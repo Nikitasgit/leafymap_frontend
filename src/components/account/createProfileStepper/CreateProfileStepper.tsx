@@ -3,6 +3,7 @@
 import { useState } from "react";
 import UserTypeStep from "./steps/UserTypeStep";
 import ActivityFormStep from "./steps/ActivityFormStep";
+import { Address } from "@/components/common/inputs/addressInput/AddressInput";
 
 export interface TimeSlot {
   startTime: string;
@@ -30,12 +31,14 @@ export interface FormData {
   name: string;
   description: string;
   type: string;
-  address: string;
+  address: Address;
   defaultSchedule: DefaultSchedule;
 }
 
 export type FormDataChangeHandler = (
-  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  e:
+    | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    | { target: { name: string; value: string | Address } }
 ) => void;
 export type onNextHandler = () => void;
 export type onBackHandler = () => void;
@@ -62,7 +65,7 @@ const CreateProfileStepper = () => {
     name: "",
     description: "",
     type: "",
-    address: "",
+    address: { id: "", label: "", coordinates: { longitude: 0, latitude: 0 } },
     defaultSchedule: createEmptySchedule(),
   });
   console.log(formData);

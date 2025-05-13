@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-interface AddressSuggestion {
+export interface Address {
   id: string;
   label: string;
-  coordinates: [number, number];
+  coordinates: {
+    longitude: number;
+    latitude: number;
+  };
 }
 
 interface MapboxFeature {
@@ -14,13 +17,13 @@ interface MapboxFeature {
   center: [number, number];
 }
 
-const AddressInput = ({
-  handleMapInteraction,
-}: {
-  handleMapInteraction: (coordinates: [number, number]) => void;
-}) => {
-  const [input, setInput] = useState("");
-  const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
+interface AddressInputProps {
+  onAddressSelect: (address: Address) => void;
+  value?: string;
+}
+const AddressInput = ({ onAddressSelect, value }: AddressInputProps) => {
+  const [input, setInput] = useState(value || "");
+  const [suggestions, setSuggestions] = useState<Address[]>([]);
 
   const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
@@ -37,19 +40,23 @@ const AddressInput = ({
           {
             params: {
               access_token: mapboxAccessToken,
-              country: "fr", // restrict to France
-              language: "fr", // French place names
+              country: "fr",
+              language: "fr",
               limit: 5,
             },
           }
         )
         .then((response) => {
-          const mappedSuggestions: AddressSuggestion[] =
-            response.data.features.map((feature: MapboxFeature) => ({
+          const mappedSuggestions: Address[] = response.data.features.map(
+            (feature: MapboxFeature) => ({
               id: feature.id,
               label: feature.place_name_fr || feature.place_name,
-              coordinates: feature.center,
-            }));
+              coordinates: {
+                longitude: feature.center[0],
+                latitude: feature.center[1],
+              },
+            })
+          );
           setSuggestions(mappedSuggestions);
         })
         .catch((error) => {
@@ -60,15 +67,17 @@ const AddressInput = ({
     }
   };
 
-  const handleSuggestionClick = (suggestion: AddressSuggestion) => {
-    // Optional: handle map interaction here
-    console.log("Selected address:", suggestion);
+  const handleSuggestionClick = (suggestion: Address) => {
     setInput(suggestion.label);
     setSuggestions([]);
-    handleMapInteraction(suggestion.coordinates);
-    // For example: flyTo on Mapbox map
-    // map.flyTo({ center: suggestion.coordinates, zoom: 15 });
+    onAddressSelect(suggestion);
   };
+  useEffect(() => {
+    if (value !== undefined && value !== input) {
+      setInput(value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   return (
     <div>

@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@/components/common/buttons/button/Button";
 import RadioYesOrNo from "@/components/common/inputs/radios/radioYesOrNo/RadioYesOrNo";
 import TextField from "@/components/common/inputs/textField/TextField";
 import Text from "@/components/common/typography/Text";
-import MapComponent from "@/components/map/mapComponent/Map";
+import MapComponent, { location } from "@/components/map/mapComponent/Map";
 import TimeTableForm from "@/components/common/forms/timetable/TimeTableForm";
 
 import {
@@ -13,7 +13,9 @@ import {
   FormDataChangeHandler,
   DefaultSchedule,
 } from "../CreateProfileStepper";
-import AddressInput from "@/components/common/inputs/addressInput/AddressInput";
+import AddressInput, {
+  Address,
+} from "@/components/common/inputs/addressInput/AddressInput";
 
 interface ActivityFormStepProps {
   data: FormData;
@@ -32,11 +34,54 @@ const ActivityFormStep = ({
 }: ActivityFormStepProps) => {
   const isCreator = data.userType === "creator";
   const [creatorWithPlace, setCreatorWithPlace] = useState(false);
-  const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
+  const [addressMarker, setAddressMarker] = useState<location | undefined>(
+    undefined
+  );
 
-  const handleMapInteraction = (coordinates: [number, number]) => {
-    setMapCenter(coordinates);
+  const onAddressSelect = (address: Address) => {
+    setAddressMarker(address.coordinates);
+    onChange({ target: { name: "address", value: address } });
   };
+  const handleMarkerMove = async ({
+    latitude,
+    longitude,
+  }: {
+    latitude: number;
+    longitude: number;
+  }) => {
+    setAddressMarker({ latitude, longitude });
+    const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+    const res = await fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${token}`
+    );
+    const data = await res.json();
+
+    if (data?.features?.length) {
+      const place = data.features[0];
+      const newAddress: Address = {
+        label: place.place_name,
+        coordinates: { latitude, longitude },
+        id: place.id,
+      };
+      console.log(newAddress);
+
+      onChange({ target: { name: "address", value: newAddress } });
+    }
+  };
+  useEffect(() => {
+    if ((creatorWithPlace || !isCreator) && !data.address?.label) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          setAddressMarker({ latitude, longitude });
+        },
+        (error) => {
+          console.warn("Geolocation error:", error);
+        },
+        { enableHighAccuracy: true }
+      );
+    }
+  }, [creatorWithPlace, isCreator, data.address?.label]);
 
   return (
     <>
@@ -83,20 +128,26 @@ const ActivityFormStep = ({
 
         {(creatorWithPlace || !isCreator) && (
           <>
-            <AddressInput handleMapInteraction={handleMapInteraction} />
-            <TextField
-              name="address"
-              value={data.address}
-              onChange={onChange}
-              label="Adresse"
+            <AddressInput
+              onAddressSelect={onAddressSelect}
+              value={data.address.label}
             />
+
             <Text as="h4">Modifier l&apos;emplacement de votre pin</Text>
-            <MapComponent height="200px" width="400px" />
+            <MapComponent
+              height="200px"
+              width="400px"
+              location={
+                addressMarker ? { ...addressMarker, zoom: 14 } : undefined
+              }
+              withDefaultMarker
+              onMarkerDragEnd={handleMarkerMove}
+            />
 
             <Text as="h3">Horaires</Text>
             <Text as="p">
-              Il s’agit d’horaires standards, vous pourrez ensuite ajuster les
-              horaires
+              Il s&apos;agit d&apos;horaires standards, vous pourrez ensuite
+              ajuster les horaires
             </Text>
             <TimeTableForm
               schedule={data.defaultSchedule}
@@ -104,7 +155,7 @@ const ActivityFormStep = ({
             />
           </>
         )}
-        <div className="flex justify-between mt-4">
+        <div>
           <Button type="button" onClick={onBack}>
             Précédent
           </Button>
