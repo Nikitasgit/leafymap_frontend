@@ -15,15 +15,16 @@ export interface location {
   zoom?: number;
 }
 export interface marker extends location {
-  draggable: boolean;
+  draggable?: boolean;
 }
+
 interface MapComponentProps {
   width?: string;
   height?: string;
   location?: location;
   markers?: marker[];
   withDefaultMarker?: boolean;
-  onMarkerDragEnd?: (coords: { longitude: number; latitude: number }) => void;
+  onMapClick?: (coords: { longitude: number; latitude: number }) => void;
 }
 
 const DEFAULT_LOCATION = {
@@ -37,7 +38,7 @@ const MapComponent = ({
   height = "100vh",
   location,
   markers = [],
-  onMarkerDragEnd,
+  onMapClick,
   withDefaultMarker = false,
 }: MapComponentProps) => {
   const [viewState, setViewState] = useState<location>(
@@ -72,37 +73,37 @@ const MapComponent = ({
     <Map
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
       {...viewState}
-      onMove={(evt) => setViewState(evt.viewState)}
+      onMove={(e) => setViewState(e.viewState)}
+      onClick={(e) => {
+        if (onMapClick) {
+          onMapClick({
+            latitude: e.lngLat.lat,
+            longitude: e.lngLat.lng,
+          });
+        }
+      }}
       style={{ width, height }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
     >
       <FullscreenControl />
       <NavigationControl />
       <GeolocateControl />
+      {withDefaultMarker && markers.length === 0 && (
+        <Marker
+          longitude={DEFAULT_LOCATION.longitude}
+          latitude={DEFAULT_LOCATION.latitude}
+          color="blue"
+        />
+      )}
       {markers.map((marker, index) => (
         <Marker
           key={index}
           longitude={marker.longitude}
           latitude={marker.latitude}
-          color="red"
+          color="blue"
           draggable={marker.draggable}
         />
       ))}
-      {withDefaultMarker && (
-        <Marker
-          draggable
-          longitude={location?.longitude || DEFAULT_LOCATION.longitude}
-          latitude={location?.latitude || DEFAULT_LOCATION.latitude}
-          onDragEnd={(e) => {
-            if (onMarkerDragEnd) {
-              onMarkerDragEnd({
-                longitude: e.lngLat.lng,
-                latitude: e.lngLat.lat,
-              });
-            }
-          }}
-        />
-      )}
     </Map>
   );
 };

@@ -42,7 +42,8 @@ const ActivityFormStep = ({
     setAddressMarker(address.coordinates);
     onChange({ target: { name: "address", value: address } });
   };
-  const handleMarkerMove = async ({
+
+  const handleMapClick = async ({
     latitude,
     longitude,
   }: {
@@ -63,11 +64,11 @@ const ActivityFormStep = ({
         coordinates: { latitude, longitude },
         id: place.id,
       };
-      console.log(newAddress);
 
       onChange({ target: { name: "address", value: newAddress } });
     }
   };
+
   useEffect(() => {
     if ((creatorWithPlace || !isCreator) && !data.address?.label) {
       navigator.geolocation.getCurrentPosition(
@@ -84,85 +85,83 @@ const ActivityFormStep = ({
   }, [creatorWithPlace, isCreator, data.address?.label]);
 
   return (
-    <>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          onNext();
-        }}
-      >
-        <Text as="h3">Informations</Text>
-        <TextField
-          label={
-            isCreator
-              ? "Nom de votre activité (obligatoire)*"
-              : "Nom du lieu (obligatoire)*"
-          }
-          name="name"
-          value={data.name}
-          onChange={onChange}
-        />
-        <TextField
-          label="Description"
-          name="description"
-          value={data.description}
-          onChange={onChange}
-          multiline
-          rows={6}
-        />
-        <TextField
-          name="type"
-          value={data.type}
-          placeholder={isCreator ? "Type d'activité" : "Type de lieu"}
-          onChange={onChange}
-        />
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        onNext();
+      }}
+    >
+      <Text as="h3">Informations</Text>
+      <TextField
+        label={
+          isCreator
+            ? "Nom de votre activité (obligatoire)*"
+            : "Nom du lieu (obligatoire)*"
+        }
+        name="name"
+        value={data.name}
+        onChange={onChange}
+      />
+      <TextField
+        label="Description"
+        name="description"
+        value={data.description}
+        onChange={onChange}
+        multiline
+        rows={6}
+      />
+      <TextField
+        name="type"
+        value={data.type}
+        placeholder={isCreator ? "Type d'activité" : "Type de lieu"}
+        onChange={onChange}
+      />
 
-        {isCreator && (
-          <RadioYesOrNo
-            label="Souhaitez-vous afficher votre lieu sur la carte pour recevoir des visiteurs?"
-            name="creatorWithPlace"
-            value={creatorWithPlace ? "yes" : "no"}
-            onChange={(e) => setCreatorWithPlace(e.target.value === "yes")}
+      {isCreator && (
+        <RadioYesOrNo
+          label="Souhaitez-vous afficher votre lieu sur la carte pour recevoir des visiteurs?"
+          name="creatorWithPlace"
+          value={creatorWithPlace ? "yes" : "no"}
+          onChange={(e) => setCreatorWithPlace(e.target.value === "yes")}
+        />
+      )}
+
+      {(creatorWithPlace || !isCreator) && (
+        <>
+          <AddressInput
+            onAddressSelect={onAddressSelect}
+            value={data.address.label}
           />
-        )}
 
-        {(creatorWithPlace || !isCreator) && (
-          <>
-            <AddressInput
-              onAddressSelect={onAddressSelect}
-              value={data.address.label}
-            />
+          <Text as="h4">Cliquez sur la carte pour positionner votre lieu</Text>
+          <MapComponent
+            height="200px"
+            width="400px"
+            location={addressMarker ? addressMarker : undefined}
+            markers={addressMarker ? [addressMarker] : []}
+            onMapClick={handleMapClick}
+            withDefaultMarker
+          />
 
-            <Text as="h4">Modifier l&apos;emplacement de votre pin</Text>
-            <MapComponent
-              height="200px"
-              width="400px"
-              location={
-                addressMarker ? { ...addressMarker, zoom: 14 } : undefined
-              }
-              withDefaultMarker
-              onMarkerDragEnd={handleMarkerMove}
-            />
+          <Text as="h3">Horaires</Text>
+          <Text as="p">
+            Il s&apos;agit d&apos;horaires standards, vous pourrez ensuite
+            ajuster les horaires
+          </Text>
+          <TimeTableForm
+            schedule={data.defaultSchedule}
+            onChange={onScheduleChange}
+          />
+        </>
+      )}
 
-            <Text as="h3">Horaires</Text>
-            <Text as="p">
-              Il s&apos;agit d&apos;horaires standards, vous pourrez ensuite
-              ajuster les horaires
-            </Text>
-            <TimeTableForm
-              schedule={data.defaultSchedule}
-              onChange={onScheduleChange}
-            />
-          </>
-        )}
-        <div>
-          <Button type="button" onClick={onBack}>
-            Précédent
-          </Button>
-          <Button type="submit">Suivant</Button>
-        </div>
-      </form>
-    </>
+      <div>
+        <Button type="button" onClick={onBack}>
+          Précédent
+        </Button>
+        <Button type="submit">Suivant</Button>
+      </div>
+    </form>
   );
 };
 
