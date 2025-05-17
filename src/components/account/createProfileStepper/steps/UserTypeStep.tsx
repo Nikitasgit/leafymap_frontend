@@ -1,9 +1,6 @@
 import Radio from "@/components/common/inputs/radios/radioWithLabel/Radio";
-import {
-  FormData,
-  FormDataChangeHandler,
-  onNextHandler,
-} from "../CreateProfileStepper";
+import { FormDataChangeHandler, onNextHandler } from "../CreateProfileStepper";
+import { FormData } from "../CreateProfileStepper.types";
 
 interface UserTypeStepProps {
   data: FormData;

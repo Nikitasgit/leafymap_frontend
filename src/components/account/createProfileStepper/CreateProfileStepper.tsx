@@ -2,44 +2,15 @@
 
 import { useState } from "react";
 import UserTypeStep from "./steps/UserTypeStep";
-import ActivityFormStep from "./steps/ActivityFormStep";
-import { Address } from "@/components/common/inputs/addressInput/AddressInput";
+import ActivityFormStep from "./steps/ActivityFormStep/ActivityFormStep";
+import { WeekDay } from "@/components/common/forms/timetable/TimeTable.types";
+import useCreateProfile from "@/hooks/useCreateProfile";
+import {
+  DefaultSchedule,
+  FormDataChangeHandler,
+} from "./CreateProfileStepper.types";
+import type { FormData } from "./CreateProfileStepper.types";
 
-export interface TimeSlot {
-  startTime: string;
-  endTime: string;
-}
-
-export interface DaySchedule {
-  open: boolean;
-  timeSlots: TimeSlot[];
-}
-
-export type WeekDay =
-  | "monday"
-  | "tuesday"
-  | "wednesday"
-  | "thursday"
-  | "friday"
-  | "saturday"
-  | "sunday";
-
-export type DefaultSchedule = Record<WeekDay, DaySchedule>;
-
-export interface FormData {
-  userType: string;
-  name: string;
-  description: string;
-  type: string;
-  address: Address;
-  defaultSchedule: DefaultSchedule;
-}
-
-export type FormDataChangeHandler = (
-  e:
-    | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    | { target: { name: string; value: string | Address } }
-) => void;
 export type onNextHandler = () => void;
 export type onBackHandler = () => void;
 const createEmptySchedule = (): DefaultSchedule => {
@@ -65,10 +36,21 @@ const CreateProfileStepper = () => {
     name: "",
     description: "",
     type: "",
-    address: { id: "", label: "", coordinates: { longitude: 0, latitude: 0 } },
+    address: null,
     defaultSchedule: createEmptySchedule(),
+    phone: "",
+    email: "",
+    website: "",
+    collaborators: [],
+    createdCollaborators: [],
+    profilePicture: "",
   });
-  console.log(formData);
+
+  const { createProfile, loading, error, success } = useCreateProfile();
+
+  const handleSubmit = async () => {
+    await createProfile(formData);
+  };
 
   const handleInputChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -95,6 +77,7 @@ const CreateProfileStepper = () => {
         <ActivityFormStep
           data={formData}
           onChange={handleInputChange}
+          onSubmit={handleSubmit}
           onNext={handleNext}
           onBack={handleBack}
           onScheduleChange={handleScheduleChange}

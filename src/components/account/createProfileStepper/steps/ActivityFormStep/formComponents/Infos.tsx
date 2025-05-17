@@ -1,48 +1,38 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import Button from "@/components/common/buttons/button/Button";
+import { useState, ChangeEvent, useEffect } from "react";
+import AddressInput from "@/components/common/inputs/addressInput/AddressInput";
 import RadioYesOrNo from "@/components/common/inputs/radios/radioYesOrNo/RadioYesOrNo";
 import TextField from "@/components/common/inputs/textField/TextField";
 import Text from "@/components/common/typography/Text";
-import MapComponent, { location } from "@/components/map/mapComponent/Map";
+import MapComponent from "@/components/map/mapComponent/Map";
+import { Address, location } from "@/types/map";
 import TimeTableForm from "@/components/common/forms/timetable/TimeTableForm";
+import { DefaultSchedule, FormData } from "../../../CreateProfileStepper.types";
+import CategorySelectorInput from "@/components/common/inputs/categorySelectorInput/CategorySelectorInput";
 
-import {
-  FormData,
-  FormDataChangeHandler,
-  DefaultSchedule,
-} from "../CreateProfileStepper";
-import AddressInput, {
-  Address,
-} from "@/components/common/inputs/addressInput/AddressInput";
-
-interface ActivityFormStepProps {
+interface InfosProps {
+  isCreator: boolean;
   data: FormData;
-  onChange: FormDataChangeHandler;
-  onNext: () => void;
-  onBack: () => void;
-  onScheduleChange: (updatedSchedule: DefaultSchedule) => void;
+  onChange: (
+    e:
+      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | { target: { name: string; value: string | Address } }
+  ) => void;
+  onScheduleChange: (schedule: DefaultSchedule) => void;
 }
 
-const ActivityFormStep = ({
-  data,
-  onChange,
-  onNext,
-  onBack,
-  onScheduleChange,
-}: ActivityFormStepProps) => {
-  const isCreator = data.userType === "creator";
+const Infos = ({ isCreator, data, onChange, onScheduleChange }: InfosProps) => {
   const [creatorWithPlace, setCreatorWithPlace] = useState(false);
-  const [addressMarker, setAddressMarker] = useState<location | undefined>(
-    undefined
-  );
+  const [addressMarker, setAddressMarker] = useState<location | null>(null);
 
   const onAddressSelect = (address: Address) => {
-    setAddressMarker(address.coordinates);
-    onChange({ target: { name: "address", value: address } });
+    if (address?.coordinates) {
+      setAddressMarker({
+        latitude: address.coordinates.latitude,
+        longitude: address.coordinates.longitude,
+      });
+      onChange({ target: { name: "address", value: address } });
+    }
   };
-
   const handleMapClick = async ({
     latitude,
     longitude,
@@ -68,7 +58,6 @@ const ActivityFormStep = ({
       onChange({ target: { name: "address", value: newAddress } });
     }
   };
-
   useEffect(() => {
     if ((creatorWithPlace || !isCreator) && !data.address?.label) {
       navigator.geolocation.getCurrentPosition(
@@ -83,14 +72,8 @@ const ActivityFormStep = ({
       );
     }
   }, [creatorWithPlace, isCreator, data.address?.label]);
-
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        onNext();
-      }}
-    >
+    <>
       <Text as="h3">Informations</Text>
       <TextField
         label={
@@ -116,6 +99,7 @@ const ActivityFormStep = ({
         placeholder={isCreator ? "Type d'activité" : "Type de lieu"}
         onChange={onChange}
       />
+      <CategorySelectorInput />
 
       {isCreator && (
         <RadioYesOrNo
@@ -125,24 +109,21 @@ const ActivityFormStep = ({
           onChange={(e) => setCreatorWithPlace(e.target.value === "yes")}
         />
       )}
-
       {(creatorWithPlace || !isCreator) && (
         <>
           <AddressInput
             onAddressSelect={onAddressSelect}
-            value={data.address.label}
+            value={data.address?.label || ""}
           />
-
           <Text as="h4">Cliquez sur la carte pour positionner votre lieu</Text>
           <MapComponent
             height="200px"
             width="400px"
-            location={addressMarker ? addressMarker : undefined}
+            location={addressMarker || undefined}
             markers={addressMarker ? [addressMarker] : []}
             onMapClick={handleMapClick}
             withDefaultMarker
           />
-
           <Text as="h3">Horaires</Text>
           <Text as="p">
             Il s&apos;agit d&apos;horaires standards, vous pourrez ensuite
@@ -154,15 +135,8 @@ const ActivityFormStep = ({
           />
         </>
       )}
-
-      <div>
-        <Button type="button" onClick={onBack}>
-          Précédent
-        </Button>
-        <Button type="submit">Suivant</Button>
-      </div>
-    </form>
+    </>
   );
 };
 
-export default ActivityFormStep;
+export default Infos;

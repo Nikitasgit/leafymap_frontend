@@ -8,11 +8,12 @@ type TextfieldProps = {
   onChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
-  type?: string;
   placeholder?: string;
   error?: boolean;
   multiline?: boolean;
   rows?: number;
+  required?: boolean;
+  type?: "text" | "email" | "password" | "number" | "tel" | "url";
 };
 
 const TextField: React.FC<TextfieldProps> = ({
@@ -26,6 +27,7 @@ const TextField: React.FC<TextfieldProps> = ({
   error = false,
   multiline = false,
   rows = 4,
+  required = false,
 }) => {
   return (
     <div>
@@ -49,6 +51,7 @@ const TextField: React.FC<TextfieldProps> = ({
           value={value}
           placeholder={placeholder}
           onChange={onChange}
+          required={required}
           onClick={onClick}
           className={error ? "error" : ""}
         />

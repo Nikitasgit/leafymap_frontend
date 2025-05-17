@@ -1,7 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import styles from "./page.module.css";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
+  const { data: session } = useSession();
+  console.log(session);
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>

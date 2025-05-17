@@ -1,9 +1,6 @@
-import {
-  DaySchedule,
-  DefaultSchedule,
-  WeekDay,
-} from "@/components/account/createProfileStepper/CreateProfileStepper";
+import { DefaultSchedule } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import DayInput from "./DayInput";
+import { DaySchedule, WeekDay } from "./TimeTable.types";
 
 interface TimeTableFormProps {
   schedule: DefaultSchedule;

@@ -8,15 +8,7 @@ import Map, {
 } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useState, useEffect } from "react";
-
-export interface location {
-  longitude: number;
-  latitude: number;
-  zoom?: number;
-}
-export interface marker extends location {
-  draggable?: boolean;
-}
+import { location, marker } from "@/types/map";
 
 interface MapComponentProps {
   width?: string;

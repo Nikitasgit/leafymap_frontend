@@ -6,7 +6,6 @@ import { Home, Map, MessageSquare, User } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
-
   const navItems = [
     { href: "/", label: "Home", icon: Home },
     { href: "/map", label: "Map", icon: Map },

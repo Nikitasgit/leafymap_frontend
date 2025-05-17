@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     includePaths: ["./src/styles"],
   },
   images: {
-    domains: ["lh3.googleusercontent.com"],
+    domains: ["lh3.googleusercontent.com", "i.pravatar.cc"],
   },
 };
 

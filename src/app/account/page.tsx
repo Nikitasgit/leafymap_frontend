@@ -11,12 +11,6 @@ export default function AccountPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/");
-    }
-  }, [status, router]);
-
   if (status === "loading") {
     return (
       <main className={styles.container}>

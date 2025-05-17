@@ -1,8 +1,4 @@
-import {
-  DaySchedule,
-  TimeSlot,
-  WeekDay,
-} from "@/components/account/createProfileStepper/CreateProfileStepper";
+import { DaySchedule, TimeSlot, WeekDay } from "./TimeTable.types";
 
 interface DayInputProps {
   day: WeekDay;
