@@ -11,9 +11,10 @@ export interface FormData {
   userType: string;
   name: string;
   description: string;
-  type: string;
+  category: string;
   address: Address | null;
   defaultSchedule: DefaultSchedule;
+  placeCategory: string;
   phone: string;
   email: string;
   website: string;

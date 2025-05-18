@@ -12,6 +12,7 @@
     "@auth/mongodb-adapter": "^3.9.0",
     "@auth0/auth0-react": "^2.3.0",
     "@auth0/nextjs-auth0": "^4.5.1",
+    "@reduxjs/toolkit": "^2.8.2",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/mapbox-gl": "^3.4.1",
     "axios": "^1.9.0",
@@ -27,6 +28,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-map-gl": "^8.0.4",
+    "react-redux": "^9.2.0",
     "sass": "^1.87.0"
   },
   "devDependencies": {

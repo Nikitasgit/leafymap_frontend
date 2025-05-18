@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect } from "react";
+import { useState, useEffect } from "react";
 import AddressInput from "@/components/common/inputs/addressInput/AddressInput";
 import RadioYesOrNo from "@/components/common/inputs/radios/radioYesOrNo/RadioYesOrNo";
 import TextField from "@/components/common/inputs/textField/TextField";
@@ -6,17 +6,18 @@ import Text from "@/components/common/typography/Text";
 import MapComponent from "@/components/map/mapComponent/Map";
 import { Address, location } from "@/types/map";
 import TimeTableForm from "@/components/common/forms/timetable/TimeTableForm";
-import { DefaultSchedule, FormData } from "../../../CreateProfileStepper.types";
+import {
+  DefaultSchedule,
+  FormData,
+  FormDataChangeHandler,
+} from "../../../CreateProfileStepper.types";
 import CategorySelectorInput from "@/components/common/inputs/categorySelectorInput/CategorySelectorInput";
+import PlaceCategorySelectorInput from "@/components/common/inputs/categorySelectorInput/PlaceCategorySelectorInput";
 
 interface InfosProps {
   isCreator: boolean;
   data: FormData;
-  onChange: (
-    e:
-      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      | { target: { name: string; value: string | Address } }
-  ) => void;
+  onChange: FormDataChangeHandler;
   onScheduleChange: (schedule: DefaultSchedule) => void;
 }
 
@@ -93,21 +94,16 @@ const Infos = ({ isCreator, data, onChange, onScheduleChange }: InfosProps) => {
         multiline
         rows={6}
       />
-      <TextField
-        name="type"
-        value={data.type}
-        placeholder={isCreator ? "Type d'activité" : "Type de lieu"}
-        onChange={onChange}
-      />
-      <CategorySelectorInput />
-
       {isCreator && (
-        <RadioYesOrNo
-          label="Souhaitez-vous afficher votre lieu sur la carte pour recevoir des visiteurs?"
-          name="creatorWithPlace"
-          value={creatorWithPlace ? "yes" : "no"}
-          onChange={(e) => setCreatorWithPlace(e.target.value === "yes")}
-        />
+        <>
+          <CategorySelectorInput onChange={onChange} />
+          <RadioYesOrNo
+            label="Souhaitez-vous afficher votre lieu sur la carte pour recevoir des visiteurs?"
+            name="creatorWithPlace"
+            value={creatorWithPlace ? "yes" : "no"}
+            onChange={(e) => setCreatorWithPlace(e.target.value === "yes")}
+          />
+        </>
       )}
       {(creatorWithPlace || !isCreator) && (
         <>
@@ -124,6 +120,7 @@ const Infos = ({ isCreator, data, onChange, onScheduleChange }: InfosProps) => {
             onMapClick={handleMapClick}
             withDefaultMarker
           />
+          <PlaceCategorySelectorInput onChange={onChange} />
           <Text as="h3">Horaires</Text>
           <Text as="p">
             Il s&apos;agit d&apos;horaires standards, vous pourrez ensuite

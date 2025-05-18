@@ -23,36 +23,34 @@ const useCreateProfile = (): UseCreateProfileReturn => {
       form.append("userType", data.userType);
       form.append("name", data.name);
       form.append("description", data.description);
-      form.append("type", "foodmarket");
+      form.append("category", data.category);
       form.append("phone", data.phone);
       form.append("email", data.email);
       form.append("website", data.website);
+      if (data.placeCategory) {
+        form.append("placeCategory", data.placeCategory);
+      }
       if (data.address) {
         form.append("address", JSON.stringify(data.address));
       }
-      form.append("defaultSchedule", JSON.stringify(data.defaultSchedule));
-      form.append("collaborators", JSON.stringify(data.collaborators));
-      form.append(
-        "createdCollaborators",
-        JSON.stringify(data.createdCollaborators)
-      );
-
+      if (data.defaultSchedule) {
+        form.append("defaultSchedule", JSON.stringify(data.defaultSchedule));
+      }
+      if (data.collaborators) {
+        form.append("collaborators", JSON.stringify(data.collaborators));
+      }
+      if (data.createdCollaborators) {
+        form.append(
+          "createdCollaborators",
+          JSON.stringify(data.createdCollaborators)
+        );
+      }
       if (data.profilePicture instanceof File) {
         form.append("profilePicture", data.profilePicture);
       }
       form.forEach((value, key) => {
         console.log(key, value);
       });
-
-      // Add detailed logging
-      console.log(
-        "Request URL:",
-        `${process.env.NEXT_PUBLIC_API_URL}/api/users/create-profile`
-      );
-      console.log("Form data entries:");
-      for (const pair of form.entries()) {
-        console.log(pair[0], pair[1]);
-      }
 
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/users/create-profile`,

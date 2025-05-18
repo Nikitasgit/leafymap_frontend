@@ -1,20 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./CategorySelectorInput.module.scss";
-
-const fakeData = {
-  Artiste: ["Peintre", "Sculpteur", "Photographe"],
-  Agriculteur: ["Maraîcher", "Éleveur", "Viticulteur"],
-};
+import { useSelector } from "react-redux";
+import { selectCategories, selectSubCategories } from "@/store/appSlice";
+import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
+import { SubCategory } from "@/types/categories";
 
 const CategorySelectorInput = ({
   onChange,
 }: {
-  onChange: (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | { target: { name: string; value: string } }
-  ) => void;
+  onChange: FormDataChangeHandler;
 }) => {
+  const categories = useSelector(selectCategories);
+  const subCategories = useSelector(selectSubCategories);
+
   const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -34,34 +32,26 @@ const CategorySelectorInput = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSelect = (value: string) => {
-    setInputValue(value);
+  const handleSelect = (value: SubCategory) => {
+    setInputValue(value.name);
     setIsOpen(false);
     setSelectedCategory(null);
     setSearch("");
     onChange({
       target: {
         name: "category",
-        value: value,
+        value: value._id,
       },
     });
   };
 
-  // Toutes les sous-catégories avec leur catégorie
-  const allSubcategories = Object.entries(fakeData).flatMap(
-    ([category, subs]) => subs.map((sub) => ({ category, sub }))
+  const filteredSubcategories = subCategories.filter((sub) =>
+    sub.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Sous-catégories filtrées par recherche
-  const filteredSubcategories = allSubcategories.filter(({ sub }) =>
-    sub.toLowerCase().includes(search.toLowerCase())
+  const categorySubcategories = subCategories.filter(
+    (sub) => sub.categoryId === selectedCategory
   );
-
-  // Sous-catégories de la catégorie sélectionnée
-  const categorySubcategories =
-    selectedCategory && fakeData[selectedCategory as keyof typeof fakeData]
-      ? fakeData[selectedCategory as keyof typeof fakeData]
-      : [];
 
   return (
     <div className={styles.categoryInputWrapper} ref={ref}>
@@ -81,40 +71,50 @@ const CategorySelectorInput = ({
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
-              setSelectedCategory(null); // Si on tape, on sort du contexte catégorie
+              setSelectedCategory(null); // Always reset category when searching
             }}
             className={styles.searchBar}
           />
 
           <div className={styles.list}>
+            {/* Case 1: Searching → show matching subcategories only */}
             {search
-              ? filteredSubcategories.map(({ sub, category }) => (
+              ? filteredSubcategories.map((sub) => (
                   <div
-                    key={`${category}-${sub}`}
+                    key={sub._id}
                     className={styles.item}
                     onClick={() => handleSelect(sub)}
                   >
-                    {sub}{" "}
-                    <span className={styles.categoryHint}>({category})</span>
+                    {sub.name}
+                    <span className={styles.categoryHint}>
+                      (
+                      {
+                        categories.find((cat) => cat._id === sub.categoryId)
+                          ?.name
+                      }
+                      )
+                    </span>
                   </div>
                 ))
               : selectedCategory
-              ? categorySubcategories.map((sub) => (
+              ? // Case 2: Category selected → show subcategories of that category
+                categorySubcategories.map((sub) => (
                   <div
-                    key={sub}
+                    key={sub._id}
                     className={styles.item}
                     onClick={() => handleSelect(sub)}
                   >
-                    {sub}
+                    {sub.name}
                   </div>
                 ))
-              : Object.keys(fakeData).map((category) => (
+              : // Case 3: No search, no category → show all categories
+                categories.map((cat) => (
                   <div
-                    key={category}
+                    key={cat._id}
                     className={styles.item}
-                    onClick={() => setSelectedCategory(category)}
+                    onClick={() => setSelectedCategory(cat._id)}
                   >
-                    {category}
+                    {cat.name}
                     <span className={styles.chevron}>➤</span>
                   </div>
                 ))}

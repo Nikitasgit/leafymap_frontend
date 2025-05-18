@@ -35,9 +35,10 @@ const CreateProfileStepper = () => {
     userType: "",
     name: "",
     description: "",
-    type: "",
+    category: "",
     address: null,
     defaultSchedule: createEmptySchedule(),
+    placeCategory: "",
     phone: "",
     email: "",
     website: "",
@@ -45,6 +46,7 @@ const CreateProfileStepper = () => {
     createdCollaborators: [],
     profilePicture: "",
   });
+  console.log(formData);
 
   const { createProfile, loading, error, success } = useCreateProfile();
 
