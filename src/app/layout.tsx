@@ -1,5 +1,5 @@
 import { Inter } from "next/font/google";
-import "./globals.css";
+
 import Navbar from "@/components/navbar/Navbar";
 import Providers from "@/components/Providers";
 
@@ -15,7 +15,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <Navbar />
-          <main className="container mx-auto p-4">{children}</main>
+          <main>{children}</main>
         </Providers>
       </body>
     </html>

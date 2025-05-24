@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./signin.module.scss";
 
 export default function SignIn() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -19,29 +19,22 @@ export default function SignIn() {
     setError("");
 
     try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-        callbackUrl: "/",
-      });
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/signin`,
+        {
+          identifier,
+          password,
+        },
+        { withCredentials: true }
+      );
 
-      if (result?.error) {
-        setError(result.error);
-      } else {
-        // Force a session refresh
-        await fetch("/api/auth/session");
-        router.push("/");
-      }
-    } catch (error) {
-      setError("An error occurred during sign in");
+      router.push("/");
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ message: string }>;
+      setError(error.response?.data?.message || "Sign in failed");
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/" });
   };
 
   return (
@@ -53,14 +46,14 @@ export default function SignIn() {
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
-            <label htmlFor="email">Email</label>
+            <label htmlFor="identifier">Username or Email</label>
             <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id="identifier"
+              type="text"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
               required
-              placeholder="Enter your email"
+              placeholder="Enter your username or email"
             />
           </div>
 
@@ -89,16 +82,8 @@ export default function SignIn() {
           <span>OR</span>
         </div>
 
-        <button
-          onClick={handleGoogleSignIn}
-          className={styles.googleButton}
-          disabled={isLoading}
-        >
-          Sign in with Google
-        </button>
-
         <p className={styles.signupLink}>
-          Don't have an account? <Link href="/auth/register">Sign up</Link>
+          Don&apos;t have an account? <Link href="/auth/register">Sign up</Link>
         </p>
       </div>
     </div>

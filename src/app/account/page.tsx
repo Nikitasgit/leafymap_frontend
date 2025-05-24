@@ -1,17 +1,19 @@
 "use client";
-
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import styles from "../../styles/styles.scss";
 import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
+import { selectUser } from "@/store/userSlice";
+import { useSelector } from "react-redux";
+import React from "react";
+import SignOutButton from "@/components/common/buttons/button/SignOutButton";
 
 export default function AccountPage() {
-  const { data: session, status } = useSession();
+  const { user, loading: userLoading } = useSelector(selectUser);
+  const { userType } = user || {};
   const router = useRouter();
 
-  if (status === "loading") {
+  if (userLoading) {
     return (
       <main className={styles.container}>
         <div className="text-center">
@@ -20,21 +22,34 @@ export default function AccountPage() {
       </main>
     );
   }
-
+  if (!user) {
+    return (
+      <main className={styles.container}>
+        <p>User not found</p>
+      </main>
+    );
+  }
+  const buttonParameters =
+    userType === "creator"
+      ? { route: "/modifyProfile", text: "Modifier mon profil" }
+      : userType === "organizer"
+      ? { route: "/addPlace", text: "Ajouter un lieu" }
+      : { route: "/createProfile", text: "Ajouter mon activité" };
   return (
     <main className={styles.container}>
       <div>
         <h1>Account</h1>
-        <Button onClick={() => router.push("/createProfile")}>
-          Ajouter mon activité
+
+        <Button onClick={() => router.push(buttonParameters.route)}>
+          {buttonParameters.text}
         </Button>
         <div>
           <div>
             <div>
               <div>
-                {session?.user?.image && (
+                {user?.image && (
                   <Image
-                    src={session.user?.image}
+                    src={user?.image}
                     alt="Profile"
                     width={80}
                     height={80}
@@ -42,14 +57,12 @@ export default function AccountPage() {
                 )}
               </div>
               <div>
-                <h2>{session?.user?.name}</h2>
-                <p>{session?.user?.email}</p>
+                <h2>{user?.username}</h2>
+                <p>{user?.email}</p>
               </div>
             </div>
             <div>
-              <Button onClick={() => router.push("/api/auth/signout")}>
-                Sign Out
-              </Button>
+              <SignOutButton />
             </div>
           </div>
         </div>
