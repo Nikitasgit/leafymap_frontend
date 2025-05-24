@@ -10,7 +10,7 @@ function SignOutButton() {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const handleLogout = async () => {
+  const handleSignOut = async () => {
     try {
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/signout`,
@@ -24,7 +24,7 @@ function SignOutButton() {
     }
   };
 
-  return <Button onClick={handleLogout}>Sign Out</Button>;
+  return <Button onClick={handleSignOut}>Sign Out</Button>;
 }
 
 export default SignOutButton;

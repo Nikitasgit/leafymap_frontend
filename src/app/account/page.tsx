@@ -9,7 +9,11 @@ import React from "react";
 import SignOutButton from "@/components/common/buttons/button/SignOutButton";
 
 export default function AccountPage() {
-  const { user, loading: userLoading } = useSelector(selectUser);
+  const {
+    user,
+    loading: userLoading,
+    error: userError,
+  } = useSelector(selectUser);
   const { userType } = user || {};
   const router = useRouter();
 
@@ -22,16 +26,16 @@ export default function AccountPage() {
       </main>
     );
   }
-  if (!user) {
+  if (!user && userError !== "") {
     return (
       <main className={styles.container}>
-        <p>User not found</p>
+        <p>{userError}</p>
       </main>
     );
   }
   const buttonParameters =
     userType === "creator"
-      ? { route: "/modifyProfile", text: "Modifier mon profil" }
+      ? { route: "/modifyCreator", text: "Modifier mon profil" }
       : userType === "organizer"
       ? { route: "/addPlace", text: "Ajouter un lieu" }
       : { route: "/createProfile", text: "Ajouter mon activité" };
@@ -47,9 +51,9 @@ export default function AccountPage() {
           <div>
             <div>
               <div>
-                {user?.image && (
+                {user?.userImg && (
                   <Image
-                    src={user?.image}
+                    src={user?.userImg}
                     alt="Profile"
                     width={80}
                     height={80}
@@ -61,9 +65,7 @@ export default function AccountPage() {
                 <p>{user?.email}</p>
               </div>
             </div>
-            <div>
-              <SignOutButton />
-            </div>
+            <div></div>
           </div>
         </div>
       </div>

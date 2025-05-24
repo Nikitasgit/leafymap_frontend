@@ -5,6 +5,8 @@ import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./signin.module.scss";
+import { useAppDispatch } from "@/store";
+import { fetchUser } from "@/store/userSlice";
 
 export default function SignIn() {
   const router = useRouter();
@@ -12,6 +14,7 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useAppDispatch();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +30,7 @@ export default function SignIn() {
         },
         { withCredentials: true }
       );
-
+      dispatch(fetchUser());
       router.push("/");
     } catch (err: unknown) {
       const error = err as AxiosError<{ message: string }>;

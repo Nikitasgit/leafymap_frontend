@@ -7,7 +7,6 @@ import MapComponent from "@/components/map/mapComponent/Map";
 import { Address, location } from "@/types/map";
 import TimeTableForm from "@/components/common/forms/timetable/TimeTableForm";
 import {
-  DefaultSchedule,
   FormData,
   FormDataChangeHandler,
 } from "../../../CreateProfileStepper.types";
@@ -18,13 +17,15 @@ interface InfosProps {
   isCreator: boolean;
   data: FormData;
   onChange: FormDataChangeHandler;
-  onScheduleChange: (schedule: DefaultSchedule) => void;
+  withPlace?: boolean;
 }
 
-const Infos = ({ isCreator, data, onChange, onScheduleChange }: InfosProps) => {
-  const [creatorWithPlace, setCreatorWithPlace] = useState(false);
-  const [addressMarker, setAddressMarker] = useState<location | null>(null);
-
+const Infos = ({ isCreator, data, onChange }: InfosProps) => {
+  const withPlace = !!data.address;
+  const [creatorWithPlace, setCreatorWithPlace] = useState(withPlace);
+  const [addressMarker, setAddressMarker] = useState<location | null>(
+    data.address?.coordinates || null
+  );
   const onAddressSelect = (address: Address) => {
     if (address?.coordinates) {
       setAddressMarker({
@@ -73,6 +74,13 @@ const Infos = ({ isCreator, data, onChange, onScheduleChange }: InfosProps) => {
       );
     }
   }, [creatorWithPlace, isCreator, data.address?.label]);
+  const handleDisplayPlaceChange = (value: string) => {
+    setCreatorWithPlace(value === "yes");
+    if (value === "no") {
+      onChange({ target: { name: "address", value: null } });
+      onChange({ target: { name: "placeCategory", value: "" } });
+    }
+  };
   return (
     <>
       <Text as="h3">Informations</Text>
@@ -96,12 +104,12 @@ const Infos = ({ isCreator, data, onChange, onScheduleChange }: InfosProps) => {
       />
       {isCreator && (
         <>
-          <CategorySelectorInput onChange={onChange} />
+          <CategorySelectorInput onChange={onChange} value={data.category} />
           <RadioYesOrNo
             label="Souhaitez-vous afficher votre lieu sur la carte pour recevoir des visiteurs?"
             name="creatorWithPlace"
             value={creatorWithPlace ? "yes" : "no"}
-            onChange={(e) => setCreatorWithPlace(e.target.value === "yes")}
+            onChange={(e) => handleDisplayPlaceChange(e.target.value)}
           />
         </>
       )}
@@ -128,7 +136,11 @@ const Infos = ({ isCreator, data, onChange, onScheduleChange }: InfosProps) => {
           </Text>
           <TimeTableForm
             schedule={data.defaultSchedule}
-            onChange={onScheduleChange}
+            onChange={(updatedSchedule) =>
+              onChange({
+                target: { name: "defaultSchedule", value: updatedSchedule },
+              })
+            }
           />
         </>
       )}

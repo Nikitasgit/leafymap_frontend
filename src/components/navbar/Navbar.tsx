@@ -1,10 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Home, Map, MessageSquare, User } from "lucide-react";
+import Button from "../common/buttons/button/Button";
+import SignOutButton from "../common/buttons/button/SignOutButton";
+import { useUser } from "@/hooks/useUser";
 
 export default function Navbar() {
+  const router = useRouter();
   const pathname = usePathname();
   const navItems = [
     { href: "/", label: "Home", icon: Home },
@@ -13,6 +17,7 @@ export default function Navbar() {
     { href: "/account", label: "Account", icon: User },
   ];
 
+  const { user } = useUser();
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
       <div className="max-w-screen-xl mx-auto px-4">
@@ -36,6 +41,20 @@ export default function Navbar() {
               </Link>
             );
           })}
+          {user ? (
+            <>
+              <SignOutButton />
+            </>
+          ) : (
+            <>
+              <Button onClick={() => router.push("/auth/register")}>
+                Register
+              </Button>
+              <Button onClick={() => router.push("/auth/signin")}>
+                Sign in
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </nav>

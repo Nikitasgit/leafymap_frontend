@@ -41,7 +41,9 @@ export type FormDataChangeHandler = (
             | string[]
             | Collaborator
             | Collaborator[]
-            | File;
+            | File
+            | DefaultSchedule
+            | null;
         };
       }
 ) => void;

@@ -9,7 +9,6 @@ export const fetchCategories = createAsyncThunk(
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_URL}/api/categories`
     );
-    console.log(response.data);
     return response.data;
   }
 );

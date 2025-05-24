@@ -7,8 +7,10 @@ import { SubCategory } from "@/types/categories";
 
 const CategorySelectorInput = ({
   onChange,
+  value,
 }: {
   onChange: FormDataChangeHandler;
+  value: string;
 }) => {
   const categories = useSelector(selectCategories);
   const subCategories = useSelector(selectSubCategories);
@@ -52,6 +54,15 @@ const CategorySelectorInput = ({
   const categorySubcategories = subCategories.filter(
     (sub) => sub.categoryId === selectedCategory
   );
+  useEffect(() => {
+    console.log(value);
+    if (value) {
+      const sub = subCategories.find((s) => s._id === value);
+      if (sub) {
+        setInputValue(sub.name);
+      }
+    }
+  }, [value, subCategories]);
 
   return (
     <div className={styles.categoryInputWrapper} ref={ref}>

@@ -36,7 +36,6 @@ const MapComponent = ({
   const [viewState, setViewState] = useState<location>(
     location ?? DEFAULT_LOCATION
   );
-
   useEffect(() => {
     if (!location && typeof window !== "undefined" && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -56,7 +55,7 @@ const MapComponent = ({
         ...prev,
         latitude: location.latitude,
         longitude: location.longitude,
-        zoom: location.zoom ?? prev.zoom,
+        zoom: location.zoom ?? prev.zoom ?? 12,
       }));
     }
   }, [location]);

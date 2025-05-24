@@ -4,16 +4,16 @@ import { useState } from "react";
 import UserTypeStep from "./steps/UserTypeStep";
 import ActivityFormStep from "./steps/ActivityFormStep/ActivityFormStep";
 import { WeekDay } from "@/components/common/forms/timetable/TimeTable.types";
-import useCreateProfile from "@/hooks/useCreateProfile";
 import {
   DefaultSchedule,
   FormDataChangeHandler,
 } from "./CreateProfileStepper.types";
 import type { FormData } from "./CreateProfileStepper.types";
+import useSubmitForm from "@/hooks/useSubmitForm";
 
 export type onNextHandler = () => void;
 export type onBackHandler = () => void;
-const createEmptySchedule = (): DefaultSchedule => {
+export const createEmptySchedule = (): DefaultSchedule => {
   const days: WeekDay[] = [
     "monday",
     "tuesday",
@@ -46,12 +46,11 @@ const CreateProfileStepper = () => {
     createdCollaborators: [],
     profilePicture: "",
   });
-  console.log(formData);
 
-  const { createProfile, loading, error, success } = useCreateProfile();
+  const { submitForm, loading, error, success } = useSubmitForm();
 
   const handleSubmit = async () => {
-    await createProfile(formData);
+    await submitForm(formData);
   };
 
   const handleInputChange: FormDataChangeHandler = (e) => {
@@ -59,12 +58,9 @@ const CreateProfileStepper = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleScheduleChange = (updatedSchedule: DefaultSchedule) => {
-    setFormData((prev) => ({ ...prev, defaultSchedule: updatedSchedule }));
-  };
-
   const handleNext = () => setStep((prev) => prev + 1);
   const handleBack = () => setStep((prev) => prev - 1);
+  console.log(formData);
 
   return (
     <div>
@@ -82,7 +78,6 @@ const CreateProfileStepper = () => {
           onSubmit={handleSubmit}
           onNext={handleNext}
           onBack={handleBack}
-          onScheduleChange={handleScheduleChange}
         />
       )}
     </div>

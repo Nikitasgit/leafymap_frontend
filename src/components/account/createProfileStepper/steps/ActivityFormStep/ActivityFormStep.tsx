@@ -3,7 +3,7 @@
 import Button from "@/components/common/buttons/button/Button";
 import { FormDataChangeHandler } from "../../CreateProfileStepper.types";
 import Infos from "./formComponents/Infos";
-import { DefaultSchedule, FormData } from "../../CreateProfileStepper.types";
+import { FormData } from "../../CreateProfileStepper.types";
 import ContactForm from "./formComponents/ContactForm";
 import Partners from "./formComponents/Partners";
 import ProfilePictureUploader from "./formComponents/ProfilePictureUploader";
@@ -11,19 +11,19 @@ import ProfilePictureUploader from "./formComponents/ProfilePictureUploader";
 interface ActivityFormStepProps {
   data: FormData;
   onChange: FormDataChangeHandler;
-  onNext: () => void;
-  onBack: () => void;
-  onScheduleChange: (updatedSchedule: DefaultSchedule) => void;
   onSubmit: () => Promise<void>;
+  onNext?: () => void;
+  onBack?: () => void;
+  submitButtonText?: string;
 }
 
 const ActivityFormStep = ({
   data,
   onChange,
   onSubmit,
-  onNext,
-  onBack,
-  onScheduleChange,
+  onNext = () => {},
+  onBack = () => {},
+  submitButtonText = "Créer mon profil",
 }: ActivityFormStepProps) => {
   const isCreator = data.userType === "creator";
 
@@ -34,23 +34,18 @@ const ActivityFormStep = ({
         onNext();
       }}
     >
-      <Infos
-        isCreator={isCreator}
-        data={data}
-        onChange={onChange}
-        onScheduleChange={onScheduleChange}
-      />
+      <Infos isCreator={isCreator} data={data} onChange={onChange} />
       <ContactForm onChange={onChange} data={data} />
       {!isCreator && <Partners onChange={onChange} data={data} />}
       <ProfilePictureUploader
         onChange={onChange}
-        initialImage={data.profilePicture}
+        initialImage={data.profilePicture as string}
       />
       <div>
         <Button type="button" onClick={onBack}>
           Précédent
         </Button>
-        <Button onClick={onSubmit}>Créer mon profil</Button>
+        <Button onClick={onSubmit}>{submitButtonText}</Button>
       </div>
     </form>
   );

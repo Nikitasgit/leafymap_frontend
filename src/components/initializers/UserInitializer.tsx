@@ -12,15 +12,16 @@ export default function UserInitializer() {
   const maxRetries = 5;
 
   useEffect(() => {
-    if (!user && !loading && !error && retryCount === 0) {
+    const isLoggedIn = document.cookie.includes("logged_in=true");
+    if (isLoggedIn && !user && !loading && error === "" && retryCount === 0) {
       dispatch(fetchUser());
     }
 
-    if (!user && error && retryCount < maxRetries) {
+    if (!user && error !== "" && !loading && retryCount < maxRetries) {
       const retryTimeout = setTimeout(() => {
         setRetryCount((prev) => prev + 1);
         dispatch(fetchUser());
-      }, 10000); // Retry after 10 seconds
+      }, 10000);
 
       return () => clearTimeout(retryTimeout);
     }
