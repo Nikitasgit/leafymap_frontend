@@ -60,7 +60,6 @@ const CreateProfileStepper = () => {
 
   const handleNext = () => setStep((prev) => prev + 1);
   const handleBack = () => setStep((prev) => prev - 1);
-  console.log(formData);
 
   return (
     <div>
@@ -74,6 +73,7 @@ const CreateProfileStepper = () => {
       {step === 2 && (
         <ActivityFormStep
           data={formData}
+          isCreator={formData.userType === "creator"}
           onChange={handleInputChange}
           onSubmit={handleSubmit}
           onNext={handleNext}

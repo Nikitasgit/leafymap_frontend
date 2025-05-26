@@ -31,6 +31,7 @@ interface Place {
   collaborators?: string[]; // Array of User IDs
   createdCollaborators?: string[]; // Array of User IDs
   isCreatorPlace?: boolean;
+  placeImg?: string;
   phone?: string;
   email?: string;
   website?: string;

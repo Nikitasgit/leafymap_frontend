@@ -55,7 +55,6 @@ const CategorySelectorInput = ({
     (sub) => sub.categoryId === selectedCategory
   );
   useEffect(() => {
-    console.log(value);
     if (value) {
       const sub = subCategories.find((s) => s._id === value);
       if (sub) {

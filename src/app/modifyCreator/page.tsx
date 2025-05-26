@@ -64,7 +64,6 @@ const ModifyCreator = () => {
     if (!formData) return;
     setFormData((prev) => ({ ...prev!, [name]: value }));
   };
-  console.log(formData);
   const handleSubmit = async () => {
     if (!formData) return;
     await submitForm(formData);
@@ -74,6 +73,7 @@ const ModifyCreator = () => {
 
   return (
     <ActivityFormStep
+      isCreator={true}
       data={formData}
       onChange={handleInputChange}
       onSubmit={handleSubmit}

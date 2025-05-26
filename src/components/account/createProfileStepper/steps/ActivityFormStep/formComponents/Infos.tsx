@@ -128,12 +128,11 @@ const Infos = ({ isCreator, data, onChange }: InfosProps) => {
             onMapClick={handleMapClick}
             withDefaultMarker
           />
-          <PlaceCategorySelectorInput onChange={onChange} />
+          <PlaceCategorySelectorInput
+            value={data.placeCategory._id}
+            onChange={onChange}
+          />
           <Text as="h3">Horaires</Text>
-          <Text as="p">
-            Il s&apos;agit d&apos;horaires standards, vous pourrez ensuite
-            ajuster les horaires
-          </Text>
           <TimeTableForm
             schedule={data.defaultSchedule}
             onChange={(updatedSchedule) =>

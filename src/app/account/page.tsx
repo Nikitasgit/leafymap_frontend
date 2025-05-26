@@ -6,7 +6,7 @@ import Button from "@/components/common/buttons/button/Button";
 import { selectUser } from "@/store/userSlice";
 import { useSelector } from "react-redux";
 import React from "react";
-import SignOutButton from "@/components/common/buttons/button/SignOutButton";
+import PlacesEditList from "@/components/account/placesList/PlacesList";
 
 export default function AccountPage() {
   const {
@@ -37,38 +37,35 @@ export default function AccountPage() {
     userType === "creator"
       ? { route: "/modifyCreator", text: "Modifier mon profil" }
       : userType === "organizer"
-      ? { route: "/addPlace", text: "Ajouter un lieu" }
+      ? { route: "/places/create", text: "Ajouter un lieu" }
       : { route: "/createProfile", text: "Ajouter mon activité" };
+
+  if (!buttonParameters) {
+    return <div>No button parameters</div>;
+  }
+
   return (
     <main className={styles.container}>
       <div>
         <h1>Account</h1>
-
+        <div>
+          <div>
+            <h2>{user?.username}</h2>
+            <p>{user?.email}</p>
+          </div>
+          {user?.userImg && (
+            <Image src={user?.userImg} alt="Profile" width={80} height={80} />
+          )}
+        </div>
+      </div>
+      {userType && (
         <Button onClick={() => router.push(buttonParameters.route)}>
           {buttonParameters.text}
         </Button>
-        <div>
-          <div>
-            <div>
-              <div>
-                {user?.userImg && (
-                  <Image
-                    src={user?.userImg}
-                    alt="Profile"
-                    width={80}
-                    height={80}
-                  />
-                )}
-              </div>
-              <div>
-                <h2>{user?.username}</h2>
-                <p>{user?.email}</p>
-              </div>
-            </div>
-            <div></div>
-          </div>
-        </div>
-      </div>
+      )}
+      {userType === "organizer" && user?.places && (
+        <PlacesEditList places={user?.places} />
+      )}
     </main>
   );
 }

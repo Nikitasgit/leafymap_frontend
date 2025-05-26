@@ -6,8 +6,10 @@ import { selectPlaceCategories } from "@/store/appSlice";
 import { PlaceCategory } from "@/types/categories";
 
 const PlaceCategorySelectorInput = ({
+  value,
   onChange,
 }: {
+  value: string;
   onChange: FormDataChangeHandler;
 }) => {
   const placeCategories = useSelector(selectPlaceCategories);
@@ -45,6 +47,14 @@ const PlaceCategorySelectorInput = ({
     cat.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  useEffect(() => {
+    if (value) {
+      const category = placeCategories.find((s) => s._id === value);
+      if (category) {
+        setInputValue(category.name);
+      }
+    }
+  }, [value, placeCategories]);
   return (
     <div className={styles.categoryInputWrapper} ref={ref}>
       <input

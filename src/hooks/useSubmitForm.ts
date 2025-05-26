@@ -65,22 +65,22 @@ const useSubmitForm = ({
       if (data.profilePicture instanceof File) {
         form.append("profilePicture", data.profilePicture);
       }
-
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/create-creator`,
+        form,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
       const url = isUpdate
         ? `${process.env.NEXT_PUBLIC_API_URL}/api/users/update-creator`
         : data.userType === "creator"
         ? `${process.env.NEXT_PUBLIC_API_URL}/api/users/create-creator`
         : `${process.env.NEXT_PUBLIC_API_URL}/api/users/create-organizer`;
 
-      await axios({
-        method: isUpdate ? "put" : "post",
-        url,
-        data: form,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      });
       router.push("/account");
       setSuccess(true);
       dispatch(fetchUser());

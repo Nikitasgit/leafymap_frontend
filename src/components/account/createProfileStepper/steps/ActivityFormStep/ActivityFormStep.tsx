@@ -15,6 +15,7 @@ interface ActivityFormStepProps {
   onNext?: () => void;
   onBack?: () => void;
   submitButtonText?: string;
+  isCreator: boolean;
 }
 
 const ActivityFormStep = ({
@@ -24,9 +25,8 @@ const ActivityFormStep = ({
   onNext = () => {},
   onBack = () => {},
   submitButtonText = "Créer mon profil",
+  isCreator,
 }: ActivityFormStepProps) => {
-  const isCreator = data.userType === "creator";
-
   return (
     <form
       onSubmit={(e) => {

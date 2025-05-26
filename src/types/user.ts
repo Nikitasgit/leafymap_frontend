@@ -31,6 +31,7 @@ interface User {
   address?: Address;
   deleted?: boolean;
   followers?: string[];
+  places?: Place[];
   creatorProfile?: CreatorProfile;
   interests?: string[];
 }
