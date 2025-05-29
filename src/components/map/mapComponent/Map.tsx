@@ -8,13 +8,13 @@ import Map, {
 } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useState, useEffect } from "react";
-import { location, marker } from "@/types/map";
+import { MapCoordinates, MapMarker } from "@/types/map";
 
 interface MapComponentProps {
   width?: string;
   height?: string;
-  location?: location;
-  markers?: marker[];
+  location?: MapCoordinates;
+  markers?: MapMarker[];
   withDefaultMarker?: boolean;
   onMapClick?: (coords: { longitude: number; latitude: number }) => void;
 }
@@ -33,7 +33,7 @@ const MapComponent = ({
   onMapClick,
   withDefaultMarker = false,
 }: MapComponentProps) => {
-  const [viewState, setViewState] = useState<location>(
+  const [viewState, setViewState] = useState<MapCoordinates>(
     location ?? DEFAULT_LOCATION
   );
   useEffect(() => {

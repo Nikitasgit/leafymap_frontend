@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserTypeStep from "./steps/UserTypeStep";
 import ActivityFormStep from "./steps/ActivityFormStep/ActivityFormStep";
 import { WeekDay } from "@/components/common/forms/timetable/TimeTable.types";
@@ -9,7 +9,8 @@ import {
   FormDataChangeHandler,
 } from "./CreateProfileStepper.types";
 import type { FormData } from "./CreateProfileStepper.types";
-import useSubmitForm from "@/hooks/useSubmitForm";
+import useSubmitForm from "@/hooks/useUpdateUser";
+import { useUser } from "@/hooks/useUser";
 
 export type onNextHandler = () => void;
 export type onBackHandler = () => void;
@@ -30,27 +31,28 @@ export const createEmptySchedule = (): DefaultSchedule => {
 };
 
 const CreateProfileStepper = () => {
+  const { user } = useUser();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     userType: "",
     name: "",
     description: "",
     category: "",
-    address: null,
+    location: null,
     defaultSchedule: createEmptySchedule(),
     placeCategory: "",
-    phone: "",
-    email: "",
-    website: "",
+    phone: user?.phone || "",
+    email: user?.email || "",
+    website: user?.website || "",
     collaborators: [],
     createdCollaborators: [],
-    profilePicture: "",
+    profilePicture: user?.userImg || "",
   });
 
-  const { submitForm, loading, error, success } = useSubmitForm();
+  const { submitForm } = useSubmitForm();
 
   const handleSubmit = async () => {
-    await submitForm(formData);
+    await submitForm(formData, false);
   };
 
   const handleInputChange: FormDataChangeHandler = (e) => {
@@ -60,6 +62,15 @@ const CreateProfileStepper = () => {
 
   const handleNext = () => setStep((prev) => prev + 1);
   const handleBack = () => setStep((prev) => prev - 1);
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        ...formData,
+        ...user,
+      });
+    }
+  }, [user, formData]);
 
   return (
     <div>

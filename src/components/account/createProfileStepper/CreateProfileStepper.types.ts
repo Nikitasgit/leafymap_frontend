@@ -2,7 +2,7 @@ import {
   DaySchedule,
   WeekDay,
 } from "@/components/common/forms/timetable/TimeTable.types";
-import { Address } from "@/types/map";
+import { Location } from "@/types/map";
 import { Collaborator } from "./steps/ActivityFormStep/formComponents/CreatePartner";
 
 export type DefaultSchedule = Record<WeekDay, DaySchedule>;
@@ -12,7 +12,7 @@ export interface FormData {
   name: string;
   description: string;
   category: string;
-  address: Address | null;
+  location: Location | null;
   defaultSchedule: DefaultSchedule;
   placeCategory: string;
   phone: string;
@@ -37,7 +37,7 @@ export type FormDataChangeHandler = (
           name: string;
           value:
             | string
-            | Address
+            | Location
             | string[]
             | Collaborator
             | Collaborator[]

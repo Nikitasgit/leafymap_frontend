@@ -14,6 +14,7 @@ type TextfieldProps = {
   rows?: number;
   required?: boolean;
   type?: "text" | "email" | "password" | "number" | "tel" | "url";
+  disabled?: boolean;
 };
 
 const TextField: React.FC<TextfieldProps> = ({
@@ -28,6 +29,7 @@ const TextField: React.FC<TextfieldProps> = ({
   multiline = false,
   rows = 4,
   required = false,
+  disabled = false,
 }) => {
   return (
     <div>
@@ -47,6 +49,7 @@ const TextField: React.FC<TextfieldProps> = ({
         <input
           id={name}
           name={name}
+          disabled={disabled}
           type={type}
           value={value}
           placeholder={placeholder}

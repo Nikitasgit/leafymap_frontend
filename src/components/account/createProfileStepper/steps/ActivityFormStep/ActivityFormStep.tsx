@@ -35,7 +35,7 @@ const ActivityFormStep = ({
       }}
     >
       <Infos isCreator={isCreator} data={data} onChange={onChange} />
-      <ContactForm onChange={onChange} data={data} />
+      <ContactForm onChange={onChange} data={data} disabled={isCreator} />
       {!isCreator && <Partners onChange={onChange} data={data} />}
       <ProfilePictureUploader
         onChange={onChange}

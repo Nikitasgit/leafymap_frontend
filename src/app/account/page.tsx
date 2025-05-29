@@ -35,10 +35,10 @@ export default function AccountPage() {
   }
   const buttonParameters =
     userType === "creator"
-      ? { route: "/modifyCreator", text: "Modifier mon profil" }
+      ? { route: "/account/update-creator", text: "Modifier mon profil" }
       : userType === "organizer"
-      ? { route: "/places/create", text: "Ajouter un lieu" }
-      : { route: "/createProfile", text: "Ajouter mon activité" };
+      ? { route: "/places/create-place", text: "Ajouter un lieu" }
+      : { route: "/account/create-profile", text: "Ajouter mon activité" };
 
   if (!buttonParameters) {
     return <div>No button parameters</div>;

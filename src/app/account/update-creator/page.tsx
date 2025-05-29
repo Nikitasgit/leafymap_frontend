@@ -9,17 +9,15 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { createEmptySchedule } from "@/components/account/createProfileStepper/CreateProfileStepper";
 import ActivityFormStep from "@/components/account/createProfileStepper/steps/ActivityFormStep/ActivityFormStep";
-import useSubmitForm from "@/hooks/useSubmitForm";
+import useSubmitForm from "@/hooks/useUpdateUser";
 
 const ModifyCreator = () => {
   const { user } = useSelector(selectUser);
   const [formData, setFormData] = useState<FormData | null>(null);
-  const { submitForm, loading, error, success } = useSubmitForm({
-    isUpdate: true,
-  });
+  const { submitForm } = useSubmitForm();
   useEffect(() => {
     if (user && user.creatorProfile && !formData) {
-      const creatorPlace = user.creatorProfile.creatorPlace?.location;
+      const creatorPlace = user.creatorProfile.place?.location;
 
       const coordinates =
         creatorPlace?.coordinates?.length === 2 &&
@@ -33,10 +31,10 @@ const ModifyCreator = () => {
 
       const data: FormData = {
         userType: user.userType || "",
-        name: user.creatorProfile.creatorName || "",
+        name: user.creatorProfile.name || "",
         description: user.description || "",
         category: user.creatorProfile.categories?.[0]._id || "",
-        address: creatorPlace
+        location: creatorPlace
           ? {
               id: creatorPlace.id || "",
               label: creatorPlace.label || "",
@@ -44,9 +42,8 @@ const ModifyCreator = () => {
             }
           : null,
         defaultSchedule:
-          user.creatorProfile.creatorPlace?.defaultSchedule ||
-          createEmptySchedule(),
-        placeCategory: user.creatorProfile.creatorPlace?.placeCategory || "",
+          user.creatorProfile.place?.defaultSchedule || createEmptySchedule(),
+        placeCategory: user.creatorProfile.place?.placeCategory._id || "",
         phone: user.phone || "",
         email: user.email || "",
         website: user.website || "",
@@ -66,7 +63,7 @@ const ModifyCreator = () => {
   };
   const handleSubmit = async () => {
     if (!formData) return;
-    await submitForm(formData);
+    await submitForm(formData, true);
   };
 
   if (!formData) return <div>Loading...</div>;

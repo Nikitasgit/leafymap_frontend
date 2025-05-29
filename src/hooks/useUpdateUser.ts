@@ -5,26 +5,23 @@ import { fetchUser } from "@/store/userSlice";
 import { useAppDispatch } from "@/store";
 import { useRouter } from "next/navigation";
 
-type UseSubmitFormParams = {
-  isUpdate?: boolean;
-};
-
 type UseCreateProfileReturn = {
-  submitForm: (data: FormData) => Promise<void>;
+  submitForm: (data: FormData, isUpdate: boolean) => Promise<void>;
   loading: boolean;
   error: string | null;
   success: boolean;
 };
 
-const useSubmitForm = ({
-  isUpdate = false,
-}: UseSubmitFormParams = {}): UseCreateProfileReturn => {
+const useSubmitForm = (): UseCreateProfileReturn => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const submitForm = async (data: FormData) => {
+  const submitForm = async (
+    data: FormData,
+    isUpdate: boolean
+  ): Promise<void> => {
     setLoading(true);
     setError(null);
     setSuccess(false);
@@ -41,8 +38,8 @@ const useSubmitForm = ({
       if (data.placeCategory) {
         form.append("placeCategory", data.placeCategory);
       }
-      if (data.address) {
-        form.append("address", JSON.stringify(data.address));
+      if (data.location) {
+        form.append("location", JSON.stringify(data.location));
       }
       if (data.defaultSchedule) {
         form.append("defaultSchedule", JSON.stringify(data.defaultSchedule));
@@ -53,6 +50,7 @@ const useSubmitForm = ({
       if (data.createdCollaborators) {
         const cleanedCollaborators = data.createdCollaborators.map(
           (collaborator) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { id, ...collaboratorWithoutId } = collaborator;
             return collaboratorWithoutId;
           }
@@ -65,21 +63,31 @@ const useSubmitForm = ({
       if (data.profilePicture instanceof File) {
         form.append("profilePicture", data.profilePicture);
       }
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/users/create-creator`,
-        form,
-        {
+
+      if (isUpdate) {
+        await axios.put(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/users/update-creator`,
+          form,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            withCredentials: true,
+          }
+        );
+      } else {
+        const url =
+          data.userType === "creator"
+            ? `${process.env.NEXT_PUBLIC_API_URL}/api/users/create-creator`
+            : `${process.env.NEXT_PUBLIC_API_URL}/api/users/create-organizer`;
+
+        await axios.post(url, form, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
           withCredentials: true,
-        }
-      );
-      const url = isUpdate
-        ? `${process.env.NEXT_PUBLIC_API_URL}/api/users/update-creator`
-        : data.userType === "creator"
-        ? `${process.env.NEXT_PUBLIC_API_URL}/api/users/create-creator`
-        : `${process.env.NEXT_PUBLIC_API_URL}/api/users/create-organizer`;
+        });
+      }
 
       router.push("/account");
       setSuccess(true);

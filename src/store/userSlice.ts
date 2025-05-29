@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
 import axios from "axios";
-import { User } from "@/types/user";
+import { Creator, User } from "@/types/user";
 import { Place } from "@/types/place";
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
@@ -58,8 +58,8 @@ const userSlice = createSlice({
 export const { signOut } = userSlice.actions;
 export const selectUser = (state: RootState): UserState => state.user;
 export const selectUserCreatorPlace = (state: RootState): Place | null => {
-  const user = state.user.user as User | null;
-  const creatorPlace = user?.creatorProfile?.creatorPlace;
+  const user = state.user.user as Creator | null;
+  const creatorPlace = user?.creatorProfile?.place;
   return creatorPlace && typeof creatorPlace !== "string" ? creatorPlace : null;
 };
 export default userSlice.reducer;

@@ -1,3 +1,5 @@
+import { PlaceCategory } from "./categories";
+
 interface Location {
   type: "Point";
   coordinates: [number, number];
@@ -25,11 +27,11 @@ interface Place {
   description?: string;
   userId: string;
   location: Location;
-  placeCategory: string; // ID of PlaceCategory
-  categories: string[]; // Array of SubCategory IDs
+  placeCategory: PlaceCategory;
+  categories: string[];
   defaultSchedule?: DefaultSchedule;
-  collaborators?: string[]; // Array of User IDs
-  createdCollaborators?: string[]; // Array of User IDs
+  collaborators?: string[];
+  createdCollaborators?: string[];
   isCreatorPlace?: boolean;
   placeImg?: string;
   phone?: string;

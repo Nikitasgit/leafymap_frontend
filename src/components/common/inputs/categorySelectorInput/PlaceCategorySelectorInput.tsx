@@ -13,7 +13,6 @@ const PlaceCategorySelectorInput = ({
   onChange: FormDataChangeHandler;
 }) => {
   const placeCategories = useSelector(selectPlaceCategories);
-
   const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");

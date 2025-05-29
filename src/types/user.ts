@@ -1,16 +1,11 @@
 import { SubCategory } from "./categories";
 import { Place } from "./place";
-interface Address {
-  number?: string;
-  street: string;
-  code: string;
-  extra?: string;
-}
+import { Location } from "./map";
 
 interface CreatorProfile {
   categories: SubCategory[];
-  creatorPlace?: Place;
-  creatorName: string;
+  place?: Place;
+  name: string;
 }
 
 type UserType = "creator" | "organizer" | "guest";
@@ -28,12 +23,14 @@ interface User {
   updatedAt?: Date;
   userImg?: string;
   description?: string;
-  address?: Address;
+  location?: Location;
   deleted?: boolean;
   followers?: string[];
   places?: Place[];
-  creatorProfile?: CreatorProfile;
   interests?: string[];
 }
+interface Creator extends Omit<User, "places"> {
+  creatorProfile: CreatorProfile;
+}
 
-export type { User };
+export type { User, Creator };

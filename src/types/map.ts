@@ -1,12 +1,13 @@
-export interface location {
+export interface MapCoordinates {
   longitude: number;
   latitude: number;
   zoom?: number;
 }
-export interface marker extends location {
+export interface MapMarker extends MapCoordinates {
   draggable?: boolean;
 }
-export interface Address {
+
+export interface Location {
   id: string;
   label: string;
   coordinates: {
@@ -14,8 +15,8 @@ export interface Address {
     latitude: number;
   };
 }
-//MAPBOX
 
+//MAPBOX
 export interface MapboxFeature {
   id: string;
   place_name_fr?: string;

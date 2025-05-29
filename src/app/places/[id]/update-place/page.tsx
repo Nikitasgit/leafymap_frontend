@@ -5,25 +5,24 @@ import ActivityFormStep from "@/components/account/createProfileStepper/steps/Ac
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { usePlace } from "@/hooks/usePlace";
-import {
-  FormData,
-  FormDataChangeHandler,
-} from "@/components/account/createProfileStepper/CreateProfileStepper.types";
+import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
+import useModifyPlace, { PlaceFormData } from "@/hooks/useUpdatePlace";
 
 const UpdatePlace = () => {
   const params = useParams();
   const placeId = params.id as string;
   const { place, loading, error } = usePlace(placeId);
-
-  const [formData, setFormData] = useState<FormData>(null);
+  const { submitForm } = useModifyPlace();
+  const [formData, setFormData] = useState<PlaceFormData | null>(null);
 
   const handleInputChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => (prev ? { ...prev, [name]: value } : null));
   };
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+  const onSubmit = async () => {
+    if (!formData) return;
+    await submitForm(formData, true);
   };
   useEffect(() => {
     if (place && !formData) {
@@ -31,16 +30,14 @@ const UpdatePlace = () => {
         latitude: place.location.coordinates[1],
         longitude: place.location.coordinates[0],
       };
-      const data: FormData = {
-        name: place.title || "",
+      const data: PlaceFormData = {
+        title: place.title || "",
         description: place.description || "",
-        address: place.location
-          ? {
-              id: place.location.id || "",
-              label: place.location.label || "",
-              coordinates: coordinates!,
-            }
-          : null,
+        location: {
+          id: place.location?.id || "",
+          label: place.location?.label || "",
+          coordinates: coordinates || { latitude: 0, longitude: 0 },
+        },
         defaultSchedule: place.defaultSchedule || createEmptySchedule(),
         placeCategory: place.placeCategory || "",
         phone: place.phone || "",

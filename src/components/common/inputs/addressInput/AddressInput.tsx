@@ -1,18 +1,20 @@
 import React from "react";
 
 import axios from "axios";
-import { Address, MapboxFeature } from "@/types/map";
+import { MapboxFeature, Location } from "@/types/map";
 import SearchInput from "../searchInput/SearhInput";
 
 interface AddressInputProps {
-  onAddressSelect: (address: Address) => void;
+  onLocationSelect: (location: Location) => void;
   value?: string;
 }
 
-const AddressInput = ({ onAddressSelect, value }: AddressInputProps) => {
+const AddressInput = ({ onLocationSelect, value }: AddressInputProps) => {
   const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
-  const fetchAddressSuggestions = async (input: string): Promise<Address[]> => {
+  const fetchLocationSuggestions = async (
+    input: string
+  ): Promise<Location[]> => {
     const response = await axios.get(
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
         input
@@ -40,8 +42,8 @@ const AddressInput = ({ onAddressSelect, value }: AddressInputProps) => {
   return (
     <SearchInput
       value={value}
-      onSelect={(suggestion) => onAddressSelect(suggestion as Address)}
-      fetchSuggestions={fetchAddressSuggestions}
+      onSelect={(suggestion) => onLocationSelect(suggestion as Location)}
+      fetchSuggestions={fetchLocationSuggestions}
       placeholder="Entrez une adresse"
       limit={5}
     />
