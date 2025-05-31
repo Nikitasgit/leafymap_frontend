@@ -1,34 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
-
 import { fetchUser } from "@/store/userSlice";
 import { useAppDispatch } from "@/store";
-import { useRouter } from "next/navigation";
-import { Location } from "@/types/map";
-import {
-  createdCollaborator,
-  DefaultSchedule,
-} from "../components/account/createProfileStepper/CreateProfileStepper.types";
-import { Collaborator } from "@/components/account/createProfileStepper/steps/ActivityFormStep/formComponents/CreatePartner";
-
-export type PlaceFormData = {
-  title: string;
-  description: string;
-  placeCategory: string;
-  phone: string;
-  email: string;
-  website: string;
-  location: Location;
-  defaultSchedule: DefaultSchedule;
-  placeImg: File;
-  collaborators: Collaborator[];
-  createdCollaborators: createdCollaborator[];
-  placeId?: string;
-  isUpdate: boolean;
-};
+import { useRouter, useParams } from "next/navigation";
+import type { FormData } from "../components/account/createProfileStepper/CreateProfileStepper.types";
 
 type UseUpdatePlaceReturn = {
-  submitForm: (data: PlaceFormData, isUpdate: boolean) => Promise<void>;
+  submitForm: (data: FormData, isUpdate: boolean) => Promise<void>;
   loading: boolean;
   error: string | null;
   success: boolean;
@@ -40,14 +18,21 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
   const [success, setSuccess] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const submitForm = async (data: PlaceFormData, isUpdate: boolean) => {
+  const params = useParams();
+  const placeId = params.id as string;
+
+  const submitForm = async (data: FormData, isUpdate: boolean) => {
     setLoading(true);
     setError(null);
     setSuccess(false);
 
     try {
+      if (isUpdate && !placeId) {
+        throw new Error("Place ID is required for update");
+      }
+
       const form = new FormData();
-      form.append("title", data.title);
+      form.append("name", data.name);
       form.append("description", data.description);
       form.append("placeCategory", data.placeCategory);
       form.append("phone", data.phone);
@@ -55,11 +40,10 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
       form.append("website", data.website);
       form.append("location", JSON.stringify(data.location));
       form.append("defaultSchedule", JSON.stringify(data.defaultSchedule));
-      if (data.placeId) {
-        form.append("placeId", data.placeId);
-      }
+
       if (data.collaborators) {
-        form.append("collaborators", JSON.stringify(data.collaborators));
+        const collaboratorIds = data.collaborators.map((collab) => collab.id);
+        form.append("collaborators", JSON.stringify(collaboratorIds));
       }
       if (data.createdCollaborators) {
         const cleanedCollaborators = data.createdCollaborators.map(
@@ -74,12 +58,13 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
           JSON.stringify(cleanedCollaborators)
         );
       }
-      if (data.placeImg instanceof File) {
-        form.append("placeImg", data.placeImg);
+      if (data.image instanceof File) {
+        form.append("image", data.image);
       }
+
       if (isUpdate) {
         await axios.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places/update-place`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/places/update-place/${placeId}`,
           form,
           {
             headers: {
@@ -105,6 +90,7 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
       setSuccess(true);
       dispatch(fetchUser());
     } catch (err: unknown) {
+      console.error("Error in submitForm:", err);
       setError(
         err instanceof Error
           ? err.message

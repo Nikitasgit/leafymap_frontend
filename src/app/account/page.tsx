@@ -6,7 +6,8 @@ import Button from "@/components/common/buttons/button/Button";
 import { selectUser } from "@/store/userSlice";
 import { useSelector } from "react-redux";
 import React from "react";
-import PlacesEditList from "@/components/account/placesList/PlacesList";
+import PlacesEditList from "@/components/account/placesList/PlacesEditList";
+import { Organizer } from "@/types/user";
 
 export default function AccountPage() {
   const {
@@ -15,6 +16,7 @@ export default function AccountPage() {
     error: userError,
   } = useSelector(selectUser);
   const { userType } = user || {};
+  const organizer = user as Organizer;
   const router = useRouter();
 
   if (userLoading) {
@@ -53,8 +55,8 @@ export default function AccountPage() {
             <h2>{user?.username}</h2>
             <p>{user?.email}</p>
           </div>
-          {user?.userImg && (
-            <Image src={user?.userImg} alt="Profile" width={80} height={80} />
+          {user?.image && (
+            <Image src={user?.image} alt="Profile" width={80} height={80} />
           )}
         </div>
       </div>
@@ -63,8 +65,8 @@ export default function AccountPage() {
           {buttonParameters.text}
         </Button>
       )}
-      {userType === "organizer" && user?.places && (
-        <PlacesEditList places={user?.places} />
+      {userType === "organizer" && organizer?.places && (
+        <PlacesEditList places={organizer?.places} />
       )}
     </main>
   );

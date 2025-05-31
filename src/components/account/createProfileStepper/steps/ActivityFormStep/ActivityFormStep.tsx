@@ -5,7 +5,6 @@ import { FormDataChangeHandler } from "../../CreateProfileStepper.types";
 import Infos from "./formComponents/Infos";
 import { FormData } from "../../CreateProfileStepper.types";
 import ContactForm from "./formComponents/ContactForm";
-import Partners from "./formComponents/Partners";
 import ProfilePictureUploader from "./formComponents/ProfilePictureUploader";
 
 interface ActivityFormStepProps {
@@ -16,6 +15,7 @@ interface ActivityFormStepProps {
   onBack?: () => void;
   submitButtonText?: string;
   isCreator: boolean;
+  firstStep: boolean;
 }
 
 const ActivityFormStep = ({
@@ -26,6 +26,7 @@ const ActivityFormStep = ({
   onBack = () => {},
   submitButtonText = "Créer mon profil",
   isCreator,
+  firstStep = false,
 }: ActivityFormStepProps) => {
   return (
     <form
@@ -36,15 +37,16 @@ const ActivityFormStep = ({
     >
       <Infos isCreator={isCreator} data={data} onChange={onChange} />
       <ContactForm onChange={onChange} data={data} disabled={isCreator} />
-      {!isCreator && <Partners onChange={onChange} data={data} />}
       <ProfilePictureUploader
         onChange={onChange}
-        initialImage={data.profilePicture as string}
+        initialImage={data.image as string}
       />
       <div>
-        <Button type="button" onClick={onBack}>
-          Précédent
-        </Button>
+        {!firstStep && (
+          <Button type="button" onClick={onBack}>
+            Précédent
+          </Button>
+        )}
         <Button onClick={onSubmit}>{submitButtonText}</Button>
       </div>
     </form>

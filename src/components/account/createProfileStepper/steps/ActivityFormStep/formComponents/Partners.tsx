@@ -1,10 +1,13 @@
 import React from "react";
 import SearchInput, {
   Suggestion,
-} from "@/components/common/inputs/searchInput/SearhInput";
+} from "@/components/common/inputs/searchInput/SearchInput";
 import Image from "next/image";
-import { FormDataChangeHandler } from "../../../CreateProfileStepper.types";
-import { FormData } from "../../../CreateProfileStepper.types";
+import {
+  FormData,
+  FormDataChangeHandler,
+  Collaborator,
+} from "../../../CreateProfileStepper.types";
 import CreatePartners from "./CreatePartner";
 import axios from "axios";
 import { Creator } from "@/types/user";
@@ -31,15 +34,7 @@ const searchUsers = async (query: string) => {
     return data.users.map((user: Creator) => ({
       id: user._id,
       label: user.creatorProfile?.name,
-      icon: (
-        <Image
-          src={user.userImg || "https://i.pravatar.cc/40?img=3"}
-          alt={user.creatorProfile?.name}
-          width={30}
-          height={30}
-          style={{ borderRadius: "50%" }}
-        />
-      ),
+      icon: user.image || "https://i.pravatar.cc/40?img=3",
     }));
   } catch (err) {
     console.error("Error searching users:", err);
@@ -50,15 +45,7 @@ const searchUsers = async (query: string) => {
 const initialUserSuggestions = fakeUsers.map((user) => ({
   id: user.id,
   label: user.name,
-  icon: (
-    <Image
-      src={user.avatar}
-      alt={user.name}
-      width={30}
-      height={30}
-      style={{ borderRadius: "50%" }}
-    />
-  ),
+  icon: user.avatar,
 }));
 
 const Partners = ({
@@ -72,7 +59,25 @@ const Partners = ({
     onChange({
       target: {
         name: "collaborators",
-        value: [...data.collaborators, suggestion.id],
+        value: [
+          ...data.collaborators,
+          {
+            id: suggestion.id,
+            label: suggestion.label,
+            icon: suggestion.icon,
+          },
+        ] as Collaborator[],
+      },
+    });
+  };
+
+  const handleDelete = (id: string) => {
+    onChange({
+      target: {
+        name: "collaborators",
+        value: data.collaborators.filter(
+          (collaborator) => collaborator.id !== id
+        ),
       },
     });
   };
@@ -85,6 +90,9 @@ const Partners = ({
         initialSuggestions={initialUserSuggestions}
         placeholder="Ajouter un utilisateur..."
         withIcons
+        list={data.collaborators}
+        onDelete={handleDelete}
+        displayList
       />
       <CreatePartners onChange={onChange} data={data} />
     </div>

@@ -19,7 +19,7 @@ const ProfilePictureUploader = ({
       setPreview(URL.createObjectURL(file));
       onChange({
         target: {
-          name: "profilePicture",
+          name: "image",
           value: file,
         },
       });

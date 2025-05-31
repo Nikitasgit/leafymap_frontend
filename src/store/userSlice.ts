@@ -15,7 +15,7 @@ export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
 });
 
 export type UserState = {
-  user: User | null;
+  user: User | Creator | null;
   loading: boolean;
   error: string;
   fetched: boolean;

@@ -2,7 +2,7 @@ import React from "react";
 
 import axios from "axios";
 import { MapboxFeature, Location } from "@/types/map";
-import SearchInput from "../searchInput/SearhInput";
+import SearchInput from "../searchInput/SearchInput";
 
 interface AddressInputProps {
   onLocationSelect: (location: Location) => void;

@@ -3,30 +3,35 @@ import {
   WeekDay,
 } from "@/components/common/forms/timetable/TimeTable.types";
 import { Location } from "@/types/map";
-import { Collaborator } from "./steps/ActivityFormStep/formComponents/CreatePartner";
 
 export type DefaultSchedule = Record<WeekDay, DaySchedule>;
 
 export interface FormData {
   userType: string;
+  image: string | File;
   name: string;
   description: string;
   category: string;
-  location: Location | null;
-  defaultSchedule: DefaultSchedule;
-  placeCategory: string;
   phone: string;
   email: string;
   website: string;
-  collaborators: string[];
-  createdCollaborators: createdCollaborator[];
-  profilePicture: string | File;
+  defaultSchedule: DefaultSchedule;
+  collaborators: Collaborator[];
+  createdCollaborators: CreatedCollaborator[];
+  placeCategory: string;
+  location: Location | null;
+  placeId?: string;
 }
-
-export type createdCollaborator = {
+export type Collaborator = {
+  icon: string;
+  label: string;
+  id: string;
+};
+export type CreatedCollaborator = {
   name: string;
   category: string;
-  id?: string;
+  id: string;
+  _id?: string;
 };
 
 export type FormDataChangeHandler = (
@@ -39,8 +44,8 @@ export type FormDataChangeHandler = (
             | string
             | Location
             | string[]
-            | Collaborator
             | Collaborator[]
+            | CreatedCollaborator[]
             | File
             | DefaultSchedule
             | null;

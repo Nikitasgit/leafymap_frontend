@@ -21,16 +21,19 @@ interface User {
   phone?: string;
   website?: string;
   updatedAt?: Date;
-  userImg?: string;
+  image?: string;
   description?: string;
   location?: Location;
   deleted?: boolean;
   followers?: string[];
-  places?: Place[];
   interests?: string[];
 }
-interface Creator extends Omit<User, "places"> {
+interface Creator extends User {
   creatorProfile: CreatorProfile;
 }
 
-export type { User, Creator };
+interface Organizer extends User {
+  places?: Place[];
+}
+
+export type { User, Creator, Organizer };

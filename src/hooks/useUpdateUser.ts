@@ -45,8 +45,10 @@ const useSubmitForm = (): UseCreateProfileReturn => {
         form.append("defaultSchedule", JSON.stringify(data.defaultSchedule));
       }
       if (data.collaborators) {
-        form.append("collaborators", JSON.stringify(data.collaborators));
+        const collaboratorIds = data.collaborators.map((collab) => collab.id);
+        form.append("collaborators", JSON.stringify(collaboratorIds));
       }
+
       if (data.createdCollaborators) {
         const cleanedCollaborators = data.createdCollaborators.map(
           (collaborator) => {
@@ -60,8 +62,8 @@ const useSubmitForm = (): UseCreateProfileReturn => {
           JSON.stringify(cleanedCollaborators)
         );
       }
-      if (data.profilePicture instanceof File) {
-        form.append("profilePicture", data.profilePicture);
+      if (data.image instanceof File) {
+        form.append("image", data.image);
       }
 
       if (isUpdate) {

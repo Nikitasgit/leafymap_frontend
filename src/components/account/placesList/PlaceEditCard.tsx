@@ -7,17 +7,12 @@ const PlaceEditCard = ({ place }: { place: Place }) => {
   const router = useRouter();
   return (
     <div>
-      <h3>{place.title}</h3>
+      <h3>{place.name}</h3>
       <p>{place.description}</p>
-      {place.placeImg && (
-        <Image
-          src={place.placeImg}
-          alt={place.title}
-          width={100}
-          height={100}
-        />
+      {place.image && (
+        <Image src={place.image} alt={place.name} width={100} height={100} />
       )}
-      <Button onClick={() => router.push(`/places/${place._id}/modify`)}>
+      <Button onClick={() => router.push(`/places/${place._id}/update-place`)}>
         Modifier
       </Button>
       <Button onClick={() => router.push(`/places/${place._id}/events`)}>

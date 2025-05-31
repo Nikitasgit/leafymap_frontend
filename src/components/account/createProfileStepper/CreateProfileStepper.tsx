@@ -40,13 +40,13 @@ const CreateProfileStepper = () => {
     category: "",
     location: null,
     defaultSchedule: createEmptySchedule(),
-    placeCategory: "",
     phone: user?.phone || "",
     email: user?.email || "",
     website: user?.website || "",
     collaborators: [],
     createdCollaborators: [],
-    profilePicture: user?.userImg || "",
+    image: user?.image || "",
+    placeCategory: "",
   });
 
   const { submitForm } = useSubmitForm();
@@ -65,12 +65,15 @@ const CreateProfileStepper = () => {
 
   useEffect(() => {
     if (user) {
-      setFormData({
-        ...formData,
-        ...user,
-      });
+      setFormData((prev) => ({
+        ...prev,
+        phone: user.phone || prev.phone,
+        email: user.email || prev.email,
+        website: user.website || prev.website,
+        image: user.image || prev.image,
+      }));
     }
-  }, [user, formData]);
+  }, [user]);
 
   return (
     <div>

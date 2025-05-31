@@ -1,4 +1,6 @@
+import { CreatedCollaborator } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { PlaceCategory } from "./categories";
+import { User } from "./user";
 
 interface Location {
   type: "Point";
@@ -21,19 +23,29 @@ type DefaultSchedule = {
   [day: string]: DaySchedule;
 };
 
+type CreatedCollaboratorDB = {
+  name: string;
+  category: string;
+  categoryId: string;
+  _id?: string;
+};
+
 interface Place {
   _id: string;
-  title: string;
+  name: string;
   description?: string;
   userId: string;
   location: Location;
   placeCategory: PlaceCategory;
   categories: string[];
   defaultSchedule?: DefaultSchedule;
-  collaborators?: string[];
-  createdCollaborators?: string[];
+  collaborators?: {
+    user: User;
+    status: "pending" | "accepted" | "refused";
+  }[];
+  createdCollaborators?: CreatedCollaboratorDB[];
   isCreatorPlace?: boolean;
-  placeImg?: string;
+  image?: string;
   phone?: string;
   email?: string;
   website?: string;
