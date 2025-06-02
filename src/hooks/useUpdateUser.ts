@@ -35,6 +35,8 @@ const useSubmitForm = (): UseCreateProfileReturn => {
       form.append("phone", data.phone);
       form.append("email", data.email);
       form.append("website", data.website);
+      form.append("placeActive", data.placeActive ? "true" : "false");
+
       if (data.placeCategory) {
         form.append("placeCategory", data.placeCategory);
       }

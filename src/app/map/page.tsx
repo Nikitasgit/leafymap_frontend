@@ -4,7 +4,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 const MapPage = () => {
   return (
     <>
-      <Map />
+      <Map withPlacesInView />
     </>
   );
 };

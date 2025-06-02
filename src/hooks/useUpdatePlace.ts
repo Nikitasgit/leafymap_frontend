@@ -64,7 +64,7 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
 
       if (isUpdate) {
         await axios.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places/update-place/${placeId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}`,
           form,
           {
             headers: {
@@ -75,7 +75,7 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
         );
       } else {
         await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places/create-place`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/places`,
           form,
           {
             headers: {

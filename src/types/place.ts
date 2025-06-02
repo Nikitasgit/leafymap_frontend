@@ -49,6 +49,7 @@ interface Place {
   phone?: string;
   email?: string;
   website?: string;
+  active: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }

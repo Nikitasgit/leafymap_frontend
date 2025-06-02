@@ -19,39 +19,40 @@ interface InfosProps {
 }
 
 const Infos = ({ isCreator, data, onChange }: InfosProps) => {
-  const withPlace = !!data.location;
   const { user } = useUser();
+  const withPlace = !!data.placeActive;
   const creator = user as Creator;
 
   const [creatorWithPlace, setCreatorWithPlace] = useState(withPlace);
 
   const handleDisplayPlaceChange = (value: string) => {
     if (creator?.creatorProfile?.place) {
+      const place = creator.creatorProfile.place;
       onChange({
         target: {
           name: "placeCategory",
-          value: creator.creatorProfile.place.placeCategory._id,
+          value: place.placeCategory._id,
         },
       });
       onChange({
         target: {
           name: "location",
           value: {
-            id: creator.creatorProfile.place.location.id || "",
-            label: creator.creatorProfile.place.location.label,
+            id: place.location.id || "",
+            label: place.location.label,
             coordinates: {
-              latitude: creator.creatorProfile.place.location.coordinates[1],
-              longitude: creator.creatorProfile.place.location.coordinates[0],
+              latitude: place.location.coordinates[1],
+              longitude: place.location.coordinates[0],
             },
           },
         },
       });
     }
+    onChange({ target: { name: "placeActive", value: true } });
     setCreatorWithPlace(value === "yes");
 
     if (value === "no") {
-      onChange({ target: { name: "location", value: null } });
-      onChange({ target: { name: "placeCategory", value: "" } });
+      onChange({ target: { name: "placeActive", value: false } });
     }
   };
 

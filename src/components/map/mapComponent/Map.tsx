@@ -9,13 +9,22 @@ import Map, {
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useState, useEffect } from "react";
 import { MapCoordinates, MapMarker } from "@/types/map";
+import axios from "axios";
+import { Place } from "@/types/place";
+
+interface MapFilters {
+  type: string;
+  category: string;
+}
 
 interface MapComponentProps {
   width?: string;
   height?: string;
   location?: MapCoordinates;
   markers?: MapMarker[];
+  filters?: MapFilters;
   withDefaultMarker?: boolean;
+  withPlacesInView?: boolean;
   onMapClick?: (coords: { longitude: number; latitude: number }) => void;
 }
 
@@ -30,14 +39,44 @@ const MapComponent = ({
   height = "100vh",
   location,
   markers = [],
+  filters,
   onMapClick,
   withDefaultMarker = false,
+  withPlacesInView = false,
 }: MapComponentProps) => {
-  const [viewState, setViewState] = useState<MapCoordinates>(
-    location ?? DEFAULT_LOCATION
-  );
+  const [viewState, setViewState] = useState<MapCoordinates | null>(null);
+  const [filteredPlaces, setFilteredPlaces] = useState<Place[]>([]);
+  const [mapRef, setMapRef] = useState<mapboxgl.Map | null>(null);
+
+  const fetchMarkersInView = async (bounds: mapboxgl.LngLatBounds | null) => {
+    if (!bounds) return;
+    const ne = bounds.getNorthEast().toArray();
+    const sw = bounds.getSouthWest().toArray();
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/places/in-view`,
+        {
+          params: {
+            ne: JSON.stringify(ne),
+            sw: JSON.stringify(sw),
+            filters: JSON.stringify(filters),
+          },
+        }
+      );
+      setFilteredPlaces(response.data);
+    } catch (err) {
+      console.error("Failed to fetch places in view:", err);
+    }
+  };
+
   useEffect(() => {
-    if (!location && typeof window !== "undefined" && navigator.geolocation) {
+    if (location) {
+      setViewState({
+        latitude: location.latitude,
+        longitude: location.longitude,
+        zoom: location.zoom ?? 12,
+      });
+    } else if (typeof window !== "undefined" && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setViewState({
@@ -46,25 +85,27 @@ const MapComponent = ({
             zoom: 12,
           });
         },
-        (error) => {
-          console.warn("Erreur de géolocalisation : ", error);
+        () => {
+          setViewState(DEFAULT_LOCATION);
         }
       );
-    } else if (location) {
-      setViewState((prev) => ({
-        ...prev,
-        latitude: location.latitude,
-        longitude: location.longitude,
-        zoom: location.zoom ?? prev.zoom ?? 12,
-      }));
+    } else {
+      setViewState(DEFAULT_LOCATION);
     }
   }, [location]);
+
+  if (!viewState) return <p>Loading map...</p>;
 
   return (
     <Map
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-      {...viewState}
-      onMove={(e) => setViewState(e.viewState)}
+      initialViewState={viewState}
+      mapStyle="mapbox://styles/mapbox/streets-v9"
+      onMoveEnd={(e) => {
+        if (withPlacesInView) {
+          fetchMarkersInView(e.target.getBounds());
+        }
+      }}
       onClick={(e) => {
         if (onMapClick) {
           onMapClick({
@@ -74,25 +115,36 @@ const MapComponent = ({
         }
       }}
       style={{ width, height }}
-      mapStyle="mapbox://styles/mapbox/streets-v9"
+      onLoad={(e) => {
+        if (withPlacesInView) {
+          fetchMarkersInView(e.target.getBounds());
+        }
+      }}
     >
       <FullscreenControl />
       <NavigationControl />
       <GeolocateControl />
-      {withDefaultMarker && markers.length === 0 && (
+
+      {withDefaultMarker && (
         <Marker
-          longitude={DEFAULT_LOCATION.longitude}
-          latitude={DEFAULT_LOCATION.latitude}
+          longitude={
+            markers.length > 0
+              ? markers[0].longitude
+              : DEFAULT_LOCATION.longitude
+          }
+          latitude={
+            markers.length > 0 ? markers[0].latitude : DEFAULT_LOCATION.latitude
+          }
           color="blue"
         />
       )}
-      {markers.map((marker, index) => (
+
+      {filteredPlaces.map((place, index) => (
         <Marker
           key={index}
-          longitude={marker.longitude}
-          latitude={marker.latitude}
+          longitude={place.location.coordinates[0]}
+          latitude={place.location.coordinates[1]}
           color="blue"
-          draggable={marker.draggable}
         />
       ))}
     </Map>

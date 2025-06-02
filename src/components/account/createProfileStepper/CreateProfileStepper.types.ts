@@ -21,6 +21,7 @@ export interface FormData {
   placeCategory: string;
   location: Location | null;
   placeId?: string;
+  placeActive?: boolean;
 }
 export type Collaborator = {
   icon: string;
@@ -48,6 +49,7 @@ export type FormDataChangeHandler = (
             | CreatedCollaborator[]
             | File
             | DefaultSchedule
+            | boolean
             | null;
         };
       }

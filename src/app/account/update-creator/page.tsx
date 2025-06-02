@@ -21,7 +21,7 @@ const ModifyCreator = () => {
   useEffect(() => {
     if (creator && creator.creatorProfile && !formData) {
       const creatorPlace = creator.creatorProfile.place?.location;
-      const coordinates = creatorPlace
+      const coordinates = creatorPlace?.coordinates
         ? {
             latitude: creatorPlace.coordinates[1],
             longitude: creatorPlace.coordinates[0],
@@ -50,11 +50,13 @@ const ModifyCreator = () => {
         image: creator.image || "",
         collaborators: [],
         createdCollaborators: [],
+        placeActive: creator.creatorProfile.place?.active || false,
       };
 
       setFormData(data);
     }
   }, [formData, creator]);
+  console.log(formData);
 
   const handleInputChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
