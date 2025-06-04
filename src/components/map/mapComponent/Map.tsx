@@ -25,6 +25,7 @@ interface MapComponentProps {
   filters?: MapFilters;
   withDefaultMarker?: boolean;
   withPlacesInView?: boolean;
+  onMarkerClick?: (place: Place) => void;
   onMapClick?: (coords: { longitude: number; latitude: number }) => void;
 }
 
@@ -43,10 +44,10 @@ const MapComponent = ({
   onMapClick,
   withDefaultMarker = false,
   withPlacesInView = false,
+  onMarkerClick,
 }: MapComponentProps) => {
   const [viewState, setViewState] = useState<MapCoordinates | null>(null);
   const [filteredPlaces, setFilteredPlaces] = useState<Place[]>([]);
-  const [mapRef, setMapRef] = useState<mapboxgl.Map | null>(null);
 
   const fetchMarkersInView = async (bounds: mapboxgl.LngLatBounds | null) => {
     if (!bounds) return;
@@ -142,6 +143,13 @@ const MapComponent = ({
       {filteredPlaces.map((place, index) => (
         <Marker
           key={index}
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            if (onMarkerClick) {
+              console.log(place);
+              onMarkerClick(place);
+            }
+          }}
           longitude={place.location.coordinates[0]}
           latitude={place.location.coordinates[1]}
           color="blue"
