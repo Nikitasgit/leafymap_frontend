@@ -12,12 +12,12 @@ import TimeSlotsInput, {
 
 registerLocale("fr", fr);
 
-interface DateTimePickerProps {
+interface ProgramDateFormProps {
   onScheduleChange: (schedule: Schedule[]) => void;
   schedule: Schedule[];
 }
 
-const DateTimePicker: React.FC<DateTimePickerProps> = ({
+const ProgramDateForm: React.FC<ProgramDateFormProps> = ({
   onScheduleChange,
   schedule,
 }) => {
@@ -129,4 +129,4 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
   );
 };
 
-export default DateTimePicker;
+export default ProgramDateForm;

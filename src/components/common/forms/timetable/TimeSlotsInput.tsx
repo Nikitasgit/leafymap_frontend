@@ -31,12 +31,30 @@ const TimeSlotsInput: React.FC<TimeSlotsInputProps> = ({
     return date;
   };
 
-  const getExcludedTimes = (currentIndex: number): Date[] => {
+  const getExcludedTimes = (
+    currentIndex: number,
+    isStartTime: boolean = true
+  ): Date[] => {
     const excludedTimes: Date[] = [];
     const currentSlot = timeSlots[currentIndex];
     const currentStartTime = currentSlot.startTime
       ? parseTimeString(currentSlot.startTime)
       : null;
+    const currentEndTime = currentSlot.endTime
+      ? parseTimeString(currentSlot.endTime)
+      : null;
+
+    // Trouve la dernière heure de fin des créneaux précédents
+    let lastEndTime: Date | null = null;
+    for (let i = 0; i < currentIndex; i++) {
+      const slot = timeSlots[i];
+      if (slot.endTime) {
+        const end = parseTimeString(slot.endTime);
+        if (end && (!lastEndTime || end > lastEndTime)) {
+          lastEndTime = end;
+        }
+      }
+    }
 
     timeSlots.forEach((slot, index) => {
       if (index === currentIndex) return;
@@ -57,6 +75,16 @@ const TimeSlotsInput: React.FC<TimeSlotsInputProps> = ({
         }
       }
 
+      // Si on est en train de sélectionner une heure de fin
+      if (currentEndTime && currentEndTime > end) {
+        // Désactive toutes les heures après l'heure de fin sélectionnée
+        const current = new Date(currentEndTime);
+        while (current <= new Date(new Date().setHours(23, 59, 0))) {
+          excludedTimes.push(new Date(current));
+          current.setMinutes(current.getMinutes() + 15);
+        }
+      }
+
       // Désactive toutes les heures du créneau existant
       const current = new Date(start);
       while (current <= end) {
@@ -64,6 +92,18 @@ const TimeSlotsInput: React.FC<TimeSlotsInputProps> = ({
         current.setMinutes(current.getMinutes() + 15);
       }
     });
+
+    // Si on est en train de sélectionner une heure de début
+    if (isStartTime && !currentStartTime) {
+      // Si on a une heure de fin sélectionnée, désactive les heures après
+      if (currentEndTime) {
+        const current = new Date(currentEndTime);
+        while (current <= new Date(new Date().setHours(23, 59, 0))) {
+          excludedTimes.push(new Date(current));
+          current.setMinutes(current.getMinutes() + 15);
+        }
+      }
+    }
 
     return excludedTimes;
   };
@@ -174,8 +214,14 @@ const TimeSlotsInput: React.FC<TimeSlotsInputProps> = ({
               placeholderText="Heure de début"
               locale="fr"
               className="time-picker"
-              excludeTimes={getExcludedTimes(index)}
+              excludeTimes={getExcludedTimes(index, true)}
               onKeyDown={(e) => e.preventDefault()}
+              minTime={new Date(new Date().setHours(0, 0, 0))}
+              maxTime={
+                slot.endTime
+                  ? parseTimeString(slot.endTime)!
+                  : new Date(new Date().setHours(23, 59, 0))
+              }
             />
             <Text>à</Text>
             <DatePicker
@@ -188,10 +234,14 @@ const TimeSlotsInput: React.FC<TimeSlotsInputProps> = ({
               dateFormat="HH:mm"
               placeholderText="Heure de fin"
               locale="fr"
-              minTime={parseTimeString(slot.startTime) || undefined}
+              minTime={
+                slot.startTime
+                  ? parseTimeString(slot.startTime)!
+                  : new Date(new Date().setHours(0, 0, 0))
+              }
               maxTime={new Date(new Date().setHours(23, 59, 0))}
               className="time-picker"
-              excludeTimes={getExcludedTimes(index)}
+              excludeTimes={getExcludedTimes(index, false)}
               onKeyDown={(e) => e.preventDefault()}
             />
             <button

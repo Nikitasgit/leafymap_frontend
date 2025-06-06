@@ -13,7 +13,6 @@ const CreateEventPage = () => {
     createdCollaborators: [],
     schedule: [],
   });
-  console.log(data);
 
   const handleInputChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;

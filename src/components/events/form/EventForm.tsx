@@ -6,7 +6,7 @@ import Partners from "@/components/account/createProfileStepper/steps/ActivityFo
 import ProfilePictureUploader from "@/components/account/createProfileStepper/steps/ActivityFormStep/formComponents/ProfilePictureUploader";
 import TextField from "@/components/common/inputs/textField/TextField";
 import React from "react";
-import DateTimePicker from "./DateTimePicker";
+import ScheduleForm from "./ScheduleForm";
 
 export interface Schedule {
   date: string;
@@ -15,11 +15,17 @@ export interface Schedule {
   participants: string[];
 }
 
+export interface Collaborator {
+  id: string;
+  label: string;
+  icon?: string;
+}
+
 export interface EventFormData {
   name: string;
   description: string;
   image: string;
-  collaborators: string[];
+  collaborators: Collaborator[];
   createdCollaborators: CreatedCollaborator[];
   schedule: Schedule[];
 }
@@ -30,16 +36,6 @@ interface EventFormProps {
 }
 
 const EventForm = ({ onChange, data }: EventFormProps) => {
-  const handleScheduleChange = (newSchedule: Schedule[]) => {
-    const event = {
-      target: {
-        name: "schedule",
-        value: newSchedule,
-      },
-    };
-    onChange(event as unknown as React.ChangeEvent<HTMLInputElement>);
-  };
-
   return (
     <form className="space-y-6">
       <TextField
@@ -59,10 +55,7 @@ const EventForm = ({ onChange, data }: EventFormProps) => {
         onChange={onChange}
       />
       <Partners onChange={onChange} data={data} />
-      <DateTimePicker
-        schedule={data.schedule}
-        onScheduleChange={handleScheduleChange}
-      />
+      <ScheduleForm onChange={onChange} data={data} />
       <ProfilePictureUploader
         onChange={onChange}
         initialImage={data.image as string}
