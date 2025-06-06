@@ -16,9 +16,9 @@ export default function AppInitializer() {
 
   useEffect(() => {
     if (
-      categories.length === 0 ||
-      placeCategories.length === 0 ||
-      subCategories.length === 0
+      !categories?.length ||
+      !placeCategories?.length ||
+      !subCategories?.length
     ) {
       dispatch(fetchCategories());
     }

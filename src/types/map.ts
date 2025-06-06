@@ -1,7 +1,10 @@
 export interface MapCoordinates {
   longitude: number;
   latitude: number;
-  zoom?: number;
+  zoom: number;
+  bearing: number;
+  pitch: number;
+  padding: { top: number; bottom: number; left: number; right: number };
 }
 export interface MapMarker extends MapCoordinates {
   draggable?: boolean;

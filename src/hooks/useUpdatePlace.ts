@@ -30,7 +30,6 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
       if (isUpdate && !placeId) {
         throw new Error("Place ID is required for update");
       }
-
       const form = new FormData();
       form.append("name", data.name);
       form.append("description", data.description);
@@ -59,11 +58,23 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
         );
       }
       if (data.image instanceof File) {
+        console.log("Image file to upload:", data.image);
         form.append("image", data.image);
+      } else {
+        console.log("No image file to upload");
       }
 
       if (isUpdate) {
-        await axios.put(
+        console.log(
+          "Sending update request with form data:",
+          Object.fromEntries(form.entries())
+        );
+        console.log("Request headers:", {
+          "Content-Type": "multipart/form-data",
+          Authorization:
+            "Bearer " + document.cookie.split("token=")[1]?.split(";")[0],
+        });
+        const response = await axios.put(
           `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}`,
           form,
           {
@@ -73,6 +84,7 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
             withCredentials: true,
           }
         );
+        console.log("Response:", response.data);
       } else {
         await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/places`,

@@ -69,7 +69,6 @@ const UpdatePlace = () => {
 
   if (loading || !formData) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
-  console.log(place);
 
   return (
     <main>

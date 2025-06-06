@@ -6,10 +6,14 @@ import { Category, PlaceCategory, SubCategory } from "@/types/categories";
 export const fetchCategories = createAsyncThunk(
   "app/fetchCategories",
   async () => {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/categories`
-    );
-    return response.data;
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/categories`
+      );
+      return response.data.data;
+    } catch (error) {
+      throw error;
+    }
   }
 );
 
@@ -37,6 +41,7 @@ const appSlice = createSlice({
     builder
       .addCase(fetchCategories.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
         state.loading = false;
@@ -46,7 +51,7 @@ const appSlice = createSlice({
       })
       .addCase(fetchCategories.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Failed to fetch user";
+        state.error = action.error.message || "Failed to fetch categories";
       });
   },
 });

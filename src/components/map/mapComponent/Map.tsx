@@ -33,6 +33,9 @@ const DEFAULT_LOCATION = {
   latitude: 48.866667,
   longitude: 2.333333,
   zoom: 12,
+  bearing: 0,
+  pitch: 0,
+  padding: { top: 0, bottom: 0, left: 0, right: 0 },
 };
 
 const MapComponent = ({
@@ -73,6 +76,7 @@ const MapComponent = ({
   useEffect(() => {
     if (location) {
       setViewState({
+        ...DEFAULT_LOCATION,
         latitude: location.latitude,
         longitude: location.longitude,
         zoom: location.zoom ?? 12,
@@ -81,9 +85,9 @@ const MapComponent = ({
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setViewState({
+            ...DEFAULT_LOCATION,
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            zoom: 12,
           });
         },
         () => {
@@ -114,6 +118,11 @@ const MapComponent = ({
             longitude: e.lngLat.lng,
           });
         }
+        setViewState({
+          ...viewState,
+          latitude: e.lngLat.lat,
+          longitude: e.lngLat.lng,
+        });
       }}
       style={{ width, height }}
       onLoad={(e) => {
@@ -146,7 +155,6 @@ const MapComponent = ({
           style={{ cursor: "pointer" }}
           onClick={() => {
             if (onMarkerClick) {
-              console.log(place);
               onMarkerClick(place);
             }
           }}

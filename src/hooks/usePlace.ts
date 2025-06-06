@@ -14,7 +14,7 @@ export const usePlace = (placeId: string) => {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}`
         );
-        setPlace(response.data);
+        setPlace(response.data.data);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch place");

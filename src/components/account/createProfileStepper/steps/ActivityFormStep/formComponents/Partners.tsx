@@ -2,7 +2,6 @@ import React from "react";
 import SearchInput, {
   Suggestion,
 } from "@/components/common/inputs/searchInput/SearchInput";
-import Image from "next/image";
 import {
   FormData,
   FormDataChangeHandler,
@@ -11,6 +10,7 @@ import {
 import CreatePartners from "./CreatePartner";
 import axios from "axios";
 import { Creator } from "@/types/user";
+import { EventFormData } from "@/components/events/form/EventForm";
 
 const fakeUsers = [
   { id: "1", name: "Alice Dupont", avatar: "https://i.pravatar.cc/40?img=1" },
@@ -53,20 +53,20 @@ const Partners = ({
   data,
 }: {
   onChange: FormDataChangeHandler;
-  data: FormData;
+  data: FormData | EventFormData;
 }) => {
+  const collaborators = (data.collaborators || []) as Collaborator[];
+
   const handleSelect = (suggestion: Suggestion) => {
+    const newCollaborator: Collaborator = {
+      id: suggestion.id,
+      label: suggestion.label || "",
+      icon: suggestion.icon || "",
+    };
     onChange({
       target: {
         name: "collaborators",
-        value: [
-          ...data.collaborators,
-          {
-            id: suggestion.id,
-            label: suggestion.label,
-            icon: suggestion.icon,
-          },
-        ] as Collaborator[],
+        value: [...collaborators, newCollaborator],
       },
     });
   };
@@ -75,9 +75,7 @@ const Partners = ({
     onChange({
       target: {
         name: "collaborators",
-        value: data.collaborators.filter(
-          (collaborator) => collaborator.id !== id
-        ),
+        value: collaborators.filter((collaborator) => collaborator.id !== id),
       },
     });
   };
@@ -90,11 +88,11 @@ const Partners = ({
         initialSuggestions={initialUserSuggestions}
         placeholder="Ajouter un utilisateur..."
         withIcons
-        list={data.collaborators}
+        list={collaborators}
         onDelete={handleDelete}
         displayList
       />
-      <CreatePartners onChange={onChange} data={data} />
+      <CreatePartners onChange={onChange} data={data as FormData} />
     </div>
   );
 };

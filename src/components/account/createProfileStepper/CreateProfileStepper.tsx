@@ -86,6 +86,7 @@ const CreateProfileStepper = () => {
       )}
       {step === 2 && (
         <ActivityFormStep
+          firstStep={false}
           data={formData}
           isCreator={formData.userType === "creator"}
           onChange={handleInputChange}

@@ -43,9 +43,7 @@ export default function EventsListPage() {
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Événements</h1>
-        <Button
-          onClick={() => router.push(`/places/${params.id}/events/create`)}
-        >
+        <Button onClick={() => router.push(`/places/${params.id}/events`)}>
           Ajouter un événement
         </Button>
       </div>

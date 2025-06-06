@@ -1,4 +1,3 @@
-import { CreatedCollaborator } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { PlaceCategory } from "./categories";
 import { User } from "./user";
 
@@ -50,6 +49,7 @@ interface Place {
   email?: string;
   website?: string;
   active: boolean;
+  rating: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
