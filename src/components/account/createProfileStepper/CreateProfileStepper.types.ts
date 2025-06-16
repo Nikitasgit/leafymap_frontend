@@ -1,12 +1,9 @@
-import {
-  DaySchedule,
-  WeekDay,
-} from "@/components/common/forms/timetable/TimeTable.types";
-import { Location } from "@/types/map";
+import { Location } from "@/types/common";
+import { Period } from "@/components/events/form/EventForm";
+import { DefaultSchedule } from "@/types/place/schedule";
+import { Collaborator, CreatedCollaborator } from "@/types/place/collaborators";
 
-export type DefaultSchedule = Record<WeekDay, DaySchedule>;
-
-export interface FormData {
+export interface NewProfileFormData {
   userType: string;
   image: string | File;
   name: string;
@@ -23,17 +20,34 @@ export interface FormData {
   placeId?: string;
   placeActive?: boolean;
 }
-export type Collaborator = {
-  icon: string;
-  label: string;
-  id: string;
-};
-export type CreatedCollaborator = {
+
+export interface PlaceFormData {
   name: string;
-  category: string;
-  id: string;
-  _id?: string;
-};
+  description: string;
+  location: {
+    id: string;
+    label: string;
+    coordinates: [number, number];
+    type: "Point";
+  };
+  defaultSchedule: DefaultSchedule;
+  placeCategory: string;
+  phone: string;
+  email: string;
+  website: string;
+  image: string;
+  collaborators: {
+    _id: string;
+    username: string;
+    image: string;
+  }[];
+  createdCollaborators: {
+    name: string;
+    categoryId: string;
+    id: string;
+    _id: string;
+  }[];
+}
 
 export type FormDataChangeHandler = (
   e:
@@ -49,8 +63,12 @@ export type FormDataChangeHandler = (
             | CreatedCollaborator[]
             | File
             | DefaultSchedule
+            | Period[]
             | boolean
             | null;
         };
       }
 ) => void;
+
+export type onNextHandler = () => void;
+export type onBackHandler = () => void;

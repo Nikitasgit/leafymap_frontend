@@ -1,0 +1,34 @@
+import { Collaborator } from "./collaborators";
+
+export type DefaultSchedule = Record<WeekDay, DaySchedule>;
+
+export interface DaySchedule {
+  open: boolean;
+  timeSlots: TimeSlot[];
+}
+
+export interface TimeSlot {
+  startTime: string;
+  endTime: string;
+}
+
+export interface EventTimeSlot extends TimeSlot {
+  title: string;
+  participants: Collaborator[];
+  _id: string;
+}
+
+export interface Period {
+  startDate: string;
+  endDate: string;
+  timeSlots: EventTimeSlot[];
+}
+
+export type WeekDay =
+  | "monday"
+  | "tuesday"
+  | "wednesday"
+  | "thursday"
+  | "friday"
+  | "saturday"
+  | "sunday";

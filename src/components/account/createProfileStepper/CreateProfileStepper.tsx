@@ -1,45 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import UserTypeStep from "./steps/UserTypeStep";
+import UserTypeStep from "./steps/UserTypeStep/UserTypeStep";
 import ActivityFormStep from "./steps/ActivityFormStep/ActivityFormStep";
-import { WeekDay } from "@/components/common/forms/timetable/TimeTable.types";
-import {
-  DefaultSchedule,
-  FormDataChangeHandler,
-} from "./CreateProfileStepper.types";
-import type { FormData } from "./CreateProfileStepper.types";
+import { FormDataChangeHandler } from "./CreateProfileStepper.types";
+import type { NewProfileFormData } from "./CreateProfileStepper.types";
 import useSubmitForm from "@/hooks/useUpdateUser";
 import { useUser } from "@/hooks/useUser";
-
-export type onNextHandler = () => void;
-export type onBackHandler = () => void;
-export const createEmptySchedule = (): DefaultSchedule => {
-  const days: WeekDay[] = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-  ];
-  return days.reduce((acc, day) => {
-    acc[day] = { open: false, timeSlots: [] };
-    return acc;
-  }, {} as DefaultSchedule);
-};
+import { defaultSchedule } from "@/utils/createProfile";
 
 const CreateProfileStepper = () => {
   const { user } = useUser();
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<NewProfileFormData>({
     userType: "",
     name: "",
     description: "",
     category: "",
     location: null,
-    defaultSchedule: createEmptySchedule(),
+    defaultSchedule: defaultSchedule,
     phone: user?.phone || "",
     email: user?.email || "",
     website: user?.website || "",
@@ -79,7 +58,7 @@ const CreateProfileStepper = () => {
     <div>
       {step === 1 && (
         <UserTypeStep
-          data={formData}
+          userType={formData.userType}
           onChange={handleInputChange}
           onNext={handleNext}
         />

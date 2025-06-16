@@ -1,12 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
-import type { FormData } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
+import { NewProfileFormData } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { fetchUser } from "@/store/userSlice";
 import { useAppDispatch } from "@/store";
 import { useRouter } from "next/navigation";
 
 type UseCreateProfileReturn = {
-  submitForm: (data: FormData, isUpdate: boolean) => Promise<void>;
+  submitForm: (data: NewProfileFormData, isUpdate: boolean) => Promise<void>;
   loading: boolean;
   error: string | null;
   success: boolean;
@@ -19,7 +19,7 @@ const useSubmitForm = (): UseCreateProfileReturn => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const submitForm = async (
-    data: FormData,
+    data: NewProfileFormData,
     isUpdate: boolean
   ): Promise<void> => {
     setLoading(true);
@@ -47,7 +47,7 @@ const useSubmitForm = (): UseCreateProfileReturn => {
         form.append("defaultSchedule", JSON.stringify(data.defaultSchedule));
       }
       if (data.collaborators) {
-        const collaboratorIds = data.collaborators.map((collab) => collab.id);
+        const collaboratorIds = data.collaborators.map((collab) => collab._id);
         form.append("collaborators", JSON.stringify(collaboratorIds));
       }
 
@@ -97,11 +97,18 @@ const useSubmitForm = (): UseCreateProfileReturn => {
       setSuccess(true);
       dispatch(fetchUser());
     } catch (err: unknown) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Erreur lors de la soumission du profil"
-      );
+      if (axios.isAxiosError(err) && err.response) {
+        setError(
+          err.response.data.error || "Erreur lors de la soumission du profil"
+        );
+        console.error("Server error:", err.response.data);
+      } else {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Erreur lors de la soumission du profil"
+        );
+      }
     } finally {
       setLoading(false);
     }

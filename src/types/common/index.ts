@@ -1,16 +1,33 @@
+export interface BaseEntity {
+  _id: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface ContactInfo {
+  phone?: string;
+  email?: string;
+  website?: string;
+}
+
+export interface Location {
+  type: "Point";
+  coordinates: [number, number]; // [longitude, latitude]
+  label: string;
+  id?: string;
+}
+
 export interface MapCoordinates {
   longitude: number;
   latitude: number;
-  zoom: number;
-  bearing: number;
-  pitch: number;
-  padding: { top: number; bottom: number; left: number; right: number };
+  zoom?: number;
 }
+
 export interface MapMarker extends MapCoordinates {
   draggable?: boolean;
 }
 
-export interface Location {
+export interface LocationWithLabel {
   id: string;
   label: string;
   coordinates: {
@@ -19,7 +36,6 @@ export interface Location {
   };
 }
 
-//MAPBOX
 export interface MapboxFeature {
   id: string;
   place_name_fr?: string;

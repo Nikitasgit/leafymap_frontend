@@ -3,7 +3,7 @@ import RadioYesOrNo from "@/components/common/inputs/radios/radioYesOrNo/RadioYe
 import TextField from "@/components/common/inputs/textField/TextField";
 import Text from "@/components/common/typography/Text";
 import {
-  FormData,
+  NewProfileFormData,
   FormDataChangeHandler,
 } from "../../../CreateProfileStepper.types";
 import CategorySelectorInput from "@/components/common/inputs/categorySelectorInput/CategorySelectorInput";
@@ -13,7 +13,7 @@ import { Creator } from "@/types/user";
 
 interface InfosProps {
   isCreator: boolean;
-  data: FormData;
+  data: NewProfileFormData;
   onChange: FormDataChangeHandler;
   withPlace?: boolean;
 }
@@ -38,12 +38,13 @@ const Infos = ({ isCreator, data, onChange }: InfosProps) => {
         target: {
           name: "location",
           value: {
-            id: place.location.id || "",
+            type: "Point",
+            coordinates: [
+              place.location.coordinates[0],
+              place.location.coordinates[1],
+            ],
             label: place.location.label,
-            coordinates: {
-              latitude: place.location.coordinates[1],
-              longitude: place.location.coordinates[0],
-            },
+            id: place.location.id || "",
           },
         },
       });

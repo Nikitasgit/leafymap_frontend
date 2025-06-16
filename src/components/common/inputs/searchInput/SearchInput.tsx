@@ -1,30 +1,29 @@
 "use client";
 
-import { Collaborator } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { Delete } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 
-export interface Suggestion {
-  id: string;
-  label: string;
-  icon?: string;
-}
-
-interface SearchInputProps {
+interface SearchInputProps<T> {
   value?: string;
-  onSelect: (suggestion: Suggestion) => void;
+  onSelect: (suggestion: T) => void;
   onDelete: (id: string) => void;
-  fetchSuggestions: (input: string) => Promise<Suggestion[]>;
-  initialSuggestions?: Suggestion[];
+  fetchSuggestions: (input: string) => Promise<T[]>;
+  initialSuggestions?: T[];
   placeholder?: string;
   limit?: number;
   withIcons?: boolean;
-  list?: Collaborator[];
+  list?: T[];
   displayList?: boolean;
 }
 
-const SearchInput = ({
+const SearchInput = <
+  T extends {
+    _id?: string;
+    username?: string;
+    image?: string;
+  }
+>({
   value = "",
   onSelect,
   onDelete,
@@ -35,9 +34,9 @@ const SearchInput = ({
   withIcons = false,
   list = [],
   displayList = false,
-}: SearchInputProps) => {
+}: SearchInputProps<T>) => {
   const [input, setInput] = useState(value);
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [suggestions, setSuggestions] = useState<T[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -60,7 +59,7 @@ const SearchInput = ({
     }
   };
 
-  const handleSuggestionClick = (suggestion: Suggestion) => {
+  const handleSuggestionClick = (suggestion: T) => {
     setInput("");
     setSuggestions([]);
     onSelect(suggestion);
@@ -122,8 +121,8 @@ const SearchInput = ({
         >
           {suggestions.map((sug) => (
             <li
-              key={sug.id}
-              onClick={() => handleSuggestionClick(sug)}
+              key={sug._id}
+              onClick={() => handleSuggestionClick(sug as T)}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -132,40 +131,43 @@ const SearchInput = ({
                 gap: "8px",
               }}
             >
-              {withIcons && sug.icon && (
+              {withIcons && sug.image && (
                 <Image
-                  src={sug.icon}
-                  alt={sug.label}
+                  src={sug.image}
+                  alt={sug.username || ""}
                   width={20}
                   height={20}
                   style={{ borderRadius: "50%" }}
                 />
               )}
-              <span>{sug.label}</span>
+              <span>{sug.username}</span>
             </li>
           ))}
         </ul>
       )}
       {displayList && list.length > 0 && (
         <ul>
-          {list.map((collaborator) => (
-            <li key={collaborator.id}>
-              {withIcons && collaborator.icon && (
-                <Image
-                  src={collaborator.icon}
-                  alt={collaborator.label}
-                  width={20}
-                  height={20}
-                  style={{ borderRadius: "50%" }}
+          {list.map((item) => {
+            const id = item._id || "";
+            return (
+              <li key={id}>
+                {withIcons && item.image && (
+                  <Image
+                    src={item.image}
+                    alt={item.username || ""}
+                    width={20}
+                    height={20}
+                    style={{ borderRadius: "50%" }}
+                  />
+                )}
+                {item.username}
+                <Delete
+                  onClick={() => handleDelete(id)}
+                  style={{ cursor: "pointer" }}
                 />
-              )}
-              {collaborator.label}
-              <Delete
-                onClick={() => handleDelete(collaborator.id)}
-                style={{ cursor: "pointer" }}
-              />
-            </li>
-          ))}
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

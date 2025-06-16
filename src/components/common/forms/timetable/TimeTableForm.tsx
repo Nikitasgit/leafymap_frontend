@@ -11,7 +11,6 @@ const TimeTableForm = ({ schedule, onChange }: TimeTableFormProps) => {
   const handleDayChange = (day: WeekDay, updated: DaySchedule) => {
     onChange({ ...schedule, [day]: updated });
   };
-
   const days: WeekDay[] = [
     "monday",
     "tuesday",

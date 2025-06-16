@@ -2,12 +2,12 @@ import TimeTableForm from "@/components/common/forms/timetable/TimeTableForm";
 import AddressInput from "@/components/common/inputs/addressInput/AddressInput";
 import PlaceCategorySelectorInput from "@/components/common/inputs/categorySelectorInput/PlaceCategorySelectorInput";
 import MapComponent from "@/components/map/mapComponent/Map";
-import { MapCoordinates, Location } from "@/types/map";
+import { MapCoordinates, Location } from "@/types/common";
 import React, { useState } from "react";
 import Partners from "./Partners";
 import Text from "@/components/common/typography/Text";
 import {
-  FormData,
+  NewProfileFormData,
   FormDataChangeHandler,
 } from "../../../CreateProfileStepper.types";
 
@@ -15,11 +15,16 @@ const PlaceForm = ({
   data,
   onChange,
 }: {
-  data: FormData;
+  data: NewProfileFormData;
   onChange: FormDataChangeHandler;
 }) => {
   const [locationMarker, setLocationMarker] = useState<MapCoordinates | null>(
-    data.location?.coordinates || null
+    data.location?.coordinates
+      ? {
+          latitude: data.location.coordinates[1],
+          longitude: data.location.coordinates[0],
+        }
+      : null
   );
   const handleMapClick = async ({
     latitude,
@@ -28,29 +33,31 @@ const PlaceForm = ({
     latitude: number;
     longitude: number;
   }) => {
-    setLocationMarker({ latitude, longitude });
+    setLocationMarker({
+      latitude,
+      longitude,
+    });
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     const res = await fetch(
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${token}`
     );
     const data = await res.json();
-
     if (data?.features?.length) {
       const place = data.features[0];
       const newLocation: Location = {
+        type: "Point",
         label: place.place_name,
-        coordinates: { latitude, longitude },
+        coordinates: [longitude, latitude],
         id: place.id,
       };
-
       onChange({ target: { name: "location", value: newLocation } });
     }
   };
   const onLocationSelect = (location: Location) => {
     if (location?.coordinates) {
       setLocationMarker({
-        latitude: location.coordinates.latitude,
-        longitude: location.coordinates.longitude,
+        latitude: location.coordinates[1],
+        longitude: location.coordinates[0],
       });
       onChange({ target: { name: "location", value: location } });
     }

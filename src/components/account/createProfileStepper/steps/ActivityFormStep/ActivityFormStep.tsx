@@ -1,18 +1,23 @@
 "use client";
 
 import Button from "@/components/common/buttons/button/Button";
-import { FormDataChangeHandler } from "../../CreateProfileStepper.types";
+import {
+  FormDataChangeHandler,
+  onBackHandler,
+  onNextHandler,
+  PlaceFormData,
+} from "../../CreateProfileStepper.types";
 import Infos from "./formComponents/Infos";
-import { FormData } from "../../CreateProfileStepper.types";
+import { NewProfileFormData } from "../../CreateProfileStepper.types";
 import ContactForm from "./formComponents/ContactForm";
 import ProfilePictureUploader from "./formComponents/ProfilePictureUploader";
 
 interface ActivityFormStepProps {
-  data: FormData;
+  data: NewProfileFormData | PlaceFormData;
   onChange: FormDataChangeHandler;
   onSubmit: () => Promise<void>;
-  onNext?: () => void;
-  onBack?: () => void;
+  onNext?: onNextHandler;
+  onBack?: onBackHandler;
   submitButtonText?: string;
   isCreator: boolean;
   firstStep: boolean;
@@ -35,8 +40,16 @@ const ActivityFormStep = ({
         onNext();
       }}
     >
-      <Infos isCreator={isCreator} data={data} onChange={onChange} />
-      <ContactForm onChange={onChange} data={data} disabled={isCreator} />
+      <Infos
+        isCreator={isCreator}
+        data={data as NewProfileFormData}
+        onChange={onChange}
+      />
+      <ContactForm
+        onChange={onChange}
+        data={data as NewProfileFormData}
+        disabled={isCreator}
+      />
       <ProfilePictureUploader
         onChange={onChange}
         initialImage={data.image as string}

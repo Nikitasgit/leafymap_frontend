@@ -3,45 +3,56 @@ import axios from "axios";
 import { fetchUser } from "@/store/userSlice";
 import { useAppDispatch } from "@/store";
 import { useRouter, useParams } from "next/navigation";
-import type { FormData } from "../components/account/createProfileStepper/CreateProfileStepper.types";
+import { EventFormData } from "@/components/events/form/EventForm";
+import { parseDateToUTC } from "@/utils/dates";
 
-type UseUpdatePlaceReturn = {
-  submitForm: (data: FormData, isUpdate: boolean) => Promise<void>;
+type UseUpdateEventReturn = {
+  submitForm: (data: EventFormData, isUpdate: boolean) => Promise<void>;
   loading: boolean;
   error: string | null;
   success: boolean;
 };
 
-const useUpdatePlace = (): UseUpdatePlaceReturn => {
+const useUpdateEvent = (): UseUpdateEventReturn => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const params = useParams();
-  const placeId = params.id as string;
+  const { placeId, eventId } = useParams();
 
-  const submitForm = async (data: FormData, isUpdate: boolean) => {
+  const submitForm = async (data: EventFormData, isUpdate: boolean) => {
     setLoading(true);
     setError(null);
     setSuccess(false);
 
     try {
-      if (isUpdate && !placeId) {
-        throw new Error("Place ID is required for update");
+      if (isUpdate && !placeId && !eventId) {
+        throw new Error("Place ID or event ID is required for update");
       }
+
+      if (!data.name?.trim()) {
+        throw new Error("Please add a title");
+      }
+      if (!data.description?.trim()) {
+        throw new Error("Please add a description");
+      }
+
       const form = new FormData();
+
       form.append("name", data.name);
       form.append("description", data.description);
-      form.append("placeCategory", data.placeCategory);
-      form.append("phone", data.phone);
-      form.append("email", data.email);
-      form.append("website", data.website);
-      form.append("location", JSON.stringify(data.location));
-      form.append("defaultSchedule", JSON.stringify(data.defaultSchedule));
+
+      const formattedSchedule = data.schedule.map((period) => ({
+        ...period,
+        startDate: parseDateToUTC(period.startDate),
+        endDate: parseDateToUTC(period.endDate),
+      }));
+
+      form.append("schedule", JSON.stringify(formattedSchedule));
 
       if (data.collaborators) {
-        const collaboratorIds = data.collaborators.map((collab) => collab.id);
+        const collaboratorIds = data.collaborators.map((collab) => collab._id);
         form.append("collaborators", JSON.stringify(collaboratorIds));
       }
       if (data.createdCollaborators) {
@@ -57,13 +68,13 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
           JSON.stringify(cleanedCollaborators)
         );
       }
-      if (data.image instanceof File) {
+      if (data.image) {
         form.append("image", data.image);
       }
 
       if (isUpdate) {
         await axios.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}/events/${eventId}`,
           form,
           {
             headers: {
@@ -74,7 +85,7 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
         );
       } else {
         await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}/events`,
           form,
           {
             headers: {
@@ -103,4 +114,4 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
   return { submitForm, loading, error, success };
 };
 
-export default useUpdatePlace;
+export default useUpdateEvent;

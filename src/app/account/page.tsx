@@ -1,6 +1,5 @@
 "use client";
 import { useRouter } from "next/navigation";
-import styles from "../../styles/styles.scss";
 import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
 import { selectUser } from "@/store/userSlice";
@@ -21,8 +20,8 @@ export default function AccountPage() {
 
   if (userLoading) {
     return (
-      <main className={styles.container}>
-        <div className="text-center">
+      <main>
+        <div>
           <p>Loading...</p>
         </div>
       </main>
@@ -30,7 +29,7 @@ export default function AccountPage() {
   }
   if (!user && userError !== "") {
     return (
-      <main className={styles.container}>
+      <main>
         <p>{userError}</p>
       </main>
     );
@@ -39,15 +38,15 @@ export default function AccountPage() {
     userType === "creator"
       ? { route: "/account/update-creator", text: "Modifier mon profil" }
       : userType === "organizer"
-      ? { route: "/places/create-place", text: "Ajouter un lieu" }
-      : { route: "/account/create-profile", text: "Ajouter mon activité" };
+      ? { route: "/account/places/create", text: "Ajouter un lieu" }
+      : { route: "/account/create", text: "Ajouter mon activité" };
 
   if (!buttonParameters) {
     return <div>No button parameters</div>;
   }
 
   return (
-    <main className={styles.container}>
+    <main>
       <div>
         <h1>Account</h1>
         <div>

@@ -1,48 +1,55 @@
-import {
-  CreatedCollaborator,
-  FormDataChangeHandler,
-} from "@/components/account/createProfileStepper/CreateProfileStepper.types";
+import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import Partners from "@/components/account/createProfileStepper/steps/ActivityFormStep/formComponents/Partners";
 import ProfilePictureUploader from "@/components/account/createProfileStepper/steps/ActivityFormStep/formComponents/ProfilePictureUploader";
 import TextField from "@/components/common/inputs/textField/TextField";
-import React from "react";
+import React, { useState } from "react";
 import ScheduleForm from "./ScheduleForm";
+import Button from "@/components/common/buttons/button/Button";
+import useUpdateEvent from "@/hooks/useUpdateEvent";
 
-export interface Schedule {
-  date: string;
-  startTime: string;
-  endTime: string;
-  participants: string[];
-}
-
-export interface Collaborator {
-  id: string;
-  label: string;
-  icon?: string;
-}
+import { Collaborator, CreatedCollaborator } from "@/types/place/collaborators";
+import { Period } from "@/types/place/schedule";
 
 export interface EventFormData {
   name: string;
   description: string;
-  image: string;
+  image: string | File;
   collaborators: Collaborator[];
   createdCollaborators: CreatedCollaborator[];
-  schedule: Schedule[];
+  schedule: Period[];
 }
 
 interface EventFormProps {
-  onChange: FormDataChangeHandler;
-  data: EventFormData;
+  data?: EventFormData;
+  isUpdate?: boolean;
 }
 
-const EventForm = ({ onChange, data }: EventFormProps) => {
+const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
+  const [formData, setFormData] = useState<EventFormData>({
+    name: data?.name || "",
+    description: data?.description || "",
+    image: data?.image || "",
+    collaborators: data?.collaborators || [],
+    createdCollaborators: data?.createdCollaborators || [],
+    schedule: data?.schedule || [],
+  });
+  const onChange: FormDataChangeHandler = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+  const { submitForm, loading } = useUpdateEvent();
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    submitForm(formData, isUpdate);
+  };
+
   return (
-    <form className="space-y-6">
+    <form onSubmit={handleSubmit}>
       <TextField
         label="Nom de l'évènement"
         name="name"
         placeholder="Nom de l'évènement"
-        value={data.name}
+        value={formData.name}
         onChange={onChange}
       />
       <TextField
@@ -51,15 +58,18 @@ const EventForm = ({ onChange, data }: EventFormProps) => {
         label="Description"
         name="description"
         placeholder="Description"
-        value={data.description}
+        value={formData.description}
         onChange={onChange}
       />
-      <Partners onChange={onChange} data={data} />
-      <ScheduleForm onChange={onChange} data={data} />
+      <Partners onChange={onChange} data={formData} />
+      <ScheduleForm onChange={onChange} data={formData} />
       <ProfilePictureUploader
         onChange={onChange}
-        initialImage={data.image as string}
+        initialImage={formData.image as string}
       />
+      <Button type="submit" disabled={loading}>
+        Enregistrer
+      </Button>
     </form>
   );
 };

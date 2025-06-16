@@ -1,21 +1,21 @@
 "use client";
 
 import {
-  FormData,
+  NewProfileFormData,
   FormDataChangeHandler,
 } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { selectUser } from "@/store/userSlice";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { createEmptySchedule } from "@/components/account/createProfileStepper/CreateProfileStepper";
 import ActivityFormStep from "@/components/account/createProfileStepper/steps/ActivityFormStep/ActivityFormStep";
 import useSubmitForm from "@/hooks/useUpdateUser";
 import { Creator } from "@/types/user";
+import { defaultSchedule } from "@/utils/createProfile";
 
 const ModifyCreator = () => {
   const { user } = useSelector(selectUser);
   const creator = user as Creator;
-  const [formData, setFormData] = useState<FormData | null>(null);
+  const [formData, setFormData] = useState<NewProfileFormData | null>(null);
   const { submitForm } = useSubmitForm();
 
   useEffect(() => {
@@ -28,21 +28,21 @@ const ModifyCreator = () => {
           }
         : null;
 
-      const data: FormData = {
+      const data: NewProfileFormData = {
         userType: creator.userType || "",
         name: creator.creatorProfile.name || "",
         description: creator.description || "",
         category: creator.creatorProfile.categories?.[0]._id || "",
         location: creatorPlace
           ? {
+              type: "Point",
               id: creatorPlace.id || "",
               label: creatorPlace.label || "",
-              coordinates: coordinates!,
+              coordinates: [coordinates!.longitude, coordinates!.latitude],
             }
           : null,
         defaultSchedule:
-          creator.creatorProfile.place?.defaultSchedule ||
-          createEmptySchedule(),
+          creator.creatorProfile.place?.defaultSchedule || defaultSchedule,
         placeCategory: creator.creatorProfile.place?.placeCategory._id || "",
         phone: creator.phone || "",
         email: creator.email || "",
@@ -56,7 +56,6 @@ const ModifyCreator = () => {
       setFormData(data);
     }
   }, [formData, creator]);
-  console.log(formData);
 
   const handleInputChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;

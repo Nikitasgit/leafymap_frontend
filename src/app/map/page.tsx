@@ -10,7 +10,6 @@ const MapPage = () => {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const handleMarkerClick = (place: Place) => {
     setSelectedPlace(place);
-    console.log(selectedPlace);
   };
   return (
     <>

@@ -6,9 +6,8 @@ import { Schedule } from "./EventForm";
 import { registerLocale } from "react-datepicker";
 import { fr } from "date-fns/locale/fr";
 import Radio from "@/components/common/inputs/radios/radioWithLabel/Radio";
-import TimeSlotsInput, {
-  TimeSlot,
-} from "@/components/common/forms/timetable/TimeSlotsInput";
+import TimeSlotsList from "@/components/common/forms/timetable/NewSlot";
+import { TimeSlot } from "@/components/common/forms/timetable/TimeSlotInputs";
 
 registerLocale("fr", fr);
 
@@ -119,7 +118,7 @@ const ProgramDateForm: React.FC<ProgramDateFormProps> = ({
       )}
 
       <div style={{ marginTop: "16px" }}>
-        <TimeSlotsInput
+        <TimeSlotsList
           timeSlots={timeSlots}
           onChange={handleTimeSlotsChange}
           label="Créneaux horaires"

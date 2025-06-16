@@ -1,7 +1,5 @@
 import React from "react";
-import SearchInput, {
-  Suggestion,
-} from "@/components/common/inputs/searchInput/SearchInput";
+import SearchInput from "@/components/common/inputs/searchInput/SearchInput";
 import {
   FormData,
   FormDataChangeHandler,
@@ -32,9 +30,9 @@ const searchUsers = async (query: string) => {
     );
     const data = res.data;
     return data.users.map((user: Creator) => ({
-      id: user._id,
-      label: user.creatorProfile?.name,
-      icon: user.image || "https://i.pravatar.cc/40?img=3",
+      _id: user._id,
+      username: user.creatorProfile?.name,
+      image: user.image || "https://i.pravatar.cc/40?img=3",
     }));
   } catch (err) {
     console.error("Error searching users:", err);
@@ -43,9 +41,9 @@ const searchUsers = async (query: string) => {
 };
 
 const initialUserSuggestions = fakeUsers.map((user) => ({
-  id: user.id,
-  label: user.name,
-  icon: user.avatar,
+  _id: user.id,
+  username: user.name,
+  image: user.avatar,
 }));
 
 const Partners = ({
@@ -57,11 +55,11 @@ const Partners = ({
 }) => {
   const collaborators = (data.collaborators || []) as Collaborator[];
 
-  const handleSelect = (suggestion: Suggestion) => {
+  const handleSelect = (suggestion: Collaborator) => {
     const newCollaborator: Collaborator = {
-      id: suggestion.id,
-      label: suggestion.label || "",
-      icon: suggestion.icon || "",
+      _id: suggestion._id,
+      username: suggestion.username || "",
+      image: suggestion.image || "",
     };
     onChange({
       target: {
@@ -75,7 +73,7 @@ const Partners = ({
     onChange({
       target: {
         name: "collaborators",
-        value: collaborators.filter((collaborator) => collaborator.id !== id),
+        value: collaborators.filter((collaborator) => collaborator._id !== id),
       },
     });
   };
