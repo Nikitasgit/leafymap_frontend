@@ -1,0 +1,33 @@
+// Colors
+$primary-color: #f29a4d;
+$secondary-color: #6c757d;
+$input-bg-color: #eff6ff;
+$success-color: #28a745;
+$error-color: #dc3545;
+
+// Grey colors
+$white: #ffffff;
+$grey-200: #e1e1e1;
+$grey-400: #7a7a7a;
+$grey-500: #3a3a3a;
+$grey-600: #252323;
+
+// Typography
+$font-family-base: "Inter", sans-serif;
+$font-size-base: 16px;
+$line-height-base: 1.5;
+
+// Breakpoints
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// Spacing
+$spacing-unit: 8px;
+$spacing-small: $spacing-unit;
+$spacing-medium: $spacing-unit * 2;
+$spacing-large: $spacing-unit * 3;
+
+// Navbar
+$navbar-height: 64px;

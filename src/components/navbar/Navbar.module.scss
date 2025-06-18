@@ -1,0 +1,80 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+$navbar-bg: #ffffff;
+$navbar-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+.navbar {
+  height: $navbar-height;
+  background-color: $navbar-bg;
+  box-shadow: $navbar-shadow;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+.navContainer {
+  @include flex(row, space-between, center, 24px);
+  width: 100%;
+}
+
+.navLinks {
+  @include flex(row, center, bottom, 24px);
+  margin-left: auto;
+}
+
+.navIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.navLink {
+  color: $grey-400;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  @include flex(row, center, center, 2px);
+
+  &:hover {
+    color: $grey-600;
+  }
+
+  &.active {
+    color: $primary-color;
+  }
+
+  span {
+    @media (max-width: 1200px) {
+      display: none;
+    }
+  }
+
+  .navIcon {
+    @media (min-width: 1200px) {
+      display: none;
+    }
+  }
+}
+
+.authLinks {
+  @include flex(row, center, center, 3px);
+  color: $grey-400;
+  border: 0.05em solid $grey-400;
+  padding: 4px 8px;
+  border-radius: 500px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: $grey-600;
+  }
+}

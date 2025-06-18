@@ -1,14 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Home, Map, MessageSquare, User } from "lucide-react";
-import Button from "../common/buttons/button/Button";
-import SignOutButton from "../common/buttons/button/SignOutButton";
+import SignOutButton from "../common/buttons/SignOutButton";
 import { useUser } from "@/hooks/useUser";
+import styles from "./Navbar.module.scss";
 
 export default function Navbar() {
-  const router = useRouter();
   const pathname = usePathname();
   const navItems = [
     { href: "/", label: "Home", icon: Home },
@@ -19,9 +18,12 @@ export default function Navbar() {
 
   const { user } = useUser();
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
-      <div className="max-w-screen-xl mx-auto px-4">
-        <div className="flex justify-around items-center h-16">
+    <nav className={styles.navbar}>
+      <Link href="/" className={styles.logo}>
+        InnovaStay
+      </Link>
+      <div className={styles.navContainer}>
+        <div className={styles.navLinks}>
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -29,31 +31,37 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center justify-center w-full h-full
-                  ${
-                    isActive
-                      ? "text-blue-600"
-                      : "text-gray-600 hover:text-blue-600"
-                  }`}
+                className={`${styles.navLink} ${isActive ? styles.active : ""}`}
               >
-                <Icon className="w-6 h-6" />
-                <span className="text-xs mt-1">{item.label}</span>
+                <Icon className={styles.navIcon} />
+                <span>{item.label}</span>
               </Link>
             );
           })}
+        </div>
+        <div>
           {user ? (
-            <>
-              <SignOutButton />
-            </>
+            <SignOutButton />
           ) : (
-            <>
-              <Button onClick={() => router.push("/auth/register")}>
-                Register
-              </Button>
-              <Button onClick={() => router.push("/auth/signin")}>
-                Sign in
-              </Button>
-            </>
+            <div className={styles.authLinks}>
+              <Link
+                href="/auth/register"
+                className={`${styles.navLink} ${
+                  pathname === "/auth/register" ? styles.active : ""
+                }`}
+              >
+                S&apos;inscrire
+              </Link>
+              <span>|</span>
+              <Link
+                href="/auth/signin"
+                className={`${styles.navLink} ${
+                  pathname === "/auth/signin" ? styles.active : ""
+                }`}
+              >
+                Se connecter
+              </Link>
+            </div>
           )}
         </div>
       </div>

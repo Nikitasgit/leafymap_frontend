@@ -1,0 +1,26 @@
+@import "@/styles/abstracts/variables";
+
+.button {
+  color: $grey-400;
+  font-weight: 500;
+  border: none;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  background: none;
+  transition: all 0.3s ease;
+  &:hover {
+    color: $grey-600;
+  }
+
+  &.secondary {
+    background-color: transparent;
+    border: 1px solid $grey-400;
+    color: $grey-600;
+
+    &:hover {
+      background-color: $grey-200;
+      color: $grey-600;
+    }
+  }
+}

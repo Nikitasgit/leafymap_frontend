@@ -9,8 +9,9 @@ import Map, {
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useState, useEffect } from "react";
 import { MapCoordinates, MapMarker } from "@/types/common";
+import { usePlacesInView } from "@/hooks/usePlacesInView";
 import { Place } from "@/types/place";
-import axios from "axios";
+
 interface MapFilters {
   type: string;
   category: string;
@@ -47,27 +48,11 @@ const MapComponent = ({
   const [viewState, setViewState] = useState<MapCoordinates>(
     location ?? DEFAULT_LOCATION
   );
-  const [filteredPlaces, setFilteredPlaces] = useState<Place[]>([]);
-  const fetchMarkersInView = async (bounds: mapboxgl.LngLatBounds | null) => {
-    if (!bounds) return;
-    const ne = bounds.getNorthEast().toArray();
-    const sw = bounds.getSouthWest().toArray();
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/places/in-view`,
-        {
-          params: {
-            ne: JSON.stringify(ne),
-            sw: JSON.stringify(sw),
-            filters: JSON.stringify(filters),
-          },
-        }
-      );
-      setFilteredPlaces(response.data);
-    } catch (err) {
-      console.error("Failed to fetch places in view:", err);
-    }
-  };
+
+  const { places: filteredPlaces, fetchPlacesInView } = usePlacesInView({
+    filters,
+  });
+
   useEffect(() => {
     if (!location && typeof window !== "undefined" && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -99,7 +84,7 @@ const MapComponent = ({
       onMove={(e) => setViewState(e.viewState)}
       onMoveEnd={(e) => {
         if (withPlacesInView) {
-          fetchMarkersInView(e.target.getBounds());
+          fetchPlacesInView(e.target.getBounds());
         }
       }}
       onClick={(e) => {
@@ -113,7 +98,7 @@ const MapComponent = ({
       style={{ width, height }}
       onLoad={(e) => {
         if (withPlacesInView) {
-          fetchMarkersInView(e.target.getBounds());
+          fetchPlacesInView(e.target.getBounds());
         }
       }}
       mapStyle="mapbox://styles/mapbox/streets-v9"

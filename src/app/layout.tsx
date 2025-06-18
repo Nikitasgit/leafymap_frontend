@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import "@/styles/main.scss";
 
 import Navbar from "@/components/navbar/Navbar";
 import Providers from "@/components/Providers";

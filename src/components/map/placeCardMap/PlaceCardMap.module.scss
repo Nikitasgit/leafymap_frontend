@@ -1,0 +1,116 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.placeCardMap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 100%;
+  background-color: $white;
+  z-index: 99999;
+  overflow-y: scroll;
+
+  img {
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .header {
+    @include flex(column, flex-start, flex-start, spacing(0.5));
+    padding: spacing(1) spacing(1) 0 spacing(1);
+    width: 100%;
+  }
+
+  .headerMain {
+    @include flex(row, flex-start, flex-start, spacing(0));
+    width: 100%;
+  }
+
+  .title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: $grey-500;
+
+    width: 100%;
+  }
+
+  .buttons {
+    @include flex(row, space-between, center, spacing(1));
+    width: 100%;
+    margin-top: spacing(0.5);
+    padding: spacing(1) spacing(1);
+    border-top: 1px solid $grey-200;
+    border-bottom: 1px solid $grey-200;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .buttonGroup {
+    @include flex(row, flex-start, center, spacing(1));
+
+    button {
+      padding: spacing(0.75) spacing(2);
+      font-size: rem(15);
+      border-radius: 6px;
+      min-width: unset;
+      height: rem(32);
+      line-height: 1;
+      flex: 0 1 auto;
+    }
+  }
+
+  .ratingRow {
+    @include flex(row, flex-start, center, spacing(0.5));
+    font-size: rem(18);
+    color: $primary-color;
+    font-weight: 600;
+  }
+
+  .heartIcon {
+    color: $primary-color;
+  }
+
+  .rating {
+    color: $primary-color;
+    font-weight: 600;
+  }
+
+  .addressRow {
+    @include flex(row, flex-start, flex-start, spacing(0.75));
+    margin-top: spacing(0.75);
+    margin-bottom: spacing(0.25);
+    width: 100%;
+    padding: 0 spacing(1);
+  }
+
+  .addressIcon {
+    color: $grey-400;
+    @include flex(row, flex-start, flex-start, 0);
+    flex-shrink: 0;
+    margin-top: spacing(0.25);
+  }
+
+  .address {
+    color: $grey-400;
+    font-size: rem(15);
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    max-width: none;
+    line-height: 1.2;
+    word-wrap: break-word;
+    flex: 1;
+  }
+
+  .descriptionRow {
+    padding: 0 spacing(1);
+    margin-top: spacing(0.25);
+    margin-bottom: spacing(1);
+    font-size: rem(16);
+    color: $grey-600;
+    width: 100%;
+  }
+}

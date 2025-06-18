@@ -1,0 +1,119 @@
+@import "../abstracts/variables";
+@import "../abstracts/mixins";
+
+// Display utilities
+.d-none {
+  display: none !important;
+}
+
+.d-block {
+  display: block !important;
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+// Flex utilities
+.flex-row {
+  flex-direction: row !important;
+}
+
+.flex-column {
+  flex-direction: column !important;
+}
+
+.justify-start {
+  justify-content: flex-start !important;
+}
+
+.justify-center {
+  justify-content: center !important;
+}
+
+.justify-end {
+  justify-content: flex-end !important;
+}
+
+.justify-between {
+  justify-content: space-between !important;
+}
+
+.align-start {
+  align-items: flex-start !important;
+}
+
+.align-center {
+  align-items: center !important;
+}
+
+.align-end {
+  align-items: flex-end !important;
+}
+
+// Spacing utilities
+.m-0 {
+  margin: 0 !important;
+}
+
+.mt-1 {
+  margin-top: $spacing-small !important;
+}
+
+.mt-2 {
+  margin-top: $spacing-medium !important;
+}
+
+.mt-3 {
+  margin-top: $spacing-large !important;
+}
+
+.mb-1 {
+  margin-bottom: $spacing-small !important;
+}
+
+.mb-2 {
+  margin-bottom: $spacing-medium !important;
+}
+
+.mb-3 {
+  margin-bottom: $spacing-large !important;
+}
+
+// Text utilities
+.text-center {
+  text-align: center !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.text-primary {
+  color: $primary-color !important;
+}
+
+.text-secondary {
+  color: $secondary-color !important;
+}
+
+.text-success {
+  color: $success-color !important;
+}
+
+.text-error {
+  color: $error-color !important;
+}
+
+// Visibility utilities
+.visible {
+  visibility: visible !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+}

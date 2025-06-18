@@ -1,0 +1,7 @@
+@import "@/styles/abstracts/variables";
+
+.mapPage {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - $navbar-height);
+}

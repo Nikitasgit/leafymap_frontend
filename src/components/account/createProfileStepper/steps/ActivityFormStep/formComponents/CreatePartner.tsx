@@ -3,26 +3,27 @@ import CategorySelectorInput from "@/components/common/inputs/categorySelectorIn
 import TextField from "@/components/common/inputs/textField/TextField";
 import { useState } from "react";
 import {
-  CreatedCollaborator,
-  FormData,
   FormDataChangeHandler,
+  NewProfileFormData,
 } from "../../../CreateProfileStepper.types";
 import { selectSubCategories } from "@/store/appSlice";
 import { useSelector } from "react-redux";
 import { DeleteIcon } from "lucide-react";
+import { EventFormData } from "@/components/events/form/EventForm";
+import { CreatedCollaborator } from "@/types/place/collaborators";
 
 const CreatePartners = ({
   onChange,
   data: formData,
 }: {
   onChange: FormDataChangeHandler;
-  data: FormData;
+  data: EventFormData | NewProfileFormData;
 }) => {
   const subCategories = useSelector(selectSubCategories);
 
   const [collaborator, setCollaborator] = useState<CreatedCollaborator>({
     name: "",
-    category: "",
+    categoryId: "",
     id: "",
   });
 
@@ -41,7 +42,7 @@ const CreatePartners = ({
     setIsCreating(false);
     setCollaborator({
       name: "",
-      category: "",
+      categoryId: "",
       id: "",
     });
   };
@@ -49,7 +50,7 @@ const CreatePartners = ({
     setIsCreating(true);
     setCollaborator({
       name: "",
-      category: "",
+      categoryId: "",
       id: "",
     });
   };
@@ -83,7 +84,7 @@ const CreatePartners = ({
           />
           <CategorySelectorInput
             onChange={handleChange}
-            value={collaborator.category}
+            value={collaborator.categoryId}
           />
           <Button onClick={handleSubmitCollaborator}>Créer</Button>
         </div>
@@ -93,7 +94,7 @@ const CreatePartners = ({
           <li key={collaborator.id}>
             {collaborator.name} -
             {
-              subCategories.find((sub) => sub._id === collaborator.category)
+              subCategories.find((sub) => sub._id === collaborator.categoryId)
                 ?.name
             }
             <DeleteIcon

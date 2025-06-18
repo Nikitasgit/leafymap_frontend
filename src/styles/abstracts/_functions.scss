@@ -1,0 +1,28 @@
+// Convert pixels to rem
+@function rem($pixels) {
+  @return ($pixels / 16) * 1rem;
+}
+
+// Convert pixels to em
+@function em($pixels, $context: 16) {
+  @return ($pixels / $context) * 1em;
+}
+
+// Get color with opacity
+@function rgba-color($color, $opacity) {
+  @return rgba($color, $opacity);
+}
+
+// Calculate spacing based on spacing unit
+@function spacing($multiplier) {
+  @return $spacing-unit * $multiplier;
+}
+
+// Calculate z-index
+@function z($name) {
+  @if map-has-key($z-layers, $name) {
+    @return map-get($z-layers, $name);
+  }
+  @warn "No z-index found for `#{$name}` in $z-layers map.";
+  @return null;
+}

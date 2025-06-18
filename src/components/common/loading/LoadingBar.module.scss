@@ -1,0 +1,30 @@
+.loadingBar {
+  position: fixed; // fixé en haut de la fenêtre
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: var(--loading-height, 4px);
+  background-color: rgba(0, 122, 255, 0.2);
+  z-index: 1000;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 50%;
+    background-color: var(--loading-color, #007aff);
+    animation: loading 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes loading {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
