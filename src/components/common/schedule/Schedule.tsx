@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DefaultSchedule, Event } from "@/types/place/schedule";
 import styles from "./Schedule.module.scss";
 import { useRouter } from "next/navigation";
@@ -14,6 +14,12 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, className }) => {
   );
   const [expandedEvents, setExpandedEvents] = useState<Set<string>>(new Set());
   const router = useRouter();
+
+  // Reset expanded states when schedule changes
+  useEffect(() => {
+    setExpandedHoraires(new Set());
+    setExpandedEvents(new Set());
+  }, [schedule]);
 
   const daysOfWeek = [
     { key: "monday", label: "Lundi" },
@@ -100,18 +106,14 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, className }) => {
 
                 <div className={styles.scheduleStatus}>
                   <div className={styles.buttonGroup}>
-                    {hasTimeSlots ? (
+                    {hasTimeSlots && daySchedule.open ? (
                       <button
                         className={`${styles.statusButton} ${
-                          daySchedule.open
-                            ? styles.openButton
-                            : styles.closedButton
+                          styles.openButton
                         } ${isHorairesOpen ? styles.active : ""}`}
                         onClick={() => toggleHoraires(day.key)}
                       >
-                        <span className={styles.statusText}>
-                          {daySchedule.open ? "Ouvert" : "Fermé"}
-                        </span>
+                        <span className={styles.statusText}>Ouvert</span>
                         <span
                           className={`${styles.expandIcon} ${
                             isHorairesOpen ? styles.expanded : ""
@@ -120,6 +122,12 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, className }) => {
                           ▼
                         </span>
                       </button>
+                    ) : hasTimeSlots && !daySchedule.open ? (
+                      <div
+                        className={`${styles.statusDisplay} ${styles.closedStatus}`}
+                      >
+                        <span className={styles.statusText}>Fermé</span>
+                      </div>
                     ) : !hasDayEvents ? (
                       <div
                         className={`${styles.statusDisplay} ${
