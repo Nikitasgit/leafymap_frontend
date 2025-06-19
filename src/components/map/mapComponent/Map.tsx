@@ -10,7 +10,6 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useState, useEffect } from "react";
 import { MapCoordinates, MapMarker } from "@/types/common";
 import { usePlacesInView } from "@/hooks/usePlacesInView";
-import { Place } from "@/types/place";
 
 interface MapFilters {
   type: string;
@@ -24,7 +23,7 @@ interface MapComponentProps {
   filters?: MapFilters;
   withDefaultMarker?: boolean;
   withPlacesInView?: boolean;
-  onMarkerClick?: (place: Place) => void;
+  onMarkerClick?: (placeId: string) => void;
   onMapClick?: (coords: { longitude: number; latitude: number }) => void;
 }
 
@@ -120,13 +119,13 @@ const MapComponent = ({
         />
       )}
 
-      {filteredPlaces.map((place, index) => (
+      {filteredPlaces?.map((place, index) => (
         <Marker
           key={index}
           style={{ cursor: "pointer" }}
           onClick={() => {
             if (onMarkerClick) {
-              onMarkerClick(place);
+              onMarkerClick(place._id);
             }
           }}
           longitude={place.location.coordinates[0]}

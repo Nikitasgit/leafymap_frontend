@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Place } from "@/types/place";
 
-export const usePlace = (placeId: string) => {
+export const usePlace = (placeId: string, enrichSchedule: boolean = false) => {
   const [place, setPlace] = useState<Place | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -12,7 +12,9 @@ export const usePlace = (placeId: string) => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}`
+          `${
+            process.env.NEXT_PUBLIC_API_URL
+          }/api/places/${placeId}?enrichSchedule=${enrichSchedule.toString()}`
         );
         setPlace(response.data.data);
         setError(null);

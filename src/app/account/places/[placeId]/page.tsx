@@ -17,7 +17,7 @@ const UpdatePlace = () => {
   const { place, loading, error } = usePlace(placeId);
   const { submitForm } = useUpdatePlace();
   const [formData, setFormData] = useState<PlaceFormData | null>(null);
-
+  console.log(formData);
   const handleInputChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => (prev ? { ...prev, [name]: value } : null));

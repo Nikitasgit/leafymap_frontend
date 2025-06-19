@@ -5,6 +5,12 @@ export type DefaultSchedule = Record<WeekDay, DaySchedule>;
 export interface DaySchedule {
   open: boolean;
   timeSlots: TimeSlot[];
+  events?: Event[];
+}
+
+export interface Event {
+  id: string;
+  name: string;
 }
 
 export interface TimeSlot {

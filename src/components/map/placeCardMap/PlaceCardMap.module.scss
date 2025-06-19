@@ -11,17 +11,59 @@
   background-color: $white;
   z-index: 99999;
   overflow-y: scroll;
+  transition: opacity 0.2s ease-in-out;
 
-  img {
+  &.fadeOut {
+    opacity: 0.8;
+  }
+
+  &.fadeIn {
+    opacity: 1;
+  }
+
+  .imageContainer {
+    position: relative;
     width: 100%;
-    object-fit: cover;
-    object-position: center;
+    height: 200px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .currentImage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    .nextImage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+      animation: fadeInImage 0.2s ease-in-out forwards;
+    }
+  }
+
+  @keyframes fadeInImage {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
   .header {
     @include flex(column, flex-start, flex-start, spacing(0.5));
     padding: spacing(1) spacing(1) 0 spacing(1);
     width: 100%;
+    box-sizing: border-box;
   }
 
   .headerMain {
@@ -31,10 +73,10 @@
 
   .title {
     font-size: 1.3rem;
-    font-weight: 700;
+    font-weight: 500;
     color: $grey-500;
-
     width: 100%;
+    letter-spacing: 0.5px;
   }
 
   .buttons {
@@ -46,25 +88,35 @@
     border-bottom: 1px solid $grey-200;
     margin-left: 0;
     margin-right: 0;
+    box-sizing: border-box;
   }
 
   .buttonGroup {
     @include flex(row, flex-start, center, spacing(1));
 
     button {
-      padding: spacing(0.75) spacing(2);
-      font-size: rem(15);
+      padding: spacing(0.5) spacing(1.5);
+      font-size: rem(13);
       border-radius: 6px;
       min-width: unset;
-      height: rem(32);
+      height: rem(26);
       line-height: 1;
       flex: 0 1 auto;
+
+      &.secondary {
+        border: none;
+        background: transparent;
+
+        &:hover {
+          background: transparent;
+        }
+      }
     }
   }
 
   .ratingRow {
     @include flex(row, flex-start, center, spacing(0.5));
-    font-size: rem(18);
+    font-size: rem(16);
     color: $primary-color;
     font-weight: 600;
   }
@@ -84,18 +136,19 @@
     margin-bottom: spacing(0.25);
     width: 100%;
     padding: 0 spacing(1);
+    box-sizing: border-box;
   }
 
   .addressIcon {
     color: $grey-400;
-    @include flex(row, flex-start, flex-start, 0);
+    @include flex(row, flex-start, center, 0);
     flex-shrink: 0;
-    margin-top: spacing(0.25);
+    margin-top: 0;
   }
 
   .address {
     color: $grey-400;
-    font-size: rem(15);
+    font-size: rem(13);
     white-space: normal;
     overflow: visible;
     text-overflow: unset;
@@ -106,11 +159,55 @@
   }
 
   .descriptionRow {
+    padding: spacing(1) spacing(1);
+    margin: spacing(0.5) 0;
+    background-color: $grey-50;
+    border-radius: 8px;
+    margin-left: spacing(1);
+    margin-right: spacing(1);
+    width: calc(100% - #{spacing(2)});
+    box-sizing: border-box;
+
+    p {
+      font-size: rem(14);
+      color: $grey-600;
+      line-height: 1.5;
+      margin: 0;
+      font-weight: 400;
+      letter-spacing: 0.2px;
+    }
+  }
+
+  .reviewsSection {
+    @include flex(row, flex-start, center, spacing(0.75));
+    margin-top: spacing(0.5);
     padding: 0 spacing(1);
-    margin-top: spacing(0.25);
-    margin-bottom: spacing(1);
-    font-size: rem(16);
-    color: $grey-600;
     width: 100%;
+    box-sizing: border-box;
+  }
+
+  .reviewsInline {
+    @include flex(row, flex-start, center, spacing(0.25));
+    margin-left: spacing(0.5);
+  }
+
+  .starsContainer {
+    @include flex(row, flex-start, center, spacing(0.05));
+  }
+
+  .star {
+    &.filled {
+      color: #ffd700;
+    }
+
+    &.empty {
+      color: $grey-200;
+    }
+  }
+
+  .reviewCount {
+    color: $grey-400;
+    font-size: rem(16);
+    font-weight: 400;
   }
 }

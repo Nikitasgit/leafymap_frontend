@@ -3,10 +3,10 @@ import axios from "axios";
 import { fetchUser } from "@/store/userSlice";
 import { useAppDispatch } from "@/store";
 import { useRouter, useParams } from "next/navigation";
-import type { FormData } from "../components/account/createProfileStepper/CreateProfileStepper.types";
+import { PlaceFormData } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 
 type UseUpdatePlaceReturn = {
-  submitForm: (data: FormData, isUpdate: boolean) => Promise<void>;
+  submitForm: (data: PlaceFormData, isUpdate: boolean) => Promise<void>;
   loading: boolean;
   error: string | null;
   success: boolean;
@@ -19,9 +19,9 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const params = useParams();
-  const placeId = params.id as string;
+  const placeId = params.placeId as string;
 
-  const submitForm = async (data: FormData, isUpdate: boolean) => {
+  const submitForm = async (data: PlaceFormData, isUpdate: boolean) => {
     setLoading(true);
     setError(null);
     setSuccess(false);
@@ -41,7 +41,7 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
       form.append("defaultSchedule", JSON.stringify(data.defaultSchedule));
 
       if (data.collaborators) {
-        const collaboratorIds = data.collaborators.map((collab) => collab.id);
+        const collaboratorIds = data.collaborators.map((collab) => collab._id);
         form.append("collaborators", JSON.stringify(collaboratorIds));
       }
       if (data.createdCollaborators) {
@@ -57,7 +57,7 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
           JSON.stringify(cleanedCollaborators)
         );
       }
-      if (data.image instanceof File) {
+      if (data.image) {
         form.append("image", data.image);
       }
 

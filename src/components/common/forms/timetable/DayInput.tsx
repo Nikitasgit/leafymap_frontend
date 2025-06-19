@@ -63,7 +63,7 @@ const DayInput = ({ day, schedule, onChange }: DayInputProps) => {
       <label>
         <input
           type="checkbox"
-          checked={schedule.open}
+          checked={schedule?.open}
           onChange={handleToggleOpen}
         />
         {day.charAt(0).toUpperCase() + day.slice(1)}
