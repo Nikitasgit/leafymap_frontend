@@ -53,17 +53,6 @@
     outline: 2px solid $primary-color;
     outline-offset: 2px;
   }
-
-  &.currentDay {
-    background-color: rgba-color($primary-color, 0.1);
-    border-left: 3px solid $primary-color;
-  }
-
-  &.expanded {
-    background-color: rgba-color($primary-color, 0.08);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
 }
 
 .dayInfo {
@@ -164,38 +153,20 @@
 }
 
 .openStatus,
-.closedStatus,
-.eventsStatus {
+.closedStatus {
   @include flex(row, flex-end, center, spacing(0.25));
 }
 
-.openStatus {
-  .statusText {
-    color: $success-color;
-    font-weight: 500;
-    font-size: rem(12);
-  }
+.openStatus .statusText {
+  color: $success-color;
+  font-weight: 500;
+  font-size: rem(12);
 }
 
-.closedStatus {
-  .statusText {
-    color: $error-color;
-    font-weight: 500;
-    font-size: rem(12);
-  }
-}
-
-.eventsStatus {
-  .statusText {
-    color: $primary-color;
-    font-weight: 500;
-    font-size: rem(12);
-  }
-}
-
-.expandIndicator {
-  @include flex(row, flex-end, center, 0);
-  margin-top: 0;
+.closedStatus .statusText {
+  color: $error-color;
+  font-weight: 500;
+  font-size: rem(12);
 }
 
 .expandIcon {
@@ -207,24 +178,6 @@
   &.expanded {
     transform: rotate(180deg);
   }
-
-  &.green {
-    color: $success-color;
-  }
-
-  &.blue {
-    color: $primary-color;
-  }
-
-  &.grey {
-    color: $grey-400;
-  }
-}
-
-.timeSlotCount {
-  font-size: rem(11);
-  color: $grey-400;
-  font-weight: 400;
 }
 
 .timeSlotsExpanded {

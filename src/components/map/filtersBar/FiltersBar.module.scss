@@ -1,0 +1,75 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+.filtersBar {
+  @include flex(row, space-between, center, 0);
+  padding: $spacing-small;
+  background-color: $white;
+  width: 100%;
+  border-top: 1px solid $grey-200;
+}
+
+.categories {
+  @include flex(row, center, center, $spacing-medium);
+
+  .category {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: $font-size-base;
+    color: $grey-400;
+    &.active {
+      color: $primary-color;
+      font-weight: 600;
+    }
+  }
+}
+
+.search {
+  @include flex(row, space-between, center, 0);
+  border: 1px solid $grey-200;
+  border-radius: 8px;
+}
+
+.searchDropdown {
+  @include flex(row, space-between, center, 0);
+  min-width: 130px;
+  padding: 0 $spacing-medium;
+  cursor: pointer;
+  span {
+    font-weight: 500;
+  }
+}
+
+.searchDropdownWrapper {
+  position: relative;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 130%;
+  left: 0;
+  background-color: $white;
+  width: 100%;
+  z-index: 1001;
+}
+
+.dropdownItem {
+  padding: $spacing-small $spacing-medium;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $grey-100;
+  }
+}
+
+.filterButton {
+  background-color: $white;
+  border: 1px solid $grey-200;
+  padding: 8px $spacing-medium;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: $spacing-small;
+}

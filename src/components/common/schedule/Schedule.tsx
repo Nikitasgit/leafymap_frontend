@@ -15,7 +15,6 @@ const Schedule: React.FC<ScheduleProps> = ({ schedule, className }) => {
   const [expandedEvents, setExpandedEvents] = useState<Set<string>>(new Set());
   const router = useRouter();
 
-  // Reset expanded states when schedule changes
   useEffect(() => {
     setExpandedHoraires(new Set());
     setExpandedEvents(new Set());

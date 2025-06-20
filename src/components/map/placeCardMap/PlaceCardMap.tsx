@@ -76,20 +76,22 @@ const PlaceCardMap = ({ placeId }: { placeId: string }) => {
       <div className={styles.header}>
         <div className={styles.headerMain}>
           <h2 className={styles.title}>{displayPlace?.name}</h2>
-        </div>
-        <div className={styles.buttons}>
-          <div className={styles.ratingRow}>
-            <Heart size={16} className={styles.heartIcon} />
-            <span className={styles.rating}>{displayPlace?.rating}</span>
-            <div className={styles.reviewsInline}>
+          <div className={styles.categoryRow}>
+            {displayPlace?.placeCategory && (
+              <Text className={styles.category}>
+                {displayPlace.placeCategory.name}
+              </Text>
+            )}
+            <div className={styles.ratingRow}>
+              <Heart size={16} className={styles.heartIcon} />
+              <span className={styles.rating}>{displayPlace?.rating}</span>
               <div className={styles.starsContainer}>
                 {renderStars(displayPlace?.rating || 0)}
               </div>
-              <span className={styles.reviewCount}>
-                ({displayPlace?.["reviewCount"] ?? 0})
-              </span>
             </div>
           </div>
+        </div>
+        <div className={styles.buttons}>
           <div className={styles.buttonGroup}>
             <Button variant="secondary">Itinéraire</Button>
             <Button variant="primary">Favoris</Button>

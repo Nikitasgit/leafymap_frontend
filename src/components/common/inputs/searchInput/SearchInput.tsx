@@ -1,8 +1,9 @@
 "use client";
 
-import { Delete } from "lucide-react";
+import { Delete, Search } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
+import styles from "./SearchInput.module.scss";
 
 interface SearchInputProps<T> {
   value?: string;
@@ -15,6 +16,7 @@ interface SearchInputProps<T> {
   withIcons?: boolean;
   list?: T[];
   displayList?: boolean;
+  disabled?: boolean;
 }
 
 const SearchInput = <
@@ -34,6 +36,7 @@ const SearchInput = <
   withIcons = false,
   list = [],
   displayList = false,
+  disabled = false,
 }: SearchInputProps<T>) => {
   const [input, setInput] = useState(value);
   const [suggestions, setSuggestions] = useState<T[]>([]);
@@ -90,46 +93,31 @@ const SearchInput = <
   }, [value]);
 
   return (
-    <div ref={wrapperRef} style={{ position: "relative" }}>
-      <input
-        type="text"
-        value={input}
-        onChange={handleInputChange}
-        onFocus={() => {
-          setIsFocused(true);
-          if (showInitialSuggestions) {
-            setSuggestions(initialSuggestions.slice(0, limit));
-          }
-        }}
-        placeholder={placeholder}
-        style={{ width: "100%", padding: "8px" }}
-      />
-      {isFocused && suggestions.length > 0 && (
-        <ul
-          style={{
-            position: "absolute",
-            background: "#fff",
-            border: "1px solid #ccc",
-            listStyle: "none",
-            margin: 0,
-            padding: 0,
-            zIndex: 1000,
-            width: "100%",
-            maxHeight: "200px",
-            overflowY: "auto",
+    <div ref={wrapperRef} className={styles.searchInput}>
+      <div style={{ position: "relative" }}>
+        <Search size={20} className={styles.icon} />
+        <input
+          type="text"
+          value={input}
+          onChange={handleInputChange}
+          onFocus={() => {
+            setIsFocused(true);
+            if (showInitialSuggestions) {
+              setSuggestions(initialSuggestions.slice(0, limit));
+            }
           }}
-        >
+          placeholder={placeholder}
+          className={styles.input}
+          disabled={disabled}
+        />
+      </div>
+      {isFocused && suggestions.length > 0 && (
+        <ul className={styles.suggestions}>
           {suggestions.map((sug) => (
             <li
               key={sug._id}
               onClick={() => handleSuggestionClick(sug as T)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                cursor: "pointer",
-                padding: "8px",
-                gap: "8px",
-              }}
+              className={styles.suggestionItem}
             >
               {withIcons && sug.image && (
                 <Image

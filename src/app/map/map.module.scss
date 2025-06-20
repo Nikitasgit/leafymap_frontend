@@ -1,7 +1,12 @@
 @import "@/styles/abstracts/variables";
 
 .mapPage {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 64px);
+}
+
+.mapContainer {
+  flex-grow: 1;
   position: relative;
-  width: 100%;
-  height: calc(100vh - $navbar-height);
 }

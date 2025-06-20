@@ -1,3 +1,6 @@
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/variables";
+
 *,
 *::before,
 *::after {
@@ -45,6 +48,15 @@ button,
 textarea,
 select {
   font: inherit;
+}
+
+input,
+textarea {
+  @include flex(row, space-between, center, 0);
+  border: 1px solid $grey-200;
+  border-radius: 8px;
+  background-color: $input-bg-color;
+  color: $grey-500;
 }
 
 @media (prefers-reduced-motion: reduce) {

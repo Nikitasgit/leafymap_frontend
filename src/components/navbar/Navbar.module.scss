@@ -42,6 +42,7 @@ $navbar-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 .navLink {
   color: $grey-400;
   font-weight: 500;
+  text-decoration: none;
   transition: color 0.2s ease;
   @include flex(row, center, center, 2px);
 
