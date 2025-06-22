@@ -4,17 +4,15 @@ import Map, {
   GeolocateControl,
   Marker,
   NavigationControl,
+  MapRef,
 } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { MapCoordinates, MapMarker } from "@/types/common";
 import { usePlacesInView } from "@/hooks/usePlacesInView";
 import CategoryMarker from "./CategoryMarker";
+import { MapFilters } from "@/types/map";
 
-interface MapFilters {
-  type: string;
-  category: string;
-}
 interface MapComponentProps {
   width?: string;
   height?: string;
@@ -49,11 +47,31 @@ const MapComponent = ({
   const [viewState, setViewState] = useState<MapCoordinates>(
     location ?? DEFAULT_LOCATION
   );
+  const mapRef = useRef<MapRef>(null);
 
-  const { places: filteredPlaces, fetchPlacesInView } = usePlacesInView({
+  const {
+    places: filteredPlaces,
+    fetchPlacesInView,
+    isLoading,
+  } = usePlacesInView({
     filters,
   });
-  console.log(filteredPlaces);
+
+  useEffect(() => {
+    if (setLoading) {
+      setLoading(isLoading);
+    }
+  }, [isLoading]);
+
+  // Refetch places when filters change
+  useEffect(() => {
+    if (withPlacesInView && mapRef.current) {
+      const bounds = mapRef.current.getBounds();
+      if (bounds) {
+        fetchPlacesInView(bounds);
+      }
+    }
+  }, [filters, withPlacesInView]);
 
   useEffect(() => {
     if (!location && typeof window !== "undefined" && navigator.geolocation) {
@@ -82,13 +100,11 @@ const MapComponent = ({
   return (
     <div style={{ position: "relative", width, height }}>
       <Map
+        ref={mapRef}
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
         {...viewState}
         onMove={(e) => setViewState(e.viewState)}
         onMoveEnd={(e) => {
-          if (setLoading) {
-            setLoading(false);
-          }
           if (withPlacesInView) {
             fetchPlacesInView(e.target.getBounds());
           }
@@ -103,9 +119,6 @@ const MapComponent = ({
         }}
         style={{ width, height }}
         onLoad={(e) => {
-          if (setLoading) {
-            setLoading(true);
-          }
           if (withPlacesInView) {
             fetchPlacesInView(e.target.getBounds());
           }

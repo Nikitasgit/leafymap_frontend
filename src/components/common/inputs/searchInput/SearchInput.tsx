@@ -16,7 +16,7 @@ interface SearchInputProps<T> {
   withIcons?: boolean;
   list?: T[];
   displayList?: boolean;
-  disabled?: boolean;
+  loading?: boolean;
 }
 
 const SearchInput = <
@@ -36,7 +36,7 @@ const SearchInput = <
   withIcons = false,
   list = [],
   displayList = false,
-  disabled = false,
+  loading = false,
 }: SearchInputProps<T>) => {
   const [input, setInput] = useState(value);
   const [suggestions, setSuggestions] = useState<T[]>([]);
@@ -108,7 +108,7 @@ const SearchInput = <
           }}
           placeholder={placeholder}
           className={styles.input}
-          disabled={disabled}
+          disabled={loading}
         />
       </div>
       {isFocused && suggestions.length > 0 && (

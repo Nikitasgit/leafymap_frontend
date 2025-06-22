@@ -2,6 +2,7 @@ export type Collaborator = {
   _id: string;
   username: string;
   image: string;
+  status?: "pending" | "accepted" | "refused";
 };
 
 export type CreatedCollaborator = {

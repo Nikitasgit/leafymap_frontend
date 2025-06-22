@@ -1,10 +1,7 @@
 import React from "react";
 import SearchInput from "@/components/common/inputs/searchInput/SearchInput";
-import {
-  FormData,
-  FormDataChangeHandler,
-  Collaborator,
-} from "../../../CreateProfileStepper.types";
+import { FormDataChangeHandler } from "../../../CreateProfileStepper.types";
+import { Collaborator } from "@/types/place/collaborators";
 import CreatePartners from "./CreatePartner";
 import axios from "axios";
 import { Creator } from "@/types/user";
@@ -51,7 +48,7 @@ const Partners = ({
   data,
 }: {
   onChange: FormDataChangeHandler;
-  data: FormData | EventFormData;
+  data: EventFormData;
 }) => {
   const collaborators = (data.collaborators || []) as Collaborator[];
 
@@ -60,6 +57,7 @@ const Partners = ({
       _id: suggestion._id,
       username: suggestion.username || "",
       image: suggestion.image || "",
+      status: "pending",
     };
     onChange({
       target: {
@@ -90,7 +88,7 @@ const Partners = ({
         onDelete={handleDelete}
         displayList
       />
-      <CreatePartners onChange={onChange} data={data as FormData} />
+      <CreatePartners onChange={onChange} data={data} />
     </div>
   );
 };

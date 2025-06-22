@@ -52,8 +52,11 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
       form.append("schedule", JSON.stringify(formattedSchedule));
 
       if (data.collaborators) {
-        const collaboratorIds = data.collaborators.map((collab) => collab._id);
-        form.append("collaborators", JSON.stringify(collaboratorIds));
+        const collaboratorData = data.collaborators.map((collab) => ({
+          userId: collab._id,
+          status: collab.status || "pending",
+        }));
+        form.append("collaborators", JSON.stringify(collaboratorData));
       }
       if (data.createdCollaborators) {
         const cleanedCollaborators = data.createdCollaborators.map(

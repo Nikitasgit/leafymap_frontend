@@ -1,7 +1,7 @@
 import { Location } from "@/types/common";
-import { Period } from "@/components/events/form/EventForm";
-import { DefaultSchedule } from "@/types/place/schedule";
+import { DefaultSchedule, Period } from "@/types/place/schedule";
 import { Collaborator, CreatedCollaborator } from "@/types/place/collaborators";
+import { PlaceType } from "@/types/place/placeCaterories";
 
 export interface NewProfileFormData {
   userType: string;
@@ -16,6 +16,7 @@ export interface NewProfileFormData {
   collaborators: Collaborator[];
   createdCollaborators: CreatedCollaborator[];
   placeCategory: string;
+  placeType: PlaceType[];
   location: Location | null;
   placeId?: string;
   placeActive?: boolean;

@@ -26,6 +26,7 @@ const CreateProfileStepper = () => {
     createdCollaborators: [],
     image: user?.image || "",
     placeCategory: "",
+    placeType: [],
   });
 
   const { submitForm } = useSubmitForm();
@@ -53,7 +54,7 @@ const CreateProfileStepper = () => {
       }));
     }
   }, [user]);
-
+  console.log(formData);
   return (
     <div>
       {step === 1 && (

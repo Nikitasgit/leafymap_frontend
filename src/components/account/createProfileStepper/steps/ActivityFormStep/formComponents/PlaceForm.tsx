@@ -1,6 +1,7 @@
 import TimeTableForm from "@/components/common/forms/timetable/TimeTableForm";
 import AddressInput from "@/components/common/inputs/addressInput/AddressInput";
 import PlaceCategorySelectorInput from "@/components/common/inputs/categorySelectorInput/PlaceCategorySelectorInput";
+import PlaceTypeSelectorInput from "@/components/common/inputs/placeTypeSelectorInput/PlaceTypeSelectorInput";
 import MapComponent from "@/components/map/mapComponent/Map";
 import { MapCoordinates, Location } from "@/types/common";
 import React, { useState } from "react";
@@ -77,9 +78,17 @@ const PlaceForm = ({
         onMapClick={handleMapClick}
         withDefaultMarker
       />
+      {data.userType === "organizer" && (
+        <PlaceTypeSelectorInput
+          value={data.placeType || []}
+          onChange={onChange}
+        />
+      )}
+
       <PlaceCategorySelectorInput
         value={data.placeCategory}
         onChange={onChange}
+        selectedTypes={data.placeType || []}
       />
       <Text as="h3">Horaires</Text>
       <TimeTableForm

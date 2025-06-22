@@ -5,22 +5,38 @@ import styles from "./FiltersBar.module.scss";
 import { ChevronDown, Filter } from "lucide-react";
 import { useRef, useState } from "react";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
+import { useFindCreatorInPlaces } from "@/hooks/useFindCreatorInPlaces";
+import { MapFilters } from "@/types/map";
 
 type SearchType = {
   label: string;
   placeholder: string;
 };
+const types = [
+  { key: "all", label: "Tous", value: ["all"] },
+  { key: "food", label: "Producteurs", value: ["food"] },
+  { key: "art", label: "Art et artisanat", value: ["art", "craft"] },
+];
 
 const searchTypes: SearchType[] = [
   { label: "Membres", placeholder: "Rechercher un membre" },
   { label: "Lieux", placeholder: "Rechercher un lieu" },
 ];
 
-const FiltersBar = () => {
+const FiltersBar = ({
+  loading,
+  filters,
+  setFilters,
+}: {
+  loading: boolean;
+  filters: MapFilters;
+  setFilters: (filters: MapFilters) => void;
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchType, setSearchType] = useState<SearchType>(searchTypes[0]);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+  const { findCreatorInPlaces, isLoading: isSearching } =
+    useFindCreatorInPlaces();
   useOnClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 
   const handleDropdownToggle = () => {
@@ -32,12 +48,37 @@ const FiltersBar = () => {
     setIsDropdownOpen(false);
   };
 
+  const handleTypeSelect = (type: {
+    key: string;
+    label: string;
+    value: string[];
+  }) => {
+    setFilters({
+      ...filters,
+      placeType: type.value,
+    });
+  };
+
+  const handleSearch = async (searchTerm: string) => {
+    if (searchType.label === "Membres") {
+      await findCreatorInPlaces(searchTerm);
+    }
+  };
+
   return (
     <div className={styles.filtersBar}>
       <div className={styles.categories}>
-        <button className={`${styles.category} ${styles.active}`}>Tous</button>
-        <button className={styles.category}>Producteurs</button>
-        <button className={styles.category}>Art et artisanat</button>
+        {types.map((type) => (
+          <button
+            key={type.key}
+            className={`${styles.category} ${
+              filters.placeType.includes(type.key) ? styles.active : ""
+            }`}
+            onClick={() => handleTypeSelect(type)}
+          >
+            {type.label}
+          </button>
+        ))}
       </div>
       <div className={styles.search}>
         <div className={styles.searchDropdownWrapper} ref={dropdownRef}>
@@ -60,13 +101,17 @@ const FiltersBar = () => {
           )}
         </div>
         <SearchInput
+          loading={loading || isSearching}
           onSelect={() => {}}
           onDelete={() => {}}
-          fetchSuggestions={async () => []}
+          fetchSuggestions={async (query: string) => {
+            await handleSearch(query);
+            return [];
+          }}
           placeholder={searchType.placeholder}
         />
       </div>
-      <button className={styles.filterButton}>
+      <button className={styles.filterButton} disabled={loading}>
         <Filter size={20} />
         Filtres
       </button>

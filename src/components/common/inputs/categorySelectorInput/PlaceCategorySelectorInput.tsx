@@ -4,13 +4,16 @@ import { useSelector } from "react-redux";
 import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { selectPlaceCategories } from "@/store/appSlice";
 import { PlaceCategory } from "@/types/categories";
+import { PlaceType } from "@/types/place/placeCaterories";
 
 const PlaceCategorySelectorInput = ({
   value,
   onChange,
+  selectedTypes = [],
 }: {
   value: string;
   onChange: FormDataChangeHandler;
+  selectedTypes?: PlaceType[];
 }) => {
   const placeCategories = useSelector(selectPlaceCategories);
   const [inputValue, setInputValue] = useState("");
@@ -18,6 +21,51 @@ const PlaceCategorySelectorInput = ({
   const [search, setSearch] = useState("");
 
   const ref = useRef<HTMLDivElement>(null);
+
+  const getFilteredCategories = () => {
+    if (selectedTypes.length === 0) {
+      return placeCategories;
+    }
+
+    const filtered = placeCategories.filter((category) => {
+      const categoryTypes = category.types || [];
+      return (
+        categoryTypes.length > 0 &&
+        categoryTypes.some((type: PlaceType) => selectedTypes.includes(type))
+      );
+    });
+
+    return filtered;
+  };
+
+  const isCurrentCategoryCompatible = () => {
+    if (!value || selectedTypes.length === 0) {
+      return true;
+    }
+
+    const currentCategory = placeCategories.find((cat) => cat._id === value);
+    if (!currentCategory) {
+      return false;
+    }
+
+    const categoryTypes = currentCategory.types || [];
+    return (
+      categoryTypes.length > 0 &&
+      categoryTypes.some((type: PlaceType) => selectedTypes.includes(type))
+    );
+  };
+
+  useEffect(() => {
+    if (value && !isCurrentCategoryCompatible()) {
+      setInputValue("");
+      onChange({
+        target: {
+          name: "placeCategory",
+          value: "",
+        },
+      });
+    }
+  }, [selectedTypes, value, onChange]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -42,7 +90,8 @@ const PlaceCategorySelectorInput = ({
     });
   };
 
-  const filtered = placeCategories.filter((cat) =>
+  const filteredCategories = getFilteredCategories();
+  const searchFiltered = filteredCategories.filter((cat) =>
     cat.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -54,6 +103,7 @@ const PlaceCategorySelectorInput = ({
       }
     }
   }, [value, placeCategories]);
+
   return (
     <div className={styles.categoryInputWrapper} ref={ref}>
       <input
@@ -75,7 +125,7 @@ const PlaceCategorySelectorInput = ({
           />
 
           <div className={styles.list}>
-            {filtered.map((cat) => (
+            {searchFiltered.map((cat) => (
               <div
                 key={cat._id}
                 className={styles.item}

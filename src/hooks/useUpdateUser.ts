@@ -40,6 +40,9 @@ const useSubmitForm = (): UseCreateProfileReturn => {
       if (data.placeCategory) {
         form.append("placeCategory", data.placeCategory);
       }
+      if (data.placeType && data.placeType.length > 0) {
+        form.append("placeType", JSON.stringify(data.placeType));
+      }
       if (data.location) {
         form.append("location", JSON.stringify(data.location));
       }
