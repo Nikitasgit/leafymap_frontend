@@ -23,34 +23,26 @@ interface CreatorInPlacesResult {
 }
 
 export const useFindCreatorInPlaces = () => {
-  const [searchResults, setSearchResults] =
-    useState<CreatorInPlacesResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-
-  const findCreatorInPlaces = useCallback(async (searchTerm: string) => {
-    if (!searchTerm || searchTerm.length < 2) {
-      setSearchResults(null);
-      return;
-    }
-
+  const [data, setData] = useState<CreatorInPlacesResult | null>(null);
+  const findCreatorInPlaces = useCallback(async (userId: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/places/search`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/creator-in-places-and-events`,
         {
           params: {
-            searchType: "members",
-            search: searchTerm,
+            userId,
           },
         }
       );
 
       const results = response.data.data;
       console.log("Creator in places search results:", results);
-      setSearchResults(results);
+      setData(results);
     } catch (err) {
       setError(
         err instanceof Error
@@ -58,22 +50,16 @@ export const useFindCreatorInPlaces = () => {
           : new Error("Failed to find creator in places")
       );
       console.error("Failed to find creator in places:", err);
-      setSearchResults(null);
+      setData(null);
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  const clearResults = useCallback(() => {
-    setSearchResults(null);
-    setError(null);
-  }, []);
-
   return {
-    searchResults,
+    data,
     isLoading,
     error,
     findCreatorInPlaces,
-    clearResults,
   };
 };

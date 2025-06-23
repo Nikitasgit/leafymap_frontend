@@ -2,7 +2,7 @@
 
 import { Delete, Search } from "lucide-react";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import styles from "./SearchInput.module.scss";
 
 interface SearchInputProps<T> {
@@ -17,6 +17,7 @@ interface SearchInputProps<T> {
   list?: T[];
   displayList?: boolean;
   loading?: boolean;
+  debounce?: number; // Delay in milliseconds
 }
 
 const SearchInput = <
@@ -37,28 +38,50 @@ const SearchInput = <
   list = [],
   displayList = false,
   loading = false,
+  debounce,
 }: SearchInputProps<T>) => {
   const [input, setInput] = useState(value);
   const [suggestions, setSuggestions] = useState<T[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const showInitialSuggestions =
     input.trim() === "" && initialSuggestions.length > 0;
 
-  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const fetchSuggestionsDebounced = useCallback(
+    async (searchTerm: string) => {
+      if (searchTerm.length > 2) {
+        try {
+          const results = await fetchSuggestions(searchTerm);
+          setSuggestions(results.slice(0, limit));
+        } catch (err) {
+          console.error("Error fetching suggestions:", err);
+        }
+      } else {
+        setSuggestions([]);
+      }
+    },
+    [fetchSuggestions, limit]
+  );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInput(newValue);
 
-    if (newValue.length > 2) {
-      try {
-        const results = await fetchSuggestions(newValue);
-        setSuggestions(results.slice(0, limit));
-      } catch (err) {
-        console.error("Error fetching suggestions:", err);
-      }
+    // Clear previous timeout if debounce is enabled
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
+    if (debounce) {
+      // Use debounce
+      debounceTimeoutRef.current = setTimeout(() => {
+        fetchSuggestionsDebounced(newValue);
+      }, debounce);
     } else {
-      setSuggestions([]);
+      // Immediate fetch
+      fetchSuggestionsDebounced(newValue);
     }
   };
 
@@ -71,7 +94,6 @@ const SearchInput = <
   const handleDelete = (id: string) => {
     onDelete(id);
   };
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -91,6 +113,15 @@ const SearchInput = <
       setInput(value);
     }
   }, [value]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div ref={wrapperRef} className={styles.searchInput}>

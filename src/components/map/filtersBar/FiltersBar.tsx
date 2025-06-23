@@ -5,8 +5,9 @@ import styles from "./FiltersBar.module.scss";
 import { ChevronDown, Filter } from "lucide-react";
 import { useRef, useState } from "react";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
-import { useFindCreatorInPlaces } from "@/hooks/useFindCreatorInPlaces";
 import { MapFilters } from "@/types/map";
+import { useFindCreators } from "@/hooks/useFindCreators";
+import { Collaborator } from "@/types/place/collaborators";
 
 type SearchType = {
   label: string;
@@ -27,16 +28,17 @@ const FiltersBar = ({
   loading,
   filters,
   setFilters,
+  handleUserSelect,
 }: {
   loading: boolean;
   filters: MapFilters;
   setFilters: (filters: MapFilters) => void;
+  handleUserSelect: (user: Collaborator) => void;
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchType, setSearchType] = useState<SearchType>(searchTypes[0]);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { findCreatorInPlaces, isLoading: isSearching } =
-    useFindCreatorInPlaces();
+  const { searchCreators } = useFindCreators();
   useOnClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 
   const handleDropdownToggle = () => {
@@ -57,12 +59,6 @@ const FiltersBar = ({
       ...filters,
       placeType: type.value,
     });
-  };
-
-  const handleSearch = async (searchTerm: string) => {
-    if (searchType.label === "Membres") {
-      await findCreatorInPlaces(searchTerm);
-    }
   };
 
   return (
@@ -101,13 +97,13 @@ const FiltersBar = ({
           )}
         </div>
         <SearchInput
-          loading={loading || isSearching}
-          onSelect={() => {}}
+          withIcons={true}
+          debounce={500}
+          loading={loading}
+          limit={10}
+          onSelect={handleUserSelect}
           onDelete={() => {}}
-          fetchSuggestions={async (query: string) => {
-            await handleSearch(query);
-            return [];
-          }}
+          fetchSuggestions={searchCreators}
           placeholder={searchType.placeholder}
         />
       </div>
