@@ -2,22 +2,34 @@ import { useState, useCallback } from "react";
 import axios from "axios";
 
 interface CreatorInPlacesResult {
+  user: {
+    _id: string;
+    creatorProfile: {
+      name: string;
+      categories: Array<{
+        _id: string;
+        name: string;
+      }>;
+    };
+    image: string;
+  };
   places: Array<{
-    placeId: string;
-    placeName: string;
-    collaborators: Array<{
-      userId: string;
-      userName: string;
-      userImage: string | null;
-    }>;
-  }>;
-  events: Array<{
-    eventId: string;
-    eventName: string;
-    collaborators: Array<{
-      userId: string;
-      userName: string;
-      userImage: string | null;
+    place: {
+      _id: string;
+      name: string;
+      location: {
+        type: string;
+        coordinates: number[];
+        label: string;
+        id: string;
+      };
+      image: string;
+    };
+    events: Array<{
+      _id: string;
+      name: string;
+      placeId: string;
+      image: string;
     }>;
   }>;
 }

@@ -25,10 +25,12 @@ const MapPage = () => {
 
   const handleMarkerClick = (placeId: string) => {
     setSelectedPlace(placeId);
+    setSelectedUser(null);
   };
 
   const handleUserSelect = (user: Collaborator) => {
     setSelectedUser(user);
+    setSelectedPlace(null);
   };
 
   return (

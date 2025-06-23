@@ -12,12 +12,9 @@
   z-index: 99999;
   overflow-y: scroll;
   transition: opacity 0.2s ease-in-out;
-
-  // Personnalisation de la scrollbar
   &::-webkit-scrollbar {
     width: 6px;
   }
-
   &::-webkit-scrollbar-track {
     background: transparent;
   }
