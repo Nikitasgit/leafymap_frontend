@@ -18,6 +18,7 @@ import { MapCoordinates, MapMarker } from "@/types/common";
 import { usePlacesInView } from "@/hooks/usePlacesInView";
 import CategoryMarker from "./CategoryMarker";
 import { MapFilters } from "@/types/map";
+import { DEFAULT_LOCATION } from "@/utils/constants";
 
 interface MapComponentProps {
   width?: string;
@@ -30,15 +31,15 @@ interface MapComponentProps {
   setLoading?: (loading: boolean) => void;
   onMarkerClick?: (placeId: string) => void;
   onMapClick?: (coords: { longitude: number; latitude: number }) => void;
+  selectedPlaceId?: string;
 }
 
-const DEFAULT_LOCATION = {
-  latitude: 48.866667,
-  longitude: 2.333333,
-  zoom: 12,
+type ExtendedMapRef = MapRef & {
+  fetchPlacesInView: (bounds: mapboxgl.LngLatBounds | null) => Promise<void>;
+  setSelectedPlaceId: (placeId: string | null) => void;
 };
 
-const MapComponent = forwardRef<MapRef, MapComponentProps>(
+const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
   (
     {
       width = "100%",
@@ -51,6 +52,7 @@ const MapComponent = forwardRef<MapRef, MapComponentProps>(
       withPlacesInView = false,
       onMarkerClick,
       setLoading,
+      selectedPlaceId,
     },
     ref
   ) => {
@@ -58,8 +60,9 @@ const MapComponent = forwardRef<MapRef, MapComponentProps>(
       location ?? DEFAULT_LOCATION
     );
     const mapRef = useRef<MapRef>(null);
-
-    useImperativeHandle(ref, () => mapRef.current!, [mapRef.current]);
+    const [internalSelectedPlaceId, setInternalSelectedPlaceId] = useState<
+      string | null
+    >(selectedPlaceId || null);
 
     const {
       places: filteredPlaces,
@@ -68,6 +71,16 @@ const MapComponent = forwardRef<MapRef, MapComponentProps>(
     } = usePlacesInView({
       filters,
     });
+
+    useImperativeHandle(ref, () => ({
+      ...mapRef.current!,
+      fetchPlacesInView,
+      setSelectedPlaceId: setInternalSelectedPlaceId,
+    }));
+
+    useEffect(() => {
+      setInternalSelectedPlaceId(selectedPlaceId || null);
+    }, [selectedPlaceId]);
 
     useEffect(() => {
       if (setLoading) {
@@ -166,7 +179,9 @@ const MapComponent = forwardRef<MapRef, MapComponentProps>(
               categoryName={place.placeCategory.name}
               placeName={place.name}
               zoom={viewState.zoom}
+              isSelected={place._id === internalSelectedPlaceId}
               onClick={() => {
+                setInternalSelectedPlaceId(place._id);
                 if (onMarkerClick) {
                   onMarkerClick(place._id);
                 }

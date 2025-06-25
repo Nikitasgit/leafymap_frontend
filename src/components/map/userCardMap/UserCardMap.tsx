@@ -6,49 +6,77 @@ import styles from "./UserCardMap.module.scss";
 import { User, Map, ExternalLink } from "lucide-react";
 import { Collaborator } from "@/types/place/collaborators";
 import { useFindCreatorInPlaces } from "@/hooks/useFindCreatorInPlaces";
-import { MapCoordinates } from "@/types/common";
 import { MapRef } from "react-map-gl/mapbox";
 import { applyPixelOffsetToLocation } from "@/utils/map";
+import mapboxgl from "mapbox-gl";
 
 interface UserCardMapProps {
   user: Collaborator;
-  onMapLocationChange?: (location: MapCoordinates) => void;
   mapRef?: React.RefObject<MapRef | null>;
 }
 
-const UserCardMap = ({
-  user,
-  onMapLocationChange,
-  mapRef,
-}: UserCardMapProps) => {
+const UserCardMap = ({ user, mapRef }: UserCardMapProps) => {
   const { data: userPlaces, findCreatorInPlaces } = useFindCreatorInPlaces();
-  console.log("mapRef", mapRef);
+
   useEffect(() => {
     findCreatorInPlaces(user._id);
   }, [user._id, findCreatorInPlaces]);
 
-  const handleMapButtonClick = (placeData: {
-    place: { location: { coordinates: number[] } };
+  const handleMapButtonClick = async (placeData: {
+    place: { location: { coordinates: number[] }; _id: string };
   }) => {
-    if (placeData.place.location?.coordinates && mapRef?.current) {
-      const [longitude, latitude] = placeData.place.location.coordinates;
+    const [longitude, latitude] = placeData.place.location.coordinates;
+    const offsetLocation = applyPixelOffsetToLocation(
+      { latitude, longitude },
+      -100,
+      0
+    );
 
-      const offsetLocation = applyPixelOffsetToLocation(
-        mapRef,
-        { latitude, longitude, zoom: 15 },
-        -100,
-        0
-      );
+    if (mapRef?.current) {
+      const mapInstance = mapRef.current as MapRef & {
+        setSelectedPlaceId?: (placeId: string | null) => void;
+        fetchPlacesInView?: (
+          bounds: mapboxgl.LngLatBounds | null
+        ) => Promise<void>;
+      };
+      if (mapInstance.setSelectedPlaceId) {
+        mapInstance.setSelectedPlaceId(placeData.place._id);
+      }
 
-      onMapLocationChange?.(offsetLocation);
+      const bounds = new mapboxgl.LngLatBounds();
+      bounds.extend([
+        offsetLocation.longitude - 0.01,
+        offsetLocation.latitude - 0.01,
+      ]);
+      bounds.extend([
+        offsetLocation.longitude + 0.01,
+        offsetLocation.latitude + 0.01,
+      ]);
+
+      if (mapInstance.fetchPlacesInView) {
+        await mapInstance.fetchPlacesInView(bounds);
+      }
 
       mapRef.current.flyTo({
         center: [offsetLocation.longitude, offsetLocation.latitude],
         zoom: 15,
-        duration: 2000,
+        duration: 800,
       });
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (mapRef?.current) {
+        const mapInstance = mapRef.current as MapRef & {
+          setSelectedPlaceId?: (placeId: string | null) => void;
+        };
+        if (mapInstance.setSelectedPlaceId) {
+          mapInstance.setSelectedPlaceId(null);
+        }
+      }
+    };
+  }, [user._id, mapRef]);
 
   if (!userPlaces) return <div>Loading...</div>;
 
@@ -57,8 +85,8 @@ const UserCardMap = ({
       <div className={styles.creatorProfile}>
         <div className={styles.creatorImageContainer}>
           <Image
-            src={userPlaces.user?.image || "/images/default-user.png"}
-            alt={userPlaces.user?.creatorProfile?.name || "Creator"}
+            src={userPlaces.user?.image}
+            alt={userPlaces.user?.creatorProfile?.name}
             width={55}
             height={55}
             className={styles.creatorImage}
@@ -76,6 +104,15 @@ const UserCardMap = ({
             ))}
           </div>
         </div>
+        <Button
+          onClick={() =>
+            handleMapButtonClick({
+              place: userPlaces.user.creatorProfile?.place,
+            })
+          }
+        >
+          <Map size={14} />
+        </Button>
       </div>
 
       <div className={styles.placesSection}>
@@ -139,11 +176,6 @@ const UserCardMap = ({
                       </Button>
                     </div>
                   ))}
-                  {placeData.events.length > 3 && (
-                    <Text className={styles.moreEvents}>
-                      +{placeData.events.length - 3} more events
-                    </Text>
-                  )}
                 </div>
               </div>
             )}
@@ -153,5 +185,4 @@ const UserCardMap = ({
     </div>
   );
 };
-
 export default UserCardMap;

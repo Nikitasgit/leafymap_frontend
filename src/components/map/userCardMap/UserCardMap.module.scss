@@ -164,7 +164,7 @@
 }
 
 .eventItem {
-  @include flex(row, flex-start, center, $spacing-small);
+  @include flex(row, center, center, $spacing-small);
   padding: spacing(0.75);
   background: $grey-50;
   border-radius: 4px;
@@ -178,6 +178,7 @@
 
 .eventImageContainer {
   flex-shrink: 0;
+  @include flex(row, center, center, 0);
 }
 
 .eventImage {

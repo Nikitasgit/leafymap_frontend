@@ -10,6 +10,15 @@ interface CreatorInPlacesResult {
         _id: string;
         name: string;
       }>;
+      place: {
+        _id: string;
+        location: {
+          type: string;
+          coordinates: number[];
+          label: string;
+          id: string;
+        };
+      };
     };
     image: string;
   };

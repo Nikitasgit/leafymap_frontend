@@ -11,6 +11,7 @@ interface CategoryMarkerProps {
   onClick?: () => void;
   className?: string;
   zoom?: number;
+  isSelected?: boolean;
 }
 
 const CategoryMarker: React.FC<CategoryMarkerProps> = ({
@@ -21,10 +22,13 @@ const CategoryMarker: React.FC<CategoryMarkerProps> = ({
   onClick,
   className,
   zoom = 0,
+  isSelected = false,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const isZoomedIn = zoom >= 15;
-  const shouldShowLabel = isZoomedIn || isHovered;
+  const isZoomHighEnough = zoom >= 10;
+  const shouldShowLabel =
+    isZoomHighEnough && (isZoomedIn || isHovered || isSelected);
 
   return (
     <Marker
@@ -34,20 +38,28 @@ const CategoryMarker: React.FC<CategoryMarkerProps> = ({
       className={className}
     >
       <div
-        className={styles.markerContainer}
+        className={`${styles.markerContainer} ${
+          isSelected ? styles.selected : ""
+        }`}
         onMouseEnter={() => !isZoomedIn && setIsHovered(true)}
         onMouseLeave={() => !isZoomedIn && setIsHovered(false)}
       >
         <PlaceCategoryIcon
           categoryName={categoryName}
           size="small"
-          variant="primary"
-          className={styles.markerIcon}
+          variant={isSelected ? "secondary" : "primary"}
+          className={`${styles.markerIcon} ${
+            isSelected ? styles.selectedIcon : ""
+          }`}
         />
         {placeName && shouldShowLabel && (
           <div
             className={`${styles.placeLabel} ${
-              isZoomedIn ? styles.permanent : styles.hover
+              isSelected
+                ? styles.selectedLabel
+                : isZoomedIn
+                ? styles.permanent
+                : styles.hover
             }`}
           >
             {placeName}
