@@ -30,6 +30,10 @@
   &::-webkit-scrollbar-button {
     display: none;
   }
+  // Pour Firefox
+  scrollbar-width: thin;
+  scrollbar-color: rgba($grey-300, 0.5) transparent;
+
   &.fadeOut {
     opacity: 0.8;
   }
@@ -39,7 +43,7 @@
   }
 }
 .creatorProfile {
-  padding: $spacing-small $spacing-medium;
+  padding: $spacing-medium;
   border-bottom: 1px solid $grey-200;
   color: $grey-600;
   @include flex(row, flex-start, center, $spacing-medium);
@@ -77,27 +81,25 @@
 }
 
 .placesSection {
-  padding: $spacing-large;
+  padding: $spacing-medium;
 }
 
 .placesTitle {
   font-size: rem(16);
-  font-weight: 600;
-  margin: 0 0 $spacing-large 0;
+  font-weight: 500;
+  margin: 0 0 $spacing-medium 0;
   color: $grey-600;
 }
 
 .placeCard {
-  @include flex(row, flex-start, center, $spacing-medium);
-  padding: $spacing-medium;
-  border: 1px solid $grey-200;
-  border-radius: 8px;
-  margin-bottom: $spacing-medium;
-  background: $grey-50;
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-small 0;
+  border-bottom: 1px solid $grey-200;
+}
 
-  &:last-child {
-    margin-bottom: 0;
-  }
+.placeMainSection {
+  @include flex(row, flex-start, flex-start, $spacing-medium);
 }
 
 .placeImageContainer {
@@ -142,30 +144,35 @@
   font-size: rem(12);
   color: $grey-400;
   margin: 0;
-}
-
-.eventsSection {
-  margin-top: $spacing-small;
-  padding-top: $spacing-small;
-  border-top: 1px solid $grey-300;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .eventsTitle {
-  font-size: rem(12);
+  font-size: rem(11);
   font-weight: 600;
   color: $grey-600;
   margin: 0 0 $spacing-small 0;
 }
 
-.eventCard {
+.eventsList {
+  display: flex;
+  flex-direction: column;
+  gap: spacing(0.5);
+}
+
+.eventItem {
   @include flex(row, flex-start, center, $spacing-small);
   padding: spacing(0.75);
-  background: $white;
-  border-radius: 6px;
-  margin-bottom: spacing(0.5);
+  background: $grey-50;
+  border-radius: 4px;
+  transition: all 0.15s ease-in-out;
+  align-items: center;
 
-  &:last-child {
-    margin-bottom: 0;
+  &:hover {
+    background: $grey-100;
   }
 }
 
@@ -178,16 +185,32 @@
   object-fit: cover;
 }
 
-.eventInfo {
-  flex: 1;
-  min-width: 0;
-}
-
 .eventName {
   font-size: rem(12);
   font-weight: 500;
   color: $grey-600;
   margin: 0;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.eventButton {
+  flex-shrink: 0;
+  padding: spacing(0.5);
+  min-width: auto;
+  height: auto;
+}
+
+.moreEvents {
+  font-size: rem(10);
+  font-weight: 500;
+  color: $grey-400;
+  margin: 0;
+  padding: spacing(0.5) 0;
+  text-align: center;
 }
 
 .star {
