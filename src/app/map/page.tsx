@@ -6,29 +6,30 @@ import { useState, useEffect, useRef } from "react";
 import PlaceCardMap from "@/components/map/placeCardMap/PlaceCardMap";
 import styles from "./map.module.scss";
 import FiltersBar from "@/components/map/filtersBar/FiltersBar";
-import { MapFilters } from "@/types/map";
+import { MapFilters, ExtendedMapRef } from "@/types/map";
 import { Collaborator } from "@/types/place/collaborators";
 import UserCardMap from "@/components/map/userCardMap/UserCardMap";
-import { MapRef } from "react-map-gl/mapbox";
 import mapboxgl from "mapbox-gl";
+import { applyPixelOffsetToLocation } from "@/utils/map";
 
-type ExtendedMapRef = MapRef & {
-  fetchPlacesInView: (bounds: mapboxgl.LngLatBounds | null) => Promise<void>;
-  setSelectedPlaceId: (placeId: string | null) => void;
+const defaultFilters: MapFilters = {
+  placeType: ["all"],
+  placeCategory: "all",
 };
 
 const MapPage = () => {
   const [selectedPlace, setSelectedPlace] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<Collaborator | null>(null);
   const [loading, setLoading] = useState(false);
-  const [filters, setFilters] = useState<MapFilters>({
-    placeType: ["all"],
-    placeCategory: "all",
-  });
+  const [filters, setFilters] = useState<MapFilters>(defaultFilters);
   const mapRef = useRef<ExtendedMapRef>(null);
+  const isSelectingFromSearch = useRef(false);
 
   useEffect(() => {
-    setSelectedPlace(null);
+    if (selectedPlace && !isSelectingFromSearch.current) {
+      setSelectedPlace(null);
+    }
+    isSelectingFromSearch.current = false;
   }, [filters]);
 
   const handleMarkerClick = (placeId: string) => {
@@ -38,16 +39,56 @@ const MapPage = () => {
 
   const handleUserSelect = (user: Collaborator) => {
     setSelectedUser(user);
+    if (mapRef.current) {
+      mapRef.current.setSelectedPlaceId(null);
+    }
+    setFilters({
+      ...defaultFilters,
+    });
     setSelectedPlace(null);
+  };
+
+  const handlePlaceSelect = (place: {
+    _id: string;
+    location: { coordinates: number[] };
+  }) => {
+    isSelectingFromSearch.current = true;
+    setSelectedPlace(place._id);
+    setFilters({
+      ...defaultFilters,
+    });
+    setSelectedUser(null);
+    if (mapRef.current) {
+      mapRef.current.setSelectedPlaceId(place._id);
+      const [longitude, latitude] = place.location.coordinates;
+      const bounds = new mapboxgl.LngLatBounds();
+      bounds.extend([longitude - 0.01, latitude - 0.01]);
+      bounds.extend([longitude + 0.01, latitude + 0.01]);
+
+      mapRef.current?.fetchPlacesInView(bounds);
+      const offsetLocation = applyPixelOffsetToLocation(
+        { latitude, longitude },
+        -100,
+        0
+      );
+
+      mapRef.current?.flyTo({
+        center: [offsetLocation.longitude, offsetLocation.latitude],
+        zoom: 15,
+        duration: 800,
+      });
+    }
   };
 
   return (
     <main className={styles.mapPage}>
       <FiltersBar
+        mapRef={mapRef}
         filters={filters}
         setFilters={setFilters}
         loading={loading}
         handleUserSelect={handleUserSelect}
+        handlePlaceSelect={handlePlaceSelect}
       />
       <div className={styles.mapContainer}>
         <MapComponent

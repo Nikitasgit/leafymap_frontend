@@ -6,13 +6,13 @@ import styles from "./UserCardMap.module.scss";
 import { User, Map, ExternalLink } from "lucide-react";
 import { Collaborator } from "@/types/place/collaborators";
 import { useFindCreatorInPlaces } from "@/hooks/useFindCreatorInPlaces";
-import { MapRef } from "react-map-gl/mapbox";
+import { ExtendedMapRef } from "@/types/map";
 import { applyPixelOffsetToLocation } from "@/utils/map";
 import mapboxgl from "mapbox-gl";
 
 interface UserCardMapProps {
   user: Collaborator;
-  mapRef?: React.RefObject<MapRef | null>;
+  mapRef?: React.RefObject<ExtendedMapRef | null>;
 }
 
 const UserCardMap = ({ user, mapRef }: UserCardMapProps) => {
@@ -21,7 +21,7 @@ const UserCardMap = ({ user, mapRef }: UserCardMapProps) => {
   useEffect(() => {
     findCreatorInPlaces(user._id);
   }, [user._id, findCreatorInPlaces]);
-
+  console.log(userPlaces);
   const handleMapButtonClick = async (placeData: {
     place: { location: { coordinates: number[] }; _id: string };
   }) => {
@@ -33,15 +33,8 @@ const UserCardMap = ({ user, mapRef }: UserCardMapProps) => {
     );
 
     if (mapRef?.current) {
-      const mapInstance = mapRef.current as MapRef & {
-        setSelectedPlaceId?: (placeId: string | null) => void;
-        fetchPlacesInView?: (
-          bounds: mapboxgl.LngLatBounds | null
-        ) => Promise<void>;
-      };
-      if (mapInstance.setSelectedPlaceId) {
-        mapInstance.setSelectedPlaceId(placeData.place._id);
-      }
+      const mapInstance = mapRef.current;
+      mapInstance.setSelectedPlaceId(placeData.place._id);
 
       const bounds = new mapboxgl.LngLatBounds();
       bounds.extend([
@@ -53,9 +46,7 @@ const UserCardMap = ({ user, mapRef }: UserCardMapProps) => {
         offsetLocation.latitude + 0.01,
       ]);
 
-      if (mapInstance.fetchPlacesInView) {
-        await mapInstance.fetchPlacesInView(bounds);
-      }
+      await mapInstance.fetchPlacesInView(bounds);
 
       mapRef.current.flyTo({
         center: [offsetLocation.longitude, offsetLocation.latitude],
@@ -64,19 +55,6 @@ const UserCardMap = ({ user, mapRef }: UserCardMapProps) => {
       });
     }
   };
-
-  useEffect(() => {
-    return () => {
-      if (mapRef?.current) {
-        const mapInstance = mapRef.current as MapRef & {
-          setSelectedPlaceId?: (placeId: string | null) => void;
-        };
-        if (mapInstance.setSelectedPlaceId) {
-          mapInstance.setSelectedPlaceId(null);
-        }
-      }
-    };
-  }, [user._id, mapRef]);
 
   if (!userPlaces) return <div>Loading...</div>;
 

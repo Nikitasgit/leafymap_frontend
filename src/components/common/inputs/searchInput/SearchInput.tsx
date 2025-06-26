@@ -18,13 +18,16 @@ interface SearchInputProps<T> {
   displayList?: boolean;
   loading?: boolean;
   debounce?: number; // Delay in milliseconds
+  renderSuggestion?: (suggestion: T) => React.ReactNode;
 }
 
 const SearchInput = <
   T extends {
     _id?: string;
     username?: string;
+    name?: string;
     image?: string;
+    location?: { label: string };
   }
 >({
   value = "",
@@ -39,6 +42,7 @@ const SearchInput = <
   displayList = false,
   loading = false,
   debounce,
+  renderSuggestion,
 }: SearchInputProps<T>) => {
   const [input, setInput] = useState(value);
   const [suggestions, setSuggestions] = useState<T[]>([]);
@@ -54,6 +58,7 @@ const SearchInput = <
       if (searchTerm.length > 2) {
         try {
           const results = await fetchSuggestions(searchTerm);
+
           setSuggestions(results.slice(0, limit));
         } catch (err) {
           console.error("Error fetching suggestions:", err);
@@ -94,6 +99,41 @@ const SearchInput = <
   const handleDelete = (id: string) => {
     onDelete(id);
   };
+
+  const getDisplayName = (item: T) => {
+    return item.username || item.name || "";
+  };
+
+  const getAddress = (item: T) => {
+    // Check if item has location with label (for places)
+    if ("location" in item && item.location && "label" in item.location) {
+      return item.location.label;
+    }
+    return null;
+  };
+
+  const renderDefaultSuggestion = (sug: T) => (
+    <>
+      {withIcons && sug.image && (
+        <Image
+          src={sug.image}
+          alt={getDisplayName(sug)}
+          width={20}
+          height={20}
+          style={{ borderRadius: "50%" }}
+        />
+      )}
+      <div className={styles.suggestionContent}>
+        <span className={styles.suggestionName}>{getDisplayName(sug)}</span>
+        {getAddress(sug) && (
+          <div className={styles.suggestionAddress}>
+            <span>{getAddress(sug)}</span>
+          </div>
+        )}
+      </div>
+    </>
+  );
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -150,16 +190,9 @@ const SearchInput = <
               onClick={() => handleSuggestionClick(sug as T)}
               className={styles.suggestionItem}
             >
-              {withIcons && sug.image && (
-                <Image
-                  src={sug.image}
-                  alt={sug.username || ""}
-                  width={20}
-                  height={20}
-                  style={{ borderRadius: "50%" }}
-                />
-              )}
-              <span>{sug.username}</span>
+              {renderSuggestion
+                ? renderSuggestion(sug)
+                : renderDefaultSuggestion(sug)}
             </li>
           ))}
         </ul>
@@ -173,13 +206,13 @@ const SearchInput = <
                 {withIcons && item.image && (
                   <Image
                     src={item.image}
-                    alt={item.username || ""}
+                    alt={getDisplayName(item)}
                     width={20}
                     height={20}
                     style={{ borderRadius: "50%" }}
                   />
                 )}
-                {item.username}
+                {getDisplayName(item)}
                 <Delete
                   onClick={() => handleDelete(id)}
                   style={{ cursor: "pointer" }}

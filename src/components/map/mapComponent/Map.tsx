@@ -17,7 +17,7 @@ import {
 import { MapCoordinates, MapMarker } from "@/types/common";
 import { usePlacesInView } from "@/hooks/usePlacesInView";
 import CategoryMarker from "./CategoryMarker";
-import { MapFilters } from "@/types/map";
+import { MapFilters, ExtendedMapRef } from "@/types/map";
 import { DEFAULT_LOCATION } from "@/utils/constants";
 
 interface MapComponentProps {
@@ -33,11 +33,6 @@ interface MapComponentProps {
   onMapClick?: (coords: { longitude: number; latitude: number }) => void;
   selectedPlaceId?: string;
 }
-
-type ExtendedMapRef = MapRef & {
-  fetchPlacesInView: (bounds: mapboxgl.LngLatBounds | null) => Promise<void>;
-  setSelectedPlaceId: (placeId: string | null) => void;
-};
 
 const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
   (
@@ -71,16 +66,13 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
     } = usePlacesInView({
       filters,
     });
-
+    console.log(filteredPlaces);
     useImperativeHandle(ref, () => ({
       ...mapRef.current!,
-      fetchPlacesInView,
+      fetchPlacesInView: (bounds: mapboxgl.LngLatBounds | null) =>
+        fetchPlacesInView(bounds, mapRef as React.RefObject<MapRef>),
       setSelectedPlaceId: setInternalSelectedPlaceId,
     }));
-
-    useEffect(() => {
-      setInternalSelectedPlaceId(selectedPlaceId || null);
-    }, [selectedPlaceId]);
 
     useEffect(() => {
       if (setLoading) {
@@ -111,19 +103,6 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
         }));
       }
     }, [location]);
-
-    useEffect(() => {
-      if (withPlacesInView && location && mapRef.current) {
-        const timer = setTimeout(() => {
-          const bounds = mapRef.current?.getBounds();
-          if (bounds) {
-            fetchPlacesInView(bounds);
-          }
-        }, 100);
-
-        return () => clearTimeout(timer);
-      }
-    }, [location, withPlacesInView, fetchPlacesInView]);
 
     return (
       <div style={{ position: "relative", width, height }}>

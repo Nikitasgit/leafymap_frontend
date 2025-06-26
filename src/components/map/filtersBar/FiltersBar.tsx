@@ -3,16 +3,42 @@
 import SearchInput from "@/components/common/inputs/searchInput/SearchInput";
 import styles from "./FiltersBar.module.scss";
 import { ChevronDown, Filter } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
-import { MapFilters } from "@/types/map";
+import { MapFilters, ExtendedMapRef } from "@/types/map";
 import { useFindCreators } from "@/hooks/useFindCreators";
+import { useFindPlaces } from "@/hooks/useFindPlaces";
 import { Collaborator } from "@/types/place/collaborators";
 
 type SearchType = {
   label: string;
   placeholder: string;
 };
+
+type CreatorSearchResult = {
+  _id: string;
+  username: string;
+  image: string;
+};
+
+type PlaceSearchResult = {
+  _id: string;
+  name: string;
+  image?: string;
+  location: {
+    type: string;
+    coordinates: number[];
+    label: string;
+    id: string;
+  };
+  placeCategory: {
+    _id: string;
+    name: string;
+  };
+};
+
+type SearchResult = CreatorSearchResult | PlaceSearchResult;
+
 const types = [
   { key: "all", label: "Tous", value: ["all"] },
   { key: "food", label: "Producteurs", value: ["food"] },
@@ -25,20 +51,29 @@ const searchTypes: SearchType[] = [
 ];
 
 const FiltersBar = ({
+  mapRef,
   loading,
   filters,
   setFilters,
   handleUserSelect,
+  handlePlaceSelect,
 }: {
+  mapRef: React.RefObject<ExtendedMapRef | null>;
   loading: boolean;
   filters: MapFilters;
   setFilters: (filters: MapFilters) => void;
   handleUserSelect: (user: Collaborator) => void;
+  handlePlaceSelect: (place: {
+    _id: string;
+    location: { coordinates: number[] };
+  }) => void;
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchType, setSearchType] = useState<SearchType>(searchTypes[0]);
+  const [searchValue, setSearchValue] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { searchCreators } = useFindCreators();
+  const { searchPlaces } = useFindPlaces();
   useOnClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 
   const handleDropdownToggle = () => {
@@ -47,6 +82,7 @@ const FiltersBar = ({
 
   const handleSearchTypeSelect = (type: SearchType) => {
     setSearchType(type);
+    setSearchValue("");
     setIsDropdownOpen(false);
   };
 
@@ -60,6 +96,30 @@ const FiltersBar = ({
       placeType: type.value,
     });
   };
+
+  const handleSearch = async (query: string) => {
+    if (searchType.label === "Membres") {
+      return await searchCreators(query);
+    } else {
+      return await searchPlaces(query);
+    }
+  };
+
+  const handleSelect = (item: SearchResult) => {
+    if (searchType.label === "Membres") {
+      handleUserSelect(item as CreatorSearchResult);
+    } else {
+      handlePlaceSelect(
+        item as { _id: string; location: { coordinates: number[] } }
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.fetchPlacesInView(null);
+    }
+  }, [filters, mapRef]);
 
   return (
     <div className={styles.filtersBar}>
@@ -97,13 +157,14 @@ const FiltersBar = ({
           )}
         </div>
         <SearchInput
-          withIcons={true}
+          value={searchValue}
+          withIcons={searchType.label === "Membres"}
           debounce={500}
           loading={loading}
           limit={10}
-          onSelect={handleUserSelect}
+          onSelect={handleSelect}
           onDelete={() => {}}
-          fetchSuggestions={searchCreators}
+          fetchSuggestions={handleSearch}
           placeholder={searchType.placeholder}
         />
       </div>

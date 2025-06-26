@@ -9,28 +9,15 @@ import { usePlace } from "@/hooks/usePlace";
 
 const PlaceCardMap = ({ placeId }: { placeId: string }) => {
   const { place, loading, error } = usePlace(placeId, true);
+
   const [displayPlace, setDisplayPlace] = useState(place);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [nextPlace, setNextPlace] = useState(place);
 
   useEffect(() => {
-    if (place && place !== displayPlace) {
-      // Set the next place immediately
-      setNextPlace(place);
-      // Start transition
-      setIsTransitioning(true);
-
-      // Faster transition - wait less time
-      const timer = setTimeout(() => {
-        setDisplayPlace(place);
-        setIsTransitioning(false);
-      }, 100); // Reduced from 150ms to 100ms
-
-      return () => clearTimeout(timer);
+    if (place) {
+      setDisplayPlace(place);
     }
-  }, [place, displayPlace]);
+  }, [place]);
 
-  // Show loading state only when we don't have any place to display
   if (!displayPlace && loading) return <div>Loading...</div>;
   if (error && !displayPlace) return <div>Error: {error}</div>;
 
@@ -48,11 +35,7 @@ const PlaceCardMap = ({ placeId }: { placeId: string }) => {
   };
 
   return (
-    <div
-      className={`${styles.placeCardMap} ${
-        isTransitioning ? styles.fadeOut : styles.fadeIn
-      }`}
-    >
+    <div className={styles.placeCardMap}>
       <div className={styles.imageContainer}>
         <Image
           src={displayPlace?.image || "/images/default-place.png"}
@@ -61,17 +44,6 @@ const PlaceCardMap = ({ placeId }: { placeId: string }) => {
           height={200}
           className={styles.currentImage}
         />
-        {isTransitioning &&
-          nextPlace &&
-          nextPlace.image !== displayPlace?.image && (
-            <Image
-              src={nextPlace.image || "/images/default-place.png"}
-              alt={nextPlace.name || "Place image"}
-              width={100}
-              height={200}
-              className={styles.nextImage}
-            />
-          )}
       </div>
       <div className={styles.header}>
         <div className={styles.headerMain}>

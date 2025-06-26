@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import axios from "axios";
 import { Place } from "@/types/place";
 import { MapFilters } from "@/types/map";
+import { MapRef } from "react-map-gl/mapbox";
 
 interface UsePlacesInViewProps {
   filters?: MapFilters;
@@ -13,14 +14,29 @@ export const usePlacesInView = ({ filters }: UsePlacesInViewProps = {}) => {
   const [error, setError] = useState<Error | null>(null);
 
   const fetchPlacesInView = useCallback(
-    async (bounds: mapboxgl.LngLatBounds | null) => {
-      if (!bounds) return;
+    async (
+      bounds: mapboxgl.LngLatBounds | null,
+      mapRef?: React.RefObject<MapRef>
+    ) => {
+      let currentBounds = bounds;
+      if (!currentBounds && mapRef?.current) {
+        try {
+          currentBounds = mapRef.current.getBounds();
+        } catch (err) {
+          console.warn("Could not get current map bounds:", err);
+          return;
+        }
+      }
+      if (!currentBounds) {
+        console.warn("No bounds provided and could not get current map bounds");
+        return;
+      }
 
       setIsLoading(true);
       setError(null);
 
-      const ne = bounds.getNorthEast().toArray();
-      const sw = bounds.getSouthWest().toArray();
+      const ne = currentBounds.getNorthEast().toArray();
+      const sw = currentBounds.getSouthWest().toArray();
 
       try {
         const response = await axios.get(

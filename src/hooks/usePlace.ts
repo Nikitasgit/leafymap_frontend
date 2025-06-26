@@ -6,16 +6,14 @@ export const usePlace = (placeId: string, enrichSchedule: boolean = false) => {
   const [place, setPlace] = useState<Place | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     const fetchPlace = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `${
-            process.env.NEXT_PUBLIC_API_URL
-          }/api/places/${placeId}?enrichSchedule=${enrichSchedule.toString()}`
-        );
+        const url = `${
+          process.env.NEXT_PUBLIC_API_URL
+        }/api/places/${placeId}?enrichSchedule=${enrichSchedule.toString()}`;
+        const response = await axios.get(url);
         setPlace(response.data.data);
         setError(null);
       } catch (err) {

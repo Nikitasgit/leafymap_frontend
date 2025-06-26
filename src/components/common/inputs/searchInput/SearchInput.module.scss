@@ -6,6 +6,7 @@
 
 .input {
   width: 100%;
+  min-width: 400px;
   padding: 8px;
   border: none;
   border-radius: 8px;
@@ -27,8 +28,6 @@
   width: 100%;
   max-height: 200px;
   overflow-y: auto;
-  border-radius: 8px;
-  margin-top: 4px;
 }
 
 .suggestionItem {
@@ -40,6 +39,29 @@
 
   &:hover {
     background-color: $grey-100;
+  }
+}
+
+.suggestionContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.suggestionName {
+  font-weight: 500;
+  color: $grey-600;
+}
+
+.suggestionAddress {
+  font-size: 12px;
+  color: $grey-600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
