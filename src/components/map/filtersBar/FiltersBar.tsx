@@ -57,6 +57,7 @@ const FiltersBar = ({
   setFilters,
   handleUserSelect,
   handlePlaceSelect,
+  handleOpenFilters,
 }: {
   mapRef: React.RefObject<ExtendedMapRef | null>;
   loading: boolean;
@@ -67,6 +68,7 @@ const FiltersBar = ({
     _id: string;
     location: { coordinates: number[] };
   }) => void;
+  handleOpenFilters: () => void;
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchType, setSearchType] = useState<SearchType>(searchTypes[0]);
@@ -168,7 +170,11 @@ const FiltersBar = ({
           placeholder={searchType.placeholder}
         />
       </div>
-      <button className={styles.filterButton} disabled={loading}>
+      <button
+        className={styles.filterButton}
+        onClick={handleOpenFilters}
+        disabled={loading}
+      >
         <Filter size={20} />
         Filtres
       </button>

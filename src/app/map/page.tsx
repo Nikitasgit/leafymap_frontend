@@ -11,10 +11,11 @@ import { Collaborator } from "@/types/place/collaborators";
 import UserCardMap from "@/components/map/userCardMap/UserCardMap";
 import mapboxgl from "mapbox-gl";
 import { applyPixelOffsetToLocation } from "@/utils/map";
+import FiltersCardMap from "@/components/map/mapComponent/filtersCardMap/FiltersCardMap";
 
 const defaultFilters: MapFilters = {
-  placeType: ["all"],
   placeCategory: "all",
+  placeType: ["all"],
 };
 
 const MapPage = () => {
@@ -24,7 +25,7 @@ const MapPage = () => {
   const [filters, setFilters] = useState<MapFilters>(defaultFilters);
   const mapRef = useRef<ExtendedMapRef>(null);
   const isSelectingFromSearch = useRef(false);
-
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   useEffect(() => {
     if (selectedPlace && !isSelectingFromSearch.current) {
       setSelectedPlace(null);
@@ -35,10 +36,12 @@ const MapPage = () => {
   const handleMarkerClick = (placeId: string) => {
     setSelectedPlace(placeId);
     setSelectedUser(null);
+    setIsFiltersOpen(false);
   };
 
   const handleUserSelect = (user: Collaborator) => {
     setSelectedUser(user);
+    setIsFiltersOpen(false);
     if (mapRef.current) {
       mapRef.current.setSelectedPlaceId(null);
     }
@@ -58,6 +61,7 @@ const MapPage = () => {
       ...defaultFilters,
     });
     setSelectedUser(null);
+    setIsFiltersOpen(false);
     if (mapRef.current) {
       mapRef.current.setSelectedPlaceId(place._id);
       const [longitude, latitude] = place.location.coordinates;
@@ -79,7 +83,14 @@ const MapPage = () => {
       });
     }
   };
-
+  const handleOpenFilters = () => {
+    setSelectedUser(null);
+    setSelectedPlace(null);
+    if (mapRef.current) {
+      mapRef.current.setSelectedPlaceId(null);
+    }
+    setIsFiltersOpen(true);
+  };
   return (
     <main className={styles.mapPage}>
       <FiltersBar
@@ -89,6 +100,7 @@ const MapPage = () => {
         loading={loading}
         handleUserSelect={handleUserSelect}
         handlePlaceSelect={handlePlaceSelect}
+        handleOpenFilters={handleOpenFilters}
       />
       <div className={styles.mapContainer}>
         <MapComponent
@@ -102,6 +114,7 @@ const MapPage = () => {
         />
         {selectedPlace && <PlaceCardMap placeId={selectedPlace} />}
         {selectedUser && <UserCardMap user={selectedUser} mapRef={mapRef} />}
+        {isFiltersOpen && <FiltersCardMap />}
       </div>
     </main>
   );

@@ -1,0 +1,94 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
+.filtersCardMap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 100%;
+  background-color: $white;
+  z-index: 999;
+  overflow-y: scroll;
+  transition: opacity 0.2s ease-in-out;
+  border-top: 2px solid $grey-200;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba($grey-200, 0.5);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba($grey-400, 0.7);
+    }
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  // Pour Firefox
+  scrollbar-width: thin;
+  scrollbar-color: rgba($grey-300, 0.5) transparent;
+
+  &.fadeOut {
+    opacity: 0.8;
+  }
+
+  &.fadeIn {
+    opacity: 1;
+  }
+}
+
+.header {
+  padding: spacing(1.5) spacing(1.5) spacing(1) spacing(1.5);
+  border-bottom: 1px solid $grey-200;
+}
+
+.title {
+  font-size: rem(18);
+  font-weight: 500;
+  color: $grey-600;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.content {
+  padding: spacing(1.5);
+  @include flex(column, flex-start, flex-start, spacing(1));
+}
+
+.resetButton {
+  @include flex(row, center, center, spacing(0.5));
+  width: 100%;
+  padding: spacing(0.75) spacing(1.5);
+  font-size: rem(14);
+  border-radius: 8px;
+  border: 1px solid $grey-300;
+  background: transparent;
+  color: $grey-600;
+  transition: all 0.15s ease-in-out;
+  font-weight: 500;
+
+  &:hover {
+    background: $grey-100;
+    border-color: $grey-400;
+    color: $grey-600;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  svg {
+    color: $grey-500;
+  }
+}
