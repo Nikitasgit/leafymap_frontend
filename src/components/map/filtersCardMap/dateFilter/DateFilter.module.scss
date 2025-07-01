@@ -1,0 +1,127 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+.dateFilter {
+  margin-bottom: $spacing-large;
+  padding: $spacing-medium;
+  border-radius: 8px;
+  background-color: $grey-50;
+  border: 1px solid $grey-200;
+
+  .header {
+    @include flex(row, flex-start, center, $spacing-small);
+    margin-bottom: $spacing-medium;
+    color: $grey-500;
+
+    .title {
+      font-weight: 600;
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-medium;
+  }
+
+  .periodToggle {
+    display: flex;
+    gap: $spacing-xsmall;
+    background-color: $grey-100;
+    border-radius: 6px;
+    padding: $spacing-xsmall;
+
+    .toggleButton {
+      flex: 1;
+      padding: $spacing-xsmall $spacing-small;
+      border: none;
+      background: transparent;
+      border-radius: $spacing-xsmall;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 12px;
+      color: $grey-500;
+
+      &:hover {
+        background-color: $grey-200;
+      }
+
+      &.active {
+        background-color: $white;
+        color: $grey-500;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  .datePickerContainer {
+    position: relative;
+    width: 100%;
+
+    .datePicker {
+      width: 100%;
+      padding: $spacing-xsmall $spacing-small;
+      border: 1px solid $grey-200;
+      border-radius: 6px;
+      font-size: 14px;
+      background-color: $input-bg-color;
+      cursor: pointer;
+      box-sizing: border-box;
+
+      &:focus {
+        outline: none;
+        border-color: $input-border-color;
+        background-color: $input-bg-color;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+      }
+
+      &::placeholder {
+        color: $grey-500;
+      }
+    }
+  }
+}
+
+.dateFilter {
+  :global(.react-datepicker-wrapper) {
+    width: 100% !important;
+  }
+
+  :global(.react-datepicker__input-container) {
+    width: 100% !important;
+  }
+
+  :global(.react-datepicker__input-container input) {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  :global(.react-datepicker) {
+    font-family: inherit;
+    border: 1px solid $input-border-color;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  :global(.react-datepicker__header) {
+    background-color: $grey-50;
+    border-bottom: 1px solid $grey-200;
+  }
+
+  :global(.react-datepicker__day--selected) {
+    background-color: $input-border-color;
+    color: $white;
+  }
+
+  :global(.react-datepicker__day--in-range) {
+    background-color: $input-bg-color;
+    color: $input-border-color;
+  }
+
+  :global(.react-datepicker__day--keyboard-selected) {
+    background-color: $input-border-color;
+    color: $white;
+  }
+}

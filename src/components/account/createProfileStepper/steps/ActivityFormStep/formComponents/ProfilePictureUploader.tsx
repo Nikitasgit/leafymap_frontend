@@ -12,10 +12,34 @@ const ProfilePictureUploader = ({
   initialImage,
 }: ProfilePictureUploaderProps) => {
   const [preview, setPreview] = useState<string | null>(initialImage || null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    setError(null);
+
     if (file) {
+      // Validation du type de fichier
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        setError(
+          "Type de fichier invalide. Seuls JPEG, PNG, GIF et WebP sont autorisés."
+        );
+        return;
+      }
+
+      // Validation de la taille (5MB)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        setError("La taille du fichier doit être inférieure à 5MB.");
+        return;
+      }
+
       setPreview(URL.createObjectURL(file));
       onChange({
         target: {
@@ -39,8 +63,18 @@ const ProfilePictureUploader = ({
         ) : (
           <span>Ajouter une photo</span>
         )}
-        <input type="file" accept="image/*" onChange={handleFileChange} />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          style={{ display: "block", marginTop: "10px" }}
+        />
       </label>
+      {error && (
+        <div style={{ color: "red", marginTop: "5px", fontSize: "14px" }}>
+          {error}
+        </div>
+      )}
     </div>
   );
 };

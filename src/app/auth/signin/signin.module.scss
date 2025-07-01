@@ -1,138 +1,68 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+@import "@/styles/abstracts/functions";
+
 .container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  background-color: #f5f5f5;
+  min-height: calc(100vh - #{$navbar-height});
+  @include flex(column, center, center, 0);
+  background-color: $grey-100;
 }
 
 .formContainer {
-  background: white;
-  padding: 2rem;
+  background: $white;
+  padding: spacing(3);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba-color($grey-600, 0.1);
   width: 100%;
   max-width: 400px;
 }
 
 .formContainer h1 {
   text-align: center;
-  margin-bottom: 2rem;
-  color: #333;
+  margin-bottom: spacing(2);
+  color: $grey-500;
 }
 
 .form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  @include flex(column, flex-start, stretch, spacing(2));
 }
 
 .inputGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  @include flex(column, flex-start, stretch, spacing(0.5));
 }
 
 .inputGroup label {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.inputGroup input {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
-
-  &:focus {
-    outline: none;
-    border-color: #0070f3;
-  }
-}
-
-.submitButton {
-  background-color: #0070f3;
-  color: white;
-  padding: 0.75rem;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #0051a2;
-  }
-
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-}
-
-.error {
-  background-color: #fee;
-  color: #c00;
-  padding: 0.75rem;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-  text-align: center;
+  font-size: rem(14);
+  color: $grey-400;
 }
 
 .divider {
-  display: flex;
-  align-items: center;
+  @include flex(row, center, center, 0);
   text-align: center;
-  margin: 1.5rem 0;
-  color: #666;
+  margin: spacing(1.5) 0;
+  color: $grey-400;
 
   &::before,
   &::after {
     content: "";
     flex: 1;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $grey-200;
   }
 
   span {
-    padding: 0 1rem;
-  }
-}
-
-.googleButton {
-  width: 100%;
-  background-color: white;
-  color: #333;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-
-  &:hover {
-    background-color: #f5f5f5;
-  }
-
-  &:disabled {
-    background-color: #f5f5f5;
-    cursor: not-allowed;
+    padding: 0 spacing(1);
   }
 }
 
 .signupLink {
   text-align: center;
-  margin-top: 1.5rem;
-  color: #666;
+  margin-top: spacing(1.5);
+  color: $grey-400;
 
   a {
-    color: #0070f3;
+    color: $primary-color;
     text-decoration: none;
+    margin-left: spacing(0.5);
 
     &:hover {
       text-decoration: underline;

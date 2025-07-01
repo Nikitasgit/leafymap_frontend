@@ -53,11 +53,17 @@ select {
 input,
 textarea {
   @include flex(row, space-between, center, 0);
+  padding: spacing(0.75);
   border: 1px solid $grey-200;
   border-radius: 8px;
   background-color: $input-bg-color;
   color: $grey-500;
 
+  transition: border-color 0.2s;
+  &:focus {
+    outline: none;
+    border-color: $input-border-color;
+  }
   &:disabled {
     background-color: #f5f5f5;
     color: #999;

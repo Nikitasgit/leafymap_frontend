@@ -22,6 +22,11 @@
   }
 }
 
+// Spacing function
+@function spacing($multiplier: 1) {
+  @return $spacing-unit * $multiplier;
+}
+
 // Flexbox
 @mixin flex($direction: row, $justify: center, $align: center, $gap: 10px) {
   display: flex;

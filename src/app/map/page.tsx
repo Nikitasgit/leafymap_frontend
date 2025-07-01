@@ -11,11 +11,15 @@ import { Collaborator } from "@/types/place/collaborators";
 import UserCardMap from "@/components/map/userCardMap/UserCardMap";
 import mapboxgl from "mapbox-gl";
 import { applyPixelOffsetToLocation } from "@/utils/map";
-import FiltersCardMap from "@/components/map/mapComponent/filtersCardMap/FiltersCardMap";
+import FiltersCardMap from "@/components/map/filtersCardMap/FiltersCardMap";
+import { useAppSelector } from "@/store";
+import { selectPlaceCategories } from "@/store/appSlice";
 
 const defaultFilters: MapFilters = {
-  placeCategory: "all",
-  placeType: ["all"],
+  placeType: "all",
+  placeCategories: [],
+  startDate: null,
+  endDate: null,
 };
 
 const MapPage = () => {
@@ -26,6 +30,18 @@ const MapPage = () => {
   const mapRef = useRef<ExtendedMapRef>(null);
   const isSelectingFromSearch = useRef(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const placeCategories = useAppSelector(selectPlaceCategories);
+  console.log(filters);
+  useEffect(() => {
+    if (placeCategories.length > 0 && filters.placeCategories.length === 0) {
+      const allCategoryIds = placeCategories.map((category) => category._id);
+      setFilters((prev) => ({
+        ...prev,
+        placeCategories: allCategoryIds,
+      }));
+    }
+  }, [placeCategories, filters.placeCategories.length]);
+
   useEffect(() => {
     if (selectedPlace && !isSelectingFromSearch.current) {
       setSelectedPlace(null);
@@ -114,7 +130,13 @@ const MapPage = () => {
         />
         {selectedPlace && <PlaceCardMap placeId={selectedPlace} />}
         {selectedUser && <UserCardMap user={selectedUser} mapRef={mapRef} />}
-        {isFiltersOpen && <FiltersCardMap />}
+        {isFiltersOpen && (
+          <FiltersCardMap
+            filters={filters}
+            onFiltersChange={setFilters}
+            onResetFilters={() => setFilters(defaultFilters)}
+          />
+        )}
       </div>
     </main>
   );

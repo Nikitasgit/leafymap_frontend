@@ -15,6 +15,7 @@ export const useEvent = (eventId: string) => {
           `${process.env.NEXT_PUBLIC_API_URL}/api/events/${eventId}`
         );
         setEvent(response.data.data);
+        console.log(response.data.data);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch event");

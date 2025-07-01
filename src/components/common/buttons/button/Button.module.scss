@@ -1,27 +1,46 @@
 @import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
 
 .button {
-  color: $grey-400;
   font-weight: 500;
   border: none;
-  font-size: 14px;
-  letter-spacing: 0.02em;
+  font-size: 15px;
   cursor: pointer;
-  background: none;
-  transition: all 0.3s ease;
+  border-radius: 4px;
+  padding: spacing(0.75) spacing(1);
 
-  &:hover {
-    color: $grey-600;
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.small {
+    font-size: 14px;
+    padding: spacing(0.5) spacing(1);
+  }
+
+  &.large {
+    font-size: 16px;
+    padding: spacing(2) spacing(4);
+  }
+
+  &.primary {
+    background-color: $primary-color;
+    color: $white;
   }
 
   &.secondary {
-    background-color: transparent;
-    border: 1px solid $grey-400;
-    color: $grey-600;
-
+    color: $grey-400;
+    background: none;
+    border: 1px solid $grey-200;
     &:hover {
-      background-color: $grey-200;
       color: $grey-600;
     }
+  }
+
+  &.outline {
+    background-color: transparent;
+    color: $primary-color;
+    border: 2px solid $primary-color;
   }
 }

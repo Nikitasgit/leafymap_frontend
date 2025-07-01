@@ -4,7 +4,7 @@ import { Creator } from "@/types/user";
 
 interface CreatorSearchResult {
   _id: string;
-  username: string;
+  name: string;
   image: string;
 }
 
@@ -33,7 +33,7 @@ export const useFindCreators = () => {
 
         const results = data.data.map((user: Creator) => ({
           _id: user._id,
-          username: user.creatorProfile?.name,
+          name: user.creatorProfile?.name,
           image: user.image || "https://i.pravatar.cc/40?img=3",
         }));
         setSearchResults(results);

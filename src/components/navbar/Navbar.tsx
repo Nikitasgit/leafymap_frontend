@@ -6,6 +6,8 @@ import { Home, Map, MessageSquare, User } from "lucide-react";
 import SignOutButton from "../common/buttons/SignOutButton";
 import { useUser } from "@/hooks/useUser";
 import styles from "./Navbar.module.scss";
+import LoadingBar from "../common/loading/LoadingBar";
+import { useToast } from "@/hooks/useToast";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -16,11 +18,21 @@ export default function Navbar() {
     { href: "/account", label: "Account", icon: User },
   ];
 
-  const { user } = useUser();
+  const { user, loading, error } = useUser();
+  const { showError } = useToast();
+
+  if (error) {
+    showError(error);
+  }
+
+  if (loading) {
+    return <LoadingBar />;
+  }
+
   return (
     <nav className={styles.navbar}>
       <Link href="/" className={styles.logo}>
-        InnovaStay
+        SpotLight
       </Link>
       <div className={styles.navContainer}>
         <div className={styles.navLinks}>

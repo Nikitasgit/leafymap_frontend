@@ -7,14 +7,7 @@
 .input {
   width: 100%;
   min-width: 400px;
-  padding: 8px;
-  border: none;
-  border-radius: 8px;
   padding-left: 35px;
-
-  &:focus {
-    outline: none;
-  }
 }
 
 .suggestions {

@@ -4,6 +4,7 @@ $secondary-color: #6c757d;
 $input-bg-color: #eff6ff;
 $success-color: #28a745;
 $error-color: #dc3545;
+$input-border-color: #007bff;
 
 // Grey colors
 $white: #ffffff;
@@ -28,9 +29,13 @@ $breakpoint-xl: 1200px;
 
 // Spacing
 $spacing-unit: 8px;
+$spacing-xsmall: $spacing-unit / 2;
 $spacing-small: $spacing-unit;
 $spacing-medium: $spacing-unit * 2;
 $spacing-large: $spacing-unit * 3;
+
+// Transitions
+$transition-default: all 0.2s ease;
 
 // Navbar
 $navbar-height: 58px;

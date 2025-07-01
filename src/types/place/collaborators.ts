@@ -1,6 +1,6 @@
 export type Collaborator = {
   _id: string;
-  username: string;
+  name: string;
   image: string;
   status?: "pending" | "accepted" | "refused";
 };

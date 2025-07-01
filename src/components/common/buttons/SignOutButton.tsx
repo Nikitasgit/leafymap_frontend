@@ -24,7 +24,11 @@ function SignOutButton() {
     }
   };
 
-  return <Button onClick={handleSignOut}>Se déconnecter</Button>;
+  return (
+    <Button variant="secondary" onClick={handleSignOut}>
+      Se déconnecter
+    </Button>
+  );
 }
 
 export default SignOutButton;

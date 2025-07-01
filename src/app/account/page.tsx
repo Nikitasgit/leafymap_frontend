@@ -2,38 +2,20 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
-import { selectUser } from "@/store/userSlice";
-import { useSelector } from "react-redux";
 import React from "react";
 import PlacesEditList from "@/components/account/placesList/PlacesEditList";
 import { Organizer } from "@/types/user";
+import LoadingBar from "@/components/common/loading/LoadingBar";
+import { useToast } from "@/hooks/useToast";
+import { useUser } from "@/hooks/useUser";
 
 export default function AccountPage() {
-  const {
-    user,
-    loading: userLoading,
-    error: userError,
-  } = useSelector(selectUser);
+  const { user, loading, error } = useUser();
+  const { showError } = useToast();
   const { userType } = user || {};
   const organizer = user as Organizer;
   const router = useRouter();
 
-  if (userLoading) {
-    return (
-      <main>
-        <div>
-          <p>Loading...</p>
-        </div>
-      </main>
-    );
-  }
-  if (!user && userError !== "") {
-    return (
-      <main>
-        <p>{userError}</p>
-      </main>
-    );
-  }
   const buttonParameters =
     userType === "creator"
       ? { route: "/account/update-creator", text: "Modifier mon profil" }
@@ -41,12 +23,13 @@ export default function AccountPage() {
       ? { route: "/account/places/create", text: "Ajouter un lieu" }
       : { route: "/account/create", text: "Ajouter mon activité" };
 
-  if (!buttonParameters) {
-    return <div>No button parameters</div>;
+  if (error) {
+    showError(error);
   }
 
   return (
     <main>
+      {loading && <LoadingBar />}
       <div>
         <h1>Account</h1>
         <div>

@@ -62,8 +62,11 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
         const cleanedCollaborators = data.createdCollaborators.map(
           (collaborator) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { id, ...collaboratorWithoutId } = collaborator;
-            return collaboratorWithoutId;
+            const { id, categoryId, ...collaboratorWithoutId } = collaborator;
+            return {
+              ...collaboratorWithoutId,
+              category: categoryId,
+            };
           }
         );
         form.append(

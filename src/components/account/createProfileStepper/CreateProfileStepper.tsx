@@ -29,7 +29,7 @@ const CreateProfileStepper = () => {
     placeType: [],
   });
 
-  const { submitForm } = useSubmitForm();
+  const { submitForm, error } = useSubmitForm();
 
   const handleSubmit = async () => {
     await submitForm(formData, false);
@@ -57,6 +57,20 @@ const CreateProfileStepper = () => {
   console.log(formData);
   return (
     <div>
+      {error && (
+        <div
+          style={{
+            color: "red",
+            backgroundColor: "#ffebee",
+            padding: "10px",
+            marginBottom: "20px",
+            borderRadius: "4px",
+            border: "1px solid #f44336",
+          }}
+        >
+          {error}
+        </div>
+      )}
       {step === 1 && (
         <UserTypeStep
           userType={formData.userType}

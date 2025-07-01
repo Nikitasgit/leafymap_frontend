@@ -39,12 +39,6 @@ type PlaceSearchResult = {
 
 type SearchResult = CreatorSearchResult | PlaceSearchResult;
 
-const types = [
-  { key: "all", label: "Tous", value: ["all"] },
-  { key: "food", label: "Producteurs", value: ["food"] },
-  { key: "art", label: "Art et artisanat", value: ["art", "craft"] },
-];
-
 const searchTypes: SearchType[] = [
   { label: "Membres", placeholder: "Rechercher un membre" },
   { label: "Lieux", placeholder: "Rechercher un lieu" },
@@ -78,6 +72,24 @@ const FiltersBar = ({
   const { searchPlaces } = useFindPlaces();
   useOnClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 
+  const types = [
+    {
+      key: "all",
+      label: "Tous",
+      value: "all",
+    },
+    {
+      key: "food",
+      label: `Producteurs`,
+      value: "food",
+    },
+    {
+      key: "art",
+      label: `Art et artisanat`,
+      value: "art-craft",
+    },
+  ];
+
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -88,11 +100,7 @@ const FiltersBar = ({
     setIsDropdownOpen(false);
   };
 
-  const handleTypeSelect = (type: {
-    key: string;
-    label: string;
-    value: string[];
-  }) => {
+  const handleTypeSelect = (type: { value: string }) => {
     setFilters({
       ...filters,
       placeType: type.value,
@@ -130,7 +138,7 @@ const FiltersBar = ({
           <button
             key={type.key}
             className={`${styles.category} ${
-              filters.placeType.includes(type.key) ? styles.active : ""
+              type.value === filters.placeType ? styles.active : ""
             }`}
             onClick={() => handleTypeSelect(type)}
           >

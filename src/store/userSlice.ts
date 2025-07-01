@@ -49,7 +49,9 @@ const userSlice = createSlice({
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Failed to fetch user";
+        state.error =
+          action.error.message ||
+          "Erreur lors de la récupération de l'utilisateur";
         state.fetched = true;
       });
   },

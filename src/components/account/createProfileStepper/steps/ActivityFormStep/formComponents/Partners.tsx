@@ -18,7 +18,7 @@ const fakeUsers = [
 
 const initialUserSuggestions = fakeUsers.map((user) => ({
   _id: user.id,
-  username: user.name,
+  name: user.name,
   image: user.avatar,
 }));
 
@@ -35,7 +35,7 @@ const Partners = ({
   const handleSelect = (suggestion: Collaborator) => {
     const newCollaborator: Collaborator = {
       _id: suggestion._id,
-      username: suggestion.username || "",
+      name: suggestion.name || "",
       image: suggestion.image || "",
       status: "pending",
     };

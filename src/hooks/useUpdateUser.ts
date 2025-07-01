@@ -4,56 +4,36 @@ import { NewProfileFormData } from "@/components/account/createProfileStepper/Cr
 import { fetchUser } from "@/store/userSlice";
 import { useAppDispatch } from "@/store";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/useToast";
 
 type UseCreateProfileReturn = {
   submitForm: (data: NewProfileFormData, isUpdate: boolean) => Promise<void>;
   loading: boolean;
-  error: string | null;
-  success: boolean;
 };
 
 const useSubmitForm = (): UseCreateProfileReturn => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const submitForm = async (
-    data: NewProfileFormData,
-    isUpdate: boolean
-  ): Promise<void> => {
+  const { showSuccess, showError } = useToast();
+
+  const submitForm = async (data: NewProfileFormData, isUpdate: boolean) => {
     setLoading(true);
-    setError(null);
-    setSuccess(false);
 
     try {
       const form = new FormData();
-      form.append("userType", data.userType);
       form.append("name", data.name);
       form.append("description", data.description);
-      form.append("category", data.category);
       form.append("phone", data.phone);
       form.append("email", data.email);
       form.append("website", data.website);
-      form.append("placeActive", data.placeActive ? "true" : "false");
+      form.append("location", JSON.stringify(data.location));
+      form.append("defaultSchedule", JSON.stringify(data.defaultSchedule));
 
-      if (data.placeCategory) {
-        form.append("placeCategory", data.placeCategory);
-      }
-      if (data.placeType && data.placeType.length > 0) {
-        form.append("placeType", JSON.stringify(data.placeType));
-      }
-      if (data.location) {
-        form.append("location", JSON.stringify(data.location));
-      }
-      if (data.defaultSchedule) {
-        form.append("defaultSchedule", JSON.stringify(data.defaultSchedule));
-      }
       if (data.collaborators) {
         const collaboratorIds = data.collaborators.map((collab) => collab._id);
         form.append("collaborators", JSON.stringify(collaboratorIds));
       }
-
       if (data.createdCollaborators) {
         const cleanedCollaborators = data.createdCollaborators.map(
           (collaborator) => {
@@ -96,20 +76,20 @@ const useSubmitForm = (): UseCreateProfileReturn => {
         });
       }
 
+      showSuccess(
+        isUpdate
+          ? "Profile updated successfully!"
+          : "Profile created successfully!"
+      );
       router.push("/account");
-      setSuccess(true);
       dispatch(fetchUser());
     } catch (err: unknown) {
       if (axios.isAxiosError(err) && err.response) {
-        setError(
-          err.response.data.error || "Erreur lors de la soumission du profil"
-        );
+        showError(err.response.data.error || "Error submitting profile");
         console.error("Server error:", err.response.data);
       } else {
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Erreur lors de la soumission du profil"
+        showError(
+          err instanceof Error ? err.message : "Error submitting profile"
         );
       }
     } finally {
@@ -117,7 +97,7 @@ const useSubmitForm = (): UseCreateProfileReturn => {
     }
   };
 
-  return { submitForm, loading, error, success };
+  return { submitForm, loading };
 };
 
 export default useSubmitForm;
