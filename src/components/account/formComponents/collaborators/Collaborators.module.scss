@@ -6,6 +6,10 @@
   padding-bottom: spacing(3);
 }
 
+.titleContainer {
+  @include flex(row, flex-start, center, spacing(1));
+}
+
 .title {
   color: $grey-450;
   font-size: 20px;

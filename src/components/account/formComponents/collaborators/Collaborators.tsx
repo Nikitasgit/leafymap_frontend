@@ -10,6 +10,7 @@ import CreateCollaborators from "../createCollaborators/CreateCollaborators";
 import { EventFormData } from "@/components/events/form/EventForm";
 import { useFindCreators } from "@/hooks/useFindCreators";
 import styles from "./Collaborators.module.scss";
+import InfoIcon from "@/components/common/info/InfoIcon";
 
 const Collaborators = ({
   onChange,
@@ -47,7 +48,14 @@ const Collaborators = ({
 
   return (
     <div className={styles.collaborators}>
-      <h3 className={styles.title}>Collaborateurs</h3>
+      <div className={styles.titleContainer}>
+        <h3 className={styles.title}>Collaborateurs</h3>
+        <InfoIcon
+          tooltip="Ajoutez des artistes, créateurs ou producteurs qui apparaîtront sur votre profil comme des collaborateurs de votre lieu."
+          place="right"
+        />
+      </div>
+
       <SearchInput
         label="Ajouter un collaborateur"
         onSelect={handleSelect}

@@ -10,9 +10,10 @@ import {
 } from "../../createProfileStepper/CreateProfileStepper.types";
 import { selectSubCategories } from "@/store/appSlice";
 import { useSelector } from "react-redux";
-import { DeleteIcon } from "lucide-react";
+import { DeleteIcon, PlusCircle } from "lucide-react";
 import { EventFormData } from "@/components/events/form/EventForm";
 import { CreatedCollaborator } from "@/types/place/collaborators";
+import Text from "@/components/common/typography/Text";
 
 const CreateCollaborators = ({
   onChange,
@@ -49,7 +50,7 @@ const CreateCollaborators = ({
     });
   };
   const addCollaborator = () => {
-    setIsCreating(true);
+    setIsCreating(!isCreating);
     setCollaborator({
       name: "",
       categoryId: "",
@@ -75,9 +76,26 @@ const CreateCollaborators = ({
 
   return (
     <div className={styles.createCollaborators}>
-      <Button onClick={addCollaborator} className={styles.createButton}>
-        Créer un collaborateur
-      </Button>
+      <div className={styles.header}>
+        <div className={styles.headerTop}>
+          <div className={styles.headerContent}>
+            <Text className={styles.label}>Créer un collaborateur</Text>
+            <Text className={styles.info}>
+              Si votre collaborateur n&apos;existe pas encore sur notre
+              plateforme vous pouvez créer un profil provisoire pour afficher
+              son nom sur le profil de votre lieu.
+            </Text>
+          </div>
+          <Button
+            variant="outline"
+            endIcon={<PlusCircle size={17} />}
+            onClick={addCollaborator}
+            className={styles.createButton}
+          >
+            Créer un collaborateur
+          </Button>
+        </div>
+      </div>
       {isCreating && (
         <div className={styles.formContainer}>
           <div className={styles.formFields}>
