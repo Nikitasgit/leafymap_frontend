@@ -1,0 +1,105 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+.dayInputRow {
+  @include flex(row, flex-start, center, 0);
+  width: 100%;
+  min-height: 48px;
+  border-bottom: 1px solid $grey-200;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  background: $white;
+  transition: $transition-default;
+}
+
+.dayName {
+  flex: 0 0 120px;
+  font-weight: 400;
+  color: $grey-700;
+  padding: spacing(1) spacing(2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.dayContentRow {
+  @include flex(row, flex-start, center, 0);
+  flex: 1;
+  min-height: 48px;
+  padding: spacing(1) 0;
+}
+
+.timeSlotsPills {
+  @include flex(row, flex-start, center, spacing(2));
+  width: 100%;
+}
+
+.timeSlotPill {
+  @include flex(row, center, center, spacing(0.5));
+  background: $input-bg-color;
+  border-radius: 20px;
+  padding: spacing(0.5) spacing(2);
+  font-size: 15px;
+  color: $grey-600;
+  min-width: 90px;
+  position: relative;
+  margin-right: spacing(1);
+}
+
+.time {
+  font-weight: 500;
+  color: $grey-600;
+}
+
+.to {
+  color: $grey-400;
+  margin: 0 spacing(0.5);
+}
+
+.removeSlotBtn {
+  background: none;
+  border: none;
+  color: $error-color;
+  margin-left: spacing(1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  transition: color 0.2s;
+  &:hover {
+    color: darken($error-color, 10%);
+  }
+}
+
+.addSlotBtn {
+  background: none;
+  border: none;
+  color: $primary-color;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0 spacing(1);
+  font-size: 18px;
+  transition: color 0.2s;
+  &:hover {
+    color: darken($primary-color, 10%);
+  }
+}
+
+.closedRow {
+  @include flex(row, flex-start, center, spacing(1));
+  font-weight: 500;
+  color: $grey-600;
+  cursor: pointer;
+  user-select: none;
+}
+
+.closedText {
+  font-weight: bold;
+  color: $grey-700;
+  margin-left: spacing(0.5);
+}
+
+.penIcon {
+  color: $grey-400;
+  margin-right: spacing(0.5);
+}

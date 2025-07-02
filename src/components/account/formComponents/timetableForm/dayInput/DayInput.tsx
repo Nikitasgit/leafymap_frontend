@@ -1,8 +1,9 @@
 import { DaySchedule, TimeSlot, WeekDay } from "@/types/place/schedule";
-import TimeSlotInputs from "./TimeSlotInputs";
+import TimeSlotInputs from "../../../../common/forms/timetable/TimeSlotInputs";
 
-import Button from "../../buttons/button/Button";
+import Button from "../../../../common/buttons/button/Button";
 import { getStrictExcludedTimes } from "@/utils/timetable";
+import styles from "./DayInput.module.scss";
 
 interface DayInputProps {
   day: WeekDay;
@@ -59,8 +60,8 @@ const DayInput = ({ day, schedule, onChange }: DayInputProps) => {
   };
 
   return (
-    <div>
-      <label>
+    <div className={styles.dayInput}>
+      <label className={styles.dayLabel}>
         <input
           type="checkbox"
           checked={schedule?.open}
@@ -70,21 +71,25 @@ const DayInput = ({ day, schedule, onChange }: DayInputProps) => {
       </label>
 
       {schedule.open && (
-        <div style={{ marginLeft: "20px", marginTop: "8px" }}>
-          {schedule.timeSlots?.map((slot, index) => (
-            <TimeSlotInputs
-              key={index}
-              slot={slot}
-              onTimeChange={(field, value) =>
-                handleTimeChange(index, field, value)
-              }
-              onRemove={() => handleRemoveSlot(index)}
-              getExcludedTimes={(isStartTime) =>
-                getStrictExcludedTimes(isStartTime, index, schedule)
-              }
-            />
-          ))}
-          <Button onClick={handleAddTimeSlot}>➕ Ajouter un créneau</Button>
+        <div className={styles.dayContent}>
+          <div className={styles.timeSlotsContainer}>
+            {schedule.timeSlots?.map((slot, index) => (
+              <TimeSlotInputs
+                key={index}
+                slot={slot}
+                onTimeChange={(field, value) =>
+                  handleTimeChange(index, field, value)
+                }
+                onRemove={() => handleRemoveSlot(index)}
+                getExcludedTimes={(isStartTime) =>
+                  getStrictExcludedTimes(isStartTime, index, schedule)
+                }
+              />
+            ))}
+          </div>
+          <Button onClick={handleAddTimeSlot} className={styles.addSlotButton}>
+            ➕ Ajouter un créneau
+          </Button>
         </div>
       )}
     </div>

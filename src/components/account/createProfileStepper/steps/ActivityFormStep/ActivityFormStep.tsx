@@ -7,10 +7,10 @@ import {
   onNextHandler,
   PlaceFormData,
 } from "../../CreateProfileStepper.types";
-import Infos from "./formComponents/Infos";
+import Infos from "../../../formComponents/infos/Infos";
 import { NewProfileFormData } from "../../CreateProfileStepper.types";
-import ContactForm from "./formComponents/ContactForm";
-import ProfilePictureUploader from "./formComponents/ProfilePictureUploader";
+import ContactForm from "../../../formComponents/ContactForm";
+import ProfilePictureUploader from "../../../formComponents/ProfilePictureUploader";
 
 interface ActivityFormStepProps {
   data: NewProfileFormData | PlaceFormData;

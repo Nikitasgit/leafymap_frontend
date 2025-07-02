@@ -58,7 +58,8 @@ const userSlice = createSlice({
 });
 
 export const { signOut } = userSlice.actions;
-export const selectUser = (state: RootState): UserState => state.user;
+export const selectUser = (state: RootState) => state.user;
+
 export const selectUserCreatorPlace = (state: RootState): Place | null => {
   const user = state.user.user as Creator | null;
   const creatorPlace = user?.creatorProfile?.place;

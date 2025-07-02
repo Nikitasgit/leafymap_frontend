@@ -12,10 +12,10 @@ import { useToast } from "@/hooks/useToast";
 export default function Navbar() {
   const pathname = usePathname();
   const navItems = [
-    { href: "/", label: "Home", icon: Home },
-    { href: "/map", label: "Map", icon: Map },
+    { href: "/", label: "Accueil", icon: Home },
+    { href: "/map", label: "Carte", icon: Map },
     { href: "/messages", label: "Messages", icon: MessageSquare },
-    { href: "/account", label: "Account", icon: User },
+    { href: "/account", label: "Compte", icon: User },
   ];
 
   const { user, loading, error } = useUser();

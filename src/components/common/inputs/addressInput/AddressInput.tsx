@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { MapboxFeature, Location } from "@/types/common";
+import useOnClickOutside from "@/hooks/useOnClickOutside";
+import { useToast } from "@/hooks/useToast";
+import styles from "./AddressInput.module.scss";
+import TextField from "../textField/TextField";
 
 interface AddressInputProps {
   onLocationSelect: (location: Location) => void;
@@ -13,6 +17,7 @@ const AddressInput = ({ onLocationSelect, value }: AddressInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
+  const { showError } = useToast();
 
   const fetchLocationSuggestions = async (
     input: string
@@ -49,6 +54,8 @@ const AddressInput = ({ onLocationSelect, value }: AddressInputProps) => {
         setSuggestions(results);
       } catch (err) {
         console.error("Error fetching suggestions:", err);
+        showError("Erreur lors de la recherche d'adresse. Veuillez réessayer.");
+        setSuggestions([]);
       }
     } else {
       setSuggestions([]);
@@ -61,62 +68,40 @@ const AddressInput = ({ onLocationSelect, value }: AddressInputProps) => {
     onLocationSelect(suggestion);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
-      ) {
-        setSuggestions([]);
-        setIsFocused(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  const handleClickOutside = () => {
+    setSuggestions([]);
+    setIsFocused(false);
+  };
+
+  useOnClickOutside(wrapperRef, handleClickOutside);
+
   useEffect(() => {
     if (value) {
       setInput(value);
     }
   }, [value]);
+
   return (
-    <div ref={wrapperRef} style={{ position: "relative" }}>
-      <input
+    <div ref={wrapperRef} className={styles.addressInputWrapper}>
+      <TextField
+        name="address"
+        label="Adresse"
         type="text"
         value={input}
-        onChange={handleInputChange}
-        onFocus={() => {
-          setIsFocused(true);
-        }}
+        onChange={(e) =>
+          handleInputChange(e as React.ChangeEvent<HTMLInputElement>)
+        }
+        onFocus={() => setIsFocused(true)}
         placeholder="Rechercher une adresse..."
-        style={{ width: "100%", padding: "8px" }}
+        fullWidth
       />
       {isFocused && suggestions.length > 0 && (
-        <ul
-          style={{
-            position: "absolute",
-            background: "#fff",
-            border: "1px solid #ccc",
-            listStyle: "none",
-            margin: 0,
-            padding: 0,
-            zIndex: 1000,
-            width: "100%",
-            maxHeight: "200px",
-            overflowY: "auto",
-          }}
-        >
+        <ul className={styles.suggestionsList}>
           {suggestions.map((sug) => (
             <li
               key={sug.id}
               onClick={() => handleSuggestionClick(sug)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                cursor: "pointer",
-                padding: "8px",
-                gap: "8px",
-              }}
+              className={styles.suggestionItem}
             >
               <span>{sug.label}</span>
             </li>

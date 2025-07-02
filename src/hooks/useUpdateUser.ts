@@ -78,18 +78,22 @@ const useSubmitForm = (): UseCreateProfileReturn => {
 
       showSuccess(
         isUpdate
-          ? "Profile updated successfully!"
-          : "Profile created successfully!"
+          ? "Profil mis à jour avec succès !"
+          : "Profil créé avec succès !"
       );
       router.push("/account");
       dispatch(fetchUser());
     } catch (err: unknown) {
       if (axios.isAxiosError(err) && err.response) {
-        showError(err.response.data.error || "Error submitting profile");
+        showError(
+          err.response.data.error || "Erreur lors de la soumission du profil"
+        );
         console.error("Server error:", err.response.data);
       } else {
         showError(
-          err instanceof Error ? err.message : "Error submitting profile"
+          err instanceof Error
+            ? err.message
+            : "Erreur lors de la soumission du profil"
         );
       }
     } finally {

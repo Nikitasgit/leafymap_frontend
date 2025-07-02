@@ -63,3 +63,5 @@ export const selectSubCategories = (state: RootState) =>
 export const selectCategories = (state: RootState) => state.app.categories;
 export const selectPlaceCategories = (state: RootState) =>
   state.app.placeCategories;
+export const selectAppLoading = (state: RootState) => state.app.loading;
+export const selectAppError = (state: RootState) => state.app.error;

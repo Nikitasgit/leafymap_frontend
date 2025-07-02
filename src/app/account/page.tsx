@@ -8,6 +8,8 @@ import { Organizer } from "@/types/user";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useToast } from "@/hooks/useToast";
 import { useUser } from "@/hooks/useUser";
+import styles from "./account.module.scss";
+import { PlusCircleIcon } from "lucide-react";
 
 export default function AccountPage() {
   const { user, loading, error } = useUser();
@@ -28,27 +30,52 @@ export default function AccountPage() {
   }
 
   return (
-    <main>
-      {loading && <LoadingBar />}
-      <div>
-        <h1>Account</h1>
-        <div>
-          <div>
-            <h2>{user?.username}</h2>
-            <p>{user?.email}</p>
-          </div>
-          {user?.image && (
-            <Image src={user?.image} alt="Profile" width={80} height={80} />
-          )}
+    <main className={styles.accountPage}>
+      {loading && <LoadingBar />}{" "}
+      <div className={styles.header}>
+        <div className={styles.userInfo}>
+          <h1 className={styles.username}>{user?.username}</h1>
+          <p className={styles.email}>{user?.email}</p>
         </div>
+        <Image
+          src={user?.image || "/images/default-avatar.png"}
+          alt="Profile"
+          width={80}
+          height={80}
+          className={styles.profileImage}
+        />
       </div>
-      {userType && (
-        <Button onClick={() => router.push(buttonParameters.route)}>
-          {buttonParameters.text}
-        </Button>
-      )}
+      <div className={styles.actions}>
+        <div className={styles.buttonGroup}>
+          <Button
+            variant="secondary"
+            onClick={() => router.push("/account/settings")}
+            fullWidth
+          >
+            Paramètres du compte
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => router.push("/account/reviews")}
+            fullWidth
+          >
+            Mes Avis
+          </Button>
+        </div>
+        {userType && (
+          <Button
+            endIcon={<PlusCircleIcon size={18} />}
+            onClick={() => router.push(buttonParameters.route)}
+            fullWidth
+          >
+            {buttonParameters.text}
+          </Button>
+        )}
+      </div>
       {userType === "organizer" && organizer?.places && (
-        <PlacesEditList places={organizer?.places} />
+        <div className={styles.placesSection}>
+          <PlacesEditList places={organizer?.places} />
+        </div>
       )}
     </main>
   );

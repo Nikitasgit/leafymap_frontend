@@ -1,6 +1,6 @@
 import React from "react";
 import SearchInput from "@/components/common/inputs/searchInput/SearchInput";
-import { FormDataChangeHandler } from "../../../CreateProfileStepper.types";
+import { FormDataChangeHandler } from "../createProfileStepper/CreateProfileStepper.types";
 import { Collaborator } from "@/types/place/collaborators";
 import CreatePartners from "./CreatePartner";
 import { EventFormData } from "@/components/events/form/EventForm";

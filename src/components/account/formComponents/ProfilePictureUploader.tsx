@@ -1,6 +1,6 @@
 import { useState, ChangeEvent } from "react";
 import Image from "next/image";
-import { FormDataChangeHandler } from "../../../CreateProfileStepper.types";
+import { FormDataChangeHandler } from "../createProfileStepper/CreateProfileStepper.types";
 
 type ProfilePictureUploaderProps = {
   onChange: FormDataChangeHandler;

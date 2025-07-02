@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./CategorySelectorInput.module.scss";
-import { useSelector } from "react-redux";
 import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
-import { selectPlaceCategories } from "@/store/appSlice";
 import { PlaceCategory } from "@/types/categories";
 import { PlaceType } from "@/types/place/placeCaterories";
+import TextField from "../textField/TextField";
+import { useApp } from "@/hooks/useApp";
+import useOnClickOutside from "@/hooks/useOnClickOutside";
+import LoadingBar from "../../loading/LoadingBar";
+import { useToast } from "@/hooks/useToast";
 
 const PlaceCategorySelectorInput = ({
   value,
@@ -15,11 +18,11 @@ const PlaceCategorySelectorInput = ({
   onChange: FormDataChangeHandler;
   selectedTypes?: PlaceType[];
 }) => {
-  const placeCategories = useSelector(selectPlaceCategories);
+  const { placeCategories, loading, error } = useApp();
   const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
-
+  const { showError } = useToast();
   const ref = useRef<HTMLDivElement>(null);
 
   const getFilteredCategories = () => {
@@ -67,16 +70,12 @@ const PlaceCategorySelectorInput = ({
     }
   }, [selectedTypes, value, onChange]);
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setIsOpen(false);
-        setSearch("");
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  const handleClickOutside = () => {
+    setIsOpen(false);
+    setSearch("");
+  };
+
+  useOnClickOutside(ref, handleClickOutside);
 
   const handleSelect = (category: PlaceCategory) => {
     setInputValue(category.name);
@@ -104,24 +103,33 @@ const PlaceCategorySelectorInput = ({
     }
   }, [value, placeCategories]);
 
+  if (error) {
+    showError(error);
+  }
+
   return (
     <div className={styles.categoryInputWrapper} ref={ref}>
-      <input
-        type="text"
+      {loading && <LoadingBar />}
+      <TextField
+        name="placeCategory"
+        label="Type de lieu"
         value={inputValue}
         onClick={() => setIsOpen(true)}
         readOnly
+        fullWidth
         placeholder="Sélectionne un type de lieu"
+        onChange={(e) => setInputValue(e.target.value)}
       />
 
       {isOpen && (
         <div className={styles.dropdown}>
-          <input
-            type="text"
+          <TextField
+            name="search"
+            onClick={() => setIsOpen(true)}
             placeholder="Rechercher un lieu..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className={styles.searchBar}
+            fullWidth
           />
 
           <div className={styles.list}>

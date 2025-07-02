@@ -1,0 +1,50 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+.title {
+  color: $grey-450;
+  font-size: 15px;
+}
+.container {
+  width: 100%;
+  border: 1px solid $grey-200;
+  border-radius: 8px;
+  padding: spacing(1);
+
+  .label {
+    color: $grey-450;
+    font-size: 14px;
+
+    @include respond-to(md) {
+      font-size: 16px;
+    }
+  }
+
+  .optionsContainer {
+    @include flex(row, flex-start, center, spacing(3));
+    flex-wrap: wrap;
+  }
+
+  .optionWrapper {
+    @include flex(row, center, center, spacing(1));
+    position: relative;
+  }
+
+  .radioLabel {
+    cursor: pointer;
+    font-size: 14px;
+    color: $grey-450;
+    transition: $transition-default;
+  }
+
+  .optionText {
+    color: $grey-450;
+  }
+
+  .disabled {
+    .radioLabel {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}

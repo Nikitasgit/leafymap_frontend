@@ -1,0 +1,43 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+.container {
+  .label {
+    color: $grey-450;
+    font-size: 14px;
+
+    @include respond-to(md) {
+      font-size: 15px;
+    }
+  }
+
+  .fullWidth {
+    width: 100%;
+  }
+
+  .textareaWrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .charCount {
+    position: absolute;
+    bottom: spacing(0.5);
+    right: spacing(1);
+    font-size: 12px;
+    color: $grey-400;
+    background-color: $white;
+    padding: spacing(0.25) spacing(0.5);
+    border-radius: 4px;
+    font-weight: 500;
+
+    &.nearLimit {
+      color: $primary-color;
+    }
+
+    &.overLimit {
+      color: $error-color;
+      font-weight: 600;
+    }
+  }
+}

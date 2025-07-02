@@ -3,7 +3,7 @@ import TextField from "@/components/common/inputs/textField/TextField";
 import {
   NewProfileFormData,
   FormDataChangeHandler,
-} from "../../../CreateProfileStepper.types";
+} from "../createProfileStepper/CreateProfileStepper.types";
 
 interface ContactFormProps {
   onChange: FormDataChangeHandler;

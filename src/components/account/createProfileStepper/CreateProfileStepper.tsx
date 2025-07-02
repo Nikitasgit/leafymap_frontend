@@ -8,9 +8,13 @@ import type { NewProfileFormData } from "./CreateProfileStepper.types";
 import useSubmitForm from "@/hooks/useUpdateUser";
 import { useUser } from "@/hooks/useUser";
 import { defaultSchedule } from "@/utils/createProfile";
+import styles from "./CreateProfileStepper.module.scss";
+import LoadingBar from "@/components/common/loading/LoadingBar";
+import { useToast } from "@/hooks/useToast";
 
 const CreateProfileStepper = () => {
-  const { user } = useUser();
+  const { user, loading: userLoading, error: userError } = useUser();
+  const { showError } = useToast();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<NewProfileFormData>({
     userType: "",
@@ -29,7 +33,7 @@ const CreateProfileStepper = () => {
     placeType: [],
   });
 
-  const { submitForm, error } = useSubmitForm();
+  const { submitForm, loading: submitLoading } = useSubmitForm();
 
   const handleSubmit = async () => {
     await submitForm(formData, false);
@@ -54,41 +58,39 @@ const CreateProfileStepper = () => {
       }));
     }
   }, [user]);
-  console.log(formData);
+
+  if (userError) {
+    showError(userError);
+  }
+  const loading = userLoading || submitLoading;
   return (
-    <div>
-      {error && (
-        <div
-          style={{
-            color: "red",
-            backgroundColor: "#ffebee",
-            padding: "10px",
-            marginBottom: "20px",
-            borderRadius: "4px",
-            border: "1px solid #f44336",
-          }}
-        >
-          {error}
-        </div>
-      )}
-      {step === 1 && (
-        <UserTypeStep
-          userType={formData.userType}
-          onChange={handleInputChange}
-          onNext={handleNext}
-        />
-      )}
-      {step === 2 && (
-        <ActivityFormStep
-          firstStep={false}
-          data={formData}
-          isCreator={formData.userType === "creator"}
-          onChange={handleInputChange}
-          onSubmit={handleSubmit}
-          onNext={handleNext}
-          onBack={handleBack}
-        />
-      )}
+    <div className={styles.container}>
+      {loading && <LoadingBar />}
+      <div className={styles.stepperHeader}>
+        <h1 className={styles.title}>Créer votre profil</h1>
+        <span className={styles.stepText}>Étape {step} sur 2</span>
+      </div>
+
+      <div className={styles.stepContainer}>
+        {step === 1 && (
+          <UserTypeStep
+            userType={formData.userType}
+            onChange={handleInputChange}
+            onNext={handleNext}
+          />
+        )}
+        {step === 2 && (
+          <ActivityFormStep
+            firstStep={false}
+            data={formData}
+            isCreator={formData.userType === "creator"}
+            onChange={handleInputChange}
+            onSubmit={handleSubmit}
+            onNext={handleNext}
+            onBack={handleBack}
+          />
+        )}
+      </div>
     </div>
   );
 };

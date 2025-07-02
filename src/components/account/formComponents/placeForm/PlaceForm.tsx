@@ -1,16 +1,17 @@
-import TimeTableForm from "@/components/common/forms/timetable/TimeTableForm";
+import TimeTableForm from "@/components/account/formComponents/timetableForm/TimeTableForm";
 import AddressInput from "@/components/common/inputs/addressInput/AddressInput";
 import PlaceCategorySelectorInput from "@/components/common/inputs/categorySelectorInput/PlaceCategorySelectorInput";
 import PlaceTypeSelectorInput from "@/components/common/inputs/placeTypeSelectorInput/PlaceTypeSelectorInput";
 import MapComponent from "@/components/map/mapComponent/Map";
 import { MapCoordinates, Location } from "@/types/common";
 import React, { useState } from "react";
-import Partners from "./Partners";
+import Partners from "../Partners";
 import Text from "@/components/common/typography/Text";
 import {
   NewProfileFormData,
   FormDataChangeHandler,
-} from "../../../CreateProfileStepper.types";
+} from "../../createProfileStepper/CreateProfileStepper.types";
+import styles from "./PlaceForm.module.scss";
 
 const PlaceForm = ({
   data,
@@ -27,6 +28,7 @@ const PlaceForm = ({
         }
       : null
   );
+
   const handleMapClick = async ({
     latitude,
     longitude,
@@ -54,6 +56,7 @@ const PlaceForm = ({
       onChange({ target: { name: "location", value: newLocation } });
     }
   };
+
   const onLocationSelect = (location: Location) => {
     if (location?.coordinates) {
       setLocationMarker({
@@ -63,34 +66,43 @@ const PlaceForm = ({
       onChange({ target: { name: "location", value: location } });
     }
   };
-  return (
-    <>
-      <AddressInput
-        onLocationSelect={onLocationSelect}
-        value={data.location?.label || ""}
-      />
-      <Text as="h4">Cliquez sur la carte pour positionner votre lieu</Text>
-      <MapComponent
-        height="200px"
-        width="400px"
-        location={locationMarker || undefined}
-        markers={locationMarker ? [locationMarker] : []}
-        onMapClick={handleMapClick}
-        withDefaultMarker
-      />
-      {data.userType === "organizer" && (
-        <PlaceTypeSelectorInput
-          value={data.placeType || []}
-          onChange={onChange}
-        />
-      )}
 
-      <PlaceCategorySelectorInput
-        value={data.placeCategory}
-        onChange={onChange}
-        selectedTypes={data.placeType || []}
-      />
-      <Text as="h3">Horaires</Text>
+  return (
+    <section className={styles.placeForm}>
+      <h3 className={styles.title}>Lieu</h3>
+      <div className={styles.placeFormContainer}>
+        <AddressInput
+          onLocationSelect={onLocationSelect}
+          value={data.location?.label || ""}
+        />
+
+        <div className={styles.mapSection}>
+          <Text as="h4" className={styles.mapTitle}>
+            Cliquez sur la carte pour positionner votre lieu
+          </Text>
+          <div className={styles.mapContainer}>
+            <MapComponent
+              height="200px"
+              location={locationMarker || undefined}
+              markers={locationMarker ? [locationMarker] : []}
+              onMapClick={handleMapClick}
+              withDefaultMarker
+            />
+          </div>
+        </div>
+
+        {data.userType === "organizer" && (
+          <PlaceTypeSelectorInput
+            value={data.placeType || []}
+            onChange={onChange}
+          />
+        )}
+        <PlaceCategorySelectorInput
+          value={data.placeCategory}
+          onChange={onChange}
+          selectedTypes={data.placeType || []}
+        />
+      </div>
       <TimeTableForm
         schedule={data.defaultSchedule}
         onChange={(updatedSchedule) =>
@@ -100,7 +112,7 @@ const PlaceForm = ({
         }
       />
       <Partners onChange={onChange} data={data} />
-    </>
+    </section>
   );
 };
 

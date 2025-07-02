@@ -5,7 +5,7 @@ import { useState } from "react";
 import {
   FormDataChangeHandler,
   NewProfileFormData,
-} from "../../../CreateProfileStepper.types";
+} from "../createProfileStepper/CreateProfileStepper.types";
 import { selectSubCategories } from "@/store/appSlice";
 import { useSelector } from "react-redux";
 import { DeleteIcon } from "lucide-react";

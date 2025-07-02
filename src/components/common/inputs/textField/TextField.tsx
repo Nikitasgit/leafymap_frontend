@@ -1,9 +1,11 @@
 import React from "react";
+import styles from "./TextField.module.scss";
 
 type TextfieldProps = {
   label?: string;
   name: string;
   value: string;
+  onFocus?: () => void;
   onClick?: () => void;
   onChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -15,6 +17,10 @@ type TextfieldProps = {
   required?: boolean;
   type?: "text" | "email" | "password" | "number" | "tel" | "url";
   disabled?: boolean;
+  fullWidth?: boolean;
+  showCharCount?: boolean;
+  maxLength?: number;
+  readOnly?: boolean;
 };
 
 const TextField: React.FC<TextfieldProps> = ({
@@ -22,41 +28,74 @@ const TextField: React.FC<TextfieldProps> = ({
   name,
   value,
   onChange,
+  onFocus,
   onClick,
   type = "text",
   placeholder = "",
+  readOnly = false,
   error = false,
   multiline = false,
   rows = 4,
   required = false,
   disabled = false,
+  fullWidth = false,
+  showCharCount = false,
+  maxLength,
 }) => {
+  const charCount = value.length;
+  const isOverLimit = maxLength && charCount > maxLength;
+
   return (
-    <div>
-      {label && <label htmlFor={name}>{label}</label>}
+    <div className={styles.container}>
+      {label && (
+        <label className={styles.label} htmlFor={name}>
+          {label}
+        </label>
+      )}
       {multiline ? (
-        <textarea
-          id={name}
-          name={name}
-          value={value}
-          placeholder={placeholder}
-          onChange={onChange}
-          onClick={onClick}
-          rows={rows}
-          className={error ? "error" : ""}
-        />
+        <div className={styles.textareaWrapper}>
+          <textarea
+            id={name}
+            name={name}
+            value={value}
+            placeholder={placeholder}
+            onChange={onChange}
+            onFocus={onFocus}
+            onClick={onClick}
+            rows={rows}
+            maxLength={maxLength}
+            className={`${error ? "error" : ""} ${
+              fullWidth ? styles.fullWidth : ""
+            }`}
+          />
+          {showCharCount && (
+            <div
+              className={`${styles.charCount} ${
+                isOverLimit ? styles.overLimit : ""
+              }`}
+            >
+              {charCount}
+              {maxLength && ` / ${maxLength}`}
+            </div>
+          )}
+        </div>
       ) : (
         <input
           id={name}
           name={name}
+          readOnly={readOnly}
           disabled={disabled}
           type={type}
           value={value}
           placeholder={placeholder}
           onChange={onChange}
           required={required}
+          onFocus={onFocus}
           onClick={onClick}
-          className={error ? "error" : ""}
+          maxLength={maxLength}
+          className={`${error ? "error" : ""} ${
+            fullWidth ? styles.fullWidth : ""
+          }`}
         />
       )}
     </div>

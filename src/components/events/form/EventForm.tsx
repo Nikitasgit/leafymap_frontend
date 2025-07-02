@@ -1,6 +1,6 @@
 import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
-import Partners from "@/components/account/createProfileStepper/steps/ActivityFormStep/formComponents/Partners";
-import ProfilePictureUploader from "@/components/account/createProfileStepper/steps/ActivityFormStep/formComponents/ProfilePictureUploader";
+import Partners from "@/components/account/formComponents/Partners";
+import ProfilePictureUploader from "@/components/account/formComponents/ProfilePictureUploader";
 import TextField from "@/components/common/inputs/textField/TextField";
 import React, { useState } from "react";
 import ScheduleForm from "./ScheduleForm";

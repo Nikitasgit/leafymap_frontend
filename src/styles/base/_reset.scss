@@ -72,7 +72,9 @@ textarea {
     border-color: #e0e0e0;
   }
 }
-
+textarea {
+  resize: none;
+}
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
     scroll-behavior: auto;

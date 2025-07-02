@@ -1,15 +1,17 @@
 import { useState } from "react";
 import RadioYesOrNo from "@/components/common/inputs/radios/radioYesOrNo/RadioYesOrNo";
 import TextField from "@/components/common/inputs/textField/TextField";
-import Text from "@/components/common/typography/Text";
 import {
   NewProfileFormData,
   FormDataChangeHandler,
-} from "../../../CreateProfileStepper.types";
+} from "../../createProfileStepper/CreateProfileStepper.types";
 import CategorySelectorInput from "@/components/common/inputs/categorySelectorInput/CategorySelectorInput";
 import { useUser } from "@/hooks/useUser";
-import PlaceForm from "./PlaceForm";
+import PlaceForm from "../placeForm/PlaceForm";
 import { Creator } from "@/types/user";
+import styles from "./Infos.module.scss";
+import LoadingBar from "@/components/common/loading/LoadingBar";
+import { useToast } from "@/hooks/useToast";
 
 interface InfosProps {
   isCreator: boolean;
@@ -19,11 +21,11 @@ interface InfosProps {
 }
 
 const Infos = ({ isCreator, data, onChange }: InfosProps) => {
-  const { user } = useUser();
-  const withPlace = !!data.placeActive;
+  const { user, loading, error } = useUser();
   const creator = user as Creator;
-
+  const withPlace = !!data.placeActive;
   const [creatorWithPlace, setCreatorWithPlace] = useState(withPlace);
+  const { showError } = useToast();
 
   const handleDisplayPlaceChange = (value: string) => {
     if (creator?.creatorProfile?.place) {
@@ -57,42 +59,56 @@ const Infos = ({ isCreator, data, onChange }: InfosProps) => {
     }
   };
 
+  if (error) {
+    showError(error);
+  }
+
   return (
-    <>
-      <Text as="h3">Informations</Text>
-      <TextField
-        label={
-          isCreator
-            ? "Nom de votre activité (obligatoire)*"
-            : "Nom du lieu (obligatoire)*"
-        }
-        name="name"
-        value={data.name}
-        onChange={onChange}
-      />
-      <TextField
-        label="Description"
-        name="description"
-        value={data.description}
-        onChange={onChange}
-        multiline
-        rows={6}
-      />
-      {isCreator && (
-        <>
-          <CategorySelectorInput onChange={onChange} value={data.category} />
-          <RadioYesOrNo
-            label="Souhaitez-vous afficher votre lieu sur la carte pour recevoir des visiteurs?"
-            name="userWithPlace"
-            value={creatorWithPlace ? "yes" : "no"}
-            onChange={(e) => handleDisplayPlaceChange(e.target.value)}
+    <div className={styles.container}>
+      {loading && <LoadingBar />}
+      <section className={styles.section}>
+        <h3 className={styles.title}>Informations</h3>
+        <div className={styles.infosContainer}>
+          <TextField
+            fullWidth
+            label={
+              isCreator
+                ? "Nom de votre activité (obligatoire)*"
+                : "Nom du lieu (obligatoire)*"
+            }
+            name="name"
+            value={data.name}
+            onChange={onChange}
           />
-        </>
-      )}
+          <TextField
+            fullWidth
+            label="Description"
+            name="description"
+            value={data.description}
+            onChange={onChange}
+            multiline
+            rows={2}
+            showCharCount
+            maxLength={300}
+          />
+          {isCreator && (
+            <CategorySelectorInput onChange={onChange} value={data.category} />
+          )}
+          {isCreator && (
+            <RadioYesOrNo
+              title="Lieu"
+              label="Souhaitez-vous afficher votre lieu sur la carte pour recevoir des visiteurs?"
+              name="userWithPlace"
+              value={creatorWithPlace ? "yes" : "no"}
+              onChange={(e) => handleDisplayPlaceChange(e.target.value)}
+            />
+          )}
+        </div>
+      </section>
       {(creatorWithPlace || !isCreator) && (
         <PlaceForm data={data} onChange={onChange} />
       )}
-    </>
+    </div>
   );
 };
 

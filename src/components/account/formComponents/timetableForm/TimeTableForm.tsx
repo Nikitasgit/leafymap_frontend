@@ -1,6 +1,7 @@
-import { DefaultSchedule } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
-import DayInput from "./DayInput";
-import { DaySchedule, WeekDay } from "./TimeTable.types";
+import DayInput from "./dayInput/DayInput";
+import Text from "../../../common/typography/Text";
+import styles from "./TimeTableForm.module.scss";
+import { DaySchedule, DefaultSchedule, WeekDay } from "@/types/place/schedule";
 
 interface TimeTableFormProps {
   schedule: DefaultSchedule;
@@ -22,7 +23,10 @@ const TimeTableForm = ({ schedule, onChange }: TimeTableFormProps) => {
   ];
 
   return (
-    <div>
+    <div className={styles.timeTableForm}>
+      <Text as="h3" className={styles.title}>
+        Horaires
+      </Text>
       {days.map((day) => (
         <DayInput
           key={day}

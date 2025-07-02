@@ -66,13 +66,12 @@
 .authLinks {
   @include flex(row, center, center, 3px);
   color: $grey-400;
-  border: 0.05em solid $grey-400;
-  padding: spacing(0.5) spacing(1);
-  border-radius: 500px;
+  padding: spacing(0.75) spacing(1);
+  border-radius: 4px;
   transition: $transition-default;
   font-size: 15px;
-
+  border: 1px solid $grey-200;
   &:hover {
-    border-color: $grey-500;
+    color: $grey-600;
   }
 }

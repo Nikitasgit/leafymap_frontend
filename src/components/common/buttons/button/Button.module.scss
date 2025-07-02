@@ -8,6 +8,10 @@
   cursor: pointer;
   border-radius: 4px;
   padding: spacing(0.75) spacing(1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: spacing(1);
 
   &:disabled {
     opacity: 0.6;
@@ -30,7 +34,7 @@
   }
 
   &.secondary {
-    color: $grey-400;
+    color: $grey-450;
     background: none;
     border: 1px solid $grey-200;
     &:hover {
@@ -43,4 +47,17 @@
     color: $primary-color;
     border: 2px solid $primary-color;
   }
+  &.fullWidth {
+    width: 100%;
+  }
+}
+
+.startIcon {
+  display: flex;
+  align-items: center;
+}
+
+.endIcon {
+  display: flex;
+  align-items: center;
 }

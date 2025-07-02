@@ -30,7 +30,6 @@ const PlaceTypeSelectorInput: React.FC<PlaceTypeSelectorInputProps> = ({
       : [...selectedTypes, type];
 
     setSelectedTypes(newSelectedTypes);
-    // Envoyer tous les types sélectionnés au backend
     onChange({
       target: {
         name: "placeType",
@@ -62,11 +61,10 @@ const PlaceTypeSelectorInput: React.FC<PlaceTypeSelectorInputProps> = ({
           </button>
         ))}
       </div>
-      {selectedTypes.length > 0 && (
-        <div className={styles.selectedInfo}>
-          Types sélectionnés : {selectedTypes.length}
-        </div>
-      )}
+
+      <div className={styles.selectedInfo}>
+        Types sélectionnés : {selectedTypes.length}
+      </div>
     </div>
   );
 };

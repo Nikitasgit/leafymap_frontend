@@ -1,0 +1,14 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+.timeTableForm {
+  @include flex(column, flex-start, stretch, spacing(1.5));
+}
+
+.title {
+  color: $grey-450;
+  font-size: 20px;
+  @include respond-to(md) {
+    font-size: 22px;
+  }
+}

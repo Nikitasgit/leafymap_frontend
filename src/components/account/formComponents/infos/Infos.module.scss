@@ -1,0 +1,23 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+.container {
+  @include flex(column, flex-start, stretch, spacing(1));
+
+  .infosContainer {
+    @include flex(column, flex-start, stretch, spacing(1));
+    padding-bottom: spacing(3);
+    border-bottom: 1px solid $grey-200;
+  }
+  section {
+    @include flex(column, flex-start, stretch, spacing(1));
+  }
+}
+
+.title {
+  color: $grey-450;
+  font-size: 20px;
+  @include respond-to(md) {
+    font-size: 22px;
+  }
+}

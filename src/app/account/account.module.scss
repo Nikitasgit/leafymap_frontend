@@ -1,0 +1,68 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+.accountPage {
+  @include flex(column, flex-start, center, spacing(3));
+  min-height: calc(100vh - $navbar-height);
+  padding: spacing(3);
+  background-color: $grey-50;
+}
+
+.header {
+  @include flex(column, center, center, spacing(2));
+  width: 100%;
+  max-width: 600px;
+  padding: spacing(3);
+  background-color: $white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  @include respond-to(md) {
+    @include flex(row, space-between, center, spacing(3));
+    padding: spacing(4);
+  }
+}
+
+.userInfo {
+  @include flex(column, center, center, spacing(1));
+  text-align: center;
+
+  @include respond-to(md) {
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
+.username {
+  font-size: 24px;
+  font-weight: 600;
+  color: $grey-600;
+}
+
+.email {
+  font-size: $font-size-base;
+  color: $grey-400;
+}
+
+.profileImage {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid $primary-color;
+}
+
+.actions {
+  @include flex(column, center, center, spacing(2));
+  width: 100%;
+  max-width: 600px;
+}
+
+.buttonGroup {
+  @include flex(column, center, center, spacing(2));
+  width: 100%;
+}
+
+.placesSection {
+  width: 100%;
+  max-width: 800px;
+  margin-top: spacing(3);
+}
