@@ -1,33 +1,22 @@
 import React from "react";
 import SearchInput from "@/components/common/inputs/searchInput/SearchInput";
-import { FormDataChangeHandler } from "../createProfileStepper/CreateProfileStepper.types";
+import {
+  FormDataChangeHandler,
+  NewProfileFormData,
+  PlaceFormData,
+} from "../../createProfileStepper/CreateProfileStepper.types";
 import { Collaborator } from "@/types/place/collaborators";
-import CreatePartners from "./CreatePartner";
+import CreateCollaborators from "../createCollaborators/CreateCollaborators";
 import { EventFormData } from "@/components/events/form/EventForm";
 import { useFindCreators } from "@/hooks/useFindCreators";
+import styles from "./Collaborators.module.scss";
 
-const fakeUsers = [
-  { id: "1", name: "Alice Dupont", avatar: "https://i.pravatar.cc/40?img=1" },
-  { id: "2", name: "Bob Martin", avatar: "https://i.pravatar.cc/40?img=2" },
-  {
-    id: "3",
-    name: "Charlie Leblanc",
-    avatar: "https://i.pravatar.cc/40?img=3",
-  },
-];
-
-const initialUserSuggestions = fakeUsers.map((user) => ({
-  _id: user.id,
-  name: user.name,
-  image: user.avatar,
-}));
-
-const Partners = ({
+const Collaborators = ({
   onChange,
   data,
 }: {
   onChange: FormDataChangeHandler;
-  data: EventFormData;
+  data: EventFormData | PlaceFormData | NewProfileFormData;
 }) => {
   const { searchCreators } = useFindCreators();
   const collaborators = (data.collaborators || []) as Collaborator[];
@@ -57,20 +46,22 @@ const Partners = ({
   };
 
   return (
-    <div style={{ position: "relative", width: "300px" }}>
+    <div className={styles.collaborators}>
+      <h3 className={styles.title}>Collaborateurs</h3>
       <SearchInput
+        label="Ajouter un collaborateur"
         onSelect={handleSelect}
         fetchSuggestions={searchCreators}
-        initialSuggestions={initialUserSuggestions}
+        initialSuggestions={[]}
         placeholder="Ajouter un utilisateur..."
         withIcons
         list={collaborators}
         onDelete={handleDelete}
         displayList
       />
-      <CreatePartners onChange={onChange} data={data} />
+      <CreateCollaborators onChange={onChange} data={data} />
     </div>
   );
 };
 
-export default Partners;
+export default Collaborators;

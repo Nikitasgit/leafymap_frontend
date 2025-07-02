@@ -1,0 +1,88 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+.createCollaborators {
+  border-bottom: 1px solid $grey-200;
+  padding-bottom: spacing(3);
+}
+
+.title {
+  color: $grey-450;
+  font-size: 20px;
+  margin-bottom: spacing(2);
+  @include respond-to(md) {
+    font-size: 22px;
+  }
+}
+
+.createButton {
+  margin-bottom: spacing(3);
+}
+
+.formContainer {
+  background-color: $grey-50;
+  border: 1px solid $grey-200;
+  border-radius: 8px;
+  padding: spacing(3);
+  margin-bottom: spacing(3);
+}
+
+.formFields {
+  display: flex;
+  flex-direction: column;
+  gap: spacing(2);
+  margin-bottom: spacing(2);
+}
+
+.submitButton {
+  align-self: flex-start;
+}
+
+.collaboratorsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.collaboratorItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: spacing(2);
+  background-color: $grey-50;
+  border: 1px solid $grey-200;
+  border-radius: 6px;
+  margin-bottom: spacing(1);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.collaboratorInfo {
+  display: flex;
+  align-items: center;
+  gap: spacing(1);
+  color: $grey-700;
+  font-weight: 500;
+}
+
+.categoryName {
+  color: $grey-500;
+  font-weight: 400;
+}
+
+.deleteButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: spacing(1);
+  border-radius: 4px;
+  color: $grey-500;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: $grey-200;
+    color: $error-color;
+  }
+}

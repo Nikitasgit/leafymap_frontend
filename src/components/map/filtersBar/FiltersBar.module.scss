@@ -2,7 +2,7 @@
 @import "@/styles/abstracts/mixins";
 
 .filtersBar {
-  @include flex(row, space-between, center, 0);
+  @include flex(row, space-between, center);
   padding: $spacing-small;
   background-color: $white;
   width: 100%;
@@ -18,6 +18,7 @@
     cursor: pointer;
     font-size: $font-size-base;
     color: $grey-400;
+    white-space: nowrap;
     &.active {
       color: $primary-color;
     }
@@ -28,6 +29,8 @@
   @include flex(row, space-between, center, 0);
   border: 1px solid $grey-200;
   border-radius: 8px;
+  width: 100%;
+  max-width: 700px;
 }
 
 .searchDropdown {

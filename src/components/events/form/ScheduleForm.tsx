@@ -8,9 +8,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from "react-datepicker";
 import { fr } from "date-fns/locale/fr";
 import { format, startOfDay } from "date-fns";
-import NewSlot from "@/components/common/forms/timetable/NewSlot";
+import NewSlot from "@/components/common/timetable/NewSlot";
 import Slots from "./Slots";
-import { TimeSlot } from "@/components/common/forms/timetable/TimeSlotInputs";
+import { TimeSlot } from "@/components/common/timetable/timeSlotInputs/TimeSlotInputs";
 import EventScheduleList from "./EventScheduleList";
 
 registerLocale("fr", fr);

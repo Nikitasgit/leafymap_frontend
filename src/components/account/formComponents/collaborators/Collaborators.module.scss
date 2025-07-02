@@ -1,8 +1,7 @@
 @import "@/styles/abstracts/variables";
 @import "@/styles/abstracts/mixins";
 
-.timeTableForm {
-  @include flex(column, flex-start, stretch, spacing(1.5));
+.collaborators {
   border-bottom: 1px solid $grey-200;
   padding-bottom: spacing(3);
 }

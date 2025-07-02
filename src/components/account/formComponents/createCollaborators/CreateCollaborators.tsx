@@ -2,22 +2,24 @@ import Button from "@/components/common/buttons/button/Button";
 import CategorySelectorInput from "@/components/common/inputs/categorySelectorInput/CategorySelectorInput";
 import TextField from "@/components/common/inputs/textField/TextField";
 import { useState } from "react";
+import styles from "./CreateCollaborators.module.scss";
 import {
   FormDataChangeHandler,
   NewProfileFormData,
-} from "../createProfileStepper/CreateProfileStepper.types";
+  PlaceFormData,
+} from "../../createProfileStepper/CreateProfileStepper.types";
 import { selectSubCategories } from "@/store/appSlice";
 import { useSelector } from "react-redux";
 import { DeleteIcon } from "lucide-react";
 import { EventFormData } from "@/components/events/form/EventForm";
 import { CreatedCollaborator } from "@/types/place/collaborators";
 
-const CreatePartners = ({
+const CreateCollaborators = ({
   onChange,
   data: formData,
 }: {
   onChange: FormDataChangeHandler;
-  data: EventFormData | NewProfileFormData;
+  data: EventFormData | NewProfileFormData | PlaceFormData;
 }) => {
   const subCategories = useSelector(selectSubCategories);
 
@@ -72,39 +74,57 @@ const CreatePartners = ({
   };
 
   return (
-    <>
-      <Button onClick={addCollaborator}>Créer un collaborateur</Button>
+    <div className={styles.createCollaborators}>
+      <Button onClick={addCollaborator} className={styles.createButton}>
+        Créer un collaborateur
+      </Button>
       {isCreating && (
-        <div>
-          <TextField
-            placeholder="Nom du collaborateur"
-            value={collaborator.name}
-            onChange={handleChange}
-            name="name"
-          />
-          <CategorySelectorInput
-            onChange={handleChange}
-            value={collaborator.categoryId}
-          />
-          <Button onClick={handleSubmitCollaborator}>Créer</Button>
+        <div className={styles.formContainer}>
+          <div className={styles.formFields}>
+            <TextField
+              placeholder="Nom du collaborateur"
+              value={collaborator.name}
+              onChange={handleChange}
+              name="name"
+            />
+            <CategorySelectorInput
+              onChange={handleChange}
+              value={collaborator.categoryId}
+            />
+          </div>
+          <Button
+            onClick={handleSubmitCollaborator}
+            className={styles.submitButton}
+          >
+            Créer
+          </Button>
         </div>
       )}
-      <ul>
+      <ul className={styles.collaboratorsList}>
         {formData.createdCollaborators.map((collaborator) => (
-          <li key={collaborator.id}>
-            {collaborator.name} -
-            {
-              subCategories.find((sub) => sub._id === collaborator.categoryId)
-                ?.name
-            }
-            <DeleteIcon
+          <li key={collaborator.id} className={styles.collaboratorItem}>
+            <div className={styles.collaboratorInfo}>
+              <span>{collaborator.name}</span>
+              <span className={styles.categoryName}>
+                -{" "}
+                {
+                  subCategories.find(
+                    (sub) => sub._id === collaborator.categoryId
+                  )?.name
+                }
+              </span>
+            </div>
+            <button
+              className={styles.deleteButton}
               onClick={() => handleDeleteCollaborator(collaborator.id)}
-            />
+            >
+              <DeleteIcon size={16} />
+            </button>
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 };
 
-export default CreatePartners;
+export default CreateCollaborators;

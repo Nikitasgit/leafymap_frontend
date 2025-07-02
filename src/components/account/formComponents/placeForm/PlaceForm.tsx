@@ -5,13 +5,13 @@ import PlaceTypeSelectorInput from "@/components/common/inputs/placeTypeSelector
 import MapComponent from "@/components/map/mapComponent/Map";
 import { MapCoordinates, Location } from "@/types/common";
 import React, { useState } from "react";
-import Partners from "../Partners";
 import Text from "@/components/common/typography/Text";
 import {
   NewProfileFormData,
   FormDataChangeHandler,
 } from "../../createProfileStepper/CreateProfileStepper.types";
 import styles from "./PlaceForm.module.scss";
+import Collaborators from "../collaborators/Collaborators";
 
 const PlaceForm = ({
   data,
@@ -111,7 +111,7 @@ const PlaceForm = ({
           })
         }
       />
-      <Partners onChange={onChange} data={data} />
+      <Collaborators onChange={onChange} data={data} />
     </section>
   );
 };

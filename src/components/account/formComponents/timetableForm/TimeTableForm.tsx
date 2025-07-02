@@ -27,6 +27,7 @@ const TimeTableForm = ({ schedule, onChange }: TimeTableFormProps) => {
       <Text as="h3" className={styles.title}>
         Horaires
       </Text>
+
       {days.map((day) => (
         <DayInput
           key={day}

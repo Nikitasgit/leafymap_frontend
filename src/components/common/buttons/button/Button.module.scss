@@ -50,6 +50,11 @@
   &.fullWidth {
     width: 100%;
   }
+  &.simple {
+    background: none;
+    color: $grey-450;
+    border: none;
+  }
 }
 
 .startIcon {

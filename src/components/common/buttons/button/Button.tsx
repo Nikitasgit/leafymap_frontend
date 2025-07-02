@@ -3,7 +3,7 @@ import styles from "./Button.module.scss";
 
 interface ButtonProps {
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "outline";
+  variant?: "primary" | "secondary" | "outline" | "simple";
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
@@ -12,6 +12,7 @@ interface ButtonProps {
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
   fullWidth?: boolean;
+  ariaLabel?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -24,11 +25,13 @@ const Button: React.FC<ButtonProps> = ({
   startIcon,
   endIcon,
   fullWidth = false,
+  ariaLabel,
 }) => {
   return (
     <button
       type={type}
       onClick={onClick}
+      aria-label={ariaLabel}
       disabled={disabled}
       className={`${styles.button} ${styles[variant]} ${styles[size]} ${
         fullWidth ? styles.fullWidth : ""

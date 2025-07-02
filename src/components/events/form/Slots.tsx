@@ -1,4 +1,4 @@
-import { TimeSlot } from "@/components/common/forms/timetable/TimeSlotInputs";
+import { TimeSlot } from "@/components/common/timetable/timeSlotInputs/TimeSlotInputs";
 import React from "react";
 
 const Slots = ({ slots }: { slots: TimeSlot[] }) => {

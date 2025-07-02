@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import TimeSlotInputs from "./TimeSlotInputs";
-import SearchInput from "../../inputs/searchInput/SearchInput";
+import TimeSlotInputs from "./timeSlotInputs/TimeSlotInputs";
+import SearchInput from "../inputs/searchInput/SearchInput";
 import { Period } from "@/components/events/form/EventForm";
 import { Collaborator } from "@/types/place/collaborators";
-import TextField from "../../inputs/textField/TextField";
-import Button from "../../buttons/button/Button";
+import TextField from "../inputs/textField/TextField";
+import Button from "../buttons/button/Button";
 import { EventTimeSlot } from "./TimeTable.types";
 
 interface NewSlotProps {

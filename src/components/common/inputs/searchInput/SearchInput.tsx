@@ -1,9 +1,12 @@
 "use client";
 
-import { Delete, Search } from "lucide-react";
+import { Delete } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import styles from "./SearchInput.module.scss";
+import TextField from "../textField/TextField";
+import { useToast } from "@/hooks/useToast";
+import Button from "../../buttons/button/Button";
 
 interface SearchInputProps<T> {
   value?: string;
@@ -17,13 +20,13 @@ interface SearchInputProps<T> {
   list?: T[];
   displayList?: boolean;
   loading?: boolean;
-  debounce?: number; // Delay in milliseconds
-  renderSuggestion?: (suggestion: T) => React.ReactNode;
+  debounce?: number;
+  label?: string;
 }
 
 const SearchInput = <
   T extends {
-    _id?: string;
+    _id: string;
     username?: string;
     name?: string;
     image?: string;
@@ -42,12 +45,13 @@ const SearchInput = <
   displayList = false,
   loading = false,
   debounce,
-  renderSuggestion,
+  label,
 }: SearchInputProps<T>) => {
   const [input, setInput] = useState(value);
   const [suggestions, setSuggestions] = useState<T[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const { showError } = useToast();
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const showInitialSuggestions =
@@ -73,27 +77,31 @@ const SearchInput = <
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInput(newValue);
-
-    // Clear previous timeout if debounce is enabled
     if (debounceTimeoutRef.current) {
       clearTimeout(debounceTimeoutRef.current);
     }
 
     if (debounce) {
-      // Use debounce
       debounceTimeoutRef.current = setTimeout(() => {
         fetchSuggestionsDebounced(newValue);
       }, debounce);
     } else {
-      // Immediate fetch
       fetchSuggestionsDebounced(newValue);
     }
   };
 
   const handleSuggestionClick = (suggestion: T) => {
-    setInput("");
-    setSuggestions([]);
-    onSelect(suggestion);
+    const isDuplicate = list.some((item) => item._id === suggestion._id);
+    if (!isDuplicate) {
+      setInput("");
+      setSuggestions([]);
+
+      onSelect(suggestion);
+    } else {
+      setInput("");
+      setSuggestions([]);
+      showError("Cet utilisateur est déjà ajouté");
+    }
   };
 
   const handleDelete = (id: string) => {
@@ -105,34 +113,11 @@ const SearchInput = <
   };
 
   const getAddress = (item: T) => {
-    // Check if item has location with label (for places)
     if ("location" in item && item.location && "label" in item.location) {
       return item.location.label;
     }
     return null;
   };
-
-  const renderDefaultSuggestion = (sug: T) => (
-    <>
-      {withIcons && sug.image && (
-        <Image
-          src={sug.image}
-          alt={getDisplayName(sug)}
-          width={20}
-          height={20}
-          style={{ borderRadius: "50%" }}
-        />
-      )}
-      <div className={styles.suggestionContent}>
-        <span className={styles.suggestionName}>{getDisplayName(sug)}</span>
-        {getAddress(sug) && (
-          <div className={styles.suggestionAddress}>
-            <span>{getAddress(sug)}</span>
-          </div>
-        )}
-      </div>
-    </>
-  );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -154,7 +139,6 @@ const SearchInput = <
     }
   }, [value]);
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (debounceTimeoutRef.current) {
@@ -165,62 +149,90 @@ const SearchInput = <
 
   return (
     <div ref={wrapperRef} className={styles.searchInput}>
-      <div style={{ position: "relative" }}>
-        <Search size={20} className={styles.icon} />
-        <input
-          type="text"
-          value={input}
-          onChange={handleInputChange}
-          onFocus={() => {
-            setIsFocused(true);
-            if (showInitialSuggestions) {
-              setSuggestions(initialSuggestions.slice(0, limit));
-            }
-          }}
-          placeholder={placeholder}
-          className={styles.input}
-          disabled={loading}
-        />
-      </div>
+      <TextField
+        name="searchInput"
+        label={label}
+        type="text"
+        value={input}
+        onChange={(e) =>
+          handleInputChange(e as React.ChangeEvent<HTMLInputElement>)
+        }
+        onFocus={() => {
+          setIsFocused(true);
+          if (showInitialSuggestions) {
+            setSuggestions(initialSuggestions.slice(0, limit));
+          }
+        }}
+        placeholder={placeholder}
+        fullWidth
+        disabled={loading}
+      />
       {isFocused && suggestions.length > 0 && (
         <ul className={styles.suggestions}>
           {suggestions.map((sug) => (
             <li
               key={sug._id}
-              onClick={() => handleSuggestionClick(sug as T)}
+              onClick={() => handleSuggestionClick(sug)}
               className={styles.suggestionItem}
             >
-              {renderSuggestion
-                ? renderSuggestion(sug)
-                : renderDefaultSuggestion(sug)}
+              {withIcons && sug.image && (
+                <Image
+                  src={sug.image}
+                  alt={getDisplayName(sug)}
+                  width={20}
+                  height={20}
+                  style={{ borderRadius: "50%" }}
+                />
+              )}
+              <div className={styles.suggestionContent}>
+                <span className={styles.suggestionName}>
+                  {getDisplayName(sug)}
+                </span>
+                {getAddress(sug) && (
+                  <div className={styles.suggestionAddress}>
+                    <span>{getAddress(sug)}</span>
+                  </div>
+                )}
+              </div>
             </li>
           ))}
         </ul>
       )}
-      {displayList && list.length > 0 && (
-        <ul>
-          {list.map((item) => {
-            const id = item._id || "";
-            return (
-              <li key={id}>
-                {withIcons && item.image && (
-                  <Image
-                    src={item.image}
-                    alt={getDisplayName(item)}
-                    width={20}
-                    height={20}
-                    style={{ borderRadius: "50%" }}
-                  />
-                )}
-                {getDisplayName(item)}
-                <Delete
-                  onClick={() => handleDelete(id)}
-                  style={{ cursor: "pointer" }}
-                />
-              </li>
-            );
-          })}
-        </ul>
+      {displayList && (
+        <div className={styles.list}>
+          {list.length > 0 ? (
+            list.map((item) => {
+              const id = item._id;
+              return (
+                <div key={id} className={styles.item}>
+                  <div className={styles.itemInfo}>
+                    {withIcons && item.image && (
+                      <Image
+                        src={item.image}
+                        alt={getDisplayName(item)}
+                        width={40}
+                        height={40}
+                        className={styles.itemImage}
+                      />
+                    )}
+                    <span className={styles.itemName}>
+                      {getDisplayName(item)}
+                    </span>
+                  </div>
+                  <Button
+                    onClick={() => handleDelete(id)}
+                    variant="simple"
+                    size="small"
+                  >
+                    <Delete size={16} />
+                  </Button>
+                </div>
+              );
+            })
+          ) : (
+            <div className={styles.emptyState}>Aucun élément ajouté</div>
+          )}
+        </div>
       )}
     </div>
   );

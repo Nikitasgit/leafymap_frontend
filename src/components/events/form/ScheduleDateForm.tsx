@@ -6,8 +6,8 @@ import { Schedule } from "./EventForm";
 import { registerLocale } from "react-datepicker";
 import { fr } from "date-fns/locale/fr";
 import Radio from "@/components/common/inputs/radios/radioWithLabel/Radio";
-import TimeSlotsList from "@/components/common/forms/timetable/NewSlot";
-import { TimeSlot } from "@/components/common/forms/timetable/TimeSlotInputs";
+import TimeSlotsList from "@/components/common/timetable/NewSlot";
+import { TimeSlot } from "@/components/common/timetable/timeSlotInputs/TimeSlotInputs";
 
 registerLocale("fr", fr);
 

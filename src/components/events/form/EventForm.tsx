@@ -1,5 +1,4 @@
 import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
-import Partners from "@/components/account/formComponents/Partners";
 import ProfilePictureUploader from "@/components/account/formComponents/ProfilePictureUploader";
 import TextField from "@/components/common/inputs/textField/TextField";
 import React, { useState } from "react";
@@ -9,6 +8,7 @@ import useUpdateEvent from "@/hooks/useUpdateEvent";
 
 import { Collaborator, CreatedCollaborator } from "@/types/place/collaborators";
 import { Period } from "@/types/place/schedule";
+import Collaborators from "@/components/account/formComponents/collaborators/Collaborators";
 
 export interface EventFormData {
   name: string;
@@ -61,7 +61,7 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
         value={formData.description}
         onChange={onChange}
       />
-      <Partners onChange={onChange} data={formData} />
+      <Collaborators onChange={onChange} data={formData} />
       <ScheduleForm onChange={onChange} data={formData} />
       <ProfilePictureUploader
         onChange={onChange}

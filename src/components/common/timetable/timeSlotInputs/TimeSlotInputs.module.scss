@@ -1,0 +1,15 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+.container {
+  @include flex(row, space-between, center, spacing(0.5));
+  padding: spacing(1) spacing(0);
+  width: 100%;
+}
+
+.timePickerWrapper {
+  @include flex(row, flex-start, center, spacing(1));
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
