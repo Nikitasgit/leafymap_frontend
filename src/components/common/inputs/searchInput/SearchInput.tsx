@@ -230,7 +230,7 @@ const SearchInput = <
               );
             })
           ) : (
-            <div className={styles.emptyState}>Aucun élément ajouté</div>
+            <div className={styles.emptyState}>Aucun collaborateur ajouté</div>
           )}
         </div>
       )}

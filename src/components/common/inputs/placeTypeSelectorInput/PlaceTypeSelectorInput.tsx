@@ -41,7 +41,8 @@ const PlaceTypeSelectorInput: React.FC<PlaceTypeSelectorInputProps> = ({
   return (
     <div className={styles.container}>
       <label className={styles.label}>
-        Sélectionner un ou plusieurs types correspondant à votre activité
+        Sélectionner un ou plusieurs types correspondant à votre activité{" "}
+        <span>*</span>
       </label>
       <div className={styles.optionsContainer}>
         {placeTypes.map((type) => (
@@ -63,7 +64,8 @@ const PlaceTypeSelectorInput: React.FC<PlaceTypeSelectorInputProps> = ({
       </div>
 
       <div className={styles.selectedInfo}>
-        Types sélectionnés : {selectedTypes.length}
+        Veuillez séléctionner au moins un type: {selectedTypes.length}{" "}
+        séléctionnés
       </div>
     </div>
   );

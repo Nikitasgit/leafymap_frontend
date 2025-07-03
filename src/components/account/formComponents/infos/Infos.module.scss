@@ -9,6 +9,7 @@
     padding-bottom: spacing(3);
     border-bottom: 1px solid $grey-200;
   }
+
   section {
     @include flex(column, flex-start, stretch, spacing(1));
   }

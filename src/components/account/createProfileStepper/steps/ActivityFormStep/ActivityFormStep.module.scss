@@ -1,0 +1,8 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+.buttonContainer {
+  @include flex(row, space-between, center, spacing(2));
+  width: 100%;
+  margin-top: spacing(2);
+}

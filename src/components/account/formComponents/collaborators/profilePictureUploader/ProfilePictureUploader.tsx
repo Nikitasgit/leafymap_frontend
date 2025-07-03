@@ -1,6 +1,9 @@
 import { useState, ChangeEvent } from "react";
 import Image from "next/image";
-import { FormDataChangeHandler } from "../createProfileStepper/CreateProfileStepper.types";
+import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
+import styles from "./ProfilePictureUploader.module.scss";
+import { useToast } from "@/hooks/useToast";
+import { Upload } from "lucide-react";
 
 type ProfilePictureUploaderProps = {
   onChange: FormDataChangeHandler;
@@ -12,14 +15,12 @@ const ProfilePictureUploader = ({
   initialImage,
 }: ProfilePictureUploaderProps) => {
   const [preview, setPreview] = useState<string | null>(initialImage || null);
-  const [error, setError] = useState<string | null>(null);
+  const { showError } = useToast();
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    setError(null);
 
     if (file) {
-      // Validation du type de fichier
       const allowedTypes = [
         "image/jpeg",
         "image/png",
@@ -27,16 +28,15 @@ const ProfilePictureUploader = ({
         "image/webp",
       ];
       if (!allowedTypes.includes(file.type)) {
-        setError(
+        showError(
           "Type de fichier invalide. Seuls JPEG, PNG, GIF et WebP sont autorisés."
         );
         return;
       }
 
-      // Validation de la taille (5MB)
-      const maxSize = 5 * 1024 * 1024; // 5MB
+      const maxSize = 5 * 1024 * 1024;
       if (file.size > maxSize) {
-        setError("La taille du fichier doit être inférieure à 5MB.");
+        showError("La taille du fichier doit être inférieure à 5MB.");
         return;
       }
 
@@ -51,30 +51,35 @@ const ProfilePictureUploader = ({
   };
 
   return (
-    <div>
-      <label>
-        {preview ? (
+    <div className={styles.uploadArea}>
+      {preview ? (
+        <div className={styles.imageContainer}>
           <Image
             src={preview}
             alt="Aperçu photo de profil"
-            width={200}
-            height={200}
+            width={100}
+            height={100}
+            className={styles.previewImage}
           />
-        ) : (
-          <span>Ajouter une photo</span>
-        )}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          style={{ display: "block", marginTop: "10px" }}
-        />
-      </label>
-      {error && (
-        <div style={{ color: "red", marginTop: "5px", fontSize: "14px" }}>
-          {error}
+          <div className={styles.overlay}>
+            <span className={styles.changeText}>Changer</span>
+          </div>
+        </div>
+      ) : (
+        <div className={styles.placeholder}>
+          <div className={styles.uploadIcon}>
+            <Upload />
+          </div>
+          <span className={styles.uploadText}>Ajouter une photo</span>
         </div>
       )}
+
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        className={styles.fileInput}
+      />
     </div>
   );
 };

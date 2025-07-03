@@ -1,0 +1,16 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+.contactForm {
+  margin-top: spacing(1);
+  .title {
+    color: $grey-450;
+    font-size: 20px;
+    @include respond-to(md) {
+      font-size: 22px;
+    }
+  }
+  .formFields {
+    @include flex(column, flex-start, stretch, spacing(1));
+  }
+}

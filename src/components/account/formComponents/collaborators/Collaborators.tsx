@@ -69,8 +69,8 @@ const Collaborators = ({
                 Ajouter un collaborateur
               </Text>
               <Text className={styles.info}>
-                Vous pouvez rechercher des profiles de collaborateurs
-                enregistrés sur notre plateforme.
+                Vous pouvez rechercher des profils de collaborateurs enregistrés
+                sur notre plateforme.
               </Text>
             </div>
           </div>

@@ -68,15 +68,13 @@ const Infos = ({ isCreator, data, onChange }: InfosProps) => {
       {loading && <LoadingBar />}
       <section className={styles.section}>
         <h3 className={styles.title}>Informations</h3>
+
         <div className={styles.infosContainer}>
           <TextField
             fullWidth
-            label={
-              isCreator
-                ? "Nom de votre activité (obligatoire)*"
-                : "Nom du lieu (obligatoire)*"
-            }
+            label={isCreator ? "Nom de votre activité" : "Nom du lieu"}
             name="name"
+            required
             value={data.name}
             onChange={onChange}
           />
@@ -91,6 +89,7 @@ const Infos = ({ isCreator, data, onChange }: InfosProps) => {
             showCharCount
             maxLength={300}
           />
+
           {isCreator && (
             <CategorySelectorInput onChange={onChange} value={data.category} />
           )}

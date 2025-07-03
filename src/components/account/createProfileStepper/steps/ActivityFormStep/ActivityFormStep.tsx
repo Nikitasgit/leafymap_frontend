@@ -9,8 +9,9 @@ import {
 } from "../../CreateProfileStepper.types";
 import Infos from "../../../formComponents/infos/Infos";
 import { NewProfileFormData } from "../../CreateProfileStepper.types";
-import ContactForm from "../../../formComponents/ContactForm";
-import ProfilePictureUploader from "../../../formComponents/ProfilePictureUploader";
+import ContactForm from "../../../formComponents/contactForm/ContactForm";
+import ProfilePictureUploader from "@/components/account/formComponents/collaborators/profilePictureUploader/ProfilePictureUploader";
+import styles from "./ActivityFormStep.module.scss";
 
 interface ActivityFormStepProps {
   data: NewProfileFormData | PlaceFormData;
@@ -40,6 +41,10 @@ const ActivityFormStep = ({
         onNext();
       }}
     >
+      <ProfilePictureUploader
+        onChange={onChange}
+        initialImage={data.image as string}
+      />
       <Infos
         isCreator={isCreator}
         data={data as NewProfileFormData}
@@ -50,17 +55,21 @@ const ActivityFormStep = ({
         data={data as NewProfileFormData}
         disabled={isCreator}
       />
-      <ProfilePictureUploader
-        onChange={onChange}
-        initialImage={data.image as string}
-      />
-      <div>
+      <div className={styles.buttonContainer}>
         {!firstStep && (
-          <Button type="button" onClick={onBack}>
+          <Button
+            size="large"
+            variant="secondary"
+            type="button"
+            onClick={onBack}
+            fullWidth
+          >
             Précédent
           </Button>
         )}
-        <Button onClick={onSubmit}>{submitButtonText}</Button>
+        <Button size="large" fullWidth onClick={onSubmit}>
+          {submitButtonText}
+        </Button>
       </div>
     </form>
   );

@@ -86,6 +86,7 @@ const AddressInput = ({ onLocationSelect, value }: AddressInputProps) => {
       <TextField
         name="address"
         label="Adresse"
+        required
         type="text"
         value={input}
         onChange={(e) =>

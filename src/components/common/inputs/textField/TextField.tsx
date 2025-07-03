@@ -49,7 +49,7 @@ const TextField: React.FC<TextfieldProps> = ({
     <div className={styles.container}>
       {label && (
         <label className={styles.label} htmlFor={name}>
-          {label}
+          {label} {required ? <span>*</span> : <span>(optionnel)</span>}
         </label>
       )}
       {multiline ? (

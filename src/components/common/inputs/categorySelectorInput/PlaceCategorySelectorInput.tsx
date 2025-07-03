@@ -116,6 +116,7 @@ const PlaceCategorySelectorInput = ({
         value={inputValue}
         onClick={() => setIsOpen(true)}
         readOnly
+        required
         fullWidth
         placeholder="Sélectionne un type de lieu"
         onChange={(e) => setInputValue(e.target.value)}
