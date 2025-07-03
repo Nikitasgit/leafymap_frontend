@@ -11,6 +11,8 @@ import { EventFormData } from "@/components/events/form/EventForm";
 import { useFindCreators } from "@/hooks/useFindCreators";
 import styles from "./Collaborators.module.scss";
 import InfoIcon from "@/components/common/info/InfoIcon";
+import Text from "@/components/common/typography/Text";
+import { Users } from "lucide-react";
 
 const Collaborators = ({
   onChange,
@@ -51,22 +53,42 @@ const Collaborators = ({
       <div className={styles.titleContainer}>
         <h3 className={styles.title}>Collaborateurs</h3>
         <InfoIcon
-          tooltip="Ajoutez des artistes, créateurs ou producteurs qui apparaîtront sur votre profil comme des collaborateurs de votre lieu."
+          tooltip="Ajoutez des artistes ou créez un profil provisoire pour des créateurs ou producteurs qui apparaîtront sur votre profil comme des collaborateurs de votre lieu."
           place="right"
         />
       </div>
-
-      <SearchInput
-        label="Ajouter un collaborateur"
-        onSelect={handleSelect}
-        fetchSuggestions={searchCreators}
-        initialSuggestions={[]}
-        placeholder="Ajouter un utilisateur..."
-        withIcons
-        list={collaborators}
-        onDelete={handleDelete}
-        displayList
-      />
+      <div className={styles.searchContainer}>
+        <div className={styles.header}>
+          <div className={styles.headerTop}>
+            <div className={styles.headerContent}>
+              <Text className={styles.label}>
+                <Users
+                  size={20}
+                  style={{ marginRight: "8px", verticalAlign: "middle" }}
+                />
+                Ajouter un collaborateur
+              </Text>
+              <Text className={styles.info}>
+                Vous pouvez rechercher des profiles de collaborateurs
+                enregistrés sur notre plateforme.
+              </Text>
+            </div>
+          </div>
+        </div>
+        <div className={styles.searchInputContainer}>
+          <SearchInput
+            label="Ajouter un collaborateur"
+            onSelect={handleSelect}
+            fetchSuggestions={searchCreators}
+            initialSuggestions={[]}
+            placeholder="Ajouter un utilisateur..."
+            withIcons
+            list={collaborators}
+            onDelete={handleDelete}
+            displayList
+          />
+        </div>
+      </div>
       <CreateCollaborators onChange={onChange} data={data} />
     </div>
   );

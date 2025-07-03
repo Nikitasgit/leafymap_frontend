@@ -55,7 +55,6 @@
 
 .list {
   margin-top: spacing(1.5);
-  background: $grey-50;
   border-radius: spacing(1);
   border: 1px solid $grey-200;
   overflow: hidden;
@@ -63,7 +62,7 @@
 
 .item {
   @include flex(row, space-between, center, 0);
-  padding: spacing(0.75) spacing(1.5);
+  padding: spacing(1.5);
   border-bottom: 1px solid $grey-100;
 
   &:last-child {

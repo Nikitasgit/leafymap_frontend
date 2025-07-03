@@ -210,8 +210,8 @@ const SearchInput = <
                       <Image
                         src={item.image}
                         alt={getDisplayName(item)}
-                        width={40}
-                        height={40}
+                        width={32}
+                        height={32}
                         className={styles.itemImage}
                       />
                     )}

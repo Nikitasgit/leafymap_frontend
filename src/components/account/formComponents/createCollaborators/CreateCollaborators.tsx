@@ -10,7 +10,7 @@ import {
 } from "../../createProfileStepper/CreateProfileStepper.types";
 import { selectSubCategories } from "@/store/appSlice";
 import { useSelector } from "react-redux";
-import { DeleteIcon, PlusCircle } from "lucide-react";
+import { DeleteIcon, PlusCircle, Users } from "lucide-react";
 import { EventFormData } from "@/components/events/form/EventForm";
 import { CreatedCollaborator } from "@/types/place/collaborators";
 import Text from "@/components/common/typography/Text";
@@ -31,7 +31,15 @@ const CreateCollaborators = ({
   });
 
   const [isCreating, setIsCreating] = useState(false);
-  const handleSubmitCollaborator = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isFormValid = collaborator.name.trim() && collaborator.categoryId;
+
+  const handleSubmitCollaborator = async () => {
+    if (!isFormValid) return;
+
+    setIsSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 300));
     const tempId = `temp-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
     onChange({
       target: {
@@ -42,13 +50,16 @@ const CreateCollaborators = ({
         ],
       },
     });
+
     setIsCreating(false);
+    setIsSubmitting(false);
     setCollaborator({
       name: "",
       categoryId: "",
       id: "",
     });
   };
+
   const addCollaborator = () => {
     setIsCreating(!isCreating);
     setCollaborator({
@@ -57,12 +68,14 @@ const CreateCollaborators = ({
       id: "",
     });
   };
+
   const handleChange: FormDataChangeHandler = (e) => {
     setCollaborator({
       ...collaborator,
       [e.target.name]: e.target.value,
     });
   };
+
   const handleDeleteCollaborator = (id: string) => {
     onChange({
       target: {
@@ -78,53 +91,70 @@ const CreateCollaborators = ({
     <div className={styles.createCollaborators}>
       <div className={styles.header}>
         <div className={styles.headerTop}>
-          <div className={styles.headerContent}>
-            <Text className={styles.label}>Créer un collaborateur</Text>
-            <Text className={styles.info}>
-              Si votre collaborateur n&apos;existe pas encore sur notre
-              plateforme vous pouvez créer un profil provisoire pour afficher
-              son nom sur le profil de votre lieu.
-            </Text>
-          </div>
+          <Text className={styles.label}>
+            <Users
+              size={20}
+              style={{ marginRight: "8px", verticalAlign: "middle" }}
+            />
+            Créer un collaborateur
+          </Text>
           <Button
             variant="outline"
             endIcon={<PlusCircle size={17} />}
             onClick={addCollaborator}
-            className={styles.createButton}
           >
-            Créer un collaborateur
+            {isCreating ? "Annuler" : "Créer un collaborateur"}
           </Button>
         </div>
+        <Text className={styles.info}>
+          Si votre collaborateur n&apos;existe pas encore sur notre plateforme
+          vous pouvez créer un profil provisoire pour afficher son nom sur le
+          profil de votre lieu.
+        </Text>
       </div>
+
       {isCreating && (
         <div className={styles.formContainer}>
           <div className={styles.formFields}>
             <TextField
-              placeholder="Nom du collaborateur"
+              label="Nom du collaborateur"
+              placeholder="ex: Vincent Van Gogh"
               value={collaborator.name}
               onChange={handleChange}
               name="name"
+              required
             />
             <CategorySelectorInput
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange({
+                  target: {
+                    name: "categoryId",
+                    value: e.target.value,
+                  },
+                });
+              }}
               value={collaborator.categoryId}
             />
+            <Button
+              onClick={handleSubmitCollaborator}
+              disabled={!isFormValid || isSubmitting}
+            >
+              {isSubmitting ? "Création..." : "Créer"}
+            </Button>
           </div>
-          <Button
-            onClick={handleSubmitCollaborator}
-            className={styles.submitButton}
-          >
-            Créer
-          </Button>
         </div>
       )}
+
       <ul className={styles.collaboratorsList}>
+        {formData.createdCollaborators.length === 0 && !isCreating && (
+          <div className={styles.emptyState}>Aucun collaborateur créé</div>
+        )}
+
         {formData.createdCollaborators.map((collaborator) => (
           <li key={collaborator.id} className={styles.collaboratorItem}>
             <div className={styles.collaboratorInfo}>
               <span>{collaborator.name}</span>
               <span className={styles.categoryName}>
-                -{" "}
                 {
                   subCategories.find(
                     (sub) => sub._id === collaborator.categoryId
@@ -132,12 +162,12 @@ const CreateCollaborators = ({
                 }
               </span>
             </div>
-            <button
-              className={styles.deleteButton}
+            <Button
+              variant="simple"
               onClick={() => handleDeleteCollaborator(collaborator.id)}
             >
               <DeleteIcon size={16} />
-            </button>
+            </Button>
           </li>
         ))}
       </ul>

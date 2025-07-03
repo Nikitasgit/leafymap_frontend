@@ -2,111 +2,111 @@
 @import "@/styles/abstracts/mixins";
 
 .createCollaborators {
-  margin-top: spacing(3);
-  border-top: 1px solid $grey-100;
-  border-bottom: 1px solid $grey-200;
-  padding-top: spacing(3);
+  margin-top: spacing(2);
+  background: $white;
+  border-radius: 8px;
+  border: 1px solid $grey-200;
+  overflow: hidden;
 }
 
 .header {
-  @include flex(column, flex-start, stretch, spacing(2));
-  margin-bottom: spacing(3);
+  padding: spacing(2) spacing(3);
+  background: $grey-50;
+  border-bottom: 1px solid $grey-100;
 }
 
 .headerTop {
-  @include flex(column, center, center spacing(1));
+  @include flex(row, space-between, center, spacing(3));
+  margin-bottom: spacing(1);
 }
 
 .headerContent {
   flex: 1;
+  max-width: 600px;
 }
 
 .label {
-  color: $grey-500;
+  color: $grey-600;
   font-size: 16px;
   font-weight: 600;
-  margin-bottom: spacing(1);
+
+  display: block;
+  line-height: 1.3;
 }
 
 .info {
   color: $grey-500;
   font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
 
   @include respond-to(md) {
     font-size: 14px;
   }
 }
 
-.createButton {
-  flex-shrink: 0;
-  min-width: fit-content;
-  align-self: flex-end;
-}
-
 .formContainer {
-  background-color: $grey-50;
-  border: 1px solid $grey-200;
-  border-radius: 8px;
   padding: spacing(3);
-  margin-bottom: spacing(3);
+  background: $white;
+  border-bottom: 1px solid $grey-100;
 }
 
 .formFields {
-  display: flex;
-  flex-direction: column;
-  gap: spacing(2);
-  margin-bottom: spacing(2);
-}
-
-.submitButton {
-  align-self: flex-start;
+  @include flex(column, flex-start, stretch, spacing(3));
 }
 
 .collaboratorsList {
   list-style: none;
-  padding: 0;
+  padding: spacing(3);
   margin: 0;
+  background: $white;
 }
 
 .collaboratorItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: spacing(2);
-  background-color: $grey-50;
-  border: 1px solid $grey-200;
-  border-radius: 6px;
-  margin-bottom: spacing(1);
+  @include flex(row, space-between, center, spacing(2));
+  padding: spacing(1.5);
 
+  background: $white;
+  border-radius: 6px;
+  border: 1px solid $grey-200;
   &:last-child {
     margin-bottom: 0;
   }
 }
 
 .collaboratorInfo {
-  display: flex;
-  align-items: center;
-  gap: spacing(1);
-  color: $grey-700;
+  @include flex(row, flex-start, center, spacing(2));
+  color: $grey-600;
   font-weight: 500;
+  font-size: 14px;
 }
 
 .categoryName {
   color: $grey-500;
   font-weight: 400;
+  font-size: 13px;
+  background: $grey-100;
+  padding: spacing(0.5) spacing(1);
+  border-radius: 4px;
+  white-space: nowrap;
 }
 
-.deleteButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: spacing(1);
-  border-radius: 4px;
-  color: $grey-500;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: $grey-200;
-    color: $error-color;
+@include respond-to(md) {
+  .formFields {
+    flex-direction: row;
+    align-items: flex-end;
   }
+
+  .submitButton {
+    align-self: flex-end;
+  }
+}
+.emptyState {
+  padding: spacing(2);
+  text-align: center;
+  color: $grey-500;
+  font-size: 15px;
+  font-style: italic;
+  border-radius: spacing(1);
+  border: 1px solid $grey-200;
 }
