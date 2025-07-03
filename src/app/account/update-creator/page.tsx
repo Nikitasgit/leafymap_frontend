@@ -4,19 +4,21 @@ import {
   NewProfileFormData,
   FormDataChangeHandler,
 } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
-import { selectUser } from "@/store/userSlice";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import ActivityFormStep from "@/components/account/createProfileStepper/steps/ActivityFormStep/ActivityFormStep";
 import useSubmitForm from "@/hooks/useUpdateUser";
 import { Creator } from "@/types/user";
 import { defaultSchedule } from "@/utils/createProfile";
+import { useUser } from "@/hooks/useUser";
+import LoadingBar from "@/components/common/loading/LoadingBar";
+import { useToast } from "@/hooks/useToast";
 
 const ModifyCreator = () => {
-  const { user } = useSelector(selectUser);
-  const creator = user as Creator;
+  const { user, loading, error } = useUser();
+  const creator = user as Creator | null;
   const [formData, setFormData] = useState<NewProfileFormData | null>(null);
   const { submitForm } = useSubmitForm();
+  const { showError } = useToast();
 
   useEffect(() => {
     if (creator && creator.creatorProfile && !formData) {
@@ -32,7 +34,7 @@ const ModifyCreator = () => {
         userType: creator.userType || "",
         name: creator.creatorProfile.name || "",
         description: creator.description || "",
-        category: creator.creatorProfile.categories?.[0]._id || "",
+        category: creator.creatorProfile.categories?.[0]?._id || "",
         location: creatorPlace
           ? {
               type: "Point",
@@ -67,7 +69,16 @@ const ModifyCreator = () => {
     await submitForm(formData, true);
   };
 
-  if (!formData) return <div>Loading...</div>;
+  if (error) {
+    showError(error);
+  }
+  if (loading) {
+    return <LoadingBar />;
+  }
+
+  if (!formData) {
+    return <LoadingBar />;
+  }
 
   return (
     <ActivityFormStep

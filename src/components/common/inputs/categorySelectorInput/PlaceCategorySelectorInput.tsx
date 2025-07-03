@@ -13,12 +13,14 @@ const PlaceCategorySelectorInput = ({
   value,
   onChange,
   selectedTypes = [],
+  error = false,
 }: {
   value: string;
   onChange: FormDataChangeHandler;
   selectedTypes?: PlaceType[];
+  error?: boolean;
 }) => {
-  const { placeCategories, loading, error } = useApp();
+  const { placeCategories, loading, error: appError } = useApp();
   const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -103,8 +105,8 @@ const PlaceCategorySelectorInput = ({
     }
   }, [value, placeCategories]);
 
-  if (error) {
-    showError(error);
+  if (appError) {
+    showError(appError);
   }
 
   return (
@@ -120,6 +122,7 @@ const PlaceCategorySelectorInput = ({
         fullWidth
         placeholder="Sélectionne un type de lieu"
         onChange={(e) => setInputValue(e.target.value)}
+        error={error}
       />
 
       {isOpen && (

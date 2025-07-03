@@ -6,11 +6,14 @@ import styles from "./PlaceTypeSelectorInput.module.scss";
 interface PlaceTypeSelectorInputProps {
   value: PlaceType[];
   onChange: FormDataChangeHandler;
+  error?: boolean;
+  errorMessage?: string;
 }
 
 const PlaceTypeSelectorInput: React.FC<PlaceTypeSelectorInputProps> = ({
   value = [],
   onChange,
+  error,
 }) => {
   const [selectedTypes, setSelectedTypes] = useState<PlaceType[]>(value);
 
@@ -51,7 +54,7 @@ const PlaceTypeSelectorInput: React.FC<PlaceTypeSelectorInputProps> = ({
             type="button"
             className={`${styles.option} ${
               selectedTypes.includes(type.value) ? styles.selected : ""
-            }`}
+            } ${error ? styles.error : ""}`}
             onClick={() => handleTypeToggle(type.value)}
           >
             <span className={styles.icon}>{type.icon}</span>
@@ -63,7 +66,9 @@ const PlaceTypeSelectorInput: React.FC<PlaceTypeSelectorInputProps> = ({
         ))}
       </div>
 
-      <div className={styles.selectedInfo}>
+      <div
+        className={`${styles.selectedInfo} ${error ? styles.errorMessage : ""}`}
+      >
         Veuillez séléctionner au moins un type: {selectedTypes.length}{" "}
         séléctionnés
       </div>

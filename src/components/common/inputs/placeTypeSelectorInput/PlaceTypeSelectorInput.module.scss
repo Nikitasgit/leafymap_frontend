@@ -77,4 +77,12 @@
       min-width: 0;
     }
   }
+
+  .error {
+    border: 1px solid $error-color;
+  }
+
+  .errorMessage {
+    color: $error-color;
+  }
 }

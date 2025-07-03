@@ -16,7 +16,7 @@ export interface NewProfileFormData {
   collaborators: Collaborator[];
   createdCollaborators: CreatedCollaborator[];
   placeCategory: string;
-  placeType: PlaceType[];
+  placeType?: PlaceType[];
   location: Location | null;
   placeId?: string;
   placeActive?: boolean;

@@ -10,9 +10,15 @@ interface ContactFormProps {
   onChange: FormDataChangeHandler;
   data: NewProfileFormData;
   disabled?: boolean;
+  errors?: Record<string, string>;
 }
 
-const ContactForm = ({ onChange, data, disabled }: ContactFormProps) => {
+const ContactForm = ({
+  onChange,
+  data,
+  disabled,
+  errors = {},
+}: ContactFormProps) => {
   return (
     <div className={styles.contactForm}>
       <h3 className={styles.title}>Contact</h3>
@@ -26,6 +32,8 @@ const ContactForm = ({ onChange, data, disabled }: ContactFormProps) => {
           placeholder="Entrez votre numéro de téléphone"
           required
           fullWidth
+          error={!!errors.phone}
+          errorMessage={errors.phone}
         />
 
         <TextField
@@ -38,6 +46,8 @@ const ContactForm = ({ onChange, data, disabled }: ContactFormProps) => {
           disabled={disabled}
           required
           fullWidth
+          error={!!errors.email}
+          errorMessage={errors.email}
         />
 
         <TextField
@@ -48,6 +58,8 @@ const ContactForm = ({ onChange, data, disabled }: ContactFormProps) => {
           type="url"
           placeholder="Entrez l'URL de votre site web"
           fullWidth
+          error={!!errors.website}
+          errorMessage={errors.website}
         />
       </div>
     </div>

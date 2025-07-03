@@ -7,14 +7,25 @@ import styles from "./AddressInput.module.scss";
 import TextField from "../textField/TextField";
 
 interface AddressInputProps {
-  onLocationSelect: (location: Location) => void;
+  onLocationSelect: (location: Location | null) => void;
   value?: string;
+  selectedLocation?: Location | null;
+  error?: boolean;
+  errorMessage?: string;
 }
 
-const AddressInput = ({ onLocationSelect, value }: AddressInputProps) => {
+const AddressInput = ({
+  onLocationSelect,
+  value,
+  selectedLocation,
+  error,
+  errorMessage,
+}: AddressInputProps) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState<Location[]>([]);
   const [isFocused, setIsFocused] = useState(false);
+  const [lastSelectedLocation, setLastSelectedLocation] =
+    useState<Location | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
   const { showError } = useToast();
@@ -48,6 +59,11 @@ const AddressInput = ({ onLocationSelect, value }: AddressInputProps) => {
     const newValue = e.target.value;
     setInput(newValue);
 
+    if (lastSelectedLocation && newValue !== lastSelectedLocation.label) {
+      setLastSelectedLocation(null);
+      onLocationSelect(null);
+    }
+
     if (newValue.length > 2) {
       try {
         const results = await fetchLocationSuggestions(newValue);
@@ -65,6 +81,7 @@ const AddressInput = ({ onLocationSelect, value }: AddressInputProps) => {
   const handleSuggestionClick = (suggestion: Location) => {
     setInput(suggestion.label || "");
     setSuggestions([]);
+    setLastSelectedLocation(suggestion);
     onLocationSelect(suggestion);
   };
 
@@ -78,8 +95,17 @@ const AddressInput = ({ onLocationSelect, value }: AddressInputProps) => {
   useEffect(() => {
     if (value) {
       setInput(value);
+      // Synchroniser lastSelectedLocation avec selectedLocation du parent
+      if (selectedLocation && value === selectedLocation.label) {
+        setLastSelectedLocation(selectedLocation);
+      } else if (lastSelectedLocation && value !== lastSelectedLocation.label) {
+        setLastSelectedLocation(null);
+      }
+    } else {
+      setInput("");
+      setLastSelectedLocation(null);
     }
-  }, [value]);
+  }, [value, selectedLocation, lastSelectedLocation]);
 
   return (
     <div ref={wrapperRef} className={styles.addressInputWrapper}>
@@ -95,6 +121,8 @@ const AddressInput = ({ onLocationSelect, value }: AddressInputProps) => {
         onFocus={() => setIsFocused(true)}
         placeholder="Rechercher une adresse..."
         fullWidth
+        error={error}
+        errorMessage={errorMessage}
       />
       {isFocused && suggestions.length > 0 && (
         <ul className={styles.suggestionsList}>

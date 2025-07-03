@@ -18,9 +18,10 @@ interface InfosProps {
   data: NewProfileFormData;
   onChange: FormDataChangeHandler;
   withPlace?: boolean;
+  errors?: Record<string, string>;
 }
 
-const Infos = ({ isCreator, data, onChange }: InfosProps) => {
+const Infos = ({ isCreator, data, onChange, errors = {} }: InfosProps) => {
   const { user, loading, error } = useUser();
   const creator = user as Creator;
   const withPlace = !!data.placeActive;
@@ -77,6 +78,8 @@ const Infos = ({ isCreator, data, onChange }: InfosProps) => {
             required
             value={data.name}
             onChange={onChange}
+            error={!!errors.name}
+            errorMessage={errors.name}
           />
           <TextField
             fullWidth
@@ -88,10 +91,16 @@ const Infos = ({ isCreator, data, onChange }: InfosProps) => {
             rows={2}
             showCharCount
             maxLength={300}
+            error={!!errors.description}
+            errorMessage={errors.description}
           />
 
           {isCreator && (
-            <CategorySelectorInput onChange={onChange} value={data.category} />
+            <CategorySelectorInput
+              onChange={onChange}
+              value={data.category}
+              error={!!errors.category}
+            />
           )}
           {isCreator && (
             <RadioYesOrNo
@@ -105,7 +114,7 @@ const Infos = ({ isCreator, data, onChange }: InfosProps) => {
         </div>
       </section>
       {(creatorWithPlace || !isCreator) && (
-        <PlaceForm data={data} onChange={onChange} />
+        <PlaceForm data={data} onChange={onChange} errors={errors} />
       )}
     </div>
   );

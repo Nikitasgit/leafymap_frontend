@@ -16,9 +16,11 @@ import Collaborators from "../collaborators/Collaborators";
 const PlaceForm = ({
   data,
   onChange,
+  errors = {},
 }: {
   data: NewProfileFormData;
   onChange: FormDataChangeHandler;
+  errors?: Record<string, string>;
 }) => {
   const [locationMarker, setLocationMarker] = useState<MapCoordinates | null>(
     data.location?.coordinates
@@ -57,13 +59,16 @@ const PlaceForm = ({
     }
   };
 
-  const onLocationSelect = (location: Location) => {
+  const onLocationSelect = (location: Location | null) => {
     if (location?.coordinates) {
       setLocationMarker({
         latitude: location.coordinates[1],
         longitude: location.coordinates[0],
       });
       onChange({ target: { name: "location", value: location } });
+    } else {
+      setLocationMarker(null);
+      onChange({ target: { name: "location", value: null } });
     }
   };
 
@@ -74,6 +79,9 @@ const PlaceForm = ({
         <AddressInput
           onLocationSelect={onLocationSelect}
           value={data.location?.label || ""}
+          selectedLocation={data.location}
+          error={!!errors.location}
+          errorMessage={errors.location}
         />
 
         <div className={styles.mapSection}>
@@ -95,12 +103,14 @@ const PlaceForm = ({
           <PlaceTypeSelectorInput
             value={data.placeType || []}
             onChange={onChange}
+            error={!!errors.placeType}
           />
         )}
         <PlaceCategorySelectorInput
           value={data.placeCategory}
           onChange={onChange}
           selectedTypes={data.placeType || []}
+          error={!!errors.placeCategory}
         />
       </div>
       <TimeTableForm
@@ -111,7 +121,9 @@ const PlaceForm = ({
           })
         }
       />
-      <Collaborators onChange={onChange} data={data} />
+      {data.userType === "organizer" && (
+        <Collaborators onChange={onChange} data={data} />
+      )}
     </section>
   );
 };

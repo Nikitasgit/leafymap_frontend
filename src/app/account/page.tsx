@@ -65,7 +65,9 @@ export default function AccountPage() {
         {userType && (
           <Button
             endIcon={<PlusCircleIcon size={18} />}
-            onClick={() => router.push(buttonParameters.route)}
+            onClick={() => {
+              router.push(buttonParameters.route);
+            }}
             fullWidth
           >
             {buttonParameters.text}

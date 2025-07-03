@@ -11,11 +11,13 @@ import TextField from "../textField/TextField";
 const CategorySelectorInput = ({
   onChange,
   value,
+  error = false,
 }: {
   onChange: FormDataChangeHandler;
   value: string;
+  error?: boolean;
 }) => {
-  const { subCategories, loading, error } = useApp();
+  const { subCategories, loading, error: appError } = useApp();
   const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -29,7 +31,6 @@ const CategorySelectorInput = ({
   };
 
   useOnClickOutside(ref, handleClickOutside);
-
   const handleSelect = (subCategory: SubCategory) => {
     setInputValue(subCategory.name);
     setIsOpen(false);
@@ -55,8 +56,8 @@ const CategorySelectorInput = ({
     }
   }, [value, subCategories]);
 
-  if (error) {
-    showError(error);
+  if (appError) {
+    showError(appError);
   }
 
   return (
@@ -71,6 +72,7 @@ const CategorySelectorInput = ({
         value={inputValue}
         onClick={() => setIsOpen(true)}
         placeholder="Sélectionne une activité"
+        error={error}
       />
       {isOpen && (
         <div className={styles.dropdown}>

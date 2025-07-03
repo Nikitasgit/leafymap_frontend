@@ -30,6 +30,7 @@ const CreateProfileStepper = () => {
     createdCollaborators: [],
     image: user?.image || "",
     placeCategory: "",
+    placeActive: true,
     placeType: [],
   });
 

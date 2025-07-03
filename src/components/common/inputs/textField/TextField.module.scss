@@ -40,4 +40,15 @@
       font-weight: 600;
     }
   }
+
+  .errorMessage {
+    color: $error-color;
+    font-size: 12px;
+    margin-top: spacing(0.5);
+    font-weight: 500;
+  }
+
+  .error {
+    border-color: $error-color;
+  }
 }

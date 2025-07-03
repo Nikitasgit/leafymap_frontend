@@ -19,7 +19,6 @@ const useSubmitForm = (): UseCreateProfileReturn => {
 
   const submitForm = async (data: NewProfileFormData, isUpdate: boolean) => {
     setLoading(true);
-
     try {
       const form = new FormData();
       form.append("name", data.name);
@@ -28,6 +27,7 @@ const useSubmitForm = (): UseCreateProfileReturn => {
       form.append("email", data.email);
       form.append("website", data.website);
       form.append("location", JSON.stringify(data.location));
+      form.append("placeCategory", data.placeCategory);
       form.append("defaultSchedule", JSON.stringify(data.defaultSchedule));
 
       if (data.collaborators) {
@@ -85,9 +85,11 @@ const useSubmitForm = (): UseCreateProfileReturn => {
       dispatch(fetchUser());
     } catch (err: unknown) {
       if (axios.isAxiosError(err) && err.response) {
-        showError(
-          err.response.data.error || "Erreur lors de la soumission du profil"
-        );
+        const errorMessage =
+          err.response.data.error ||
+          err.response.data.message ||
+          "Erreur lors de la soumission du profil";
+        showError(errorMessage);
         console.error("Server error:", err.response.data);
       } else {
         showError(

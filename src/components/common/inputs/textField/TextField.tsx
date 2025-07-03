@@ -12,6 +12,7 @@ type TextfieldProps = {
   ) => void;
   placeholder?: string;
   error?: boolean;
+  errorMessage?: string;
   multiline?: boolean;
   rows?: number;
   required?: boolean;
@@ -34,6 +35,7 @@ const TextField: React.FC<TextfieldProps> = ({
   placeholder = "",
   readOnly = false,
   error = false,
+  errorMessage,
   multiline = false,
   rows = 4,
   required = false,
@@ -64,7 +66,7 @@ const TextField: React.FC<TextfieldProps> = ({
             onClick={onClick}
             rows={rows}
             maxLength={maxLength}
-            className={`${error ? "error" : ""} ${
+            className={`${error ? styles.error : ""} ${
               fullWidth ? styles.fullWidth : ""
             }`}
           />
@@ -93,10 +95,13 @@ const TextField: React.FC<TextfieldProps> = ({
           onFocus={onFocus}
           onClick={onClick}
           maxLength={maxLength}
-          className={`${error ? "error" : ""} ${
+          className={`${error ? styles.error : ""} ${
             fullWidth ? styles.fullWidth : ""
           }`}
         />
+      )}
+      {error && errorMessage && (
+        <div className={styles.errorMessage}>{errorMessage}</div>
       )}
     </div>
   );
