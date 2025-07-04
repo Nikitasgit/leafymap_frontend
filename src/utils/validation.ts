@@ -1,5 +1,62 @@
+import { z } from "zod";
+
 /**
- * Validation functions for form fields
+ * Zod schemas for form field validation
+ */
+
+export const emailSchema = z
+  .string()
+  .min(1, "L'email est requis")
+  .email("L'email n'est pas valide");
+
+export const phoneSchema = z
+  .string()
+  .min(1, "Le téléphone est requis")
+  .regex(/^[0-9]{10}$/, "Le numéro de téléphone doit contenir 10 chiffres");
+
+export const websiteSchema = z
+  .string()
+  .optional()
+  .refine(
+    (val) => {
+      if (!val || val.trim() === "") return true;
+
+      const urlToValidate = val.replace(/^https?:\/\//, "");
+      if (urlToValidate.length < 3) return false;
+      if (!urlToValidate.includes(".")) return false;
+
+      const domainRegex =
+        /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+      if (!domainRegex.test(urlToValidate)) return false;
+
+      try {
+        let url = val;
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+          url = "https://" + url;
+        }
+        new URL(url);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    {
+      message: "L'URL du site web n'est pas valide",
+    }
+  );
+
+export const nameSchema = z
+  .string()
+  .min(1, "Le nom est requis")
+  .min(4, "Le nom doit contenir au moins 4 caractères")
+  .max(40, "Le nom ne peut pas dépasser 40 caractères")
+  .regex(
+    /^[a-zA-Z0-9\s']+$/,
+    "Le nom ne peut contenir que des lettres, chiffres, espaces et le caractère '"
+  );
+
+/**
+ * Validation functions that use Zod schemas
  */
 
 /**
@@ -8,16 +65,8 @@
  * @returns error message if invalid, null if valid
  */
 export const validateEmail = (email: string): string | null => {
-  if (!email?.trim()) {
-    return "L'email est requis";
-  }
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return "L'email n'est pas valide";
-  }
-
-  return null;
+  const result = emailSchema.safeParse(email);
+  return result.success ? null : result.error.errors[0].message;
 };
 
 /**
@@ -26,16 +75,8 @@ export const validateEmail = (email: string): string | null => {
  * @returns error message if invalid, null if valid
  */
 export const validatePhone = (phone: string): string | null => {
-  if (!phone?.trim()) {
-    return "Le téléphone est requis";
-  }
-
-  const phoneRegex = /^[0-9]{10}$/;
-  if (!phoneRegex.test(phone)) {
-    return "Le numéro de téléphone doit contenir 10 chiffres";
-  }
-
-  return null;
+  const result = phoneSchema.safeParse(phone);
+  return result.success ? null : result.error.errors[0].message;
 };
 
 /**
@@ -44,33 +85,8 @@ export const validatePhone = (phone: string): string | null => {
  * @returns error message if invalid, null if valid
  */
 export const validateWebsite = (website: string): string | null => {
-  if (!website || website.trim() === "") {
-    return null;
-  }
-  const urlToValidate = website.replace(/^https?:\/\//, "");
-  if (urlToValidate.length < 3) {
-    return "L'URL du site web doit contenir au moins 3 caractères";
-  }
-  if (!urlToValidate.includes(".")) {
-    return "L'URL du site web doit contenir un nom de domaine valide";
-  }
-  const domainRegex =
-    /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-  if (!domainRegex.test(urlToValidate)) {
-    return "L'URL du site web n'est pas valide";
-  }
-
-  try {
-    let url = website;
-    if (!url.startsWith("http://") && !url.startsWith("https://")) {
-      url = "https://" + url;
-    }
-
-    new URL(url);
-    return null;
-  } catch {
-    return "L'URL du site web n'est pas valide";
-  }
+  const result = websiteSchema.safeParse(website);
+  return result.success ? null : result.error.errors[0].message;
 };
 
 /**
@@ -79,18 +95,6 @@ export const validateWebsite = (website: string): string | null => {
  * @returns error message if invalid, null if valid
  */
 export const validateName = (name: string): string | null => {
-  if (!name?.trim()) {
-    return "Le nom est requis";
-  }
-
-  if (name.trim().length < 4) {
-    return "Le nom doit contenir au moins 4 caractères";
-  }
-
-  const nameRegex = /^[a-zA-Z0-9\s']+$/;
-  if (!nameRegex.test(name)) {
-    return "Le nom ne peut contenir que des lettres, chiffres, espaces et le caractère '";
-  }
-
-  return null;
+  const result = nameSchema.safeParse(name);
+  return result.success ? null : result.error.errors[0].message;
 };

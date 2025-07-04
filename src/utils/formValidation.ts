@@ -1,9 +1,10 @@
+import { z } from "zod";
 import { Location } from "@/types/common";
 import {
-  validateEmail,
-  validatePhone,
-  validateWebsite,
-  validateName,
+  emailSchema,
+  phoneSchema,
+  websiteSchema,
+  nameSchema,
 } from "./validation";
 
 interface BaseFormData {
@@ -26,55 +27,86 @@ interface ValidationResult {
 }
 
 /**
- * Validates a profile/activity form
+ * Validates a profile/activity form using Zod schemas
  * @param data - The form data to validate
  * @returns Validation result with errors and validity status
  */
 export const validateForm = (data: BaseFormData): ValidationResult => {
   const isCreator = data.userType === "creator";
-  const newErrors: Record<string, string> = {};
+  const errors: Record<string, string> = {};
 
-  const nameError: string | null = validateName(data.name || "");
-  if (nameError) {
-    newErrors.name = nameError;
-  }
+  try {
+    // Basic validation for all user types
+    const basicSchema = z.object({
+      name: nameSchema.optional(),
+      phone: phoneSchema.optional(),
+      email: emailSchema.optional(),
+      website: websiteSchema,
+    });
 
-  if (isCreator && "category" in data && !data.category) {
-    newErrors.category = "La catégorie est requise";
-  }
-
-  const phoneError: string | null = validatePhone(data.phone || "");
-  if (phoneError) {
-    newErrors.phone = phoneError;
-  }
-
-  const emailError: string | null = validateEmail(data.email || "");
-  if (emailError) {
-    newErrors.email = emailError;
-  }
-
-  if (data.website && data.website.trim() !== "") {
-    const websiteError: string | null = validateWebsite(data.website);
-    if (websiteError) {
-      newErrors.website = websiteError;
+    const basicResult = basicSchema.safeParse(data);
+    if (!basicResult.success) {
+      basicResult.error.errors.forEach((err) => {
+        const field = err.path.join(".");
+        errors[field] = err.message;
+      });
     }
-  }
 
-  if (("placeActive" in data && data.placeActive && isCreator) || !isCreator) {
-    if (!data.placeCategory) {
-      newErrors.placeCategory = "La catégorie du lieu est requise";
+    // Creator-specific validation
+    if (isCreator) {
+      if (!data.name) {
+        errors.name = "Le nom est requis";
+      }
+      if (!data.category) {
+        errors.category = "La catégorie est requise";
+      }
+      if (!data.phone) {
+        errors.phone = "Le téléphone est requis";
+      }
+      if (!data.email) {
+        errors.email = "L'email est requis";
+      }
+
+      // Location and placeCategory validation for creators
+      if (("placeActive" in data && data.placeActive) || !isCreator) {
+        if (!data.placeCategory) {
+          errors.placeCategory = "La catégorie du lieu est requise";
+        }
+        if (!data.location) {
+          errors.location = "L'emplacement est requis";
+        }
+      }
+    } else {
+      // Non-creator validation
+      if (!data.name) {
+        errors.name = "Le nom est requis";
+      }
+      if (!data.phone) {
+        errors.phone = "Le téléphone est requis";
+      }
+      if (!data.email) {
+        errors.email = "L'email est requis";
+      }
+      if (!data.placeCategory) {
+        errors.placeCategory = "La catégorie du lieu est requise";
+      }
+      if (!data.location) {
+        errors.location = "L'emplacement est requis";
+      }
+      if (!data.placeType || data.placeType.length === 0) {
+        errors.placeType = "Le type de lieu est requis";
+      }
     }
-    if (!data.location) {
-      newErrors.location = "L'emplacement est requis";
-    }
-  }
 
-  if (!isCreator && "placeType" in data && data.placeType?.length === 0) {
-    newErrors.placeType = "Le type de lieu est requis";
+    return {
+      errors,
+      isValid: Object.keys(errors).length === 0,
+    };
+  } catch {
+    // Fallback for unexpected errors
+    return {
+      errors: { general: "Une erreur de validation s'est produite" },
+      isValid: false,
+    };
   }
-
-  return {
-    errors: newErrors,
-    isValid: Object.keys(newErrors).length === 0,
-  };
 };
