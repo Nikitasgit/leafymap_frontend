@@ -1,63 +1,71 @@
-import { useState } from "react";
 import axios from "axios";
 import { NewProfileFormData } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { fetchUser } from "@/store/userSlice";
 import { useAppDispatch } from "@/store";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
+import { useLoading } from "@/hooks/useLoading";
 
 type UseCreateProfileReturn = {
   submitForm: (data: NewProfileFormData, isUpdate: boolean) => Promise<void>;
-  loading: boolean;
+  isLoading: boolean;
 };
 
-const useSubmitForm = (): UseCreateProfileReturn => {
-  const [loading, setLoading] = useState(false);
+const useUpdateUser = (): UseCreateProfileReturn => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { showSuccess, showError } = useToast();
+  const { isLoading, withLoading } = useLoading();
 
   const submitForm = async (data: NewProfileFormData, isUpdate: boolean) => {
-    setLoading(true);
-    try {
-      const form = new FormData();
-      form.append("name", data.name);
-      form.append("description", data.description);
-      form.append("phone", data.phone);
-      form.append("email", data.email);
-      form.append("website", data.website);
-      form.append("location", JSON.stringify(data.location));
-      form.append("placeCategory", data.placeCategory);
-      form.append("defaultSchedule", JSON.stringify(data.defaultSchedule));
+    return withLoading(async () => {
+      const { userType, name, description, phone, email, website, category } =
+        data;
+      const requestData: NewProfileFormData = {
+        userType,
+        name,
+        description,
+        phone,
+        email,
+        website,
+        category,
+      };
 
-      if (data.collaborators) {
-        const collaboratorIds = data.collaborators.map((collab) => collab._id);
-        form.append("collaborators", JSON.stringify(collaboratorIds));
-      }
-      if (data.createdCollaborators) {
-        const cleanedCollaborators = data.createdCollaborators.map(
-          (collaborator) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { id, ...collaboratorWithoutId } = collaborator;
-            return collaboratorWithoutId;
+      if (
+        (data.placeActive && data.userType === "creator") ||
+        data.userType === "organizer"
+      ) {
+        const { location, placeCategory, defaultSchedule, placeActive } = data;
+        requestData.location = location;
+        requestData.placeCategory = placeCategory;
+        requestData.defaultSchedule = defaultSchedule;
+        requestData.placeActive = placeActive;
+
+        if (data.userType === "organizer") {
+          const { collaborators, createdCollaborators } = data;
+          if (collaborators) {
+            requestData.collaborators = collaborators;
           }
-        );
-        form.append(
-          "createdCollaborators",
-          JSON.stringify(cleanedCollaborators)
-        );
-      }
-      if (data.image instanceof File) {
-        form.append("image", data.image);
+          if (createdCollaborators) {
+            const cleanedCollaborators = createdCollaborators.map(
+              (collaborator) => {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const { id, ...collaboratorWithoutId } = collaborator;
+                return collaboratorWithoutId;
+              }
+            );
+            requestData.createdCollaborators = cleanedCollaborators;
+          }
+        }
       }
 
       if (isUpdate) {
         await axios.put(
           `${process.env.NEXT_PUBLIC_API_URL}/api/users/update-creator`,
-          form,
+          requestData,
           {
             headers: {
-              "Content-Type": "multipart/form-data",
+              "Content-Type": "application/json",
             },
             withCredentials: true,
           }
@@ -68,9 +76,9 @@ const useSubmitForm = (): UseCreateProfileReturn => {
             ? `${process.env.NEXT_PUBLIC_API_URL}/api/users/create-creator`
             : `${process.env.NEXT_PUBLIC_API_URL}/api/users/create-organizer`;
 
-        await axios.post(url, form, {
+        await axios.post(url, requestData, {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
           },
           withCredentials: true,
         });
@@ -83,14 +91,33 @@ const useSubmitForm = (): UseCreateProfileReturn => {
       );
       router.push("/account");
       dispatch(fetchUser());
-    } catch (err: unknown) {
+    }).catch((err: unknown) => {
       if (axios.isAxiosError(err) && err.response) {
-        const errorMessage =
-          err.response.data.error ||
-          err.response.data.message ||
-          "Erreur lors de la soumission du profil";
-        showError(errorMessage);
-        console.error("Server error:", err.response.data);
+        const responseData = err.response.data;
+        if (responseData.error === "Validation error" && responseData.details) {
+          const details = responseData.details;
+          const errorMessages: string[] = [];
+          Object.keys(details).forEach((field) => {
+            if (Array.isArray(details[field])) {
+              details[field].forEach((error: string) => {
+                errorMessages.push(error);
+              });
+            }
+          });
+          if (errorMessages.length > 0) {
+            errorMessages.forEach((message) => {
+              showError(message);
+            });
+          } else {
+            showError("Erreur de validation");
+          }
+        } else {
+          const errorMessage =
+            responseData.error ||
+            responseData.message ||
+            "Erreur lors de la soumission du profil";
+          showError(errorMessage);
+        }
       } else {
         showError(
           err instanceof Error
@@ -98,12 +125,10 @@ const useSubmitForm = (): UseCreateProfileReturn => {
             : "Erreur lors de la soumission du profil"
         );
       }
-    } finally {
-      setLoading(false);
-    }
+    });
   };
 
-  return { submitForm, loading };
+  return { submitForm, isLoading };
 };
 
-export default useSubmitForm;
+export default useUpdateUser;

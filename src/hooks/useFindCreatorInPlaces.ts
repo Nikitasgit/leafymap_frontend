@@ -62,7 +62,7 @@ export const useFindCreatorInPlaces = () => {
       );
 
       const results = response.data.data;
-      console.log("Creator in places search results:", results);
+
       setData(results);
     } catch (err) {
       setError(

@@ -3,7 +3,7 @@
 
 .loadingBarContainer {
   position: fixed;
-  top: $navbar-height;
+  top: 0;
   left: 0;
   width: 100%;
   height: var(--loading-height, 4px);

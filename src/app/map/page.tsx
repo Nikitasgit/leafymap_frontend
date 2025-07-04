@@ -31,7 +31,7 @@ const MapPage = () => {
   const isSelectingFromSearch = useRef(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const placeCategories = useAppSelector(selectPlaceCategories);
-  console.log(filters);
+
   useEffect(() => {
     if (placeCategories.length > 0 && filters.placeCategories.length === 0) {
       const allCategoryIds = placeCategories.map((category) => category._id);

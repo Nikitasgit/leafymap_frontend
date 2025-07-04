@@ -8,7 +8,7 @@ export type Collaborator = {
 export type CreatedCollaborator = {
   name: string;
   categoryId: string;
-  id: string;
+  id?: string;
 };
 
 export type CreatedCollaboratorDB = {

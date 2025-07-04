@@ -5,7 +5,7 @@ import UserTypeStep from "./steps/UserTypeStep/UserTypeStep";
 import ActivityFormStep from "./steps/ActivityFormStep/ActivityFormStep";
 import { FormDataChangeHandler } from "./CreateProfileStepper.types";
 import type { NewProfileFormData } from "./CreateProfileStepper.types";
-import useSubmitForm from "@/hooks/useUpdateUser";
+import useUpdateUser from "@/hooks/useUpdateUser";
 import { useUser } from "@/hooks/useUser";
 import { defaultSchedule } from "@/utils/createProfile";
 import styles from "./CreateProfileStepper.module.scss";
@@ -28,13 +28,12 @@ const CreateProfileStepper = () => {
     website: user?.website || "",
     collaborators: [],
     createdCollaborators: [],
-    image: user?.image || "",
     placeCategory: "",
     placeActive: true,
     placeType: [],
   });
 
-  const { submitForm, loading: submitLoading } = useSubmitForm();
+  const { submitForm, isLoading: submitLoading } = useUpdateUser();
 
   const handleSubmit = async () => {
     await submitForm(formData, false);
@@ -55,7 +54,6 @@ const CreateProfileStepper = () => {
         phone: user.phone || prev.phone,
         email: user.email || prev.email,
         website: user.website || prev.website,
-        image: user.image || prev.image,
       }));
     }
   }, [user]);

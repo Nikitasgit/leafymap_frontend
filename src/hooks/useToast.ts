@@ -1,6 +1,22 @@
 import { toast } from "sonner";
 
-export const useToast = () => {
+interface ToastFunctions {
+  showSuccess: (message: string) => void;
+  showError: (message: string) => void;
+  showInfo: (message: string) => void;
+  showLoading: (message: string) => string | number;
+  dismissToast: (toastId: string) => void;
+  showPromise: (
+    promise: Promise<unknown>,
+    messages: {
+      loading: string;
+      success: string;
+      error: string;
+    }
+  ) => unknown;
+}
+
+export const useToast = (): ToastFunctions => {
   const showSuccess = (message: string) => {
     toast.success(message);
   };

@@ -6,7 +6,7 @@ import {
 } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { useState, useEffect } from "react";
 import ActivityFormStep from "@/components/account/createProfileStepper/steps/ActivityFormStep/ActivityFormStep";
-import useSubmitForm from "@/hooks/useUpdateUser";
+import useUpdateUser from "@/hooks/useUpdateUser";
 import { Creator } from "@/types/user";
 import { defaultSchedule } from "@/utils/createProfile";
 import { useUser } from "@/hooks/useUser";
@@ -17,9 +17,8 @@ const ModifyCreator = () => {
   const { user, loading, error } = useUser();
   const creator = user as Creator | null;
   const [formData, setFormData] = useState<NewProfileFormData | null>(null);
-  const { submitForm } = useSubmitForm();
+  const { submitForm } = useUpdateUser();
   const { showError } = useToast();
-
   useEffect(() => {
     if (creator && creator.creatorProfile && !formData) {
       const creatorPlace = creator.creatorProfile.place?.location;
@@ -49,7 +48,6 @@ const ModifyCreator = () => {
         phone: creator.phone || "",
         email: creator.email || "",
         website: creator.website || "",
-        image: creator.image || "",
         collaborators: [],
         createdCollaborators: [],
         placeActive: creator.creatorProfile.place?.active || false,
@@ -72,11 +70,8 @@ const ModifyCreator = () => {
   if (error) {
     showError(error);
   }
-  if (loading) {
-    return <LoadingBar />;
-  }
 
-  if (!formData) {
+  if (loading || !formData) {
     return <LoadingBar />;
   }
 

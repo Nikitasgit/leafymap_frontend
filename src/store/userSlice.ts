@@ -11,7 +11,7 @@ export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
       withCredentials: true,
     }
   );
-  return response.data.user;
+  return response.data.data.user;
 });
 
 export type UserState = {

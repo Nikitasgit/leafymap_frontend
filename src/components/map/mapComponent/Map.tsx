@@ -66,7 +66,7 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
     } = usePlacesInView({
       filters,
     });
-    console.log(filteredPlaces);
+
     useImperativeHandle(ref, () => ({
       ...mapRef.current!,
       fetchPlacesInView: (bounds: mapboxgl.LngLatBounds | null) =>

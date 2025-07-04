@@ -33,7 +33,6 @@ interface ValidationResult {
 export const validateForm = (data: BaseFormData): ValidationResult => {
   const isCreator = data.userType === "creator";
   const newErrors: Record<string, string> = {};
-  console.log(data);
 
   const nameError: string | null = validateName(data.name || "");
   if (nameError) {

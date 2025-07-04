@@ -21,7 +21,7 @@ const UserCardMap = ({ user, mapRef }: UserCardMapProps) => {
   useEffect(() => {
     findCreatorInPlaces(user._id);
   }, [user._id, findCreatorInPlaces]);
-  console.log(userPlaces);
+
   const handleMapButtonClick = async (placeData: {
     place: { location: { coordinates: number[] }; _id: string };
   }) => {

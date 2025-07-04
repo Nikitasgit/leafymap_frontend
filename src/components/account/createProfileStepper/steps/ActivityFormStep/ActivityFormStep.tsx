@@ -11,7 +11,6 @@ import {
 import Infos from "../../../formComponents/infos/Infos";
 import { NewProfileFormData } from "../../CreateProfileStepper.types";
 import ContactForm from "../../../formComponents/contactForm/ContactForm";
-import ProfilePictureUploader from "@/components/account/formComponents/collaborators/profilePictureUploader/ProfilePictureUploader";
 import styles from "./ActivityFormStep.module.scss";
 import { useToast } from "@/hooks/useToast";
 import { validateForm } from "@/utils/formValidation";
@@ -66,13 +65,8 @@ const ActivityFormStep = ({
     }
   };
 
-  console.log(data);
   return (
     <form onSubmit={handleSubmit} noValidate>
-      <ProfilePictureUploader
-        onChange={onChange}
-        initialImage={data.image as string}
-      />
       <Infos
         isCreator={isCreator}
         data={data as NewProfileFormData}

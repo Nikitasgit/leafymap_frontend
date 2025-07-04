@@ -5,19 +5,18 @@ import { PlaceType } from "@/types/place/placeCaterories";
 
 export interface NewProfileFormData {
   userType: string;
-  image: string | File;
   name: string;
   description: string;
   category: string;
   phone: string;
   email: string;
   website: string;
-  defaultSchedule: DefaultSchedule;
-  collaborators: Collaborator[];
-  createdCollaborators: CreatedCollaborator[];
-  placeCategory: string;
+  defaultSchedule?: DefaultSchedule;
+  collaborators?: Collaborator[];
+  createdCollaborators?: CreatedCollaborator[];
+  placeCategory?: string;
   placeType?: PlaceType[];
-  location: Location | null;
+  location?: Location | null;
   placeId?: string;
   placeActive?: boolean;
 }
@@ -36,7 +35,6 @@ export interface PlaceFormData {
   phone: string;
   email: string;
   website: string;
-  image: string;
   collaborators: {
     _id: string;
     username: string;
