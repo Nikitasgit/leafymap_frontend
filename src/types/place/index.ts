@@ -2,7 +2,8 @@ import { BaseEntity, ContactInfo, Location } from "../common";
 import { PlaceCategory } from "../categories";
 import { User } from "../user";
 import { DefaultSchedule } from "./schedule";
-import { CreatedCollaboratorDB } from "./collaborators";
+import { CreatedCollaborator } from "./collaborators";
+import { PlaceType } from "./placeCaterories";
 
 export interface Place extends BaseEntity, ContactInfo {
   name: string;
@@ -16,9 +17,10 @@ export interface Place extends BaseEntity, ContactInfo {
     user: User;
     status: "pending" | "accepted" | "refused";
   }[];
-  createdCollaborators?: CreatedCollaboratorDB[];
+  createdCollaborators?: CreatedCollaborator[];
   isCreatorPlace?: boolean;
   image?: string;
   active: boolean;
   rating: number;
+  placeType: PlaceType[];
 }

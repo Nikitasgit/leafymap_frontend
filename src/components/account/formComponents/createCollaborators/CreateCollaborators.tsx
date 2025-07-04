@@ -26,14 +26,14 @@ const CreateCollaborators = ({
 
   const [collaborator, setCollaborator] = useState<CreatedCollaborator>({
     name: "",
-    categoryId: "",
+    category: "",
     id: "",
   });
 
   const [isCreating, setIsCreating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const isFormValid = collaborator.name.trim() && collaborator.categoryId;
+  const isFormValid = collaborator.name.trim() && collaborator.category;
 
   const handleSubmitCollaborator = async () => {
     if (!isFormValid) return;
@@ -55,7 +55,7 @@ const CreateCollaborators = ({
     setIsSubmitting(false);
     setCollaborator({
       name: "",
-      categoryId: "",
+      category: "",
       id: "",
     });
   };
@@ -64,7 +64,7 @@ const CreateCollaborators = ({
     setIsCreating(!isCreating);
     setCollaborator({
       name: "",
-      categoryId: "",
+      category: "",
       id: "",
     });
   };
@@ -81,7 +81,7 @@ const CreateCollaborators = ({
       target: {
         name: "createdCollaborators",
         value: formData.createdCollaborators.filter(
-          (collab) => collab.id !== id
+          (collab) => collab.id !== id && collab._id !== id
         ),
       },
     });
@@ -128,12 +128,12 @@ const CreateCollaborators = ({
               onChange={(e) => {
                 handleChange({
                   target: {
-                    name: "categoryId",
+                    name: "category",
                     value: e.target.value,
                   },
                 });
               }}
-              value={collaborator.categoryId}
+              value={collaborator.category}
             />
             <Button
               onClick={handleSubmitCollaborator}
@@ -156,9 +156,8 @@ const CreateCollaborators = ({
               <span>{collaborator.name}</span>
               <span className={styles.categoryName}>
                 {
-                  subCategories.find(
-                    (sub) => sub._id === collaborator.categoryId
-                  )?.name
+                  subCategories.find((sub) => sub._id === collaborator.category)
+                    ?.name
                 }
               </span>
             </div>

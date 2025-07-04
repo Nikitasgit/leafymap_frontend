@@ -13,7 +13,7 @@ export interface NewProfileFormData {
   website: string;
   defaultSchedule?: DefaultSchedule;
   collaborators?: Collaborator[];
-  createdCollaborators?: CreatedCollaborator[];
+  createdCollaborators: CreatedCollaborator[];
   placeCategory?: string;
   placeType?: PlaceType[];
   location?: Location | null;
@@ -22,6 +22,7 @@ export interface NewProfileFormData {
 }
 
 export interface PlaceFormData {
+  userType: "creator" | "organizer" | "guest";
   name: string;
   description: string;
   location: {
@@ -40,12 +41,8 @@ export interface PlaceFormData {
     username: string;
     image: string;
   }[];
-  createdCollaborators: {
-    name: string;
-    categoryId: string;
-    id: string;
-    _id: string;
-  }[];
+  createdCollaborators: CreatedCollaborator[];
+  placeType: PlaceType[];
 }
 
 export type FormDataChangeHandler = (

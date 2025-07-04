@@ -1,33 +1,37 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Place } from "@/types/place";
+import { useLoading } from "./useLoading";
+import { useToast } from "./useToast";
 
 export const usePlace = (placeId: string, enrichSchedule: boolean = false) => {
   const [place, setPlace] = useState<Place | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { isLoading, withLoading } = useLoading(true);
+  const { showError, showSuccess } = useToast();
+
   useEffect(() => {
     const fetchPlace = async () => {
       try {
-        setLoading(true);
         const url = `${
           process.env.NEXT_PUBLIC_API_URL
         }/api/places/${placeId}?enrichSchedule=${enrichSchedule.toString()}`;
         const response = await axios.get(url);
         setPlace(response.data.data);
-        setError(null);
+        showSuccess("Lieu chargé avec succès");
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch place");
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : "Erreur lors du chargement du lieu";
         setPlace(null);
-      } finally {
-        setLoading(false);
+        showError(errorMessage);
       }
     };
 
     if (placeId) {
-      fetchPlace();
+      withLoading(fetchPlace);
     }
   }, [placeId]);
 
-  return { place, loading, error };
+  return { place, loading: isLoading };
 };

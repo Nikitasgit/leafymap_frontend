@@ -12,6 +12,7 @@ import {
 } from "../../createProfileStepper/CreateProfileStepper.types";
 import styles from "./PlaceForm.module.scss";
 import Collaborators from "../collaborators/Collaborators";
+import { defaultSchedule } from "@/utils/createProfile";
 
 const PlaceForm = ({
   data,
@@ -107,14 +108,14 @@ const PlaceForm = ({
           />
         )}
         <PlaceCategorySelectorInput
-          value={data.placeCategory}
+          value={data.placeCategory || ""}
           onChange={onChange}
           selectedTypes={data.placeType || []}
           error={!!errors.placeCategory}
         />
       </div>
       <TimeTableForm
-        schedule={data.defaultSchedule}
+        schedule={data.defaultSchedule || defaultSchedule}
         onChange={(updatedSchedule) =>
           onChange({
             target: { name: "defaultSchedule", value: updatedSchedule },

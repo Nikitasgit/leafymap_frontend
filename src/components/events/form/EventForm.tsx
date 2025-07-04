@@ -1,5 +1,5 @@
 import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
-import ProfilePictureUploader from "@/components/account/formComponents/profilePictureUploader/ProfilePictureUploader";
+
 import TextField from "@/components/common/inputs/textField/TextField";
 import React, { useState } from "react";
 import ScheduleForm from "./ScheduleForm";
@@ -63,10 +63,6 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
       />
       <Collaborators onChange={onChange} data={formData} />
       <ScheduleForm onChange={onChange} data={formData} />
-      <ProfilePictureUploader
-        onChange={onChange}
-        initialImage={formData.image as string}
-      />
       <Button type="submit" disabled={loading}>
         Enregistrer
       </Button>

@@ -10,12 +10,16 @@ import {
 } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import useUpdatePlace from "@/hooks/useUpdatePlace";
 import { defaultSchedule } from "@/utils/createProfile";
+import { useUser } from "@/hooks/useUser";
+import LoadingBar from "@/components/common/loading/LoadingBar";
+import styles from "./updatePlacePage.module.scss";
 
 const UpdatePlace = () => {
   const params = useParams();
   const placeId = params.placeId as string;
-  const { place, loading, error } = usePlace(placeId);
-  const { submitForm } = useUpdatePlace();
+  const { place, loading } = usePlace(placeId);
+  const { user, loading: userLoading } = useUser();
+  const { submitForm, isLoading } = useUpdatePlace();
   const [formData, setFormData] = useState<PlaceFormData | null>(null);
 
   const handleInputChange: FormDataChangeHandler = (e) => {
@@ -35,6 +39,7 @@ const UpdatePlace = () => {
         longitude: place.location.coordinates[0],
       };
       const data: PlaceFormData = {
+        userType: user?.userType || "guest",
         name: place.name || "",
         description: place.description || "",
         location: {
@@ -57,29 +62,32 @@ const UpdatePlace = () => {
         createdCollaborators:
           place.createdCollaborators?.map((collab) => ({
             name: collab.name || "",
-            categoryId: collab.category || "",
+            category: collab.category || "",
             id: collab._id || "",
             _id: collab._id || "",
           })) || [],
+        placeType: place.placeType || [],
       };
 
       setFormData(data);
     }
-  }, [place, loading, error, formData]);
+  }, [place, loading, formData, user]);
 
-  if (loading || !formData) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading || !formData || isLoading || userLoading) return <LoadingBar />;
 
   return (
-    <main>
-      <ActivityFormStep
-        firstStep={true}
-        isCreator={false}
-        data={formData}
-        onChange={handleInputChange}
-        onSubmit={onSubmit}
-        submitButtonText="Enregistrer"
-      />
+    <main className={styles.pageContainer}>
+      <div className={styles.container}>
+        <h1 className={styles.title}>Modifier votre lieu</h1>
+        <ActivityFormStep
+          firstStep={true}
+          isCreator={false}
+          data={formData}
+          onChange={handleInputChange}
+          onSubmit={onSubmit}
+          submitButtonText="Enregistrer"
+        />
+      </div>
     </main>
   );
 };

@@ -7,13 +7,7 @@ export type Collaborator = {
 
 export type CreatedCollaborator = {
   name: string;
-  categoryId: string;
-  id?: string;
-};
-
-export type CreatedCollaboratorDB = {
-  name: string;
   category: string;
-  categoryId: string;
-  _id: string;
+  id: string;
+  _id?: string;
 };

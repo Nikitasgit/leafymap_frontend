@@ -4,16 +4,19 @@ import { fetchUser } from "@/store/userSlice";
 import { useAppDispatch } from "@/store";
 import { useRouter, useParams } from "next/navigation";
 import { PlaceFormData } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
+import { useLoading } from "./useLoading";
+import { useToast } from "./useToast";
 
 type UseUpdatePlaceReturn = {
   submitForm: (data: PlaceFormData, isUpdate: boolean) => Promise<void>;
-  loading: boolean;
+  isLoading: boolean;
   error: string | null;
   success: boolean;
 };
 
 const useUpdatePlace = (): UseUpdatePlaceReturn => {
-  const [loading, setLoading] = useState(false);
+  const { isLoading, withLoading } = useLoading();
+  const { showError, showSuccess } = useToast();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const dispatch = useAppDispatch();
@@ -22,7 +25,6 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
   const placeId = params.placeId as string;
 
   const submitForm = async (data: PlaceFormData, isUpdate: boolean) => {
-    setLoading(true);
     setError(null);
     setSuccess(false);
 
@@ -30,77 +32,73 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
       if (isUpdate && !placeId) {
         throw new Error("Place ID is required for update");
       }
-      const form = new FormData();
-      form.append("name", data.name);
-      form.append("description", data.description);
-      form.append("placeCategory", data.placeCategory);
-      form.append("phone", data.phone);
-      form.append("email", data.email);
-      form.append("website", data.website);
-      form.append("location", JSON.stringify(data.location));
-      form.append("defaultSchedule", JSON.stringify(data.defaultSchedule));
 
-      if (data.collaborators) {
-        const collaboratorIds = data.collaborators.map((collab) => collab._id);
-        form.append("collaborators", JSON.stringify(collaboratorIds));
-      }
-      if (data.createdCollaborators) {
-        const cleanedCollaborators = data.createdCollaborators.map(
-          (collaborator) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { id, ...collaboratorWithoutId } = collaborator;
-            return collaboratorWithoutId;
-          }
-        );
-        form.append(
-          "createdCollaborators",
-          JSON.stringify(cleanedCollaborators)
-        );
-      }
-      if (data.image) {
-        form.append("image", data.image);
-      }
-
+      const payload = {
+        name: data.name,
+        description: data.description,
+        placeCategory: data.placeCategory,
+        phone: data.phone,
+        email: data.email,
+        website: data.website,
+        location: data.location,
+        defaultSchedule: data.defaultSchedule,
+        collaborators: data.collaborators?.map((collab) => collab._id),
+        createdCollaborators: data.createdCollaborators?.map((collaborator) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { id, ...collaboratorWithoutId } = collaborator;
+          return collaboratorWithoutId;
+        }),
+        placeType: data.placeType,
+      };
+      console.log(payload);
       if (isUpdate) {
-        await axios.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}`,
-          form,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            withCredentials: true,
-          }
+        await withLoading(() =>
+          axios.put(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}`,
+            payload,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              withCredentials: true,
+            }
+          )
         );
       } else {
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places`,
-          form,
-          {
+        await withLoading(() =>
+          axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/places`, payload, {
             headers: {
-              "Content-Type": "multipart/form-data",
+              "Content-Type": "application/json",
             },
             withCredentials: true,
-          }
+          })
         );
       }
 
+      showSuccess("Lieu modifié avec succès");
       router.push("/account");
-      setSuccess(true);
       dispatch(fetchUser());
     } catch (err: unknown) {
-      console.error("Error in submitForm:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Erreur lors de la soumission du lieu"
-      );
-    } finally {
-      setLoading(false);
+      console.error("Update place error:", err);
+      if (axios.isAxiosError(err) && err.response?.data) {
+        console.error("Backend error details:", err.response.data);
+        showError(
+          err.response.data.message ||
+            (err.response.data.errors
+              ? JSON.stringify(err.response.data.errors)
+              : err.message)
+        );
+      } else {
+        showError(
+          err instanceof Error
+            ? err.message
+            : "Erreur lors de la soumission du lieu"
+        );
+      }
     }
   };
 
-  return { submitForm, loading, error, success };
+  return { submitForm, isLoading, error, success };
 };
 
 export default useUpdatePlace;

@@ -6,7 +6,7 @@
   background: $white;
   border-radius: 8px;
   border: 1px solid $grey-200;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .header {
@@ -58,6 +58,7 @@
 .collaboratorsList {
   list-style: none;
   padding: spacing(3);
+  @include flex(column, flex-start, stretch, spacing(1));
   margin: 0;
   background: $white;
 }
