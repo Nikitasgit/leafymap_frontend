@@ -1,0 +1,57 @@
+{
+  "title": "Register",
+  "signin": {
+    "title": "Sign In",
+    "form": {
+      "identifier": {
+        "label": "Username or Email",
+        "placeholder": "Enter your username or email"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password"
+      },
+      "submit": "Sign In",
+      "submitLoading": "Signing in..."
+    },
+    "divider": "OR",
+    "signupLink": {
+      "text": "Don't have an account?",
+      "link": "Sign Up"
+    },
+    "messages": {
+      "success": "Sign in successful!",
+      "error": "Sign in failed"
+    }
+  },
+  "form": {
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter your email"
+    },
+    "username": {
+      "label": "Username",
+      "placeholder": "Enter your username"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password"
+    },
+    "confirmPassword": {
+      "label": "Confirm Password",
+      "placeholder": "Confirm your password"
+    },
+    "submit": "Register",
+    "submitLoading": "Registering..."
+  },
+  "divider": "OR",
+  "signinLink": {
+    "text": "Already have an account?",
+    "link": "Sign In"
+  },
+  "messages": {
+    "success": "Registration successful! Please sign in.",
+    "error": "Registration failed",
+    "validationError": "Please correct the errors in the form"
+  }
+}

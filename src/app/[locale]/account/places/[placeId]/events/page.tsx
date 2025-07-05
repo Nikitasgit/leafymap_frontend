@@ -44,11 +44,11 @@ export default function EventsListPage() {
               <div className="collaborators">
                 {event.collaborators.map((collaborator) => (
                   <div key={collaborator._id}>
-                    <p>{collaborator.username}</p>
+                    <p>{collaborator.name}</p>
                     <Image
                       key={collaborator._id}
                       src={collaborator.image || "/images/default-avatar.png"}
-                      alt={collaborator.username}
+                      alt={collaborator.name}
                       width={30}
                       height={30}
                     />

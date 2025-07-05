@@ -1,0 +1,12 @@
+{
+  "hello": "Bonjour",
+  "welcome": "Bienvenue sur mon site !",
+  "nav": {
+    "home": "Accueil",
+    "map": "Carte",
+    "messages": "Messages",
+    "account": "Compte",
+    "register": "S'inscrire",
+    "signin": "Se connecter"
+  }
+}

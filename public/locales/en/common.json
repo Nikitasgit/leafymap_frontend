@@ -1,0 +1,12 @@
+{
+  "hello": "Hello",
+  "welcome": "Welcome to my website!",
+  "nav": {
+    "home": "Home",
+    "map": "Map",
+    "messages": "Messages",
+    "account": "Account",
+    "register": "Register",
+    "signin": "Sign In"
+  }
+}

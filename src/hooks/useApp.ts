@@ -18,14 +18,14 @@ export interface AppState {
 
 export const useApp = (): AppState => {
   const subCategories = useSelector(selectSubCategories);
-  const categories = useSelector(selectCategories);
+  const categoriesData = useSelector(selectCategories);
   const placeCategories = useSelector(selectPlaceCategories);
   const loading = useSelector(selectAppLoading);
   const error = useSelector(selectAppError);
 
   return {
     subCategories,
-    categories,
+    categories: categoriesData,
     placeCategories,
     loading,
     error,

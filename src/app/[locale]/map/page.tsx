@@ -1,10 +1,10 @@
 "use client";
 
-import MapComponent from "../../components/map/mapComponent/Map";
+import MapComponent from "@/components/map/mapComponent/Map";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useState, useEffect, useRef } from "react";
 import PlaceCardMap from "@/components/map/placeCardMap/PlaceCardMap";
-import styles from "./map.module.scss";
+import styles from "./mapPage.module.scss";
 import FiltersBar from "@/components/map/filtersBar/FiltersBar";
 import { MapFilters, ExtendedMapRef } from "@/types/map";
 import { Collaborator } from "@/types/place/collaborators";

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import styles from "./register.module.scss";
 import { useToast } from "@/hooks/useToast";
 import Button from "@/components/common/buttons/button/Button";
@@ -19,6 +20,7 @@ import { z } from "zod";
 
 export default function Register() {
   const router = useRouter();
+  const { t } = useTranslation("subscription");
   const [formData, setFormData] = useState<RegisterFormData>({
     username: "",
     email: "",
@@ -49,18 +51,18 @@ export default function Register() {
               username: formData.username,
             }
           );
-          showSuccess("Inscription réussie ! Veuillez vous connecter.");
+          showSuccess(t("messages.success"));
           router.push("/auth/signin");
         } catch (err: unknown) {
           const error = err as AxiosError<{ message: string }>;
-          showError(error.response?.data?.message || "Échec de l'inscription");
+          showError(error.response?.data?.message || t("messages.error"));
         }
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
         const validationErrors = getValidationErrors(error);
         setErrors(validationErrors);
-        showError("Veuillez corriger les erreurs dans le formulaire");
+        showError(t("messages.validationError"));
       }
     }
   };
@@ -69,14 +71,14 @@ export default function Register() {
     <div className={styles.container}>
       {isLoading && <LoadingBar />}
       <div className={styles.formContainer}>
-        <h1>S&apos;inscrire</h1>
+        <h1>{t("title")}</h1>
 
         <form onSubmit={handleRegister} className={styles.form}>
           <TextField
-            label="Email"
+            label={t("form.email.label")}
             name="email"
             type="email"
-            placeholder="Entrez votre email"
+            placeholder={t("form.email.placeholder")}
             required
             fullWidth
             value={formData.email}
@@ -87,10 +89,10 @@ export default function Register() {
           />
 
           <TextField
-            label="Nom d'utilisateur"
+            label={t("form.username.label")}
             name="username"
             type="text"
-            placeholder="Entrez votre nom d'utilisateur"
+            placeholder={t("form.username.placeholder")}
             required
             fullWidth
             value={formData.username}
@@ -101,10 +103,10 @@ export default function Register() {
           />
 
           <TextField
-            label="Mot de passe"
+            label={t("form.password.label")}
             name="password"
             type="password"
-            placeholder="Entrez votre mot de passe"
+            placeholder={t("form.password.placeholder")}
             required
             fullWidth
             value={formData.password}
@@ -115,10 +117,10 @@ export default function Register() {
           />
 
           <TextField
-            label="Confirmer le mot de passe"
+            label={t("form.confirmPassword.label")}
             name="confirmPassword"
             type="password"
-            placeholder="Confirmez votre mot de passe"
+            placeholder={t("form.confirmPassword.placeholder")}
             required
             fullWidth
             value={formData.confirmPassword}
@@ -136,17 +138,17 @@ export default function Register() {
             size="medium"
             disabled={isLoading}
           >
-            {isLoading ? "Inscription en cours..." : "S'inscrire"}
+            {isLoading ? t("form.submitLoading") : t("form.submit")}
           </Button>
         </form>
 
         <div className={styles.divider}>
-          <span>OU</span>
+          <span>{t("divider")}</span>
         </div>
 
         <p className={styles.signinLink}>
-          Vous avez déjà un compte ?
-          <Link href="/auth/signin">Se connecter</Link>
+          {t("signinLink.text")}
+          <Link href="/auth/signin">{t("signinLink.link")}</Link>
         </p>
       </div>
     </div>

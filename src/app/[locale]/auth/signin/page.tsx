@@ -11,11 +11,13 @@ import { useToast } from "@/hooks/useToast";
 import { useLoading } from "@/hooks/useLoading";
 import Button from "@/components/common/buttons/button/Button";
 import LoadingBar from "@/components/common/loading/LoadingBar";
+import { useTranslation } from "react-i18next";
 
 export default function SignIn() {
   const router = useRouter();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
+  const { t } = useTranslation("subscription");
   const dispatch = useAppDispatch();
   const { showSuccess, showError } = useToast();
   const { isLoading, withLoading } = useLoading();
@@ -34,11 +36,11 @@ export default function SignIn() {
           { withCredentials: true }
         );
         dispatch(fetchUser());
-        showSuccess("Connexion réussie !");
+        showSuccess(t("signin.messages.success"));
         router.push("/");
       } catch (err: unknown) {
         const error = err as AxiosError<{ message: string }>;
-        showError(error.response?.data?.message || "Échec de la connexion");
+        showError(error.response?.data?.message || t("signin.messages.error"));
       }
     });
   };
@@ -48,31 +50,33 @@ export default function SignIn() {
       {isLoading && <LoadingBar />}
 
       <div className={styles.formContainer}>
-        <h1>Se connecter</h1>
+        <h1>{t("signin.title")}</h1>
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
-            <label htmlFor="identifier">Nom d&apos;utilisateur ou Email</label>
+            <label htmlFor="identifier">
+              {t("signin.form.identifier.label")}
+            </label>
             <input
               id="identifier"
               type="text"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
               required
-              placeholder="Entrez votre nom d'utilisateur ou email"
+              placeholder={t("signin.form.identifier.placeholder")}
               disabled={isLoading}
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <label htmlFor="password">Mot de passe</label>
+            <label htmlFor="password">{t("signin.form.password.label")}</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="Entrez votre mot de passe"
+              placeholder={t("signin.form.password.placeholder")}
               disabled={isLoading}
             />
           </div>
@@ -83,17 +87,19 @@ export default function SignIn() {
             size="medium"
             disabled={isLoading}
           >
-            {isLoading ? "Connexion en cours..." : "Se connecter"}
+            {isLoading
+              ? t("signin.form.submitLoading")
+              : t("signin.form.submit")}
           </Button>
         </form>
 
         <div className={styles.divider}>
-          <span>OU</span>
+          <span>{t("signin.divider")}</span>
         </div>
 
         <p className={styles.signupLink}>
-          Vous n&apos;avez pas de compte ?
-          <Link href="/auth/register">S&apos;inscrire</Link>
+          {t("signin.signupLink.text")}
+          <Link href="/auth/register">{t("signin.signupLink.link")}</Link>
         </p>
       </div>
     </div>

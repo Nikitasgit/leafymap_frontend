@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Map, MessageSquare, User } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import SignOutButton from "../common/buttons/SignOutButton";
 import { useUser } from "@/hooks/useUser";
 import styles from "./Navbar.module.scss";
@@ -11,11 +12,13 @@ import { useToast } from "@/hooks/useToast";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { t } = useTranslation("common");
+
   const navItems = [
-    { href: "/", label: "Accueil", icon: Home },
-    { href: "/map", label: "Carte", icon: Map },
-    { href: "/messages", label: "Messages", icon: MessageSquare },
-    { href: "/account", label: "Compte", icon: User },
+    { href: "/", label: t("nav.home"), icon: Home },
+    { href: "/map", label: t("nav.map"), icon: Map },
+    { href: "/messages", label: t("nav.messages"), icon: MessageSquare },
+    { href: "/account", label: t("nav.account"), icon: User },
   ];
 
   const { user, loading, error } = useUser();
@@ -62,7 +65,7 @@ export default function Navbar() {
                   pathname === "/auth/register" ? styles.active : ""
                 }`}
               >
-                S&apos;inscrire
+                {t("nav.register")}
               </Link>
               <span>|</span>
               <Link
@@ -71,7 +74,7 @@ export default function Navbar() {
                   pathname === "/auth/signin" ? styles.active : ""
                 }`}
               >
-                Se connecter
+                {t("nav.signin")}
               </Link>
             </div>
           )}

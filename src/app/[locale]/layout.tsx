@@ -6,17 +6,21 @@ import Providers from "@/components/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className={inter.className}>
-        <Providers>
+        <Providers locale={locale}>
           <Navbar />
-          <main>{children}</main>
+          <main data-locale={locale}>{children}</main>
         </Providers>
       </body>
     </html>
