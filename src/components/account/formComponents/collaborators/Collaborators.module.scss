@@ -1,5 +1,6 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
 
 .collaborators {
   border-bottom: 1px solid $grey-200;

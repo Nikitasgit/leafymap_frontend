@@ -31,7 +31,7 @@ export default function AccountPage() {
 
   return (
     <main className={styles.accountPage}>
-      {loading && <LoadingBar />}{" "}
+      {loading && <LoadingBar />}
       <div className={styles.header}>
         <div className={styles.userInfo}>
           <h1 className={styles.username}>{user?.username}</h1>
@@ -48,6 +48,7 @@ export default function AccountPage() {
       <div className={styles.actions}>
         <div className={styles.buttonGroup}>
           <Button
+            disabled={loading}
             variant="secondary"
             onClick={() => router.push("/account/settings")}
             fullWidth
@@ -55,6 +56,7 @@ export default function AccountPage() {
             Paramètres du compte
           </Button>
           <Button
+            disabled={loading}
             variant="secondary"
             onClick={() => router.push("/account/reviews")}
             fullWidth
@@ -62,17 +64,16 @@ export default function AccountPage() {
             Mes Avis
           </Button>
         </div>
-        {userType && (
-          <Button
-            endIcon={<PlusCircleIcon size={18} />}
-            onClick={() => {
-              router.push(buttonParameters.route);
-            }}
-            fullWidth
-          >
-            {buttonParameters.text}
-          </Button>
-        )}
+        <Button
+          disabled={loading}
+          endIcon={<PlusCircleIcon size={18} />}
+          onClick={() => {
+            router.push(buttonParameters.route);
+          }}
+          fullWidth
+        >
+          {buttonParameters.text}
+        </Button>
       </div>
       {userType === "organizer" && organizer?.places && (
         <div className={styles.placesSection}>

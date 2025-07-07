@@ -35,7 +35,13 @@ const useUpdateUser = (): UseCreateProfileReturn => {
         (data.placeActive && data.userType === "creator") ||
         data.userType === "organizer"
       ) {
-        const { location, placeCategory, defaultSchedule, placeActive } = data;
+        const {
+          location,
+          placeCategory,
+          defaultSchedule,
+          placeActive,
+          placeType,
+        } = data;
         requestData.location = location;
         requestData.placeCategory = placeCategory;
         requestData.defaultSchedule = defaultSchedule;
@@ -44,7 +50,9 @@ const useUpdateUser = (): UseCreateProfileReturn => {
         if (data.userType === "organizer") {
           const { collaborators, createdCollaborators } = data;
           if (collaborators) {
-            requestData.collaborators = collaborators;
+            requestData.collaborators = collaborators.map((collaborator) => ({
+              _id: collaborator._id,
+            }));
           }
           if (createdCollaborators) {
             const cleanedCollaborators = createdCollaborators.map(
@@ -56,9 +64,10 @@ const useUpdateUser = (): UseCreateProfileReturn => {
             );
             requestData.createdCollaborators = cleanedCollaborators;
           }
+          requestData.placeType = placeType || [];
         }
       }
-
+      console.log("requestData", requestData);
       if (isUpdate) {
         await axios.put(
           `${process.env.NEXT_PUBLIC_API_URL}/api/users/update-creator`,
@@ -92,6 +101,7 @@ const useUpdateUser = (): UseCreateProfileReturn => {
       router.push("/account");
       dispatch(fetchUser());
     }).catch((err: unknown) => {
+      console.error("API Error:", err);
       if (axios.isAxiosError(err) && err.response) {
         const responseData = err.response.data;
         if (responseData.error === "Validation error" && responseData.details) {

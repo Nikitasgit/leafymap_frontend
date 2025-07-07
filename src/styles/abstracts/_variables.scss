@@ -31,10 +31,10 @@ $breakpoint-xl: 1200px;
 
 // Spacing
 $spacing-unit: 8px;
-$spacing-xsmall: $spacing-unit / 2;
+$spacing-xsmall: calc($spacing-unit / 2);
 $spacing-small: $spacing-unit;
-$spacing-medium: $spacing-unit * 2;
-$spacing-large: $spacing-unit * 3;
+$spacing-medium: calc($spacing-unit * 2);
+$spacing-large: calc($spacing-unit * 3);
 
 // Transitions
 $transition-default: all 0.2s ease;

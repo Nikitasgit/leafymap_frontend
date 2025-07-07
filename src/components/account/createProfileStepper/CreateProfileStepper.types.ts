@@ -13,7 +13,7 @@ export interface NewProfileFormData {
   website: string;
   defaultSchedule?: DefaultSchedule;
   collaborators?: Collaborator[];
-  createdCollaborators: CreatedCollaborator[];
+  createdCollaborators?: CreatedCollaborator[];
   placeCategory?: string;
   placeType?: PlaceType[];
   location?: Location | null;
@@ -38,8 +38,8 @@ export interface PlaceFormData {
   website: string;
   collaborators: {
     _id: string;
-    username: string;
-    image: string;
+    name?: string;
+    image?: string;
   }[];
   createdCollaborators: CreatedCollaborator[];
   placeType: PlaceType[];

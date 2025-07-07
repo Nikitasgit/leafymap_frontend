@@ -1,5 +1,5 @@
 // Custom Sonner toast styling
-@import "@/styles/abstracts/variables";
+@use "@/styles/abstracts/variables" as *;
 
 [data-sonner-toaster] {
   --normal-bg: #{$white};

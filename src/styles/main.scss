@@ -1,12 +1,12 @@
 // Abstracts
-@import "abstracts/variables";
-@import "abstracts/mixins";
-@import "abstracts/functions";
+@use "abstracts/variables" as *;
+@use "abstracts/mixins" as *;
+@use "abstracts/functions" as *;
 
 // Base
-@import "base/reset";
-@import "base/typography";
-@import "base/utilities";
+@use "base/reset";
+@use "base/typography";
+@use "base/utilities";
 
 // Components
-@import "components/sonner";
+@use "components/sonner";

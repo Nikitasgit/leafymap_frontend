@@ -42,7 +42,9 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
         website: data.website,
         location: data.location,
         defaultSchedule: data.defaultSchedule,
-        collaborators: data.collaborators?.map((collab) => collab._id),
+        collaborators: data.collaborators?.map((collab) => ({
+          _id: collab._id,
+        })),
         createdCollaborators: data.createdCollaborators?.map((collaborator) => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { id, ...collaboratorWithoutId } = collaborator;

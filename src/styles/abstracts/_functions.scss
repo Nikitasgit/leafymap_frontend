@@ -1,11 +1,13 @@
+@use "variables" as *;
+
 // Convert pixels to rem
 @function rem($pixels) {
-  @return ($pixels / 16) * 1rem;
+  @return calc($pixels / 16) * 1rem;
 }
 
 // Convert pixels to em
 @function em($pixels, $context: 16) {
-  @return ($pixels / $context) * 1em;
+  @return calc($pixels / $context) * 1em;
 }
 
 // Get color with opacity

@@ -1,6 +1,6 @@
-@import "@/styles/abstracts/variables";
-@import "@/styles/abstracts/mixins";
-@import "@/styles/abstracts/functions";
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
 
 .userCardMap {
   position: absolute;

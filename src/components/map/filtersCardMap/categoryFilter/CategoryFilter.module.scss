@@ -1,4 +1,4 @@
-@import "@/styles/abstracts/variables";
+@use "@/styles/abstracts/variables" as *;
 
 .categoryFilter {
   margin-bottom: $spacing-large;
