@@ -64,10 +64,10 @@ const useUpdateUser = (): UseCreateProfileReturn => {
             );
             requestData.createdCollaborators = cleanedCollaborators;
           }
-          requestData.placeType = placeType || [];
         }
+
+        requestData.placeType = placeType;
       }
-      console.log("requestData", requestData);
       if (isUpdate) {
         await axios.put(
           `${process.env.NEXT_PUBLIC_API_URL}/api/users/update-creator`,

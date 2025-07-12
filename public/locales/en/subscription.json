@@ -44,6 +44,16 @@
     "submit": "Register",
     "submitLoading": "Registering..."
   },
+  "categorySelector": {
+    "label": "Activity",
+    "placeholder": "Select an activity",
+    "searchPlaceholder": "Search for an activity..."
+  },
+  "placeCategorySelector": {
+    "label": "Place Type",
+    "placeholder": "Select a place type",
+    "searchPlaceholder": "Search for a place..."
+  },
   "divider": "OR",
   "signinLink": {
     "text": "Already have an account?",

@@ -7,6 +7,7 @@ import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useToast } from "@/hooks/useToast";
 import LoadingBar from "../../loading/LoadingBar";
 import TextField from "../textField/TextField";
+import { useTranslation } from "react-i18next";
 
 const CategorySelectorInput = ({
   onChange,
@@ -17,10 +18,13 @@ const CategorySelectorInput = ({
   value: string;
   error?: boolean;
 }) => {
-  const { subCategories, loading, error: appError } = useApp();
+  const { subCategories, categories, loading, error: appError } = useApp();
+
   const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const { t } = useTranslation("subscription");
+
   const { showError } = useToast();
 
   const ref = useRef<HTMLDivElement>(null);
@@ -32,6 +36,7 @@ const CategorySelectorInput = ({
 
   useOnClickOutside(ref, handleClickOutside);
   const handleSelect = (subCategory: SubCategory) => {
+    const category = categories.find((c) => c._id === subCategory.categoryId);
     setInputValue(subCategory.name);
     setIsOpen(false);
     setSearch("");
@@ -41,6 +46,14 @@ const CategorySelectorInput = ({
         value: subCategory._id,
       },
     });
+    if (category) {
+      onChange({
+        target: {
+          name: "placeType",
+          value: [category.name],
+        },
+      });
+    }
   };
 
   const filteredSubcategories = subCategories.filter((sub) =>
@@ -65,13 +78,15 @@ const CategorySelectorInput = ({
       {loading && <LoadingBar />}
       <TextField
         name="category"
-        label="Activité"
+        label={t("categorySelector.label")}
         readOnly
         fullWidth
         onChange={(e) => setInputValue(e.target.value)}
-        value={inputValue}
+        value={t(`creatorCategories.${inputValue}`, {
+          defaultValue: inputValue,
+        })}
         onClick={() => setIsOpen(true)}
-        placeholder="Sélectionne une activité"
+        placeholder={t("categorySelector.placeholder")}
         error={error}
       />
       {isOpen && (
@@ -79,7 +94,7 @@ const CategorySelectorInput = ({
           <TextField
             type="text"
             name="search"
-            placeholder="Rechercher une activité..."
+            placeholder={t("categorySelector.searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onClick={() => setIsOpen(true)}
@@ -92,7 +107,7 @@ const CategorySelectorInput = ({
                 className={styles.item}
                 onClick={() => handleSelect(sub)}
               >
-                {sub.name}
+                {t(`creatorCategories.${sub.name}`)}
               </div>
             ))}
           </div>

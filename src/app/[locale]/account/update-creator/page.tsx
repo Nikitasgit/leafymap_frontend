@@ -12,6 +12,7 @@ import { defaultSchedule } from "@/utils/createProfile";
 import { useUser } from "@/hooks/useUser";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useToast } from "@/hooks/useToast";
+import styles from "./updateCreatorPage.module.scss";
 
 const ModifyCreator = () => {
   const { user, loading, error } = useUser();
@@ -56,7 +57,6 @@ const ModifyCreator = () => {
       setFormData(data);
     }
   }, [formData, creator]);
-
   const handleInputChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
     if (!formData) return;
@@ -76,14 +76,16 @@ const ModifyCreator = () => {
   }
 
   return (
-    <ActivityFormStep
-      firstStep={true}
-      isCreator={true}
-      data={formData}
-      onChange={handleInputChange}
-      onSubmit={handleSubmit}
-      submitButtonText="Enregistrer"
-    />
+    <div className={styles.pageContainer}>
+      <ActivityFormStep
+        firstStep={true}
+        isCreator={true}
+        data={formData}
+        onChange={handleInputChange}
+        onSubmit={handleSubmit}
+        submitButtonText="Enregistrer"
+      />
+    </div>
   );
 };
 

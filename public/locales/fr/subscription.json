@@ -44,6 +44,16 @@
     "submit": "S'inscrire",
     "submitLoading": "Inscription en cours..."
   },
+  "categorySelector": {
+    "label": "Activité",
+    "placeholder": "Sélectionne une activité",
+    "searchPlaceholder": "Rechercher une activité..."
+  },
+  "placeCategorySelector": {
+    "label": "Type de lieu",
+    "placeholder": "Sélectionne un type de lieu",
+    "searchPlaceholder": "Rechercher un lieu..."
+  },
   "divider": "OU",
   "signinLink": {
     "text": "Vous avez déjà un compte ?",

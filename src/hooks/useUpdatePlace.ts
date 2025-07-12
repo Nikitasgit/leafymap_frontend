@@ -52,7 +52,7 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
         }),
         placeType: data.placeType,
       };
-      console.log(payload);
+
       if (isUpdate) {
         await withLoading(() =>
           axios.put(

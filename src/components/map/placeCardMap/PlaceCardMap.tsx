@@ -6,10 +6,12 @@ import Schedule from "@/components/common/schedule";
 import styles from "./PlaceCardMap.module.scss";
 import { MapPin, Heart, Star } from "lucide-react";
 import { usePlace } from "@/hooks/usePlace";
+import LoadingBar from "@/components/common/loading/LoadingBar";
+import { useTranslation } from "react-i18next";
 
 const PlaceCardMap = ({ placeId }: { placeId: string }) => {
-  const { place, loading, error } = usePlace(placeId, true);
-
+  const { place, loading } = usePlace(placeId, true);
+  const { t } = useTranslation("common");
   const [displayPlace, setDisplayPlace] = useState(place);
 
   useEffect(() => {
@@ -17,9 +19,6 @@ const PlaceCardMap = ({ placeId }: { placeId: string }) => {
       setDisplayPlace(place);
     }
   }, [place]);
-
-  if (!displayPlace && loading) return <div>Loading...</div>;
-  if (error && !displayPlace) return <div>Error: {error}</div>;
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, index) => (
@@ -36,6 +35,7 @@ const PlaceCardMap = ({ placeId }: { placeId: string }) => {
 
   return (
     <div className={styles.placeCardMap}>
+      {loading && <LoadingBar />}
       <div className={styles.imageContainer}>
         <Image
           src={displayPlace?.image || "/images/default-place.png"}
@@ -51,7 +51,17 @@ const PlaceCardMap = ({ placeId }: { placeId: string }) => {
           <div className={styles.categoryRow}>
             {displayPlace?.placeCategory && (
               <Text className={styles.category}>
-                {displayPlace.placeCategory.name}
+                {displayPlace.creatorCategories ? (
+                  displayPlace.creatorCategories.map((category) => (
+                    <Text key={category._id}>
+                      {t(`creatorCategories.${category.name}`)}
+                    </Text>
+                  ))
+                ) : (
+                  <Text>
+                    {t(`placeCategories.${displayPlace.placeCategory.name}`)}
+                  </Text>
+                )}
               </Text>
             )}
             <div className={styles.ratingRow}>

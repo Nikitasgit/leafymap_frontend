@@ -23,4 +23,5 @@ export interface Place extends BaseEntity, ContactInfo {
   active: boolean;
   rating: number;
   placeType: PlaceType[];
+  creatorCategories?: SubCategory[];
 }

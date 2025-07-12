@@ -8,6 +8,7 @@ import { useApp } from "@/hooks/useApp";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import LoadingBar from "../../loading/LoadingBar";
 import { useToast } from "@/hooks/useToast";
+import { useTranslation } from "react-i18next";
 
 const PlaceCategorySelectorInput = ({
   value,
@@ -25,6 +26,7 @@ const PlaceCategorySelectorInput = ({
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const { showError } = useToast();
+  const { t } = useTranslation("subscription");
   const ref = useRef<HTMLDivElement>(null);
 
   const getFilteredCategories = () => {
@@ -114,13 +116,15 @@ const PlaceCategorySelectorInput = ({
       {loading && <LoadingBar />}
       <TextField
         name="placeCategory"
-        label="Type de lieu"
-        value={inputValue}
+        label={t("placeCategorySelector.label")}
+        value={t(`placeCategories.${inputValue}`, {
+          defaultValue: inputValue,
+        })}
         onClick={() => setIsOpen(true)}
         readOnly
         required
         fullWidth
-        placeholder="Sélectionne un type de lieu"
+        placeholder={t("placeCategorySelector.placeholder")}
         onChange={(e) => setInputValue(e.target.value)}
         error={error}
       />
@@ -130,7 +134,7 @@ const PlaceCategorySelectorInput = ({
           <TextField
             name="search"
             onClick={() => setIsOpen(true)}
-            placeholder="Rechercher un lieu..."
+            placeholder={t("placeCategorySelector.searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             fullWidth
@@ -143,7 +147,7 @@ const PlaceCategorySelectorInput = ({
                 className={styles.item}
                 onClick={() => handleSelect(cat)}
               >
-                {cat.name}
+                {t(`placeCategories.${cat.name}`)}
               </div>
             ))}
           </div>

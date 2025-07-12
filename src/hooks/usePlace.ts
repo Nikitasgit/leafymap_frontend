@@ -7,7 +7,7 @@ import { useToast } from "./useToast";
 export const usePlace = (placeId: string, enrichSchedule: boolean = false) => {
   const [place, setPlace] = useState<Place | null>(null);
   const { isLoading, withLoading } = useLoading(true);
-  const { showError, showSuccess } = useToast();
+  const { showError } = useToast();
 
   useEffect(() => {
     const fetchPlace = async () => {
@@ -17,7 +17,6 @@ export const usePlace = (placeId: string, enrichSchedule: boolean = false) => {
         }/api/places/${placeId}?enrichSchedule=${enrichSchedule.toString()}`;
         const response = await axios.get(url);
         setPlace(response.data.data);
-        showSuccess("Lieu chargé avec succès");
       } catch (err) {
         const errorMessage =
           err instanceof Error

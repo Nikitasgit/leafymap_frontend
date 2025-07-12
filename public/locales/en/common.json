@@ -8,5 +8,43 @@
     "account": "Account",
     "register": "Register",
     "signin": "Sign In"
+  },
+  "placeTypes": {
+    "food": "Food",
+    "art": "Art",
+    "craft": "Craft"
+  },
+  "placeCategories": {
+    "craft fair": "Craft Fair",
+    "cooperative store": "Cooperative Store",
+    "boutique": "Boutique",
+    "street stand": "Street Stand",
+    "gallery": "Gallery",
+    "farm": "Farm",
+    "cultural center": "Cultural Center",
+    "food market": "Food Market",
+    "workshop": "Workshop",
+    "festival": "Festival",
+    "library": "Library"
+  },
+  "creatorCategories": {
+    "painter": "Painter",
+    "illustrator": "Illustrator",
+    "beekeeper": "Beekeeper",
+    "market gardener": "Market Gardener",
+    "winemaker": "Winemaker",
+    "sculptor": "Sculptor",
+    "photographer": "Photographer",
+    "blacksmith": "Blacksmith",
+    "musician": "Musician",
+    "writer": "Writer",
+    "designer": "Designer",
+    "livestock breeder": "Livestock Breeder",
+    "fisher": "Fisher",
+    "farmer": "Farmer",
+    "herbalist": "Herbalist",
+    "cabinetmaker": "Cabinetmaker",
+    "ceramicist": "Ceramicist",
+    "weaver": "Weaver"
   }
 }

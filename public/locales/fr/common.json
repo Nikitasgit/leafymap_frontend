@@ -8,5 +8,43 @@
     "account": "Compte",
     "register": "S'inscrire",
     "signin": "Se connecter"
+  },
+  "placeTypes": {
+    "food": "Alimentaire",
+    "art": "Art",
+    "craft": "Artisanat"
+  },
+  "placeCategories": {
+    "craft fair": "Foire d'Artisanat",
+    "gallery": "Galerie",
+    "farm": "Ferme",
+    "cultural center": "Centre Culturel",
+    "food market": "Marché Alimentaire",
+    "workshop": "Atelier",
+    "festival": "Festival",
+    "library": "Bibliothèque",
+    "cooperative store": "Coopérative",
+    "boutique": "Boutique",
+    "street stand": "Stand de rue"
+  },
+  "creatorCategories": {
+    "painter": "Peintre",
+    "illustrator": "Illustrateur",
+    "beekeeper": "Apiculteur",
+    "market gardener": "Maraîcher",
+    "winemaker": "Vigneron",
+    "sculptor": "Sculpteur",
+    "photographer": "Photographe",
+    "blacksmith": "Forgeron",
+    "musician": "Musicien",
+    "writer": "Écrivain",
+    "designer": "Designer",
+    "livestock breeder": "Éleveur de bétail",
+    "fisher": "Pêcheur",
+    "farmer": "Agriculteur",
+    "herbalist": "Herboriste",
+    "cabinetmaker": "Menuisier",
+    "ceramicist": "Céramiste",
+    "weaver": "Tisserand"
   }
 }
