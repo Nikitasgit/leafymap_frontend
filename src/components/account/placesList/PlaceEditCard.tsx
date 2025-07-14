@@ -1,12 +1,11 @@
 import Button from "@/components/common/buttons/button/Button";
-import { useUser } from "@/hooks/useUser";
 import { Place } from "@/types/place";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 const PlaceEditCard = ({ place }: { place: Place }) => {
   const router = useRouter();
-  const { user } = useUser();
+
   return (
     <div>
       <h3>{place.name}</h3>

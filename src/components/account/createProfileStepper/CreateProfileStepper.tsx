@@ -6,14 +6,14 @@ import ActivityFormStep from "./steps/ActivityFormStep/ActivityFormStep";
 import { FormDataChangeHandler } from "./CreateProfileStepper.types";
 import type { NewProfileFormData } from "./CreateProfileStepper.types";
 import useUpdateUser from "@/hooks/useUpdateUser";
-import { useUser } from "@/hooks/useUser";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { defaultSchedule } from "@/utils/createProfile";
 import styles from "./CreateProfileStepper.module.scss";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useToast } from "@/hooks/useToast";
 
 const CreateProfileStepper = () => {
-  const { user, loading: userLoading, error: userError } = useUser();
+  const { user, loading: userLoading, error: userError } = useCurrentUser();
   const { showError } = useToast();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<NewProfileFormData>({

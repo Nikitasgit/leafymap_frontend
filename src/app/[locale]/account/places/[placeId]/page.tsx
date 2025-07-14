@@ -10,7 +10,7 @@ import {
 } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import useUpdatePlace from "@/hooks/useUpdatePlace";
 import { defaultSchedule } from "@/utils/createProfile";
-import { useUser } from "@/hooks/useUser";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import styles from "./updatePlacePage.module.scss";
 
@@ -18,7 +18,7 @@ const UpdatePlace = () => {
   const params = useParams();
   const placeId = params.placeId as string;
   const { place, loading } = usePlace(placeId);
-  const { user, loading: userLoading } = useUser();
+  const { user, isLoading: userLoading } = useCurrentUser();
   const { submitForm, isLoading } = useUpdatePlace();
   const [formData, setFormData] = useState<PlaceFormData | null>(null);
 

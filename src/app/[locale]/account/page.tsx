@@ -6,14 +6,12 @@ import React from "react";
 import PlacesEditList from "@/components/account/placesList/PlacesEditList";
 import { Organizer } from "@/types/user";
 import LoadingBar from "@/components/common/loading/LoadingBar";
-import { useToast } from "@/hooks/useToast";
-import { useUser } from "@/hooks/useUser";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import styles from "./account.module.scss";
 import { PlusCircleIcon } from "lucide-react";
 
 export default function AccountPage() {
-  const { user, loading, error } = useUser();
-  const { showError } = useToast();
+  const { user, isLoading } = useCurrentUser();
   const { userType } = user || {};
   const organizer = user as Organizer;
   const router = useRouter();
@@ -25,13 +23,9 @@ export default function AccountPage() {
       ? { route: "/account/places/create", text: "Ajouter un lieu" }
       : { route: "/account/create", text: "Ajouter mon activité" };
 
-  if (error) {
-    showError(error);
-  }
-
   return (
     <main className={styles.accountPage}>
-      {loading && <LoadingBar />}
+      {isLoading && <LoadingBar />}
       <div className={styles.header}>
         <div className={styles.userInfo}>
           <h1 className={styles.username}>{user?.username}</h1>
@@ -48,7 +42,7 @@ export default function AccountPage() {
       <div className={styles.actions}>
         <div className={styles.buttonGroup}>
           <Button
-            disabled={loading}
+            disabled={isLoading}
             variant="secondary"
             onClick={() => router.push("/account/settings")}
             fullWidth
@@ -56,7 +50,7 @@ export default function AccountPage() {
             Paramètres du compte
           </Button>
           <Button
-            disabled={loading}
+            disabled={isLoading}
             variant="secondary"
             onClick={() => router.push("/account/reviews")}
             fullWidth
@@ -65,7 +59,7 @@ export default function AccountPage() {
           </Button>
         </div>
         <Button
-          disabled={loading}
+          disabled={isLoading}
           endIcon={<PlusCircleIcon size={18} />}
           onClick={() => {
             router.push(buttonParameters.route);

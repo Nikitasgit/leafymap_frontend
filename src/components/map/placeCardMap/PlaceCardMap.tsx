@@ -8,12 +8,13 @@ import { MapPin, Heart, Star } from "lucide-react";
 import { usePlace } from "@/hooks/usePlace";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/navigation";
 
 const PlaceCardMap = ({ placeId }: { placeId: string }) => {
   const { place, loading } = usePlace(placeId, true);
   const { t } = useTranslation("common");
   const [displayPlace, setDisplayPlace] = useState(place);
-
+  const router = useRouter();
   useEffect(() => {
     if (place) {
       setDisplayPlace(place);
@@ -38,6 +39,13 @@ const PlaceCardMap = ({ placeId }: { placeId: string }) => {
       {loading && <LoadingBar />}
       <div className={styles.imageContainer}>
         <Image
+          onClick={() => {
+            if (displayPlace?.isCreatorPlace) {
+              router.push(`/users/${displayPlace?.userId._id}`);
+            } else {
+              router.push(`/places/${displayPlace?._id}`);
+            }
+          }}
           src={displayPlace?.image || "/images/default-place.png"}
           alt={displayPlace?.name || "Place image"}
           width={100}

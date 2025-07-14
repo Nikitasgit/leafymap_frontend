@@ -9,6 +9,7 @@ import { useFindCreatorInPlaces } from "@/hooks/useFindCreatorInPlaces";
 import { ExtendedMapRef } from "@/types/map";
 import { applyPixelOffsetToLocation } from "@/utils/map";
 import mapboxgl from "mapbox-gl";
+import { useRouter } from "next/navigation";
 
 interface UserCardMapProps {
   user: Collaborator;
@@ -17,7 +18,7 @@ interface UserCardMapProps {
 
 const UserCardMap = ({ user, mapRef }: UserCardMapProps) => {
   const { data: userPlaces, findCreatorInPlaces } = useFindCreatorInPlaces();
-
+  const router = useRouter();
   useEffect(() => {
     findCreatorInPlaces(user._id);
   }, [user._id, findCreatorInPlaces]);
@@ -61,7 +62,10 @@ const UserCardMap = ({ user, mapRef }: UserCardMapProps) => {
   return (
     <div className={styles.userCardMap}>
       <div className={styles.creatorProfile}>
-        <div className={styles.creatorImageContainer}>
+        <div
+          className={styles.creatorImageContainer}
+          onClick={() => router.push(`/users/${userPlaces.user?._id}`)}
+        >
           <Image
             src={userPlaces.user?.image}
             alt={userPlaces.user?.creatorProfile?.name}
@@ -116,7 +120,11 @@ const UserCardMap = ({ user, mapRef }: UserCardMapProps) => {
                 <div className={styles.placeHeader}>
                   <h4 className={styles.placeName}>{placeData.place.name}</h4>
                   <div className={styles.placeButtons}>
-                    <Button>
+                    <Button
+                      onClick={() =>
+                        router.push(`/places/${placeData.place._id}`)
+                      }
+                    >
                       <User size={14} />
                     </Button>
                     <Button onClick={() => handleMapButtonClick(placeData)}>

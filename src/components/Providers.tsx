@@ -3,7 +3,6 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { store } from "@/store";
-import UserInitializer from "./initializers/UserInitializer";
 import AppInitializer from "./initializers/AppInitializer";
 import { Toaster } from "sonner";
 import { LoadingProvider } from "./common/loading/LoadingProvider";
@@ -46,7 +45,6 @@ export default function Providers({ children, locale = "fr" }: ProvidersProps) {
     <Provider store={store}>
       <I18nextProvider i18n={i18nInstance}>
         <LoadingProvider>
-          <UserInitializer />
           <AppInitializer />
           {children}
           <Toaster

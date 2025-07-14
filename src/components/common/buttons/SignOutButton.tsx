@@ -1,13 +1,10 @@
 "use client";
 
 import axios from "axios";
-import { useAppDispatch } from "@/store";
-import { signOut } from "@/store/userSlice";
 import { useRouter } from "next/navigation";
 import Button from "./button/Button";
 
 function SignOutButton() {
-  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const handleSignOut = async () => {
@@ -17,7 +14,6 @@ function SignOutButton() {
         {},
         { withCredentials: true }
       );
-      dispatch(signOut());
       router.push("/auth/signin");
     } catch (error) {
       console.error("Sign out failed", error);

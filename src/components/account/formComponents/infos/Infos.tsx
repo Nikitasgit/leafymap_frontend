@@ -6,7 +6,7 @@ import {
   FormDataChangeHandler,
 } from "../../createProfileStepper/CreateProfileStepper.types";
 import CategorySelectorInput from "@/components/common/inputs/categorySelectorInput/CategorySelectorInput";
-import { useUser } from "@/hooks/useUser";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import PlaceForm from "../placeForm/PlaceForm";
 import { Creator } from "@/types/user";
 import styles from "./Infos.module.scss";
@@ -22,7 +22,7 @@ interface InfosProps {
 }
 
 const Infos = ({ isCreator, data, onChange, errors = {} }: InfosProps) => {
-  const { user, loading, error } = useUser();
+  const { user, loading, error } = useCurrentUser();
   const creator = user as Creator;
   const withPlace = !!data.placeActive;
   const [creatorWithPlace, setCreatorWithPlace] = useState(withPlace);

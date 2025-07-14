@@ -24,6 +24,8 @@ export interface User extends BaseEntity {
   deleted?: boolean;
   followers?: string[];
   interests?: string[];
+  places?: Place[];
+  _id: string;
 }
 
 export interface Creator extends User {

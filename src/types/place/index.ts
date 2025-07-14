@@ -1,5 +1,5 @@
 import { BaseEntity, ContactInfo, Location } from "../common";
-import { PlaceCategory } from "../categories";
+import { PlaceCategory, SubCategory } from "../categories";
 import { User } from "../user";
 import { DefaultSchedule } from "./schedule";
 import { CreatedCollaborator } from "./collaborators";

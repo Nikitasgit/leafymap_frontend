@@ -5,10 +5,9 @@ import { usePathname } from "next/navigation";
 import { Home, Map, MessageSquare, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import SignOutButton from "../common/buttons/SignOutButton";
-import { useUser } from "@/hooks/useUser";
 import styles from "./Navbar.module.scss";
 import LoadingBar from "../common/loading/LoadingBar";
-import { useToast } from "@/hooks/useToast";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -21,14 +20,9 @@ export default function Navbar() {
     { href: "/account", label: t("nav.account"), icon: User },
   ];
 
-  const { user, loading, error } = useUser();
-  const { showError } = useToast();
+  const { isLoading, isLoggedIn } = useCurrentUser();
 
-  if (error) {
-    showError(error);
-  }
-
-  if (loading) {
+  if (isLoading) {
     return <LoadingBar />;
   }
 
@@ -55,7 +49,7 @@ export default function Navbar() {
           })}
         </div>
         <div>
-          {user ? (
+          {isLoggedIn ? (
             <SignOutButton />
           ) : (
             <div className={styles.authLinks}>

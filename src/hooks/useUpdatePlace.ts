@@ -1,7 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-import { fetchUser } from "@/store/userSlice";
-import { useAppDispatch } from "@/store";
 import { useRouter, useParams } from "next/navigation";
 import { PlaceFormData } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { useLoading } from "./useLoading";
@@ -19,7 +17,6 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
   const { showError, showSuccess } = useToast();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const dispatch = useAppDispatch();
   const router = useRouter();
   const params = useParams();
   const placeId = params.placeId as string;
@@ -79,7 +76,6 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
 
       showSuccess("Lieu modifié avec succès");
       router.push("/account");
-      dispatch(fetchUser());
     } catch (err: unknown) {
       console.error("Update place error:", err);
       if (axios.isAxiosError(err) && err.response?.data) {

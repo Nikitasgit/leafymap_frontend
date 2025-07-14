@@ -55,11 +55,7 @@ const CategoryMarker: React.FC<CategoryMarkerProps> = ({
         {placeName && shouldShowLabel && (
           <div
             className={`${styles.placeLabel} ${
-              isSelected
-                ? styles.selectedLabel
-                : isZoomedIn
-                ? styles.permanent
-                : styles.hover
+              isZoomedIn ? styles.permanent : styles.hover
             }`}
           >
             {placeName}

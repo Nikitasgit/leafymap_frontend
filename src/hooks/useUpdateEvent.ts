@@ -1,7 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-import { fetchUser } from "@/store/userSlice";
-import { useAppDispatch } from "@/store";
 import { useRouter, useParams } from "next/navigation";
 import { EventFormData } from "@/components/events/form/EventForm";
 import { parseDateToUTC } from "@/utils/dates";
@@ -17,7 +15,6 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const dispatch = useAppDispatch();
   const router = useRouter();
   const { placeId, eventId } = useParams();
 
@@ -62,11 +59,8 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
         const cleanedCollaborators = data.createdCollaborators.map(
           (collaborator) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { id, categoryId, ...collaboratorWithoutId } = collaborator;
-            return {
-              ...collaboratorWithoutId,
-              category: categoryId,
-            };
+            const { id, ...collaboratorWithoutId } = collaborator;
+            return collaboratorWithoutId;
           }
         );
         form.append(
@@ -104,7 +98,6 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
 
       router.push("/account");
       setSuccess(true);
-      dispatch(fetchUser());
     } catch (err: unknown) {
       console.error("Error in submitForm:", err);
       setError(

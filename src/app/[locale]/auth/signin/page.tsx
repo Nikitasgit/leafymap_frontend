@@ -5,8 +5,6 @@ import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./signin.module.scss";
-import { useAppDispatch } from "@/store";
-import { fetchUser } from "@/store/userSlice";
 import { useToast } from "@/hooks/useToast";
 import { useLoading } from "@/hooks/useLoading";
 import Button from "@/components/common/buttons/button/Button";
@@ -18,7 +16,6 @@ export default function SignIn() {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const { t } = useTranslation("subscription");
-  const dispatch = useAppDispatch();
   const { showSuccess, showError } = useToast();
   const { isLoading, withLoading } = useLoading();
 
@@ -35,7 +32,6 @@ export default function SignIn() {
           },
           { withCredentials: true }
         );
-        dispatch(fetchUser());
         showSuccess(t("signin.messages.success"));
         router.push("/");
       } catch (err: unknown) {

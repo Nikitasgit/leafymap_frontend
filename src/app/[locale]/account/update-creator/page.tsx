@@ -9,17 +9,15 @@ import ActivityFormStep from "@/components/account/createProfileStepper/steps/Ac
 import useUpdateUser from "@/hooks/useUpdateUser";
 import { Creator } from "@/types/user";
 import { defaultSchedule } from "@/utils/createProfile";
-import { useUser } from "@/hooks/useUser";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import LoadingBar from "@/components/common/loading/LoadingBar";
-import { useToast } from "@/hooks/useToast";
 import styles from "./updateCreatorPage.module.scss";
 
 const ModifyCreator = () => {
-  const { user, loading, error } = useUser();
+  const { user, isLoading } = useCurrentUser();
   const creator = user as Creator | null;
   const [formData, setFormData] = useState<NewProfileFormData | null>(null);
   const { submitForm } = useUpdateUser();
-  const { showError } = useToast();
   useEffect(() => {
     if (creator && creator.creatorProfile && !formData) {
       const creatorPlace = creator.creatorProfile.place?.location;
@@ -66,12 +64,8 @@ const ModifyCreator = () => {
     if (!formData) return;
     await submitForm(formData, true);
   };
-
-  if (error) {
-    showError(error);
-  }
-
-  if (loading || !formData) {
+  console.log(formData);
+  if (isLoading || !formData) {
     return <LoadingBar />;
   }
 

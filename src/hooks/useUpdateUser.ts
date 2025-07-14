@@ -1,7 +1,5 @@
 import axios from "axios";
 import { NewProfileFormData } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
-import { fetchUser } from "@/store/userSlice";
-import { useAppDispatch } from "@/store";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
 import { useLoading } from "@/hooks/useLoading";
@@ -12,7 +10,6 @@ type UseCreateProfileReturn = {
 };
 
 const useUpdateUser = (): UseCreateProfileReturn => {
-  const dispatch = useAppDispatch();
   const router = useRouter();
   const { showSuccess, showError } = useToast();
   const { isLoading, withLoading } = useLoading();
@@ -99,7 +96,6 @@ const useUpdateUser = (): UseCreateProfileReturn => {
           : "Profil créé avec succès !"
       );
       router.push("/account");
-      dispatch(fetchUser());
     }).catch((err: unknown) => {
       console.error("API Error:", err);
       if (axios.isAxiosError(err) && err.response) {

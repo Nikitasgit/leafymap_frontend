@@ -12,7 +12,6 @@ export const useFindCreators = () => {
   const [searchResults, setSearchResults] = useState<CreatorSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-
   const searchCreators = useCallback(
     async (query: string): Promise<CreatorSearchResult[]> => {
       if (!query || query.length < 2) {

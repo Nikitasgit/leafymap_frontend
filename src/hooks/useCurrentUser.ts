@@ -4,16 +4,20 @@ import { User, Creator } from "@/types/user";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 
-export const useUser = (userId?: string) => {
+export const useCurrentUser = () => {
   const [user, setUser] = useState<User | Creator | null>(null);
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchCurrentUser = async () => {
       try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}`;
-        const response = await axios.get(url);
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`,
+          {
+            withCredentials: true,
+          }
+        );
         setUser(response.data.data.user);
       } catch (err) {
         const errorMessage =
@@ -25,10 +29,15 @@ export const useUser = (userId?: string) => {
       }
     };
 
-    if (userId) {
-      withLoading(fetchUser);
-    }
-  }, [userId]);
+    withLoading(fetchCurrentUser);
+  }, []);
 
-  return { user, isLoading };
+  const getLoggedIn = () => {
+    if (typeof document === "undefined") return false;
+    return document.cookie.includes("logged_in=true");
+  };
+
+  const isLoggedIn = getLoggedIn() && user;
+
+  return { user, isLoading, isLoggedIn };
 };
