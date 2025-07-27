@@ -8,7 +8,7 @@ import { PlaceType } from "./placeCaterories";
 export interface Place extends BaseEntity, ContactInfo {
   name: string;
   description?: string;
-  userId: string;
+  userId: string | User;
   location: Location;
   placeCategory: PlaceCategory;
   categories: string[];

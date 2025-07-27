@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
 import Text from "@/components/common/typography/Text";
@@ -9,17 +9,27 @@ import { usePlace } from "@/hooks/usePlace";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
+import { ExtendedMapRef } from "@/types/map";
+import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
 
-const PlaceCardMap = ({ placeId }: { placeId: string }) => {
+interface PlaceCardMapProps {
+  placeId: string;
+  mapRef: React.RefObject<ExtendedMapRef | null>;
+}
+
+const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
   const { place, loading } = usePlace(placeId, true);
   const { t } = useTranslation("common");
-  const [displayPlace, setDisplayPlace] = useState(place);
   const router = useRouter();
   useEffect(() => {
-    if (place) {
-      setDisplayPlace(place);
+    if (mapRef.current && place) {
+      navigateToPlaceOnMap({
+        mapRef,
+        placeId: place._id,
+        coordinates: place.location.coordinates,
+      });
     }
-  }, [place]);
+  }, [mapRef, place]);
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, index) => (
@@ -40,14 +50,18 @@ const PlaceCardMap = ({ placeId }: { placeId: string }) => {
       <div className={styles.imageContainer}>
         <Image
           onClick={() => {
-            if (displayPlace?.isCreatorPlace) {
-              router.push(`/users/${displayPlace?.userId._id}`);
+            if (place?.isCreatorPlace) {
+              const userId =
+                typeof place.userId === "string"
+                  ? place.userId
+                  : place.userId._id;
+              router.push(`/users/${userId}`);
             } else {
-              router.push(`/places/${displayPlace?._id}`);
+              router.push(`/places/${place?._id}`);
             }
           }}
-          src={displayPlace?.image || "/images/default-place.png"}
-          alt={displayPlace?.name || "Place image"}
+          src={place?.image || "/images/default-place.png"}
+          alt={place?.name || "Place image"}
           width={100}
           height={200}
           className={styles.currentImage}
@@ -55,28 +69,28 @@ const PlaceCardMap = ({ placeId }: { placeId: string }) => {
       </div>
       <div className={styles.header}>
         <div className={styles.headerMain}>
-          <h2 className={styles.title}>{displayPlace?.name}</h2>
+          <h2 className={styles.title}>{place?.name}</h2>
           <div className={styles.categoryRow}>
-            {displayPlace?.placeCategory && (
+            {place?.placeCategory && (
               <Text className={styles.category}>
-                {displayPlace.creatorCategories ? (
-                  displayPlace.creatorCategories.map((category) => (
+                {place.creatorCategories ? (
+                  place.creatorCategories.map((category) => (
                     <Text key={category._id}>
                       {t(`creatorCategories.${category.name}`)}
                     </Text>
                   ))
                 ) : (
                   <Text>
-                    {t(`placeCategories.${displayPlace.placeCategory.name}`)}
+                    {t(`placeCategories.${place.placeCategory.name}`)}
                   </Text>
                 )}
               </Text>
             )}
             <div className={styles.ratingRow}>
               <Heart size={16} className={styles.heartIcon} />
-              <span className={styles.rating}>{displayPlace?.rating}</span>
+              <span className={styles.rating}>{place?.rating}</span>
               <div className={styles.starsContainer}>
-                {renderStars(displayPlace?.rating || 0)}
+                {renderStars(place?.rating || 0)}
               </div>
             </div>
           </div>
@@ -91,15 +105,13 @@ const PlaceCardMap = ({ placeId }: { placeId: string }) => {
           <span className={styles.addressIcon}>
             <MapPin size={14} />
           </span>
-          <Text className={styles.address}>{displayPlace?.location.label}</Text>
+          <Text className={styles.address}>{place?.location.label}</Text>
         </div>
       </div>
       <div className={styles.descriptionRow}>
-        <Text>{displayPlace?.description}</Text>
+        <Text>{place?.description}</Text>
       </div>
-      {displayPlace?.defaultSchedule && (
-        <Schedule schedule={displayPlace?.defaultSchedule} />
-      )}
+      {place?.defaultSchedule && <Schedule schedule={place?.defaultSchedule} />}
     </div>
   );
 };

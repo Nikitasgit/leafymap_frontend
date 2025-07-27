@@ -1,5 +1,7 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
+import { useToast } from "./useToast";
+import { useLoading } from "./useLoading";
 
 interface PlaceSearchResult {
   _id: string;
@@ -19,8 +21,8 @@ interface PlaceSearchResult {
 
 export const useFindPlaces = () => {
   const [searchResults, setSearchResults] = useState<PlaceSearchResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const { showError } = useToast();
+  const { isLoading, withLoading } = useLoading();
 
   const searchPlaces = useCallback(
     async (query: string): Promise<PlaceSearchResult[]> => {
@@ -29,49 +31,44 @@ export const useFindPlaces = () => {
         return [];
       }
 
-      setIsLoading(true);
-      setError(null);
+      return withLoading(async () => {
+        try {
+          const res = await axios.get(
+            `${
+              process.env.NEXT_PUBLIC_API_URL
+            }/api/places/search?name=${encodeURIComponent(query)}&limit=10`
+          );
+          const data = res.data;
 
-      try {
-        const res = await axios.get(
-          `${
-            process.env.NEXT_PUBLIC_API_URL
-          }/api/places/search?name=${encodeURIComponent(query)}&limit=10`
-        );
-        const data = res.data;
-
-        const results = data.data.map((place: PlaceSearchResult) => ({
-          _id: place._id,
-          name: place.name,
-          image: place.image || "https://i.pravatar.cc/40?img=3",
-          location: place.location,
-          placeCategory: place.placeCategory,
-        }));
-        setSearchResults(results);
-        return results;
-      } catch (err) {
-        setError(
-          err instanceof Error ? err : new Error("Failed to search places")
-        );
-        console.error("Error searching places:", err);
-        setSearchResults([]);
-        return [];
-      } finally {
-        setIsLoading(false);
-      }
+          const results = data.data.map((place: PlaceSearchResult) => ({
+            _id: place._id,
+            name: place.name,
+            image: place.image || "https://i.pravatar.cc/40?img=3",
+            location: place.location,
+            placeCategory: place.placeCategory,
+          }));
+          setSearchResults(results);
+          return results;
+        } catch (err) {
+          const error =
+            err instanceof Error ? err : new Error("Failed to search places");
+          showError(error.message);
+          console.error("Error searching places:", err);
+          setSearchResults([]);
+          return [];
+        }
+      });
     },
-    []
+    [showError]
   );
 
   const clearResults = useCallback(() => {
     setSearchResults([]);
-    setError(null);
   }, []);
 
   return {
     searchResults,
     isLoading,
-    error,
     searchPlaces,
     clearResults,
   };

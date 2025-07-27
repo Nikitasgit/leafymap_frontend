@@ -9,6 +9,7 @@ import { MapFilters, ExtendedMapRef } from "@/types/map";
 import { useFindCreators } from "@/hooks/useFindCreators";
 import { useFindPlaces } from "@/hooks/useFindPlaces";
 import { Collaborator } from "@/types/place/collaborators";
+import { Place } from "@/types/place";
 
 type SearchType = {
   label: string;
@@ -17,7 +18,7 @@ type SearchType = {
 
 type CreatorSearchResult = {
   _id: string;
-  username: string;
+  name: string;
   image: string;
 };
 
@@ -46,7 +47,7 @@ const searchTypes: SearchType[] = [
 
 const FiltersBar = ({
   mapRef,
-  loading,
+  loading: loadingProps,
   filters,
   setFilters,
   handleUserSelect,
@@ -58,10 +59,9 @@ const FiltersBar = ({
   filters: MapFilters;
   setFilters: (filters: MapFilters) => void;
   handleUserSelect: (user: Collaborator) => void;
-  handlePlaceSelect: (place: {
-    _id: string;
-    location: { coordinates: number[] };
-  }) => void;
+  handlePlaceSelect: (
+    place: Pick<Place, "_id" | "location" | "image" | "name" | "placeCategory">
+  ) => void;
   handleOpenFilters: () => void;
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -69,7 +69,7 @@ const FiltersBar = ({
   const [searchValue, setSearchValue] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { searchCreators } = useFindCreators();
-  const { searchPlaces } = useFindPlaces();
+  const { searchPlaces, isLoading } = useFindPlaces();
   useOnClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 
   const types = [
@@ -109,27 +109,34 @@ const FiltersBar = ({
 
   const handleSearch = async (query: string) => {
     if (searchType.label === "Membres") {
-      return await searchCreators(query);
+      const creators = await searchCreators(query);
+      return creators;
     } else {
-      return await searchPlaces(query);
+      const places = await searchPlaces(query);
+      return places;
     }
   };
 
   const handleSelect = (item: SearchResult) => {
     if (searchType.label === "Membres") {
-      handleUserSelect(item as CreatorSearchResult);
+      handleUserSelect({
+        _id: item._id,
+        name: item.name,
+        image: item.image,
+      } as Collaborator);
     } else {
-      handlePlaceSelect(
-        item as { _id: string; location: { coordinates: number[] } }
-      );
+      handlePlaceSelect(item as Place);
     }
   };
 
   useEffect(() => {
     if (mapRef.current) {
       mapRef.current.fetchPlacesInView(null);
+      mapRef.current.setSelectedPlaceId(null);
     }
   }, [filters, mapRef]);
+
+  const loading = isLoading || loadingProps;
 
   return (
     <div className={styles.filtersBar}>

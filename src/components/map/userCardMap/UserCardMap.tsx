@@ -1,64 +1,35 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
 import Text from "@/components/common/typography/Text";
 import styles from "./UserCardMap.module.scss";
 import { User, Map, ExternalLink } from "lucide-react";
-import { Collaborator } from "@/types/place/collaborators";
 import { useFindCreatorInPlaces } from "@/hooks/useFindCreatorInPlaces";
 import { ExtendedMapRef } from "@/types/map";
-import { applyPixelOffsetToLocation } from "@/utils/map";
-import mapboxgl from "mapbox-gl";
+import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
 import { useRouter } from "next/navigation";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 
 interface UserCardMapProps {
-  user: Collaborator;
+  userId: string;
   mapRef?: React.RefObject<ExtendedMapRef | null>;
 }
 
-const UserCardMap = ({ user, mapRef }: UserCardMapProps) => {
-  const { data: userPlaces, findCreatorInPlaces } = useFindCreatorInPlaces();
+const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
+  const { data: userPlaces, isLoading } = useFindCreatorInPlaces(userId);
   const router = useRouter();
-  useEffect(() => {
-    findCreatorInPlaces(user._id);
-  }, [user._id, findCreatorInPlaces]);
 
   const handleMapButtonClick = async (placeData: {
     place: { location: { coordinates: number[] }; _id: string };
   }) => {
-    const [longitude, latitude] = placeData.place.location.coordinates;
-    const offsetLocation = applyPixelOffsetToLocation(
-      { latitude, longitude },
-      -100,
-      0
-    );
-
-    if (mapRef?.current) {
-      const mapInstance = mapRef.current;
-      mapInstance.setSelectedPlaceId(placeData.place._id);
-
-      const bounds = new mapboxgl.LngLatBounds();
-      bounds.extend([
-        offsetLocation.longitude - 0.01,
-        offsetLocation.latitude - 0.01,
-      ]);
-      bounds.extend([
-        offsetLocation.longitude + 0.01,
-        offsetLocation.latitude + 0.01,
-      ]);
-
-      await mapInstance.fetchPlacesInView(bounds);
-
-      mapRef.current.flyTo({
-        center: [offsetLocation.longitude, offsetLocation.latitude],
-        zoom: 15,
-        duration: 800,
-      });
-    }
+    await navigateToPlaceOnMap({
+      mapRef,
+      placeId: placeData.place._id,
+      coordinates: placeData.place.location.coordinates,
+    });
   };
 
-  if (!userPlaces) return <div>Loading...</div>;
-
+  if (isLoading || !userPlaces) return <LoadingBar />;
   return (
     <div className={styles.userCardMap}>
       <div className={styles.creatorProfile}>

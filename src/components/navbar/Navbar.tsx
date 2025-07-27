@@ -22,10 +22,6 @@ export default function Navbar() {
 
   const { isLoading, isLoggedIn } = useCurrentUser();
 
-  if (isLoading) {
-    return <LoadingBar />;
-  }
-
   return (
     <nav className={styles.navbar}>
       <Link href="/" className={styles.logo}>
@@ -48,31 +44,35 @@ export default function Navbar() {
             );
           })}
         </div>
-        <div>
-          {isLoggedIn ? (
-            <SignOutButton />
-          ) : (
-            <div className={styles.authLinks}>
-              <Link
-                href="/auth/register"
-                className={`${styles.navLink} ${
-                  pathname === "/auth/register" ? styles.active : ""
-                }`}
-              >
-                {t("nav.register")}
-              </Link>
-              <span>|</span>
-              <Link
-                href="/auth/signin"
-                className={`${styles.navLink} ${
-                  pathname === "/auth/signin" ? styles.active : ""
-                }`}
-              >
-                {t("nav.signin")}
-              </Link>
-            </div>
-          )}
-        </div>
+        {isLoading ? (
+          <LoadingBar />
+        ) : (
+          <div>
+            {isLoggedIn ? (
+              <SignOutButton />
+            ) : (
+              <div className={styles.authLinks}>
+                <Link
+                  href="/auth/register"
+                  className={`${styles.navLink} ${
+                    pathname === "/auth/register" ? styles.active : ""
+                  }`}
+                >
+                  {t("nav.register")}
+                </Link>
+                <span>|</span>
+                <Link
+                  href="/auth/signin"
+                  className={`${styles.navLink} ${
+                    pathname === "/auth/signin" ? styles.active : ""
+                  }`}
+                >
+                  {t("nav.signin")}
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </nav>
   );

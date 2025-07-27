@@ -2,16 +2,13 @@
 
 import MapComponent from "@/components/map/mapComponent/Map";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useState, useEffect, useRef } from "react";
-import PlaceCardMap from "@/components/map/placeCardMap/PlaceCardMap";
+import { useState, useRef, useEffect } from "react";
 import styles from "./mapPage.module.scss";
 import FiltersBar from "@/components/map/filtersBar/FiltersBar";
 import { MapFilters, ExtendedMapRef } from "@/types/map";
 import { Collaborator } from "@/types/place/collaborators";
-import UserCardMap from "@/components/map/userCardMap/UserCardMap";
-import mapboxgl from "mapbox-gl";
-import { applyPixelOffsetToLocation } from "@/utils/map";
-import FiltersCardMap from "@/components/map/filtersCardMap/FiltersCardMap";
+import { Place } from "@/types/place";
+import CardMapContainer from "@/components/map/cardMapContainer/CardMapContainer";
 import { useAppSelector } from "@/store";
 import { selectPlaceCategories } from "@/store/appSlice";
 
@@ -23,90 +20,50 @@ const defaultFilters: MapFilters = {
 };
 
 const MapPage = () => {
-  const [selectedPlace, setSelectedPlace] = useState<string | null>(null);
-  const [selectedUser, setSelectedUser] = useState<Collaborator | null>(null);
+  const [selectedItem, setSelectedItem] = useState<{
+    id: string;
+    type: "place" | "user" | "filters" | null;
+  }>({ id: "", type: null });
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState<MapFilters>(defaultFilters);
-  const mapRef = useRef<ExtendedMapRef>(null);
-  const isSelectingFromSearch = useRef(false);
-  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-  const placeCategories = useAppSelector(selectPlaceCategories);
+  const mapRef = useRef<ExtendedMapRef | null>(null);
+  const placeCategoriesIds = useAppSelector(selectPlaceCategories).map(
+    (category) => category._id
+  );
+
+  const handleMarkerClick = (placeId: string) => {
+    setSelectedItem({ id: placeId, type: "place" });
+  };
+
+  const handleUserSelect = (user: Collaborator) => {
+    setSelectedItem({ id: user._id, type: "user" });
+    setFilters({
+      ...defaultFilters,
+    });
+  };
+
+  const handlePlaceSelect = (
+    place: Pick<Place, "_id" | "location" | "image" | "name" | "placeCategory">
+  ) => {
+    setSelectedItem({ id: place._id, type: "place" });
+    setFilters({
+      ...defaultFilters,
+    });
+  };
+  const handleOpenFilters = () => {
+    setSelectedItem({ id: "", type: "filters" });
+  };
 
   useEffect(() => {
-    if (placeCategories.length > 0 && filters.placeCategories.length === 0) {
-      const allCategoryIds = placeCategories.map((category) => category._id);
+    if (filters.placeCategories.length === 0) {
+      const allCategoryIds = placeCategoriesIds;
       setFilters((prev) => ({
         ...prev,
         placeCategories: allCategoryIds,
       }));
     }
-  }, [placeCategories, filters.placeCategories.length]);
+  }, [placeCategoriesIds, filters.placeCategories]);
 
-  useEffect(() => {
-    if (selectedPlace && !isSelectingFromSearch.current) {
-      setSelectedPlace(null);
-    }
-    isSelectingFromSearch.current = false;
-  }, [filters]);
-
-  const handleMarkerClick = (placeId: string) => {
-    setSelectedPlace(placeId);
-    setSelectedUser(null);
-    setIsFiltersOpen(false);
-  };
-
-  const handleUserSelect = (user: Collaborator) => {
-    setSelectedUser(user);
-    setIsFiltersOpen(false);
-    if (mapRef.current) {
-      mapRef.current.setSelectedPlaceId(null);
-    }
-    setFilters({
-      ...defaultFilters,
-    });
-    setSelectedPlace(null);
-  };
-
-  const handlePlaceSelect = (place: {
-    _id: string;
-    location: { coordinates: number[] };
-  }) => {
-    isSelectingFromSearch.current = true;
-    setSelectedPlace(place._id);
-    setFilters({
-      ...defaultFilters,
-    });
-    setSelectedUser(null);
-    setIsFiltersOpen(false);
-    if (mapRef.current) {
-      mapRef.current.setSelectedPlaceId(place._id);
-      const [longitude, latitude] = place.location.coordinates;
-      const bounds = new mapboxgl.LngLatBounds();
-      bounds.extend([longitude - 0.01, latitude - 0.01]);
-      bounds.extend([longitude + 0.01, latitude + 0.01]);
-
-      mapRef.current?.fetchPlacesInView(bounds);
-      const offsetLocation = applyPixelOffsetToLocation(
-        { latitude, longitude },
-        -100,
-        0
-      );
-
-      mapRef.current?.flyTo({
-        center: [offsetLocation.longitude, offsetLocation.latitude],
-        zoom: 15,
-        duration: 800,
-      });
-    }
-  };
-  const handleOpenFilters = () => {
-    setSelectedUser(null);
-    setSelectedPlace(null);
-    if (mapRef.current) {
-      mapRef.current.setSelectedPlaceId(null);
-    }
-    setIsFiltersOpen(true);
-  };
   return (
     <main className={styles.mapPage}>
       <FiltersBar
@@ -128,12 +85,12 @@ const MapPage = () => {
           height="100%"
           width="100%"
         />
-        {selectedPlace && <PlaceCardMap placeId={selectedPlace} />}
-        {selectedUser && <UserCardMap user={selectedUser} mapRef={mapRef} />}
-        {isFiltersOpen && (
-          <FiltersCardMap
+        {selectedItem.type && (
+          <CardMapContainer
+            selectedItem={selectedItem}
+            mapRef={mapRef}
             filters={filters}
-            onFiltersChange={setFilters}
+            setFilters={setFilters}
             onResetFilters={() => setFilters(defaultFilters)}
           />
         )}

@@ -22,7 +22,6 @@ const FiltersCardMap = ({
 }: FiltersCardMapProps) => {
   const [localFilters, setLocalFilters] = useState<MapFilters>(filters);
 
-  // Update local filters when props change
   useEffect(() => {
     setLocalFilters(filters);
   }, [filters]);

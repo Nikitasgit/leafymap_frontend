@@ -3,223 +3,185 @@
 @use "@/styles/abstracts/functions" as *;
 
 .userCardMap {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 400px;
-  height: 100%;
-  background-color: $white;
-  z-index: 999;
-  overflow-y: scroll;
-  transition: opacity 0.2s ease-in-out;
-  border-top: 2px solid $grey-200;
-  &::-webkit-scrollbar {
-    width: 6px;
+  .creatorProfile {
+    padding: $spacing-medium;
+    border-bottom: 1px solid $grey-200;
+    color: $grey-600;
+    @include flex(row, flex-start, center, $spacing-medium);
   }
-  &::-webkit-scrollbar-track {
-    background: transparent;
+
+  .creatorImageContainer {
+    @include flex(row, center, center, 0);
   }
-  &::-webkit-scrollbar-thumb {
-    background: rgba($grey-200, 0.5);
-    border-radius: 3px;
+
+  .creatorImage {
+    cursor: pointer;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba-color($white, 0.3);
+  }
+
+  .creatorName {
+    font-size: rem(18);
+    font-weight: 500;
+    margin: 0 0 spacing(0.5) 0;
+  }
+
+  .creatorCategories {
+    @include flex(row, flex-start, center, $spacing-small);
+    flex-wrap: wrap;
+  }
+
+  .category {
+    font-size: rem(13);
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    padding: 2px $spacing-small;
+    background: rgba-color($grey-200, 0.5);
+    border-radius: 6px;
+  }
+
+  .placesSection {
+    padding: $spacing-medium;
+  }
+
+  .placesTitle {
+    font-size: rem(16);
+    font-weight: 500;
+    margin: 0 0 $spacing-medium 0;
+    color: $grey-600;
+  }
+
+  .placeCard {
+    display: flex;
+    flex-direction: column;
+    padding: $spacing-small 0;
+    border-bottom: 1px solid $grey-200;
+  }
+
+  .placeMainSection {
+    @include flex(row, flex-start, flex-start, $spacing-medium);
+  }
+
+  .placeImageContainer {
+    flex-shrink: 0;
+  }
+
+  .placeImage {
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  .placeContent {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .placeHeader {
+    @include flex(row, space-between, flex-start, 0);
+    margin-bottom: $spacing-small;
+  }
+
+  .placeName {
+    font-size: rem(14);
+    font-weight: 600;
+    margin: 0;
+    color: $grey-600;
+    flex: 1;
+    margin-right: $spacing-small;
+  }
+
+  .placeButtons {
+    @include flex(row, center, center, spacing(0.5));
+    flex-shrink: 0;
+  }
+
+  .placeLocation {
+    @include flex(row, flex-start, center, spacing(0.5));
+    margin-bottom: $spacing-small;
+  }
+
+  .locationText {
+    font-size: rem(12);
+    color: $grey-400;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+
+  .eventsTitle {
+    font-size: rem(11);
+    font-weight: 600;
+    color: $grey-600;
+    margin: 0 0 $spacing-small 0;
+  }
+
+  .eventsList {
+    display: flex;
+    flex-direction: column;
+    gap: spacing(0.5);
+  }
+
+  .eventItem {
+    @include flex(row, center, center, $spacing-small);
+    padding: spacing(0.75);
+    background: $grey-50;
+    border-radius: 4px;
+    transition: all 0.15s ease-in-out;
+    align-items: center;
 
     &:hover {
-      background: rgba($grey-400, 0.7);
+      background: $grey-100;
     }
   }
-  &::-webkit-scrollbar-button {
-    display: none;
-  }
-  // Pour Firefox
-  scrollbar-width: thin;
-  scrollbar-color: rgba($grey-300, 0.5) transparent;
 
-  &.fadeOut {
-    opacity: 0.8;
+  .eventImageContainer {
+    flex-shrink: 0;
+    @include flex(row, center, center, 0);
   }
 
-  &.fadeIn {
-    opacity: 1;
-  }
-}
-.creatorProfile {
-  padding: $spacing-medium;
-  border-bottom: 1px solid $grey-200;
-  color: $grey-600;
-  @include flex(row, flex-start, center, $spacing-medium);
-}
-
-.creatorImageContainer {
-  @include flex(row, center, center, 0);
-}
-
-.creatorImage {
-  cursor: pointer;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid rgba-color($white, 0.3);
-}
-
-.creatorName {
-  font-size: rem(18);
-  font-weight: 500;
-  margin: 0 0 spacing(0.5) 0;
-}
-
-.creatorCategories {
-  @include flex(row, flex-start, center, $spacing-small);
-  flex-wrap: wrap;
-}
-
-.category {
-  font-size: rem(13);
-  font-weight: 500;
-  letter-spacing: 0.3px;
-  padding: 2px $spacing-small;
-  background: rgba-color($grey-200, 0.5);
-  border-radius: 6px;
-}
-
-.placesSection {
-  padding: $spacing-medium;
-}
-
-.placesTitle {
-  font-size: rem(16);
-  font-weight: 500;
-  margin: 0 0 $spacing-medium 0;
-  color: $grey-600;
-}
-
-.placeCard {
-  display: flex;
-  flex-direction: column;
-  padding: $spacing-small 0;
-  border-bottom: 1px solid $grey-200;
-}
-
-.placeMainSection {
-  @include flex(row, flex-start, flex-start, $spacing-medium);
-}
-
-.placeImageContainer {
-  flex-shrink: 0;
-}
-
-.placeImage {
-  border-radius: 8px;
-  object-fit: cover;
-}
-
-.placeContent {
-  flex: 1;
-  min-width: 0;
-}
-
-.placeHeader {
-  @include flex(row, space-between, flex-start, 0);
-  margin-bottom: $spacing-small;
-}
-
-.placeName {
-  font-size: rem(14);
-  font-weight: 600;
-  margin: 0;
-  color: $grey-600;
-  flex: 1;
-  margin-right: $spacing-small;
-}
-
-.placeButtons {
-  @include flex(row, center, center, spacing(0.5));
-  flex-shrink: 0;
-}
-
-.placeLocation {
-  @include flex(row, flex-start, center, spacing(0.5));
-  margin-bottom: $spacing-small;
-}
-
-.locationText {
-  font-size: rem(12);
-  color: $grey-400;
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 100%;
-}
-
-.eventsTitle {
-  font-size: rem(11);
-  font-weight: 600;
-  color: $grey-600;
-  margin: 0 0 $spacing-small 0;
-}
-
-.eventsList {
-  display: flex;
-  flex-direction: column;
-  gap: spacing(0.5);
-}
-
-.eventItem {
-  @include flex(row, center, center, $spacing-small);
-  padding: spacing(0.75);
-  background: $grey-50;
-  border-radius: 4px;
-  transition: all 0.15s ease-in-out;
-  align-items: center;
-
-  &:hover {
-    background: $grey-100;
-  }
-}
-
-.eventImageContainer {
-  flex-shrink: 0;
-  @include flex(row, center, center, 0);
-}
-
-.eventImage {
-  border-radius: 4px;
-  object-fit: cover;
-}
-
-.eventName {
-  font-size: rem(12);
-  font-weight: 500;
-  color: $grey-600;
-  margin: 0;
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.eventButton {
-  flex-shrink: 0;
-  padding: spacing(0.5);
-  min-width: auto;
-  height: auto;
-}
-
-.moreEvents {
-  font-size: rem(10);
-  font-weight: 500;
-  color: $grey-400;
-  margin: 0;
-  padding: spacing(0.5) 0;
-  text-align: center;
-}
-
-.star {
-  &.filled {
-    color: #ffd700;
+  .eventImage {
+    border-radius: 4px;
+    object-fit: cover;
   }
 
-  &.empty {
-    color: $grey-300;
+  .eventName {
+    font-size: rem(12);
+    font-weight: 500;
+    color: $grey-600;
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .eventButton {
+    flex-shrink: 0;
+    padding: spacing(0.5);
+    min-width: auto;
+    height: auto;
+  }
+
+  .moreEvents {
+    font-size: rem(10);
+    font-weight: 500;
+    color: $grey-400;
+    margin: 0;
+    padding: spacing(0.5) 0;
+    text-align: center;
+  }
+
+  .star {
+    &.filled {
+      color: #ffd700;
+    }
+
+    &.empty {
+      color: $grey-300;
+    }
   }
 }

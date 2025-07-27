@@ -1,5 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import { useToast } from "./useToast";
+import { useLoading } from "./useLoading";
 
 interface CreatorInPlacesResult {
   user: {
@@ -43,44 +45,42 @@ interface CreatorInPlacesResult {
   }>;
 }
 
-export const useFindCreatorInPlaces = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+export const useFindCreatorInPlaces = (userId: string) => {
+  const { isLoading, withLoading } = useLoading(true);
+  const { showError } = useToast();
   const [data, setData] = useState<CreatorInPlacesResult | null>(null);
-  const findCreatorInPlaces = useCallback(async (userId: string) => {
-    setIsLoading(true);
-    setError(null);
 
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/users/creator-in-places-and-events`,
-        {
-          params: {
-            userId,
-          },
-        }
-      );
+  useEffect(() => {
+    const findCreatorInPlaces = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/users/creator-in-places-and-events`,
+          {
+            params: {
+              userId,
+            },
+          }
+        );
 
-      const results = response.data.data;
+        const results = response.data.data;
 
-      setData(results);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err
-          : new Error("Failed to find creator in places")
-      );
-      console.error("Failed to find creator in places:", err);
-      setData(null);
-    } finally {
-      setIsLoading(false);
+        setData(results);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : "Erreur lors du chargement des lieux";
+        setData(null);
+        showError(errorMessage);
+      }
+    };
+    if (userId) {
+      withLoading(findCreatorInPlaces);
     }
-  }, []);
+  }, [userId]);
 
   return {
     data,
     isLoading,
-    error,
-    findCreatorInPlaces,
   };
 };

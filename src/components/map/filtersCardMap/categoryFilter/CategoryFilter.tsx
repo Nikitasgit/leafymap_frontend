@@ -16,7 +16,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
   onCategoryChange,
 }) => {
   const placeCategories = useAppSelector(selectPlaceCategories);
-
+  console.log("selectedCategories", selectedCategories);
   const onCategoryClick = (categoryId: string) => {
     const newCategories = selectedCategories.includes(categoryId)
       ? selectedCategories.filter((id) => id !== categoryId)

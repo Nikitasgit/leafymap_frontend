@@ -1,0 +1,71 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.cardMapContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: 99999;
+  transition: transform 0.3s ease-in-out;
+
+  &.collapsed {
+    transform: translateX(-100%);
+  }
+
+  .cardContent {
+    width: 400px;
+    height: 100%;
+    overflow-y: scroll;
+    display: flex;
+    background-color: $white;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba($grey-200, 0.5);
+      border-radius: 3px;
+
+      &:hover {
+        background: rgba($grey-400, 0.7);
+      }
+    }
+
+    &::-webkit-scrollbar-button {
+      display: none;
+    }
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba($grey-300, 0.5) transparent;
+  }
+}
+
+.collapseButton {
+  position: absolute;
+  right: -22px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 70px;
+  background-color: $white;
+  border: 1px solid rgba($grey-300, 0.5);
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+  cursor: pointer;
+  z-index: 10000000000;
+  @include flex(row, center, center, 0);
+  font-size: 16px;
+  font-weight: bold;
+  color: $grey-600;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: $grey-50;
+  }
+}

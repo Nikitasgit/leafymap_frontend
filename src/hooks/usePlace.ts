@@ -15,8 +15,15 @@ export const usePlace = (placeId: string, enrichSchedule: boolean = false) => {
         const url = `${
           process.env.NEXT_PUBLIC_API_URL
         }/api/places/${placeId}?enrichSchedule=${enrichSchedule.toString()}`;
+
         const response = await axios.get(url);
-        setPlace(response.data.data);
+
+        if (response.data && response.data.data) {
+          setPlace(response.data.data);
+        } else {
+          setPlace(null);
+          showError("Invalid response from server");
+        }
       } catch (err) {
         const errorMessage =
           err instanceof Error
@@ -30,7 +37,7 @@ export const usePlace = (placeId: string, enrichSchedule: boolean = false) => {
     if (placeId) {
       withLoading(fetchPlace);
     }
-  }, [placeId]);
+  }, [placeId, enrichSchedule]);
 
   return { place, loading: isLoading };
 };
