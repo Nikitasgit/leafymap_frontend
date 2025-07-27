@@ -1,6 +1,9 @@
 {
   "hello": "Bonjour",
   "welcome": "Bienvenue sur mon site !",
+  "filters": "Filtres",
+  "dates": "Dates",
+  "categories": "Catégories",
   "nav": {
     "home": "Accueil",
     "map": "Carte",

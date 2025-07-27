@@ -3,6 +3,7 @@
 @use "@/styles/abstracts/functions" as *;
 
 .placeCardMap {
+  width: 100%;
   &.fadeOut {
     opacity: 0.8;
   }

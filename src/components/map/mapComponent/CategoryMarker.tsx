@@ -9,7 +9,6 @@ interface CategoryMarkerProps {
   categoryName: string;
   placeName?: string;
   onClick?: () => void;
-  className?: string;
   zoom?: number;
   isSelected?: boolean;
 }
@@ -20,7 +19,6 @@ const CategoryMarker: React.FC<CategoryMarkerProps> = ({
   categoryName,
   placeName,
   onClick,
-  className,
   zoom = 0,
   isSelected = false,
 }) => {
@@ -35,27 +33,29 @@ const CategoryMarker: React.FC<CategoryMarkerProps> = ({
       longitude={longitude}
       latitude={latitude}
       onClick={onClick}
-      className={className}
+      className={`${styles.markerContainer} ${
+        isSelected ? styles.selected : ""
+      }`}
     >
       <div
-        className={`${styles.markerContainer} ${
-          isSelected ? styles.selected : ""
-        }`}
+        className={styles.marker}
         onMouseEnter={() => !isZoomedIn && setIsHovered(true)}
         onMouseLeave={() => !isZoomedIn && setIsHovered(false)}
       >
-        <PlaceCategoryIcon
-          categoryName={categoryName}
-          size="small"
-          variant={isSelected ? "secondary" : "primary"}
-          className={`${styles.markerIcon} ${
-            isSelected ? styles.selectedIcon : ""
-          }`}
-        />
+        <div className={styles.markerIconContainer}>
+          <PlaceCategoryIcon
+            categoryName={categoryName}
+            size="small"
+            variant={isSelected ? "secondary" : "primary"}
+            className={`${styles.markerIcon} ${
+              isSelected ? styles.selectedIcon : ""
+            }`}
+          />
+        </div>
         {placeName && shouldShowLabel && (
           <div
             className={`${styles.placeLabel} ${
-              isZoomedIn ? styles.permanent : styles.hover
+              isSelected ? styles.selected : ""
             }`}
           >
             {placeName}

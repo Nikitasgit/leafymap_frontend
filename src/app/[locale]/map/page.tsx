@@ -6,8 +6,6 @@ import { useState, useRef, useEffect } from "react";
 import styles from "./mapPage.module.scss";
 import FiltersBar from "@/components/map/filtersBar/FiltersBar";
 import { MapFilters, ExtendedMapRef } from "@/types/map";
-import { Collaborator } from "@/types/place/collaborators";
-import { Place } from "@/types/place";
 import CardMapContainer from "@/components/map/cardMapContainer/CardMapContainer";
 import { useAppSelector } from "@/store";
 import { selectPlaceCategories } from "@/store/appSlice";
@@ -17,6 +15,11 @@ const defaultFilters: MapFilters = {
   placeCategories: [],
   startDate: null,
   endDate: null,
+};
+
+type SearchResult = {
+  _id: string;
+  type: "place" | "user" | "filters" | null;
 };
 
 const MapPage = () => {
@@ -35,23 +38,13 @@ const MapPage = () => {
     setSelectedItem({ id: placeId, type: "place" });
   };
 
-  const handleUserSelect = (user: Collaborator) => {
-    setSelectedItem({ id: user._id, type: "user" });
-    setFilters({
-      ...defaultFilters,
-    });
-  };
-
-  const handlePlaceSelect = (
-    place: Pick<Place, "_id" | "location" | "image" | "name" | "placeCategory">
-  ) => {
-    setSelectedItem({ id: place._id, type: "place" });
-    setFilters({
-      ...defaultFilters,
-    });
-  };
-  const handleOpenFilters = () => {
-    setSelectedItem({ id: "", type: "filters" });
+  const handleSelect = (item: SearchResult) => {
+    setSelectedItem({ id: item._id, type: item.type });
+    if (item.type !== "filters") {
+      setFilters({
+        ...defaultFilters,
+      });
+    }
   };
 
   useEffect(() => {
@@ -71,9 +64,8 @@ const MapPage = () => {
         filters={filters}
         setFilters={setFilters}
         loading={loading}
-        handleUserSelect={handleUserSelect}
-        handlePlaceSelect={handlePlaceSelect}
-        handleOpenFilters={handleOpenFilters}
+        selectedItem={selectedItem}
+        handleSelect={handleSelect}
       />
       <div className={styles.mapContainer}>
         <MapComponent

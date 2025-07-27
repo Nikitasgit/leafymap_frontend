@@ -8,13 +8,6 @@ import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { MapFilters, ExtendedMapRef } from "@/types/map";
 import { useFindCreators } from "@/hooks/useFindCreators";
 import { useFindPlaces } from "@/hooks/useFindPlaces";
-import { Collaborator } from "@/types/place/collaborators";
-import { Place } from "@/types/place";
-
-type SearchType = {
-  label: string;
-  placeholder: string;
-};
 
 type CreatorSearchResult = {
   _id: string;
@@ -27,10 +20,7 @@ type PlaceSearchResult = {
   name: string;
   image?: string;
   location: {
-    type: string;
-    coordinates: number[];
     label: string;
-    id: string;
   };
   placeCategory: {
     _id: string;
@@ -38,7 +28,15 @@ type PlaceSearchResult = {
   };
 };
 
-type SearchResult = CreatorSearchResult | PlaceSearchResult;
+type SearchResult = {
+  _id: string;
+  type: "user" | "place" | "filters" | null;
+};
+
+type SearchType = {
+  label: string;
+  placeholder: string;
+};
 
 const searchTypes: SearchType[] = [
   { label: "Membres", placeholder: "Rechercher un membre" },
@@ -50,19 +48,15 @@ const FiltersBar = ({
   loading: loadingProps,
   filters,
   setFilters,
-  handleUserSelect,
-  handlePlaceSelect,
-  handleOpenFilters,
+  handleSelect,
+  selectedItem,
 }: {
   mapRef: React.RefObject<ExtendedMapRef | null>;
   loading: boolean;
   filters: MapFilters;
   setFilters: (filters: MapFilters) => void;
-  handleUserSelect: (user: Collaborator) => void;
-  handlePlaceSelect: (
-    place: Pick<Place, "_id" | "location" | "image" | "name" | "placeCategory">
-  ) => void;
-  handleOpenFilters: () => void;
+  handleSelect: (item: SearchResult) => void;
+  selectedItem: SearchResult;
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchType, setSearchType] = useState<SearchType>(searchTypes[0]);
@@ -101,6 +95,12 @@ const FiltersBar = ({
   };
 
   const handleTypeSelect = (type: { value: string }) => {
+    if (selectedItem.type !== "filters") {
+      handleSelect({
+        _id: "",
+        type: null,
+      });
+    }
     setFilters({
       ...filters,
       placeType: type.value,
@@ -117,15 +117,20 @@ const FiltersBar = ({
     }
   };
 
-  const handleSelect = (item: SearchResult) => {
+  const handleSelectSuggestion = (
+    item: CreatorSearchResult | PlaceSearchResult
+  ) => {
+    console.log(item);
     if (searchType.label === "Membres") {
-      handleUserSelect({
+      handleSelect({
         _id: item._id,
-        name: item.name,
-        image: item.image,
-      } as Collaborator);
+        type: "user",
+      });
     } else {
-      handlePlaceSelect(item as Place);
+      handleSelect({
+        _id: item._id,
+        type: "place",
+      });
     }
   };
 
@@ -179,7 +184,7 @@ const FiltersBar = ({
           debounce={500}
           loading={loading}
           limit={10}
-          onSelect={handleSelect}
+          onSelect={handleSelectSuggestion}
           onDelete={() => {}}
           fetchSuggestions={handleSearch}
           placeholder={searchType.placeholder}
@@ -187,7 +192,7 @@ const FiltersBar = ({
       </div>
       <button
         className={styles.filterButton}
-        onClick={handleOpenFilters}
+        onClick={() => handleSelect({ _id: "", type: "filters" })}
         disabled={loading}
       >
         <Filter size={20} />

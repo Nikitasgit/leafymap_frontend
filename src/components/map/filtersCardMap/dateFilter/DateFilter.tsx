@@ -6,6 +6,7 @@ import { Calendar } from "lucide-react";
 import { registerLocale } from "react-datepicker";
 import { fr } from "date-fns/locale/fr";
 import styles from "./DateFilter.module.scss";
+import { useTranslation } from "react-i18next";
 
 registerLocale("fr", fr);
 
@@ -21,7 +22,7 @@ const DateFilter: React.FC<DateFilterProps> = ({
   onDateChange,
 }) => {
   const [isPeriod, setIsPeriod] = useState(false);
-
+  const { t } = useTranslation("common");
   const handleDateChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     onDateChange(start, end);
@@ -35,7 +36,7 @@ const DateFilter: React.FC<DateFilterProps> = ({
     <div className={styles.dateFilter}>
       <div className={styles.header}>
         <Calendar size={16} />
-        <Text className={styles.title}>Dates</Text>
+        <Text className={styles.title}>{t("dates")}</Text>
       </div>
 
       <div className={styles.controls}>

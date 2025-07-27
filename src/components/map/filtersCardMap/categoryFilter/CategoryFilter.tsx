@@ -5,6 +5,7 @@ import { useAppSelector } from "@/store";
 import { selectPlaceCategories } from "@/store/appSlice";
 import PlaceCategoryIcon from "@/components/common/icons/PlaceCategoryIcon";
 import styles from "./CategoryFilter.module.scss";
+import { useTranslation } from "react-i18next";
 
 interface CategoryFilterProps {
   selectedCategories: string[];
@@ -16,7 +17,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
   onCategoryChange,
 }) => {
   const placeCategories = useAppSelector(selectPlaceCategories);
-  console.log("selectedCategories", selectedCategories);
+  const { t } = useTranslation("common");
   const onCategoryClick = (categoryId: string) => {
     const newCategories = selectedCategories.includes(categoryId)
       ? selectedCategories.filter((id) => id !== categoryId)
@@ -28,7 +29,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
     <div className={styles.categoryFilter}>
       <div className={styles.header}>
         <Tag size={16} />
-        <Text className={styles.title}>Catégories</Text>
+        <Text className={styles.title}>{t("categories")}</Text>
       </div>
 
       <ul className={styles.categoriesList}>
@@ -51,7 +52,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
                   isSelected ? styles.selectedText : styles.unselectedText
                 }
               >
-                {category.name}
+                {t(`placeCategories.${category.name.toLowerCase()}`)}
               </Text>
             </li>
           );

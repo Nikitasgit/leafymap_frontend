@@ -6,6 +6,7 @@ import { RotateCcw } from "lucide-react";
 import DateFilter from "./dateFilter/DateFilter";
 import CategoryFilter from "./categoryFilter/CategoryFilter";
 import { MapFilters } from "@/types/map";
+import { useTranslation } from "react-i18next";
 
 interface FiltersCardMapProps {
   onResetFilters?: () => void;
@@ -21,7 +22,7 @@ const FiltersCardMap = ({
   onResetFilters,
 }: FiltersCardMapProps) => {
   const [localFilters, setLocalFilters] = useState<MapFilters>(filters);
-
+  const { t } = useTranslation("common");
   useEffect(() => {
     setLocalFilters(filters);
   }, [filters]);
@@ -65,7 +66,7 @@ const FiltersCardMap = ({
   return (
     <div className={styles.filtersCardMap}>
       <div className={styles.header}>
-        <h2 className={styles.title}>Filtres</h2>
+        <h2 className={styles.title}>{t("filters")}</h2>
       </div>
       <div className={styles.content}>
         <Button
