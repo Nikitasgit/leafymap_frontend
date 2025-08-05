@@ -99,22 +99,19 @@ const PlaceForm = ({
             />
           </div>
         </div>
-
         {data.userType === "organizer" && (
-          <>
-            <PlaceTypeSelectorInput
-              value={data.placeType || []}
-              onChange={onChange}
-              error={!!errors.placeType}
-            />
-            <PlaceCategorySelectorInput
-              value={data.placeCategory || ""}
-              onChange={onChange}
-              selectedTypes={data.placeType || []}
-              error={!!errors.placeCategory}
-            />
-          </>
+          <PlaceTypeSelectorInput
+            value={data.placeType || []}
+            onChange={onChange}
+            error={!!errors.placeType}
+          />
         )}
+        <PlaceCategorySelectorInput
+          value={data.placeCategory || ""}
+          onChange={onChange}
+          selectedTypes={data.placeType || []}
+          error={!!errors.placeCategory}
+        />
       </div>
       <TimeTableForm
         schedule={data.defaultSchedule || defaultSchedule}

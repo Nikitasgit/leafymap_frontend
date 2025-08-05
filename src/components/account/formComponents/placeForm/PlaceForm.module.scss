@@ -13,16 +13,6 @@
     }
   }
 
-  .section {
-    .sectionTitle {
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: $grey-600;
-      margin-bottom: spacing(0.5);
-      font-family: $font-family-base;
-    }
-  }
-
   .placeFormContainer {
     @include flex(column, flex-start, stretch, spacing(1.5));
     border-bottom: 1px solid $grey-200;

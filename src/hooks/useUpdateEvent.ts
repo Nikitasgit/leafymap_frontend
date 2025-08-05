@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter, useParams } from "next/navigation";
-import { EventFormData } from "@/components/events/form/EventForm";
+import { EventFormData } from "@/components/events/form/EventForm/EventForm";
 import { parseDateToUTC } from "@/utils/dates";
 
 type UseUpdateEventReturn = {

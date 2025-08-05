@@ -26,7 +26,13 @@ export const useFindCreators = () => {
         const res = await axios.get(
           `${
             process.env.NEXT_PUBLIC_API_URL
-          }/api/users/find-creators?name=${encodeURIComponent(query)}&limit=5`
+          }/api/users/find-creators?name=${encodeURIComponent(query)}&limit=5`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
         );
         const data = res.data;
 

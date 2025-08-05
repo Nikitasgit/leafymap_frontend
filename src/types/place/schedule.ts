@@ -28,6 +28,7 @@ export interface Period {
   startDate: string;
   endDate: string;
   timeSlots: EventTimeSlot[];
+  _id: string;
 }
 
 export type WeekDay =

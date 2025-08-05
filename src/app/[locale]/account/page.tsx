@@ -14,6 +14,7 @@ export default function AccountPage() {
   const { user, isLoading } = useCurrentUser();
   const { userType } = user || {};
   const organizer = user as Organizer;
+  const creator = user as Creator;
   const router = useRouter();
 
   const buttonParameters =
@@ -69,10 +70,22 @@ export default function AccountPage() {
           {buttonParameters.text}
         </Button>
       </div>
+
       {userType === "organizer" && organizer?.places && (
         <div className={styles.placesSection}>
           <PlacesEditList places={organizer?.places} />
         </div>
+      )}
+      {userType === "creator" && creator?.creatorProfile?.place && (
+        <Button
+          onClick={() =>
+            router.push(
+              `account/places/${creator?.creatorProfile?.place._id}/events/create`
+            )
+          }
+        >
+          Ajouter un événement
+        </Button>
       )}
     </main>
   );

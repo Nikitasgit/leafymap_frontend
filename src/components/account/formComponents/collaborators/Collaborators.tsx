@@ -7,7 +7,7 @@ import {
 } from "../../createProfileStepper/CreateProfileStepper.types";
 import { Collaborator } from "@/types/place/collaborators";
 import CreateCollaborators from "../createCollaborators/CreateCollaborators";
-import { EventFormData } from "@/components/events/form/EventForm";
+import { EventFormData } from "@/components/events/form/EventForm/EventForm";
 import { useFindCreators } from "@/hooks/useFindCreators";
 import styles from "./Collaborators.module.scss";
 import InfoIcon from "@/components/common/info/InfoIcon";

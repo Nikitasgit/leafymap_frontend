@@ -1,0 +1,25 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.scheduleEventForm {
+  margin-top: spacing(1);
+  width: 100%;
+  @include flex(column, flex-start, stretch, spacing(1));
+  .title {
+    color: $grey-450;
+    font-size: 20px;
+    @include respond-to(md) {
+      font-size: 22px;
+    }
+  }
+
+  .periodContainer {
+    @include flex(column, flex-start, stretch, spacing(1));
+    width: 100%;
+    border: 1px solid $grey-200;
+    border-radius: 8px;
+    padding: spacing(2);
+    background-color: $white;
+  }
+}

@@ -16,6 +16,7 @@ interface TimeSlotInputsProps {
   onRemove: () => void;
   onTimeChange: (field: keyof TimeSlot, value: Date | string | null) => void;
   getExcludedTimes: (isStartTime: boolean) => Date[];
+  canRemove: boolean;
 }
 
 const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
@@ -23,6 +24,7 @@ const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
   onRemove,
   onTimeChange,
   getExcludedTimes = () => [],
+  canRemove = true,
 }) => {
   const parseTimeString = (timeString: string): Date | null => {
     if (!timeString) return null;
@@ -77,14 +79,16 @@ const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
           onKeyDown={(e) => e.preventDefault()}
         />
       </div>
-      <Button
-        onClick={onRemove}
-        variant="simple"
-        size="small"
-        ariaLabel="Supprimer ce créneau horaire"
-      >
-        <XCircle size={20} />
-      </Button>
+      {canRemove && (
+        <Button
+          onClick={onRemove}
+          variant="simple"
+          size="small"
+          ariaLabel="Supprimer ce créneau horaire"
+        >
+          <XCircle size={20} />
+        </Button>
+      )}
     </div>
   );
 };

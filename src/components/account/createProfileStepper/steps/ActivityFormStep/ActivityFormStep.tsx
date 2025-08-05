@@ -59,9 +59,9 @@ const ActivityFormStep = ({
     if (validateFormData()) {
       await onSubmit();
     } else {
-      showError(
-        "Veuillez corriger les erreurs avant de soumettre le formulaire"
-      );
+      Object.keys(errors).forEach((key) => {
+        showError(errors[key]);
+      });
     }
   };
 

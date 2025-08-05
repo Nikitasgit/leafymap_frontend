@@ -1,5 +1,5 @@
 "use client";
-import EventForm from "@/components/events/form/EventForm";
+import EventForm from "@/components/events/form/EventForm/EventForm";
 import { useEvent } from "@/hooks/useEvent";
 import { useParams } from "next/navigation";
 import React from "react";

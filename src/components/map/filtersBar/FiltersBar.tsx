@@ -149,6 +149,7 @@ const FiltersBar = ({
         {types.map((type) => (
           <button
             key={type.key}
+            type="button"
             className={`${styles.category} ${
               type.value === filters.placeType ? styles.active : ""
             }`}
@@ -191,6 +192,7 @@ const FiltersBar = ({
         />
       </div>
       <button
+        type="button"
         className={styles.filterButton}
         onClick={() => handleSelect({ _id: "", type: "filters" })}
         disabled={loading}

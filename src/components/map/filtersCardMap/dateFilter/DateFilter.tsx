@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Text from "@/components/common/typography/Text";
@@ -6,7 +6,6 @@ import { Calendar } from "lucide-react";
 import { registerLocale } from "react-datepicker";
 import { fr } from "date-fns/locale/fr";
 import styles from "./DateFilter.module.scss";
-import { useTranslation } from "react-i18next";
 
 registerLocale("fr", fr);
 
@@ -14,15 +13,19 @@ interface DateFilterProps {
   startDate: Date | null;
   endDate: Date | null;
   onDateChange: (startDate: Date | null, endDate: Date | null) => void;
+  isPeriod: boolean;
+  setIsPeriod: (isPeriod: boolean) => void;
+  title?: string;
 }
 
 const DateFilter: React.FC<DateFilterProps> = ({
   startDate,
   endDate,
   onDateChange,
+  isPeriod,
+  setIsPeriod,
+  title,
 }) => {
-  const [isPeriod, setIsPeriod] = useState(false);
-  const { t } = useTranslation("common");
   const handleDateChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     onDateChange(start, end);
@@ -32,28 +35,55 @@ const DateFilter: React.FC<DateFilterProps> = ({
     onDateChange(date, date);
   };
 
+  const handleToggleClick = (e: React.MouseEvent, isPeriodValue: boolean) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsPeriod(isPeriodValue);
+  };
+
+  const handleDatePickerClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
   return (
-    <div className={styles.dateFilter}>
-      <div className={styles.header}>
-        <Calendar size={16} />
-        <Text className={styles.title}>{t("dates")}</Text>
-      </div>
+    <div
+      className={styles.dateFilter}
+      onClick={handleDatePickerClick}
+      onKeyDown={handleKeyDown}
+    >
+      {title && (
+        <div className={styles.header}>
+          <Calendar size={16} />
+          <Text className={styles.title}>{title}</Text>
+        </div>
+      )}
 
       <div className={styles.controls}>
         <div className={styles.periodToggle}>
           <button
+            type="button"
             className={`${styles.toggleButton} ${
               !isPeriod ? styles.active : ""
             }`}
-            onClick={() => setIsPeriod(false)}
+            onClick={(e) => handleToggleClick(e, false)}
+            onKeyDown={handleKeyDown}
           >
             <Text>Un jour</Text>
           </button>
           <button
+            type="button"
             className={`${styles.toggleButton} ${
               isPeriod ? styles.active : ""
             }`}
-            onClick={() => setIsPeriod(true)}
+            onClick={(e) => handleToggleClick(e, true)}
+            onKeyDown={handleKeyDown}
           >
             <Text>Période</Text>
           </button>
@@ -73,6 +103,8 @@ const DateFilter: React.FC<DateFilterProps> = ({
               locale="fr"
               className={styles.datePicker}
               isClearable
+              onClickOutside={(e) => e.stopPropagation()}
+              onKeyDown={handleKeyDown}
             />
           ) : (
             <DatePicker
@@ -84,6 +116,8 @@ const DateFilter: React.FC<DateFilterProps> = ({
               locale="fr"
               className={styles.datePicker}
               isClearable
+              onClickOutside={(e) => e.stopPropagation()}
+              onKeyDown={handleKeyDown}
             />
           )}
         </div>

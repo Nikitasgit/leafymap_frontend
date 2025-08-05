@@ -22,6 +22,7 @@ type TextfieldProps = {
   showCharCount?: boolean;
   maxLength?: number;
   readOnly?: boolean;
+  className?: string;
 };
 
 const TextField: React.FC<TextfieldProps> = ({
@@ -43,12 +44,13 @@ const TextField: React.FC<TextfieldProps> = ({
   fullWidth = false,
   showCharCount = false,
   maxLength,
+  className,
 }) => {
   const charCount = value.length;
   const isOverLimit = maxLength && charCount > maxLength;
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${className}`}>
       {label && (
         <label className={styles.label} htmlFor={name}>
           {label} {required ? <span>*</span> : <span>(optionnel)</span>}

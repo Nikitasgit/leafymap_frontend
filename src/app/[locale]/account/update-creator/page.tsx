@@ -64,7 +64,7 @@ const ModifyCreator = () => {
     if (!formData) return;
     await submitForm(formData, true);
   };
-  console.log(formData);
+
   if (isLoading || !formData) {
     return <LoadingBar />;
   }

@@ -11,7 +11,7 @@ import {
 import { selectSubCategories } from "@/store/appSlice";
 import { useSelector } from "react-redux";
 import { DeleteIcon, PlusCircle, Users } from "lucide-react";
-import { EventFormData } from "@/components/events/form/EventForm";
+import { EventFormData } from "@/components/events/form/EventForm/EventForm";
 import { CreatedCollaborator } from "@/types/place/collaborators";
 import Text from "@/components/common/typography/Text";
 
@@ -45,7 +45,7 @@ const CreateCollaborators = ({
       target: {
         name: "createdCollaborators",
         value: [
-          ...formData.createdCollaborators,
+          ...(formData.createdCollaborators || []),
           { ...collaborator, id: tempId },
         ],
       },
@@ -80,7 +80,7 @@ const CreateCollaborators = ({
     onChange({
       target: {
         name: "createdCollaborators",
-        value: formData.createdCollaborators.filter(
+        value: (formData.createdCollaborators || []).filter(
           (collab) => collab.id !== id && collab._id !== id
         ),
       },
@@ -146,11 +146,11 @@ const CreateCollaborators = ({
       )}
 
       <ul className={styles.collaboratorsList}>
-        {formData.createdCollaborators.length === 0 && !isCreating && (
+        {formData.createdCollaborators?.length === 0 && !isCreating && (
           <div className={styles.emptyState}>Aucun collaborateur créé</div>
         )}
 
-        {formData.createdCollaborators.map((collaborator) => (
+        {formData.createdCollaborators?.map((collaborator) => (
           <li key={collaborator.id} className={styles.collaboratorItem}>
             <div className={styles.collaboratorInfo}>
               <span>{collaborator.name}</span>
@@ -163,7 +163,7 @@ const CreateCollaborators = ({
             </div>
             <Button
               variant="simple"
-              onClick={() => handleDeleteCollaborator(collaborator.id)}
+              onClick={() => handleDeleteCollaborator(collaborator.id!)}
             >
               <DeleteIcon size={16} />
             </Button>
