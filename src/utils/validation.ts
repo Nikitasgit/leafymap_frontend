@@ -55,6 +55,33 @@ export const nameSchema = z
     "Le nom ne peut contenir que des lettres, chiffres, espaces et le caractère '"
   );
 
+export const eventNameSchema = z
+  .string()
+  .min(1, "Le nom de l'événement est requis")
+  .min(3, "Le nom de l'événement doit contenir au moins 3 caractères")
+  .max(100, "Le nom de l'événement ne peut pas dépasser 100 caractères")
+  .regex(
+    /^[a-zA-ZÀ-ÿ0-9\s'\-()]+$/,
+    "Le nom de l'événement ne peut contenir que des lettres, chiffres, espaces et les caractères '()-"
+  );
+
+export const eventDescriptionSchema = z
+  .string()
+  .min(1, "La description est requise")
+  .min(10, "La description doit contenir au moins 10 caractères")
+  .max(1000, "La description ne peut pas dépasser 1000 caractères");
+
+export const eventImageSchema = z
+  .union([z.string(), z.instanceof(File)])
+  .optional()
+  .refine((val) => {
+    if (!val) return true; // Image is optional
+    if (typeof val === "string") {
+      return val.length > 0;
+    }
+    return val instanceof File;
+  }, "L'image n'est pas valide");
+
 /**
  * Validation functions that use Zod schemas
  */

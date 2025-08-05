@@ -1,7 +1,7 @@
 import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 
 import TextField from "@/components/common/inputs/textField/TextField";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NewDatesEventForm from "../NewDatesEventForm/NewDatesEventForm";
 import Button from "@/components/common/buttons/button/Button";
 import useUpdateEvent from "@/hooks/useUpdateEvent";
@@ -13,6 +13,8 @@ import { useRouter } from "next/navigation";
 import styles from "./EventForm.module.scss";
 import EventScheduleList from "../EventScheduleList/EventScheduleList";
 import { format } from "date-fns";
+import { validateEventForm } from "@/utils/formValidation";
+import { useToast } from "@/hooks/useToast";
 
 export interface EventFormData {
   name: string;
@@ -38,16 +40,40 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
     createdCollaborators: data?.createdCollaborators || [],
     schedule: data?.schedule || [],
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+  const { showError } = useToast();
+
   const onChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const validateFormData = (): boolean => {
+    const result = validateEventForm(formData);
+    setErrors(result.errors);
+    return result.isValid;
+  };
+
+  useEffect(() => {
+    if (hasAttemptedSubmit) {
+      validateFormData();
+    }
+  }, [formData, hasAttemptedSubmit]);
+
   const { submitForm, loading } = useUpdateEvent();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    submitForm(formData, isUpdate);
-  };
+    setHasAttemptedSubmit(true);
 
+    if (validateFormData()) {
+      submitForm(formData, isUpdate);
+    } else {
+      Object.keys(errors).forEach((key) => {
+        showError(errors[key]);
+      });
+    }
+  };
   const onUpdatePeriod = (
     periodId: string,
     startDate: Date,
@@ -95,8 +121,25 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
       ),
     }));
   };
+  const onDeleteTimeSlot = (periodId: string, timeSlotId: string) => {
+    if (confirm("Voulez-vous vraiment supprimer ce créneau ?")) {
+      setFormData((prev) => ({
+        ...prev,
+        schedule: prev.schedule.map((period) =>
+          period._id === periodId
+            ? {
+                ...period,
+                timeSlots: period.timeSlots.filter(
+                  (slot) => slot._id !== timeSlotId
+                ),
+              }
+            : period
+        ),
+      }));
+    }
+  };
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} noValidate>
       <TextField
         label="Nom de l'évènement"
         fullWidth
@@ -105,6 +148,8 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
         placeholder="Nom de l'évènement"
         value={formData.name}
         onChange={onChange}
+        error={!!errors.name}
+        errorMessage={errors.name}
       />
       <TextField
         multiline
@@ -116,6 +161,8 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
         placeholder="Description"
         value={formData.description}
         onChange={onChange}
+        error={!!errors.description}
+        errorMessage={errors.description}
       />
 
       <Collaborators onChange={onChange} data={formData} />
@@ -126,6 +173,8 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
         onUpdatePeriod={onUpdatePeriod}
         onUpdateTimeSlot={onUpdateTimeSlot}
         onDeletePeriod={onDeletePeriod}
+        onDeleteTimeSlot={onDeleteTimeSlot}
+        errors={errors}
       />
       <div className={styles.buttonContainer}>
         <Button

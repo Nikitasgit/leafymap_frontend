@@ -9,8 +9,12 @@
 }
 
 .timePickerWrapper {
-  @include flex(row, flex-start, center, spacing(1));
+  @include flex(row, flex-start, center, spacing(0));
   flex: 1;
   min-width: 0;
   width: 100%;
+}
+
+.timeSeparator {
+  margin: 0 spacing(0.5);
 }

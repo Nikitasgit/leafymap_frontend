@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import { useToast } from "@/hooks/useToast";
 import DateFilter from "@/components/map/filtersCardMap/dateFilter/DateFilter";
 import styles from "./NewDatesEventForm.module.scss";
+import { generateTempId } from "@/utils/tempId";
 
 registerLocale("fr", fr);
 
@@ -38,7 +39,7 @@ const NewDatesEventForm = ({
       startDate: format(startDate, "dd-MM-yyyy"),
       endDate: isPeriod && endDate ? format(endDate, "dd-MM-yyyy") : "",
       timeSlots: [],
-      _id: crypto.randomUUID(),
+      _id: generateTempId(),
     };
     const updatedSchedule = [...data.schedule, updatedPeriod];
     onChange({
@@ -69,7 +70,7 @@ const NewDatesEventForm = ({
           setIsPeriod={setIsPeriod}
         />
         <Button onClick={handleSaveDates}>
-          {isPeriod ? "Ajouter cette période" : "Ajouter cette date"}
+          {isPeriod ? "Ajouter une période" : "Ajouter une date"}
         </Button>
       </div>
     </section>

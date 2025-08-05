@@ -2,7 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter, useParams } from "next/navigation";
 import { EventFormData } from "@/components/events/form/EventForm/EventForm";
-import { parseDateToUTC } from "@/utils/dates";
+import { useLoading } from "./useLoading";
+import { useToast } from "./useToast";
 
 type UseUpdateEventReturn = {
   submitForm: (data: EventFormData, isUpdate: boolean) => Promise<void>;
@@ -12,14 +13,16 @@ type UseUpdateEventReturn = {
 };
 
 const useUpdateEvent = (): UseUpdateEventReturn => {
-  const [loading, setLoading] = useState(false);
+  const { isLoading, withLoading } = useLoading();
+  const { showError, showSuccess } = useToast();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
-  const { placeId, eventId } = useParams();
+  const params = useParams();
+  const placeId = params.placeId as string;
+  const eventId = params.eventId as string;
 
   const submitForm = async (data: EventFormData, isUpdate: boolean) => {
-    setLoading(true);
     setError(null);
     setSuccess(false);
 
@@ -28,89 +31,72 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
         throw new Error("Place ID or event ID is required for update");
       }
 
-      if (!data.name?.trim()) {
-        throw new Error("Please add a title");
-      }
-      if (!data.description?.trim()) {
-        throw new Error("Please add a description");
-      }
-
-      const form = new FormData();
-
-      form.append("name", data.name);
-      form.append("description", data.description);
-
-      const formattedSchedule = data.schedule.map((period) => ({
-        ...period,
-        startDate: parseDateToUTC(period.startDate),
-        endDate: parseDateToUTC(period.endDate),
-      }));
-
-      form.append("schedule", JSON.stringify(formattedSchedule));
-
-      if (data.collaborators) {
-        const collaboratorData = data.collaborators.map((collab) => ({
+      const payload = {
+        name: data.name,
+        description: data.description,
+        schedule: data.schedule,
+        collaborators: data.collaborators?.map((collab) => ({
           userId: collab._id,
           status: collab.status || "pending",
-        }));
-        form.append("collaborators", JSON.stringify(collaboratorData));
-      }
-      if (data.createdCollaborators) {
-        const cleanedCollaborators = data.createdCollaborators.map(
-          (collaborator) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { id, ...collaboratorWithoutId } = collaborator;
-            return collaboratorWithoutId;
-          }
-        );
-        form.append(
-          "createdCollaborators",
-          JSON.stringify(cleanedCollaborators)
-        );
-      }
-      if (data.image) {
-        form.append("image", data.image);
-      }
+        })),
+        createdCollaborators: data.createdCollaborators?.map((collaborator) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { id, ...collaboratorWithoutId } = collaborator;
+          return collaboratorWithoutId;
+        }),
+      };
 
       if (isUpdate) {
-        await axios.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}/events/${eventId}`,
-          form,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            withCredentials: true,
-          }
+        await withLoading(() =>
+          axios.put(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}/events/${eventId}`,
+            payload,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              withCredentials: true,
+            }
+          )
         );
       } else {
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}/events`,
-          form,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            withCredentials: true,
-          }
+        await withLoading(() =>
+          axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}/events`,
+            payload,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              withCredentials: true,
+            }
+          )
         );
       }
 
+      showSuccess("Événement modifié avec succès");
       router.push("/account");
-      setSuccess(true);
     } catch (err: unknown) {
-      console.error("Error in submitForm:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Erreur lors de la soumission du lieu"
-      );
-    } finally {
-      setLoading(false);
+      console.error("Update event error:", err);
+      if (axios.isAxiosError(err) && err.response?.data) {
+        console.error("Backend error details:", err.response.data);
+        showError(
+          err.response.data.message ||
+            (err.response.data.errors
+              ? JSON.stringify(err.response.data.errors)
+              : err.message)
+        );
+      } else {
+        showError(
+          err instanceof Error
+            ? err.message
+            : "Erreur lors de la soumission de l'événement"
+        );
+      }
     }
   };
 
-  return { submitForm, loading, error, success };
+  return { submitForm, loading: isLoading, error, success };
 };
 
 export default useUpdateEvent;

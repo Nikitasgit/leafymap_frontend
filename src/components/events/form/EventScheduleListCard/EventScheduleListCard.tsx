@@ -9,23 +9,26 @@ import DateFilter from "@/components/map/filtersCardMap/dateFilter/DateFilter";
 import { parseDateToUTC } from "@/utils/dates";
 import NewSlot from "@/components/common/timetable/NewSlot";
 import { Collaborator } from "@/types/place/collaborators";
+import EventSlotCard from "../EventSlotCard/EventSlotCard";
 
 const EventScheduleListCard = ({
   period,
+  collaborators,
   onDeletePeriod,
   onUpdatePeriod,
-  collaborators,
   onUpdateTimeSlot,
+  onDeleteTimeSlot,
 }: {
   period: Period;
+  collaborators: Collaborator[];
   onDeletePeriod: (periodId: string) => void;
+  onUpdateTimeSlot: (periodId: string, timeSlot: EventTimeSlot) => void;
+  onDeleteTimeSlot: (periodId: string, timeSlotId: string) => void;
   onUpdatePeriod: (
     periodId: string,
     startDate: Date,
     endDate: Date | null
   ) => void;
-  collaborators: Collaborator[];
-  onUpdateTimeSlot: (periodId: string, timeSlot: EventTimeSlot) => void;
 }) => {
   const [isPeriod, setIsPeriod] = useState(!!period.endDate);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -56,6 +59,9 @@ const EventScheduleListCard = ({
   const handleUpdateTimeSlot = (timeSlot: EventTimeSlot) => {
     setTimeSlotToEdit(null);
     onUpdateTimeSlot(period._id, timeSlot);
+  };
+  const handleDeleteTimeSlot = (timeSlotId: string) => {
+    onDeleteTimeSlot(period._id, timeSlotId);
   };
   return (
     <div key={period._id} className={styles.periodContainer}>
@@ -125,61 +131,29 @@ const EventScheduleListCard = ({
       )}
       {isAddTimeSlot && (
         <NewSlot
+          onCancel={() => setIsAddTimeSlot(false)}
           collaborators={collaborators}
-          period={period}
           onSubmit={handleAddTimeSlot}
         />
       )}
       {period.timeSlots.length > 0 ? (
         <div className={styles.timeSlotsContainer}>
-          {period.timeSlots.map((slot, slotIndex) =>
-            timeSlotToEdit ? (
+          {period.timeSlots.map((slot) =>
+            timeSlotToEdit && timeSlotToEdit._id === slot._id ? (
               <NewSlot
-                key={slotIndex}
+                key={slot._id}
                 collaborators={collaborators}
-                period={period}
                 onSubmit={handleUpdateTimeSlot}
                 defaultSlot={slot}
+                onCancel={() => setTimeSlotToEdit(null)}
               />
             ) : (
-              <div key={slotIndex} className={styles.timeSlotItem}>
-                <div className={styles.timeSlotInfo}>
-                  <Text className={styles.timeSlotTitle}>{slot.title}</Text>
-                  <div className={styles.timeSlotTime}>
-                    <Text className={styles.timeRange}>
-                      {slot.startTime} - {slot.endTime}
-                    </Text>
-                  </div>
-                </div>
-
-                <div className={styles.participantsContainer}>
-                  <Text className={styles.participantsLabel}>Participants</Text>
-                  <Text className={styles.participantsList}>
-                    {slot.participants.length > 0
-                      ? slot.participants
-                          .map((participant) => participant.name)
-                          .join(", ")
-                      : "Aucun participant"}
-                  </Text>
-                </div>
-                <div className={styles.actionsContainer}>
-                  <button
-                    type="button"
-                    className={`${styles.actionButton} ${styles.editButton}`}
-                    onClick={() => setTimeSlotToEdit(slot)}
-                    title="Modifier le créneau"
-                  >
-                    <Edit size={14} />
-                  </button>
-                  <button
-                    type="button"
-                    className={`${styles.actionButton} ${styles.deleteButton}`}
-                    title="Supprimer le créneau"
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              </div>
+              <EventSlotCard
+                key={slot._id}
+                slot={slot}
+                setTimeSlotToEdit={setTimeSlotToEdit}
+                onDeleteTimeSlot={handleDeleteTimeSlot}
+              />
             )
           )}
         </div>

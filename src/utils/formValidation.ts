@@ -5,7 +5,11 @@ import {
   phoneSchema,
   websiteSchema,
   nameSchema,
+  eventNameSchema,
+  eventDescriptionSchema,
+  eventImageSchema,
 } from "./validation";
+import { EventFormData } from "@/components/events/form/EventForm/EventForm";
 
 interface BaseFormData {
   name?: string;
@@ -96,6 +100,55 @@ export const validateForm = (data: BaseFormData): ValidationResult => {
       if (!data.placeType || data.placeType.length === 0) {
         errors.placeType = "Le type de lieu est requis";
       }
+    }
+
+    return {
+      errors,
+      isValid: Object.keys(errors).length === 0,
+    };
+  } catch {
+    // Fallback for unexpected errors
+    return {
+      errors: { general: "Une erreur de validation s'est produite" },
+      isValid: false,
+    };
+  }
+};
+
+/**
+ * Validates an event form using Zod schemas
+ * @param data - The event form data to validate
+ * @returns Validation result with errors and validity status
+ */
+export const validateEventForm = (data: EventFormData): ValidationResult => {
+  const errors: Record<string, string> = {};
+
+  try {
+    // Event name validation
+    const nameResult = eventNameSchema.safeParse(data.name);
+    if (!nameResult.success) {
+      errors.name = nameResult.error.errors[0].message;
+    }
+
+    // Event description validation
+    const descriptionResult = eventDescriptionSchema.safeParse(
+      data.description
+    );
+    if (!descriptionResult.success) {
+      errors.description = descriptionResult.error.errors[0].message;
+    }
+
+    // Event image validation (optional)
+    if (data.image) {
+      const imageResult = eventImageSchema.safeParse(data.image);
+      if (!imageResult.success) {
+        errors.image = imageResult.error.errors[0].message;
+      }
+    }
+
+    // Schedule validation - at least one period is required
+    if (!data.schedule || data.schedule.length === 0) {
+      errors.schedule = "Au moins une date est requise";
     }
 
     return {

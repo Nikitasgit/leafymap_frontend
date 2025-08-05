@@ -45,7 +45,7 @@ const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
           timeIntervals={10}
           timeCaption="Heure"
           dateFormat="HH:mm"
-          placeholderText="Heure de début"
+          placeholderText="Heure de début *"
           locale="fr"
           className={styles.timePicker}
           excludeTimes={getExcludedTimes(true)}
@@ -57,7 +57,7 @@ const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
               : new Date(new Date().setHours(23, 59, 0))
           }
         />
-        <Text>à</Text>
+        <Text className={styles.timeSeparator}>à</Text>
         <DatePicker
           selected={parseTimeString(slot.endTime)}
           onChange={(time) => onTimeChange("endTime", time)}
@@ -66,7 +66,7 @@ const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
           timeIntervals={10}
           timeCaption="Heure"
           dateFormat="HH:mm"
-          placeholderText="Heure de fin"
+          placeholderText="Heure de fin *"
           locale="fr"
           minTime={
             slot.startTime

@@ -1,34 +1,40 @@
 import React, { useState } from "react";
 import TimeSlotInputs from "./timeSlotInputs/TimeSlotInputs";
 import SearchInput from "../inputs/searchInput/SearchInput";
-import { Period } from "@/types/place/schedule";
 import { Collaborator } from "@/types/place/collaborators";
 import TextField from "../inputs/textField/TextField";
 import Button from "../buttons/button/Button";
 import { EventTimeSlot } from "@/types/place/schedule";
 import styles from "./NewSlot.module.scss";
+import { useFindCreators } from "@/hooks/useFindCreators";
+import { useToast } from "@/hooks/useToast";
+import { generateTempId } from "@/utils/tempId";
 
 interface NewSlotProps {
   collaborators: Collaborator[];
-  period: Period;
   onSubmit: (timeSlot: EventTimeSlot) => void;
   defaultSlot?: EventTimeSlot;
+  onCancel?: () => void;
 }
 
 const NewSlot: React.FC<NewSlotProps> = ({
   collaborators,
   onSubmit,
   defaultSlot,
+  onCancel,
 }) => {
+  const { showError } = useToast();
+  const { searchCreators } = useFindCreators();
   const [timeSlot, setTimeSlot] = useState<EventTimeSlot>(
     defaultSlot || {
       title: "",
       startTime: "",
       endTime: "",
       participants: [],
-      _id: `new-slot-${Date.now()}`,
+      _id: generateTempId(),
     }
   );
+
   const handleParticipantSelect = (collaborator: Collaborator) => {
     if (!timeSlot.participants.some((p) => p._id === collaborator._id)) {
       setTimeSlot({
@@ -45,22 +51,24 @@ const NewSlot: React.FC<NewSlotProps> = ({
   };
   const handleValidateTimeSlot = () => {
     if (!timeSlot.title || !timeSlot.startTime || !timeSlot.endTime) {
-      alert("Veuillez remplir tous les champs.");
+      showError("Veuillez remplir tous les champs obligatoires du créneau.");
+      if (timeSlot.title.length < 3) {
+        showError("Le titre du créneau doit contenir au moins 3 caractères.");
+      }
       return;
     }
     onSubmit(timeSlot);
   };
   const handleCancelTimeSlot = () => {
-    if (defaultSlot) {
-      setTimeSlot(defaultSlot);
-      return;
+    if (onCancel) {
+      onCancel();
     }
     setTimeSlot({
       title: "",
       startTime: "",
       endTime: "",
       participants: [],
-      _id: `new-slot-${Date.now()}`,
+      _id: generateTempId(),
     });
   };
   const handleSlotChange = (
@@ -72,7 +80,11 @@ const NewSlot: React.FC<NewSlotProps> = ({
       updatedValue = value as string;
     } else {
       if (value instanceof Date) {
-        updatedValue = value.toLocaleTimeString("fr-FR", { hour12: false });
+        updatedValue = value.toLocaleTimeString("fr-FR", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        });
       } else {
         updatedValue = value as string;
       }
@@ -115,11 +127,7 @@ const NewSlot: React.FC<NewSlotProps> = ({
         onSelect={handleParticipantSelect}
         onDelete={handleParticipantDelete}
         initialSuggestions={collaborators}
-        fetchSuggestions={async (input: string) => {
-          return collaborators.filter((collab) =>
-            collab.name?.toLowerCase().includes(input.toLowerCase())
-          );
-        }}
+        fetchSuggestions={searchCreators}
         list={timeSlot.participants}
         withIcons
         displayList

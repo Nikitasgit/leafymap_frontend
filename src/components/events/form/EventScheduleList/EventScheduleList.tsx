@@ -7,28 +7,36 @@ import { Collaborator } from "@/types/place/collaborators";
 
 interface EventScheduleListProps {
   schedule: Period[];
+  collaborators: Collaborator[];
   onUpdatePeriod: (
     periodId: string,
     startDate: Date,
     endDate: Date | null
   ) => void;
   onDeletePeriod: (periodId: string) => void;
-  collaborators: Collaborator[];
   onUpdateTimeSlot: (periodId: string, timeSlot: EventTimeSlot) => void;
+  onDeleteTimeSlot: (periodId: string, timeSlotId: string) => void;
+  errors?: Record<string, string>;
 }
 
 const EventScheduleList: React.FC<EventScheduleListProps> = ({
   schedule,
+  collaborators,
   onUpdatePeriod,
   onDeletePeriod,
-  collaborators,
   onUpdateTimeSlot,
+  onDeleteTimeSlot,
+  errors = {},
 }) => {
   if (schedule.length === 0) {
     return (
       <div className={styles.eventScheduleList}>
-        <div className={styles.emptyState}>
-          <Text>Aucune date programmée</Text>
+        <div
+          className={`${styles.emptyState} ${
+            errors.schedule ? styles.error : ""
+          }`}
+        >
+          <Text>{errors.schedule || "Aucune date programmée"}</Text>
         </div>
       </div>
     );
@@ -37,14 +45,16 @@ const EventScheduleList: React.FC<EventScheduleListProps> = ({
   return (
     <div className={styles.eventScheduleList}>
       {schedule.map((period) => (
-        <EventScheduleListCard
-          key={period._id}
-          period={period}
-          onUpdatePeriod={onUpdatePeriod}
-          onDeletePeriod={onDeletePeriod}
-          collaborators={collaborators}
-          onUpdateTimeSlot={onUpdateTimeSlot}
-        />
+        <div key={period._id}>
+          <EventScheduleListCard
+            period={period}
+            onUpdatePeriod={onUpdatePeriod}
+            onDeletePeriod={onDeletePeriod}
+            collaborators={collaborators}
+            onUpdateTimeSlot={onUpdateTimeSlot}
+            onDeleteTimeSlot={onDeleteTimeSlot}
+          />
+        </div>
       ))}
     </div>
   );

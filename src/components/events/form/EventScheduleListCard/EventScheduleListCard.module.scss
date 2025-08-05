@@ -14,165 +14,42 @@
   &:last-child {
     border-bottom: none;
   }
-}
 
-.periodDates {
-  @include flex(row, flex-start, center, spacing(1));
-
-  .dateItem {
+  .periodDates {
     @include flex(row, flex-start, center, spacing(1));
-  }
-}
 
-.dateLabel {
-  color: $grey-600;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.dateValue {
-  color: $grey-800;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.timeSlotsContainer {
-  @include flex(column, flex-start, stretch, spacing(1));
-  margin-top: spacing(1);
-  .emptyState {
-    padding: spacing(1);
-    text-align: center;
-    color: $grey-500;
-    font-size: 15px;
-    font-style: italic;
-    border-radius: spacing(1);
-    border: 1px solid $grey-200;
-  }
-}
-
-.timeSlotItem {
-  @include flex(row, space-between, center, spacing(2));
-  padding: spacing(1);
-  background: $grey-50;
-  border-radius: 4px;
-  border: 1px solid $grey-200;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: $grey-100;
-    border-color: $grey-300;
-  }
-}
-
-.timeSlotInfo {
-  @include flex(column, flex-start, stretch, spacing(0.25));
-  flex: 1;
-  min-width: 0;
-}
-
-.timeSlotTitle {
-  color: $grey-800;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.timeSlotTime {
-  @include flex(row, flex-start, center, spacing(1));
-  color: $grey-600;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.timeRange {
-  color: $grey-700;
-  font-weight: 600;
-}
-
-.participantsContainer {
-  @include flex(column, flex-start, stretch, spacing(0.25));
-  min-width: 120px;
-  max-width: 150px;
-}
-
-.participantsLabel {
-  color: $grey-600;
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.participantsList {
-  color: $grey-700;
-  font-size: 12px;
-  line-height: 1.3;
-  font-style: italic;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.actionsContainer {
-  @include flex(row, flex-end, center, spacing(0.5));
-  min-width: 80px;
-}
-
-.actionButton {
-  @include flex(row, center, center, 0);
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: 4px;
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: $grey-200;
-  }
-
-  &.editButton {
-    color: $primary-color;
-
-    &:hover {
-      background: $grey-100;
+    .dateItem {
+      @include flex(row, flex-start, center, spacing(1));
     }
   }
 
-  &.deleteButton {
-    color: $error-color;
-
-    &:hover {
-      background: $grey-100;
-    }
-  }
-}
-
-@include respond-to(md) {
-  .periodHeader {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: spacing(0.5);
+  .dateLabel {
+    color: $grey-600;
+    font-size: 12px;
+    font-weight: 500;
   }
 
-  .timeSlotItem {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: spacing(1);
+  .dateValue {
+    color: $grey-800;
+    font-size: 14px;
+    font-weight: 600;
   }
-
-  .participantsContainer {
-    min-width: auto;
-    max-width: none;
-    width: 100%;
-  }
-
   .actionsContainer {
+    @include flex(row, flex-end, center, spacing(1));
     align-self: flex-end;
     min-width: auto;
+  }
+  .timeSlotsContainer {
+    @include flex(column, flex-start, stretch, spacing(1));
+    margin-top: spacing(1);
+    .emptyState {
+      padding: spacing(1);
+      text-align: center;
+      color: $grey-500;
+      font-size: 15px;
+      font-style: italic;
+      border-radius: spacing(1);
+      border: 1px solid $grey-200;
+    }
   }
 }
