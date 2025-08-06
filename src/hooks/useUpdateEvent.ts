@@ -4,6 +4,7 @@ import { useRouter, useParams } from "next/navigation";
 import { EventFormData } from "@/components/events/form/EventForm/EventForm";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
+import { isTempId } from "@/utils/tempId";
 
 type UseUpdateEventReturn = {
   submitForm: (data: EventFormData, isUpdate: boolean) => Promise<void>;
@@ -34,15 +35,35 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
       const payload = {
         name: data.name,
         description: data.description,
-        schedule: data.schedule,
+        schedule: data.schedule.map((period) => ({
+          ...period,
+          _id: isTempId(period._id) ? undefined : period._id,
+          timeSlots: period.timeSlots?.map((slot) => ({
+            ...slot,
+            _id: isTempId(slot._id) ? undefined : slot._id,
+            collaborators: slot.collaborators?.map((collaborator) => ({
+              userId: collaborator._id,
+              status: collaborator.status || "pending",
+            })),
+            createdCollaborators: slot.createdCollaborators?.map(
+              (collaborator) => ({
+                name: collaborator.name,
+                category: collaborator.category,
+                _id: isTempId(collaborator._id!) ? undefined : collaborator._id,
+              })
+            ),
+          })),
+        })),
         collaborators: data.collaborators?.map((collab) => ({
           userId: collab._id,
           status: collab.status || "pending",
         })),
         createdCollaborators: data.createdCollaborators?.map((collaborator) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { id, ...collaboratorWithoutId } = collaborator;
-          return collaboratorWithoutId;
+          return {
+            name: collaborator.name,
+            category: collaborator.category,
+            _id: isTempId(collaborator._id!) ? undefined : collaborator._id,
+          };
         }),
       };
 

@@ -4,6 +4,7 @@ import { useRouter, useParams } from "next/navigation";
 import { PlaceFormData } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
+import { isTempId } from "@/utils/tempId";
 
 type UseUpdatePlaceReturn = {
   submitForm: (data: PlaceFormData, isUpdate: boolean) => Promise<void>;
@@ -43,9 +44,11 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
           _id: collab._id,
         })),
         createdCollaborators: data.createdCollaborators?.map((collaborator) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { id, ...collaboratorWithoutId } = collaborator;
-          return collaboratorWithoutId;
+          return {
+            name: collaborator.name,
+            category: collaborator.category,
+            _id: isTempId(collaborator._id!) ? undefined : collaborator._id,
+          };
         }),
         placeType: data.placeType,
       };

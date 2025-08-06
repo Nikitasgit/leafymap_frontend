@@ -11,7 +11,6 @@ import PlaceForm from "../placeForm/PlaceForm";
 import { Creator } from "@/types/user";
 import styles from "./Infos.module.scss";
 import LoadingBar from "@/components/common/loading/LoadingBar";
-import { useToast } from "@/hooks/useToast";
 
 interface InfosProps {
   isCreator: boolean;
@@ -22,11 +21,10 @@ interface InfosProps {
 }
 
 const Infos = ({ isCreator, data, onChange, errors = {} }: InfosProps) => {
-  const { user, loading, error } = useCurrentUser();
+  const { user, isLoading } = useCurrentUser();
   const creator = user as Creator;
   const withPlace = !!data.placeActive;
   const [creatorWithPlace, setCreatorWithPlace] = useState(withPlace);
-  const { showError } = useToast();
 
   const handleDisplayPlaceChange = (value: string) => {
     if (creator?.creatorProfile?.place) {
@@ -60,13 +58,9 @@ const Infos = ({ isCreator, data, onChange, errors = {} }: InfosProps) => {
     }
   };
 
-  if (error) {
-    showError(error);
-  }
-
   return (
     <div className={styles.container}>
-      {loading && <LoadingBar />}
+      {isLoading && <LoadingBar />}
       <section className={styles.section}>
         <h3 className={styles.title}>Informations</h3>
 

@@ -14,6 +14,7 @@ import { DeleteIcon, PlusCircle, Users } from "lucide-react";
 import { EventFormData } from "@/components/events/form/EventForm/EventForm";
 import { CreatedCollaborator } from "@/types/place/collaborators";
 import Text from "@/components/common/typography/Text";
+import { generateTempId } from "@/utils/tempId";
 
 const CreateCollaborators = ({
   onChange,
@@ -27,7 +28,7 @@ const CreateCollaborators = ({
   const [collaborator, setCollaborator] = useState<CreatedCollaborator>({
     name: "",
     category: "",
-    id: "",
+    _id: "",
   });
 
   const [isCreating, setIsCreating] = useState(false);
@@ -40,14 +41,10 @@ const CreateCollaborators = ({
 
     setIsSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 300));
-    const tempId = `temp-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
     onChange({
       target: {
         name: "createdCollaborators",
-        value: [
-          ...(formData.createdCollaborators || []),
-          { ...collaborator, id: tempId },
-        ],
+        value: [...formData.createdCollaborators, collaborator],
       },
     });
 
@@ -56,7 +53,7 @@ const CreateCollaborators = ({
     setCollaborator({
       name: "",
       category: "",
-      id: "",
+      _id: "",
     });
   };
 
@@ -65,7 +62,7 @@ const CreateCollaborators = ({
     setCollaborator({
       name: "",
       category: "",
-      id: "",
+      _id: generateTempId(),
     });
   };
 
@@ -80,8 +77,8 @@ const CreateCollaborators = ({
     onChange({
       target: {
         name: "createdCollaborators",
-        value: (formData.createdCollaborators || []).filter(
-          (collab) => collab.id !== id && collab._id !== id
+        value: formData.createdCollaborators.filter(
+          (collab) => collab._id !== id
         ),
       },
     });
@@ -151,7 +148,7 @@ const CreateCollaborators = ({
         )}
 
         {formData.createdCollaborators?.map((collaborator) => (
-          <li key={collaborator.id} className={styles.collaboratorItem}>
+          <li key={collaborator._id} className={styles.collaboratorItem}>
             <div className={styles.collaboratorInfo}>
               <span>{collaborator.name}</span>
               <span className={styles.categoryName}>
@@ -163,7 +160,7 @@ const CreateCollaborators = ({
             </div>
             <Button
               variant="simple"
-              onClick={() => handleDeleteCollaborator(collaborator.id!)}
+              onClick={() => handleDeleteCollaborator(collaborator._id!)}
             >
               <DeleteIcon size={16} />
             </Button>

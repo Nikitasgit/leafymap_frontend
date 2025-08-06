@@ -1,4 +1,4 @@
-import { Collaborator } from "./collaborators";
+import { Collaborator, CreatedCollaborator } from "./collaborators";
 
 export type DefaultSchedule = Record<WeekDay, DaySchedule>;
 
@@ -20,7 +20,8 @@ export interface TimeSlot {
 
 export interface EventTimeSlot extends TimeSlot {
   title: string;
-  participants: Collaborator[];
+  collaborators: Collaborator[];
+  createdCollaborators: CreatedCollaborator[];
   _id: string;
 }
 

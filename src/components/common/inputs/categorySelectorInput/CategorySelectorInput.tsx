@@ -18,7 +18,7 @@ const CategorySelectorInput = ({
   value: string;
   error?: boolean;
 }) => {
-  const { subCategories, categories, loading, error: appError } = useApp();
+  const { subCategories, loading, error: appError } = useApp();
 
   const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +36,6 @@ const CategorySelectorInput = ({
 
   useOnClickOutside(ref, handleClickOutside);
   const handleSelect = (subCategory: SubCategory) => {
-    const category = categories.find((c) => c._id === subCategory.categoryId);
     setInputValue(subCategory.name);
     setIsOpen(false);
     setSearch("");
@@ -46,14 +45,6 @@ const CategorySelectorInput = ({
         value: subCategory._id,
       },
     });
-    if (category) {
-      onChange({
-        target: {
-          name: "placeType",
-          value: [category.name],
-        },
-      });
-    }
   };
 
   const filteredSubcategories = subCategories.filter((sub) =>

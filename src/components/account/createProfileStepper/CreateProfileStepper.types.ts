@@ -12,8 +12,8 @@ export interface NewProfileFormData {
   email: string;
   website: string;
   defaultSchedule?: DefaultSchedule;
-  collaborators?: Collaborator[];
-  createdCollaborators?: CreatedCollaborator[];
+  collaborators: Collaborator[];
+  createdCollaborators: CreatedCollaborator[];
   placeCategory?: string;
   placeType?: PlaceType[];
   location?: Location | null;

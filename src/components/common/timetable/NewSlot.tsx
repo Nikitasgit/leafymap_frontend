@@ -30,23 +30,24 @@ const NewSlot: React.FC<NewSlotProps> = ({
       title: "",
       startTime: "",
       endTime: "",
-      participants: [],
+      collaborators: [],
+      createdCollaborators: [],
       _id: generateTempId(),
     }
   );
 
   const handleParticipantSelect = (collaborator: Collaborator) => {
-    if (!timeSlot.participants.some((p) => p._id === collaborator._id)) {
+    if (!timeSlot.collaborators.some((p) => p._id === collaborator._id)) {
       setTimeSlot({
         ...timeSlot,
-        participants: [...timeSlot.participants, collaborator],
+        collaborators: [...timeSlot.collaborators, collaborator],
       });
     }
   };
   const handleParticipantDelete = (id: string) => {
     setTimeSlot({
       ...timeSlot,
-      participants: timeSlot.participants.filter((p) => p._id !== id),
+      collaborators: timeSlot.collaborators.filter((p) => p._id !== id),
     });
   };
   const handleValidateTimeSlot = () => {
@@ -67,7 +68,8 @@ const NewSlot: React.FC<NewSlotProps> = ({
       title: "",
       startTime: "",
       endTime: "",
-      participants: [],
+      collaborators: [],
+      createdCollaborators: [],
       _id: generateTempId(),
     });
   };
@@ -128,7 +130,7 @@ const NewSlot: React.FC<NewSlotProps> = ({
         onDelete={handleParticipantDelete}
         initialSuggestions={collaborators}
         fetchSuggestions={searchCreators}
-        list={timeSlot.participants}
+        list={timeSlot.collaborators}
         withIcons
         displayList
       />

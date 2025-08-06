@@ -3,6 +3,7 @@ import { NewProfileFormData } from "@/components/account/createProfileStepper/Cr
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
 import { useLoading } from "@/hooks/useLoading";
+import { isTempId } from "@/utils/tempId";
 
 type UseCreateProfileReturn = {
   submitForm: (data: NewProfileFormData, isUpdate: boolean) => Promise<void>;
@@ -18,7 +19,7 @@ const useUpdateUser = (): UseCreateProfileReturn => {
     return withLoading(async () => {
       const { userType, name, description, phone, email, website, category } =
         data;
-      const requestData: NewProfileFormData = {
+      const requestData: Partial<NewProfileFormData> = {
         userType,
         name,
         description,
@@ -26,8 +27,9 @@ const useUpdateUser = (): UseCreateProfileReturn => {
         email,
         website,
         category,
+        collaborators: [],
+        createdCollaborators: [],
       };
-
       if (
         (data.placeActive && data.userType === "creator") ||
         data.userType === "organizer"
@@ -51,20 +53,20 @@ const useUpdateUser = (): UseCreateProfileReturn => {
               _id: collaborator._id,
             }));
           }
-          if (createdCollaborators) {
-            const cleanedCollaborators = createdCollaborators.map(
-              (collaborator) => {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const { id, ...collaboratorWithoutId } = collaborator;
-                return collaboratorWithoutId;
-              }
-            );
-            requestData.createdCollaborators = cleanedCollaborators;
-          }
+          requestData.createdCollaborators = createdCollaborators?.map(
+            (collaborator) => {
+              return {
+                name: collaborator.name,
+                category: collaborator.category,
+                _id: isTempId(collaborator._id!) ? undefined : collaborator._id,
+              };
+            }
+          );
         }
 
         requestData.placeType = placeType;
       }
+
       if (isUpdate) {
         await axios.put(
           `${process.env.NEXT_PUBLIC_API_URL}/api/users/update-creator`,
