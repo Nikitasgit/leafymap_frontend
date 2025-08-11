@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import SignOutButton from "../common/buttons/SignOutButton";
 import styles from "./Navbar.module.scss";
 import LoadingBar from "../common/loading/LoadingBar";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -20,7 +20,7 @@ export default function Navbar() {
     { href: "/account", label: t("nav.account"), icon: User },
   ];
 
-  const { isLoading, isLoggedIn } = useCurrentUser();
+  const { loading, user, logout } = useAuth();
 
   return (
     <nav className={styles.navbar}>
@@ -44,12 +44,12 @@ export default function Navbar() {
             );
           })}
         </div>
-        {isLoading ? (
+        {loading ? (
           <LoadingBar />
         ) : (
           <div>
-            {isLoggedIn ? (
-              <SignOutButton />
+            {user ? (
+              <SignOutButton logout={logout} />
             ) : (
               <div className={styles.authLinks}>
                 <Link

@@ -1,19 +1,14 @@
 "use client";
 
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import Button from "./button/Button";
 
-function SignOutButton() {
+function SignOutButton({ logout }: { logout: () => Promise<void> }) {
   const router = useRouter();
 
   const handleSignOut = async () => {
     try {
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/signout`,
-        {},
-        { withCredentials: true }
-      );
+      await logout();
       router.push("/auth/signin");
     } catch (error) {
       console.error("Sign out failed", error);

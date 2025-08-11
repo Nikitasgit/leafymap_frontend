@@ -1,49 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import axios, { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./signin.module.scss";
-import { useToast } from "@/hooks/useToast";
-import { useLoading } from "@/hooks/useLoading";
 import Button from "@/components/common/buttons/button/Button";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function SignIn() {
-  const router = useRouter();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const { t } = useTranslation("subscription");
-  const { showSuccess, showError } = useToast();
-  const { isLoading, withLoading } = useLoading();
+
+  const { login, loading } = useAuth();
+  console.log("loading", loading);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    await withLoading(async () => {
-      try {
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/signin`,
-          {
-            identifier,
-            password,
-          },
-          { withCredentials: true }
-        );
-        showSuccess(t("signin.messages.success"));
-        router.push("/");
-      } catch (err: unknown) {
-        const error = err as AxiosError<{ message: string }>;
-        showError(error.response?.data?.message || t("signin.messages.error"));
-      }
-    });
+    await login(identifier, password);
   };
 
   return (
     <div className={styles.container}>
-      {isLoading && <LoadingBar />}
+      {loading && <LoadingBar />}
 
       <div className={styles.formContainer}>
         <h1>{t("signin.title")}</h1>
@@ -60,7 +40,7 @@ export default function SignIn() {
               onChange={(e) => setIdentifier(e.target.value)}
               required
               placeholder={t("signin.form.identifier.placeholder")}
-              disabled={isLoading}
+              disabled={loading}
             />
           </div>
 
@@ -73,7 +53,7 @@ export default function SignIn() {
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder={t("signin.form.password.placeholder")}
-              disabled={isLoading}
+              disabled={loading}
             />
           </div>
 
@@ -81,11 +61,9 @@ export default function SignIn() {
             type="submit"
             variant="primary"
             size="medium"
-            disabled={isLoading}
+            disabled={loading}
           >
-            {isLoading
-              ? t("signin.form.submitLoading")
-              : t("signin.form.submit")}
+            {loading ? t("signin.form.submitLoading") : t("signin.form.submit")}
           </Button>
         </form>
 

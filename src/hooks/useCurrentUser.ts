@@ -32,12 +32,5 @@ export const useCurrentUser = () => {
     withLoading(fetchCurrentUser);
   }, []);
 
-  const getLoggedIn = () => {
-    if (typeof document === "undefined") return false;
-    return document.cookie.includes("logged_in=true");
-  };
-
-  const isLoggedIn = getLoggedIn() && user;
-
-  return { user, isLoading, isLoggedIn };
+  return { user, isLoading };
 };
