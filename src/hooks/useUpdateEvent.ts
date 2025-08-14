@@ -46,7 +46,7 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
             ...slot,
             _id: isTempId(slot._id) ? undefined : slot._id,
             collaborators: slot.collaborators?.map((collaborator) => ({
-              userId: collaborator._id,
+              _id: collaborator._id,
               status: collaborator.status || "pending",
             })),
             createdCollaborators: slot.createdCollaborators?.map(
@@ -59,7 +59,7 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
           })),
         })),
         collaborators: data.collaborators?.map((collab) => ({
-          userId: collab._id,
+          _id: collab._id,
           status: collab.status || "pending",
         })),
         createdCollaborators: data.createdCollaborators?.map((collaborator) => {
@@ -99,7 +99,11 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
         );
       }
 
-      showSuccess("Événement modifié avec succès");
+      showSuccess(
+        isUpdate
+          ? "Événement modifié avec succès"
+          : "Événement créé avec succès"
+      );
       router.push("/account");
     } catch (err: unknown) {
       console.error("Update event error:", err);

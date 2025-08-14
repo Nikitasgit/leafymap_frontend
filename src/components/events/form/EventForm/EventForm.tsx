@@ -1,11 +1,9 @@
 import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
-
 import TextField from "@/components/common/inputs/textField/TextField";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import NewDatesEventForm from "../NewDatesEventForm/NewDatesEventForm";
 import Button from "@/components/common/buttons/button/Button";
 import useUpdateEvent from "@/hooks/useUpdateEvent";
-
 import { Collaborator, CreatedCollaborator } from "@/types/place/collaborators";
 import { EventTimeSlot, Period } from "@/types/place/schedule";
 import Collaborators from "@/components/account/formComponents/collaborators/Collaborators";
@@ -15,6 +13,7 @@ import EventScheduleList from "../EventScheduleList/EventScheduleList";
 import { format } from "date-fns";
 import { validateEventForm } from "@/utils/formValidation";
 import { useToast } from "@/hooks/useToast";
+import { Event } from "@/types/place/event";
 
 export interface EventFormData {
   name: string;
@@ -26,7 +25,7 @@ export interface EventFormData {
 }
 
 interface EventFormProps {
-  data?: EventFormData;
+  data: Event | null;
   isUpdate?: boolean;
 }
 
@@ -40,6 +39,7 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
     createdCollaborators: data?.createdCollaborators || [],
     schedule: data?.schedule || [],
   });
+  console.log("formData", formData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const { showError } = useToast();
@@ -49,31 +49,36 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const validateFormData = (): boolean => {
+  const validateFormData = useCallback((): {
+    isValid: boolean;
+    errors: Record<string, string>;
+  } => {
     const result = validateEventForm(formData);
     setErrors(result.errors);
-    return result.isValid;
-  };
+    return result;
+  }, [formData]);
 
   useEffect(() => {
     if (hasAttemptedSubmit) {
       validateFormData();
     }
-  }, [formData, hasAttemptedSubmit]);
+  }, [hasAttemptedSubmit, validateFormData]);
 
   const { submitForm, loading } = useUpdateEvent();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setHasAttemptedSubmit(true);
-
-    if (validateFormData()) {
+    const validationResult = validateFormData();
+    if (validationResult.isValid) {
       submitForm(formData, isUpdate);
     } else {
-      Object.keys(errors).forEach((key) => {
-        showError(errors[key]);
+      Object.keys(validationResult.errors).forEach((key) => {
+        showError(validationResult.errors[key]);
       });
     }
   };
+
   const onUpdatePeriod = (
     periodId: string,
     startDate: Date,
@@ -92,6 +97,7 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
       ),
     }));
   };
+
   const onDeletePeriod = (periodId: string) => {
     if (
       confirm("Tous les créneaux de cette période seront également supprimés")
@@ -102,6 +108,7 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
       }));
     }
   };
+
   const onUpdateTimeSlot = (periodId: string, timeSlot: EventTimeSlot) => {
     setFormData((prev) => ({
       ...prev,
@@ -121,6 +128,7 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
       ),
     }));
   };
+
   const onDeleteTimeSlot = (periodId: string, timeSlotId: string) => {
     if (confirm("Voulez-vous vraiment supprimer ce créneau ?")) {
       setFormData((prev) => ({
@@ -138,6 +146,7 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
       }));
     }
   };
+
   return (
     <form onSubmit={handleSubmit} noValidate>
       <TextField
@@ -164,7 +173,6 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
         error={!!errors.description}
         errorMessage={errors.description}
       />
-
       <Collaborators onChange={onChange} data={formData} />
       <NewDatesEventForm onChange={onChange} data={formData} />
       <EventScheduleList

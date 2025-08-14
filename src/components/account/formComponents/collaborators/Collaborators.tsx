@@ -22,7 +22,7 @@ const Collaborators = ({
   data: EventFormData | PlaceFormData | NewProfileFormData;
 }) => {
   const { searchCreators } = useFindCreators();
-  const collaborators = (data.collaborators || []) as Collaborator[];
+  const collaborators = data.collaborators;
 
   const handleSelect = (suggestion: Collaborator) => {
     const newCollaborator: Collaborator = {

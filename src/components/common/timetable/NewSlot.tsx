@@ -37,7 +37,7 @@ const NewSlot: React.FC<NewSlotProps> = ({
   );
 
   const handleParticipantSelect = (collaborator: Collaborator) => {
-    if (!timeSlot.collaborators.some((p) => p._id === collaborator._id)) {
+    if (!timeSlot.collaborators?.some((p) => p._id === collaborator._id)) {
       setTimeSlot({
         ...timeSlot,
         collaborators: [...timeSlot.collaborators, collaborator],

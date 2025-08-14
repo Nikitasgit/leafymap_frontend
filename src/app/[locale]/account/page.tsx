@@ -4,7 +4,7 @@ import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
 import React from "react";
 import PlacesEditList from "@/components/account/placesList/PlacesEditList";
-import { Organizer } from "@/types/user";
+import { Creator, Organizer } from "@/types/user";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import styles from "./account.module.scss";
@@ -68,24 +68,37 @@ export default function AccountPage() {
           fullWidth
         >
           {buttonParameters.text}
-        </Button>
+        </Button>{" "}
+        {userType === "creator" && creator?.creatorProfile?.place && (
+          <>
+            <Button
+              fullWidth
+              onClick={() =>
+                router.push(
+                  `account/places/${creator?.creatorProfile?.place?._id}/events/create`
+                )
+              }
+            >
+              Ajouter un événement
+            </Button>
+            <Button
+              fullWidth
+              onClick={() =>
+                router.push(
+                  `account/places/${creator?.creatorProfile?.place?._id}/events`
+                )
+              }
+            >
+              Voir les événements
+            </Button>
+          </>
+        )}
       </div>
 
       {userType === "organizer" && organizer?.places && (
         <div className={styles.placesSection}>
           <PlacesEditList places={organizer?.places} />
         </div>
-      )}
-      {userType === "creator" && creator?.creatorProfile?.place && (
-        <Button
-          onClick={() =>
-            router.push(
-              `account/places/${creator?.creatorProfile?.place._id}/events/create`
-            )
-          }
-        >
-          Ajouter un événement
-        </Button>
       )}
     </main>
   );

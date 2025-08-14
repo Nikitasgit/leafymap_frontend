@@ -41,20 +41,19 @@ const EventScheduleList: React.FC<EventScheduleListProps> = ({
       </div>
     );
   }
-
+  console.log(schedule);
   return (
     <div className={styles.eventScheduleList}>
       {schedule.map((period) => (
-        <div key={period._id}>
-          <EventScheduleListCard
-            period={period}
-            onUpdatePeriod={onUpdatePeriod}
-            onDeletePeriod={onDeletePeriod}
-            collaborators={collaborators}
-            onUpdateTimeSlot={onUpdateTimeSlot}
-            onDeleteTimeSlot={onDeleteTimeSlot}
-          />
-        </div>
+        <EventScheduleListCard
+          key={period._id}
+          period={period}
+          onUpdatePeriod={onUpdatePeriod}
+          onDeletePeriod={onDeletePeriod}
+          collaborators={collaborators}
+          onUpdateTimeSlot={onUpdateTimeSlot}
+          onDeleteTimeSlot={onDeleteTimeSlot}
+        />
       ))}
     </div>
   );

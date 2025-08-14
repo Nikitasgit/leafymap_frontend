@@ -1,34 +1,41 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Event } from "@/types/place/event";
+import { useLoading } from "./useLoading";
+import { useToast } from "./useToast";
 
 export const useEvent = (eventId: string) => {
   const [event, setEvent] = useState<Event | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { isLoading, withLoading } = useLoading(true);
+  const { showError } = useToast();
 
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        setLoading(true);
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/events/${eventId}`
         );
-        setEvent(response.data.data);
 
-        setError(null);
+        if (response.data && response.data.data) {
+          setEvent(response.data.data);
+        } else {
+          setEvent(null);
+          showError("Invalid response from server");
+        }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch event");
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : "Erreur lors du chargement de l'événement";
         setEvent(null);
-      } finally {
-        setLoading(false);
+        showError(errorMessage);
       }
     };
 
     if (eventId) {
-      fetchEvent();
+      withLoading(fetchEvent);
     }
   }, [eventId]);
 
-  return { event, loading, error };
+  return { event, isLoading };
 };

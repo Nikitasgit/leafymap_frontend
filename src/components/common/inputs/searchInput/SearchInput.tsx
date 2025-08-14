@@ -95,7 +95,6 @@ const SearchInput = <
     if (!isDuplicate) {
       setInput("");
       setSuggestions([]);
-
       onSelect(suggestion);
     } else {
       setInput("");

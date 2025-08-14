@@ -91,7 +91,6 @@ const Infos = ({ isCreator, data, onChange, errors = {} }: InfosProps) => {
 
           {isCreator && (
             <CategorySelectorInput
-              withPlaceType
               onChange={onChange}
               value={data.category}
               error={!!errors.category}

@@ -48,7 +48,7 @@ export default function EventsListPage() {
                     <Image
                       key={collaborator._id}
                       src={collaborator.image || "/images/default-avatar.png"}
-                      alt={collaborator.name}
+                      alt={collaborator.name || ""}
                       width={30}
                       height={30}
                     />

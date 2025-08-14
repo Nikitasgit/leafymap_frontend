@@ -46,7 +46,6 @@
     .participantsContainer {
       @include flex(column, flex-start, stretch, spacing(0.25));
       min-width: 120px;
-      max-width: 150px;
       flex: 1;
 
       .participantsLabel {

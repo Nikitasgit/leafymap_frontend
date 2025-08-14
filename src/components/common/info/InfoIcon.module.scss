@@ -1,5 +1,6 @@
 @use "@/styles/abstracts/variables" as *;
 @use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
 
 .infoIconContainer {
   position: relative;
@@ -27,7 +28,6 @@
   z-index: 10000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   min-width: 300px;
-  word-wrap: break-word;
 }
 
 .top .tooltip {

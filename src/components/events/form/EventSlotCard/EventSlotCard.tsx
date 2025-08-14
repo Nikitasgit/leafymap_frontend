@@ -28,11 +28,11 @@ const EventSlotCard = ({
         <div className={styles.participantsContainer}>
           <Text className={styles.participantsLabel}>Participants</Text>
           <Text className={styles.participantsList}>
-            {slot.collaborators.length > 0
+            {slot.collaborators?.length > 0
               ? slot.collaborators
                   .map((collaborator) => collaborator.name)
                   .join(", ")
-              : "Aucun collaboreateur ajouté"}
+              : "Aucun collaborateur ajouté"}
           </Text>
         </div>
       </div>

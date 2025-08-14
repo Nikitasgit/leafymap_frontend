@@ -15,6 +15,7 @@ import { EventFormData } from "@/components/events/form/EventForm/EventForm";
 import { CreatedCollaborator } from "@/types/place/collaborators";
 import Text from "@/components/common/typography/Text";
 import { generateTempId } from "@/utils/tempId";
+import { useTranslation } from "next-i18next";
 
 const CreateCollaborators = ({
   onChange,
@@ -24,7 +25,7 @@ const CreateCollaborators = ({
   data: EventFormData | NewProfileFormData | PlaceFormData;
 }) => {
   const subCategories = useSelector(selectSubCategories);
-
+  const { t } = useTranslation();
   const [collaborator, setCollaborator] = useState<CreatedCollaborator>({
     name: "",
     category: "",
@@ -82,6 +83,11 @@ const CreateCollaborators = ({
         ),
       },
     });
+  };
+
+  const getCategoryTranslation = (categoryId: string) => {
+    const category = subCategories.find((sub) => sub._id === categoryId);
+    return category ? t(`creatorCategories.${category.name}`) : "";
   };
 
   return (
@@ -152,10 +158,7 @@ const CreateCollaborators = ({
             <div className={styles.collaboratorInfo}>
               <span>{collaborator.name}</span>
               <span className={styles.categoryName}>
-                {
-                  subCategories.find((sub) => sub._id === collaborator.category)
-                    ?.name
-                }
+                {getCategoryTranslation(collaborator.category)}
               </span>
             </div>
             <Button
