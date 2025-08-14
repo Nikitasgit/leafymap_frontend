@@ -5,6 +5,7 @@ import { EventFormData } from "@/components/events/form/EventForm/EventForm";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { isTempId } from "@/utils/tempId";
+import { parseDateToUTC } from "@/utils/dates";
 
 type UseUpdateEventReturn = {
   submitForm: (data: EventFormData, isUpdate: boolean) => Promise<void>;
@@ -31,12 +32,15 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
       if (isUpdate && !placeId && !eventId) {
         throw new Error("Place ID or event ID is required for update");
       }
-
       const payload = {
         name: data.name,
         description: data.description,
         schedule: data.schedule.map((period) => ({
           ...period,
+          startDate: parseDateToUTC(period.startDate),
+          endDate: period.endDate
+            ? parseDateToUTC(period.endDate)
+            : parseDateToUTC(period.startDate),
           _id: isTempId(period._id) ? undefined : period._id,
           timeSlots: period.timeSlots?.map((slot) => ({
             ...slot,
