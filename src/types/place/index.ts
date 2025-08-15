@@ -1,8 +1,7 @@
 import { BaseEntity, ContactInfo, Location } from "../common";
 import { PlaceCategory, SubCategory } from "../categories";
-import { User } from "../user";
+import { Creator, User } from "../user";
 import { DefaultSchedule } from "./schedule";
-import { CreatedCollaborator } from "./collaborators";
 import { PlaceType } from "./placeCaterories";
 
 export interface Place extends BaseEntity, ContactInfo {
@@ -13,11 +12,10 @@ export interface Place extends BaseEntity, ContactInfo {
   placeCategory: PlaceCategory;
   categories: string[];
   defaultSchedule: DefaultSchedule;
-  collaborators?: {
-    user: User;
+  collaborators: {
+    user: Creator;
     status: "pending" | "accepted" | "refused";
   }[];
-  createdCollaborators?: CreatedCollaborator[];
   isCreatorPlace?: boolean;
   image?: string;
   active: boolean;

@@ -21,7 +21,6 @@ const UpdatePlace = () => {
   const { user, isLoading: userLoading } = useCurrentUser();
   const { submitForm, isLoading } = useUpdatePlace();
   const [formData, setFormData] = useState<PlaceFormData | null>(null);
-
   const handleInputChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => (prev ? { ...prev, [name]: value } : null));
@@ -33,7 +32,7 @@ const UpdatePlace = () => {
   };
 
   useEffect(() => {
-    if (place && !formData) {
+    if (place && !formData && user) {
       const coordinates = {
         latitude: place.location.coordinates[1],
         longitude: place.location.coordinates[0],
@@ -56,15 +55,9 @@ const UpdatePlace = () => {
         collaborators:
           place.collaborators?.map((collab) => ({
             _id: collab.user?._id || "",
-            username: collab.user?.username || "",
+            username: collab.user?.creatorProfile?.name || "",
             image: collab.user?.image || "",
-          })) || [],
-        createdCollaborators:
-          place.createdCollaborators?.map((collab) => ({
-            name: collab.name || "",
-            category: collab.category || "",
-            id: collab._id || "",
-            _id: collab._id || "",
+            status: collab.status || "",
           })) || [],
         placeType: place.placeType || [],
       };
@@ -72,8 +65,8 @@ const UpdatePlace = () => {
       setFormData(data);
     }
   }, [place, loading, formData, user]);
-
-  if (loading || !formData || isLoading || userLoading) return <LoadingBar />;
+  console.log("formData", formData);
+  if (loading || isLoading || userLoading || !formData) return <LoadingBar />;
 
   return (
     <main className={styles.pageContainer}>

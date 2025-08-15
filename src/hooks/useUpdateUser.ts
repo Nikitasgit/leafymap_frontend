@@ -3,7 +3,6 @@ import { NewProfileFormData } from "@/components/account/createProfileStepper/Cr
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
 import { useLoading } from "@/hooks/useLoading";
-import { isTempId } from "@/utils/tempId";
 
 type UseCreateProfileReturn = {
   submitForm: (data: NewProfileFormData, isUpdate: boolean) => Promise<void>;
@@ -28,7 +27,6 @@ const useUpdateUser = (): UseCreateProfileReturn => {
         website,
         category,
         collaborators: [],
-        createdCollaborators: [],
       };
       if (
         (data.placeActive && data.userType === "creator") ||
@@ -40,30 +38,13 @@ const useUpdateUser = (): UseCreateProfileReturn => {
           defaultSchedule,
           placeActive,
           placeType,
+          collaborators,
         } = data;
         requestData.location = location;
         requestData.placeCategory = placeCategory;
         requestData.defaultSchedule = defaultSchedule;
         requestData.placeActive = placeActive;
-
-        if (data.userType === "organizer") {
-          const { collaborators, createdCollaborators } = data;
-          if (collaborators) {
-            requestData.collaborators = collaborators.map((collaborator) => ({
-              _id: collaborator._id,
-            }));
-          }
-          requestData.createdCollaborators = createdCollaborators?.map(
-            (collaborator) => {
-              return {
-                name: collaborator.name,
-                category: collaborator.category,
-                _id: isTempId(collaborator._id!) ? undefined : collaborator._id,
-              };
-            }
-          );
-        }
-
+        requestData.collaborators = collaborators;
         requestData.placeType = placeType;
       }
 

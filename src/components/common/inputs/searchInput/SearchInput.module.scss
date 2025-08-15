@@ -73,19 +73,46 @@
 }
 
 .itemInfo {
-  @include flex(row, flex-start, center, spacing(1.5));
+  @include flex(row, space-between, center, spacing(1.5));
   flex: 1;
+}
+
+.itemInfoLeft {
+  @include flex(row, flex-start, center, spacing(1.5));
 }
 
 .itemImage {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid $primary-color;
+  width: 32px;
+  height: 32px;
 }
 
 .itemName {
   color: $grey-600;
   font-size: 15px;
+}
+
+.itemStatus {
+  color: $white;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  padding: spacing(0.5) spacing(1);
+  border-radius: spacing(1);
+}
+
+.pending {
+  background-color: $warning-color;
+}
+
+.accepted {
+  background-color: $success-color;
+}
+
+.refused {
+  background-color: $error-color;
 }
 
 .emptyState {

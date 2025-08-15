@@ -7,6 +7,7 @@ import styles from "./SearchInput.module.scss";
 import TextField from "../textField/TextField";
 import { useToast } from "@/hooks/useToast";
 import Button from "../../buttons/button/Button";
+import { useTranslation } from "next-i18next";
 
 interface SearchInputProps<T> {
   value?: string;
@@ -31,6 +32,7 @@ const SearchInput = <
     name?: string;
     image?: string;
     location?: { label: string };
+    status?: string;
   }
 >({
   value = "",
@@ -53,7 +55,7 @@ const SearchInput = <
   const wrapperRef = useRef<HTMLDivElement>(null);
   const { showError } = useToast();
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
+  const { t } = useTranslation();
   const showInitialSuggestions =
     input.trim() === "" && initialSuggestions.length > 0;
 
@@ -205,19 +207,31 @@ const SearchInput = <
               return (
                 <div key={id} className={styles.item}>
                   <div className={styles.itemInfo}>
-                    {withIcons && item.image && (
-                      <Image
-                        src={item.image}
-                        alt={getDisplayName(item)}
-                        width={32}
-                        height={32}
-                        className={styles.itemImage}
-                      />
+                    <div className={styles.itemInfoLeft}>
+                      {withIcons && (
+                        <Image
+                          src={item.image || "https://i.pravatar.cc/40?img=3"}
+                          alt={getDisplayName(item)}
+                          width={32}
+                          height={32}
+                          className={styles.itemImage}
+                        />
+                      )}
+                      <span className={styles.itemName}>
+                        {getDisplayName(item)}
+                      </span>
+                    </div>
+                    {item.status && (
+                      <span
+                        className={`${styles.itemStatus} ${
+                          styles[item.status]
+                        }`}
+                      >
+                        {t(`collaboratorStatus.${item.status}`)}
+                      </span>
                     )}
-                    <span className={styles.itemName}>
-                      {getDisplayName(item)}
-                    </span>
                   </div>
+
                   <Button
                     onClick={() => handleDelete(id)}
                     variant="simple"

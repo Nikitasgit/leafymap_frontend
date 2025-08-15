@@ -9,7 +9,7 @@ export default function EventsListPage() {
   const params = useParams();
   const router = useRouter();
   const { events, loading } = usePlaceEvents(params.placeId as string);
-
+  console.log(events);
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -27,11 +27,11 @@ export default function EventsListPage() {
         </Button>
       </div>
 
-      {events.length === 0 ? (
+      {events?.length === 0 ? (
         <p>Aucun événement trouvé</p>
       ) : (
         <div>
-          {events.map((event) => (
+          {events?.map((event) => (
             <div key={event._id}>
               <h2>{event.name}</h2>
               <p>{event.description}</p>

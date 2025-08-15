@@ -4,7 +4,6 @@ import { useRouter, useParams } from "next/navigation";
 import { PlaceFormData } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
-import { isTempId } from "@/utils/tempId";
 
 type UseUpdatePlaceReturn = {
   submitForm: (data: PlaceFormData, isUpdate: boolean) => Promise<void>;
@@ -31,33 +30,11 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
         throw new Error("Place ID is required for update");
       }
 
-      const payload = {
-        name: data.name,
-        description: data.description,
-        placeCategory: data.placeCategory,
-        phone: data.phone,
-        email: data.email,
-        website: data.website,
-        location: data.location,
-        defaultSchedule: data.defaultSchedule,
-        collaborators: data.collaborators?.map((collab) => ({
-          _id: collab._id,
-        })),
-        createdCollaborators: data.createdCollaborators?.map((collaborator) => {
-          return {
-            name: collaborator.name,
-            category: collaborator.category,
-            _id: isTempId(collaborator._id!) ? undefined : collaborator._id,
-          };
-        }),
-        placeType: data.placeType,
-      };
-
       if (isUpdate) {
         await withLoading(() =>
           axios.put(
             `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}`,
-            payload,
+            data,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -68,7 +45,7 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
         );
       } else {
         await withLoading(() =>
-          axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/places`, payload, {
+          axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/places`, data, {
             headers: {
               "Content-Type": "application/json",
             },

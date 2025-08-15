@@ -6,7 +6,6 @@ import {
   PlaceFormData,
 } from "../../createProfileStepper/CreateProfileStepper.types";
 import { Collaborator } from "@/types/place/collaborators";
-import CreateCollaborators from "../createCollaborators/CreateCollaborators";
 import { EventFormData } from "@/components/events/form/EventForm/EventForm";
 import { useFindCreators } from "@/hooks/useFindCreators";
 import styles from "./Collaborators.module.scss";
@@ -89,7 +88,6 @@ const Collaborators = ({
           />
         </div>
       </div>
-      <CreateCollaborators onChange={onChange} data={data} />
     </div>
   );
 };

@@ -49,5 +49,10 @@
     "cabinetmaker": "Menuisier",
     "ceramicist": "Céramiste",
     "weaver": "Tisserand"
+  },
+  "collaboratorStatus": {
+    "pending": "En attente",
+    "accepted": "Accepté",
+    "refused": "Refusé"
   }
 }
