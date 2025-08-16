@@ -94,9 +94,9 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
               withCredentials: true,
             }
           );
-          const { place } = response.data.data;
+          const { _id } = response.data.data;
           if (newPartnerships.length > 0) {
-            await createPartnerships(newPartnerships, place._id, eventId);
+            await createPartnerships(newPartnerships, placeId, _id);
           }
         });
       }

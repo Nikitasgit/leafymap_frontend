@@ -12,7 +12,9 @@ export const usePlacePartnerships = (placeId: string, eventId?: string) => {
   useEffect(() => {
     const fetchPartnerships = async () => {
       try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/partnerships/${placeId}/${eventId}`;
+        const url = `${
+          process.env.NEXT_PUBLIC_API_URL
+        }/api/partnerships/${placeId}${eventId ? `/${eventId}` : ""}`;
 
         const response = await axios.get(url);
 
