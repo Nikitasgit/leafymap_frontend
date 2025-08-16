@@ -13,11 +13,15 @@ import { defaultSchedule } from "@/utils/createProfile";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import styles from "./updatePlacePage.module.scss";
+import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
 
 const UpdatePlace = () => {
   const params = useParams();
   const placeId = params.placeId as string;
   const { place, loading } = usePlace(placeId);
+  const { partnerships, loading: partnershipsLoading } =
+    usePlacePartnerships(placeId);
+
   const { user, isLoading: userLoading } = useCurrentUser();
   const { submitForm, isLoading } = useUpdatePlace();
   const [formData, setFormData] = useState<PlaceFormData | null>(null);
@@ -30,7 +34,6 @@ const UpdatePlace = () => {
     if (!formData) return;
     await submitForm(formData, true);
   };
-
   useEffect(() => {
     if (place && !formData && user) {
       const coordinates = {
@@ -52,21 +55,15 @@ const UpdatePlace = () => {
         phone: place.phone || "",
         email: place.email || "",
         website: place.website || "",
-        collaborators:
-          place.collaborators?.map((collab) => ({
-            _id: collab.user?._id || "",
-            username: collab.user?.creatorProfile?.name || "",
-            image: collab.user?.image || "",
-            status: collab.status || "",
-          })) || [],
+        partnerships: partnerships || [],
         placeType: place.placeType || [],
       };
 
       setFormData(data);
     }
-  }, [place, loading, formData, user]);
-  console.log("formData", formData);
-  if (loading || isLoading || userLoading || !formData) return <LoadingBar />;
+  }, [place, loading, formData, user, partnerships]);
+  if (loading || isLoading || userLoading || !formData || partnershipsLoading)
+    return <LoadingBar />;
 
   return (
     <main className={styles.pageContainer}>

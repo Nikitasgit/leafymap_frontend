@@ -1,7 +1,7 @@
 import { Location } from "@/types/common";
 import { DefaultSchedule, Period } from "@/types/place/schedule";
-import { Collaborator } from "@/types/place/collaborators";
 import { PlaceType } from "@/types/place/placeCaterories";
+import { Partnership } from "@/types/partnerships";
 
 export interface NewProfileFormData {
   userType: string;
@@ -12,7 +12,7 @@ export interface NewProfileFormData {
   email: string;
   website: string;
   defaultSchedule?: DefaultSchedule;
-  collaborators: Collaborator[];
+  partnerships: Partnership[];
   placeCategory?: string;
   placeType?: PlaceType[];
   location?: Location | null;
@@ -35,11 +35,7 @@ export interface PlaceFormData {
   phone: string;
   email: string;
   website: string;
-  collaborators: {
-    _id: string;
-    name?: string;
-    image?: string;
-  }[];
+  partnerships: Partnership[];
   placeType: PlaceType[];
 }
 
@@ -53,7 +49,7 @@ export type FormDataChangeHandler = (
             | string
             | Location
             | string[]
-            | Collaborator[]
+            | Partnership[]
             | File
             | DefaultSchedule
             | Period[]

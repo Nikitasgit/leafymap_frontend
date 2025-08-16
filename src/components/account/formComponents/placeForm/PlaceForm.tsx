@@ -11,7 +11,7 @@ import {
   FormDataChangeHandler,
 } from "../../createProfileStepper/CreateProfileStepper.types";
 import styles from "./PlaceForm.module.scss";
-import Collaborators from "../collaborators/Collaborators";
+import Collaborators from "../collaborators/Partnerships";
 import { defaultSchedule } from "@/utils/createProfile";
 
 const PlaceForm = ({

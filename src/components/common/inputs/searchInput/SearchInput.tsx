@@ -1,25 +1,18 @@
 "use client";
 
-import { Delete } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import styles from "./SearchInput.module.scss";
 import TextField from "../textField/TextField";
-import { useToast } from "@/hooks/useToast";
-import Button from "../../buttons/button/Button";
-import { useTranslation } from "next-i18next";
 
 interface SearchInputProps<T> {
   value?: string;
   onSelect: (suggestion: T) => void;
-  onDelete: (id: string) => void;
   fetchSuggestions: (input: string) => Promise<T[]>;
   initialSuggestions?: T[];
   placeholder?: string;
   limit?: number;
   withIcons?: boolean;
-  list?: T[];
-  displayList?: boolean;
   loading?: boolean;
   debounce?: number;
   label?: string;
@@ -37,14 +30,11 @@ const SearchInput = <
 >({
   value = "",
   onSelect,
-  onDelete,
   fetchSuggestions,
   initialSuggestions = [],
   placeholder = "Rechercher...",
   limit = 5,
   withIcons = false,
-  list = [],
-  displayList = false,
   loading = false,
   debounce,
   label,
@@ -53,9 +43,7 @@ const SearchInput = <
   const [suggestions, setSuggestions] = useState<T[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const { showError } = useToast();
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const { t } = useTranslation();
   const showInitialSuggestions =
     input.trim() === "" && initialSuggestions.length > 0;
 
@@ -93,20 +81,9 @@ const SearchInput = <
   };
 
   const handleSuggestionClick = (suggestion: T) => {
-    const isDuplicate = list.some((item) => item._id === suggestion._id);
-    if (!isDuplicate) {
-      setInput("");
-      setSuggestions([]);
-      onSelect(suggestion);
-    } else {
-      setInput("");
-      setSuggestions([]);
-      showError("Cet utilisateur est déjà ajouté");
-    }
-  };
-
-  const handleDelete = (id: string) => {
-    onDelete(id);
+    setInput("");
+    setSuggestions([]);
+    onSelect(suggestion);
   };
 
   const getDisplayName = (item: T) => {
@@ -198,54 +175,6 @@ const SearchInput = <
             </li>
           ))}
         </ul>
-      )}
-      {displayList && (
-        <div className={styles.list}>
-          {list.length > 0 ? (
-            list.map((item) => {
-              const id = item._id;
-              return (
-                <div key={id} className={styles.item}>
-                  <div className={styles.itemInfo}>
-                    <div className={styles.itemInfoLeft}>
-                      {withIcons && (
-                        <Image
-                          src={item.image || "https://i.pravatar.cc/40?img=3"}
-                          alt={getDisplayName(item)}
-                          width={32}
-                          height={32}
-                          className={styles.itemImage}
-                        />
-                      )}
-                      <span className={styles.itemName}>
-                        {getDisplayName(item)}
-                      </span>
-                    </div>
-                    {item.status && (
-                      <span
-                        className={`${styles.itemStatus} ${
-                          styles[item.status]
-                        }`}
-                      >
-                        {t(`collaboratorStatus.${item.status}`)}
-                      </span>
-                    )}
-                  </div>
-
-                  <Button
-                    onClick={() => handleDelete(id)}
-                    variant="simple"
-                    size="small"
-                  >
-                    <Delete size={16} />
-                  </Button>
-                </div>
-              );
-            })
-          ) : (
-            <div className={styles.emptyState}>Aucun collaborateur ajouté</div>
-          )}
-        </div>
       )}
     </div>
   );

@@ -6,7 +6,7 @@ import Button from "@/components/common/buttons/button/Button";
 import useUpdateEvent from "@/hooks/useUpdateEvent";
 import { Collaborator, CreatedCollaborator } from "@/types/place/collaborators";
 import { EventTimeSlot, Period } from "@/types/place/schedule";
-import Collaborators from "@/components/account/formComponents/collaborators/Collaborators";
+import Collaborators from "@/components/account/formComponents/collaborators/Partnerships";
 import { useRouter } from "next/navigation";
 import styles from "./EventForm.module.scss";
 import EventScheduleList from "../EventScheduleList/EventScheduleList";
@@ -14,13 +14,13 @@ import { format } from "date-fns";
 import { validateEventForm } from "@/utils/formValidation";
 import { useToast } from "@/hooks/useToast";
 import { Event } from "@/types/place/event";
+import { Partnership } from "@/types/partnerships";
 
 export interface EventFormData {
   name: string;
   description: string;
   image: string | File;
-  collaborators: Collaborator[];
-  createdCollaborators: CreatedCollaborator[];
+  partnerships: Partnership[];
   schedule: Period[];
 }
 
@@ -35,8 +35,7 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
     name: data?.name || "",
     description: data?.description || "",
     image: data?.image || "",
-    collaborators: data?.collaborators || [],
-    createdCollaborators: data?.createdCollaborators || [],
+    partnerships: data?.partnerships || [],
     schedule: data?.schedule || [],
   });
   console.log("formData", formData);

@@ -4,6 +4,9 @@ import { useRouter, useParams } from "next/navigation";
 import { PlaceFormData } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
+import { useCreatePartnerships } from "./useCreatePartnerships";
+import { isTempId } from "@/utils/tempId";
+import { useUpdatePartnerships } from "./useUpdatePartnerships";
 
 type UseUpdatePlaceReturn = {
   submitForm: (data: PlaceFormData, isUpdate: boolean) => Promise<void>;
@@ -13,28 +16,44 @@ type UseUpdatePlaceReturn = {
 };
 
 const useUpdatePlace = (): UseUpdatePlaceReturn => {
-  const { isLoading, withLoading } = useLoading();
-  const { showError, showSuccess } = useToast();
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
   const router = useRouter();
   const params = useParams();
   const placeId = params.placeId as string;
+  const { isLoading, withLoading } = useLoading();
+  const { showError, showSuccess } = useToast();
+  const { createPartnerships } = useCreatePartnerships();
+  const { updatePartnerships } = useUpdatePartnerships();
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const submitForm = async (data: PlaceFormData, isUpdate: boolean) => {
+    const { partnerships, ...placeData } = data;
     setError(null);
     setSuccess(false);
-
     try {
       if (isUpdate && !placeId) {
         throw new Error("Place ID is required for update");
+      }
+      if (partnerships && partnerships.length > 0) {
+        const newPartnerships = partnerships.filter((partnership) =>
+          isTempId(partnership._id)
+        );
+        if (newPartnerships.length > 0) {
+          await createPartnerships(newPartnerships, placeId);
+        }
+        const existingPartnerships = partnerships.filter(
+          (partnership) => !isTempId(partnership._id)
+        );
+        if (existingPartnerships.length > 0) {
+          await updatePartnerships(existingPartnerships, placeId);
+        }
       }
 
       if (isUpdate) {
         await withLoading(() =>
           axios.put(
             `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}`,
-            data,
+            placeData,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -45,12 +64,16 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
         );
       } else {
         await withLoading(() =>
-          axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/places`, data, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          })
+          axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/places`,
+            placeData,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              withCredentials: true,
+            }
+          )
         );
       }
 

@@ -50,7 +50,7 @@
     "ceramicist": "Céramiste",
     "weaver": "Tisserand"
   },
-  "collaboratorStatus": {
+  "partnershipStatus": {
     "pending": "En attente",
     "accepted": "Accepté",
     "refused": "Refusé"

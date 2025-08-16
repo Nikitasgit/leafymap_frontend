@@ -14,7 +14,6 @@ export default function SignIn() {
   const { t } = useTranslation("subscription");
 
   const { login, loading } = useAuth();
-  console.log("loading", loading);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

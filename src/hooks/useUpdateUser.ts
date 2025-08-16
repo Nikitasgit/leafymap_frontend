@@ -3,6 +3,7 @@ import { NewProfileFormData } from "@/components/account/createProfileStepper/Cr
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
 import { useLoading } from "@/hooks/useLoading";
+import { useCreatePartnerships } from "./useCreatePartnerships";
 
 type UseCreateProfileReturn = {
   submitForm: (data: NewProfileFormData, isUpdate: boolean) => Promise<void>;
@@ -11,13 +12,16 @@ type UseCreateProfileReturn = {
 
 const useUpdateUser = (): UseCreateProfileReturn => {
   const router = useRouter();
+  const { createPartnerships } = useCreatePartnerships();
   const { showSuccess, showError } = useToast();
+
   const { isLoading, withLoading } = useLoading();
 
   const submitForm = async (data: NewProfileFormData, isUpdate: boolean) => {
+    const { partnerships, ...userData } = data;
     return withLoading(async () => {
       const { userType, name, description, phone, email, website, category } =
-        data;
+        userData;
       const requestData: Partial<NewProfileFormData> = {
         userType,
         name,
@@ -26,11 +30,10 @@ const useUpdateUser = (): UseCreateProfileReturn => {
         email,
         website,
         category,
-        collaborators: [],
       };
       if (
-        (data.placeActive && data.userType === "creator") ||
-        data.userType === "organizer"
+        (userData.placeActive && userData.userType === "creator") ||
+        userData.userType === "organizer"
       ) {
         const {
           location,
@@ -38,13 +41,12 @@ const useUpdateUser = (): UseCreateProfileReturn => {
           defaultSchedule,
           placeActive,
           placeType,
-          collaborators,
-        } = data;
+        } = userData;
+
         requestData.location = location;
         requestData.placeCategory = placeCategory;
         requestData.defaultSchedule = defaultSchedule;
         requestData.placeActive = placeActive;
-        requestData.collaborators = collaborators;
         requestData.placeType = placeType;
       }
 
@@ -65,12 +67,20 @@ const useUpdateUser = (): UseCreateProfileReturn => {
             ? `${process.env.NEXT_PUBLIC_API_URL}/api/users/create-creator`
             : `${process.env.NEXT_PUBLIC_API_URL}/api/users/create-organizer`;
 
-        await axios.post(url, requestData, {
+        const response = await axios.post(url, requestData, {
           headers: {
             "Content-Type": "application/json",
           },
           withCredentials: true,
         });
+        const { place } = response.data.data;
+        if (
+          partnerships &&
+          partnerships.length > 0 &&
+          userData.userType === "organizer"
+        ) {
+          await createPartnerships(partnerships, place._id);
+        }
       }
 
       showSuccess(
