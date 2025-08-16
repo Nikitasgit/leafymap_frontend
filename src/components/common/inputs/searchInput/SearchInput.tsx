@@ -30,7 +30,7 @@ const SearchInput = <
 >({
   value = "",
   onSelect,
-  fetchSuggestions,
+  fetchSuggestions ,
   initialSuggestions = [],
   placeholder = "Rechercher...",
   limit = 5,

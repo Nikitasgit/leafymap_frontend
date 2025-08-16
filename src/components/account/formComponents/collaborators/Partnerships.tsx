@@ -21,6 +21,7 @@ import { useToast } from "@/hooks/useToast";
 
 const Partnerships = ({
   onChange,
+
   data,
 }: {
   onChange: FormDataChangeHandler;
@@ -28,9 +29,9 @@ const Partnerships = ({
 }) => {
   const { searchCreators } = useFindCreators();
   const { showError } = useToast();
-  console.log(data);
 
   const partnerships = data.partnerships;
+
   const filteredPartnerships = partnerships.filter(
     (partnership) => !partnership.deleted
   );

@@ -9,7 +9,7 @@ export default function EventsListPage() {
   const params = useParams();
   const router = useRouter();
   const { events, loading } = usePlaceEvents(params.placeId as string);
-  console.log(events);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -41,20 +41,6 @@ export default function EventsListPage() {
                 width={100}
                 height={100}
               />
-              <div className="collaborators">
-                {event.collaborators.map((collaborator) => (
-                  <div key={collaborator._id}>
-                    <p>{collaborator.name}</p>
-                    <Image
-                      key={collaborator._id}
-                      src={collaborator.image || "/images/default-avatar.png"}
-                      alt={collaborator.name || ""}
-                      width={30}
-                      height={30}
-                    />
-                  </div>
-                ))}
-              </div>
               <Button
                 onClick={() =>
                   router.push(

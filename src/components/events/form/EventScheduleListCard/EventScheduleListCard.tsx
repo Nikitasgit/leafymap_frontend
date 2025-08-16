@@ -8,19 +8,19 @@ import { useState } from "react";
 import DateFilter from "@/components/map/filtersCardMap/dateFilter/DateFilter";
 import { parseDateToUTC } from "@/utils/dates";
 import NewSlot from "@/components/common/timetable/NewSlot";
-import { Collaborator } from "@/types/place/collaborators";
 import EventSlotCard from "../EventSlotCard/EventSlotCard";
+import { Partnership } from "@/types/partnerships";
 
 const EventScheduleListCard = ({
   period,
-  collaborators,
+  partnerships,
   onDeletePeriod,
   onUpdatePeriod,
   onUpdateTimeSlot,
   onDeleteTimeSlot,
 }: {
   period: Period;
-  collaborators: Collaborator[];
+  partnerships: Partnership[];
   onDeletePeriod: (periodId: string) => void;
   onUpdateTimeSlot: (periodId: string, timeSlot: EventTimeSlot) => void;
   onDeleteTimeSlot: (periodId: string, timeSlotId: string) => void;
@@ -132,7 +132,7 @@ const EventScheduleListCard = ({
       {isAddTimeSlot && (
         <NewSlot
           onCancel={() => setIsAddTimeSlot(false)}
-          collaborators={collaborators}
+          partnerships={partnerships}
           onSubmit={handleAddTimeSlot}
         />
       )}
@@ -142,7 +142,7 @@ const EventScheduleListCard = ({
             timeSlotToEdit && timeSlotToEdit._id === slot._id ? (
               <NewSlot
                 key={slot._id}
-                collaborators={collaborators}
+                partnerships={partnerships}
                 onSubmit={handleUpdateTimeSlot}
                 defaultSlot={slot}
                 onCancel={() => setTimeSlotToEdit(null)}

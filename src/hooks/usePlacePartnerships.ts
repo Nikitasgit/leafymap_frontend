@@ -4,7 +4,7 @@ import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { Partnership } from "@/types/partnerships";
 
-export const usePlacePartnerships = (placeId: string) => {
+export const usePlacePartnerships = (placeId: string, eventId?: string) => {
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
@@ -12,13 +12,12 @@ export const usePlacePartnerships = (placeId: string) => {
   useEffect(() => {
     const fetchPartnerships = async () => {
       try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/partnerships/${placeId}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/partnerships/${placeId}/${eventId}`;
 
         const response = await axios.get(url);
 
         if (response.data && response.data.data) {
           setPartnerships(response.data.data);
-          console.log("data", response);
         } else {
           setPartnerships([]);
           showError("Invalid response from server");
@@ -36,7 +35,7 @@ export const usePlacePartnerships = (placeId: string) => {
     if (placeId) {
       withLoading(fetchPartnerships);
     }
-  }, [placeId]);
+  }, [placeId, eventId]);
 
   return { partnerships, loading: isLoading };
 };

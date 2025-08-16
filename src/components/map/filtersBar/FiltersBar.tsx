@@ -120,7 +120,6 @@ const FiltersBar = ({
   const handleSelectSuggestion = (
     item: CreatorSearchResult | PlaceSearchResult
   ) => {
-    console.log(item);
     if (searchType.label === "Membres") {
       handleSelect({
         _id: item._id,

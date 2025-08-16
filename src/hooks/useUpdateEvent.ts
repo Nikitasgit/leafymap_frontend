@@ -6,6 +6,8 @@ import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { isTempId } from "@/utils/tempId";
 import { parseDateToUTC } from "@/utils/dates";
+import { useCreatePartnerships } from "./useCreatePartnerships";
+import { useUpdatePartnerships } from "./useUpdatePartnerships";
 
 type UseUpdateEventReturn = {
   submitForm: (data: EventFormData, isUpdate: boolean) => Promise<void>;
@@ -16,6 +18,8 @@ type UseUpdateEventReturn = {
 
 const useUpdateEvent = (): UseUpdateEventReturn => {
   const { isLoading, withLoading } = useLoading();
+  const { createPartnerships } = useCreatePartnerships();
+  const { updatePartnerships } = useUpdatePartnerships();
   const { showError, showSuccess } = useToast();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -27,15 +31,22 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
   const submitForm = async (data: EventFormData, isUpdate: boolean) => {
     setError(null);
     setSuccess(false);
+    const { partnerships, ...eventData } = data;
+    const existingPartnerships = partnerships.filter(
+      (partnership) => !isTempId(partnership._id)
+    );
+    const newPartnerships = partnerships.filter((partnership) =>
+      isTempId(partnership._id)
+    );
 
     try {
       if (isUpdate && !placeId && !eventId) {
         throw new Error("Place ID or event ID is required for update");
       }
       const payload = {
-        name: data.name,
-        description: data.description,
-        schedule: data.schedule.map((period) => ({
+        name: eventData.name,
+        description: eventData.description,
+        schedule: eventData.schedule.map((period) => ({
           ...period,
           startDate: parseDateToUTC(period.startDate),
           endDate: period.endDate
@@ -47,28 +58,9 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
             _id: isTempId(slot._id) ? undefined : slot._id,
             collaborators: slot.collaborators?.map((collaborator) => ({
               _id: collaborator._id,
-              status: collaborator.status || "pending",
             })),
-            createdCollaborators: slot.createdCollaborators?.map(
-              (collaborator) => ({
-                name: collaborator.name,
-                category: collaborator.category,
-                _id: isTempId(collaborator._id!) ? undefined : collaborator._id,
-              })
-            ),
           })),
         })),
-        collaborators: data.collaborators?.map((collab) => ({
-          _id: collab._id,
-          status: collab.status || "pending",
-        })),
-        createdCollaborators: data.createdCollaborators?.map((collaborator) => {
-          return {
-            name: collaborator.name,
-            category: collaborator.category,
-            _id: isTempId(collaborator._id!) ? undefined : collaborator._id,
-          };
-        }),
       };
 
       if (isUpdate) {
@@ -84,9 +76,15 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
             }
           )
         );
+        if (existingPartnerships.length > 0) {
+          await updatePartnerships(existingPartnerships, placeId);
+        }
+        if (newPartnerships.length > 0) {
+          await createPartnerships(newPartnerships, placeId, eventId);
+        }
       } else {
-        await withLoading(() =>
-          axios.post(
+        await withLoading(async () => {
+          const response = await axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}/events`,
             payload,
             {
@@ -95,8 +93,12 @@ const useUpdateEvent = (): UseUpdateEventReturn => {
               },
               withCredentials: true,
             }
-          )
-        );
+          );
+          const { place } = response.data.data;
+          if (newPartnerships.length > 0) {
+            await createPartnerships(newPartnerships, place._id, eventId);
+          }
+        });
       }
 
       showSuccess(

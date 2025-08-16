@@ -1,5 +1,5 @@
 import { BaseEntity } from "../common";
-import { Collaborator, CreatedCollaborator } from "./collaborators";
+import { Partnership } from "../partnerships";
 import { Period } from "./schedule";
 
 export interface Event extends BaseEntity {
@@ -7,6 +7,5 @@ export interface Event extends BaseEntity {
   description: string;
   image: string;
   schedule: Period[];
-  collaborators: Collaborator[];
-  createdCollaborators: CreatedCollaborator[];
+  partnerships: Partnership[];
 }

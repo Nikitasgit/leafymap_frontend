@@ -1,55 +1,58 @@
 import React, { useState } from "react";
 import TimeSlotInputs from "./timeSlotInputs/TimeSlotInputs";
-import SearchInput from "../inputs/searchInput/SearchInput";
-import { Collaborator } from "@/types/place/collaborators";
 import TextField from "../inputs/textField/TextField";
 import Button from "../buttons/button/Button";
 import { EventTimeSlot } from "@/types/place/schedule";
 import styles from "./NewSlot.module.scss";
-import { useFindCreators } from "@/hooks/useFindCreators";
 import { useToast } from "@/hooks/useToast";
 import { generateTempId } from "@/utils/tempId";
+import { Partnership } from "@/types/partnerships";
+import PartnershipsSelect from "@/components/events/form/PartnershipsSelect/PartnershipsSelect";
 
 interface NewSlotProps {
-  collaborators: Collaborator[];
+  partnerships: Partnership[];
   onSubmit: (timeSlot: EventTimeSlot) => void;
   defaultSlot?: EventTimeSlot;
   onCancel?: () => void;
 }
 
 const NewSlot: React.FC<NewSlotProps> = ({
-  collaborators,
+  partnerships,
   onSubmit,
   defaultSlot,
   onCancel,
 }) => {
   const { showError } = useToast();
-  const { searchCreators } = useFindCreators();
   const [timeSlot, setTimeSlot] = useState<EventTimeSlot>(
     defaultSlot || {
       title: "",
       startTime: "",
       endTime: "",
       collaborators: [],
-      createdCollaborators: [],
       _id: generateTempId(),
     }
   );
 
-  const handleParticipantSelect = (collaborator: Collaborator) => {
-    if (!timeSlot.collaborators?.some((p) => p._id === collaborator._id)) {
+  const handleParticipantSelect = (partnership: Partnership) => {
+    if (
+      !timeSlot.collaborators?.some(
+        (p) => p._id === partnership.collaborator._id
+      )
+    ) {
       setTimeSlot({
         ...timeSlot,
-        collaborators: [...timeSlot.collaborators, collaborator],
+        collaborators: [...timeSlot.collaborators, partnership.collaborator],
+      });
+    } else {
+      setTimeSlot({
+        ...timeSlot,
+        collaborators: timeSlot.collaborators.filter(
+          (p) => p._id !== partnership.collaborator._id
+        ),
       });
     }
   };
-  const handleParticipantDelete = (id: string) => {
-    setTimeSlot({
-      ...timeSlot,
-      collaborators: timeSlot.collaborators.filter((p) => p._id !== id),
-    });
-  };
+
   const handleValidateTimeSlot = () => {
     if (!timeSlot.title || !timeSlot.startTime || !timeSlot.endTime) {
       showError("Veuillez remplir tous les champs obligatoires du créneau.");
@@ -69,7 +72,6 @@ const NewSlot: React.FC<NewSlotProps> = ({
       startTime: "",
       endTime: "",
       collaborators: [],
-      createdCollaborators: [],
       _id: generateTempId(),
     });
   };
@@ -124,15 +126,10 @@ const NewSlot: React.FC<NewSlotProps> = ({
         value={timeSlot.title || ""}
         onChange={(e) => handleSlotChange("title", e.target.value)}
       />
-      <SearchInput
-        label="Participants"
-        onSelect={handleParticipantSelect}
-        onDelete={handleParticipantDelete}
-        initialSuggestions={collaborators}
-        fetchSuggestions={searchCreators}
-        list={timeSlot.collaborators}
-        withIcons
-        displayList
+      <PartnershipsSelect
+        partnerships={partnerships}
+        selectedPartnerships={timeSlot.collaborators}
+        onClick={handleParticipantSelect}
       />
       <div className={styles.buttonContainer}>
         <Button variant="secondary" onClick={handleCancelTimeSlot} fullWidth>

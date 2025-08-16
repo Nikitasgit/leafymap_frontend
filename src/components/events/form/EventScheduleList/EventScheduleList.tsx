@@ -3,11 +3,11 @@ import { EventTimeSlot, Period } from "@/types/place/schedule";
 import Text from "@/components/common/typography/Text";
 import styles from "./EventScheduleList.module.scss";
 import EventScheduleListCard from "../EventScheduleListCard/EventScheduleListCard";
-import { Collaborator } from "@/types/place/collaborators";
+import { Partnership } from "@/types/partnerships";
 
 interface EventScheduleListProps {
   schedule: Period[];
-  collaborators: Collaborator[];
+  partnerships: Partnership[];
   onUpdatePeriod: (
     periodId: string,
     startDate: Date,
@@ -21,7 +21,7 @@ interface EventScheduleListProps {
 
 const EventScheduleList: React.FC<EventScheduleListProps> = ({
   schedule,
-  collaborators,
+  partnerships,
   onUpdatePeriod,
   onDeletePeriod,
   onUpdateTimeSlot,
@@ -41,7 +41,7 @@ const EventScheduleList: React.FC<EventScheduleListProps> = ({
       </div>
     );
   }
-  console.log(schedule);
+
   return (
     <div className={styles.eventScheduleList}>
       {schedule.map((period) => (
@@ -50,7 +50,7 @@ const EventScheduleList: React.FC<EventScheduleListProps> = ({
           period={period}
           onUpdatePeriod={onUpdatePeriod}
           onDeletePeriod={onDeletePeriod}
-          collaborators={collaborators}
+          partnerships={partnerships}
           onUpdateTimeSlot={onUpdateTimeSlot}
           onDeleteTimeSlot={onDeleteTimeSlot}
         />

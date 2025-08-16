@@ -4,9 +4,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import NewDatesEventForm from "../NewDatesEventForm/NewDatesEventForm";
 import Button from "@/components/common/buttons/button/Button";
 import useUpdateEvent from "@/hooks/useUpdateEvent";
-import { Collaborator, CreatedCollaborator } from "@/types/place/collaborators";
 import { EventTimeSlot, Period } from "@/types/place/schedule";
-import Collaborators from "@/components/account/formComponents/collaborators/Partnerships";
+import Partnerships from "@/components/account/formComponents/collaborators/Partnerships";
 import { useRouter } from "next/navigation";
 import styles from "./EventForm.module.scss";
 import EventScheduleList from "../EventScheduleList/EventScheduleList";
@@ -27,18 +26,24 @@ export interface EventFormData {
 interface EventFormProps {
   data: Event | null;
   isUpdate?: boolean;
+  partnerships: Partnership[];
 }
 
-const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
+const EventForm = ({
+  data = null,
+  isUpdate = false,
+  partnerships = [],
+}: EventFormProps) => {
   const router = useRouter();
+
   const [formData, setFormData] = useState<EventFormData>({
     name: data?.name || "",
     description: data?.description || "",
     image: data?.image || "",
-    partnerships: data?.partnerships || [],
+    partnerships: partnerships || [],
     schedule: data?.schedule || [],
   });
-  console.log("formData", formData);
+  console.log("formDataa", formData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const { showError } = useToast();
@@ -172,11 +177,11 @@ const EventForm = ({ data, isUpdate = false }: EventFormProps) => {
         error={!!errors.description}
         errorMessage={errors.description}
       />
-      <Collaborators onChange={onChange} data={formData} />
+      <Partnerships onChange={onChange} data={formData} />
       <NewDatesEventForm onChange={onChange} data={formData} />
       <EventScheduleList
         schedule={formData.schedule}
-        collaborators={formData.collaborators}
+        partnerships={formData.partnerships}
         onUpdatePeriod={onUpdatePeriod}
         onUpdateTimeSlot={onUpdateTimeSlot}
         onDeletePeriod={onDeletePeriod}
