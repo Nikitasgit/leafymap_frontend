@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserTypeStep from "./steps/UserTypeStep/UserTypeStep";
 import ActivityFormStep from "./steps/ActivityFormStep/ActivityFormStep";
 import {
@@ -48,11 +48,18 @@ const CreateProfileStepper = () => {
   const { submitPartnerships, isLoading: submitPartnershipsLoading } =
     useSubmitPartnerships();
   const [step, setStep] = useState(1);
-  const [place, setPlace] = useState<InitialPlaceData>(initialPlaceData(user));
+  const [place, setPlace] = useState<InitialPlaceData>(initialPlaceData(null));
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
   const [newUser, setNewUser] = useState<InitialCreatorData>(
-    initialUserData(user)
+    initialUserData(null)
   );
+
+  useEffect(() => {
+    if (user) {
+      setNewUser(initialUserData(user));
+      setPlace(initialPlaceData(user));
+    }
+  }, [user]);
 
   const loading =
     userLoading ||
@@ -103,13 +110,13 @@ const CreateProfileStepper = () => {
         )}
         {step === 2 && (
           <ActivityFormStep
-            firstStep={false}
             place={place}
             user={newUser}
+            firstStep={false}
             partnerships={partnerships}
             onPartnershipsChange={setPartnerships}
-            onUserChange={onUserChange}
             onPlaceChange={onPlaceChange}
+            onUserChange={onUserChange}
             onSubmit={handleSubmit}
             onNext={handleNext}
             onBack={handleBack}
