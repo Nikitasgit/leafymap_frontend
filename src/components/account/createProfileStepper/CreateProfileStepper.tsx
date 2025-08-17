@@ -4,33 +4,38 @@ import { useEffect, useState } from "react";
 import UserTypeStep from "./steps/UserTypeStep/UserTypeStep";
 import ActivityFormStep from "./steps/ActivityFormStep/ActivityFormStep";
 import { FormDataChangeHandler } from "./CreateProfileStepper.types";
-import type { NewProfileFormData } from "./CreateProfileStepper.types";
+import type { BaseProfileFormData } from "./CreateProfileStepper.types";
 import useUpdateUser from "@/hooks/useUpdateUser";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { defaultSchedule } from "@/utils/createProfile";
 import styles from "./CreateProfileStepper.module.scss";
 import LoadingBar from "@/components/common/loading/LoadingBar";
+import { IUser } from "../../../../../innovastay-backend/types/models/user";
+
+const initialFormData = (user: IUser | null): BaseProfileFormData => ({
+  userType: "",
+  name: "",
+  description: "",
+  category: "",
+  location: null,
+  defaultSchedule: defaultSchedule,
+  phone: user?.phone || "",
+  email: user?.email || "",
+  website: user?.website || "",
+  partnerships: [],
+  placeCategory: "",
+  placeActive: true,
+  placeType: [],
+});
 
 const CreateProfileStepper = () => {
   const { user, isLoading: userLoading } = useCurrentUser();
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<NewProfileFormData>({
-    userType: "",
-    name: "",
-    description: "",
-    category: "",
-    location: null,
-    defaultSchedule: defaultSchedule,
-    phone: user?.phone || "",
-    email: user?.email || "",
-    website: user?.website || "",
-    partnerships: [],
-    placeCategory: "",
-    placeActive: true,
-    placeType: [],
-  });
-
   const { submitForm, isLoading: submitLoading } = useUpdateUser();
+
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState<BaseProfileFormData>(
+    initialFormData(user as IUser | null)
+  );
 
   const handleSubmit = async () => {
     await submitForm(formData, false);

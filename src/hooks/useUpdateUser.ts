@@ -1,12 +1,12 @@
 import axios from "axios";
-import { NewProfileFormData } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
+import { BaseProfileFormData } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
 import { useLoading } from "@/hooks/useLoading";
 import { useCreatePartnerships } from "./useCreatePartnerships";
 
 type UseCreateProfileReturn = {
-  submitForm: (data: NewProfileFormData, isUpdate: boolean) => Promise<void>;
+  submitForm: (data: BaseProfileFormData, isUpdate: boolean) => Promise<void>;
   isLoading: boolean;
 };
 
@@ -14,15 +14,14 @@ const useUpdateUser = (): UseCreateProfileReturn => {
   const router = useRouter();
   const { createPartnerships } = useCreatePartnerships();
   const { showSuccess, showError } = useToast();
-
   const { isLoading, withLoading } = useLoading();
 
-  const submitForm = async (data: NewProfileFormData, isUpdate: boolean) => {
+  const submitForm = async (data: BaseProfileFormData, isUpdate: boolean) => {
     const { partnerships, ...userData } = data;
     return withLoading(async () => {
       const { userType, name, description, phone, email, website, category } =
         userData;
-      const requestData: Partial<NewProfileFormData> = {
+      const requestData: Partial<BaseProfileFormData> = {
         userType,
         name,
         description,

@@ -3,7 +3,7 @@ import { DefaultSchedule, Period } from "@/types/place/schedule";
 import { PlaceType } from "@/types/place/placeCaterories";
 import { Partnership } from "@/types/partnerships";
 
-export interface NewProfileFormData {
+export interface BaseProfileFormData {
   userType: string;
   name: string;
   description: string;
@@ -11,13 +11,13 @@ export interface NewProfileFormData {
   phone: string;
   email: string;
   website: string;
-  defaultSchedule?: DefaultSchedule;
+  defaultSchedule: DefaultSchedule;
   partnerships: Partnership[];
-  placeCategory?: string;
+  placeCategory: string;
   placeType?: PlaceType[];
-  location?: Location | null;
+  location: Location | null;
+  placeActive: boolean;
   placeId?: string;
-  placeActive?: boolean;
 }
 
 export interface PlaceFormData {

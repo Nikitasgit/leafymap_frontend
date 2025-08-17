@@ -34,6 +34,7 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
       if (isUpdate && !placeId) {
         throw new Error("Place ID is required for update");
       }
+
       if (partnerships && partnerships.length > 0) {
         const newPartnerships = partnerships.filter((partnership) =>
           isTempId(partnership._id)
@@ -83,12 +84,13 @@ const useUpdatePlace = (): UseUpdatePlaceReturn => {
       console.error("Update place error:", err);
       if (axios.isAxiosError(err) && err.response?.data) {
         console.error("Backend error details:", err.response.data);
-        showError(
-          err.response.data.message ||
-            (err.response.data.errors
-              ? JSON.stringify(err.response.data.errors)
-              : err.message)
-        );
+        if (err.response.data.data && Array.isArray(err.response.data.data)) {
+          err.response.data.data.forEach((error: { message: string }) => {
+            showError(error.message);
+          });
+        } else {
+          showError(err.response.data.message);
+        }
       } else {
         showError(
           err instanceof Error

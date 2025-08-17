@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  NewProfileFormData,
+  BaseProfileFormData,
   FormDataChangeHandler,
 } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { useState, useEffect } from "react";
@@ -16,7 +16,7 @@ import styles from "./updateCreatorPage.module.scss";
 const ModifyCreator = () => {
   const { user, isLoading } = useCurrentUser();
   const creator = user as Creator | null;
-  const [formData, setFormData] = useState<NewProfileFormData | null>(null);
+  const [formData, setFormData] = useState<BaseProfileFormData | null>(null);
   const { submitForm } = useUpdateUser();
   useEffect(() => {
     if (creator && creator.creatorProfile && !formData) {
@@ -28,7 +28,7 @@ const ModifyCreator = () => {
           }
         : null;
 
-      const data: NewProfileFormData = {
+      const data: BaseProfileFormData = {
         userType: creator.userType || "",
         name: creator.creatorProfile.name || "",
         description: creator.description || "",
@@ -47,8 +47,7 @@ const ModifyCreator = () => {
         phone: creator.phone || "",
         email: creator.email || "",
         website: creator.website || "",
-        collaborators: [],
-        createdCollaborators: [],
+        partnerships: [],
         placeActive: creator.creatorProfile.place?.active || false,
       };
 
