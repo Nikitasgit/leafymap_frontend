@@ -6,7 +6,7 @@ import {
 } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { useState, useEffect } from "react";
 import ActivityFormStep from "@/components/account/createProfileStepper/steps/ActivityFormStep/ActivityFormStep";
-import useUpdateUser from "@/hooks/useUpdateUser";
+import useUpdateUser from "@/hooks/useSubmitUser";
 import { Creator } from "@/types/user";
 import { defaultSchedule } from "@/utils/createProfile";
 import { useCurrentUser } from "@/hooks/useCurrentUser";

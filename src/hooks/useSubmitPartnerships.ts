@@ -3,12 +3,13 @@ import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { Partnership } from "@/types/partnerships";
 
-export const useUpdatePartnerships = () => {
-  const { isLoading, withLoading } = useLoading(true);
+export const useSubmitPartnerships = () => {
+  const { isLoading, withLoading } = useLoading();
   const { showError } = useToast();
 
-  const updatePartnerships = async (
+  const submitPartnerships = async (
     partnerships: Partnership[],
+    isUpdate: boolean,
     placeId: string
   ) => {
     try {
@@ -16,10 +17,12 @@ export const useUpdatePartnerships = () => {
         _id: partnership._id,
         deleted: partnership.deleted,
       }));
-
+      const method = isUpdate ? "put" : "post";
       await withLoading(() =>
-        axios.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/partnerships/${placeId}`,
+        axios[method](
+          `${process.env.NEXT_PUBLIC_API_URL}/api/partnerships/${
+            isUpdate ? placeId : ""
+          }`,
           { partnerships: filteredPartnerships },
           {
             headers: {
@@ -39,7 +42,7 @@ export const useUpdatePartnerships = () => {
   };
 
   return {
-    loading: isLoading,
-    updatePartnerships,
+    isLoading,
+    submitPartnerships,
   };
 };

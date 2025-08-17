@@ -43,7 +43,6 @@ const EventForm = ({
     partnerships: partnerships || [],
     schedule: data?.schedule || [],
   });
-  console.log("formDataa", formData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const { showError } = useToast();

@@ -2,26 +2,20 @@ import { Location } from "@/types/common";
 import { DefaultSchedule, Period } from "@/types/place/schedule";
 import { PlaceType } from "@/types/place/placeCaterories";
 import { Partnership } from "@/types/partnerships";
+import { Creator } from "@/types/user";
+import { Place } from "@/types/place";
 
 export interface BaseProfileFormData {
   userType: string;
   name: string;
   description: string;
-  category: string;
+  categories: string[];
   phone: string;
   email: string;
   website: string;
-  defaultSchedule: DefaultSchedule;
-  partnerships: Partnership[];
-  placeCategory: string;
-  placeType?: PlaceType[];
-  location: Location | null;
-  placeActive: boolean;
-  placeId?: string;
 }
 
 export interface PlaceFormData {
-  userType: "creator" | "organizer" | "guest";
   name: string;
   description: string;
   location: {
@@ -35,7 +29,6 @@ export interface PlaceFormData {
   phone: string;
   email: string;
   website: string;
-  partnerships: Partnership[];
   placeType: PlaceType[];
 }
 
@@ -61,3 +54,28 @@ export type FormDataChangeHandler = (
 
 export type onNextHandler = () => void;
 export type onBackHandler = () => void;
+
+export type InitialPlaceData = Pick<
+  Place,
+  | "name"
+  | "description"
+  | "location"
+  | "defaultSchedule"
+  | "placeCategory"
+  | "phone"
+  | "email"
+  | "website"
+  | "placeType"
+  | "active"
+>;
+
+export type InitialCreatorData = Pick<
+  Creator,
+  | "userType"
+  | "creatorName"
+  | "description"
+  | "categories"
+  | "phone"
+  | "email"
+  | "website"
+>;

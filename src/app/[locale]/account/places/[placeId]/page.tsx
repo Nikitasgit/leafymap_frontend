@@ -8,7 +8,7 @@ import {
   FormDataChangeHandler,
   PlaceFormData,
 } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
-import useUpdatePlace from "@/hooks/useUpdatePlace";
+import useUpdatePlace from "@/hooks/useSubmitPlace";
 import { defaultSchedule } from "@/utils/createProfile";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import LoadingBar from "@/components/common/loading/LoadingBar";

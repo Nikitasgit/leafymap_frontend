@@ -5,9 +5,9 @@ export interface BaseEntity {
 }
 
 export interface ContactInfo {
-  phone?: string;
-  email?: string;
-  website?: string;
+  phone: string;
+  email: string;
+  website: string;
 }
 
 export interface Location {

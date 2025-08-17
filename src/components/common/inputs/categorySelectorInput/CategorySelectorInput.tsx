@@ -15,7 +15,7 @@ const CategorySelectorInput = ({
   error = false,
 }: {
   onChange: FormDataChangeHandler;
-  value: string;
+  value: string[];
   error?: boolean;
 }) => {
   const { subCategories, loading, error: appError } = useApp();
@@ -41,8 +41,8 @@ const CategorySelectorInput = ({
     setSearch("");
     onChange({
       target: {
-        name: "category",
-        value: subCategory._id,
+        name: "categories",
+        value: [subCategory._id],
       },
     });
   };
@@ -53,7 +53,7 @@ const CategorySelectorInput = ({
 
   useEffect(() => {
     if (value) {
-      const sub = subCategories.find((s) => s._id === value);
+      const sub = subCategories.find((s) => value.includes(s._id));
       if (sub) {
         setInputValue(sub.name);
       }
@@ -68,7 +68,7 @@ const CategorySelectorInput = ({
     <div className={styles.categoryInputWrapper} ref={ref}>
       {loading && <LoadingBar />}
       <TextField
-        name="category"
+        name="categories"
         label={t("categorySelector.label")}
         readOnly
         fullWidth

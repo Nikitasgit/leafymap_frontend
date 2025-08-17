@@ -1,0 +1,59 @@
+import axios from "axios";
+import { useParams } from "next/navigation";
+import { useLoading } from "./useLoading";
+import { useToast } from "./useToast";
+import { Place } from "@/types/place";
+
+const useSubmitPlace = () => {
+  const params = useParams();
+  const placeId = params.placeId as string;
+  const { isLoading, withLoading } = useLoading();
+  const { showError, showSuccess } = useToast();
+
+  const submitPlace = async (data: Partial<Place>, isUpdate: boolean) => {
+    try {
+      if (isUpdate && !placeId) {
+        throw new Error("Place ID is required for update");
+      }
+      const method = isUpdate ? "put" : "post";
+      const response = await withLoading(() =>
+        axios[method](
+          `${process.env.NEXT_PUBLIC_API_URL}/api/places/${
+            isUpdate ? placeId : ""
+          }`,
+          data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        )
+      );
+      showSuccess(
+        isUpdate ? "Lieu modifié avec succès" : "Lieu créé avec succès"
+      );
+      return response.data.place._id;
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err) && err.response?.data) {
+        if (err.response.data.data && Array.isArray(err.response.data.data)) {
+          err.response.data.data.forEach((error: { message: string }) => {
+            showError(error.message);
+          });
+        } else {
+          showError(err.response.data.message);
+        }
+      } else {
+        showError(
+          err instanceof Error
+            ? err.message
+            : "Erreur lors de la soumission du lieu"
+        );
+      }
+    }
+  };
+
+  return { submitPlace, isLoading };
+};
+
+export default useSubmitPlace;

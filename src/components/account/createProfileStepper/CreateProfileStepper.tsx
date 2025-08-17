@@ -1,66 +1,90 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import UserTypeStep from "./steps/UserTypeStep/UserTypeStep";
 import ActivityFormStep from "./steps/ActivityFormStep/ActivityFormStep";
-import { FormDataChangeHandler } from "./CreateProfileStepper.types";
-import type { BaseProfileFormData } from "./CreateProfileStepper.types";
-import useUpdateUser from "@/hooks/useUpdateUser";
+import {
+  FormDataChangeHandler,
+  InitialCreatorData,
+  InitialPlaceData,
+} from "./CreateProfileStepper.types";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { defaultSchedule } from "@/utils/createProfile";
 import styles from "./CreateProfileStepper.module.scss";
 import LoadingBar from "@/components/common/loading/LoadingBar";
-import { IUser } from "../../../../../innovastay-backend/types/models/user";
+import useSubmitUser from "@/hooks/useSubmitUser";
+import useSubmitPlace from "@/hooks/useSubmitPlace";
+import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
+import { User } from "@/types/user";
+import { Partnership } from "@/types/partnerships";
 
-const initialFormData = (user: IUser | null): BaseProfileFormData => ({
-  userType: "",
-  name: "",
+const initialUserData = (user: Partial<User> | null): InitialCreatorData => ({
+  userType: "guest",
+  creatorName: "",
   description: "",
-  category: "",
-  location: null,
-  defaultSchedule: defaultSchedule,
+  categories: [],
   phone: user?.phone || "",
   email: user?.email || "",
   website: user?.website || "",
-  partnerships: [],
+});
+
+const initialPlaceData = (user: Partial<User> | null): InitialPlaceData => ({
+  name: "",
+  description: "",
+  location: null,
+  defaultSchedule: defaultSchedule,
   placeCategory: "",
-  placeActive: true,
+  phone: user?.phone || "",
+  email: user?.email || "",
+  website: user?.website || "",
   placeType: [],
+  active: true,
 });
 
 const CreateProfileStepper = () => {
   const { user, isLoading: userLoading } = useCurrentUser();
-  const { submitForm, isLoading: submitLoading } = useUpdateUser();
-
+  const { submitUser, isLoading: submitUserLoading } = useSubmitUser();
+  const { submitPlace, isLoading: submitPlaceLoading } = useSubmitPlace();
+  const { submitPartnerships, isLoading: submitPartnershipsLoading } =
+    useSubmitPartnerships();
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<BaseProfileFormData>(
-    initialFormData(user as IUser | null)
+  const [place, setPlace] = useState<InitialPlaceData>(initialPlaceData(user));
+  const [partnerships, setPartnerships] = useState<Partnership[]>([]);
+  const [newUser, setNewUser] = useState<InitialCreatorData>(
+    initialUserData(user)
   );
 
+  const loading =
+    userLoading ||
+    submitUserLoading ||
+    submitPlaceLoading ||
+    submitPartnershipsLoading;
+
   const handleSubmit = async () => {
-    await submitForm(formData, false);
+    if (newUser) {
+      await submitUser(newUser);
+    }
+    if (place) {
+      const placeId = await submitPlace(place, false);
+      if (partnerships && placeId) {
+        await submitPartnerships(partnerships, false, placeId);
+      }
+    }
   };
 
-  const handleInputChange: FormDataChangeHandler = (e) => {
+  const onUserChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setNewUser((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const onPlaceChange: FormDataChangeHandler = (e) => {
+    const { name, value } = e.target;
+    setPlace((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleNext = () => setStep((prev) => prev + 1);
   const handleBack = () => setStep((prev) => prev - 1);
 
-  useEffect(() => {
-    if (user) {
-      setFormData((prev) => ({
-        ...prev,
-        phone: user.phone || prev.phone,
-        email: user.email || prev.email,
-        website: user.website || prev.website,
-      }));
-    }
-  }, [user]);
-
-  const loading = userLoading || submitLoading;
   return (
     <div className={styles.container}>
       {loading && <LoadingBar />}
@@ -72,17 +96,20 @@ const CreateProfileStepper = () => {
       <div className={styles.stepContainer}>
         {step === 1 && (
           <UserTypeStep
-            userType={formData.userType}
-            onChange={handleInputChange}
+            userType={newUser.userType}
+            onChange={onUserChange}
             onNext={handleNext}
           />
         )}
         {step === 2 && (
           <ActivityFormStep
             firstStep={false}
-            data={formData}
-            isCreator={formData.userType === "creator"}
-            onChange={handleInputChange}
+            place={place}
+            user={newUser}
+            partnerships={partnerships}
+            onPartnershipsChange={setPartnerships}
+            onUserChange={onUserChange}
+            onPlaceChange={onPlaceChange}
             onSubmit={handleSubmit}
             onNext={handleNext}
             onBack={handleBack}

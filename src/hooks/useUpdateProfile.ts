@@ -10,7 +10,7 @@ type UseCreateProfileReturn = {
   isLoading: boolean;
 };
 
-const useUpdateUser = (): UseCreateProfileReturn => {
+const useUpdateProfile = (): UseCreateProfileReturn => {
   const router = useRouter();
   const { createPartnerships } = useCreatePartnerships();
   const { showSuccess, showError } = useToast();

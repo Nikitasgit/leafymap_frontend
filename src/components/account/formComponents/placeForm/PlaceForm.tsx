@@ -7,31 +7,40 @@ import { MapCoordinates, Location } from "@/types/common";
 import React, { useState } from "react";
 import Text from "@/components/common/typography/Text";
 import {
-  NewProfileFormData,
   FormDataChangeHandler,
+  InitialPlaceData,
 } from "../../createProfileStepper/CreateProfileStepper.types";
 import styles from "./PlaceForm.module.scss";
-import Collaborators from "../collaborators/Partnerships";
 import { defaultSchedule } from "@/utils/createProfile";
+import RadioYesOrNo from "@/components/common/inputs/radios/radioYesOrNo/RadioYesOrNo";
 
 const PlaceForm = ({
-  data,
+  place,
+  userType,
   onChange,
   errors = {},
 }: {
-  data: NewProfileFormData;
+  place: InitialPlaceData;
+  userType: "creator" | "organizer" | "guest";
   onChange: FormDataChangeHandler;
   errors?: Record<string, string>;
 }) => {
   const [locationMarker, setLocationMarker] = useState<MapCoordinates | null>(
-    data.location?.coordinates
+    place.location?.coordinates
       ? {
-          latitude: data.location.coordinates[1],
-          longitude: data.location.coordinates[0],
+          latitude: place.location.coordinates[1],
+          longitude: place.location.coordinates[0],
         }
       : null
   );
-
+  const handleDisplayPlaceChange = (value: string) => {
+    onChange({
+      target: {
+        name: "placeActive",
+        value: value === "yes",
+      },
+    });
+  };
   const handleMapClick = async ({
     latitude,
     longitude,
@@ -75,54 +84,64 @@ const PlaceForm = ({
 
   return (
     <section className={styles.placeForm}>
-      <h3 className={styles.title}>Lieu</h3>
-      <div className={styles.placeFormContainer}>
-        <AddressInput
-          onLocationSelect={onLocationSelect}
-          value={data.location?.label || ""}
-          selectedLocation={data.location}
-          error={!!errors.location}
-          errorMessage={errors.location}
+      {userType !== "organizer" && (
+        <RadioYesOrNo
+          title="Lieu"
+          label="Souhaitez-vous afficher votre lieu sur la carte pour recevoir des visiteurs?"
+          name="userWithPlace"
+          value={place.active ? "yes" : "no"}
+          onChange={(e) => handleDisplayPlaceChange(e.target.value)}
         />
+      )}
+      {place.active && (
+        <div>
+          <h3 className={styles.title}>Lieu</h3>
+          <div className={styles.placeFormContainer}>
+            <AddressInput
+              onLocationSelect={onLocationSelect}
+              value={place.location?.label || ""}
+              selectedLocation={place.location}
+              error={!!errors.location}
+              errorMessage={errors.location}
+            />
 
-        <div className={styles.mapSection}>
-          <Text as="h4" className={styles.mapTitle}>
-            Cliquez sur la carte pour positionner votre lieu
-          </Text>
-          <div className={styles.mapContainer}>
-            <MapComponent
-              height="200px"
-              location={locationMarker || undefined}
-              markers={locationMarker ? [locationMarker] : []}
-              onMapClick={handleMapClick}
-              withDefaultMarker
+            <div className={styles.mapSection}>
+              <Text as="h4" className={styles.mapTitle}>
+                Cliquez sur la carte pour positionner votre lieu
+              </Text>
+              <div className={styles.mapContainer}>
+                <MapComponent
+                  height="200px"
+                  location={locationMarker || undefined}
+                  markers={locationMarker ? [locationMarker] : []}
+                  onMapClick={handleMapClick}
+                  withDefaultMarker
+                />
+              </div>
+            </div>
+            {userType === "organizer" && (
+              <PlaceTypeSelectorInput
+                value={place.placeType || []}
+                onChange={onChange}
+                error={!!errors.placeType}
+              />
+            )}
+            <PlaceCategorySelectorInput
+              value={(place.placeCategory as string) || ""}
+              onChange={onChange}
+              selectedTypes={place.placeType || []}
+              error={!!errors.placeCategory}
             />
           </div>
-        </div>
-        {data.userType === "organizer" && (
-          <PlaceTypeSelectorInput
-            value={data.placeType || []}
-            onChange={onChange}
-            error={!!errors.placeType}
+          <TimeTableForm
+            schedule={place.defaultSchedule || defaultSchedule}
+            onChange={(updatedSchedule) =>
+              onChange({
+                target: { name: "defaultSchedule", value: updatedSchedule },
+              })
+            }
           />
-        )}
-        <PlaceCategorySelectorInput
-          value={data.placeCategory || ""}
-          onChange={onChange}
-          selectedTypes={data.placeType || []}
-          error={!!errors.placeCategory}
-        />
-      </div>
-      <TimeTableForm
-        schedule={data.defaultSchedule || defaultSchedule}
-        onChange={(updatedSchedule) =>
-          onChange({
-            target: { name: "defaultSchedule", value: updatedSchedule },
-          })
-        }
-      />
-      {data.userType === "organizer" && (
-        <Collaborators onChange={onChange} data={data} />
+        </div>
       )}
     </section>
   );

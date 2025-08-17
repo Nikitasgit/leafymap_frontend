@@ -6,10 +6,10 @@ import { PlaceType } from "./placeCaterories";
 
 export interface Place extends BaseEntity, ContactInfo {
   name: string;
-  description?: string;
+  description: string;
   userId: string | User;
-  location: Location;
-  placeCategory: PlaceCategory;
+  location: Location | null;
+  placeCategory: PlaceCategory | string;
   categories: string[];
   defaultSchedule: DefaultSchedule;
   collaborators: {

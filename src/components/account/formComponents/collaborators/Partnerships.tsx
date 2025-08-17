@@ -1,12 +1,6 @@
 import React from "react";
 import SearchInput from "@/components/common/inputs/searchInput/SearchInput";
-import {
-  FormDataChangeHandler,
-  NewProfileFormData,
-  PlaceFormData,
-} from "../../createProfileStepper/CreateProfileStepper.types";
 import { Collaborator } from "@/types/place/collaborators";
-import { EventFormData } from "@/components/events/form/EventForm/EventForm";
 import { useFindCreators } from "@/hooks/useFindCreators";
 import styles from "./Partnerships.module.scss";
 import InfoIcon from "@/components/common/info/InfoIcon";
@@ -21,16 +15,13 @@ import { useToast } from "@/hooks/useToast";
 
 const Partnerships = ({
   onChange,
-
-  data,
+  partnerships,
 }: {
-  onChange: FormDataChangeHandler;
-  data: EventFormData | PlaceFormData | NewProfileFormData;
+  onChange: (partnerships: Partnership[]) => void;
+  partnerships: Partnership[];
 }) => {
   const { searchCreators } = useFindCreators();
   const { showError } = useToast();
-
-  const partnerships = data.partnerships;
 
   const filteredPartnerships = partnerships.filter(
     (partnership) => !partnership.deleted
@@ -47,14 +38,11 @@ const Partnerships = ({
           ...existingPartnership,
           deleted: false,
         };
-        onChange({
-          target: {
-            name: "partnerships",
-            value: partnerships.map((p) =>
-              p._id === existingPartnership._id ? updatedPartnership : p
-            ),
-          },
-        });
+        onChange(
+          partnerships.map((p) =>
+            p._id === existingPartnership._id ? updatedPartnership : p
+          )
+        );
       } else {
         showError("Ce collaborateur est déjà ajouté");
         return;
@@ -69,12 +57,7 @@ const Partnerships = ({
         },
         status: "pending",
       };
-      onChange({
-        target: {
-          name: "partnerships",
-          value: [...partnerships, newPartnership],
-        },
-      });
+      onChange([...partnerships, newPartnership]);
     }
   };
 
@@ -83,23 +66,18 @@ const Partnerships = ({
       const newPartnerships = partnerships.filter(
         (p) => p._id !== partnership._id
       );
-      onChange({
-        target: { name: "partnerships", value: newPartnerships },
-      });
+      onChange(newPartnerships);
       return;
     }
     const updatedPartnership = {
       ...partnership,
       deleted: true,
     };
-    onChange({
-      target: {
-        name: "partnerships",
-        value: partnerships.map((p) =>
-          p._id === partnership._id ? updatedPartnership : p
-        ),
-      },
-    });
+    onChange(
+      partnerships.map((p) =>
+        p._id === partnership._id ? updatedPartnership : p
+      )
+    );
   };
 
   return (

@@ -7,7 +7,7 @@ import { useToast } from "./useToast";
 import { isTempId } from "@/utils/tempId";
 import { parseDateToUTC } from "@/utils/dates";
 import { useCreatePartnerships } from "./useCreatePartnerships";
-import { useUpdatePartnerships } from "./useUpdatePartnerships";
+import { useUpdatePartnerships } from "./useSubmitPartnerships";
 
 type UseUpdateEventReturn = {
   submitForm: (data: EventFormData, isUpdate: boolean) => Promise<void>;
