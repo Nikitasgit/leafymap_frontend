@@ -10,7 +10,10 @@ const useSubmitPlace = () => {
   const { isLoading, withLoading } = useLoading();
   const { showError, showSuccess } = useToast();
 
-  const submitPlace = async (data: Partial<Place>, isUpdate: boolean) => {
+  const submitPlace = async (
+    data: Partial<Place>,
+    isUpdate: boolean = false
+  ) => {
     try {
       if (isUpdate && !placeId) {
         throw new Error("Place ID is required for update");
@@ -35,20 +38,23 @@ const useSubmitPlace = () => {
       );
       return response.data.place._id;
     } catch (err: unknown) {
+      console.log(err);
       if (axios.isAxiosError(err) && err.response?.data) {
-        if (err.response.data.data && Array.isArray(err.response.data.data)) {
-          err.response.data.data.forEach((error: { message: string }) => {
-            showError(error.message);
+        if (err.response.data.data) {
+          Object.values(err.response.data.data).forEach((error: unknown) => {
+            if (Array.isArray(error)) {
+              error.forEach((e: string) => {
+                showError(e);
+              });
+            } else if (typeof error === "string") {
+              showError(error);
+            }
           });
         } else {
           showError(err.response.data.message);
         }
       } else {
-        showError(
-          err instanceof Error
-            ? err.message
-            : "Erreur lors de la soumission du lieu"
-        );
+        showError("Une erreur inattendue s'est produite");
       }
     }
   };

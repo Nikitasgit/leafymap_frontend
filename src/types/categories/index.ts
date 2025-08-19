@@ -3,12 +3,11 @@ import { PlaceType } from "../place/placeCaterories";
 
 export interface SubCategory extends BaseEntity {
   name: string;
-  categoryId: string;
+  category: Category;
 }
 
 export interface Category extends BaseEntity {
   name: string;
-  subCategories: SubCategory[];
 }
 
 export interface PlaceCategory extends BaseEntity {

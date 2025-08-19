@@ -23,7 +23,7 @@ export interface User extends BaseEntity {
 
 export interface Creator extends User {
   creatorName: string;
-  categories: string[];
+  creatorCategories: string[];
 }
 
 export interface Organizer extends User {

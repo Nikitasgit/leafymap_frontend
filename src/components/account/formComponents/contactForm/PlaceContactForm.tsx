@@ -3,34 +3,28 @@ import styles from "./ContactForm.module.scss";
 
 import {
   FormDataChangeHandler,
-  InitialCreatorData,
   InitialPlaceData,
 } from "../../createProfileStepper/CreateProfileStepper.types";
 
-interface ContactFormProps {
-  user: InitialCreatorData;
+interface PlaceContactFormProps {
   place: InitialPlaceData;
-  onUserChange: FormDataChangeHandler;
   onPlaceChange: FormDataChangeHandler;
   errors?: Record<string, string>;
 }
 
-const ContactForm = ({
-  user,
+const PlaceContactForm = ({
   place,
-  onUserChange,
   onPlaceChange,
   errors = {},
-}: ContactFormProps) => {
-  const isCreator = user.userType === "creator";
+}: PlaceContactFormProps) => {
   return (
     <div className={styles.contactForm}>
       <h3 className={styles.title}>Contact</h3>
       <div className={styles.formFields}>
         <TextField
           label="Numéro de téléphone"
-          value={isCreator ? user.phone : place.phone}
-          onChange={isCreator ? onUserChange : onPlaceChange}
+          value={place.phone}
+          onChange={onPlaceChange}
           name="phone"
           type="tel"
           placeholder="Entrez votre numéro de téléphone"
@@ -42,12 +36,11 @@ const ContactForm = ({
 
         <TextField
           label="Adresse email"
-          value={isCreator ? user.email : place.email}
-          onChange={isCreator ? onUserChange : onPlaceChange}
+          value={place.email}
+          onChange={onPlaceChange}
           name="email"
           type="email"
           placeholder="Entrez votre adresse email"
-          disabled={isCreator}
           required
           fullWidth
           error={!!errors.email}
@@ -56,8 +49,8 @@ const ContactForm = ({
 
         <TextField
           label="Site web"
-          value={isCreator ? user.website : place.website}
-          onChange={isCreator ? onUserChange : onPlaceChange}
+          value={place.website}
+          onChange={onPlaceChange}
           name="website"
           type="url"
           placeholder="Entrez l'URL de votre site web"
@@ -70,4 +63,4 @@ const ContactForm = ({
   );
 };
 
-export default ContactForm;
+export default PlaceContactForm;

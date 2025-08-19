@@ -15,11 +15,13 @@ const PlaceCategorySelectorInput = ({
   onChange,
   selectedTypes = [],
   error = false,
+  errorMessage = "",
 }: {
   value: string;
   onChange: FormDataChangeHandler;
   selectedTypes?: PlaceType[];
   error?: boolean;
+  errorMessage?: string;
 }) => {
   const { placeCategories, loading, error: appError } = useApp();
   const [inputValue, setInputValue] = useState("");
@@ -127,6 +129,7 @@ const PlaceCategorySelectorInput = ({
         placeholder={t("placeCategorySelector.placeholder")}
         onChange={(e) => setInputValue(e.target.value)}
         error={error}
+        errorMessage={errorMessage}
       />
 
       {isOpen && (

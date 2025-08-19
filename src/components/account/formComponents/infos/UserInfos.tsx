@@ -10,9 +10,15 @@ interface InfosProps {
   user: InitialCreatorData;
   onUserChange: FormDataChangeHandler;
   errors?: Record<string, string>;
+  onPlaceChange: FormDataChangeHandler;
 }
 
-const UserInfos = ({ user, onUserChange, errors = {} }: InfosProps) => {
+const UserInfos = ({
+  user,
+  onUserChange,
+  onPlaceChange,
+  errors = {},
+}: InfosProps) => {
   return (
     <div className={styles.container}>
       <section className={styles.section}>
@@ -42,9 +48,11 @@ const UserInfos = ({ user, onUserChange, errors = {} }: InfosProps) => {
             errorMessage={errors.description}
           />
           <CategorySelectorInput
-            onChange={onUserChange}
-            value={user.categories}
-            error={!!errors.categories}
+            onUserChange={onUserChange}
+            onPlaceChange={onPlaceChange}
+            value={user.creatorCategories}
+            error={!!errors.creatorCategories}
+            errorMessage={errors.creatorCategories}
           />
         </div>
       </section>

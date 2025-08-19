@@ -71,11 +71,5 @@ export type InitialPlaceData = Pick<
 
 export type InitialCreatorData = Pick<
   Creator,
-  | "userType"
-  | "creatorName"
-  | "description"
-  | "categories"
-  | "phone"
-  | "email"
-  | "website"
+  "userType" | "creatorName" | "description" | "creatorCategories" | "website"
 >;

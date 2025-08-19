@@ -2,9 +2,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchCategories,
-  selectCategories,
+  selectCreatorCategories,
   selectPlaceCategories,
-  selectSubCategories,
 } from "@/store/appSlice";
 import { fetchCurrentUser, selectAuth } from "@/store/authSlice";
 import type { AppDispatch } from "@/store";
@@ -12,9 +11,8 @@ import type { AppDispatch } from "@/store";
 export default function AppInitializer() {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector(selectAuth);
-  const categories = useSelector(selectCategories);
+  const creatorCategories = useSelector(selectCreatorCategories);
   const placeCategories = useSelector(selectPlaceCategories);
-  const subCategories = useSelector(selectSubCategories);
 
   useEffect(() => {
     if (!user) {
@@ -23,14 +21,10 @@ export default function AppInitializer() {
   }, [dispatch, user]);
 
   useEffect(() => {
-    if (
-      !categories?.length ||
-      !placeCategories?.length ||
-      !subCategories?.length
-    ) {
+    if (!creatorCategories?.length || !placeCategories?.length) {
       dispatch(fetchCategories());
     }
-  }, [dispatch, categories, placeCategories, subCategories]);
+  }, [dispatch, creatorCategories, placeCategories]);
 
   return null;
 }

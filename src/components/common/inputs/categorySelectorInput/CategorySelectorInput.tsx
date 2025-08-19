@@ -10,15 +10,19 @@ import TextField from "../textField/TextField";
 import { useTranslation } from "react-i18next";
 
 const CategorySelectorInput = ({
-  onChange,
+  onUserChange,
+  onPlaceChange,
   value,
   error = false,
+  errorMessage = "",
 }: {
-  onChange: FormDataChangeHandler;
+  onUserChange: FormDataChangeHandler;
+  onPlaceChange: FormDataChangeHandler;
   value: string[];
   error?: boolean;
+  errorMessage?: string;
 }) => {
-  const { subCategories, loading, error: appError } = useApp();
+  const { creatorCategories, loading, error: appError } = useApp();
 
   const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -39,26 +43,32 @@ const CategorySelectorInput = ({
     setInputValue(subCategory.name);
     setIsOpen(false);
     setSearch("");
-    onChange({
+    onUserChange({
       target: {
-        name: "categories",
+        name: "creatorCategories",
         value: [subCategory._id],
+      },
+    });
+    onPlaceChange({
+      target: {
+        name: "placeType",
+        value: [subCategory.category.name],
       },
     });
   };
 
-  const filteredSubcategories = subCategories.filter((sub) =>
+  const filteredSubcategories = creatorCategories.filter((sub) =>
     sub.name.toLowerCase().includes(search.toLowerCase())
   );
 
   useEffect(() => {
     if (value) {
-      const sub = subCategories.find((s) => value.includes(s._id));
+      const sub = creatorCategories.find((s) => value.includes(s._id));
       if (sub) {
         setInputValue(sub.name);
       }
     }
-  }, [value, subCategories]);
+  }, [value, creatorCategories]);
 
   if (appError) {
     showError(appError);
@@ -68,10 +78,11 @@ const CategorySelectorInput = ({
     <div className={styles.categoryInputWrapper} ref={ref}>
       {loading && <LoadingBar />}
       <TextField
-        name="categories"
+        name="creatorCategories"
         label={t("categorySelector.label")}
         readOnly
         fullWidth
+        required
         onChange={(e) => setInputValue(e.target.value)}
         value={t(`creatorCategories.${inputValue}`, {
           defaultValue: inputValue,
@@ -79,6 +90,7 @@ const CategorySelectorInput = ({
         onClick={() => setIsOpen(true)}
         placeholder={t("categorySelector.placeholder")}
         error={error}
+        errorMessage={errorMessage}
       />
       {isOpen && (
         <div className={styles.dropdown}>

@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import styles from "./EventForm.module.scss";
 import EventScheduleList from "../EventScheduleList/EventScheduleList";
 import { format } from "date-fns";
-import { validateEventForm } from "@/utils/formValidation";
+import { validateEventForm } from "@/validations/formValidation";
 import { useToast } from "@/hooks/useToast";
 import { Event } from "@/types/place/event";
 import { Partnership } from "@/types/partnerships";

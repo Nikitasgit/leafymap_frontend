@@ -33,11 +33,12 @@ const PlaceForm = ({
         }
       : null
   );
-  const handleDisplayPlaceChange = (value: string) => {
+  const handleDisplayPlaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
     onChange({
       target: {
-        name: "placeActive",
-        value: value === "yes",
+        name: "active",
+        value: e.target.value === "yes",
       },
     });
   };
@@ -90,7 +91,7 @@ const PlaceForm = ({
           label="Souhaitez-vous afficher votre lieu sur la carte pour recevoir des visiteurs?"
           name="userWithPlace"
           value={place.active ? "yes" : "no"}
-          onChange={(e) => handleDisplayPlaceChange(e.target.value)}
+          onChange={handleDisplayPlaceChange}
         />
       )}
       {place.active && (
@@ -131,6 +132,7 @@ const PlaceForm = ({
               onChange={onChange}
               selectedTypes={place.placeType || []}
               error={!!errors.placeCategory}
+              errorMessage={errors.placeCategory}
             />
           </div>
           <TimeTableForm

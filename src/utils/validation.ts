@@ -16,7 +16,7 @@ export const phoneSchema = z
 
 export const websiteSchema = z
   .string()
-  .optional()
+  .min(1, "Le site web est requis")
   .refine(
     (val) => {
       if (!val || val.trim() === "") return true;

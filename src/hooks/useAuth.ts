@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectAuth, signIn, signOut } from "@/store/authSlice";
 import { User } from "@/types/user";
 import { useToast } from "./useToast";
-import { useEffect } from "react";
 import { AppDispatch } from "@/store";
 import { useRouter } from "next/navigation";
 
@@ -20,22 +19,23 @@ export const useAuth = (): AuthState => {
   const router = useRouter();
 
   const login = async (identifier: string, password: string) => {
-    await dispatch(signIn({ identifier, password }));
-    router.push("/");
-    showSuccess("Connexion réussie");
+    try {
+      await dispatch(signIn({ identifier, password })).unwrap();
+      showSuccess("Connexion réussie");
+      router.push("/");
+    } catch {
+      showError("Échec de connexion");
+    }
   };
 
   const logout = async () => {
-    await dispatch(signOut());
-    router.push("/auth/signin");
-    showSuccess("Déconnexion réussie");
-  };
-
-  useEffect(() => {
-    if (error) {
-      showError(error);
+    try {
+      await dispatch(signOut()).unwrap();
+      router.push("/auth/signin");
+    } catch {
+      showError("Échec de déconnexion");
     }
-  }, [error, showError]);
+  };
 
   return {
     user,

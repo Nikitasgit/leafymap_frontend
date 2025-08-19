@@ -16,15 +16,25 @@ const useSubmitUser = () => {
         withCredentials: true,
       });
       showSuccess("Profil mis à jour avec succès !");
+      return true;
     }).catch((err: unknown) => {
+      console.log(err);
       if (axios.isAxiosError(err) && err.response?.data) {
-        if (err.response.data.data && Array.isArray(err.response.data.data)) {
-          err.response.data.data.forEach((error: { message: string }) => {
-            showError(error.message);
+        if (err.response.data.data) {
+          Object.values(err.response.data.data).forEach((error: unknown) => {
+            if (Array.isArray(error)) {
+              error.forEach((e: string) => {
+                showError(e);
+              });
+            } else if (typeof error === "string") {
+              showError(error);
+            }
           });
         } else {
           showError(err.response.data.message);
         }
+      } else {
+        showError("Une erreur inattendue s'est produite");
       }
     });
   };

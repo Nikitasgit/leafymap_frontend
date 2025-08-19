@@ -35,6 +35,7 @@ const PlaceInfos = ({ place, onPlaceChange, errors = {} }: InfosProps) => {
             onChange={onPlaceChange}
             multiline
             rows={2}
+            required
             showCharCount
             maxLength={300}
             error={!!errors.description}

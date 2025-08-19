@@ -8,7 +8,7 @@ import {
   eventNameSchema,
   eventDescriptionSchema,
   eventImageSchema,
-} from "./validation";
+} from "../utils/validation";
 import { EventFormData } from "@/components/events/form/EventForm/EventForm";
 import { Place } from "@/types/place";
 import { Partnership } from "@/types/partnerships";
@@ -46,9 +46,8 @@ export const validatePlaceData = (
   const errors: Record<string, string> = {};
 
   try {
-    // Basic place validation
     const placeSchema = z.object({
-      name: nameSchema.optional(),
+      name: nameSchema,
       description: z.string().min(1, "La description est requise").optional(),
       phone: phoneSchema.optional(),
       email: emailSchema.optional(),

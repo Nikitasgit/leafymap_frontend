@@ -22,9 +22,7 @@ const initialUserData = (user: Partial<User> | null): InitialCreatorData => ({
   userType: "guest",
   creatorName: "",
   description: "",
-  categories: [],
-  phone: user?.phone || "",
-  email: user?.email || "",
+  creatorCategories: [],
   website: user?.website || "",
 });
 
@@ -68,11 +66,11 @@ const CreateProfileStepper = () => {
     submitPartnershipsLoading;
 
   const handleSubmit = async () => {
-    if (newUser) {
-      await submitUser(newUser);
-    }
-    if (place) {
-      const placeId = await submitPlace(place, false);
+    const user = await submitUser(newUser);
+    if (place.active && user) {
+      console.log(user);
+      const placeId = await submitPlace(place);
+      console.log(placeId);
       if (partnerships && placeId) {
         await submitPartnerships(partnerships, false, placeId);
       }
@@ -90,7 +88,16 @@ const CreateProfileStepper = () => {
   };
 
   const handleNext = () => setStep((prev) => prev + 1);
-  const handleBack = () => setStep((prev) => prev - 1);
+
+  const handleBack = () => {
+    const prevStep = step;
+    setStep((prev) => prev - 1);
+    if (prevStep === 2) {
+      setNewUser(initialUserData(user));
+      setPlace(initialPlaceData(user));
+      setPartnerships([]);
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -112,13 +119,11 @@ const CreateProfileStepper = () => {
           <ActivityFormStep
             place={place}
             user={newUser}
-            firstStep={false}
             partnerships={partnerships}
             onPartnershipsChange={setPartnerships}
             onPlaceChange={onPlaceChange}
             onUserChange={onUserChange}
             onSubmit={handleSubmit}
-            onNext={handleNext}
             onBack={handleBack}
           />
         )}

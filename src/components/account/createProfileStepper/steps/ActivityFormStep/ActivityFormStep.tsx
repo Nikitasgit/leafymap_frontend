@@ -5,36 +5,32 @@ import Button from "@/components/common/buttons/button/Button";
 import {
   FormDataChangeHandler,
   InitialCreatorData,
-  onBackHandler,
-  onNextHandler,
 } from "../../CreateProfileStepper.types";
 import PlaceInfos from "../../../formComponents/infos/PlaceInfos";
 import { InitialPlaceData } from "../../CreateProfileStepper.types";
-import ContactForm from "../../../formComponents/contactForm/ContactForm";
 import styles from "./ActivityFormStep.module.scss";
 import { useToast } from "@/hooks/useToast";
-import {
-  validatePlaceData,
-  validateUserData,
-  validatePartnershipsData,
-} from "@/utils/formValidation";
 import { Partnership } from "@/types/partnerships";
 import PlaceForm from "@/components/account/formComponents/placeForm/PlaceForm";
 import Partnerships from "@/components/account/formComponents/collaborators/Partnerships";
 import UserInfos from "@/components/account/formComponents/infos/UserInfos";
+import { validateNewPlaceData } from "@/validations/placeValidations";
+import { validateNewUserData } from "@/validations/userValidations";
+import UserContactForm from "@/components/account/formComponents/contactForm/UserContactForm";
+import PlaceContactForm from "@/components/account/formComponents/contactForm/PlaceContactForm";
+import { ValidationResult } from "@/validations/commonValidations";
 
 interface ActivityFormStepProps {
   place: InitialPlaceData;
   user: InitialCreatorData;
   partnerships: Partnership[];
-  firstStep: boolean;
+  firstStep?: boolean;
   submitButtonText?: string;
   onPlaceChange: FormDataChangeHandler;
   onUserChange: FormDataChangeHandler;
   onPartnershipsChange: (partnerships: Partnership[]) => void;
   onSubmit: () => Promise<void>;
-  onNext?: onNextHandler;
-  onBack?: onBackHandler;
+  onBack: () => void;
 }
 
 const ActivityFormStep = ({
@@ -49,31 +45,28 @@ const ActivityFormStep = ({
   submitButtonText = "Créer mon profil",
   firstStep = false,
 }: ActivityFormStepProps) => {
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<{
+    place: Record<string, string>;
+    user: Record<string, string>;
+  }>({ place: {}, user: {} });
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const { showError } = useToast();
 
   const validateFormData = (): boolean => {
-    const placeValidation = validatePlaceData(place, "place");
-    const userValidation = validateUserData(user, "user");
-    const partnershipsValidation = validatePartnershipsData(
-      partnerships,
-      "partnerships"
-    );
-
-    const allErrors = {
-      ...placeValidation.errors,
-      ...userValidation.errors,
-      ...partnershipsValidation.errors,
+    const userValidation = validateNewUserData(user);
+    let placeValidation: ValidationResult = {
+      errors: {},
+      isValid: true,
     };
-
-    setErrors(allErrors);
-
-    return (
-      placeValidation.isValid &&
-      userValidation.isValid &&
-      partnershipsValidation.isValid
-    );
+    if (place.active) {
+      placeValidation = validateNewPlaceData(place, user.userType);
+    }
+    setErrors((prev) => ({
+      ...prev,
+      user: userValidation.errors,
+      place: placeValidation.errors,
+    }));
+    return userValidation.isValid && placeValidation.isValid;
   };
 
   useEffect(() => {
@@ -84,34 +77,34 @@ const ActivityFormStep = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setHasAttemptedSubmit(true);
-
     if (validateFormData()) {
       await onSubmit();
     } else {
-      Object.keys(errors).forEach((key) => {
-        showError(errors[key]);
-      });
+      showError("Veuillez corriger les erreurs ci-dessus");
     }
   };
-
   return (
     <form onSubmit={handleSubmit} noValidate>
       {user.userType === "organizer" ? (
         <PlaceInfos
           place={place}
           onPlaceChange={onPlaceChange}
-          errors={errors}
+          errors={errors.place}
         />
       ) : (
-        <UserInfos user={user} onUserChange={onUserChange} errors={errors} />
+        <UserInfos
+          user={user}
+          onUserChange={onUserChange}
+          onPlaceChange={onPlaceChange}
+          errors={errors.user}
+        />
       )}
       <PlaceForm
         place={place}
         userType={user.userType}
         onChange={onPlaceChange}
-        errors={errors}
+        errors={errors.place}
       />
       {user.userType === "organizer" && (
         <Partnerships
@@ -119,17 +112,24 @@ const ActivityFormStep = ({
           partnerships={partnerships}
         />
       )}
-      <ContactForm
-        user={user}
-        place={place}
-        onUserChange={onUserChange}
-        onPlaceChange={onPlaceChange}
-        errors={errors}
-      />
+      {user.userType === "creator" ? (
+        <UserContactForm
+          user={user}
+          onUserChange={onUserChange}
+          errors={errors.user}
+        />
+      ) : (
+        <PlaceContactForm
+          place={place}
+          onPlaceChange={onPlaceChange}
+          errors={errors.place}
+        />
+      )}
+
       <div className={styles.buttonContainer}>
         {!firstStep && (
           <Button
-            size="large"
+            size="medium"
             variant="secondary"
             type="button"
             onClick={onBack}

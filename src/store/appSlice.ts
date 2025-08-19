@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { RootState } from "./index";
-import { Category, PlaceCategory, SubCategory } from "@/types/categories";
+import { PlaceCategory, SubCategory } from "@/types/categories";
 
 export const fetchCategories = createAsyncThunk(
   "app/fetchCategories",
@@ -18,17 +18,15 @@ export const fetchCategories = createAsyncThunk(
 );
 
 type AppState = {
-  subCategories: SubCategory[];
+  creatorCategories: SubCategory[];
   placeCategories: PlaceCategory[];
-  categories: Category[];
   loading: boolean;
   error: string | null;
 };
 
 const initialState: AppState = {
-  subCategories: [],
+  creatorCategories: [],
   placeCategories: [],
-  categories: [],
   loading: false,
   error: null,
 };
@@ -45,8 +43,7 @@ const appSlice = createSlice({
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
         state.loading = false;
-        state.subCategories = action.payload.subCategories;
-        state.categories = action.payload.categories;
+        state.creatorCategories = action.payload.creatorCategories;
         state.placeCategories = action.payload.placeCategories;
       })
       .addCase(fetchCategories.rejected, (state, action) => {
@@ -58,9 +55,8 @@ const appSlice = createSlice({
 
 export default appSlice.reducer;
 
-export const selectSubCategories = (state: RootState) =>
-  state.app.subCategories;
-export const selectCategories = (state: RootState) => state.app.categories;
+export const selectCreatorCategories = (state: RootState) =>
+  state.app.creatorCategories;
 export const selectPlaceCategories = (state: RootState) =>
   state.app.placeCategories;
 export const selectAppLoading = (state: RootState) => state.app.loading;
