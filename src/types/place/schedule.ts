@@ -31,6 +31,7 @@ export interface Period {
   _id: string;
 }
 
+
 export type WeekDay =
   | "monday"
   | "tuesday"
