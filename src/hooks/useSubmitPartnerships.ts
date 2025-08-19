@@ -9,20 +9,27 @@ export const useSubmitPartnerships = () => {
 
   const submitPartnerships = async (
     partnerships: Partnership[],
-    isUpdate: boolean,
-    placeId: string
+    isUpdate: boolean = false,
+    placeId: string,
+    eventId: string = ""
   ) => {
     try {
-      const filteredPartnerships = partnerships.map((partnership) => ({
-        _id: partnership._id,
-        deleted: partnership.deleted,
-      }));
+      const filteredPartnerships = partnerships.map((partnership) => {
+        if (isUpdate) {
+          return {
+            _id: partnership._id,
+            deleted: partnership.deleted,
+          };
+        } else {
+          return {
+            collaborator: partnership.collaborator,
+          };
+        }
+      });
       const method = isUpdate ? "put" : "post";
       await withLoading(() =>
         axios[method](
-          `${process.env.NEXT_PUBLIC_API_URL}/api/partnerships/${
-            isUpdate ? placeId : ""
-          }`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/partnerships/${placeId}/${eventId}`,
           { partnerships: filteredPartnerships },
           {
             headers: {

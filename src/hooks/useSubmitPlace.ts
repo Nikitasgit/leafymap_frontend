@@ -6,9 +6,9 @@ import { Place } from "@/types/place";
 
 const useSubmitPlace = () => {
   const params = useParams();
-  const placeId = params.placeId as string;
+  const { placeId } = params;
   const { isLoading, withLoading } = useLoading();
-  const { showError, showSuccess } = useToast();
+  const { showError } = useToast();
 
   const submitPlace = async (
     data: Partial<Place>,
@@ -33,10 +33,7 @@ const useSubmitPlace = () => {
           }
         )
       );
-      showSuccess(
-        isUpdate ? "Lieu modifié avec succès" : "Lieu créé avec succès"
-      );
-      return response.data.place._id;
+      return response.data.data;
     } catch (err: unknown) {
       console.log(err);
       if (axios.isAxiosError(err) && err.response?.data) {

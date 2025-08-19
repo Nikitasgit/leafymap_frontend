@@ -13,7 +13,7 @@ export interface AuthState {
 }
 
 export const useAuth = (): AuthState => {
-  const { user, loading, error } = useSelector(selectAuth);
+  const { user, loading } = useSelector(selectAuth);
   const { showError, showSuccess } = useToast();
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();

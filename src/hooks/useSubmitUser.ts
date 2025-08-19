@@ -4,7 +4,7 @@ import { useLoading } from "@/hooks/useLoading";
 import { User } from "@/types/user";
 
 const useSubmitUser = () => {
-  const { showSuccess, showError } = useToast();
+  const { showError } = useToast();
   const { isLoading, withLoading } = useLoading();
 
   const submitUser = async (data: Partial<User>) => {
@@ -15,7 +15,6 @@ const useSubmitUser = () => {
         },
         withCredentials: true,
       });
-      showSuccess("Profil mis à jour avec succès !");
       return true;
     }).catch((err: unknown) => {
       console.log(err);

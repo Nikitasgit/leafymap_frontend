@@ -34,7 +34,6 @@ const PlaceForm = ({
       : null
   );
   const handleDisplayPlaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     onChange({
       target: {
         name: "active",

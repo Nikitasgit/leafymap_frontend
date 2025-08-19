@@ -17,6 +17,8 @@ import useSubmitPlace from "@/hooks/useSubmitPlace";
 import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
 import { User } from "@/types/user";
 import { Partnership } from "@/types/partnerships";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/useToast";
 
 const initialUserData = (user: Partial<User> | null): InitialCreatorData => ({
   userType: "guest",
@@ -45,12 +47,14 @@ const CreateProfileStepper = () => {
   const { submitPlace, isLoading: submitPlaceLoading } = useSubmitPlace();
   const { submitPartnerships, isLoading: submitPartnershipsLoading } =
     useSubmitPartnerships();
+  const { showSuccess, showError } = useToast();
   const [step, setStep] = useState(1);
   const [place, setPlace] = useState<InitialPlaceData>(initialPlaceData(null));
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
   const [newUser, setNewUser] = useState<InitialCreatorData>(
     initialUserData(null)
   );
+  const router = useRouter();
 
   useEffect(() => {
     if (user) {
@@ -66,14 +70,19 @@ const CreateProfileStepper = () => {
     submitPartnershipsLoading;
 
   const handleSubmit = async () => {
-    const user = await submitUser(newUser);
-    if (place.active && user) {
-      console.log(user);
-      const placeId = await submitPlace(place);
-      console.log(placeId);
-      if (partnerships && placeId) {
-        await submitPartnerships(partnerships, false, placeId);
+    try {
+      const user = await submitUser(newUser);
+      if (place.active && user) {
+        const placeId = await submitPlace(place);
+        if (partnerships.length > 0 && placeId) {
+          await submitPartnerships(partnerships, false, placeId);
+        }
       }
+      showSuccess("Profil créé avec succès");
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+      showError("Erreur lors de la création du profil");
     }
   };
 
