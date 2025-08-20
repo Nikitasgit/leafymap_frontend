@@ -5,3 +5,13 @@ export const DEFAULT_LOCATION = {
   longitude: 2.333333,
   zoom: 12,
 };
+
+export const USER_MARKER = {
+  location: {
+    coordinates: [2.333333, 48.866667],
+  },
+  placeCategory: { name: "workshop" },
+  name: "Déplacez votre lieu",
+  isSelected: true,
+  _id: "user-marker",
+};

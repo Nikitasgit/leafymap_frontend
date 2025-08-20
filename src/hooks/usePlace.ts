@@ -39,5 +39,5 @@ export const usePlace = (placeId: string, enrichSchedule: boolean = false) => {
     }
   }, [placeId, enrichSchedule]);
 
-  return { place, loading: isLoading };
+  return { place, isLoading };
 };

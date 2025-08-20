@@ -2,7 +2,6 @@
 
 import Map, {
   GeolocateControl,
-  Marker,
   NavigationControl,
   MapRef,
 } from "react-map-gl/mapbox";
@@ -14,7 +13,7 @@ import {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { MapCoordinates, MapMarker } from "@/types/common";
+import { MapCoordinates } from "@/types/common";
 import { usePlacesInView } from "@/hooks/usePlacesInView";
 import CategoryMarker from "./CategoryMarker";
 import { MapFilters, ExtendedMapRef } from "@/types/map";
@@ -24,7 +23,6 @@ interface MapComponentProps {
   width?: string;
   height?: string;
   location?: MapCoordinates;
-  markers?: MapMarker[];
   filters?: MapFilters;
   withDefaultMarker?: boolean;
   withPlacesInView?: boolean;
@@ -32,6 +30,12 @@ interface MapComponentProps {
   onMarkerClick?: (placeId: string) => void;
   onMapClick?: (coords: { longitude: number; latitude: number }) => void;
   selectedPlaceId?: string;
+  userMarker?: {
+    location: { coordinates: number[] };
+    placeCategory: { name: string };
+    name: string;
+    _id: string;
+  };
 }
 
 const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
@@ -41,9 +45,8 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
       height = "100vh",
       location,
       filters,
-      markers = [],
       onMapClick,
-      withDefaultMarker = false,
+      userMarker,
       withPlacesInView = false,
       onMarkerClick,
       setLoading,
@@ -67,6 +70,9 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
       filters,
     });
 
+    const filteredMarkersWithUserMarker = userMarker
+      ? [...filteredPlaces, userMarker]
+      : filteredPlaces;
     useImperativeHandle(ref, () => ({
       ...mapRef.current!,
       fetchPlacesInView: (bounds: mapboxgl.LngLatBounds | null) =>
@@ -134,39 +140,30 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
         >
           <NavigationControl />
           <GeolocateControl />
-          {withDefaultMarker && (
-            <Marker
-              longitude={
-                markers.length > 0
-                  ? markers[0].longitude
-                  : DEFAULT_LOCATION.longitude
-              }
-              latitude={
-                markers.length > 0
-                  ? markers[0].latitude
-                  : DEFAULT_LOCATION.latitude
-              }
-              color="blue"
-            />
-          )}
 
-          {filteredPlaces?.map((place, index) => (
-            <CategoryMarker
-              key={index}
-              longitude={place.location.coordinates[0]}
-              latitude={place.location.coordinates[1]}
-              categoryName={place.placeCategory.name}
-              placeName={place.name}
-              zoom={viewState.zoom}
-              isSelected={place._id === internalSelectedPlaceId}
-              onClick={() => {
-                setInternalSelectedPlaceId(place._id);
-                if (onMarkerClick) {
-                  onMarkerClick(place._id);
+          {filteredMarkersWithUserMarker?.map((place, index) =>
+            place && place.location ? (
+              <CategoryMarker
+                key={index}
+                longitude={place.location.coordinates[0]}
+                latitude={place.location.coordinates[1]}
+                categoryName={
+                  typeof place.placeCategory === "string"
+                    ? place.placeCategory
+                    : place.placeCategory.name
                 }
-              }}
-            />
-          ))}
+                placeName={place.name}
+                zoom={viewState.zoom}
+                isSelected={place._id === internalSelectedPlaceId}
+                onClick={() => {
+                  setInternalSelectedPlaceId(place._id);
+                  if (onMarkerClick) {
+                    onMarkerClick(place._id);
+                  }
+                }}
+              />
+            ) : null
+          )}
         </Map>
       </div>
     );

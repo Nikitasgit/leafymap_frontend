@@ -4,7 +4,7 @@ import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
 import React from "react";
 import PlacesEditList from "@/components/account/placesList/PlacesEditList";
-import { Creator, Organizer } from "@/types/user";
+import { Organizer } from "@/types/user";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import styles from "./account.module.scss";
@@ -14,7 +14,6 @@ export default function AccountPage() {
   const { user, isLoading } = useCurrentUser();
   const { userType } = user || {};
   const organizer = user as Organizer;
-  const creator = user as Creator;
   const router = useRouter();
 
   const buttonParameters =
@@ -69,13 +68,13 @@ export default function AccountPage() {
         >
           {buttonParameters.text}
         </Button>{" "}
-        {userType === "creator" && creator?.creatorProfile?.place && (
+        {userType === "creator" && user?.places?.[0] && (
           <>
             <Button
               fullWidth
               onClick={() =>
                 router.push(
-                  `account/places/${creator?.creatorProfile?.place?._id}/events/create`
+                  `account/places/${user?.places?.[0]._id}/events/create`
                 )
               }
             >
@@ -84,9 +83,7 @@ export default function AccountPage() {
             <Button
               fullWidth
               onClick={() =>
-                router.push(
-                  `account/places/${creator?.creatorProfile?.place?._id}/events`
-                )
+                router.push(  `account/places/${user?.places?.[0]._id}/events`)
               }
             >
               Voir les événements

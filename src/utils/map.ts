@@ -1,4 +1,6 @@
+import { InitialPlaceData } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import { MapCoordinates } from "@/types/common";
+import { USER_MARKER } from "./constants";
 
 export const applyPixelOffsetToLocation = (
   coords: MapCoordinates,
@@ -16,3 +18,18 @@ export const applyPixelOffsetToLocation = (
     zoom: coords.zoom,
   };
 };
+
+export const buildUserMarker = (
+  place: InitialPlaceData,
+  creatorName: string
+) => ({
+  location: place.location ?? USER_MARKER.location,
+  placeCategory: {
+    name:
+      typeof place.placeCategory === "string"
+        ? place.placeCategory
+        : place.placeCategory?.name ?? USER_MARKER.placeCategory.name,
+  },
+  name: creatorName || place.name || USER_MARKER.name,
+  _id: "user-marker",
+});

@@ -23,23 +23,23 @@ import { ValidationResult } from "@/validations/commonValidations";
 interface ActivityFormStepProps {
   place: InitialPlaceData;
   user: InitialCreatorData;
-  partnerships: Partnership[];
+  partnerships?: Partnership[];
   firstStep?: boolean;
   submitButtonText?: string;
   onPlaceChange: FormDataChangeHandler;
-  onUserChange: FormDataChangeHandler;
-  onPartnershipsChange: (partnerships: Partnership[]) => void;
+  onUserChange?: FormDataChangeHandler;
+  onPartnershipsChange?: (partnerships: Partnership[]) => void;
   onSubmit: () => Promise<void>;
-  onBack: () => void;
+  onBack?: () => void;
 }
 
 const ActivityFormStep = ({
   place,
   user,
-  partnerships,
+  partnerships = [],
   onPlaceChange,
-  onUserChange,
-  onPartnershipsChange,
+  onUserChange = () => {},
+  onPartnershipsChange = () => {},
   onSubmit,
   onBack = () => {},
   submitButtonText = "Créer mon profil",
@@ -73,15 +73,17 @@ const ActivityFormStep = ({
     if (hasAttemptedSubmit) {
       validateFormData();
     }
-  }, [place, user, partnerships, hasAttemptedSubmit]);
+  }, [place, user, partnerships]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setHasAttemptedSubmit(true);
+
     if (validateFormData()) {
       await onSubmit();
     } else {
-      showError("Veuillez corriger les erreurs ci-dessus");
+      console.log(errors);
+      showError("Veuillez corriger les erreurs du formulaire");
     }
   };
   return (
@@ -102,6 +104,7 @@ const ActivityFormStep = ({
       )}
       <PlaceForm
         place={place}
+        creatorName={user.creatorName}
         userType={user.userType}
         onChange={onPlaceChange}
         errors={errors.place}
@@ -129,7 +132,7 @@ const ActivityFormStep = ({
       <div className={styles.buttonContainer}>
         {!firstStep && (
           <Button
-            size="medium"
+            size="large"
             variant="secondary"
             type="button"
             onClick={onBack}

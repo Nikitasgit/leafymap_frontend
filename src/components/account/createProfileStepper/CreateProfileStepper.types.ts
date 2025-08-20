@@ -2,7 +2,7 @@ import { Location } from "@/types/common";
 import { DefaultSchedule, Period } from "@/types/place/schedule";
 import { PlaceType } from "@/types/place/placeCaterories";
 import { Partnership } from "@/types/partnerships";
-import { Creator } from "@/types/user";
+import { User } from "@/types/user";
 import { Place } from "@/types/place";
 
 export interface BaseProfileFormData {
@@ -70,6 +70,6 @@ export type InitialPlaceData = Pick<
 >;
 
 export type InitialCreatorData = Pick<
-  Creator,
+  User,
   "userType" | "creatorName" | "description" | "creatorCategories" | "website"
 >;

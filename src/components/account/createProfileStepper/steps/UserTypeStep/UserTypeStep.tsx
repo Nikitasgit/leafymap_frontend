@@ -4,18 +4,28 @@ import {
   onNextHandler,
 } from "../../CreateProfileStepper.types";
 import styles from "./UserTypeStep.module.scss";
+import { useToast } from "@/hooks/useToast";
 
 interface UserTypeStepProps {
   userType: string;
   onChange: FormDataChangeHandler;
   onNext: onNextHandler;
+  loading: boolean;
 }
 
-const UserTypeStep = ({ userType, onChange, onNext }: UserTypeStepProps) => {
+const UserTypeStep = ({
+  userType,
+  onChange,
+  onNext,
+  loading,
+}: UserTypeStepProps) => {
+  const { showError } = useToast();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (userType) {
+    if (["creator", "organizer"].includes(userType)) {
       onNext();
+    } else {
+      showError("Veuillez sélectionner un type d'utilisateur");
     }
   };
 
@@ -54,7 +64,7 @@ const UserTypeStep = ({ userType, onChange, onNext }: UserTypeStepProps) => {
           </div>
         </div>
 
-        <Button type="submit" disabled={!userType}>
+        <Button type="submit" disabled={loading}>
           Suivant
         </Button>
       </form>

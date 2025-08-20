@@ -3,8 +3,8 @@ import AddressInput from "@/components/common/inputs/addressInput/AddressInput";
 import PlaceCategorySelectorInput from "@/components/common/inputs/categorySelectorInput/PlaceCategorySelectorInput";
 import PlaceTypeSelectorInput from "@/components/common/inputs/placeTypeSelectorInput/PlaceTypeSelectorInput";
 import MapComponent from "@/components/map/mapComponent/Map";
-import { MapCoordinates, Location } from "@/types/common";
-import React, { useState } from "react";
+import { Location } from "@/types/common";
+import React, { useRef } from "react";
 import Text from "@/components/common/typography/Text";
 import {
   FormDataChangeHandler,
@@ -13,34 +13,35 @@ import {
 import styles from "./PlaceForm.module.scss";
 import { defaultSchedule } from "@/utils/createProfile";
 import RadioYesOrNo from "@/components/common/inputs/radios/radioYesOrNo/RadioYesOrNo";
+import { USER_MARKER } from "@/utils/constants";
+import { ExtendedMapRef } from "@/types/map";
+import { buildUserMarker } from "@/utils/map";
 
 const PlaceForm = ({
   place,
   userType,
+  creatorName,
   onChange,
   errors = {},
 }: {
   place: InitialPlaceData;
   userType: "creator" | "organizer" | "guest";
+  creatorName: string;
   onChange: FormDataChangeHandler;
   errors?: Record<string, string>;
 }) => {
-  const [locationMarker, setLocationMarker] = useState<MapCoordinates | null>(
-    place.location?.coordinates
-      ? {
-          latitude: place.location.coordinates[1],
-          longitude: place.location.coordinates[0],
-        }
-      : null
-  );
+  const mapRef = useRef<ExtendedMapRef | null>(null);
   const handleDisplayPlaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
     onChange({
       target: {
         name: "active",
-        value: e.target.value === "yes",
+        value: e.target.value === "yes" ? true : false,
       },
     });
   };
+  const userMarker = buildUserMarker(place, creatorName);
+
   const handleMapClick = async ({
     latitude,
     longitude,
@@ -48,10 +49,12 @@ const PlaceForm = ({
     latitude: number;
     longitude: number;
   }) => {
-    setLocationMarker({
-      latitude,
-      longitude,
-    });
+    if (mapRef.current) {
+      mapRef.current.flyTo({
+        center: [longitude, latitude],
+        duration: 800,
+      });
+    }
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     const res = await fetch(
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${token}`
@@ -70,14 +73,14 @@ const PlaceForm = ({
   };
 
   const onLocationSelect = (location: Location | null) => {
-    if (location?.coordinates) {
-      setLocationMarker({
-        latitude: location.coordinates[1],
-        longitude: location.coordinates[0],
+    if (location?.coordinates && mapRef.current) {
+      mapRef.current.flyTo({
+        center: [location.coordinates[0], location.coordinates[1]],
+        duration: 800,
+        zoom: 12,
       });
       onChange({ target: { name: "location", value: location } });
     } else {
-      setLocationMarker(null);
       onChange({ target: { name: "location", value: null } });
     }
   };
@@ -112,10 +115,10 @@ const PlaceForm = ({
               <div className={styles.mapContainer}>
                 <MapComponent
                   height="200px"
-                  location={locationMarker || undefined}
-                  markers={locationMarker ? [locationMarker] : []}
                   onMapClick={handleMapClick}
+                  userMarker={userMarker}
                   withDefaultMarker
+                  ref={mapRef}
                 />
               </div>
             </div>
@@ -131,7 +134,6 @@ const PlaceForm = ({
               onChange={onChange}
               selectedTypes={place.placeType || []}
               error={!!errors.placeCategory}
-              errorMessage={errors.placeCategory}
             />
           </div>
           <TimeTableForm

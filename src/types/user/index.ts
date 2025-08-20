@@ -19,12 +19,11 @@ export interface User extends BaseEntity {
   interests?: string[];
   places?: Place[];
   _id: string;
-}
-
-export interface Creator extends User {
   creatorName: string;
   creatorCategories: string[];
 }
+
+
 
 export interface Organizer extends User {
   places?: Place[];

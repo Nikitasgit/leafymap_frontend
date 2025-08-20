@@ -79,9 +79,8 @@ const CreateProfileStepper = () => {
         }
       }
       showSuccess("Profil créé avec succès");
-      router.push("/");
-    } catch (error) {
-      console.log(error);
+      router.push("/account");
+    } catch {
       showError("Erreur lors de la création du profil");
     }
   };
@@ -119,6 +118,7 @@ const CreateProfileStepper = () => {
       <div className={styles.stepContainer}>
         {step === 1 && (
           <UserTypeStep
+            loading={loading}
             userType={newUser.userType}
             onChange={onUserChange}
             onNext={handleNext}

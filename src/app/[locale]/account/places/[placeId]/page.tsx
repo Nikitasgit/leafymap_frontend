@@ -6,77 +6,109 @@ import { useParams } from "next/navigation";
 import { usePlace } from "@/hooks/usePlace";
 import {
   FormDataChangeHandler,
-  PlaceFormData,
+  InitialPlaceData,
 } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
-import useUpdatePlace from "@/hooks/useSubmitPlace";
 import { defaultSchedule } from "@/utils/createProfile";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import styles from "./updatePlacePage.module.scss";
 import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
+import useSubmitPlace from "@/hooks/useSubmitPlace";
+import { Partnership } from "@/types/partnerships";
+import { useToast } from "@/hooks/useToast";
+import { useRouter } from "next/navigation";
+import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
+import { separateNewAndUpdatedArrayValues } from "@/utils/tempId";
+
+const initialPlaceData = (place: InitialPlaceData): InitialPlaceData => ({
+  name: place?.name || "",
+  description: place?.description || "",
+  location: place?.location || null,
+  defaultSchedule: defaultSchedule,
+  placeCategory:
+    typeof place?.placeCategory === "string"
+      ? place.placeCategory
+      : place?.placeCategory?._id || "",
+  phone: place?.phone || "",
+  email: place?.email || "",
+  website: place?.website || "",
+  placeType: place?.placeType || [],
+  active: true,
+});
 
 const UpdatePlace = () => {
   const params = useParams();
   const placeId = params.placeId as string;
-  const { place, loading } = usePlace(placeId);
-  const { partnerships, loading: partnershipsLoading } =
-    usePlacePartnerships(placeId);
-
   const { user, isLoading: userLoading } = useCurrentUser();
-  const { submitForm, isLoading } = useUpdatePlace();
-  const [formData, setFormData] = useState<PlaceFormData | null>(null);
-  const handleInputChange: FormDataChangeHandler = (e) => {
+  const { submitPlace, isLoading: submitPlaceLoading } = useSubmitPlace();
+  const { place: placeData, isLoading: placeLoading } = usePlace(placeId);
+  const { partnerships: partnershipsData, loading: partnershipsLoading } =
+    usePlacePartnerships(placeId);
+  const { submitPartnerships, isLoading: submitPartnershipsLoading } =
+    useSubmitPartnerships();
+  const [place, setPlace] = useState<InitialPlaceData | null>(null);
+  const [partnerships, setPartnerships] = useState<Partnership[]>(
+    partnershipsData || []
+  );
+  const { showError, showSuccess } = useToast();
+  const router = useRouter();
+  const onPlaceChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => (prev ? { ...prev, [name]: value } : null));
+    setPlace((prev) => (prev ? { ...prev, [name]: value } : null));
   };
 
   const onSubmit = async () => {
-    if (!formData) return;
-    await submitForm(formData, true);
-  };
-  useEffect(() => {
-    if (place && !formData && user) {
-      const coordinates = {
-        latitude: place.location.coordinates[1],
-        longitude: place.location.coordinates[0],
-      };
-      const data: PlaceFormData = {
-        userType: user?.userType || "guest",
-        name: place.name || "",
-        description: place.description || "",
-        location: {
-          id: place.location?.id || "",
-          label: place.location?.label || "",
-          coordinates: [coordinates.longitude, coordinates.latitude],
-          type: "Point",
-        },
-        defaultSchedule: place.defaultSchedule || defaultSchedule,
-        placeCategory: place.placeCategory._id || "",
-        phone: place.phone || "",
-        email: place.email || "",
-        website: place.website || "",
-        partnerships: partnerships || [],
-        placeType: place.placeType || [],
-      };
-
-      setFormData(data);
+    try {
+      if (place) {
+        const placeId = await submitPlace(place);
+        if (partnerships.length > 0 && placeId) {
+          const { newValues, updatedValues } =
+            separateNewAndUpdatedArrayValues(partnerships);
+          if (newValues.length > 0) {
+            await submitPartnerships(newValues, false, placeId);
+          }
+          if (updatedValues.length > 0) {
+            await submitPartnerships(updatedValues, true, placeId);
+          }
+        }
+      }
+      showSuccess("Lieu modifié avec succès");
+      router.push("/account");
+    } catch {
+      showError("Erreur lors de la modification du lieu");
     }
-  }, [place, loading, formData, user, partnerships]);
-  if (loading || isLoading || userLoading || !formData || partnershipsLoading)
-    return <LoadingBar />;
+  };
+
+  useEffect(() => {
+    if (placeData) setPlace(initialPlaceData(placeData));
+    if (partnershipsData) setPartnerships(partnershipsData);
+  }, [placeData, partnershipsData]);
+
+  const loading =
+    placeLoading ||
+    submitPlaceLoading ||
+    userLoading ||
+    partnershipsLoading ||
+    submitPartnershipsLoading;
 
   return (
     <main className={styles.pageContainer}>
       <div className={styles.container}>
         <h1 className={styles.title}>Modifier votre lieu</h1>
-        <ActivityFormStep
-          firstStep={true}
-          isCreator={false}
-          data={formData}
-          onChange={handleInputChange}
-          onSubmit={onSubmit}
-          submitButtonText="Enregistrer"
-        />
+        {loading || !place || !user ? (
+          <LoadingBar />
+        ) : (
+          <ActivityFormStep
+            firstStep={true}
+            place={place}
+            user={user}
+            partnerships={partnerships}
+            onPlaceChange={onPlaceChange}
+            onPartnershipsChange={setPartnerships}
+            onSubmit={onSubmit}
+            submitButtonText="Enregistrer"
+          />
+        )}
       </div>
     </main>
   );

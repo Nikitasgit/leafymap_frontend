@@ -3,7 +3,7 @@ import { Marker } from "react-map-gl/mapbox";
 import PlaceCategoryIcon from "@/components/common/icons/PlaceCategoryIcon";
 import styles from "./CategoryMarker.module.scss";
 
-interface CategoryMarkerProps {
+export interface CategoryMarkerProps {
   longitude: number;
   latitude: number;
   categoryName: string;
