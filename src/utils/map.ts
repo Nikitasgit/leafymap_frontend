@@ -21,15 +21,30 @@ export const applyPixelOffsetToLocation = (
 
 export const buildUserMarker = (
   place: InitialPlaceData,
-  creatorName: string
-) => ({
-  location: place.location ?? USER_MARKER.location,
-  placeCategory: {
-    name:
-      typeof place.placeCategory === "string"
-        ? place.placeCategory
-        : place.placeCategory?.name ?? USER_MARKER.placeCategory.name,
-  },
-  name: creatorName || place.name || USER_MARKER.name,
-  _id: "user-marker",
-});
+  creatorName: string,
+  userLocation?: { latitude: number; longitude: number }
+) => {
+  let location;
+
+  if (place.location) {
+    location = place.location;
+  } else if (userLocation) {
+    location = {
+      coordinates: [userLocation.longitude, userLocation.latitude],
+    };
+  } else {
+    location = USER_MARKER.location;
+  }
+
+  return {
+    location,
+    placeCategory: {
+      name:
+        typeof place.placeCategory === "string"
+          ? place.placeCategory
+          : place.placeCategory?.name ?? USER_MARKER.placeCategory.name,
+    },
+    name: creatorName || place.name || USER_MARKER.name,
+    _id: "user-marker",
+  };
+};

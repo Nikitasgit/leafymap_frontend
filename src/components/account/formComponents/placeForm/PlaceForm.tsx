@@ -4,7 +4,7 @@ import PlaceCategorySelectorInput from "@/components/common/inputs/categorySelec
 import PlaceTypeSelectorInput from "@/components/common/inputs/placeTypeSelectorInput/PlaceTypeSelectorInput";
 import MapComponent from "@/components/map/mapComponent/Map";
 import { Location } from "@/types/common";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Text from "@/components/common/typography/Text";
 import {
   FormDataChangeHandler,
@@ -13,9 +13,9 @@ import {
 import styles from "./PlaceForm.module.scss";
 import { defaultSchedule } from "@/utils/createProfile";
 import RadioYesOrNo from "@/components/common/inputs/radios/radioYesOrNo/RadioYesOrNo";
-import { USER_MARKER } from "@/utils/constants";
 import { ExtendedMapRef } from "@/types/map";
 import { buildUserMarker } from "@/utils/map";
+import { useGeolocation } from "@/hooks/useGeolocation";
 
 const PlaceForm = ({
   place,
@@ -31,8 +31,9 @@ const PlaceForm = ({
   errors?: Record<string, string>;
 }) => {
   const mapRef = useRef<ExtendedMapRef | null>(null);
+  const { latitude, longitude } = useGeolocation();
+  const [mapReady, setMapReady] = useState(false);
   const handleDisplayPlaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     onChange({
       target: {
         name: "active",
@@ -40,7 +41,22 @@ const PlaceForm = ({
       },
     });
   };
-  const userMarker = buildUserMarker(place, creatorName);
+
+  const userLocation =
+    latitude && longitude ? { latitude, longitude } : undefined;
+  const userMarker = buildUserMarker(place, creatorName, userLocation);
+
+  useEffect(() => {
+    if (mapReady && userMarker) {
+      mapRef.current?.flyTo({
+        center: [
+          userMarker.location.coordinates[0],
+          userMarker.location.coordinates[1],
+        ],
+        duration: 800,
+      });
+    }
+  }, [userMarker, mapReady]);
 
   const handleMapClick = async ({
     latitude,
@@ -49,12 +65,6 @@ const PlaceForm = ({
     latitude: number;
     longitude: number;
   }) => {
-    if (mapRef.current) {
-      mapRef.current.flyTo({
-        center: [longitude, latitude],
-        duration: 800,
-      });
-    }
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     const res = await fetch(
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${token}`
@@ -84,7 +94,6 @@ const PlaceForm = ({
       onChange({ target: { name: "location", value: null } });
     }
   };
-
   return (
     <section className={styles.placeForm}>
       {userType !== "organizer" && (
@@ -119,6 +128,7 @@ const PlaceForm = ({
                   userMarker={userMarker}
                   withDefaultMarker
                   ref={mapRef}
+                  onMapReady={() => setMapReady(true)}
                 />
               </div>
             </div>

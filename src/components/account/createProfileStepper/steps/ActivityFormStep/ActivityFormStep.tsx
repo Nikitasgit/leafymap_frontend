@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Button from "@/components/common/buttons/button/Button";
 import {
   FormDataChangeHandler,
@@ -52,7 +52,7 @@ const ActivityFormStep = ({
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const { showError } = useToast();
 
-  const validateFormData = (): boolean => {
+  const validateFormData = useCallback((): boolean => {
     const userValidation = validateNewUserData(user);
     let placeValidation: ValidationResult = {
       errors: {},
@@ -67,13 +67,13 @@ const ActivityFormStep = ({
       place: placeValidation.errors,
     }));
     return userValidation.isValid && placeValidation.isValid;
-  };
+  }, [place, user, partnerships]);
 
   useEffect(() => {
     if (hasAttemptedSubmit) {
       validateFormData();
     }
-  }, [place, user, partnerships]);
+  }, [hasAttemptedSubmit, validateFormData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

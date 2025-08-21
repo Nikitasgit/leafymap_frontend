@@ -8,7 +8,7 @@ const CreateEventPage = () => {
     <main className={styles.pageContainer}>
       <div className={styles.container}>
         <h1 className={styles.title}>Créer un événement</h1>
-        <EventForm data={null} partnerships={[]} />
+        <EventForm />
       </div>
     </main>
   );

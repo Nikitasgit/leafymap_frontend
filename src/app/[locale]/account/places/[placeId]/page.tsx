@@ -42,7 +42,7 @@ const UpdatePlace = () => {
   const { user, isLoading: userLoading } = useCurrentUser();
   const { submitPlace, isLoading: submitPlaceLoading } = useSubmitPlace();
   const { place: placeData, isLoading: placeLoading } = usePlace(placeId);
-  const { partnerships: partnershipsData, loading: partnershipsLoading } =
+  const { partnerships: partnershipsData, isLoading: partnershipsLoading } =
     usePlacePartnerships(placeId);
   const { submitPartnerships, isLoading: submitPartnershipsLoading } =
     useSubmitPartnerships();
@@ -60,7 +60,7 @@ const UpdatePlace = () => {
   const onSubmit = async () => {
     try {
       if (place) {
-        const placeId = await submitPlace(place);
+        const placeId = await submitPlace(place, true);
         if (partnerships.length > 0 && placeId) {
           const { newValues, updatedValues } =
             separateNewAndUpdatedArrayValues(partnerships);

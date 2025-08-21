@@ -1,65 +1,85 @@
 import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import TextField from "@/components/common/inputs/textField/TextField";
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import NewDatesEventForm from "../NewDatesEventForm/NewDatesEventForm";
 import Button from "@/components/common/buttons/button/Button";
-import useUpdateEvent from "@/hooks/useUpdateEvent";
+import useSubmitEvent from "@/hooks/useSubmitEvent";
 import { EventTimeSlot, Period } from "@/types/place/schedule";
 import Partnerships from "@/components/account/formComponents/collaborators/Partnerships";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import styles from "./EventForm.module.scss";
 import EventScheduleList from "../EventScheduleList/EventScheduleList";
 import { format } from "date-fns";
-import { validateEventForm } from "@/validations/formValidation";
 import { useToast } from "@/hooks/useToast";
 import { Event } from "@/types/place/event";
 import { Partnership } from "@/types/partnerships";
+import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
+import { separateNewAndUpdatedArrayValues } from "@/utils/tempId";
+import { validateEventData } from "@/validations/eventValidations";
 
-export interface EventFormData {
+export interface initialEventData {
   name: string;
   description: string;
   image: string | File;
-  partnerships: Partnership[];
   schedule: Period[];
 }
 
 interface EventFormProps {
-  data: Event | null;
+  eventData?: Event | null;
   isUpdate?: boolean;
-  partnerships: Partnership[];
+  partnershipsData?: Partnership[];
 }
 
+const initialEventData = (
+  event: initialEventData | null
+): initialEventData => ({
+  name: event?.name || "",
+  description: event?.description || "",
+  image: event?.image || "",
+  schedule: event?.schedule || [],
+});
 const EventForm = ({
-  data = null,
+  eventData = null,
   isUpdate = false,
-  partnerships = [],
+  partnershipsData = [],
 }: EventFormProps) => {
   const router = useRouter();
+  const params = useParams();
+  const placeId = params.placeId as string;
+  const { submitEvent, isLoading: submitFormLoading } = useSubmitEvent();
+  const { submitPartnerships, isLoading: submitPartnershipsLoading } =
+    useSubmitPartnerships();
 
-  const [formData, setFormData] = useState<EventFormData>({
-    name: data?.name || "",
-    description: data?.description || "",
-    image: data?.image || "",
-    partnerships: partnerships || [],
-    schedule: data?.schedule || [],
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [event, setEvent] = useState<initialEventData>(
+    initialEventData(eventData)
+  );
+  const [partnerships, setPartnerships] =
+    useState<Partnership[]>(partnershipsData);
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
-  const { showError } = useToast();
+  const { showError, showSuccess } = useToast();
+  const [errors, setErrors] = useState<{
+    event: Record<string, string>;
+  }>({ event: {} });
 
-  const onChange: FormDataChangeHandler = (e) => {
+  const onEventChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setEvent((prev) => ({ ...prev, [name]: value }));
   };
 
-  const validateFormData = useCallback((): {
-    isValid: boolean;
-    errors: Record<string, string>;
-  } => {
-    const result = validateEventForm(formData);
-    setErrors(result.errors);
-    return result;
-  }, [formData]);
+  const validateFormData = useCallback((): boolean => {
+    const eventValidation = validateEventData(event);
+    setErrors((prev) => ({
+      ...prev,
+      event: eventValidation.errors,
+    }));
+    return eventValidation.isValid;
+  }, [event]);
+
+  useEffect(() => {
+    if (eventData) setEvent(initialEventData(eventData));
+    if (partnershipsData && partnershipsData.length > 0)
+      setPartnerships(partnershipsData);
+  }, [eventData, partnershipsData]);
 
   useEffect(() => {
     if (hasAttemptedSubmit) {
@@ -67,18 +87,41 @@ const EventForm = ({
     }
   }, [hasAttemptedSubmit, validateFormData]);
 
-  const { submitForm, loading } = useUpdateEvent();
+  const loading = submitPartnershipsLoading || submitFormLoading;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setHasAttemptedSubmit(true);
-    const validationResult = validateFormData();
-    if (validationResult.isValid) {
-      submitForm(formData, isUpdate);
-    } else {
-      Object.keys(validationResult.errors).forEach((key) => {
-        showError(validationResult.errors[key]);
-      });
+    try {
+      if (!validateFormData()) {
+        showError("Veuillez corriger les erreurs du formulaire");
+        return;
+      }
+      if (event) {
+        const eventId = await submitEvent(event, isUpdate);
+        if (eventId && partnerships.length > 0) {
+          const { newValues, updatedValues } =
+            separateNewAndUpdatedArrayValues(partnerships);
+          if (newValues.length > 0) {
+            await submitPartnerships(newValues, false, placeId, eventId);
+          }
+          if (updatedValues.length > 0) {
+            await submitPartnerships(updatedValues, true, placeId, eventId);
+          }
+        }
+      }
+      showSuccess(
+        isUpdate
+          ? "Évènement modifié avec succès"
+          : "Évènement créé avec succès"
+      );
+      router.push(`/account`);
+    } catch {
+      showError(
+        isUpdate
+          ? "Erreur lors de la modification de l'évènement"
+          : "Erreur lors de la création de l'évènement"
+      );
     }
   };
 
@@ -87,7 +130,7 @@ const EventForm = ({
     startDate: Date,
     endDate: Date | null
   ) => {
-    setFormData((prev) => ({
+    setEvent((prev) => ({
       ...prev,
       schedule: prev.schedule.map((period) =>
         period._id === periodId
@@ -105,7 +148,7 @@ const EventForm = ({
     if (
       confirm("Tous les créneaux de cette période seront également supprimés")
     ) {
-      setFormData((prev) => ({
+      setEvent((prev) => ({
         ...prev,
         schedule: prev.schedule.filter((period) => period._id !== periodId),
       }));
@@ -113,7 +156,7 @@ const EventForm = ({
   };
 
   const onUpdateTimeSlot = (periodId: string, timeSlot: EventTimeSlot) => {
-    setFormData((prev) => ({
+    setEvent((prev) => ({
       ...prev,
       schedule: prev.schedule.map((period) =>
         period._id === periodId
@@ -134,7 +177,7 @@ const EventForm = ({
 
   const onDeleteTimeSlot = (periodId: string, timeSlotId: string) => {
     if (confirm("Voulez-vous vraiment supprimer ce créneau ?")) {
-      setFormData((prev) => ({
+      setEvent((prev) => ({
         ...prev,
         schedule: prev.schedule.map((period) =>
           period._id === periodId
@@ -149,7 +192,6 @@ const EventForm = ({
       }));
     }
   };
-
   return (
     <form onSubmit={handleSubmit} noValidate>
       <TextField
@@ -158,10 +200,10 @@ const EventForm = ({
         required
         name="name"
         placeholder="Nom de l'évènement"
-        value={formData.name}
-        onChange={onChange}
-        error={!!errors.name}
-        errorMessage={errors.name}
+        value={event.name}
+        onChange={onEventChange}
+        error={!!errors.event.name}
+        errorMessage={errors.event.name}
       />
       <TextField
         multiline
@@ -171,21 +213,21 @@ const EventForm = ({
         label="Description"
         name="description"
         placeholder="Description"
-        value={formData.description}
-        onChange={onChange}
-        error={!!errors.description}
-        errorMessage={errors.description}
+        value={event.description}
+        onChange={onEventChange}
+        error={!!errors.event.description}
+        errorMessage={errors.event.description}
       />
-      <Partnerships onChange={onChange} data={formData} />
-      <NewDatesEventForm onChange={onChange} data={formData} />
+      <Partnerships onChange={setPartnerships} partnerships={partnerships} />
+      <NewDatesEventForm onChange={onEventChange} data={event} />
       <EventScheduleList
-        schedule={formData.schedule}
-        partnerships={formData.partnerships}
+        schedule={event.schedule}
+        partnerships={partnerships}
         onUpdatePeriod={onUpdatePeriod}
         onUpdateTimeSlot={onUpdateTimeSlot}
         onDeletePeriod={onDeletePeriod}
         onDeleteTimeSlot={onDeleteTimeSlot}
-        errors={errors}
+        errors={errors.event}
       />
       <div className={styles.buttonContainer}>
         <Button

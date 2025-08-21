@@ -28,7 +28,7 @@ const PlaceCategoryIcon: React.FC<PlaceCategoryIconProps> = ({
   hoverable = false,
   className = "",
 }) => {
-
+  
   const getCategoryIcon = (name: string): LucideIcon => {
     const lowerName = name.toLowerCase();
 

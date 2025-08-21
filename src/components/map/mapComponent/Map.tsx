@@ -13,22 +13,22 @@ import {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { MapCoordinates } from "@/types/common";
 import { usePlacesInView } from "@/hooks/usePlacesInView";
 import CategoryMarker from "./CategoryMarker";
 import { MapFilters, ExtendedMapRef } from "@/types/map";
 import { DEFAULT_LOCATION } from "@/utils/constants";
+import { useGeolocation } from "@/hooks/useGeolocation";
 
 interface MapComponentProps {
   width?: string;
   height?: string;
-  location?: MapCoordinates;
   filters?: MapFilters;
   withDefaultMarker?: boolean;
   withPlacesInView?: boolean;
   setLoading?: (loading: boolean) => void;
   onMarkerClick?: (placeId: string) => void;
   onMapClick?: (coords: { longitude: number; latitude: number }) => void;
+  onMapReady?: () => void;
   selectedPlaceId?: string;
   userMarker?: {
     location: { coordinates: number[] };
@@ -43,7 +43,6 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
     {
       width = "100%",
       height = "100vh",
-      location,
       filters,
       onMapClick,
       userMarker,
@@ -51,12 +50,17 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
       onMarkerClick,
       setLoading,
       selectedPlaceId,
+      onMapReady,
     },
     ref
   ) => {
-    const [viewState, setViewState] = useState<MapCoordinates>(
-      location ?? DEFAULT_LOCATION
-    );
+    const { latitude, longitude } = useGeolocation();
+    const [viewState, setViewState] = useState({
+      latitude: latitude || DEFAULT_LOCATION.latitude,
+      longitude: longitude || DEFAULT_LOCATION.longitude,
+      zoom: DEFAULT_LOCATION.zoom,
+    });
+    const [isMapReady, setIsMapReady] = useState(false);
     const mapRef = useRef<MapRef>(null);
     const [internalSelectedPlaceId, setInternalSelectedPlaceId] = useState<
       string | null
@@ -73,42 +77,24 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
     const filteredMarkersWithUserMarker = userMarker
       ? [...filteredPlaces, userMarker]
       : filteredPlaces;
-    useImperativeHandle(ref, () => ({
-      ...mapRef.current!,
-      fetchPlacesInView: (bounds: mapboxgl.LngLatBounds | null) =>
-        fetchPlacesInView(bounds, mapRef as React.RefObject<MapRef>),
-      setSelectedPlaceId: setInternalSelectedPlaceId,
-    }));
+
+    useImperativeHandle(
+      ref,
+      () => ({
+        ...mapRef.current!,
+        fetchPlacesInView: (bounds: mapboxgl.LngLatBounds | null) =>
+          fetchPlacesInView(bounds, mapRef as React.RefObject<MapRef>),
+        setSelectedPlaceId: setInternalSelectedPlaceId,
+        isReady: isMapReady,
+      }),
+      [isMapReady, fetchPlacesInView]
+    );
 
     useEffect(() => {
       if (setLoading) {
         setLoading(isLoading);
       }
     }, [isLoading]);
-
-    useEffect(() => {
-      if (!location && typeof window !== "undefined" && navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            setViewState({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              zoom: 12,
-            });
-          },
-          (error) => {
-            console.warn("Erreur de géolocalisation : ", error);
-          }
-        );
-      } else if (location) {
-        setViewState((prev) => ({
-          ...prev,
-          latitude: location.latitude,
-          longitude: location.longitude,
-          zoom: location.zoom ?? prev.zoom ?? 12,
-        }));
-      }
-    }, [location]);
 
     return (
       <div style={{ position: "relative", width, height }}>
@@ -134,6 +120,10 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
           onLoad={(e) => {
             if (withPlacesInView) {
               fetchPlacesInView(e.target.getBounds());
+            }
+            setIsMapReady(true);
+            if (typeof onMapReady === "function") {
+              onMapReady();
             }
           }}
           mapStyle="mapbox://styles/mapbox/streets-v9"

@@ -8,21 +8,28 @@ import LoadingBar from "@/components/common/loading/LoadingBar";
 import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
 
 const UpdateEventPage = () => {
-  const { eventId, placeId } = useParams();
-  const { event, isLoading } = useEvent(eventId as string);
-  const { partnerships, loading: partnershipsLoading } = usePlacePartnerships(
-    placeId as string,
-    eventId as string
+  const params = useParams();
+  const eventId = params.eventId as string;
+  const placeId = params.placeId as string;
+  const { event, isLoading: eventLoading } = useEvent(eventId);
+  const { partnerships, isLoading: partnershipsLoading } = usePlacePartnerships(
+    placeId,
+    eventId,
+    "event"
   );
-
+  const loading = eventLoading || partnershipsLoading;
   return (
     <main className={styles.pageContainer}>
       <div className={styles.container}>
         <h1 className={styles.title}>Modifier un événement</h1>
-        {isLoading || partnershipsLoading ? (
+        {loading ? (
           <LoadingBar />
         ) : (
-          <EventForm data={event} isUpdate={true} partnerships={partnerships} />
+          <EventForm
+            eventData={event}
+            isUpdate={true}
+            partnershipsData={partnerships}
+          />
         )}
       </div>
     </main>

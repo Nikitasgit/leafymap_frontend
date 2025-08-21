@@ -6,7 +6,7 @@ import { Edit, Trash2 } from "lucide-react";
 import Button from "@/components/common/buttons/button/Button";
 import { useState } from "react";
 import DateFilter from "@/components/map/filtersCardMap/dateFilter/DateFilter";
-import { parseDateToUTC } from "@/utils/dates";
+import { parseDateStringToDate } from "@/utils/dates";
 import NewSlot from "@/components/common/timetable/NewSlot";
 import EventSlotCard from "../EventSlotCard/EventSlotCard";
 import { Partnership } from "@/types/partnerships";
@@ -37,10 +37,10 @@ const EventScheduleListCard = ({
     null
   );
   const [startDate, setStartDate] = useState(
-    period.startDate ? parseDateToUTC(period.startDate) : null
+    period.startDate ? parseDateStringToDate(period.startDate) : null
   );
   const [endDate, setEndDate] = useState(
-    period.endDate ? parseDateToUTC(period.endDate) : null
+    period.endDate ? parseDateStringToDate(period.endDate) : null
   );
   const handleDateChange = (startDate: Date | null, endDate: Date | null) => {
     setStartDate(startDate);
@@ -69,11 +69,11 @@ const EventScheduleListCard = ({
         <div className={styles.periodDates}>
           <div className={styles.dateItem}>
             <Text className={styles.dateLabel}>
-              {period.endDate ? "Du" : "Le"}
+              {period.endDate !== period.startDate ? "Du" : "Le"}
             </Text>
             <Text className={styles.dateValue}>{period.startDate}</Text>
           </div>
-          {period.endDate && (
+          {period.endDate !== period.startDate && (
             <div className={styles.dateItem}>
               <Text className={styles.dateLabel}>Au</Text>
               <Text className={styles.dateValue}>{period.endDate}</Text>
