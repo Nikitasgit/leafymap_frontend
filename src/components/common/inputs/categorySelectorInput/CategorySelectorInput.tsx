@@ -62,10 +62,18 @@ const CategorySelectorInput = ({
   );
 
   useEffect(() => {
-    if (value) {
+    if (value && value.length > 0) {
       const sub = creatorCategories.find((s) => value.includes(s._id));
       if (sub) {
         setInputValue(sub.name);
+        if (creatorCategories.length > 0) {
+          onPlaceChange({
+            target: {
+              name: "placeType",
+              value: [sub.category.name],
+            },
+          });
+        }
       }
     }
   }, [value, creatorCategories]);

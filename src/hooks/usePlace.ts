@@ -4,11 +4,14 @@ import { Place } from "@/types/place";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 
-export const usePlace = (placeId: string, enrichSchedule: boolean = false) => {
+export const usePlace = (
+  placeId: string | null,
+  enrichSchedule: boolean = false
+) => {
   const [place, setPlace] = useState<Place | null>(null);
-  const { isLoading, withLoading } = useLoading(true);
+  const { isLoading, withLoading, stopLoading } = useLoading(true);
   const { showError } = useToast();
-
+  console.log("placeId", placeId);
   useEffect(() => {
     const fetchPlace = async () => {
       try {
@@ -36,6 +39,9 @@ export const usePlace = (placeId: string, enrichSchedule: boolean = false) => {
 
     if (placeId) {
       withLoading(fetchPlace);
+    } else {
+      setPlace(null);
+      stopLoading();
     }
   }, [placeId, enrichSchedule]);
 

@@ -1,18 +1,16 @@
 import axios from "axios";
-import { useParams } from "next/navigation";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { Place } from "@/types/place";
 
 const useSubmitPlace = () => {
-  const params = useParams();
-  const { placeId } = params;
   const { isLoading, withLoading } = useLoading();
   const { showError } = useToast();
 
   const submitPlace = async (
     data: Partial<Place>,
-    isUpdate: boolean = false
+    isUpdate: boolean = false,
+    placeId?: string
   ) => {
     try {
       if (isUpdate && !placeId) {

@@ -19,6 +19,7 @@ import { validateNewUserData } from "@/validations/userValidations";
 import UserContactForm from "@/components/account/formComponents/contactForm/UserContactForm";
 import PlaceContactForm from "@/components/account/formComponents/contactForm/PlaceContactForm";
 import { ValidationResult } from "@/validations/commonValidations";
+import { Location } from "@/types/common";
 
 interface ActivityFormStepProps {
   place: InitialPlaceData;
@@ -26,6 +27,7 @@ interface ActivityFormStepProps {
   partnerships?: Partnership[];
   firstStep?: boolean;
   submitButtonText?: string;
+  initialPlaceLocation?: Location | null;
   onPlaceChange: FormDataChangeHandler;
   onUserChange?: FormDataChangeHandler;
   onPartnershipsChange?: (partnerships: Partnership[]) => void;
@@ -37,6 +39,7 @@ const ActivityFormStep = ({
   place,
   user,
   partnerships = [],
+  initialPlaceLocation,
   onPlaceChange,
   onUserChange = () => {},
   onPartnershipsChange = () => {},
@@ -67,7 +70,7 @@ const ActivityFormStep = ({
       place: placeValidation.errors,
     }));
     return userValidation.isValid && placeValidation.isValid;
-  }, [place, user, partnerships]);
+  }, [place, user]);
 
   useEffect(() => {
     if (hasAttemptedSubmit) {
@@ -104,6 +107,7 @@ const ActivityFormStep = ({
       )}
       <PlaceForm
         place={place}
+        initialPlaceLocation={initialPlaceLocation}
         creatorName={user.creatorName}
         userType={user.userType}
         onChange={onPlaceChange}

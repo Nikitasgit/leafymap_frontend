@@ -59,16 +59,17 @@ const UpdatePlace = () => {
 
   const onSubmit = async () => {
     try {
-      if (place) {
-        const placeId = await submitPlace(place, true);
-        if (partnerships.length > 0 && placeId) {
+      if (placeData && place) {
+        const id = placeData._id;
+        await submitPlace(place, true, id);
+        if (partnerships.length > 0) {
           const { newValues, updatedValues } =
             separateNewAndUpdatedArrayValues(partnerships);
           if (newValues.length > 0) {
-            await submitPartnerships(newValues, false, placeId);
+            await submitPartnerships(newValues, false, id);
           }
           if (updatedValues.length > 0) {
-            await submitPartnerships(updatedValues, true, placeId);
+            await submitPartnerships(updatedValues, true, id);
           }
         }
       }

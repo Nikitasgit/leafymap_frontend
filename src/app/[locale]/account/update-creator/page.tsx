@@ -14,6 +14,8 @@ import LoadingBar from "@/components/common/loading/LoadingBar";
 import styles from "./updateCreatorPage.module.scss";
 import { usePlace } from "@/hooks/usePlace";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
+import { useToast } from "@/hooks/useToast";
+import { useRouter } from "next/navigation";
 
 const initialUserData = (user: InitialCreatorData): InitialCreatorData => ({
   userType: user.userType || "creator",
@@ -38,7 +40,7 @@ const initialPlaceData = (
   email: place?.email || "",
   website: place?.website || "",
   placeType: place?.placeType || [],
-  active: place?.active || true,
+  active: place?.active || false,
 });
 
 const ModifyCreator = () => {
@@ -46,16 +48,17 @@ const ModifyCreator = () => {
   const { submitUser, isLoading: submitUserLoading } = useUpdateUser();
   const { submitPlace, isLoading: submitPlaceLoading } = useSubmitPlace();
   const { place: placeData, isLoading: placeLoading } = usePlace(
-    user?.places?.[0]._id || ""
+    user?.places?.[0]?._id || null
   );
-
+  const { showSuccess, showError } = useToast();
+  const router = useRouter();
   const [updatedUser, setUpdatedUser] = useState<InitialCreatorData | null>(
     null
   );
   const [place, setPlace] = useState<InitialPlaceData>(
     initialPlaceData(placeData)
   );
-
+  console.log("place", place);
   const onUserChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
     setUpdatedUser((prev) => (prev ? { ...prev, [name]: value } : null));
@@ -67,11 +70,22 @@ const ModifyCreator = () => {
   };
 
   const handleSubmit = async () => {
-    if (updatedUser) {
-      await submitUser(updatedUser);
-      if (place) {
-        await submitPlace(place);
+    try {
+      if (updatedUser) {
+        await submitUser(updatedUser);
+        if (placeData) {
+          const dataToSubmit = place.active
+            ? place
+            : { active: false, placeType: place.placeType };
+          await submitPlace(dataToSubmit, true, placeData?._id);
+        } else if (!placeData && place.active) {
+          await submitPlace(place);
+        }
+        showSuccess("Profil mis à jour avec succès");
+        router.push("/account");
       }
+    } catch {
+      showError("Erreur lors de la mise à jour");
     }
   };
 
@@ -81,8 +95,6 @@ const ModifyCreator = () => {
     submitUserLoading ||
     submitPlaceLoading ||
     placeLoading;
-
-    
 
   useEffect(() => {
     if (placeData) setPlace(initialPlaceData(placeData));
@@ -98,6 +110,7 @@ const ModifyCreator = () => {
         firstStep={true}
         user={updatedUser}
         place={place}
+        initialPlaceLocation={placeData?.location}
         onUserChange={onUserChange}
         onPlaceChange={onPlaceChange}
         onSubmit={handleSubmit}

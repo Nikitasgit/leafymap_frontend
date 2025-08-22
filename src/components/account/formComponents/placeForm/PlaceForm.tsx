@@ -23,12 +23,14 @@ const PlaceForm = ({
   creatorName,
   onChange,
   errors = {},
+  initialPlaceLocation,
 }: {
   place: InitialPlaceData;
   userType: "creator" | "organizer" | "guest";
   creatorName: string;
   onChange: FormDataChangeHandler;
   errors?: Record<string, string>;
+  initialPlaceLocation?: Location | null;
 }) => {
   const mapRef = useRef<ExtendedMapRef | null>(null);
   const { latitude, longitude } = useGeolocation();
@@ -40,6 +42,14 @@ const PlaceForm = ({
         value: e.target.value === "yes" ? true : false,
       },
     });
+    if (e.target.value === "no") {
+      setMapReady(false);
+      if (initialPlaceLocation) {
+        onChange({
+          target: { name: "location", value: initialPlaceLocation },
+        });
+      }
+    }
   };
 
   const userLocation =

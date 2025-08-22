@@ -8,13 +8,13 @@ import React from "react";
 
 const PlacePage = () => {
   const { placeId } = useParams();
-  const { place, loading } = usePlace(placeId as string);
+  const { place, isLoading: placeLoading } = usePlace(placeId as string);
   const { user, isLoading: userLoading } = useCurrentUser();
   const isCurrentUserPlace = user?.places?.some(
     (place) => place._id === placeId
   );
 
-  if (loading || userLoading) return <LoadingBar />;
+  if (placeLoading || userLoading) return <LoadingBar />;
   return (
     <div style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto" }}>
       <h1>Place Profile Picture</h1>
