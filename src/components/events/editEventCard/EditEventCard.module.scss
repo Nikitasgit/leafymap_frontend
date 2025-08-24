@@ -1,0 +1,124 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.card {
+  @include flex(row, space-between, center, spacing(1.5));
+  background-color: $white;
+  border: 1px solid $grey-200;
+  border-radius: rem(8);
+  padding: spacing(2);
+  transition: $transition-default;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: spacing(1.5);
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-color: $primary-color;
+  }
+}
+
+.content {
+  @include flex(column, flex-start, stretch, spacing(0.25));
+  flex: 1;
+  min-width: 0;
+}
+
+.titleContainer {
+  @include flex(row, space-between, center, spacing(0.5));
+  width: 100%;
+}
+
+.actionButtons {
+  @include flex(row, flex-end, center, spacing(0.25));
+}
+
+.title {
+  color: $grey-700;
+  font-weight: 600;
+  margin: 0;
+  font-size: rem(14);
+}
+
+.status {
+  font-size: rem(10);
+  font-weight: 500;
+  padding: spacing(0.2) spacing(0.4);
+  border-radius: rem(3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: spacing(0.5);
+
+  &.upcoming {
+    background-color: rgba($primary-color, 0.1);
+    color: $primary-color;
+  }
+
+  &.ongoing {
+    background-color: rgba($success-color, 0.1);
+    color: $success-color;
+  }
+
+  &.completed {
+    background-color: rgba($grey-500, 0.1);
+    color: $grey-600;
+  }
+
+  &.cancelled {
+    background-color: rgba($error-color, 0.1);
+    color: $error-color;
+  }
+
+  &.unvalid {
+    background-color: rgba($error-color, 0.1);
+    color: $error-color;
+  }
+}
+
+.viewIcon {
+  color: $grey-500;
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+.editIcon {
+  color: $grey-500;
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+.description {
+  color: $grey-500;
+  font-size: rem(12);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+
+.scheduleInfo {
+  @include flex(column, flex-start, stretch, spacing(0.25));
+  margin-top: spacing(0.25);
+}
+
+.scheduleItem {
+  @include flex(row, flex-start, center, spacing(0.5));
+  color: $grey-600;
+  align-items: center;
+}
+
+.scheduleText {
+  font-size: rem(11);
+  color: $grey-600;
+  margin: 0;
+}
+
+.buttonGroup {
+  @include flex(row, flex-start, center, spacing(0.5));
+  margin-top: spacing(0.75);
+  flex-wrap: wrap;
+}

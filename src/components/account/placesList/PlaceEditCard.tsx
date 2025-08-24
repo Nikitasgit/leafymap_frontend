@@ -1,29 +1,58 @@
 import Button from "@/components/common/buttons/button/Button";
 import { Place } from "@/types/place";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Text from "@/components/common/typography/Text";
+import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader";
+import { Edit3 } from "lucide-react";
+import styles from "./PlaceEditCard.module.scss";
 
 const PlaceEditCard = ({ place }: { place: Place }) => {
   const router = useRouter();
 
   return (
-    <div>
-      <h3>{place.name}</h3>
-      <p>{place.description}</p>
-      {place.image && (
-        <Image src={place.image} alt={place.name} width={100} height={100} />
-      )}
-      <Button onClick={() => router.push(`account/places/${place._id}`)}>
-        Modifier
-      </Button>
-      <Button onClick={() => router.push(`account/places/${place._id}/events`)}>
-        Voir les événements
-      </Button>
-      <Button
-        onClick={() => router.push(`account/places/${place._id}/events/create`)}
-      >
-        Ajouter un événement
-      </Button>
+    <div className={styles.card}>
+      <ProfilePictureUploader
+        entityType="place"
+        entityId={place._id}
+        initialImage={place.image}
+        isOwner
+        size="medium"
+      />
+
+      <div className={styles.content}>
+        <div className={styles.titleContainer}>
+          <Text as="h4" className={styles.title}>
+            {place.name}
+          </Text>
+          <Button
+            variant="simple"
+            onClick={() => router.push(`account/places/${place._id}`)}
+            className={styles.editIcon}
+            aria-label="Modifier"
+          >
+            <Edit3 size={16} />
+          </Button>
+        </div>
+        <Text as="p" className={styles.description}>
+          {place.description}
+        </Text>
+        <div className={styles.buttonGroup}>
+          <Button
+            variant="secondary"
+            onClick={() => router.push(`account/places/${place._id}/events`)}
+          >
+            Voir les événements
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() =>
+              router.push(`account/places/${place._id}/events/create`)
+            }
+          >
+            Ajouter un événement
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

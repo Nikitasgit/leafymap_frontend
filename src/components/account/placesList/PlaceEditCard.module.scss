@@ -1,0 +1,56 @@
+@use "../../../styles/abstracts/variables" as *;
+@use "../../../styles/abstracts/functions" as *;
+@use "../../../styles/abstracts/mixins" as *;
+
+.card {
+  @include flex(row, space-between, center, spacing(2));
+  background-color: $white;
+  border: 1px solid $grey-200;
+  border-radius: rem(8);
+  padding: spacing(3);
+  transition: $transition-default;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-color: $primary-color;
+  }
+}
+
+.content {
+  @include flex(column, flex-start, stretch, spacing(1));
+  flex: 1;
+  min-width: 0;
+}
+
+.titleContainer {
+  @include flex(row, space-between, center, spacing(0.5));
+  width: 100%;
+}
+
+.title {
+  color: $grey-700;
+  font-weight: 600;
+}
+
+.editIcon {
+  color: $grey-500;
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+.description {
+  color: $grey-500;
+  font-size: rem(13);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.buttonGroup {
+  @include flex(row, flex-start, center, spacing(0.5));
+  margin-top: spacing(1);
+  flex-wrap: wrap;
+}

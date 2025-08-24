@@ -3,57 +3,55 @@
 import { useParams, useRouter } from "next/navigation";
 import Button from "@/components/common/buttons/button/Button";
 import { usePlaceEvents } from "@/hooks/usePlaceEvents";
-import Image from "next/image";
+import LoadingBar from "@/components/common/loading/LoadingBar";
+import { Plus } from "lucide-react";
+import styles from "./eventsPage.module.scss";
+import { getEventStatusFromSchedule } from "@/utils/eventDates";
+import PageHeader from "@/components/common/PageHeader/PageHeader";
+import EventsList from "@/components/events/EventsList";
 
 export default function EventsListPage() {
   const params = useParams();
   const router = useRouter();
-  const { events, loading } = usePlaceEvents(params.placeId as string);
+  const { events, isLoading } = usePlaceEvents(params.placeId as string);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const placeName = events?.[0]?.place?.name || "Événements de votre lieu";
+
+  if (isLoading) return <LoadingBar />;
+
+  const eventsWithStatus = events?.map((event) => ({
+    ...event,
+    status: ["cancelled", "full"].includes(event.status)
+      ? event.status
+      : getEventStatusFromSchedule(event.schedule || []),
+  }));
 
   return (
-    <div>
-      <div>
-        <h1>Événements</h1>
-        <Button
-          onClick={() =>
-            router.push(`/account/places/${params.placeId}/events/create`)
-          }
-        >
-          Ajouter un événement
-        </Button>
-      </div>
+    <div className={styles.container}>
+      <PageHeader
+        title="Événements"
+        subtitle="Gérez les événements de votre lieu"
+        showBackButton={true}
+        onBackClick={() => router.push("/account")}
+        backButtonLabel="Retour au compte"
+        rightComponent={
+          <Button
+            onClick={() =>
+              router.push(`/account/places/${params.placeId}/events/create`)
+            }
+            variant="secondary"
+            endIcon={<Plus size={16} />}
+          >
+            Ajouter un événement
+          </Button>
+        }
+      />
 
-      {events?.length === 0 ? (
-        <p>Aucun événement trouvé</p>
-      ) : (
-        <div>
-          {events?.map((event) => (
-            <div key={event._id}>
-              <h2>{event.name}</h2>
-              <p>{event.description}</p>
-              <Image
-                src={event.image || "/images/default-event.png"}
-                alt={event.name}
-                width={100}
-                height={100}
-              />
-              <Button
-                onClick={() =>
-                  router.push(
-                    `/account/places/${params.placeId}/events/${event._id}`
-                  )
-                }
-              >
-                Modifier
-              </Button>
-            </div>
-          ))}
-        </div>
-      )}
+      <EventsList
+        events={eventsWithStatus || []}
+        placeId={params.placeId as string}
+        placeName={placeName}
+      />
     </div>
   );
 }

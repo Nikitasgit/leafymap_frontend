@@ -1,16 +1,12 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import Image from "next/image";
-import { Upload } from "lucide-react";
-import useUpdateProfilePicture, {
-  EntityType,
-} from "@/hooks/useUpdateProfilePicture";
+import { Upload, Trash2 } from "lucide-react";
+import useAwsImages from "@/hooks/useAwsImages";
 import styles from "./ProfilePictureUploader.module.scss";
 
 interface ProfilePictureUploaderProps {
-  entityType: EntityType;
-  entityId?: string;
   initialImage?: string;
-  onImageUploaded?: (imageUrl: string) => void;
+  onImageUploaded: (imageUrl: string) => void;
   className?: string;
   size?: "small" | "medium" | "large";
   disabled?: boolean;
@@ -18,8 +14,6 @@ interface ProfilePictureUploaderProps {
 }
 
 const ProfilePictureUploader = ({
-  entityType,
-  entityId,
   initialImage,
   onImageUploaded,
   className = "",
@@ -28,32 +22,46 @@ const ProfilePictureUploader = ({
   disabled = false,
 }: ProfilePictureUploaderProps) => {
   const [preview, setPreview] = useState<string | null>(initialImage || null);
-  const { updateProfilePicture, isLoading } = useUpdateProfilePicture();
+  const { uploadImages, deleteImages, isLoading } = useAwsImages();
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || disabled || !isOwner) return;
-
     const previewUrl = URL.createObjectURL(file);
     setPreview(previewUrl);
-
     try {
-      const imageUrl = await updateProfilePicture({
-        entityType,
-        entityId,
-        file,
+      const uploadedImages = await uploadImages({
+        files: [file],
       });
-
-      if (imageUrl) {
-        setPreview(imageUrl);
-        onImageUploaded?.(imageUrl);
+      if (uploadedImages) {
+        const { url, signedUrl } = uploadedImages[0];
+        onImageUploaded(url);
+        if (preview && preview !== initialImage) {
+          await deleteImages({
+            imageUrls: [preview],
+          });
+        }
+        setPreview(signedUrl);
       } else {
-        // Revert preview if upload failed
         setPreview(initialImage || null);
       }
     } catch {
-      // Revert preview if upload failed
       setPreview(initialImage || null);
+    }
+  };
+
+  const handleDeleteImage = async () => {
+    if (disabled || !isOwner || !preview) return;
+    try {
+      const success = await deleteImages({
+        imageUrls: [preview],
+      });
+      if (success) {
+        setPreview(null);
+        onImageUploaded("");
+      }
+    } catch (error) {
+      console.error("Error deleting image:", error);
     }
   };
 
@@ -75,6 +83,10 @@ const ProfilePictureUploader = ({
   const defaultAvatar = "/images/default-avatar.png";
   const displayImage = preview || defaultAvatar;
 
+  useEffect(() => {
+    setPreview(initialImage || null);
+  }, [initialImage]);
+
   return (
     <div
       className={`${
@@ -86,16 +98,20 @@ const ProfilePictureUploader = ({
           <Image
             src={displayImage}
             alt="Photo de profil"
-            width={size === "small" ? 80 : size === "large" ? 150 : 120}
-            height={size === "small" ? 80 : size === "large" ? 150 : 120}
+            width={size === "small" ? 80 : size === "large" ? 120 : 100}
+            height={size === "small" ? 80 : size === "large" ? 120 : 100}
             className={styles.previewImage}
           />
-          {isOwner && (
-            <div className={styles.overlay}>
-              <span className={styles.changeText}>
-                {isLoading ? "Téléchargement..." : "Changer"}
-              </span>
-            </div>
+          {isOwner && preview && (
+            <button
+              type="button"
+              onClick={handleDeleteImage}
+              className={styles.deleteButton}
+              disabled={isLoading || disabled}
+              title="Supprimer la photo"
+            >
+              <Trash2 size={16} />
+            </button>
           )}
         </div>
       ) : (

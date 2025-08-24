@@ -1,11 +1,12 @@
 "use client";
 import EventForm from "@/components/events/form/EventForm/EventForm";
 import { useEvent } from "@/hooks/useEvent";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
-import styles from "../editEventPage.module.scss";
+import styles from "./editEventPage.module.scss";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
+import PageHeader from "@/components/common/PageHeader/PageHeader";
 
 const UpdateEventPage = () => {
   const params = useParams();
@@ -18,10 +19,16 @@ const UpdateEventPage = () => {
     "event"
   );
   const loading = eventLoading || partnershipsLoading;
+  const router = useRouter();
   return (
     <main className={styles.pageContainer}>
       <div className={styles.container}>
-        <h1 className={styles.title}>Modifier un événement</h1>
+        <PageHeader
+          title="Modifier un événement"
+          showBackButton={true}
+          onBackClick={() => router.push(`/account/places/${placeId}/events`)}
+          backButtonLabel="Retour aux événements"
+        />
         {loading ? (
           <LoadingBar />
         ) : (

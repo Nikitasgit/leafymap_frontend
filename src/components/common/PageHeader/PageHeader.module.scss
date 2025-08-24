@@ -1,0 +1,37 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.header {
+  @include flex(row, space-between, center, spacing(2));
+  width: 100%;
+  padding-bottom: spacing(2);
+  margin-bottom: spacing(2);
+  border-bottom: 1px solid $grey-200;
+}
+
+.titleSection {
+  @include flex(column, flex-start, stretch, spacing(0.5));
+}
+
+.titleRow {
+  @include flex(row, center, center, spacing(1.5));
+}
+
+.title {
+  color: $grey-500;
+  font-weight: 700;
+  margin: 0;
+  font-size: rem(28);
+}
+
+.subtitle {
+  color: $grey-600;
+  margin: 0;
+  font-size: rem(14);
+}
+
+.rightComponent {
+  @include flex(row, center, center, spacing(0.5));
+  white-space: nowrap;
+}

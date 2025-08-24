@@ -19,6 +19,7 @@ import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/navigation";
 import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
 import { separateNewAndUpdatedArrayValues } from "@/utils/tempId";
+import PageHeader from "@/components/common/PageHeader/PageHeader";
 
 const initialPlaceData = (place: InitialPlaceData): InitialPlaceData => ({
   name: place?.name || "",
@@ -95,7 +96,12 @@ const UpdatePlace = () => {
   return (
     <main className={styles.pageContainer}>
       <div className={styles.container}>
-        <h1 className={styles.title}>Modifier votre lieu</h1>
+        <PageHeader
+          title="Modifier votre lieu"
+          showBackButton={true}
+          onBackClick={() => router.push("/account")}
+          backButtonLabel="Retour au compte"
+        />
         {loading || !place || !user ? (
           <LoadingBar />
         ) : (

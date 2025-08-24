@@ -1,2 +1,2 @@
 export { default } from "./ProfilePictureUploader";
-export type { EntityType } from "@/hooks/useUpdateProfilePicture";
+export type { EntityType } from "@/hooks/useAwsImages";

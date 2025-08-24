@@ -11,7 +11,6 @@ export const usePlace = (
   const [place, setPlace] = useState<Place | null>(null);
   const { isLoading, withLoading, stopLoading } = useLoading(true);
   const { showError } = useToast();
-  console.log("placeId", placeId);
   useEffect(() => {
     const fetchPlace = async () => {
       try {

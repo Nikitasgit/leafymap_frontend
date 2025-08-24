@@ -1,44 +1,45 @@
-import { Collaborator } from "@/types/place/collaborators";
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { useLoading } from "./useLoading";
+import { useToast } from "./useToast";
+import { Event } from "@/types/place/event";
 
-interface Event {
-  _id: string;
-  name: string;
-  description: string;
-  image: string;
-  schedule: {
-    startDate: string;
-    endDate: string;
-    timeSlots: {
-      title: string;
-      startTime: string;
-      endTime: string;
-      participants: string[];
-    }[];
-  }[];
-  collaborators: Collaborator[];
-}
 
-export const usePlaceEvents = (placeId: string) => {
+export const usePlaceEvents = (placeId: string | null) => {
   const [events, setEvents] = useState<Event[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { isLoading, withLoading, stopLoading } = useLoading(true);
+  const { showError } = useToast();
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}/events`
-        );
-        const data = await response.json();
-        setEvents(data.data);
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      } finally {
-        setLoading(false);
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}/events`;
+
+        const response = await axios.get(url);
+
+        if (response.data && response.data.data) {
+          setEvents(response.data.data);
+        } else {
+          setEvents([]);
+          showError("Invalid response from server");
+        }
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : "Erreur lors du chargement des événements";
+        setEvents([]);
+        showError(errorMessage);
       }
     };
-    fetchEvents();
+
+    if (placeId) {
+      withLoading(fetchEvents);
+    } else {
+      setEvents([]);
+      stopLoading();
+    }
   }, [placeId]);
 
-  return { events, loading };
+  return { events, isLoading };
 };

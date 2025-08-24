@@ -58,7 +58,6 @@ const ModifyCreator = () => {
   const [place, setPlace] = useState<InitialPlaceData>(
     initialPlaceData(placeData)
   );
-  console.log("place", place);
   const onUserChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
     setUpdatedUser((prev) => (prev ? { ...prev, [name]: value } : null));

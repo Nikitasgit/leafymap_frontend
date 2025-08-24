@@ -6,7 +6,6 @@ const PlacesEditList = ({ places }: { places: Place[] }) => {
     <>
       {places.map((place) => (
         <section key={place._id}>
-          <h2>Mes lieux</h2>
           <PlaceEditCard place={place} />
         </section>
       ))}

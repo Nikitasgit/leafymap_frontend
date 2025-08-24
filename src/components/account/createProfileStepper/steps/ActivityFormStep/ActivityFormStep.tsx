@@ -85,7 +85,6 @@ const ActivityFormStep = ({
     if (validateFormData()) {
       await onSubmit();
     } else {
-      console.log(errors);
       showError("Veuillez corriger les erreurs du formulaire");
     }
   };

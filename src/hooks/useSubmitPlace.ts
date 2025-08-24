@@ -33,7 +33,6 @@ const useSubmitPlace = () => {
       );
       return response.data.data;
     } catch (err: unknown) {
-      console.log(err);
       if (axios.isAxiosError(err) && err.response?.data) {
         if (err.response.data.data) {
           Object.values(err.response.data.data).forEach((error: unknown) => {

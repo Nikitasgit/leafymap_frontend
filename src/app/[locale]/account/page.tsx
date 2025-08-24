@@ -1,48 +1,63 @@
 "use client";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
 import React from "react";
 import PlacesEditList from "@/components/account/placesList/PlacesEditList";
-import { Organizer } from "@/types/user";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import styles from "./account.module.scss";
 import { PlusCircleIcon } from "lucide-react";
+import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader";
+import { capitalizeFirstLetter } from "@/utils/functions";
+import Text from "@/components/common/typography/Text";
+import useSubmitUser from "@/hooks/useSubmitUser";
 
 export default function AccountPage() {
-  const { user, isLoading } = useCurrentUser();
+  const { user, isLoading: isLoadingUser } = useCurrentUser();
+  const { submitUser } = useSubmitUser();
   const { userType } = user || {};
-  const organizer = user as Organizer;
   const router = useRouter();
 
   const buttonParameters =
     userType === "creator"
       ? { route: "/account/update-creator", text: "Modifier mon profil" }
-      : userType === "organizer"
-      ? { route: "/account/places/create", text: "Ajouter un lieu" }
-      : { route: "/account/create", text: "Ajouter mon activité" };
-
+      : userType === "guest" && {
+          route: "/account/create",
+          text: "Ajouter mon activité",
+        };
+  if (isLoadingUser || !user) return <LoadingBar />;
   return (
     <main className={styles.accountPage}>
-      {isLoading && <LoadingBar />}
       <div className={styles.header}>
         <div className={styles.userInfo}>
-          <h1 className={styles.username}>{user?.username}</h1>
-          <p className={styles.email}>{user?.email}</p>
+          <Text as="h1" className={styles.username}>
+            {capitalizeFirstLetter(user?.username)}
+          </Text>
+          {user?.creatorName && (
+            <Text as="p" className={styles.creatorName}>
+              {user?.creatorName}
+            </Text>
+          )}
+          <Text as="p" className={styles.email}>
+            {user?.email}
+          </Text>
         </div>
-        <Image
-          src={user?.image || "/images/default-avatar.png"}
-          alt="Profile"
-          width={80}
-          height={80}
-          className={styles.profileImage}
+        <ProfilePictureUploader
+          onImageUploaded={async (imageUrl) => {
+            await submitUser({
+              image: imageUrl,
+            });
+          }}
+          initialImage={user?.image}
+          isOwner={true}
+          size="medium"
+          disabled={isLoadingUser}
         />
       </div>
       <div className={styles.actions}>
         <div className={styles.buttonGroup}>
           <Button
-            disabled={isLoading}
+            disabled={isLoadingUser}
             variant="secondary"
             onClick={() => router.push("/account/settings")}
             fullWidth
@@ -50,7 +65,7 @@ export default function AccountPage() {
             Paramètres du compte
           </Button>
           <Button
-            disabled={isLoading}
+            disabled={isLoadingUser}
             variant="secondary"
             onClick={() => router.push("/account/reviews")}
             fullWidth
@@ -58,16 +73,18 @@ export default function AccountPage() {
             Mes Avis
           </Button>
         </div>
-        <Button
-          disabled={isLoading}
-          endIcon={<PlusCircleIcon size={18} />}
-          onClick={() => {
-            router.push(buttonParameters.route);
-          }}
-          fullWidth
-        >
-          {buttonParameters.text}
-        </Button>{" "}
+        {buttonParameters && (
+          <Button
+            disabled={isLoadingUser}
+            endIcon={<PlusCircleIcon size={18} />}
+            onClick={() => {
+              router.push(buttonParameters.route);
+            }}
+            fullWidth
+          >
+            {buttonParameters.text}
+          </Button>
+        )}
         {userType === "creator" && user?.places?.[0] && (
           <>
             <Button
@@ -83,7 +100,7 @@ export default function AccountPage() {
             <Button
               fullWidth
               onClick={() =>
-                router.push(  `account/places/${user?.places?.[0]._id}/events`)
+                router.push(`account/places/${user?.places?.[0]._id}/events`)
               }
             >
               Voir les événements
@@ -92,9 +109,9 @@ export default function AccountPage() {
         )}
       </div>
 
-      {userType === "organizer" && organizer?.places && (
+      {userType === "organizer" && user?.places && (
         <div className={styles.placesSection}>
-          <PlacesEditList places={organizer?.places} />
+          <PlacesEditList places={user?.places} />
         </div>
       )}
     </main>

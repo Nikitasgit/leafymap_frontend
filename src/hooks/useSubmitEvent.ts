@@ -13,7 +13,10 @@ const useSubmitEvent = () => {
   const { isLoading, withLoading } = useLoading();
   const { showError } = useToast();
 
-  const submitEvent = async (event: initialEventData, isUpdate: boolean) => {
+  const submitEvent = async (
+    event: initialEventData,
+    isUpdate: boolean = false
+  ) => {
     try {
       if (isUpdate && !placeId && !eventId) {
         throw new Error("Place ID or event ID is required for update");
@@ -54,7 +57,6 @@ const useSubmitEvent = () => {
       );
       return response.data.data;
     } catch (err: unknown) {
-      console.log(err);
       if (axios.isAxiosError(err) && err.response?.data) {
         if (err.response.data.data) {
           Object.values(err.response.data.data).forEach((error: unknown) => {

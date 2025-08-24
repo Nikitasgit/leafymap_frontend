@@ -63,17 +63,20 @@ const EventScheduleListCard = ({
   const handleDeleteTimeSlot = (timeSlotId: string) => {
     onDeleteTimeSlot(period._id, timeSlotId);
   };
+  console.log(period);
   return (
     <div key={period._id} className={styles.periodContainer}>
       <div className={styles.periodHeader}>
         <div className={styles.periodDates}>
           <div className={styles.dateItem}>
             <Text className={styles.dateLabel}>
-              {period.endDate !== period.startDate ? "Du" : "Le"}
+              {period.endDate !== period.startDate && period.endDate
+                ? "Du"
+                : "Le"}
             </Text>
             <Text className={styles.dateValue}>{period.startDate}</Text>
           </div>
-          {period.endDate !== period.startDate && (
+          {period.endDate !== period.startDate && period.endDate !== "" && (
             <div className={styles.dateItem}>
               <Text className={styles.dateLabel}>Au</Text>
               <Text className={styles.dateValue}>{period.endDate}</Text>

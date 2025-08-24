@@ -20,7 +20,6 @@ import { validateEventData } from "@/validations/eventValidations";
 export interface initialEventData {
   name: string;
   description: string;
-  image: string | File;
   schedule: Period[];
 }
 
@@ -35,7 +34,6 @@ const initialEventData = (
 ): initialEventData => ({
   name: event?.name || "",
   description: event?.description || "",
-  image: event?.image || "",
   schedule: event?.schedule || [],
 });
 const EventForm = ({
