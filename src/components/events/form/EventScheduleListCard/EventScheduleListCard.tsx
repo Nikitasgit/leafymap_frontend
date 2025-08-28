@@ -63,7 +63,6 @@ const EventScheduleListCard = ({
   const handleDeleteTimeSlot = (timeSlotId: string) => {
     onDeleteTimeSlot(period._id, timeSlotId);
   };
-  console.log(period);
   return (
     <div key={period._id} className={styles.periodContainer}>
       <div className={styles.periodHeader}>

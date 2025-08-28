@@ -1,16 +1,20 @@
 import { useState, ChangeEvent, useEffect } from "react";
 import Image from "next/image";
 import { Upload, Trash2 } from "lucide-react";
-import useAwsImages from "@/hooks/useAwsImages";
 import styles from "./ProfilePictureUploader.module.scss";
+import useSubmitImages from "@/hooks/useSubmitImages";
+import useDeleteImages from "@/hooks/useDeleteImages";
+import { Image as IImage } from "@/types/image";
 
 interface ProfilePictureUploaderProps {
-  initialImage?: string;
-  onImageUploaded: (imageUrl: string) => void;
+  initialImage?: IImage;
+  onImageUploaded: (imageUrl: string | null) => void;
   className?: string;
   size?: "small" | "medium" | "large";
   disabled?: boolean;
   isOwner?: boolean;
+  type: "User" | "Place" | "Event";
+  reference: string;
 }
 
 const ProfilePictureUploader = ({
@@ -20,45 +24,46 @@ const ProfilePictureUploader = ({
   size = "medium",
   isOwner = false,
   disabled = false,
+  type,
+  reference,
 }: ProfilePictureUploaderProps) => {
-  const [preview, setPreview] = useState<string | null>(initialImage || null);
-  const { uploadImages, deleteImages, isLoading } = useAwsImages();
-
+  const [preview, setPreview] = useState<Pick<IImage, "_id" | "url"> | null>(
+    initialImage || null
+  );
+  const { deleteImages, isLoading: isLoadingDeleteImages } = useDeleteImages();
+  const { submitImages, isLoading: isLoadingImages } = useSubmitImages();
+  const isLoading = isLoadingDeleteImages || isLoadingImages;
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || disabled || !isOwner) return;
     const previewUrl = URL.createObjectURL(file);
-    setPreview(previewUrl);
+    setPreview({ ...initialImage, url: previewUrl } as IImage);
     try {
-      const uploadedImages = await uploadImages({
+      const response = await submitImages({
         files: [file],
+        reference: reference,
+        referenceType: type,
+        type: "profile",
       });
-      if (uploadedImages) {
-        const { url, signedUrl } = uploadedImages[0];
-        onImageUploaded(url);
-        if (preview && preview !== initialImage) {
-          await deleteImages({
-            imageUrls: [preview],
-          });
-        }
-        setPreview(signedUrl);
-      } else {
-        setPreview(initialImage || null);
+      if (response && response.images.length > 0) {
+        onImageUploaded(response.images[0]._id);
+        setPreview({
+          _id: response.images[0]._id,
+          url: response.images[0].signedUrl,
+        });
       }
     } catch {
-      setPreview(initialImage || null);
+      setPreview(null);
     }
   };
 
   const handleDeleteImage = async () => {
     if (disabled || !isOwner || !preview) return;
     try {
-      const success = await deleteImages({
-        imageUrls: [preview],
-      });
+      const success = await deleteImages([preview._id]);
       if (success) {
         setPreview(null);
-        onImageUploaded("");
+        onImageUploaded(null);
       }
     } catch (error) {
       console.error("Error deleting image:", error);
@@ -81,7 +86,6 @@ const ProfilePictureUploader = ({
   };
 
   const defaultAvatar = "/images/default-avatar.png";
-  const displayImage = preview || defaultAvatar;
 
   useEffect(() => {
     setPreview(initialImage || null);
@@ -96,7 +100,7 @@ const ProfilePictureUploader = ({
       {preview || !isOwner ? (
         <div className={styles.imageContainer}>
           <Image
-            src={displayImage}
+            src={preview?.url || defaultAvatar}
             alt="Photo de profil"
             width={size === "small" ? 80 : size === "large" ? 120 : 100}
             height={size === "small" ? 80 : size === "large" ? 120 : 100}

@@ -11,6 +11,7 @@ import ProfilePictureUploader from "@/components/common/inputs/profilePictureUpl
 import { capitalizeFirstLetter } from "@/utils/functions";
 import Text from "@/components/common/typography/Text";
 import useSubmitUser from "@/hooks/useSubmitUser";
+import { Image } from "@/types/image";
 
 export default function AccountPage() {
   const { user, isLoading: isLoadingUser } = useCurrentUser();
@@ -26,6 +27,7 @@ export default function AccountPage() {
           text: "Ajouter mon activité",
         };
   if (isLoadingUser || !user) return <LoadingBar />;
+
   return (
     <main className={styles.accountPage}>
       <div className={styles.header}>
@@ -43,12 +45,14 @@ export default function AccountPage() {
           </Text>
         </div>
         <ProfilePictureUploader
-          onImageUploaded={async (imageUrl) => {
+          onImageUploaded={async (imageId) => {
             await submitUser({
-              image: imageUrl,
+              image: imageId || undefined,
             });
           }}
-          initialImage={user?.image}
+          type="User"
+          reference={user?._id}
+          initialImage={user.image as Image}
           isOwner={true}
           size="medium"
           disabled={isLoadingUser}
