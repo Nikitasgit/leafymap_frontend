@@ -46,7 +46,6 @@ const eventSchema = z.object({
 
 export const validateEventData = (data: initialEventData): ValidationResult => {
   const errors: Record<string, string> = {};
-
   const result = eventSchema.safeParse(data);
 
   if (result && !result.success) {

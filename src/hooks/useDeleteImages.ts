@@ -54,9 +54,7 @@ const useDeleteImages = () => {
           showError(err.response.data.message);
         }
       } else {
-        showError(
-          "Une erreur inattendue s'est produite lors de la suppression des images"
-        );
+        showError("Une erreur inattendue s'est produite lors de la suppression des images");
       }
     }
   };

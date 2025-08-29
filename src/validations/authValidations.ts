@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { emailSchema, ValidationResult } from "./commonValidations";
+import { RegisterFormData, LoginFormData } from "@/types/auth";
 
 export const registerSchema = z
   .object({
@@ -10,10 +12,7 @@ export const registerSchema = z
         /^[a-zA-Z0-9_-]+$/,
         "Le nom d'utilisateur ne peut contenir que des lettres, chiffres, tirets et underscores"
       ),
-    email: z
-      .string()
-      .email("Veuillez entrer une adresse email valide")
-      .min(1, "L'email est requis"),
+    email: emailSchema,
     password: z
       .string()
       .min(10, "Le mot de passe doit contenir au moins 10 caractères")
@@ -31,30 +30,54 @@ export const registerSchema = z
     path: ["confirmPassword"],
   });
 
+export const validateRegisterData = (
+  data: RegisterFormData
+): ValidationResult => {
+  const errors: Record<string, string> = {};
+  const result = registerSchema.safeParse(data);
+  if (result && !result.success) {
+    result.error.errors.forEach((err) => {
+      const field = err.path.join(".");
+      errors[field] = err.message;
+    });
+  }
+  return {
+    errors,
+    isValid: Object.keys(errors).length === 0,
+  };
+};
+
+const identifierSchema = z
+  .string()
+  .min(1, "L'identifiant est requis")
+  .refine(
+    (val) => {
+      const emailResult = emailSchema.safeParse(val);
+      if (emailResult.success) return true;
+
+      const usernameRegex = /^[a-zA-Z0-9_-]{3,30}$/;
+      return usernameRegex.test(val);
+    },
+    {
+      message:
+        "L'identifiant doit être un email valide ou un nom d'utilisateur valide (3-30 caractères, lettres, chiffres, tirets et underscores uniquement)",
+    }
+  );
 export const loginSchema = z.object({
-  email: z
-    .string()
-    .email("Veuillez entrer une adresse email valide")
-    .min(1, "L'email est requis"),
+  identifier: identifierSchema,
   password: z.string().min(1, "Le mot de passe est requis"),
 });
-
-export type RegisterFormData = z.infer<typeof registerSchema>;
-export type LoginFormData = z.infer<typeof loginSchema>;
-
-export const validateRegisterData = (data: unknown): RegisterFormData => {
-  return registerSchema.parse(data);
-};
-
-export const validateLoginData = (data: unknown): LoginFormData => {
-  return loginSchema.parse(data);
-};
-
-export const getValidationErrors = (error: z.ZodError) => {
+export const validateLoginData = (data: LoginFormData): ValidationResult => {
   const errors: Record<string, string> = {};
-  error.errors.forEach((err) => {
-    const field = err.path.join(".");
-    errors[field] = err.message;
-  });
-  return errors;
+  const result = loginSchema.safeParse(data);
+  if (result && !result.success) {
+    result.error.errors.forEach((err) => {
+      const field = err.path.join(".");
+      errors[field] = err.message;
+    });
+  }
+  return {
+    errors,
+    isValid: Object.keys(errors).length === 0,
+  };
 };

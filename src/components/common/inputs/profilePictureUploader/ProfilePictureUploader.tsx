@@ -15,6 +15,7 @@ interface ProfilePictureUploaderProps {
   isOwner?: boolean;
   type: "User" | "Place" | "Event";
   reference: string;
+  rounded?: boolean;
 }
 
 const ProfilePictureUploader = ({
@@ -26,6 +27,7 @@ const ProfilePictureUploader = ({
   disabled = false,
   type,
   reference,
+  rounded = false,
 }: ProfilePictureUploaderProps) => {
   const [preview, setPreview] = useState<Pick<IImage, "_id" | "url"> | null>(
     initialImage || null
@@ -36,8 +38,10 @@ const ProfilePictureUploader = ({
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || disabled || !isOwner) return;
+
     const previewUrl = URL.createObjectURL(file);
     setPreview({ ...initialImage, url: previewUrl } as IImage);
+
     try {
       const response = await submitImages({
         files: [file],
@@ -46,6 +50,9 @@ const ProfilePictureUploader = ({
         type: "profile",
       });
       if (response && response.images.length > 0) {
+        if (preview) {
+          await deleteImages([preview._id]);
+        }
         onImageUploaded(response.images[0]._id);
         setPreview({
           _id: response.images[0]._id,
@@ -54,6 +61,8 @@ const ProfilePictureUploader = ({
       }
     } catch {
       setPreview(null);
+    } finally {
+      e.target.value = "";
     }
   };
 
@@ -104,22 +113,25 @@ const ProfilePictureUploader = ({
             alt="Photo de profil"
             width={size === "small" ? 80 : size === "large" ? 120 : 100}
             height={size === "small" ? 80 : size === "large" ? 120 : 100}
-            className={styles.previewImage}
-          />
+            className={` ${styles.previewImage} ${
+              rounded ? styles.rounded : ""
+            }`}
+          />{" "}
           {isOwner && preview && (
             <button
-              type="button"
               onClick={handleDeleteImage}
               className={styles.deleteButton}
               disabled={isLoading || disabled}
-              title="Supprimer la photo"
+              aria-label="Supprimer la photo"
             >
-              <Trash2 size={16} />
+              <Trash2 size={14} />
             </button>
           )}
         </div>
       ) : (
-        <div className={styles.placeholder}>
+        <div
+          className={`${styles.placeholder} ${rounded ? styles.rounded : ""}`}
+        >
           <div className={styles.uploadIcon}>
             {isLoading ? <div className={styles.loadingSpinner} /> : <Upload />}
           </div>
@@ -134,7 +146,7 @@ const ProfilePictureUploader = ({
           type="file"
           accept="image/*"
           onChange={handleFileChange}
-          className={styles.fileInput}
+          className={`${styles.fileInput} ${rounded ? styles.rounded : ""}`}
           disabled={isLoading || disabled}
         />
       )}

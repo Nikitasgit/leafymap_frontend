@@ -26,7 +26,7 @@ const UpdateEventPage = () => {
         <PageHeader
           title="Modifier un événement"
           showBackButton={true}
-          onBackClick={() => router.push(`/account/places/${placeId}/events`)}
+          onBackClick={() => router.back()}
           backButtonLabel="Retour aux événements"
         />
         {loading ? (

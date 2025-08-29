@@ -24,6 +24,7 @@ const Button: React.FC<ButtonProps> = ({
   size = "medium",
   startIcon,
   endIcon,
+  className,
   fullWidth = false,
   ariaLabel,
 }) => {
@@ -35,7 +36,7 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled}
       className={`${styles.button} ${styles[variant]} ${styles[size]} ${
         fullWidth ? styles.fullWidth : ""
-      }`}
+      } ${className}`}
     >
       {startIcon && <span className={styles.startIcon}>{startIcon}</span>}
       {children}

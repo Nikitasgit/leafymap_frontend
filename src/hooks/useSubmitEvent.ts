@@ -4,27 +4,26 @@ import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { isTempId } from "@/utils/tempId";
 import { parseDateToUTC } from "@/utils/dates";
-import { initialEventData } from "@/components/events/form/EventForm/EventForm";
+import { Event } from "@/types/place/event";
 
 const useSubmitEvent = () => {
   const params = useParams();
   const placeId = params.placeId as string;
-  const eventId = params.eventId as string;
   const { isLoading, withLoading } = useLoading();
   const { showError } = useToast();
 
   const submitEvent = async (
-    event: initialEventData,
-    isUpdate: boolean = false
+    event: Partial<Event>,
+    isUpdate: boolean = false,
+    eventId?: string
   ) => {
     try {
       if (isUpdate && !placeId && !eventId) {
         throw new Error("Place ID or event ID is required for update");
       }
-
       const payload = {
         ...event,
-        schedule: event.schedule.map((period) => ({
+        schedule: event.schedule?.map((period) => ({
           ...period,
           startDate: parseDateToUTC(period.startDate),
           endDate: period.endDate

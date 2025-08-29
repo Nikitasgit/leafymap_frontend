@@ -5,18 +5,35 @@ import Text from "@/components/common/typography/Text";
 import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader";
 import { Edit3 } from "lucide-react";
 import styles from "./PlaceEditCard.module.scss";
+import useSubmitPlace from "@/hooks/useSubmitPlace";
+import { Image } from "@/types/image";
 
 const PlaceEditCard = ({ place }: { place: Place }) => {
   const router = useRouter();
+  const { submitPlace, isLoading: isLoadingPlace } = useSubmitPlace();
+
+  const handleImageUploaded = async (imageId: string | null) => {
+    if (imageId) {
+      await submitPlace(
+        {
+          image: imageId,
+        },
+        true,
+        place._id
+      );
+    }
+  };
 
   return (
     <div className={styles.card}>
       <ProfilePictureUploader
-        entityType="place"
-        entityId={place._id}
-        initialImage={place.image}
-        isOwner
+        onImageUploaded={handleImageUploaded}
+        type="Place"
+        reference={place._id}
+        initialImage={place.image as Image}
+        isOwner={true}
         size="medium"
+        disabled={isLoadingPlace}
       />
 
       <div className={styles.content}>

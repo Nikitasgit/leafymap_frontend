@@ -45,9 +45,7 @@ export const signIn = createAsyncThunk(
 
       return response.data.data.user;
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.data?.message) {
-        throw new Error(error.response.data.message);
-      }
+      // Passer l'erreur Axios complète pour que useHandleApiErrors puisse la traiter
       throw error;
     }
   }

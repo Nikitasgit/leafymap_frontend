@@ -1,0 +1,27 @@
+@use "../../../../styles/abstracts/variables" as *;
+@use "../../../../styles/abstracts/functions" as *;
+@use "../../../../styles/abstracts/mixins" as *;
+
+.container {
+  @include flex(row, flex-start, center, spacing(2));
+  width: 100%;
+}
+
+.title {
+  color: $grey-600;
+  font-weight: 600;
+  font-size: rem(28);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.line {
+  flex: 1;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    $primary-color 0%,
+    lighten($primary-color, 30%) 100%
+  );
+  border-radius: rem(2);
+}

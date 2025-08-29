@@ -8,6 +8,8 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { getEventDateRange } from "@/utils/eventDates";
 import styles from "./EditEventCard.module.scss";
+import { Image } from "@/types/image";
+import useSubmitEvent from "@/hooks/useSubmitEvent";
 
 interface EditEventCardProps {
   event: Event;
@@ -16,6 +18,7 @@ interface EditEventCardProps {
 
 const EditEventCard = ({ event, placeId }: EditEventCardProps) => {
   const router = useRouter();
+  const { submitEvent } = useSubmitEvent();
 
   const getEventStatus = (status: string) => {
     switch (status) {
@@ -38,13 +41,25 @@ const EditEventCard = ({ event, placeId }: EditEventCardProps) => {
 
   const statusDisplay = getEventStatus(event.status);
   const dateRange = getEventDateRange(event.schedule || []);
+  const handleImageUploaded = async (imageId: string | null) => {
+    if (imageId && typeof imageId === "string") {
+      await submitEvent(
+        {
+          image: imageId,
+        },
+        true,
+        event._id
+      );
+    }
+  };
 
   return (
     <div className={styles.card}>
       <ProfilePictureUploader
-        entityType="event"
-        entityId={event._id}
-        initialImage={event.image}
+        type="Event"
+        reference={event._id}
+        onImageUploaded={handleImageUploaded}
+        initialImage={event.image as Image}
         isOwner
         size="medium"
       />

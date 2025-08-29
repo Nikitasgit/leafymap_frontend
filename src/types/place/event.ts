@@ -1,12 +1,13 @@
 import { Place } from ".";
 import { BaseEntity } from "../common";
+import { Image } from "../image";
 import { Partnership } from "../partnerships";
 import { Period } from "./schedule";
 
 export interface Event extends BaseEntity {
   name: string;
   description: string;
-  image: string;
+  image: string | Image;
   schedule: Period[];
   partnerships: Partnership[];
   status:

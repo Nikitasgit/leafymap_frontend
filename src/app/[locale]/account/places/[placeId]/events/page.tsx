@@ -32,7 +32,7 @@ export default function EventsListPage() {
         title="Événements"
         subtitle="Gérez les événements de votre lieu"
         showBackButton={true}
-        onBackClick={() => router.push("/account")}
+        onBackClick={() => router.back()}
         backButtonLabel="Retour au compte"
         rightComponent={
           <Button

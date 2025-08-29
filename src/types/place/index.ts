@@ -1,6 +1,7 @@
 import { BaseEntity, ContactInfo, Location } from "../common";
 import { PlaceCategory, SubCategory } from "../categories";
 import { User } from "../user";
+import { Image } from "../image";
 import { DefaultSchedule } from "./schedule";
 import { PlaceType } from "./placeCaterories";
 
@@ -13,7 +14,7 @@ export interface Place extends BaseEntity, ContactInfo {
   categories: string[];
   defaultSchedule: DefaultSchedule;
   isCreatorPlace?: boolean;
-  image?: string;
+  image?: string | Image;
   active: boolean;
   rating: number;
   placeType: PlaceType[];

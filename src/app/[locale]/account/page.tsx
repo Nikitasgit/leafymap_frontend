@@ -28,6 +28,14 @@ export default function AccountPage() {
         };
   if (isLoadingUser || !user) return <LoadingBar />;
 
+  const handleImageUploaded = async (imageId: string | null) => {
+    if (imageId) {
+      await submitUser({
+        image: imageId,
+      });
+    }
+  };
+
   return (
     <main className={styles.accountPage}>
       <div className={styles.header}>
@@ -45,16 +53,13 @@ export default function AccountPage() {
           </Text>
         </div>
         <ProfilePictureUploader
-          onImageUploaded={async (imageId) => {
-            await submitUser({
-              image: imageId || undefined,
-            });
-          }}
+          onImageUploaded={handleImageUploaded}
           type="User"
           reference={user?._id}
           initialImage={user.image as Image}
           isOwner={true}
           size="medium"
+          rounded
           disabled={isLoadingUser}
         />
       </div>

@@ -21,6 +21,15 @@ const Partnerships = ({
   partnerships: Partnership[];
 }) => {
   const { searchCreators } = useFindCreators();
+  console.log(partnerships);
+  const fetchSuggestions = async (query: string) => {
+    const users = await searchCreators(query);
+    return users.map((user) => ({
+      _id: user._id,
+      image: typeof user.image === "string" ? user.image : user.image?.url,
+      name: user.creatorName,
+    }));
+  };
   const { showError } = useToast();
 
   const filteredPartnerships = partnerships.filter(
@@ -53,7 +62,7 @@ const Partnerships = ({
         collaborator: {
           _id: suggestion._id,
           name: suggestion.name || "",
-          image: suggestion.image || "",
+          image: suggestion.image as string,
         },
         status: "pending",
       };
@@ -111,7 +120,7 @@ const Partnerships = ({
           <SearchInput
             label="Ajouter un partenaire"
             onSelect={handleSelect}
-            fetchSuggestions={searchCreators}
+            fetchSuggestions={fetchSuggestions}
             initialSuggestions={[]}
             placeholder="Ajouter un partenaire..."
             withIcons

@@ -99,7 +99,7 @@ const UpdatePlace = () => {
         <PageHeader
           title="Modifier votre lieu"
           showBackButton={true}
-          onBackClick={() => router.push("/account")}
+          onBackClick={() => router.back()}
           backButtonLabel="Retour au compte"
         />
         {loading || !place || !user ? (

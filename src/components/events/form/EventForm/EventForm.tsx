@@ -96,7 +96,7 @@ const EventForm = ({
         return;
       }
       if (event) {
-        const eventId = await submitEvent(event, isUpdate);
+        const eventId = await submitEvent(event, isUpdate, eventData?._id);
         if (eventId && partnerships.length > 0) {
           const { newValues, updatedValues } =
             separateNewAndUpdatedArrayValues(partnerships);

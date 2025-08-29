@@ -30,7 +30,7 @@ const SearchInput = <
 >({
   value = "",
   onSelect,
-  fetchSuggestions ,
+  fetchSuggestions,
   initialSuggestions = [],
   placeholder = "Rechercher...",
   limit = 5,
@@ -124,7 +124,6 @@ const SearchInput = <
       }
     };
   }, []);
-
   return (
     <div ref={wrapperRef} className={styles.searchInput}>
       <TextField

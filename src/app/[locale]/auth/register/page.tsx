@@ -1,22 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import styles from "./register.module.scss";
 import { useToast } from "@/hooks/useToast";
+import useHandleApiErrors from "@/hooks/useHandleApiErrors";
 import Button from "@/components/common/buttons/button/Button";
 import { useLoading } from "@/hooks/useLoading";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import TextField from "@/components/common/inputs/textField/TextField";
-import {
-  registerSchema,
-  getValidationErrors,
-  type RegisterFormData,
-} from "@/validations/authValidations";
-import { z } from "zod";
+import { validateRegisterData } from "@/validations/authValidations";
+import { RegisterFormData } from "@/types/auth";
 
 export default function Register() {
   const router = useRouter();
@@ -27,20 +24,40 @@ export default function Register() {
     password: "",
     confirmPassword: "",
   });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const { showSuccess, showError } = useToast();
+  const [errors, setErrors] = useState<{
+    register: Record<string, string>;
+  }>({ register: {} });
+  const { showSuccess } = useToast();
   const { isLoading, withLoading } = useLoading();
-
+  const { handleApiError } = useHandleApiErrors();
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const handleInputChange = (field: keyof RegisterFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
+  const validateFormData = useCallback((): boolean => {
+    const registerValidation = validateRegisterData(formData);
+    setErrors((prev) => ({
+      ...prev,
+      register: registerValidation.errors,
+    }));
+    return registerValidation.isValid;
+  }, [formData]);
+
+  useEffect(() => {
+    if (hasAttemptedSubmit) {
+      validateFormData();
+    }
+  }, [hasAttemptedSubmit, validateFormData]);
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setHasAttemptedSubmit(true);
+    if (!validateFormData()) {
+      return;
+    }
     try {
-      registerSchema.parse(formData);
       await withLoading(async () => {
         try {
           await axios.post(
@@ -54,16 +71,20 @@ export default function Register() {
           showSuccess(t("messages.success"));
           router.push("/auth/signin");
         } catch (err: unknown) {
-          const error = err as AxiosError<{ message: string }>;
-          showError(error.response?.data?.message || t("messages.error"));
+          handleApiError(
+            err,
+            (validationErrors) => {
+              setErrors((prev) => ({
+                ...prev,
+                register: validationErrors,
+              }));
+            },
+            false
+          );
         }
       });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const validationErrors = getValidationErrors(error);
-        setErrors(validationErrors);
-        showError(t("messages.validationError"));
-      }
+    } catch (err) {
+      handleApiError(err);
     }
   };
 
@@ -73,19 +94,19 @@ export default function Register() {
       <div className={styles.formContainer}>
         <h1>{t("title")}</h1>
 
-        <form onSubmit={handleRegister} className={styles.form}>
+        <form onSubmit={handleRegister} className={styles.form} noValidate>
           <TextField
             label={t("form.email.label")}
             name="email"
-            type="email"
+            type="text"
             placeholder={t("form.email.placeholder")}
             required
             fullWidth
             value={formData.email}
             onChange={(e) => handleInputChange("email", e.target.value)}
             disabled={isLoading}
-            error={!!errors.email}
-            errorMessage={errors.email}
+            error={!!errors.register.email}
+            errorMessage={errors.register.email}
           />
 
           <TextField
@@ -98,8 +119,8 @@ export default function Register() {
             value={formData.username}
             onChange={(e) => handleInputChange("username", e.target.value)}
             disabled={isLoading}
-            error={!!errors.username}
-            errorMessage={errors.username}
+            error={!!errors.register.username}
+            errorMessage={errors.register.username}
           />
 
           <TextField
@@ -112,8 +133,8 @@ export default function Register() {
             value={formData.password}
             onChange={(e) => handleInputChange("password", e.target.value)}
             disabled={isLoading}
-            error={!!errors.password}
-            errorMessage={errors.password}
+            error={!!errors.register.password}
+            errorMessage={errors.register.password}
           />
 
           <TextField
@@ -128,8 +149,8 @@ export default function Register() {
               handleInputChange("confirmPassword", e.target.value)
             }
             disabled={isLoading}
-            error={!!errors.confirmPassword}
-            errorMessage={errors.confirmPassword}
+            error={!!errors.register.confirmPassword}
+            errorMessage={errors.register.confirmPassword}
           />
 
           <Button

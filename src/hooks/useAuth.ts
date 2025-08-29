@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectAuth, signIn, signOut } from "@/store/authSlice";
 import { User } from "@/types/user";
 import { useToast } from "./useToast";
+import useHandleApiErrors from "./useHandleApiErrors";
 import { AppDispatch } from "@/store";
 import { useRouter } from "next/navigation";
 
@@ -14,7 +15,8 @@ export interface AuthState {
 
 export const useAuth = (): AuthState => {
   const { user, loading } = useSelector(selectAuth);
-  const { showError, showSuccess } = useToast();
+  const { showSuccess } = useToast();
+  const { handleApiError } = useHandleApiErrors();
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
@@ -23,8 +25,8 @@ export const useAuth = (): AuthState => {
       await dispatch(signIn({ identifier, password })).unwrap();
       showSuccess("Connexion réussie");
       router.push("/");
-    } catch {
-      showError("Échec de connexion");
+    } catch (error) {
+      handleApiError(error);
     }
   };
 
@@ -32,8 +34,8 @@ export const useAuth = (): AuthState => {
     try {
       await dispatch(signOut()).unwrap();
       router.push("/auth/signin");
-    } catch {
-      showError("Échec de déconnexion");
+    } catch (error) {
+      handleApiError(error);
     }
   };
 

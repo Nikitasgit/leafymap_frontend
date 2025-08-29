@@ -1,25 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./signin.module.scss";
 import Button from "@/components/common/buttons/button/Button";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
+import { validateLoginData } from "@/validations/authValidations";
+import TextField from "@/components/common/inputs/textField/TextField";
 
 export default function SignIn() {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<{
+    signin: Record<string, string>;
+  }>({ signin: {} });
   const { t } = useTranslation("subscription");
-
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const { login, loading } = useAuth();
+
+  const validateFormData = useCallback((): boolean => {
+    const signinValidation = validateLoginData({
+      identifier,
+      password,
+    });
+    setErrors((prev) => ({
+      ...prev,
+      signin: signinValidation.errors,
+    }));
+    return signinValidation.isValid;
+  }, [identifier, password]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setHasAttemptedSubmit(true);
+    if (!validateFormData()) {
+      return;
+    }
     await login(identifier, password);
   };
 
+  useEffect(() => {
+    if (hasAttemptedSubmit) {
+      validateFormData();
+    }
+  }, [hasAttemptedSubmit, validateFormData]);
   return (
     <div className={styles.container}>
       {loading && <LoadingBar />}
@@ -27,34 +53,34 @@ export default function SignIn() {
       <div className={styles.formContainer}>
         <h1>{t("signin.title")}</h1>
 
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.inputGroup}>
-            <label htmlFor="identifier">
-              {t("signin.form.identifier.label")}
-            </label>
-            <input
-              id="identifier"
-              type="text"
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
-              required
-              placeholder={t("signin.form.identifier.placeholder")}
-              disabled={loading}
-            />
-          </div>
+        <form onSubmit={handleSubmit} className={styles.form} noValidate>
+          <TextField
+            label={t("signin.form.identifier.label")}
+            name="identifier"
+            type="text"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+            required
+            placeholder={t("signin.form.identifier.placeholder")}
+            disabled={loading}
+            error={!!errors.signin.identifier}
+            fullWidth
+            errorMessage={errors.signin.identifier}
+          />
 
-          <div className={styles.inputGroup}>
-            <label htmlFor="password">{t("signin.form.password.label")}</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder={t("signin.form.password.placeholder")}
-              disabled={loading}
-            />
-          </div>
+          <TextField
+            label={t("signin.form.password.label")}
+            name="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            placeholder={t("signin.form.password.placeholder")}
+            disabled={loading}
+            error={!!errors.signin.password}
+            fullWidth
+            errorMessage={errors.signin.password}
+          />
 
           <Button
             type="submit"
