@@ -26,13 +26,16 @@ export const fetchCurrentUser = createAsyncThunk(
 
 export const signIn = createAsyncThunk(
   "auth/signIn",
-  async ({
-    identifier,
-    password,
-  }: {
-    identifier: string;
-    password: string;
-  }) => {
+  async (
+    {
+      identifier,
+      password,
+    }: {
+      identifier: string;
+      password: string;
+    },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/signin`,
@@ -45,7 +48,9 @@ export const signIn = createAsyncThunk(
 
       return response.data.data.user;
     } catch (error) {
-      // Passer l'erreur Axios complète pour que useHandleApiErrors puisse la traiter
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data);
+      }
       throw error;
     }
   }

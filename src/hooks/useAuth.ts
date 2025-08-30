@@ -15,7 +15,7 @@ export interface AuthState {
 
 export const useAuth = (): AuthState => {
   const { user, loading } = useSelector(selectAuth);
-  const { showSuccess } = useToast();
+  const { showSuccess, showError } = useToast();
   const { handleApiError } = useHandleApiErrors();
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
@@ -25,8 +25,17 @@ export const useAuth = (): AuthState => {
       await dispatch(signIn({ identifier, password })).unwrap();
       showSuccess("Connexion réussie");
       router.push("/");
-    } catch (error) {
-      handleApiError(error);
+    } catch (error: unknown) {
+      if (
+        error &&
+        typeof error === "object" &&
+        "message" in error &&
+        typeof error.message === "string"
+      ) {
+        showError(error.message);
+      } else {
+        showError("Une erreur inattendue s'est produite");
+      }
     }
   };
 

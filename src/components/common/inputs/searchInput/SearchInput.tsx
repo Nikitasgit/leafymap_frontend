@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import styles from "./SearchInput.module.scss";
 import TextField from "../textField/TextField";
+import { useTranslation } from "react-i18next";
 
 interface SearchInputProps<T> {
   value?: string;
@@ -26,6 +27,7 @@ const SearchInput = <
     image?: string;
     location?: { label: string };
     status?: string;
+    categories?: { name: string }[];
   }
 >({
   value = "",
@@ -40,6 +42,7 @@ const SearchInput = <
   label,
 }: SearchInputProps<T>) => {
   const [input, setInput] = useState(value);
+  const { t } = useTranslation();
   const [suggestions, setSuggestions] = useState<T[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -90,6 +93,15 @@ const SearchInput = <
     return item.username || item.name || "";
   };
 
+  const getCategories = (item: T) => {
+    if ("categories" in item && item.categories) {
+      return item.categories
+        .map((category) => t(`creatorCategories.${category.name}`))
+        .join(", ");
+    }
+    return null;
+  };
+
   const getAddress = (item: T) => {
     if ("location" in item && item.location && "label" in item.location) {
       return item.location.label;
@@ -124,6 +136,7 @@ const SearchInput = <
       }
     };
   }, []);
+
   return (
     <div ref={wrapperRef} className={styles.searchInput}>
       <TextField
@@ -156,17 +169,22 @@ const SearchInput = <
                 <Image
                   src={sug.image}
                   alt={getDisplayName(sug)}
-                  width={20}
-                  height={20}
-                  style={{ borderRadius: "50%" }}
+                  width={32}
+                  height={32}
+                  className={styles.suggestionImage}
                 />
               )}
               <div className={styles.suggestionContent}>
                 <span className={styles.suggestionName}>
                   {getDisplayName(sug)}
                 </span>
+                {sug.categories && (
+                  <span className={styles.suggestionInfos}>
+                    {getCategories(sug)}
+                  </span>
+                )}
                 {getAddress(sug) && (
-                  <div className={styles.suggestionAddress}>
+                  <div className={styles.suggestionInfos}>
                     <span>{getAddress(sug)}</span>
                   </div>
                 )}

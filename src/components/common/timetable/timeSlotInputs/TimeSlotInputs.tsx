@@ -56,6 +56,9 @@ const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
               ? parseTimeString(slot.endTime)!
               : new Date(new Date().setHours(23, 59, 0))
           }
+          popperProps={{
+            strategy: "fixed",
+          }}
         />
         <Text className={styles.timeSeparator}>à</Text>
         <DatePicker
@@ -77,6 +80,9 @@ const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
           className={styles.timePicker}
           excludeTimes={getExcludedTimes(false)}
           onKeyDown={(e) => e.preventDefault()}
+          popperProps={{
+            strategy: "fixed",
+          }}
         />
       </div>
       {canRemove && (

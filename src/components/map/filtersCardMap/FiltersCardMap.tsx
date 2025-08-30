@@ -94,6 +94,8 @@ const FiltersCardMap = ({
         startDate={localFilters.startDate || null}
         endDate={localFilters.endDate || null}
         onDateChange={handleDateChange}
+        isPeriod={false}
+        setIsPeriod={() => {}}
       />
     </div>
   );

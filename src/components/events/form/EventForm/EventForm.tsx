@@ -205,10 +205,13 @@ const EventForm = ({
       />
       <TextField
         multiline
+        showCharCount
         fullWidth
         required
+        maxLength={300}
         rows={2}
         label="Description"
+        className={styles.description}
         name="description"
         placeholder="Description"
         value={event.description}

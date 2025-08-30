@@ -108,7 +108,6 @@ const PlaceForm = ({
     <section className={styles.placeForm}>
       {userType !== "organizer" && (
         <RadioYesOrNo
-          title="Lieu"
           label="Souhaitez-vous afficher votre lieu sur la carte pour recevoir des visiteurs?"
           name="userWithPlace"
           value={place.active ? "yes" : "no"}

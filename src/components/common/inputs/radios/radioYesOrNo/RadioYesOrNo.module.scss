@@ -2,11 +2,15 @@
 @use "@/styles/abstracts/mixins" as *;
 @use "@/styles/abstracts/functions" as *;
 
+.container {
+  margin-top: spacing(2);
+}
+
 .title {
   color: $grey-450;
   font-size: 15px;
 }
-.container {
+.innerContainer {
   width: 100%;
   border: 1px solid $grey-200;
   border-radius: 8px;

@@ -16,6 +16,7 @@ import { usePlace } from "@/hooks/usePlace";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
 import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/navigation";
+import PageHeader from "@/components/common/PageHeader/PageHeader";
 
 const initialUserData = (user: InitialCreatorData): InitialCreatorData => ({
   userType: user.userType || "creator",
@@ -100,22 +101,31 @@ const ModifyCreator = () => {
     if (user) setUpdatedUser(initialUserData(user));
   }, [placeData, user]);
 
-  if (loading) {
-    return <LoadingBar />;
-  }
   return (
-    <div className={styles.pageContainer}>
-      <ActivityFormStep
-        firstStep={true}
-        user={updatedUser}
-        place={place}
-        initialPlaceLocation={placeData?.location}
-        onUserChange={onUserChange}
-        onPlaceChange={onPlaceChange}
-        onSubmit={handleSubmit}
-        submitButtonText="Enregistrer"
-      />
-    </div>
+    <main className={styles.pageContainer}>
+      <section className={styles.container}>
+        <PageHeader
+          title="Modifier votre profil"
+          showBackButton={true}
+          onBackClick={() => router.back()}
+          backButtonLabel="Retour au compte"
+        />
+        {loading ? (
+          <LoadingBar />
+        ) : (
+          <ActivityFormStep
+            firstStep={true}
+            user={updatedUser}
+            place={place}
+            initialPlaceLocation={placeData?.location}
+            onUserChange={onUserChange}
+            onPlaceChange={onPlaceChange}
+            onSubmit={handleSubmit}
+            submitButtonText="Enregistrer"
+          />
+        )}
+      </section>
+    </main>
   );
 };
 

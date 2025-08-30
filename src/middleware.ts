@@ -58,7 +58,17 @@ export async function middleware(request: NextRequest) {
       pathNameWithoutLocale.startsWith(route)
     );
 
+    // Special handling for place-specific routes
+    const placeIdPattern = /^\/account\/places\/[^\/]+$/;
+    const isPlaceSpecificRoute = placeIdPattern.test(pathNameWithoutLocale);
+
     if (isOrganizerOnlyRoute && userType !== "organizer") {
+      const accountUrl = new URL(`/account`, request.url);
+      return NextResponse.redirect(accountUrl);
+    }
+
+    // Restrict access to specific place pages to organizers only
+    if (isPlaceSpecificRoute && userType !== "organizer") {
       const accountUrl = new URL(`/account`, request.url);
       return NextResponse.redirect(accountUrl);
     }

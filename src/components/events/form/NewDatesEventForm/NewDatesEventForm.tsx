@@ -70,7 +70,13 @@ const NewDatesEventForm = ({
           setIsPeriod={setIsPeriod}
         />
         <Button onClick={handleSaveDates}>
-          {isPeriod ? "Ajouter une période" : "Ajouter une date"}
+          {isPeriod && startDate && endDate
+            ? "Ajouter cette période"
+            : isPeriod && !startDate && !endDate
+            ? "Ajouter une période"
+            : !isPeriod && startDate
+            ? "Ajouter cette date"
+            : "Ajouter une date"}
         </Button>
       </div>
     </section>

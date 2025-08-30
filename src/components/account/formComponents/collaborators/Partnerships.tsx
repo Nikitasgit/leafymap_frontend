@@ -21,13 +21,16 @@ const Partnerships = ({
   partnerships: Partnership[];
 }) => {
   const { searchCreators } = useFindCreators();
-  console.log(partnerships);
+
   const fetchSuggestions = async (query: string) => {
     const users = await searchCreators(query);
     return users.map((user) => ({
       _id: user._id,
       image: typeof user.image === "string" ? user.image : user.image?.url,
       name: user.creatorName,
+      categories: user.creatorCategories?.map((category) => ({
+        name: category,
+      })),
     }));
   };
   const { showError } = useToast();

@@ -23,9 +23,9 @@ const RadioYesOrNo: React.FC<RadioYesOrNoProps> = ({
   disabled = false,
 }) => {
   return (
-    <div>
+    <div className={styles.container}>
       {title && <p className={styles.title}>{title}</p>}
-      <div className={styles.container}>
+      <div className={styles.innerContainer}>
         {label && <p className={styles.label}>{label}</p>}
         <div className={styles.optionsContainer}>
           <div className={styles.optionWrapper}>
