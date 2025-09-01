@@ -56,8 +56,8 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
   ) => {
     const { latitude, longitude } = useGeolocation();
     const [viewState, setViewState] = useState({
-      latitude: latitude || DEFAULT_LOCATION.latitude,
-      longitude: longitude || DEFAULT_LOCATION.longitude,
+      latitude: DEFAULT_LOCATION.latitude,
+      longitude: DEFAULT_LOCATION.longitude,
       zoom: DEFAULT_LOCATION.zoom,
     });
     const [isMapReady, setIsMapReady] = useState(false);
@@ -95,6 +95,16 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
         setLoading(isLoading);
       }
     }, [isLoading]);
+
+    useEffect(() => {
+      if (latitude && longitude) {
+        setViewState({
+          latitude,
+          longitude,
+          zoom: DEFAULT_LOCATION.zoom,
+        });
+      }
+    }, [latitude, longitude, isMapReady]);
 
     return (
       <div style={{ position: "relative", width, height }}>

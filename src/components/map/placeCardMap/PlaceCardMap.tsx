@@ -18,15 +18,16 @@ interface PlaceCardMapProps {
 }
 
 const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
-  const { place, loading } = usePlace(placeId, true);
+  const { place, isLoading } = usePlace(placeId, true);
   const { t } = useTranslation("common");
   const router = useRouter();
+
   useEffect(() => {
     if (mapRef.current && place) {
       navigateToPlaceOnMap({
         mapRef,
         placeId: place._id,
-        coordinates: place.location.coordinates,
+        coordinates: place.location?.coordinates || [],
       });
     }
   }, [mapRef, place]);
@@ -46,7 +47,7 @@ const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
 
   return (
     <div className={styles.placeCardMap}>
-      {loading && <LoadingBar />}
+      {isLoading && <LoadingBar />}
       <div className={styles.imageContainer}>
         <Image
           onClick={() => {
@@ -60,7 +61,11 @@ const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
               router.push(`/places/${place?._id}`);
             }
           }}
-          src={place?.image || "/images/default-place.png"}
+          src={
+            typeof place?.image === "object"
+              ? place?.image.url
+              : place?.image || "/images/default-place.png"
+          }
           alt={place?.name || "Place image"}
           width={100}
           height={200}
@@ -81,7 +86,13 @@ const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
                   ))
                 ) : (
                   <Text>
-                    {t(`placeCategories.${place.placeCategory.name}`)}
+                    {t(
+                      `placeCategories.${
+                        typeof place.placeCategory === "object"
+                          ? place.placeCategory?.name
+                          : place.placeCategory
+                      }`
+                    )}
                   </Text>
                 )}
               </Text>
@@ -105,7 +116,7 @@ const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
           <span className={styles.addressIcon}>
             <MapPin size={14} />
           </span>
-          <Text className={styles.address}>{place?.location.label}</Text>
+          <Text className={styles.address}>{place?.location?.label}</Text>
         </div>
       </div>
       <div className={styles.descriptionRow}>

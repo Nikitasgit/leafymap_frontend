@@ -54,7 +54,7 @@ const ActivityFormStep = ({
   }>({ place: {}, user: {} });
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const { showError } = useToast();
-  console.log(errors);
+
   const validateFormData = useCallback((): boolean => {
     const userValidation = validateNewUserData(user);
     let placeValidation: ValidationResult = {

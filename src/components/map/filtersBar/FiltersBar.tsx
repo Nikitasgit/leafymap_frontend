@@ -6,8 +6,8 @@ import { ChevronDown, Filter } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { MapFilters, ExtendedMapRef } from "@/types/map";
-import { useFindCreators } from "@/hooks/useFindCreators";
 import { useFindPlaces } from "@/hooks/useFindPlaces";
+import { useFindUsers } from "@/hooks/useFindUsers";
 
 type CreatorSearchResult = {
   _id: string;
@@ -62,8 +62,8 @@ const FiltersBar = ({
   const [searchType, setSearchType] = useState<SearchType>(searchTypes[0]);
   const [searchValue, setSearchValue] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { searchCreators } = useFindCreators();
-  const { searchPlaces, isLoading } = useFindPlaces();
+  const { searchUsers, isLoading: isLoadingUsers } = useFindUsers();
+  const { searchPlaces, isLoading: isLoadingPlaces } = useFindPlaces();
   useOnClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 
   const types = [
@@ -109,8 +109,16 @@ const FiltersBar = ({
 
   const handleSearch = async (query: string) => {
     if (searchType.label === "Membres") {
-      const creators = await searchCreators(query);
-      return creators;
+      const creators = await searchUsers({ creatorName: query });
+      const suggestions = creators.map((user) => ({
+        _id: user._id,
+        image: typeof user.image === "string" ? user.image : user.image?.url,
+        name: user.creatorName,
+        categories: user.creatorCategories?.map((category) => ({
+          name: category.name,
+        })),
+      }));
+      return suggestions;
     } else {
       const places = await searchPlaces(query);
       return places;
@@ -140,7 +148,7 @@ const FiltersBar = ({
     }
   }, [filters, mapRef]);
 
-  const loading = isLoading || loadingProps;
+  const loading = isLoadingUsers || isLoadingPlaces || loadingProps;
 
   return (
     <div className={styles.filtersBar}>
@@ -185,7 +193,6 @@ const FiltersBar = ({
           loading={loading}
           limit={10}
           onSelect={handleSelectSuggestion}
-          onDelete={() => {}}
           fetchSuggestions={handleSearch}
           placeholder={searchType.placeholder}
         />

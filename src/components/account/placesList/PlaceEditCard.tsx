@@ -41,14 +41,24 @@ const PlaceEditCard = ({ place }: { place: Place }) => {
           <Text as="h4" className={styles.title}>
             {place.name}
           </Text>
-          <Button
-            variant="simple"
-            onClick={() => router.push(`account/places/${place._id}`)}
-            className={styles.editIcon}
-            aria-label="Modifier"
-          >
-            <Edit3 size={16} />
-          </Button>
+          {!place.isCreatorPlace ? (
+            <Button
+              variant="simple"
+              onClick={() => router.push(`account/places/${place._id}`)}
+              className={styles.editIcon}
+              aria-label="Modifier"
+            >
+              <Edit3 size={16} />
+            </Button>
+          ) : (
+            <span
+              className={`${styles.placeStatus} ${
+                styles[place.active ? "active" : "inactive"]
+              }`}
+            >
+              {place.active ? "visible" : "désactivée"}
+            </span>
+          )}
         </div>
         <Text as="p" className={styles.description}>
           {place.description}
@@ -56,12 +66,14 @@ const PlaceEditCard = ({ place }: { place: Place }) => {
         <div className={styles.buttonGroup}>
           <Button
             variant="secondary"
+            size="small"
             onClick={() => router.push(`account/places/${place._id}/events`)}
           >
             Voir les événements
           </Button>
           <Button
             variant="secondary"
+            size="small"
             onClick={() =>
               router.push(`account/places/${place._id}/events/create`)
             }

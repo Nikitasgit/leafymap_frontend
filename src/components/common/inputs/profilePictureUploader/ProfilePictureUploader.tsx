@@ -39,9 +39,6 @@ const ProfilePictureUploader = ({
     const file = e.target.files?.[0];
     if (!file || disabled || !isOwner) return;
 
-    const previewUrl = URL.createObjectURL(file);
-    setPreview({ ...initialImage, url: previewUrl } as IImage);
-
     try {
       const response = await submitImages({
         files: [file],
@@ -136,7 +133,7 @@ const ProfilePictureUploader = ({
             {isLoading ? <div className={styles.loadingSpinner} /> : <Upload />}
           </div>
           <span className={styles.uploadText}>
-            {isLoading ? "Téléchargement..." : "Ajouter une photo"}
+            {isLoading ? "Téléchargement..." : "Ajouter une photo (max. 5MB)"}
           </span>
         </div>
       )}

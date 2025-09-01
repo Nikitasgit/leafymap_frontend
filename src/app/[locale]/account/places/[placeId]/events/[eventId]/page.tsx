@@ -20,6 +20,7 @@ const UpdateEventPage = () => {
   );
   const loading = eventLoading || partnershipsLoading;
   const router = useRouter();
+  
   return (
     <main className={styles.pageContainer}>
       <div className={styles.container}>

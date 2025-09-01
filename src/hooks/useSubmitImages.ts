@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 
@@ -53,20 +53,9 @@ const useSubmitImages = () => {
 
       return response.data.data;
     } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response?.data) {
-        if (err.response.data.data) {
-          Object.values(err.response.data.data).forEach((error: unknown) => {
-            if (Array.isArray(error)) {
-              error.forEach((e: string) => {
-                showError(e);
-              });
-            } else if (typeof error === "string") {
-              showError(error);
-            }
-          });
-        } else {
-          showError(err.response.data.message);
-        }
+      console.log(err);
+      if (err instanceof AxiosError && err.response?.data.message) {
+        showError(err.response.data.message);
       } else {
         showError(
           "Une erreur inattendue s'est produite lors de l'upload des images"

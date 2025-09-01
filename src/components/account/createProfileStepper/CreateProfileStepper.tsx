@@ -62,7 +62,7 @@ const CreateProfileStepper = () => {
       setPlace(initialPlaceData(user));
     }
   }, [user]);
-  console.log(newUser);
+
   const loading =
     userLoading ||
     submitUserLoading ||

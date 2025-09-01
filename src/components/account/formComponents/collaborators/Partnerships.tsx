@@ -1,7 +1,7 @@
 import React from "react";
 import SearchInput from "@/components/common/inputs/searchInput/SearchInput";
 import { Collaborator } from "@/types/place/collaborators";
-import { useFindCreators } from "@/hooks/useFindCreators";
+
 import styles from "./Partnerships.module.scss";
 import InfoIcon from "@/components/common/info/InfoIcon";
 import Text from "@/components/common/typography/Text";
@@ -12,6 +12,7 @@ import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
 import { useTranslation } from "next-i18next";
 import { useToast } from "@/hooks/useToast";
+import { useFindUsers } from "@/hooks/useFindUsers";
 
 const Partnerships = ({
   onChange,
@@ -20,18 +21,19 @@ const Partnerships = ({
   onChange: (partnerships: Partnership[]) => void;
   partnerships: Partnership[];
 }) => {
-  const { searchCreators } = useFindCreators();
+  const { searchUsers } = useFindUsers();
 
   const fetchSuggestions = async (query: string) => {
-    const users = await searchCreators(query);
-    return users.map((user) => ({
+    const users = await searchUsers({ creatorName: query });
+    const suggestions = users.map((user) => ({
       _id: user._id,
-      image: typeof user.image === "string" ? user.image : user.image?.url,
+      image: typeof user.image === "object" ? user.image?.url : user.image,
       name: user.creatorName,
       categories: user.creatorCategories?.map((category) => ({
-        name: category,
+        name: category.name,
       })),
     }));
+    return suggestions;
   };
   const { showError } = useToast();
 
@@ -140,7 +142,9 @@ const Partnerships = ({
                   <div className={styles.itemInfoLeft}>
                     <Image
                       src={
-                        partnership.collaborator.image ||
+                        (typeof partnership.collaborator?.image === "object"
+                          ? partnership.collaborator?.image?.url
+                          : partnership.collaborator?.image) ||
                         "https://i.pravatar.cc/40?img=3"
                       }
                       alt={partnership.collaborator.name || ""}

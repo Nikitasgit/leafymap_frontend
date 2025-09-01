@@ -94,31 +94,9 @@ export default function AccountPage() {
             {buttonParameters.text}
           </Button>
         )}
-        {userType === "creator" && user?.places?.[0] && (
-          <>
-            <Button
-              fullWidth
-              onClick={() =>
-                router.push(
-                  `account/places/${user?.places?.[0]._id}/events/create`
-                )
-              }
-            >
-              Ajouter un événement
-            </Button>
-            <Button
-              fullWidth
-              onClick={() =>
-                router.push(`account/places/${user?.places?.[0]._id}/events`)
-              }
-            >
-              Voir les événements
-            </Button>
-          </>
-        )}
       </div>
 
-      {userType === "organizer" && user?.places && (
+      {user?.places && (
         <div className={styles.placesSection}>
           <PlacesEditList places={user?.places} />
         </div>

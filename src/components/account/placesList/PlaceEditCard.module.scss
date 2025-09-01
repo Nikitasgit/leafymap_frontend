@@ -49,6 +49,24 @@
   overflow: hidden;
 }
 
+.placeStatus {
+  font-size: rem(10);
+  font-weight: 500;
+  padding: spacing(0.2) spacing(0.4);
+  border-radius: rem(3);
+  text-transform: uppercase;
+  color: $white;
+  letter-spacing: 0.5px;
+}
+.active {
+  background-color: rgba(8, 161, 8, 0.546);
+  border: 1px solid $success-color;
+}
+.inactive {
+  border: 1px solid $error-color;
+  background-color: rgba(171, 0, 0, 0.42);
+}
+
 .buttonGroup {
   @include flex(row, flex-start, center, spacing(0.5));
   margin-top: spacing(1);
