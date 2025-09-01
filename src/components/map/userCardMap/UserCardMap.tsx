@@ -20,9 +20,8 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
   const { partnerships, isLoading: isLoadingPartnerships } =
     usePartnershipByUserId(userId, { asCollaborator: "true" });
   const { user, isLoading: isLoadingUser } = useUser(userId);
-
   const isLoading = isLoadingPartnerships || isLoadingUser;
-  console.log(partnerships);
+
   const router = useRouter();
 
   const handleMapButtonClick = async (placeData: {
@@ -87,7 +86,7 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
             <div className={styles.placeMainSection}>
               <div className={styles.placeImageContainer}>
                 <Image
-                  src={partnership.place.image}
+                  src={partnership.place.image.url}
                   alt={partnership.place.name}
                   width={80}
                   height={80}
