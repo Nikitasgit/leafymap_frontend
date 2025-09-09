@@ -1,8 +1,14 @@
+export interface ImageUrls {
+  original: string;
+  thumbnail: string;
+  medium: string;
+}
+
 export interface Image {
   _id: string;
-  url: string;
-  user?: string; // ObjectId reference to User
-  reference: string; // ObjectId reference to the entity this image belongs to
+  urls: ImageUrls;
+  user?: string;
+  reference: string;
   referenceType: "Place" | "User" | "Event" | "Message" | "Review";
   type: "profile" | "cover" | "gallery" | "other";
   originalName: string;
@@ -11,5 +17,3 @@ export interface Image {
   createdAt?: string;
   updatedAt?: string;
 }
-
-

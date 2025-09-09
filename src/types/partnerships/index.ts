@@ -1,8 +1,11 @@
 import { Image } from "../image";
+import { Place } from "../place";
+import { Event } from "../place/event";
 
 export interface Partnership {
   _id: string;
-  place?: string;
+  place?: string | Place;
+  event?: string | Event;
   collaborator: {
     _id: string;
     name?: string;

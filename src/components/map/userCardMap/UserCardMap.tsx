@@ -1,15 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
 import Text from "@/components/common/typography/Text";
 import styles from "./UserCardMap.module.scss";
-import { User, Map, ExternalLink } from "lucide-react";
+import { Map, SquareArrowOutUpRight } from "lucide-react";
 import { ExtendedMapRef } from "@/types/map";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
 import { useRouter } from "next/navigation";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { usePartnershipByUserId } from "@/hooks/usePartnershipByUserId";
 import { useUser } from "@/hooks/useUser";
+import { Calendar } from "lucide-react";
+import { getEventDateRange } from "@/utils/eventDates";
+import { useTranslation } from "next-i18next";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 
 interface UserCardMapProps {
   userId: string;
@@ -17,136 +22,212 @@ interface UserCardMapProps {
 }
 
 const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
-  const { partnerships, isLoading: isLoadingPartnerships } =
-    usePartnershipByUserId(userId, { asCollaborator: "true" });
-  const { user, isLoading: isLoadingUser } = useUser(userId);
-  const isLoading = isLoadingPartnerships || isLoadingUser;
-
+  const { t } = useTranslation();
   const router = useRouter();
 
-  const handleMapButtonClick = async (placeData: {
-    place: { location: { coordinates: number[] }; _id: string };
+  const { user, isLoading: isLoadingUser } = useUser(userId);
+  const { partnerships, isLoading: isLoadingPartnerships } =
+    usePartnershipByUserId(userId, { asCollaborator: "true" });
+  const placePartnerships = partnerships.filter(
+    (partnership) => partnership.type === "place"
+  );
+  const eventPartnerships = partnerships.filter(
+    (partnership) => partnership.type === "event"
+  );
+  const isLoading = isLoadingPartnerships || isLoadingUser;
+  const handleMapButtonClick = async (place: {
+    location: { coordinates: number[] } | null;
+    _id: string;
   }) => {
+    if (!place.location) return;
     await navigateToPlaceOnMap({
       mapRef,
-      placeId: placeData.place._id,
-      coordinates: placeData.place.location.coordinates,
+      placeId: place._id,
+      coordinates: place.location.coordinates,
     });
   };
 
-  if (isLoading || !user) return <LoadingBar />;
+  if (isLoading || !user || isLoadingPartnerships) return <LoadingBar />;
+  console.log(eventPartnerships);
+
   return (
     <div className={styles.userCardMap}>
       <div className={styles.creatorProfile}>
         <div
-          className={styles.creatorImageContainer}
+          className={styles.creatorInfo}
           onClick={() => router.push(`/users/${user?._id}`)}
         >
           <Image
-            src={user?.image.url}
+            src={
+              typeof user?.image === "object"
+                ? user?.image.urls.thumbnail
+                : user?.image
+            }
+            onClick={() => router.push(`/users/${user?._id}`)}
             alt={user.creatorName}
             width={55}
             height={55}
             className={styles.creatorImage}
           />
-        </div>
-        <div className={styles.creatorInfo}>
-          <h2 className={styles.creatorName}>{user.creatorName}</h2>
-          <div className={styles.creatorCategories}>
-            {user.creatorCategories?.map((category) => (
-              <Text key={category._id} className={styles.category}>
-                {category.name}
-              </Text>
-            ))}
+          <div className={styles.creatorText}>
+            <Text as="h3">{user.creatorName}</Text>
+            <Text as="p" className={styles.creatorCategories}>
+              {user.creatorCategories
+                ?.map((category: { name: string }) =>
+                  t(`creatorCategories.${category.name}`)
+                )
+                .join(", ")}
+            </Text>
           </div>
         </div>
-        {user.places && user.places.length > 0 && (
-          <Button
-            onClick={() =>
-              handleMapButtonClick({
-                place: user.places[0],
-              })
-            }
-          >
-            <Map size={14} />
-          </Button>
-        )}
+        <Button
+          variant="simple"
+          onClick={() =>
+            handleMapButtonClick({
+              location: user.places![0].location,
+              _id: user.places![0]._id,
+            })
+          }
+        >
+          <Map size={12} />
+        </Button>
       </div>
 
-      <div className={styles.placesSection}>
-        <h3 className={styles.placesTitle}>
-          Où retrouver {user.creatorName} (
-          {partnerships.eventPartnerships.length +
-            partnerships.placePartnerships.length}
-          )
-        </h3>
+      <div className={styles.placesAndEventsSection}>
+        {eventPartnerships && eventPartnerships.length > 0 && (
+          <div className={styles.section}>
+            <Text className={styles.sectionTitle}>
+              Evenements ({eventPartnerships.length}):
+            </Text>
+            {eventPartnerships.map((partnership) => {
+              const event =
+                typeof partnership.event === "object"
+                  ? partnership.event
+                  : null;
+              const place =
+                typeof partnership.place === "object"
+                  ? partnership.place
+                  : null;
+              if (!event || !place) return null;
 
-        {partnerships.placePartnerships.map((partnership) => (
-          <div key={partnership._id} className={styles.placeCard}>
-            <div className={styles.placeMainSection}>
-              <div className={styles.placeImageContainer}>
-                <Image
-                  src={partnership.place.image.url}
-                  alt={partnership.place.name}
-                  width={80}
-                  height={80}
-                  className={styles.placeImage}
-                />
-              </div>
-
-              <div className={styles.placeContent}>
-                <div className={styles.placeHeader}>
-                  <h4 className={styles.placeName}>{partnership.place.name}</h4>
-                  <div className={styles.placeButtons}>
-                    <Button
-                      onClick={() =>
-                        router.push(`/places/${partnership.place._id}`)
-                      }
-                    >
-                      <User size={14} />
-                    </Button>
-                    <Button
-                      onClick={() => handleMapButtonClick(partnership.place)}
-                    >
-                      <Map size={14} />
-                    </Button>
-                  </div>
-                </div>
-
-                <Text className={styles.locationText}>
-                  {partnership.place.location?.label}
-                </Text>
-              </div>
-            </div>
-
-            {partnership.events && partnership.events.length > 0 && (
-              <div className={styles.eventsSection}>
-                <Text className={styles.eventsTitle}>
-                  Events ({partnership.events.length})
-                </Text>
-                <div className={styles.eventsList}>
-                  {partnership.events.slice(0, 3).map((event) => (
-                    <div key={event._id} className={styles.eventItem}>
-                      <div className={styles.eventImageContainer}>
-                        <Image
-                          src={event.image}
-                          alt={event.title}
-                          width={32}
-                          height={32}
-                          className={styles.eventImage}
-                        />
+              const dateRange = getEventDateRange(event.schedule);
+              return (
+                <div key={partnership._id} className={styles.card}>
+                  <div className={styles.cardInfo}>
+                    <div className={styles.imageContainer}>
+                      <Image
+                        src={
+                          typeof event.image === "string"
+                            ? event.image
+                            : "/images/default-event.png"
+                        }
+                        alt={event.name}
+                        width={54}
+                        height={54}
+                      />
+                    </div>
+                    <div className={styles.cardText}>
+                      <Text as="h5">{event.name}</Text>
+                      <div className={styles.scheduleItem}>
+                        <Calendar size={12} />
+                        <Text as="p" className={styles.scheduleText}>
+                          {format(
+                            new Date(dateRange.firstDate),
+                            "dd MMM yyyy",
+                            {
+                              locale: fr,
+                            }
+                          )}
+                          {dateRange.latestDate &&
+                            dateRange.latestDate !== dateRange.firstDate && (
+                              <>
+                                {" "}
+                                -{" "}
+                                {format(
+                                  new Date(dateRange.latestDate),
+                                  "dd MMM yyyy",
+                                  {
+                                    locale: fr,
+                                  }
+                                )}
+                              </>
+                            )}
+                        </Text>
                       </div>
-                      <Text className={styles.eventName}>{event.title}</Text>
-                      <Button className={styles.eventButton}>
-                        <ExternalLink size={14} />
+
+                      <Text className={styles.description}>
+                        {event.description}
+                      </Text>
+                      <Button
+                        className={styles.eventLocationButton}
+                        variant="simple"
+                        startIcon={<SquareArrowOutUpRight size={12} />}
+                        onClick={() => router.push(`/places/${place._id}`)}
+                      >
+                        {place.name}
                       </Button>
                     </div>
-                  ))}
+                  </div>
+                  <Button
+                    variant="simple"
+                    className={styles.eventButton}
+                    onClick={() =>
+                      router.push(`places/${place._id}/events/${event._id}`)
+                    }
+                  >
+                    <SquareArrowOutUpRight size={12} />
+                  </Button>
                 </div>
-              </div>
-            )}
+              );
+            })}
           </div>
-        ))}
+        )}
+        <div className={styles.section}>
+          <Text className={styles.sectionTitle}>
+            Lieux partenaires ({placePartnerships.length})
+          </Text>
+
+          {placePartnerships.map((partnership) => {
+            const place =
+              typeof partnership.place === "object" ? partnership.place : null;
+            if (!place) return null;
+            return (
+              <div key={partnership._id} className={styles.card}>
+                <div className={styles.cardInfo}>
+                  <div
+                    className={styles.imageContainer}
+                    onClick={() => router.push(`/places/${place._id}`)}
+                  >
+                    <Image
+                      src={
+                        typeof place.image === "string"
+                          ? place.image
+                          : place.image?.urls.thumbnail ||
+                            "/images/default-place.png"
+                      }
+                      alt={place.name}
+                      width={48}
+                      height={48}
+                    />
+                  </div>
+                  <div className={styles.cardText}>
+                    <Text as="h5">{place.name}</Text>
+                    <Text as="p" className={styles.locationText}>
+                      {place.location?.label}
+                    </Text>
+                  </div>
+                </div>
+                <Button
+                  variant="simple"
+                  className={styles.mapButton}
+                  onClick={() => handleMapButtonClick(place)}
+                >
+                  <Map size={12} />
+                </Button>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

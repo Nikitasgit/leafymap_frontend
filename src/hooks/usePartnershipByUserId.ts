@@ -8,10 +8,7 @@ export const usePartnershipByUserId = (
   userId?: string,
   queryParams: Record<string, string> = {}
 ) => {
-  const [partnerships, setPartnerships] = useState<{
-    eventPartnerships: Partnership[];
-    placePartnerships: Partnership[];
-  }>({ eventPartnerships: [], placePartnerships: [] });
+  const [partnerships, setPartnerships] = useState<Partnership[]>([]);
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
 
@@ -27,11 +24,10 @@ export const usePartnershipByUserId = (
         }/api/partnerships/user/${userId}?${searchParams.toString()}`;
 
         const response = await axios.get(url);
-        console.log(response);
         if (response.data && response.data.data) {
           setPartnerships(response.data.data);
         } else {
-          setPartnerships({ eventPartnerships: [], placePartnerships: [] });
+          setPartnerships([]);
           showError("Invalid response from server");
         }
       } catch (err) {
@@ -39,7 +35,7 @@ export const usePartnershipByUserId = (
           err instanceof Error
             ? err.message
             : "Erreur lors du chargement des partenariats";
-        setPartnerships({ eventPartnerships: [], placePartnerships: [] });
+        setPartnerships([]);
         showError(errorMessage);
       }
     };

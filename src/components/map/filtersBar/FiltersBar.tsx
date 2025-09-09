@@ -29,7 +29,7 @@ type PlaceSearchResult = {
 };
 
 type SearchResult = {
-  _id: string;
+  id: string;
   type: "user" | "place" | "filters" | null;
 };
 
@@ -97,7 +97,7 @@ const FiltersBar = ({
   const handleTypeSelect = (type: { value: string }) => {
     if (selectedItem.type !== "filters") {
       handleSelect({
-        _id: "",
+        id: "",
         type: null,
       });
     }
@@ -130,12 +130,12 @@ const FiltersBar = ({
   ) => {
     if (searchType.label === "Membres") {
       handleSelect({
-        _id: item._id,
+        id: item._id,
         type: "user",
       });
     } else {
       handleSelect({
-        _id: item._id,
+        id: item._id,
         type: "place",
       });
     }
@@ -200,7 +200,7 @@ const FiltersBar = ({
       <button
         type="button"
         className={styles.filterButton}
-        onClick={() => handleSelect({ _id: "", type: "filters" })}
+        onClick={() => handleSelect({ id: "", type: "filters" })}
         disabled={loading}
       >
         <Filter size={20} />

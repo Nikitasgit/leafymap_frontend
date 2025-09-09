@@ -29,9 +29,10 @@ const ProfilePictureUploader = ({
   reference,
   rounded = false,
 }: ProfilePictureUploaderProps) => {
-  const [preview, setPreview] = useState<Pick<IImage, "_id" | "url"> | null>(
+  const [preview, setPreview] = useState<Pick<IImage, "_id" | "urls"> | null>(
     initialImage || null
   );
+
   const { deleteImages, isLoading: isLoadingDeleteImages } = useDeleteImages();
   const { submitImages, isLoading: isLoadingImages } = useSubmitImages();
   const isLoading = isLoadingDeleteImages || isLoadingImages;
@@ -53,7 +54,7 @@ const ProfilePictureUploader = ({
         onImageUploaded(response.images[0]._id);
         setPreview({
           _id: response.images[0]._id,
-          url: response.images[0].signedUrl,
+          urls: response.images[0].signedUrls,
         });
       }
     } catch {
@@ -106,7 +107,7 @@ const ProfilePictureUploader = ({
       {preview || !isOwner ? (
         <div className={styles.imageContainer}>
           <Image
-            src={preview?.url || defaultAvatar}
+            src={preview?.urls?.thumbnail || defaultAvatar}
             alt="Photo de profil"
             width={size === "small" ? 80 : size === "large" ? 120 : 100}
             height={size === "small" ? 80 : size === "large" ? 120 : 100}

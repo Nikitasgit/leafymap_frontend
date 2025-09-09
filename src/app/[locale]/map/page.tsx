@@ -18,7 +18,7 @@ const defaultFilters: MapFilters = {
 };
 
 type SearchResult = {
-  _id: string;
+  id: string;
   type: "place" | "user" | "filters" | null;
 };
 
@@ -39,7 +39,7 @@ const MapPage = () => {
   };
 
   const handleSelect = (item: SearchResult) => {
-    setSelectedItem({ id: item._id, type: item.type });
+    setSelectedItem({ id: item.id, type: item.type });
     if (item.type !== "filters") {
       setFilters({
         ...defaultFilters,

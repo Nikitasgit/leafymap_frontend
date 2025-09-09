@@ -16,8 +16,16 @@ const useSubmitImages = () => {
   interface UploadImagesResponse {
     images: Array<{
       _id: string;
-      url: string;
-      signedUrl: string;
+      urls: {
+        original: string;
+        thumbnail: string;
+        medium: string;
+      };
+      signedUrls: {
+        original: string;
+        thumbnail: string;
+        medium: string;
+      };
       referenceType: string;
       reference: string;
       type: string;
@@ -53,7 +61,6 @@ const useSubmitImages = () => {
 
       return response.data.data;
     } catch (err: unknown) {
-      console.log(err);
       if (err instanceof AxiosError && err.response?.data.message) {
         showError(err.response.data.message);
       } else {
