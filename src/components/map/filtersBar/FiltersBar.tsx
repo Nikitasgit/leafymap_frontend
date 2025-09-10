@@ -8,6 +8,7 @@ import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { MapFilters, ExtendedMapRef } from "@/types/map";
 import { useFindPlaces } from "@/hooks/useFindPlaces";
 import { useFindUsers } from "@/hooks/useFindUsers";
+import Button from "@/components/common/buttons/button/Button";
 
 type CreatorSearchResult = {
   _id: string;
@@ -112,7 +113,10 @@ const FiltersBar = ({
       const creators = await searchUsers({ creatorName: query });
       const suggestions = creators.map((user) => ({
         _id: user._id,
-        image: typeof user.image === "string" ? user.image : user.image?.url,
+        image:
+          typeof user.image === "string"
+            ? user.image
+            : user.image?.urls.thumbnail,
         name: user.creatorName,
         categories: user.creatorCategories?.map((category) => ({
           name: category.name,
@@ -197,15 +201,15 @@ const FiltersBar = ({
           placeholder={searchType.placeholder}
         />
       </div>
-      <button
+      <Button
+        variant="secondary"
         type="button"
-        className={styles.filterButton}
         onClick={() => handleSelect({ id: "", type: "filters" })}
         disabled={loading}
+        startIcon={<Filter size={17} />}
       >
-        <Filter size={20} />
         Filtres
-      </button>
+      </Button>
     </div>
   );
 };

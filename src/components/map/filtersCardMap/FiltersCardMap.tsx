@@ -3,7 +3,6 @@ import Button from "@/components/common/buttons/button/Button";
 import Text from "@/components/common/typography/Text";
 import styles from "./FiltersCardMap.module.scss";
 import { RotateCcw } from "lucide-react";
-import DateFilter from "./dateFilter/DateFilter";
 import CategoryFilter from "./categoryFilter/CategoryFilter";
 import { MapFilters } from "@/types/map";
 import { useTranslation } from "react-i18next";
@@ -31,8 +30,6 @@ const FiltersCardMap = ({
     const resetFilters = {
       ...filters,
       placeCategories: [],
-      startDate: null,
-      endDate: null,
     };
     setLocalFilters(resetFilters);
     if (onResetFilters) {
@@ -47,14 +44,6 @@ const FiltersCardMap = ({
     });
   };
 
-  const handleDateChange = (startDate: Date | null, endDate: Date | null) => {
-    setLocalFilters({
-      ...localFilters,
-      startDate,
-      endDate,
-    });
-  };
-
   const handleApplyFilters = () => {
     if (onApplyFilters) {
       onApplyFilters(localFilters);
@@ -66,37 +55,29 @@ const FiltersCardMap = ({
   return (
     <div className={styles.filtersCardMap}>
       <div className={styles.header}>
-        <h2 className={styles.title}>{t("filters")}</h2>
+        <Text as="h3" className={styles.title}>
+          {t("filters")}
+        </Text>
       </div>
       <div className={styles.content}>
+        <CategoryFilter
+          selectedCategories={localFilters.placeCategories}
+          onCategoryChange={handleCategoryChange}
+        />
+
         <Button
-          variant="primary"
+          variant="outline"
+          startIcon={<RotateCcw size={14} />}
           onClick={handleResetFilters}
-          className={styles.resetButton}
+          fullWidth
         >
-          <RotateCcw size={14} />
           <Text>Réinitialiser les filtres</Text>
         </Button>
 
-        <Button
-          variant="primary"
-          onClick={handleApplyFilters}
-          className={styles.applyButton}
-        >
+        <Button fullWidth onClick={handleApplyFilters}>
           <Text>Appliquer les filtres</Text>
         </Button>
       </div>
-      <CategoryFilter
-        selectedCategories={localFilters.placeCategories}
-        onCategoryChange={handleCategoryChange}
-      />
-      <DateFilter
-        startDate={localFilters.startDate || null}
-        endDate={localFilters.endDate || null}
-        onDateChange={handleDateChange}
-        isPeriod={false}
-        setIsPeriod={() => {}}
-      />
     </div>
   );
 };

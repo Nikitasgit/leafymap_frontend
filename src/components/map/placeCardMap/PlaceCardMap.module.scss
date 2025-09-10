@@ -4,50 +4,18 @@
 
 .placeCardMap {
   width: 100%;
-  &.fadeOut {
-    opacity: 0.8;
-  }
-
-  &.fadeIn {
-    opacity: 1;
-  }
-
   .imageContainer {
     position: relative;
     width: 100%;
     height: 200px;
     overflow: hidden;
     cursor: pointer;
+    background-color: $grey-50;
 
     img {
       width: 100%;
       object-fit: cover;
       object-position: center;
-    }
-
-    .currentImage {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transition: opacity 0.2s ease-in-out;
-    }
-
-    .nextImage {
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      transition: opacity 0.2s ease-in-out;
-      animation: fadeInImage 0.2s ease-in-out forwards;
-    }
-  }
-
-  @keyframes fadeInImage {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
     }
   }
 

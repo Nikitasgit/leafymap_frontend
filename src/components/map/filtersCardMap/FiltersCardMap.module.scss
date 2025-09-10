@@ -8,41 +8,40 @@
     flex-wrap: wrap;
     gap: spacing(1);
     padding: spacing(1.5);
-  }
-
-  .categoryItem {
-    @include flex(row, center, center, spacing(0.5));
-    padding: spacing(0.5);
-    border: 1px solid $grey-200;
-    border-radius: 8px;
-    cursor: pointer;
-    background-color: $grey-100;
-    font-size: rem(13);
-    color: $grey-400;
-
-    &:hover {
-      border-color: $grey-300;
-      background-color: $grey-50;
-    }
-
-    &.selected {
-      border-color: $primary-color;
-      border: 1px solid $primary-color;
-      background-color: rgba($primary-color, 0.1);
-      color: $primary-color;
+    .categoryItem {
+      @include flex(row, center, center, spacing(0.5));
+      padding: spacing(0.5);
+      border: 1px solid $grey-200;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: $grey-100;
+      font-size: rem(13);
+      color: $grey-400;
 
       &:hover {
-        background-color: rgba($primary-color, 0.15);
+        border-color: $grey-300;
+        background-color: $grey-50;
+      }
+
+      &.selected {
+        border-color: $primary-color;
+        border: 1px solid $primary-color;
+        background-color: rgba($primary-color, 0.1);
+        color: $primary-color;
+
+        &:hover {
+          background-color: rgba($primary-color, 0.15);
+        }
       }
     }
-  }
 
-  .selectedText {
-    color: $primary-color;
-  }
+    .selectedText {
+      color: $primary-color;
+    }
 
-  .unselectedText {
-    color: $grey-400;
+    .unselectedText {
+      color: $grey-400;
+    }
   }
 }
 
@@ -51,65 +50,7 @@
   border-bottom: 1px solid $grey-200;
 }
 
-.title {
-  font-size: rem(18);
-  font-weight: 500;
-  color: $grey-600;
-  margin: 0;
-  letter-spacing: 0.5px;
-}
-
 .content {
-  padding: spacing(1.5);
+  padding: spacing(2);
   @include flex(column, center, center, spacing(1));
-}
-
-.resetButton {
-  @include flex(row, center, center, spacing(0.5));
-  width: 100%;
-  padding: spacing(0.75) spacing(1.5);
-  font-size: rem(14);
-  border-radius: 8px;
-  border: 1px solid $grey-300;
-  background: transparent;
-  color: $grey-600;
-  transition: all 0.15s ease-in-out;
-  font-weight: 500;
-
-  &:hover {
-    background: $grey-100;
-    border-color: $grey-400;
-    color: $grey-600;
-  }
-
-  &:active {
-    transform: translateY(1px);
-  }
-
-  svg {
-    color: $grey-500;
-  }
-}
-
-.applyButton {
-  @include flex(row, center, center, spacing(0.5));
-  width: 100%;
-  padding: spacing(0.75) spacing(1.5);
-  font-size: rem(14);
-  border-radius: 8px;
-  border: 1px solid $primary-color;
-  background: $primary-color;
-  color: $white;
-  transition: all 0.15s ease-in-out;
-  font-weight: 500;
-
-  &:hover {
-    background: darken($primary-color, 5%);
-    border-color: darken($primary-color, 5%);
-    color: $white;
-  }
-
-  &:active {
-    transform: translateY(1px);
-  }
 }

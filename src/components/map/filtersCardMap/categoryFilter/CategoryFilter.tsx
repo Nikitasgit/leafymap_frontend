@@ -31,7 +31,6 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
         <Tag size={16} />
         <Text className={styles.title}>{t("categories")}</Text>
       </div>
-
       <ul className={styles.categoriesList}>
         {placeCategories.map((category) => {
           const isSelected = selectedCategories.includes(category._id);

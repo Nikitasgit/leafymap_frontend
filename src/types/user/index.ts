@@ -13,7 +13,7 @@ export interface User extends BaseEntity {
   userType: UserType;
   phone: string;
   website: string;
-  image: string | Image;
+  image: Image;
   description: string;
   location?: LocationWithLabel;
   deleted?: boolean;

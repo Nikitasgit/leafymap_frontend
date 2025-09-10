@@ -7,7 +7,7 @@ import { Period } from "./schedule";
 export interface Event extends BaseEntity {
   name: string;
   description: string;
-  image: string | Image;
+  image: Image;
   schedule: Period[];
   partnerships: Partnership[];
   status:

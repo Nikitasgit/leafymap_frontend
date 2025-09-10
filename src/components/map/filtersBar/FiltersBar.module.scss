@@ -66,14 +66,3 @@
     background-color: $grey-100;
   }
 }
-
-.filterButton {
-  background-color: $white;
-  border: 1px solid $grey-200;
-  padding: 8px $spacing-medium;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: $spacing-small;
-}

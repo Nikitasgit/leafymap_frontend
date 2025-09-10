@@ -9,3 +9,16 @@
 
 // Components
 @use "components/sonner";
+
+.skeleton {
+  animation: skeleton-loading 2s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: rgb(245, 245, 245);
+  }
+  100% {
+    background-color: rgb(230, 230, 230);
+  }
+}

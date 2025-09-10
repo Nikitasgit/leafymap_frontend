@@ -27,7 +27,9 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
 
   const { user, isLoading: isLoadingUser } = useUser(userId);
   const { partnerships, isLoading: isLoadingPartnerships } =
-    usePartnershipByUserId(userId, { asCollaborator: "true" });
+    usePartnershipByUserId(userId, {
+      asCollaborator: "true",
+    });
   const placePartnerships = partnerships.filter(
     (partnership) => partnership.type === "place"
   );
@@ -48,7 +50,6 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
   };
 
   if (isLoading || !user || isLoadingPartnerships) return <LoadingBar />;
-  console.log(eventPartnerships);
 
   return (
     <div className={styles.userCardMap}>
@@ -59,9 +60,9 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
         >
           <Image
             src={
-              typeof user?.image === "object"
-                ? user?.image.urls.thumbnail
-                : user?.image
+              user.image?.urls.thumbnail
+                ? user.image.urls.thumbnail
+                : "/images/default-avatar.png"
             }
             onClick={() => router.push(`/users/${user?._id}`)}
             alt={user.creatorName}
@@ -97,7 +98,7 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
         {eventPartnerships && eventPartnerships.length > 0 && (
           <div className={styles.section}>
             <Text className={styles.sectionTitle}>
-              Evenements ({eventPartnerships.length}):
+              Evenements en cours et à venir ({eventPartnerships.length}):
             </Text>
             {eventPartnerships.map((partnership) => {
               const event =
@@ -117,8 +118,8 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
                     <div className={styles.imageContainer}>
                       <Image
                         src={
-                          typeof event.image === "string"
-                            ? event.image
+                          event.image?.urls
+                            ? event.image.urls.thumbnail
                             : "/images/default-event.png"
                         }
                         alt={event.name}
@@ -200,10 +201,9 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
                   >
                     <Image
                       src={
-                        typeof place.image === "string"
-                          ? place.image
-                          : place.image?.urls.thumbnail ||
-                            "/images/default-place.png"
+                        place.image?.urls.thumbnail
+                          ? place.image.urls.thumbnail
+                          : "/images/default-place.png"
                       }
                       alt={place.name}
                       width={48}
