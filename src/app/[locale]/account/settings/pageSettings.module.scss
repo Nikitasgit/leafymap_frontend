@@ -1,0 +1,58 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.pageContainer {
+  min-height: calc(100vh - $navbar-height);
+  background: linear-gradient(135deg, $grey-50 0%, $white 100%);
+  padding: spacing(4);
+
+  .container {
+    min-height: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: spacing(3);
+    background-color: $white;
+    border-radius: 8px;
+  }
+}
+
+.settingsContainer {
+  margin-top: spacing(3);
+}
+
+.deleteAccountCard {
+  @include flex(row, space-between, center, spacing(1.5));
+  background-color: $white;
+  border: 1px solid $grey-300;
+  border-radius: 8px;
+  padding: spacing(1.5);
+  box-shadow: 0 2px 6px rgba($grey-400, 0.1);
+
+  .deleteAccountInfo {
+    flex: 1;
+
+    .titleRow {
+      @include flex(row, flex-start, center, spacing(0.5));
+      margin-bottom: spacing(0.5);
+    }
+
+    .deleteTitle {
+      color: $error-color;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .deleteDescription {
+      color: $grey-600;
+      line-height: 1.4;
+      font-size: 0.85rem;
+      margin: 0;
+    }
+
+    .infoIcon {
+      color: $error-color;
+    }
+  }
+
+}

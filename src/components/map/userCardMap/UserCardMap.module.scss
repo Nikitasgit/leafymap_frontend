@@ -12,6 +12,7 @@
     .creatorInfo {
       @include flex(row, flex-start, center, $spacing-medium);
       cursor: pointer;
+      width: 100%;
 
       .creatorImage {
         border-radius: 50%;

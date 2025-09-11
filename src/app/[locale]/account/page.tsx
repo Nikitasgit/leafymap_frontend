@@ -38,6 +38,7 @@ export default function AccountPage() {
 
   return (
     <main className={styles.accountPage}>
+      
       <div className={styles.header}>
         <div className={styles.userInfo}>
           <Text as="h1" className={styles.username}>

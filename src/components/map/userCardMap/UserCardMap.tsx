@@ -30,6 +30,8 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
     usePartnershipByUserId(userId, {
       asCollaborator: "true",
     });
+  console.log(partnerships);
+
   const placePartnerships = partnerships.filter(
     (partnership) => partnership.type === "place"
   );
