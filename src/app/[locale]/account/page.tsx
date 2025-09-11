@@ -38,7 +38,6 @@ export default function AccountPage() {
 
   return (
     <main className={styles.accountPage}>
-      
       <div className={styles.header}>
         <div className={styles.userInfo}>
           <Text as="h1" className={styles.username}>
@@ -97,7 +96,7 @@ export default function AccountPage() {
         )}
       </div>
 
-      {user?.places && (
+      {user?.places && user.places.length > 0 && (
         <div className={styles.placesSection}>
           <PlacesEditList places={user?.places} />
         </div>

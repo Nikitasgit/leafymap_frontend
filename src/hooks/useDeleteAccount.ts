@@ -1,33 +1,22 @@
 "use client";
 
-import { useState } from "react";
 import axios from "axios";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
-import { useRouter } from "next/navigation";
 
 export const useDeleteAccount = () => {
-  const [isDeleting, setIsDeleting] = useState(false);
-  const { withLoading } = useLoading(false);
+  const { isLoading: isLoadingDeleteAccount, withLoading } = useLoading(false);
   const { showSuccess, showError } = useToast();
-  const router = useRouter();
-
+  const isLoading = isLoadingDeleteAccount;
   const deleteAccount = async () => {
     try {
-      setIsDeleting(true);
-      const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/users`,
-        {
-          withCredentials: true,
-        }
-      );
-
-      if (response.status === 200) {
-        showSuccess("Votre compte a été supprimé avec succès");
-        router.push("/");
-        window.location.reload();
-      }
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
+        withCredentials: true,
+      });
+      showSuccess("Compte supprimé avec succès");
+      window.location.reload();
     } catch (err: unknown) {
+      console.error("Error deleting account:", err);
       let errorMessage = "Erreur lors de la suppression du compte";
 
       if (err && typeof err === "object") {
@@ -48,7 +37,6 @@ export const useDeleteAccount = () => {
 
       showError(errorMessage);
     } finally {
-      setIsDeleting(false);
     }
   };
 
@@ -69,6 +57,6 @@ export const useDeleteAccount = () => {
 
   return {
     deleteAccount: deleteAccountWithConfirmation,
-    isDeleting,
+    isLoading,
   };
 };

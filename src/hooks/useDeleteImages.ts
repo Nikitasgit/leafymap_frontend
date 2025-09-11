@@ -6,27 +6,9 @@ const useDeleteImages = () => {
   const { isLoading, withLoading } = useLoading();
   const { showError } = useToast();
 
-  interface DeleteImagesResponse {
-    deletedFromDB: number;
-    deletedFromS3: number;
-    failedS3Deletions: number;
-    s3DeleteResults: Array<
-      | {
-          imageId: string;
-          url: string;
-          deletedFromS3: boolean;
-        }
-      | {
-          error: string;
-        }
-    >;
-  }
-
-  const deleteImages = async (
-    images: string[]
-  ): Promise<DeleteImagesResponse | undefined> => {
+  const deleteImages = async (images: string[]): Promise<void> => {
     try {
-      const response = await withLoading(() =>
+      await withLoading(() =>
         axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/images`, {
           data: {
             images,
@@ -37,7 +19,6 @@ const useDeleteImages = () => {
           withCredentials: true,
         })
       );
-      return response.data.data;
     } catch (err: unknown) {
       if (axios.isAxiosError(err) && err.response?.data) {
         if (err.response.data.data) {
@@ -54,7 +35,9 @@ const useDeleteImages = () => {
           showError(err.response.data.message);
         }
       } else {
-        showError("Une erreur inattendue s'est produite lors de la suppression des images");
+        showError(
+          "Une erreur inattendue s'est produite lors de la suppression des images"
+        );
       }
     }
   };

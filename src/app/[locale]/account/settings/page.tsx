@@ -10,7 +10,9 @@ import InfoIcon from "@/components/common/info/InfoIcon";
 import Text from "@/components/common/typography/Text";
 
 const Page = () => {
-  const { deleteAccount, isDeleting } = useDeleteAccount();
+  const { deleteAccount, isLoading } = useDeleteAccount();
+
+
 
   return (
     <main className={styles.pageContainer}>
@@ -43,10 +45,10 @@ const Page = () => {
             <Button
               variant="secondary"
               onClick={deleteAccount}
-              disabled={isDeleting}
+              disabled={isLoading}
               startIcon={<Trash2 size={16} />}
             >
-              {isDeleting ? "Suppression..." : "Supprimer"}
+              {isLoading ? "Suppression..." : "Supprimer"}
             </Button>
           </div>
         </div>

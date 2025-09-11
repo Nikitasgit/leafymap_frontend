@@ -67,11 +67,9 @@ const ProfilePictureUploader = ({
   const handleDeleteImage = async () => {
     if (disabled || !isOwner || !preview) return;
     try {
-      const success = await deleteImages([preview._id]);
-      if (success) {
-        setPreview(null);
-        onImageUploaded(null);
-      }
+      await deleteImages([preview._id]);
+      setPreview(null);
+      onImageUploaded(null);
     } catch (error) {
       console.error("Error deleting image:", error);
     }
