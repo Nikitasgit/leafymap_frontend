@@ -22,10 +22,18 @@ export default function AccountPage() {
   const buttonParameters =
     userType === "creator"
       ? { route: "/account/update-creator", text: "Modifier mon profil" }
-      : userType === "guest" && {
+      : userType === "guest"
+      ? {
           route: "/account/create",
           text: "Ajouter mon activité",
-        };
+        }
+      : userType === "organizer" && user?.places && user.places.length < 3
+      ? {
+          route: "/account/places/create",
+          text: "Ajouter un lieu",
+        }
+      : null;
+
   if (isLoadingUser || !user) return <LoadingBar />;
 
   const handleImageUploaded = async (imageId: string | null) => {

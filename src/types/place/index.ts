@@ -14,7 +14,7 @@ export interface Place extends BaseEntity, ContactInfo {
   categories: string[];
   defaultSchedule: DefaultSchedule;
   isCreatorPlace?: boolean;
-  image?: Image;
+  image?: string | Image;
   active: boolean;
   rating: number;
   placeType: PlaceType[];

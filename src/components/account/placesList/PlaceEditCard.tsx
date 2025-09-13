@@ -3,14 +3,16 @@ import { Place } from "@/types/place";
 import { useRouter } from "next/navigation";
 import Text from "@/components/common/typography/Text";
 import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader";
-import { Edit3 } from "lucide-react";
+import { Edit3, Trash2 } from "lucide-react";
 import styles from "./PlaceEditCard.module.scss";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
+import useDeletePlace from "@/hooks/useDeletePlace";
 import { Image } from "@/types/image";
 
 const PlaceEditCard = ({ place }: { place: Place }) => {
   const router = useRouter();
   const { submitPlace, isLoading: isLoadingPlace } = useSubmitPlace();
+  const { deletePlace, isLoading: isDeletingPlace } = useDeletePlace();
 
   const handleImageUploaded = async (imageId: string | null) => {
     if (imageId) {
@@ -42,14 +44,25 @@ const PlaceEditCard = ({ place }: { place: Place }) => {
             {place.name}
           </Text>
           {!place.isCreatorPlace ? (
-            <Button
-              variant="simple"
-              onClick={() => router.push(`account/places/${place._id}`)}
-              className={styles.editIcon}
-              aria-label="Modifier"
-            >
-              <Edit3 size={16} />
-            </Button>
+            <div className={styles.actionButtons}>
+              <Button
+                variant="simple"
+                onClick={() => deletePlace(place._id)}
+                className={styles.deleteIcon}
+                aria-label="Supprimer"
+                disabled={isDeletingPlace}
+              >
+                <Trash2 size={16} />
+              </Button>
+              <Button
+                variant="simple"
+                onClick={() => router.push(`account/places/${place._id}`)}
+                className={styles.editIcon}
+                aria-label="Modifier"
+              >
+                <Edit3 size={16} />
+              </Button>
+            </div>
           ) : (
             <span
               className={`${styles.placeStatus} ${

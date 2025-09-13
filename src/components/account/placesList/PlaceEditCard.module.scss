@@ -27,6 +27,10 @@
   width: 100%;
 }
 
+.actionButtons {
+  @include flex(row, flex-end, center, spacing(0.2));
+}
+
 .title {
   color: $grey-700;
   font-weight: 600;
@@ -36,6 +40,13 @@
   color: $grey-500;
   &:hover {
     color: $primary-color;
+  }
+}
+
+.deleteIcon {
+  color: $error-color;
+  &:hover {
+    color: $error-color;
   }
 }
 

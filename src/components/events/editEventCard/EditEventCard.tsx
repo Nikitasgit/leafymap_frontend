@@ -3,13 +3,14 @@ import { Event } from "@/types/place/event";
 import { useRouter } from "next/navigation";
 import Text from "@/components/common/typography/Text";
 import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader";
-import { Edit3, Calendar, Eye } from "lucide-react";
+import { Edit3, Calendar, Eye, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { getEventDateRange } from "@/utils/eventDates";
 import styles from "./EditEventCard.module.scss";
 import { Image } from "@/types/image";
 import useSubmitEvent from "@/hooks/useSubmitEvent";
+import useDeleteEvent from "@/hooks/useDeleteEvent";
 
 interface EditEventCardProps {
   event: Event;
@@ -19,6 +20,7 @@ interface EditEventCardProps {
 const EditEventCard = ({ event, placeId }: EditEventCardProps) => {
   const router = useRouter();
   const { submitEvent } = useSubmitEvent();
+  const { deleteEvent, isLoading: isDeletingEvent } = useDeleteEvent();
 
   const getEventStatus = (status: string) => {
     switch (status) {
@@ -79,6 +81,15 @@ const EditEventCard = ({ event, placeId }: EditEventCardProps) => {
               aria-label="Voir l'événement"
             >
               <Eye size={16} />
+            </Button>
+            <Button
+              variant="simple"
+              onClick={() => deleteEvent(event._id, placeId)}
+              className={styles.deleteIcon}
+              aria-label="Supprimer"
+              disabled={isDeletingEvent}
+            >
+              <Trash2 size={16} />
             </Button>
             <Button
               variant="simple"

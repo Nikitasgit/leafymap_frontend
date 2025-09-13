@@ -27,7 +27,7 @@ const PlaceForm = ({
 }: {
   place: InitialPlaceData;
   userType: "creator" | "organizer" | "guest";
-  creatorName: string;
+  creatorName?: string;
   onChange: FormDataChangeHandler;
   errors?: Record<string, string>;
   initialPlaceLocation?: Location | null;
@@ -54,7 +54,7 @@ const PlaceForm = ({
 
   const userLocation =
     latitude && longitude ? { latitude, longitude } : undefined;
-  const userMarker = buildUserMarker(place, creatorName, userLocation);
+  const userMarker = buildUserMarker(place, creatorName || "", userLocation);
 
   useEffect(() => {
     if (mapReady && userMarker) {

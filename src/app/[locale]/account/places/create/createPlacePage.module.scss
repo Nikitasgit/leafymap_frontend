@@ -1,0 +1,16 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.pageContainer {
+  min-height: calc(100vh - $navbar-height);
+  background: linear-gradient(135deg, $grey-50 0%, $white 100%);
+  padding: spacing(2);
+}
+
+.container {
+  @include flex(column, flex-start, stretch, spacing(3));
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: spacing(3);
+}
