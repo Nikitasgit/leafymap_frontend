@@ -18,7 +18,7 @@ const CategorySelectorInput = ({
 }: {
   onUserChange: FormDataChangeHandler;
   onPlaceChange: FormDataChangeHandler;
-  value: string[];
+  value: SubCategory[];
   error?: boolean;
   errorMessage?: string;
 }) => {
@@ -46,7 +46,7 @@ const CategorySelectorInput = ({
     onUserChange({
       target: {
         name: "creatorCategories",
-        value: [subCategory._id],
+        value: [subCategory] as SubCategory[],
       },
     });
     onPlaceChange({
@@ -63,7 +63,7 @@ const CategorySelectorInput = ({
 
   useEffect(() => {
     if (value && value.length > 0) {
-      const sub = creatorCategories.find((s) => value.includes(s._id));
+      const sub = value[0];
       if (sub) {
         setInputValue(sub.name);
         if (creatorCategories.length > 0) {

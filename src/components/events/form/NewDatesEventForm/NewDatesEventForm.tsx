@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { EventFormData } from "../EventForm/EventForm";
+import { initialEventData } from "../EventForm/EventForm";
 import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import Button from "@/components/common/buttons/button/Button";
 import { registerLocale } from "react-datepicker";
@@ -17,7 +17,7 @@ const NewDatesEventForm = ({
   data,
 }: {
   onChange: FormDataChangeHandler;
-  data: EventFormData;
+  data: initialEventData;
 }) => {
   const { showError } = useToast();
   const [startDate, setStartDate] = useState<Date | null>(null);

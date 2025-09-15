@@ -64,14 +64,13 @@ const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
                 }
               }}
               src={
-                place?.image?.urls
-                  ? place?.image.urls.medium
+                typeof place?.image === "object" && place?.image?.urls
+                  ? place.image.urls.medium
                   : "/images/default-event.png"
               }
               alt={place?.name || "Place image"}
               width={100}
               height={200}
-        
             />
           )}
         </div>

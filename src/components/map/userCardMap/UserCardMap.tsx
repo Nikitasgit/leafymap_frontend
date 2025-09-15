@@ -62,7 +62,7 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
         >
           <Image
             src={
-              user.image?.urls.thumbnail
+              typeof user.image === "object" && user.image?.urls?.thumbnail
                 ? user.image.urls.thumbnail
                 : "/images/default-avatar.png"
             }
@@ -120,7 +120,7 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
                     <div className={styles.imageContainer}>
                       <Image
                         src={
-                          event.image?.urls
+                          typeof event.image === "object" && event.image?.urls
                             ? event.image.urls.thumbnail
                             : "/images/default-event.png"
                         }
@@ -203,7 +203,7 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
                   >
                     <Image
                       src={
-                        place.image?.urls.thumbnail
+                        typeof place.image === "object" && place.image?.urls
                           ? place.image.urls.thumbnail
                           : "/images/default-place.png"
                       }

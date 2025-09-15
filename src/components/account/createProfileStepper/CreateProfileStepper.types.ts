@@ -4,6 +4,7 @@ import { PlaceType } from "@/types/place/placeCaterories";
 import { Partnership } from "@/types/partnerships";
 import { User } from "@/types/user";
 import { Place } from "@/types/place";
+import { SubCategory } from "@/types/categories";
 
 export interface BaseProfileFormData {
   userType: string;
@@ -47,7 +48,8 @@ export type FormDataChangeHandler = (
             | DefaultSchedule
             | Period[]
             | boolean
-            | null;
+            | null
+            | SubCategory[];
         };
       }
 ) => void;

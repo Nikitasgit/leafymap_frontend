@@ -113,6 +113,7 @@ const DayInput = ({ day, schedule, onChange }: DayInputProps) => {
                 getExcludedTimes={(isStartTime) =>
                   getStrictExcludedTimes(isStartTime, index, schedule)
                 }
+                canRemove={true}
               />
             ))}
           </div>
