@@ -1,6 +1,7 @@
 @use "../../../../styles/abstracts/variables" as *;
 @use "../../../../styles/abstracts/functions" as *;
 @use "../../../../styles/abstracts/mixins" as *;
+@use "sass:color";
 
 .container {
   @include flex(row, flex-start, center, spacing(2));
@@ -21,7 +22,7 @@
   background: linear-gradient(
     90deg,
     $primary-color 0%,
-    lighten($primary-color, 30%) 100%
+    color.adjust($primary-color, $lightness: 30%) 100%
   );
   border-radius: rem(2);
 }
