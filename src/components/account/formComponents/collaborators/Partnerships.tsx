@@ -27,7 +27,10 @@ const Partnerships = ({
     const users = await searchUsers({ creatorName: query });
     const suggestions = users.map((user) => ({
       _id: user._id,
-      image: typeof user.image === "object" ? user.image?.urls.thumbnail : user.image,
+      image:
+        typeof user.image === "object"
+          ? user.image?.urls.thumbnail
+          : user.image,
       name: user.creatorName,
       categories: user.creatorCategories?.map((category) => ({
         name: category.name,
@@ -62,7 +65,7 @@ const Partnerships = ({
         return;
       }
     } else {
-      const newPartnership:  Partnership= {
+      const newPartnership: Partnership = {
         _id: generateTempId(),
         collaborator: {
           _id: suggestion._id,
@@ -143,7 +146,7 @@ const Partnerships = ({
                     <Image
                       src={
                         (typeof partnership.collaborator?.image === "object"
-                          ? partnership.collaborator?.image?.url
+                          ? partnership.collaborator?.image?.urls.thumbnail
                           : partnership.collaborator?.image) ||
                         "https://i.pravatar.cc/40?img=3"
                       }
