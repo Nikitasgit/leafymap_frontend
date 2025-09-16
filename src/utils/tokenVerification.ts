@@ -19,13 +19,21 @@ export const verifyTokenServer = async (
   user?: VerifyTokenResponse["data"];
 }> => {
   try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+    if (!apiUrl) {
+      console.error("NEXT_PUBLIC_API_URL is not defined");
+      return { isValid: false };
+    }
+
     const response = await axios.get<VerifyTokenResponse>(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify`,
+      `${apiUrl}/api/auth/verify`,
       {
         headers: {
           Cookie: `token=${token}`,
         },
         withCredentials: true,
+        timeout: 10000, // 10 second timeout
       }
     );
 
@@ -37,6 +45,13 @@ export const verifyTokenServer = async (
     };
   } catch (error) {
     console.error("Token verification failed:", error);
+
+    // Log more details in development
+    if (process.env.NODE_ENV === "development") {
+      console.error("API URL:", process.env.NEXT_PUBLIC_API_URL);
+      console.error("Token:", token ? "Present" : "Missing");
+    }
+
     return {
       isValid: false,
     };

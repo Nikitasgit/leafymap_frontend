@@ -23,6 +23,7 @@ export async function middleware(request: NextRequest) {
     const token = request.cookies.get("token")?.value;
 
     if (!token) {
+      console.log("No token found, redirecting to signin");
       const signinUrl = new URL(`/auth/signin`, request.url);
       return NextResponse.redirect(signinUrl);
     }
@@ -30,6 +31,7 @@ export async function middleware(request: NextRequest) {
     const tokenVerification = await verifyTokenServer(token);
 
     if (!tokenVerification.isValid) {
+      console.log("Token verification failed, redirecting to signin");
       const signinUrl = new URL(`/auth/signin`, request.url);
       return NextResponse.redirect(signinUrl);
     }
