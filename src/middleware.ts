@@ -21,7 +21,7 @@ export async function middleware(request: NextRequest) {
 
   if (isProtectedRoute) {
     const token = request.cookies.get("token")?.value;
-
+    console.log("Token found, redirecting to account");
     if (!token) {
       console.log("No token found, redirecting to signin");
       const signinUrl = new URL(`/auth/signin`, request.url);
