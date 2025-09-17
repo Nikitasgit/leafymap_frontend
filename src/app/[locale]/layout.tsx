@@ -1,6 +1,6 @@
 import { Inter } from "next/font/google";
 import "@/styles/main.scss";
-
+import { Analytics } from "@vercel/analytics/next";
 import Navbar from "@/components/navbar/Navbar";
 import Providers from "@/components/Providers";
 
@@ -19,6 +19,7 @@ export default async function RootLayout({
     <html lang={locale}>
       <body className={inter.className}>
         <Providers locale={locale}>
+          <Analytics />
           <Navbar />
           <main data-locale={locale}>{children}</main>
         </Providers>
