@@ -18,7 +18,7 @@ const CategorySelectorInput = ({
 }: {
   onUserChange: FormDataChangeHandler;
   onPlaceChange: FormDataChangeHandler;
-  value: SubCategory[];
+  value: string[];
   error?: boolean;
   errorMessage?: string;
 }) => {
@@ -46,7 +46,7 @@ const CategorySelectorInput = ({
     onUserChange({
       target: {
         name: "creatorCategories",
-        value: [subCategory] as SubCategory[],
+        value: [subCategory._id],
       },
     });
     onPlaceChange({
@@ -63,14 +63,18 @@ const CategorySelectorInput = ({
 
   useEffect(() => {
     if (value && value.length > 0) {
-      const sub = value[0];
-      if (sub) {
-        setInputValue(sub.name);
-        if (creatorCategories.length > 0) {
+      const categoryId = value[0];
+      if (categoryId) {
+        // Find the SubCategory object by ID to get the name and category info
+        const subCategory = creatorCategories.find(
+          (cat) => cat._id === categoryId
+        );
+        if (subCategory) {
+          setInputValue(subCategory.name);
           onPlaceChange({
             target: {
               name: "placeType",
-              value: [sub.category.name],
+              value: [subCategory.category.name],
             },
           });
         }
