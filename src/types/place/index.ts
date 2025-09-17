@@ -20,3 +20,7 @@ export interface Place extends BaseEntity, ContactInfo {
   placeType: PlaceType[];
   creatorCategories?: SubCategory[];
 }
+
+export interface PlacePopulated extends Place {
+  image: Image;
+}

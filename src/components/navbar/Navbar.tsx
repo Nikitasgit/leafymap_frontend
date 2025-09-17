@@ -12,15 +12,19 @@ import { useAuth } from "@/hooks/useAuth";
 export default function Navbar() {
   const pathname = usePathname();
   const { t } = useTranslation("common");
+  const { loading, user, logout } = useAuth();
 
   const navItems = [
-    { href: "/", label: t("nav.home"), icon: Home },
-    { href: "/map", label: t("nav.map"), icon: Map },
-    { href: "/messages", label: t("nav.messages"), icon: MessageSquare },
-    { href: "/account", label: t("nav.account"), icon: User },
+    { href: "/", label: t("nav.home"), icon: Home, display: true },
+    { href: "/map", label: t("nav.map"), icon: Map, display: true },
+    {
+      href: "/messages",
+      label: t("nav.messages"),
+      icon: MessageSquare,
+      display: !!user,
+    },
+    { href: "/account", label: t("nav.account"), icon: User, display: !!user },
   ];
-
-  const { loading, user, logout } = useAuth();
 
   return (
     <nav className={styles.navbar}>
@@ -32,6 +36,7 @@ export default function Navbar() {
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
+            if (!item.display) return null;
             return (
               <Link
                 key={item.href}

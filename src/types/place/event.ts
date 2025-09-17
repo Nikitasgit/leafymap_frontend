@@ -20,3 +20,7 @@ export interface Event extends BaseEntity {
     | "unvalid";
   place: Place;
 }
+
+export interface EventPopulated extends Event {
+  image: Image;
+}

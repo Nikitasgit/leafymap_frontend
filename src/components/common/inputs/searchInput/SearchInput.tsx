@@ -136,7 +136,6 @@ const SearchInput = <
       }
     };
   }, []);
-
   return (
     <div ref={wrapperRef} className={styles.searchInput}>
       <TextField
@@ -165,9 +164,9 @@ const SearchInput = <
               onClick={() => handleSuggestionClick(sug)}
               className={styles.suggestionItem}
             >
-              {withIcons && sug.image && (
+              {withIcons && (
                 <Image
-                  src={sug.image}
+                  src={sug.image || "https://i.pravatar.cc/40?img=3"}
                   alt={getDisplayName(sug)}
                   width={32}
                   height={32}

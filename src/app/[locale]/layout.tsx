@@ -20,8 +20,8 @@ export default async function RootLayout({
     <html lang={locale}>
       <body className={inter.className}>
         <Providers locale={locale}>
-          <Analytics />
-          <SpeedInsights />
+          <Analytics debug={false} />
+          <SpeedInsights debug={false} />
           <Navbar />
           <main data-locale={locale}>{children}</main>
         </Providers>
