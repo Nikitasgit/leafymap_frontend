@@ -7,7 +7,10 @@ import Button from "@/components/common/buttons/button/Button";
 import { Check, X } from "lucide-react";
 import styles from "./PartnershipMessage.module.scss";
 import { Partnership, PartnershipPopulated } from "@/types/partnerships";
-import { getEventDateRange } from "@/utils/eventDates";
+import {
+  getEventDateRange,
+  getEventStatusFromSchedule,
+} from "@/utils/eventDates";
 import { format } from "date-fns";
 import Text from "../common/typography/Text";
 import { fr } from "date-fns/locale";
@@ -48,8 +51,12 @@ export default function PartnershipMessage({
     }
   };
 
-  const statusDisplay = getEventStatus(partnership.event?.status);
+  const eventStatus = ["cancelled", "full"].includes(partnership.event?.status)
+    ? partnership.event.status
+    : getEventStatusFromSchedule(partnership.event?.schedule || []);
+  const statusDisplay = getEventStatus(eventStatus);
   const dateRange = getEventDateRange(partnership.event?.schedule || []);
+
   return (
     <div className={styles.partnershipCard}>
       <div className={styles.placeContainer}>

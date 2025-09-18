@@ -1,0 +1,15 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.tabs {
+  @include flex(row, flex-start, center, 0);
+  border-bottom: 1px solid $grey-200;
+  background: $grey-50;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

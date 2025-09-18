@@ -108,24 +108,23 @@ const FiltersBar = ({
     });
   };
 
-  const handleSearch = async (query: string) => {
+  const handleSearch = async (
+    query: string
+  ): Promise<(CreatorSearchResult | PlaceSearchResult)[]> => {
     if (searchType.label === "Membres") {
       const creators = await searchUsers({ creatorName: query });
-      const suggestions = creators.map((user) => ({
+      const suggestions: CreatorSearchResult[] = creators.map((user) => ({
         _id: user._id,
         image:
           typeof user.image === "string"
             ? user.image
-            : user.image?.urls.thumbnail,
-        name: user.creatorName,
-        categories: user.creatorCategories?.map((category) => ({
-          name: category.name,
-        })),
+            : user.image?.urls.thumbnail || "",
+        name: user.creatorName || "",
       }));
       return suggestions;
     } else {
       const places = await searchPlaces(query);
-      return places;
+      return places as PlaceSearchResult[];
     }
   };
 

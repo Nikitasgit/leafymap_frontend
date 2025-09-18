@@ -54,7 +54,7 @@ const EditEventCard = ({ event, placeId }: EditEventCardProps) => {
       );
     }
   };
-
+  console.log(event);
   return (
     <div className={styles.card}>
       <ProfilePictureUploader

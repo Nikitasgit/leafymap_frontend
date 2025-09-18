@@ -1,3 +1,7 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+@use "@/styles/abstracts/mixins" as *;
+
 .partnershipCard {
   background: #ffffff;
   border: 1px solid #e5e7eb;
@@ -107,42 +111,37 @@
 }
 
 .status {
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 10px;
-  font-weight: 600;
+  font-size: rem(10);
+  font-weight: 500;
+  padding: spacing(0.2) spacing(0.4);
+  border-radius: rem(3);
   text-transform: uppercase;
-  display: inline-flex;
-  align-items: center;
+  letter-spacing: 0.5px;
+  margin-left: spacing(0.5);
 
   &.upcoming {
-    background: #fef3c7;
-    color: #92400e;
+    background-color: rgba($primary-color, 0.1);
+    color: $primary-color;
   }
 
   &.ongoing {
-    background: #dbeafe;
-    color: #1e40af;
+    background-color: rgba($success-color, 0.1);
+    color: $success-color;
   }
 
   &.completed {
-    background: #d1fae5;
-    color: #065f46;
+    background-color: rgba($grey-500, 0.1);
+    color: $grey-600;
   }
 
   &.cancelled {
-    background: #fee2e2;
-    color: #991b1b;
-  }
-
-  &.full {
-    background: #f3e8ff;
-    color: #6b21a8;
+    background-color: rgba($error-color, 0.1);
+    color: $error-color;
   }
 
   &.unvalid {
-    background: #fef2f2;
-    color: #7f1d1d;
+    background-color: rgba($error-color, 0.1);
+    color: $error-color;
   }
 }
 

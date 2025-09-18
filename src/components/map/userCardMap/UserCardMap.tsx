@@ -29,8 +29,8 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
   const { partnerships, isLoading: isLoadingPartnerships } =
     usePartnershipByUserId(userId, {
       asCollaborator: "true",
+      onlyAccepted: "true",
     });
-  console.log(partnerships);
 
   const placePartnerships = partnerships.filter(
     (partnership) => partnership.type === "place"
@@ -62,9 +62,7 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
         >
           <Image
             src={
-              typeof user.image === "object" && user.image?.urls?.thumbnail
-                ? user.image.urls.thumbnail
-                : "/images/default-avatar.png"
+              user.image?.urls?.thumbnail || "https://i.pravatar.cc/40?img=3"
             }
             onClick={() => router.push(`/users/${user?._id}`)}
             alt={user.creatorName}
@@ -122,7 +120,7 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
                         src={
                           typeof event.image === "object" && event.image?.urls
                             ? event.image.urls.thumbnail
-                            : "/images/default-event.png"
+                            : "https://i.pravatar.cc/40?img=3"
                         }
                         alt={event.name}
                         width={54}

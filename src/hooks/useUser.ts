@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { User } from "@/types/user";
+import { UserPopulated } from "@/types/user";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 
 export const useUser = (userId?: string) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserPopulated | null>(null);
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
 

@@ -1,0 +1,29 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.emptyState {
+  @include flex(column, center, center, 0);
+  padding: spacing(8) spacing(4);
+  text-align: center;
+  min-height: 400px;
+}
+
+.emptyIcon {
+  color: $grey-400;
+  margin-bottom: spacing(3);
+}
+
+.emptyTitle {
+  font-size: rem(24);
+  font-weight: 600;
+  color: $grey-700;
+  margin-bottom: spacing(1.5);
+}
+
+.emptyDescription {
+  font-size: $font-size-base;
+  color: $grey-500;
+  max-width: 400px;
+  line-height: $line-height-base;
+}

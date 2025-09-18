@@ -1,6 +1,6 @@
 import { BaseEntity, LocationWithLabel } from "../common";
 import { Image } from "../image";
-import { Place } from "../place";
+import { Place, PlacePopulated } from "../place";
 import { SubCategory } from "../categories";
 
 export type UserType = "creator" | "organizer" | "guest";
@@ -13,7 +13,7 @@ export interface User extends BaseEntity {
   userType: UserType;
   phone: string;
   website: string;
-  image: string | Image;
+  image?: string | Image;
   description: string;
   location?: LocationWithLabel;
   deleted?: boolean;
@@ -23,6 +23,11 @@ export interface User extends BaseEntity {
   _id: string;
   creatorName: string;
   creatorCategories: SubCategory[];
+}
+
+export interface UserPopulated extends User {
+  places?: PlacePopulated[];
+  image?: Image;
 }
 
 export interface Organizer extends User {

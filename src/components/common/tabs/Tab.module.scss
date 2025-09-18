@@ -1,0 +1,28 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.tab {
+  @include flex(row, flex-start, center, spacing(1));
+  padding: spacing(1.5) spacing(3);
+  border: none;
+  background: transparent;
+  color: $grey-500;
+  font-size: rem(15);
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  &:hover {
+    color: $grey-700;
+  }
+}
+
+.activeTab {
+  background: $white;
+  color: $grey-800;
+  border-bottom: 2px solid $primary-color;
+
+  &:hover {
+    background: $white;
+  }
+}

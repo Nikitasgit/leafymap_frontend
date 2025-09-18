@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
-import { Partnership } from "@/types/partnerships";
+import { PartnershipPopulated } from "@/types/partnerships";
 
 export const usePartnershipByUserId = (
   userId?: string,
   queryParams: Record<string, string> = {}
 ) => {
-  const [partnerships, setPartnerships] = useState<Partnership[]>([]);
+  const [partnerships, setPartnerships] = useState<PartnershipPopulated[]>([]);
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
 

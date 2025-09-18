@@ -5,7 +5,7 @@ import { Partnership } from "@/types/partnerships";
 
 export const useSubmitPartnerships = (onUpdate?: () => void) => {
   const { isLoading, withLoading } = useLoading();
-  const { showError, showSuccess } = useToast();
+  const { showError } = useToast();
 
   const submitPartnerships = async (
     partnerships: Partnership[],
@@ -13,10 +13,6 @@ export const useSubmitPartnerships = (onUpdate?: () => void) => {
     placeId: string,
     eventId: string = ""
   ) => {
-    console.log("partnerships", partnerships);
-    console.log("isUpdate", isUpdate);
-    console.log("placeId", placeId);
-    console.log("eventId", eventId);
     try {
       const filteredPartnerships = partnerships.map((partnership) => {
         if (isUpdate) {
@@ -44,8 +40,6 @@ export const useSubmitPartnerships = (onUpdate?: () => void) => {
           }
         )
       );
-
-      showSuccess("Partnership status updated successfully");
       onUpdate?.();
     } catch (err) {
       const errorMessage =

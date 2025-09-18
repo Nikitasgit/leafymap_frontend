@@ -73,6 +73,7 @@ const Partnerships = ({
           image: suggestion.image as string,
         },
         status: "pending",
+        initiator: undefined,
       };
       onChange([...partnerships, newPartnership]);
     }

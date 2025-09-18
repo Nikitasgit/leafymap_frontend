@@ -1,123 +1,24 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+@use "@/styles/abstracts/mixins" as *;
+
 .container {
-  padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
   min-height: 50vh;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
-}
-
 .icon {
-  color: #6366f1;
+  color: $primary-color;
 }
 
 .title {
-  color: #111827;
-  font-size: 2rem;
+  color: $grey-800;
+  font-size: rem(32);
   font-weight: 700;
   margin: 0;
 }
 
-.tabs {
-  display: flex;
-  gap: 0;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.tab {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  color: #6b7280;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-
-  &:hover {
-    color: #374151;
-    background-color: #f9fafb;
-  }
-
-  &.activeTab {
-    color: #6366f1;
-    border-bottom-color: #6366f1;
-    background-color: #f8fafc;
-  }
-}
-
 .tabContent {
   min-height: 400px;
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.section {
-  background: #f9fafb;
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid #e5e7eb;
-}
-
-.sectionTitle {
-  color: #374151;
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0 0 1rem 0;
-}
-
-.partnershipsList {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.emptyState {
-  text-align: center;
-  padding: 3rem 2rem;
-  background: #f9fafb;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-}
-
-.emptyIcon {
-  margin: 0 auto 1rem;
-  color: #9ca3af;
-}
-
-.emptyTitle {
-  color: #374151;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem 0;
-}
-
-.emptyDescription {
-  color: #6b7280;
-  max-width: 500px;
-  margin: 0 auto;
-  line-height: 1.6;
-}
-
-// Legacy styles for backward compatibility
-.description {
-  color: #666;
-  max-width: 400px;
 }

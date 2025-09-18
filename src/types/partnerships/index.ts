@@ -6,7 +6,7 @@ export interface Partnership {
   _id: string;
   place?: string | Place;
   event?: string | Event;
-  initiator: {
+  initiator?: {
     _id: string;
     name?: string;
     image?: string | Image;
