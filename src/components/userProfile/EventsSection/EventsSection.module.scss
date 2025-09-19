@@ -1,0 +1,71 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.eventsSection {
+  background: $white;
+  border-radius: 8px;
+  padding: spacing(3);
+  margin-bottom: spacing(3);
+  border: 1px solid $grey-200;
+
+  @include respond-to(md) {
+    padding: spacing(4);
+  }
+
+  h2 {
+    color: $grey-700;
+    font-size: rem(20);
+    font-weight: 700;
+    margin: 0 0 spacing(2.5) 0;
+
+    @include respond-to(md) {
+      font-size: rem(22);
+    }
+  }
+}
+
+.eventsList {
+  @include flex(column, flex-start, stretch, spacing(1.5));
+}
+
+.eventItem {
+  @include flex(row, flex-start, center, spacing(1));
+  background: $grey-50;
+  padding: spacing(1.5) spacing(2);
+  border-radius: 8px;
+  border: 1px solid $grey-200;
+
+  @include respond-to(md) {
+    padding: spacing(2) spacing(2.5);
+  }
+
+  p {
+    margin: 0;
+    color: $grey-600;
+    font-weight: 500;
+    flex: 1;
+  }
+}
+
+.eventIcon {
+  color: $primary-color;
+  flex-shrink: 0;
+}
+
+.emptyState {
+  @include flex(column, center, center, spacing(1.5));
+  padding: spacing(4);
+  text-align: center;
+  color: $grey-400;
+
+  .icon {
+    font-size: rem(32);
+    opacity: 0.5;
+  }
+
+  .text {
+    font-size: rem(16);
+    font-weight: 500;
+  }
+}

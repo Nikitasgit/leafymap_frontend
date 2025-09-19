@@ -4,7 +4,7 @@ import Button from "@/components/common/buttons/button/Button";
 import Text from "@/components/common/typography/Text";
 import Schedule from "@/components/common/schedule";
 import styles from "./PlaceCardMap.module.scss";
-import { MapPin, Heart, Star } from "lucide-react";
+import { MapPin, Star } from "lucide-react";
 import { usePlace } from "@/hooks/usePlace";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
@@ -100,7 +100,6 @@ const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
                 </Text>
               )}
               <div className={styles.ratingRow}>
-                <Heart size={16} className={styles.heartIcon} />
                 <span className={styles.rating}>{place?.rating}</span>
                 <div className={styles.starsContainer}>
                   {renderStars(place?.rating || 0)}

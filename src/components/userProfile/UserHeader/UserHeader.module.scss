@@ -1,0 +1,86 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.header {
+  margin-bottom: spacing(2);
+}
+
+.topBar {
+  @include flex(row, space-between, center);
+}
+
+.backButton,
+.menuButton {
+  padding: spacing(0.5);
+  color: $grey-600;
+}
+
+.headerMain {
+  @include flex(row, space-between, center, spacing(2));
+}
+
+.userInfo {
+  flex: 1;
+
+  h1 {
+    color: $grey-700;
+    font-size: rem(20);
+    font-weight: 700;
+    margin: 0 0 spacing(0.5) 0;
+    line-height: 1.3;
+
+    @include respond-to(md) {
+      font-size: rem(24);
+    }
+  }
+}
+
+.counters {
+  @include flex(row, flex-start, center, spacing(1.5));
+  margin-bottom: spacing(1);
+}
+
+.counterRow {
+  @include flex(row, flex-start, center, spacing(0.25));
+}
+
+.counter {
+  color: $grey-600;
+  font-weight: 500;
+  font-size: rem(14);
+}
+
+.description {
+  color: $grey-600;
+  font-size: rem(14);
+  line-height: 1.4;
+  margin: 0;
+  font-weight: 400;
+}
+
+.buttonsContainer {
+  @include flex(column, space-between, flex-end, spacing(1.5));
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.buttons {
+  @include flex(row, flex-start, center, spacing(1));
+}
+
+.starsContainer {
+  @include flex(row, flex-start, center, 2px);
+}
+
+.star {
+  color: $primary-color;
+
+  &.filled {
+    color: $primary-color;
+  }
+
+  &.empty {
+    color: $grey-300;
+  }
+}

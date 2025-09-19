@@ -28,7 +28,7 @@ const ProfilePictureUploader = ({
   type,
   reference,
   rounded = false,
-}: ProfilePictureUploaderProps) => {
+}: ProfilePictureUploaderProps): React.JSX.Element => {
   const [preview, setPreview] = useState<Pick<IImage, "_id" | "urls"> | null>(
     initialImage || null
   );
