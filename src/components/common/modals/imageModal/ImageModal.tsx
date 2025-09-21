@@ -10,6 +10,8 @@ interface ImageModalProps {
   images: ImageType[];
   currentIndex: number;
   onNavigate: (index: number) => void;
+  isOwner?: boolean;
+  onDeleteImage?: (imageId: string) => void;
 }
 
 const ImageModal: React.FC<ImageModalProps> = ({
@@ -24,7 +26,6 @@ const ImageModal: React.FC<ImageModalProps> = ({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
-
       switch (e.key) {
         case "Escape":
           onClose();
@@ -41,12 +42,10 @@ const ImageModal: React.FC<ImageModalProps> = ({
           break;
       }
     };
-
     if (isOpen) {
       document.addEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "hidden";
     }
-
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "unset";
@@ -104,12 +103,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
 
         <div className={styles.imageContainer}>
           <Image
-            src={
-              currentImage.urls?.large ||
-              currentImage.urls?.medium ||
-              currentImage.urls?.original ||
-              ""
-            }
+            src={currentImage.urls?.medium || ""}
             alt={`Image ${currentIndex + 1}`}
             className={styles.modalImage}
             width={800}

@@ -55,12 +55,10 @@ const UserPage = () => {
 
   const handleFilesSelected = async (files: File[]) => {
     if (files.length === 0) return;
-
     if (!user) {
       console.error("User not found");
       return;
     }
-
     try {
       await submitImages({
         files,
@@ -68,12 +66,14 @@ const UserPage = () => {
         referenceType: "User",
         type: "gallery",
       });
-
-      // Refetch images after successful upload
       await refetchImages();
     } catch (error) {
       console.error("Error uploading images:", error);
     }
+  };
+
+  const handleImageDeleted = async () => {
+    await refetchImages();
   };
 
   const handleTabClick = (tabId: string) => {
@@ -96,6 +96,7 @@ const UserPage = () => {
             isLoading={isLoadingImages || isUploadingImages}
             isOwner={isOwner || false}
             onFilesSelected={handleFilesSelected}
+            onImageDeleted={handleImageDeleted}
           />
         );
       case "avis":

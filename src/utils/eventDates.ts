@@ -1,8 +1,16 @@
 import { Period } from "@/types/place/schedule";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 
 interface EventDates {
   firstDate: string;
   latestDate: string;
+}
+
+interface EventDisplayInfo {
+  status: "upcoming" | "ongoing" | "completed" | "unvalid";
+  formattedDateRange: string;
+  dateRange: EventDates;
 }
 
 export const getEventDateRange = (schedule: Period[]): EventDates => {
@@ -58,4 +66,43 @@ export const getEventStatusFromSchedule = (
     return "completed";
   }
   return "unvalid";
+};
+
+
+export const getEventDisplayInfo = (schedule: Period[]): EventDisplayInfo => {
+  const status = getEventStatusFromSchedule(schedule);
+  const dateRange = getEventDateRange(schedule);
+  const formattedDateRange = formatEventDateRange(dateRange);
+
+  return {
+    status,
+    formattedDateRange,
+    dateRange,
+  };
+};
+
+export const formatEventDateRange = (dateRange: EventDates): string => {
+  if (!dateRange.firstDate) return "";
+
+  const firstDate = format(new Date(dateRange.firstDate), "dd MMM yyyy", {
+    locale: fr,
+  });
+
+  if (!dateRange.latestDate || dateRange.latestDate === dateRange.firstDate) {
+    return firstDate;
+  }
+
+  const latestDate = format(new Date(dateRange.latestDate), "dd MMM yyyy", {
+    locale: fr,
+  });
+
+  return `${firstDate} - ${latestDate}`;
+};
+
+export const formatEventDate = (dateString: string): string => {
+  if (!dateString) return "";
+
+  return format(new Date(dateString), "dd MMM yyyy", {
+    locale: fr,
+  });
 };

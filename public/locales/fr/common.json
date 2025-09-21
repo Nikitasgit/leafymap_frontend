@@ -54,5 +54,14 @@
     "pending": "En attente",
     "accepted": "Accepté",
     "refused": "Refusé"
+  },
+  "eventStatus": {
+    "upcoming": "À venir",
+    "ongoing": "En cours",
+    "completed": "Terminé",
+    "unvalid": "Non défini",
+    "pending": "En attente",
+    "accepted": "Accepté",
+    "refused": "Refusé"
   }
 }

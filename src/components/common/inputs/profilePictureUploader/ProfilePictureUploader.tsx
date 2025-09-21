@@ -8,7 +8,7 @@ import { Image as IImage } from "@/types/image";
 
 interface ProfilePictureUploaderProps {
   initialImage?: IImage;
-  onImageUploaded: (imageUrl: string | null) => void;
+  onImageUploaded?: (imageUrl: string | null) => void;
   className?: string;
   size?: "small" | "medium" | "large";
   disabled?: boolean;
@@ -20,7 +20,7 @@ interface ProfilePictureUploaderProps {
 
 const ProfilePictureUploader = ({
   initialImage,
-  onImageUploaded,
+  onImageUploaded = () => {},
   className = "",
   size = "medium",
   isOwner = false,

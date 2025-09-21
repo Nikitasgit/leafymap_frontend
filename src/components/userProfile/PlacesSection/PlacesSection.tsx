@@ -1,5 +1,5 @@
 import React from "react";
-import { MapPin, Star, Users } from "lucide-react";
+import { MapPin, Users } from "lucide-react";
 import Image from "next/image";
 import Text from "@/components/common/typography/Text";
 import { PartnershipPopulated } from "@/types/partnerships";
@@ -53,12 +53,6 @@ const PlacesSection: React.FC<PlacesSectionProps> = ({
                       {place?.location?.label || "Adresse non disponible"}
                     </Text>
                     <div className={styles.placeStats}>
-                      <div className={styles.rating}>
-                        <Star size={12} className={styles.starIcon} />
-                        <span className={styles.ratingText}>
-                          {place?.rating?.toFixed(1) || "N/A"}
-                        </span>
-                      </div>
                       <div className={styles.followers}>
                         <Users size={12} className={styles.followersIcon} />
                         <span className={styles.followersText}>

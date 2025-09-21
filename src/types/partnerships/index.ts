@@ -26,4 +26,10 @@ export interface Partnership {
 export interface PartnershipPopulated extends Partnership {
   place: PlacePopulated;
   event: EventPopulated;
+  collaborator: {
+    _id: string;
+    name?: string;
+    image?: Image;
+    categories?: string[];
+  };
 }

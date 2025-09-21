@@ -11,10 +11,8 @@ import LoadingBar from "@/components/common/loading/LoadingBar";
 import { usePartnershipByUserId } from "@/hooks/usePartnershipByUserId";
 import { useUser } from "@/hooks/useUser";
 import { Calendar } from "lucide-react";
-import { getEventDateRange } from "@/utils/eventDates";
+import { getEventDisplayInfo } from "@/utils/eventDates";
 import { useTranslation } from "next-i18next";
-import { format } from "date-fns";
-import { fr } from "date-fns/locale";
 
 interface UserCardMapProps {
   userId: string;
@@ -111,7 +109,7 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
                   : null;
               if (!event || !place) return null;
 
-              const dateRange = getEventDateRange(event.schedule);
+              const eventDisplayInfo = getEventDisplayInfo(event.schedule);
               return (
                 <div key={partnership._id} className={styles.card}>
                   <div className={styles.cardInfo}>
@@ -132,27 +130,7 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
                       <div className={styles.scheduleItem}>
                         <Calendar size={12} />
                         <Text as="p" className={styles.scheduleText}>
-                          {format(
-                            new Date(dateRange.firstDate),
-                            "dd MMM yyyy",
-                            {
-                              locale: fr,
-                            }
-                          )}
-                          {dateRange.latestDate &&
-                            dateRange.latestDate !== dateRange.firstDate && (
-                              <>
-                                {" "}
-                                -{" "}
-                                {format(
-                                  new Date(dateRange.latestDate),
-                                  "dd MMM yyyy",
-                                  {
-                                    locale: fr,
-                                  }
-                                )}
-                              </>
-                            )}
+                          {eventDisplayInfo.formattedDateRange}
                         </Text>
                       </div>
 

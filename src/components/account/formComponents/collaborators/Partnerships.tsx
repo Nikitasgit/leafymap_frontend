@@ -7,22 +7,21 @@ import InfoIcon from "@/components/common/info/InfoIcon";
 import Text from "@/components/common/typography/Text";
 import { Delete, Users } from "lucide-react";
 import { generateTempId, isTempId } from "@/utils/tempId";
-import { Partnership } from "@/types/partnerships";
+import { Partnership, PartnershipPopulated } from "@/types/partnerships";
 import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
-import { useTranslation } from "next-i18next";
 import { useToast } from "@/hooks/useToast";
 import { useFindUsers } from "@/hooks/useFindUsers";
+import EventStatus from "@/components/common/eventStatus/EventStatus";
 
 const Partnerships = ({
   onChange,
   partnerships,
 }: {
   onChange: (partnerships: Partnership[]) => void;
-  partnerships: Partnership[];
+  partnerships: PartnershipPopulated[];
 }) => {
   const { searchUsers } = useFindUsers();
-
   const fetchSuggestions = async (query: string) => {
     const users = await searchUsers({ creatorName: query });
     const suggestions = users.map((user) => ({
@@ -43,7 +42,6 @@ const Partnerships = ({
   const filteredPartnerships = partnerships.filter(
     (partnership) => !partnership.deleted
   );
-  const { t } = useTranslation();
 
   const handleSelect = (suggestion: Collaborator) => {
     const existingPartnership = partnerships.find(
@@ -146,9 +144,7 @@ const Partnerships = ({
                   <div className={styles.itemInfoLeft}>
                     <Image
                       src={
-                        (typeof partnership.collaborator?.image === "object"
-                          ? partnership.collaborator?.image?.urls.thumbnail
-                          : partnership.collaborator?.image) ||
+                        partnership.collaborator?.image?.urls?.thumbnail ||
                         "https://i.pravatar.cc/40?img=3"
                       }
                       alt={partnership.collaborator.name || ""}
@@ -161,13 +157,7 @@ const Partnerships = ({
                       {partnership.collaborator.name}
                     </span>
                   </div>
-                  <span
-                    className={`${styles.itemStatus} ${
-                      styles[partnership.status]
-                    }`}
-                  >
-                    {t(`partnershipStatus.${partnership.status}`)}
-                  </span>
+                  <EventStatus status={partnership.status} />
                 </div>
 
                 <Button

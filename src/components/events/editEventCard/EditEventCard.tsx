@@ -3,10 +3,9 @@ import { Event } from "@/types/place/event";
 import { useRouter } from "next/navigation";
 import Text from "@/components/common/typography/Text";
 import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader";
+import EventStatus from "@/components/common/eventStatus/EventStatus";
 import { Edit3, Calendar, Eye, Trash2 } from "lucide-react";
-import { format } from "date-fns";
-import { fr } from "date-fns/locale";
-import { getEventDateRange } from "@/utils/eventDates";
+import { getEventDisplayInfo } from "@/utils/eventDates";
 import styles from "./EditEventCard.module.scss";
 import { Image } from "@/types/image";
 import useSubmitEvent from "@/hooks/useSubmitEvent";
@@ -22,27 +21,7 @@ const EditEventCard = ({ event, placeId }: EditEventCardProps) => {
   const { submitEvent } = useSubmitEvent();
   const { deleteEvent, isLoading: isDeletingEvent } = useDeleteEvent();
 
-  const getEventStatus = (status: string) => {
-    switch (status) {
-      case "upcoming":
-        return { label: "À venir", color: "upcoming" };
-      case "ongoing":
-        return { label: "En cours", color: "ongoing" };
-      case "completed":
-        return { label: "Terminé", color: "completed" };
-      case "cancelled":
-        return { label: "Annulé", color: "cancelled" };
-      case "full":
-        return { label: "Complet", color: "full" };
-      case "unvalid":
-        return { label: "Dates invalides", color: "unvalid" };
-      default:
-        return { label: "À venir", color: "upcoming" };
-    }
-  };
-
-  const statusDisplay = getEventStatus(event.status);
-  const dateRange = getEventDateRange(event.schedule || []);
+  const eventDisplayInfo = getEventDisplayInfo(event.schedule || []);
   const handleImageUploaded = async (imageId: string | null) => {
     if (imageId && typeof imageId === "string") {
       await submitEvent(
@@ -108,30 +87,14 @@ const EditEventCard = ({ event, placeId }: EditEventCardProps) => {
           {event.description}
         </Text>
 
-        {dateRange.firstDate && (
+        {eventDisplayInfo.formattedDateRange && (
           <div className={styles.scheduleInfo}>
             <div className={styles.scheduleItem}>
               <Calendar size={14} />
               <Text as="p" className={styles.scheduleText}>
-                {format(new Date(dateRange.firstDate), "dd MMM yyyy", {
-                  locale: fr,
-                })}
-                {dateRange.latestDate &&
-                  dateRange.latestDate !== dateRange.firstDate && (
-                    <>
-                      {" "}
-                      -{" "}
-                      {format(new Date(dateRange.latestDate), "dd MMM yyyy", {
-                        locale: fr,
-                      })}
-                    </>
-                  )}
+                {eventDisplayInfo.formattedDateRange}
               </Text>
-              <span
-                className={`${styles.status} ${styles[statusDisplay.color]}`}
-              >
-                {statusDisplay.label}
-              </span>
+              <EventStatus status={eventDisplayInfo.status} />
             </div>
           </div>
         )}

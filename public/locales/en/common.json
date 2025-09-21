@@ -49,5 +49,14 @@
     "cabinetmaker": "Cabinetmaker",
     "ceramicist": "Ceramicist",
     "weaver": "Weaver"
+  },
+  "eventStatus": {
+    "upcoming": "Upcoming",
+    "ongoing": "Ongoing",
+    "completed": "Completed",
+    "unvalid": "Invalid",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "refused": "Refused"
   }
 }

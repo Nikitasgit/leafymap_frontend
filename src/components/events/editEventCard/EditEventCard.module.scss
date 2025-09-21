@@ -40,41 +40,6 @@
   font-size: rem(14);
 }
 
-.status {
-  font-size: rem(10);
-  font-weight: 500;
-  padding: spacing(0.2) spacing(0.4);
-  border-radius: rem(3);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-left: spacing(0.5);
-
-  &.upcoming {
-    background-color: rgba($primary-color, 0.1);
-    color: $primary-color;
-  }
-
-  &.ongoing {
-    background-color: rgba($success-color, 0.1);
-    color: $success-color;
-  }
-
-  &.completed {
-    background-color: rgba($grey-500, 0.1);
-    color: $grey-600;
-  }
-
-  &.cancelled {
-    background-color: rgba($error-color, 0.1);
-    color: $error-color;
-  }
-
-  &.unvalid {
-    background-color: rgba($error-color, 0.1);
-    color: $error-color;
-  }
-}
-
 .viewIcon {
   color: $grey-500;
   &:hover {
