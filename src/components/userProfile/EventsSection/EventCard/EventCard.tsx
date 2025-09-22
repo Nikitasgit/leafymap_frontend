@@ -12,17 +12,19 @@ import { useRouter } from "next/navigation";
 
 interface EventCardProps {
   event: Event;
-  place: Place;
+  place?: Place;
 }
 
 const EventCard: React.FC<EventCardProps> = ({ event, place }) => {
   const eventDisplayInfo = getEventDisplayInfo(event.schedule || []);
   const router = useRouter();
+
+  const handleCardClick = () => {
+    router.push(`/events/${event._id}`);
+  };
+
   return (
-    <div
-      className={styles.eventCard}
-      onClick={() => router.push(`/places/${place._id}/events/${event._id}`)}
-    >
+    <div className={styles.eventCard} onClick={handleCardClick}>
       <ProfilePictureUploader
         type="Event"
         reference={event._id}
@@ -58,19 +60,21 @@ const EventCard: React.FC<EventCardProps> = ({ event, place }) => {
                 </Text>
               </div>
             )}
-            <div className={styles.locationInfo}>
-              <MapPin size={14} className={styles.detailIcon} />
-              <div className={styles.locationDetails}>
-                <Text as="p" className={styles.locationName}>
-                  {place.name}
-                </Text>
-                {place.location && place.location.label && (
-                  <Text as="p" className={styles.locationAddress}>
-                    {place.location.label}
+            {place && (
+              <div className={styles.locationInfo}>
+                <MapPin size={14} className={styles.detailIcon} />
+                <div className={styles.locationDetails}>
+                  <Text as="p" className={styles.locationName}>
+                    {place.name}
                   </Text>
-                )}
+                  {place.location && place.location.label && (
+                    <Text as="p" className={styles.locationAddress}>
+                      {place.location.label}
+                    </Text>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

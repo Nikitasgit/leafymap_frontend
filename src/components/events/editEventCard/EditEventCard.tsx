@@ -33,7 +33,6 @@ const EditEventCard = ({ event, placeId }: EditEventCardProps) => {
       );
     }
   };
-  console.log(event);
   return (
     <div className={styles.card}>
       <ProfilePictureUploader
@@ -53,9 +52,7 @@ const EditEventCard = ({ event, placeId }: EditEventCardProps) => {
           <div className={styles.actionButtons}>
             <Button
               variant="simple"
-              onClick={() =>
-                router.push(`/places/${placeId}?event=${event._id}`)
-              }
+              onClick={() => router.push(`/events/${event._id}`)}
               className={styles.viewIcon}
               aria-label="Voir l'événement"
             >

@@ -98,7 +98,6 @@ const PlacePage = () => {
         return (
           <PlaceEventsSection
             events={events || []}
-            placeName={place?.name || ""}
           />
         );
       default:
@@ -108,7 +107,11 @@ const PlacePage = () => {
 
   if (placeLoading || eventsLoading) return <LoadingBar />;
 
-  const isOwner = currentUser && place && currentUser._id === place.userId;
+  const isOwner =
+    currentUser &&
+    place &&
+    typeof place.user === "object" &&
+    currentUser._id === place.user._id;
 
   if (!place) return <LoadingBar />;
 

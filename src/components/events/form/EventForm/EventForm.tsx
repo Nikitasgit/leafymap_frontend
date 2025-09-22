@@ -34,8 +34,16 @@ const initialEventData = (
 ): initialEventData => ({
   name: event?.name || "",
   description: event?.description || "",
-  schedule: event?.schedule || [],
+  schedule:
+    event?.schedule.map((period) => ({
+      ...period,
+      startDate: format(new Date(period.startDate), "dd-MM-yyyy"),
+      endDate: period.endDate
+        ? format(new Date(period.endDate), "dd-MM-yyyy")
+        : "",
+    })) || [],
 });
+
 const EventForm = ({
   eventData = null,
   isUpdate = false,
@@ -50,6 +58,7 @@ const EventForm = ({
   const [event, setEvent] = useState<initialEventData>(
     initialEventData(eventData)
   );
+  console.log(event);
   const [partnerships, setPartnerships] =
     useState<Partnership[]>(partnershipsData);
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
