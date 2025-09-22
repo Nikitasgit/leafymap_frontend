@@ -6,7 +6,7 @@ import PlacesEditList from "@/components/account/placesList/PlacesEditList";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import styles from "./account.module.scss";
-import { PlusCircleIcon } from "lucide-react";
+import { Edit, Eye } from "lucide-react";
 import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import Text from "@/components/common/typography/Text";
@@ -89,11 +89,22 @@ export default function AccountPage() {
           >
             Mes Avis
           </Button>
+          {userType === "creator" && (
+            <Button
+              disabled={isLoadingUser}
+              variant="primary"
+              onClick={() => router.push(`/users/${user._id}`)}
+              fullWidth
+              endIcon={<Eye size={16} />}
+            >
+              Voir mon profil public
+            </Button>
+          )}
         </div>
         {buttonParameters && (
           <Button
             disabled={isLoadingUser}
-            endIcon={<PlusCircleIcon size={18} />}
+            endIcon={<Edit size={16} />}
             onClick={() => {
               router.push(buttonParameters.route);
             }}

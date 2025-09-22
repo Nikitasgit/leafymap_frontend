@@ -31,8 +31,6 @@ const eventSchema = z.object({
                 .array(
                   z.object({
                     _id: z.string(),
-                    name: z.string().optional(),
-                    image: z.string().optional(),
                   })
                 )
                 .optional(),

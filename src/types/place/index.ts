@@ -19,6 +19,7 @@ export interface Place extends BaseEntity, ContactInfo {
   rating: number;
   placeType: PlaceType[];
   creatorCategories?: SubCategory[];
+  followers: string[];
 }
 
 export interface PlacePopulated extends Place {

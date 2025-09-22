@@ -59,14 +59,9 @@
   font-weight: 400;
 }
 
-.buttonsContainer {
-  @include flex(column, space-between, flex-end, spacing(1.5));
-  flex-shrink: 0;
-  height: 100%;
-}
-
 .buttons {
   @include flex(row, flex-start, center, spacing(1));
+
 }
 
 .starsContainer {

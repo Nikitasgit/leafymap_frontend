@@ -1,23 +1,20 @@
 import React from "react";
-import { Star, Users, ArrowLeft } from "lucide-react";
+import { ArrowLeft, Star, MapPin, Users } from "lucide-react";
 import Text from "@/components/common/typography/Text";
-import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader";
-import Button from "@/components/common/buttons/button/Button";
-import { Image as ImageType } from "@/types/image";
-import { User } from "@/types/user";
+import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader/ProfilePictureUploader";
 import { Place } from "@/types/place";
-import styles from "./UserHeader.module.scss";
+import styles from "./PlaceHeader.module.scss";
+import Button from "@/components/common/buttons/button/Button";
+import { Image } from "@/types/image";
 
-interface UserHeaderProps {
-  user: User;
-  place?: Place;
+interface PlaceHeaderProps {
+  place: Place;
   onFollow: () => void;
   onMessage: () => void;
   onBack: () => void;
 }
 
-const UserHeader: React.FC<UserHeaderProps> = ({
-  user,
+const PlaceHeader: React.FC<PlaceHeaderProps> = ({
   place,
   onFollow,
   onMessage,
@@ -46,43 +43,49 @@ const UserHeader: React.FC<UserHeaderProps> = ({
       <div className={styles.headerMain}>
         <ProfilePictureUploader
           onImageUploaded={() => {}}
-          type="User"
-          reference={user._id}
-          initialImage={user.image as ImageType}
+          type="Place"
+          reference={place._id}
+          initialImage={place.image as Image}
           isOwner={false}
           size="small"
           rounded
         />
 
-        <div className={styles.userInfo}>
-          <Text as="h1">{user.creatorName}</Text>
+        <div className={styles.placeInfo}>
+          <Text as="h1">{place.name}</Text>
           <div className={styles.counters}>
             <div className={styles.counterRow}>
               <span className={styles.counter}>
-                {user.followers?.length || 0}
+                {place.followers?.length || 0}
               </span>
               <Users size={12} />
             </div>
-            {place && (
-              <div className={styles.counterRow}>
-                <span className={styles.counter}>{place.rating}</span>
-                <div className={styles.starsContainer}>
-                  {renderStars(place.rating || 0)}
-                </div>
+            <div className={styles.counterRow}>
+              <span className={styles.counter}>{place.rating || 0}</span>
+              <div className={styles.starsContainer}>
+                {renderStars(place.rating || 0)}
               </div>
-            )}
+            </div>
           </div>
           <Text as="p" className={styles.description}>
-            {user.description}
+            {place.description}
           </Text>
+          {place.location && (
+            <div className={styles.locationInfo}>
+              <MapPin size={14} />
+              <Text as="p" className={styles.location}>
+                {place.location.label}
+              </Text>
+            </div>
+          )}
         </div>
 
         <div className={styles.buttons}>
           <Button variant="outline" onClick={onFollow}>
             Suivre
           </Button>
-          <Button variant="outline" onClick={onMessage}>
-            Message
+          <Button variant="primary" onClick={onMessage}>
+            Contacter
           </Button>
         </div>
       </div>
@@ -90,4 +93,4 @@ const UserHeader: React.FC<UserHeaderProps> = ({
   );
 };
 
-export default UserHeader;
+export default PlaceHeader;

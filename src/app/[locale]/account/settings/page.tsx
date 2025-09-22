@@ -8,11 +8,11 @@ import { useDeleteAccount } from "@/hooks/useDeleteAccount";
 import { Trash2 } from "lucide-react";
 import InfoIcon from "@/components/common/info/InfoIcon";
 import Text from "@/components/common/typography/Text";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const { deleteAccount, isLoading } = useDeleteAccount();
-
-
+  const router = useRouter();
 
   return (
     <main className={styles.pageContainer}>
@@ -21,6 +21,7 @@ const Page = () => {
           backButtonLabel="Retour au compte"
           subtitle="Gérez vos paramètres de compte"
           title="Paramètres du compte"
+          onBackClick={() => router.back()}
           showBackButton
         />
         <div className={styles.settingsContainer}>

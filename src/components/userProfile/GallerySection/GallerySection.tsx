@@ -56,14 +56,8 @@ const GallerySection: React.FC<GallerySectionProps> = ({
   };
   if (isLoading) {
     return (
-      <section className={styles.images}>
-        <Text as="h2">
-          <ImageIcon
-            size={20}
-            style={{ marginRight: "8px", verticalAlign: "middle" }}
-          />
-          Galerie
-        </Text>
+      <section>
+        <Text as="h3">Galerie</Text>
         <div className={styles.loading}>
           <div className={styles.spinner}></div>
           <Text as="p">Chargement des images...</Text>
@@ -73,14 +67,8 @@ const GallerySection: React.FC<GallerySectionProps> = ({
   }
 
   return (
-    <section className={styles.images}>
-      <Text as="h2">
-        <ImageIcon
-          size={20}
-          style={{ marginRight: "8px", verticalAlign: "middle" }}
-        />
-        Galerie
-      </Text>
+    <section>
+      <Text as="h3">Galerie</Text>
       <div className={styles.imagesList}>
         {isOwner && (
           <ImageUploader
@@ -96,7 +84,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
                 onClick={() => handleImageClick(index)}
               >
                 <Image
-                  src={image.urls?.medium}
+                  src={image.urls?.thumbnail}
                   alt={`Image ${index + 1}`}
                   className={styles.galleryImage}
                   width={150}
@@ -123,7 +111,6 @@ const GallerySection: React.FC<GallerySectionProps> = ({
               </div>
             )}
       </div>
-
       <ImageModal
         isOpen={modalOpen}
         onClose={handleModalClose}

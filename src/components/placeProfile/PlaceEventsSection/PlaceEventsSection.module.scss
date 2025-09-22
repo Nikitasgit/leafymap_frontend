@@ -1,0 +1,86 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.eventsList {
+  margin-top: spacing(2);
+}
+
+.eventsGrid {
+  display: grid;
+  gap: spacing(2);
+  grid-template-columns: 1fr;
+
+  @include respond-to(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-to(lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.eventCard {
+  background: $white;
+  border: 1px solid $grey-200;
+  border-radius: 8px;
+  padding: spacing(2);
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.eventHeader {
+  margin-bottom: spacing(1.5);
+}
+
+.eventTitle {
+  margin: 0 0 spacing(1) 0;
+  font-size: rem(16);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.eventDate {
+  display: flex;
+  align-items: center;
+  gap: spacing(0.5);
+  color: $grey-600;
+  font-size: rem(14);
+}
+
+.dateText {
+  margin: 0;
+  color: $grey-600;
+  font-weight: 500;
+}
+
+.eventDescription {
+  margin: 0;
+  color: $grey-700;
+  font-size: rem(14);
+  line-height: 1.5;
+}
+
+.emptyState {
+  @include flex(column, center, center, spacing(1.5));
+  padding: spacing(4);
+  text-align: center;
+  color: $grey-400;
+  background: $white;
+  border-radius: 8px;
+  border: 1px solid $grey-200;
+
+  .icon {
+    color: $grey-300;
+  }
+
+  .text {
+    margin: 0;
+    font-size: rem(16);
+    font-weight: 500;
+    color: $grey-400;
+  }
+}

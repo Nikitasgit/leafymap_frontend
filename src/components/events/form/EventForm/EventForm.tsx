@@ -12,7 +12,7 @@ import EventScheduleList from "../EventScheduleList/EventScheduleList";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/useToast";
 import { Event } from "@/types/place/event";
-import { Partnership } from "@/types/partnerships";
+import { Partnership, PartnershipPopulated } from "@/types/partnerships";
 import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
 import { separateNewAndUpdatedArrayValues } from "@/utils/tempId";
 import { validateEventData } from "@/validations/eventValidations";
@@ -47,7 +47,6 @@ const EventForm = ({
   const { submitEvent, isLoading: submitFormLoading } = useSubmitEvent();
   const { submitPartnerships, isLoading: submitPartnershipsLoading } =
     useSubmitPartnerships();
-
   const [event, setEvent] = useState<initialEventData>(
     initialEventData(eventData)
   );
@@ -58,7 +57,7 @@ const EventForm = ({
   const [errors, setErrors] = useState<{
     event: Record<string, string>;
   }>({ event: {} });
-
+  console.log(errors);
   const onEventChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
     setEvent((prev) => ({ ...prev, [name]: value }));
@@ -219,7 +218,10 @@ const EventForm = ({
         error={!!errors.event.description}
         errorMessage={errors.event.description}
       />
-      <Partnerships onChange={setPartnerships} partnerships={partnerships} />
+      <Partnerships
+        onChange={setPartnerships}
+        partnerships={partnerships as PartnershipPopulated[]}
+      />
       <NewDatesEventForm onChange={onEventChange} data={event} />
       <EventScheduleList
         schedule={event.schedule}

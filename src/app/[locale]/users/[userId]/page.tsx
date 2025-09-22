@@ -19,7 +19,7 @@ import { User as UserIcon, Star, MapPin, Calendar } from "lucide-react";
 const UserPage = () => {
   const { userId } = useParams();
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("presentation");
+  const [activeTab, setActiveTab] = useState("gallery");
 
   const { user: currentUser } = useAuth();
   const { user, isLoading } = useUser(userId as string);
@@ -81,15 +81,15 @@ const UserPage = () => {
   };
 
   const tabs = [
-    { id: "presentation", label: "Présentation", icon: UserIcon },
-    { id: "avis", label: "Avis", icon: Star },
-    { id: "lieux", label: "Lieux partenaires", icon: MapPin },
-    { id: "evenements", label: "Événements", icon: Calendar },
+    { id: "gallery", label: "Galerie", icon: UserIcon },
+    { id: "reviews", label: "Avis", icon: Star },
+    { id: "places", label: "Lieux partenaires", icon: MapPin },
+    { id: "events", label: "Événements", icon: Calendar },
   ];
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case "presentation":
+      case "gallery":
         return (
           <GallerySection
             images={images || []}
@@ -99,18 +99,18 @@ const UserPage = () => {
             onImageDeleted={handleImageDeleted}
           />
         );
-      case "avis":
+      case "reviews":
         return (
           <div className={styles.emptyState}>
             <Star size={32} />
             <p>Aucun avis pour le moment</p>
           </div>
         );
-      case "lieux":
+      case "places":
         return (
           <PlacesSection placePartnerships={placePartnerships} user={user!} />
         );
-      case "evenements":
+      case "events":
         return (
           <EventsSection eventPartnerships={eventPartnerships} user={user!} />
         );
@@ -121,7 +121,6 @@ const UserPage = () => {
 
   if (isLoading || isLoadingPartnerships) return <LoadingBar />;
 
-  // Check if current user is the owner of this profile
   const isOwner = currentUser && user && currentUser._id === user._id;
 
   if (!user) return <LoadingBar />;
