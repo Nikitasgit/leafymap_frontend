@@ -1,3 +1,4 @@
+import { SubCategory } from "../categories";
 import { Image } from "../image";
 import { Place, PlacePopulated } from "../place";
 import { Event, EventPopulated } from "../place/event";
@@ -16,7 +17,7 @@ export interface Partnership {
     _id: string;
     name?: string;
     image?: string | Image;
-    categories?: string[];
+    categories?: string[] | SubCategory[];
   };
   status: "pending" | "accepted" | "refused";
   type?: "place" | "event";
@@ -30,6 +31,6 @@ export interface PartnershipPopulated extends Partnership {
     _id: string;
     name?: string;
     image?: Image;
-    categories?: string[];
+    categories: SubCategory[];
   };
 }

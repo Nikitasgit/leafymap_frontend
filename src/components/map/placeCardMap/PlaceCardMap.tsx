@@ -54,11 +54,7 @@ const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
             <Image
               onClick={() => {
                 if (place?.isCreatorPlace) {
-                  const userId =
-                    typeof place.userId === "string"
-                      ? place.userId
-                      : place.userId._id;
-                  router.push(`/users/${userId}`);
+                  router.push(`/users/${place.user._id}`);
                 } else {
                   router.push(`/places/${place?._id}`);
                 }

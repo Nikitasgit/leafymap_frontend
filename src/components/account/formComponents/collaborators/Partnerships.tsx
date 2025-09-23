@@ -7,7 +7,7 @@ import InfoIcon from "@/components/common/info/InfoIcon";
 import Text from "@/components/common/typography/Text";
 import { Delete, Users } from "lucide-react";
 import { generateTempId, isTempId } from "@/utils/tempId";
-import { Partnership, PartnershipPopulated } from "@/types/partnerships";
+import { Partnership } from "@/types/partnerships";
 import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
 import { useToast } from "@/hooks/useToast";
@@ -19,7 +19,7 @@ const Partnerships = ({
   partnerships,
 }: {
   onChange: (partnerships: Partnership[]) => void;
-  partnerships: PartnershipPopulated[];
+  partnerships: Partnership[];
 }) => {
   const { searchUsers } = useFindUsers();
   const fetchSuggestions = async (query: string) => {
@@ -144,8 +144,10 @@ const Partnerships = ({
                   <div className={styles.itemInfoLeft}>
                     <Image
                       src={
-                        partnership.collaborator?.image?.urls?.thumbnail ||
-                        "https://i.pravatar.cc/40?img=3"
+                        typeof partnership.collaborator?.image === "object"
+                          ? partnership.collaborator.image?.urls?.thumbnail
+                          : partnership.collaborator?.image ||
+                            "https://i.pravatar.cc/40?img=3"
                       }
                       alt={partnership.collaborator.name || ""}
                       width={32}

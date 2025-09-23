@@ -58,7 +58,6 @@ const EventForm = ({
   const [event, setEvent] = useState<initialEventData>(
     initialEventData(eventData)
   );
-  console.log(event);
   const [partnerships, setPartnerships] =
     useState<Partnership[]>(partnershipsData);
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
@@ -66,7 +65,6 @@ const EventForm = ({
   const [errors, setErrors] = useState<{
     event: Record<string, string>;
   }>({ event: {} });
-  console.log(errors);
   const onEventChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
     setEvent((prev) => ({ ...prev, [name]: value }));

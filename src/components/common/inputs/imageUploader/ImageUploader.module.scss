@@ -1,6 +1,7 @@
 @use "@/styles/abstracts/variables" as *;
 @use "@/styles/abstracts/mixins" as *;
 @use "@/styles/abstracts/functions" as *;
+@use "sass:color";
 
 .imageUploader {
   aspect-ratio: 1;
@@ -15,7 +16,7 @@
 
   &:hover:not(:disabled) {
     background: $grey-50;
-    border-color: darken($primary-color, 10%);
+    color: color.adjust($primary-color, $lightness: -10%);
   }
 
   &:focus {

@@ -1,8 +1,7 @@
 @use "@/styles/abstracts/variables" as *;
 @use "@/styles/abstracts/functions" as *;
 @use "@/styles/abstracts/mixins" as *;
-
-@import "./shared.module.scss";
+@use "./shared.module.scss" as shared;
 
 .content {
   padding: spacing(3);

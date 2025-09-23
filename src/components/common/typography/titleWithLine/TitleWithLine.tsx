@@ -14,8 +14,8 @@ const TitleWithLine = ({
   className = "",
 }: TitleWithLineProps) => {
   return (
-    <div className={`${styles.container} ${className}`}>
-      <Text as={as} className={styles.title}>
+    <div className={styles.container}>
+      <Text as={as} className={className || styles.title}>
         {children}
       </Text>
       <div className={styles.line}></div>

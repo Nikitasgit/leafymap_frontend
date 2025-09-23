@@ -46,7 +46,6 @@ const GallerySection: React.FC<GallerySectionProps> = ({
   ) => {
     event?.stopPropagation();
     if (!isOwner) return;
-
     try {
       await deleteImages([imageId]);
       onImageDeleted?.();

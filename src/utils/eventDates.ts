@@ -71,7 +71,6 @@ export const getEventStatusFromSchedule = (
 export const getEventDisplayInfo = (schedule: Period[]): EventDisplayInfo => {
   const status = getEventStatusFromSchedule(schedule);
   const dateRange = getEventDateRange(schedule);
-  console.log(dateRange);
   const formattedDateRange = formatEventDateRange(dateRange);
 
   return {

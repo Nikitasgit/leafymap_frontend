@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Place } from "@/types/place";
+import { PlacePopulated } from "@/types/place";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 
@@ -8,7 +8,7 @@ export const usePlace = (
   placeId: string | null,
   enrichSchedule: boolean = false
 ) => {
-  const [place, setPlace] = useState<Place | null>(null);
+  const [place, setPlace] = useState<PlacePopulated | null>(null);
   const { isLoading, withLoading, stopLoading } = useLoading(true);
   const { showError } = useToast();
   useEffect(() => {

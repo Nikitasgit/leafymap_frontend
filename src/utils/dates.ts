@@ -1,4 +1,5 @@
-import { parse } from "date-fns";
+import { format, parse } from "date-fns";
+import { fr } from "date-fns/locale";
 
 export function parseDateToUTC(dateString: string): string {
   const parsedDate = parse(dateString, "dd-MM-yyyy", new Date());
@@ -35,3 +36,19 @@ export function parseDateStringToDate(dateString: string): Date {
 
   return utcDate;
 }
+
+export const formatDateShort = (dateString: string): string => {
+  return format(new Date(dateString), "dd/MM", {
+    locale: fr,
+  });
+};
+
+export const sortPeriodsByStartDate = <T extends { startDate: string }>(
+  periods: T[]
+): T[] => {
+  return [...periods].sort((a, b) => {
+    const dateA = new Date(a.startDate);
+    const dateB = new Date(b.startDate);
+    return dateA.getTime() - dateB.getTime();
+  });
+};
