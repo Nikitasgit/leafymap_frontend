@@ -2,16 +2,15 @@ import React from "react";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import Text from "@/components/common/typography/Text";
 import EventStatus from "@/components/common/eventStatus/EventStatus";
-import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader/ProfilePictureUploader";
-import { Event } from "@/types/place/event";
+import { EventPopulated } from "@/types/place/event";
 import { Place } from "@/types/place";
 import { getEventDisplayInfo } from "@/utils/eventDates";
-import { Image } from "@/types/image";
 import styles from "./EventCard.module.scss";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface EventCardProps {
-  event: Event;
+  event: EventPopulated;
   place?: Place;
 }
 
@@ -25,14 +24,14 @@ const EventCard: React.FC<EventCardProps> = ({ event, place }) => {
 
   return (
     <div className={styles.eventCard} onClick={handleCardClick}>
-      <ProfilePictureUploader
-        type="Event"
-        reference={event._id}
-        initialImage={event.image as Image}
-        size="medium"
-        isOwner={false}
-      />
-
+      <div className={styles.imageContainer}>
+        <Image
+          src={event.image?.urls?.thumbnail || "https://i.pravatar.cc/40?img=3"}
+          alt={event.name}
+          fill
+          className={styles.placeImage}
+        />
+      </div>
       <div className={styles.eventInfo}>
         <div className={styles.eventHeader}>
           <div className={styles.eventTitle}>

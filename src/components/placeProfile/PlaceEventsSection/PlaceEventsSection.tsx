@@ -2,11 +2,11 @@ import React from "react";
 import { Calendar } from "lucide-react";
 import Text from "@/components/common/typography/Text";
 import EventCard from "@/components/userProfile/EventsSection/EventCard/EventCard";
-import { Event } from "@/types/place/event";
+import { EventPopulated } from "@/types/place/event";
 import styles from "./PlaceEventsSection.module.scss";
 
 interface PlaceEventsSectionProps {
-  events: Event[];
+  events: EventPopulated[];
 }
 
 const PlaceEventsSection: React.FC<PlaceEventsSectionProps> = ({ events }) => {

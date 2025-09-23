@@ -8,6 +8,7 @@ import ImageModal from "@/components/common/modals/imageModal/ImageModal";
 import useDeleteImages from "@/hooks/useDeleteImages";
 import styles from "./GallerySection.module.scss";
 import EmptyState from "@/components/common/noResults/emptyState";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 
 interface GallerySectionProps {
   images: ImageType[];
@@ -68,8 +69,9 @@ const GallerySection: React.FC<GallerySectionProps> = ({
           <div className={styles.imagesList}>
             {isOwner && (
               <ImageUploader
-                onFilesSelected={onFilesSelected || (() => {})}
+                onFilesSelected={onFilesSelected}
                 disabled={isLoading}
+                iconSize={28}
               />
             )}
             {images &&
@@ -109,6 +111,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
         currentIndex={currentImageIndex}
         onNavigate={handleNavigate}
       />
+      {isLoading && <LoadingBar />}
     </section>
   );
 };

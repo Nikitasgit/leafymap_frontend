@@ -10,8 +10,8 @@
   @include flex(row, flex-start, center, spacing(0));
   .imageContainer {
     position: relative;
-    width: 100px;
-    height: 120px;
+    width: 70px;
+    align-self: stretch;
     flex-shrink: 0;
     border-radius: 12px 0 0 12px;
     overflow: hidden;
@@ -35,6 +35,9 @@
           flex-shrink: 0;
         }
       }
+      .placeCounters {
+        @include flex(row, flex-start, center, spacing(1));
+      }
     }
     .placeContent {
       @include flex(column, flex-start, stretch, spacing(0));
@@ -47,7 +50,6 @@
         @include flex(column, flex-start, stretch, spacing(0));
         padding-top: spacing(1);
         border-top: 1px solid $grey-100;
-
         .locationName {
           margin: 0;
           color: $grey-600;

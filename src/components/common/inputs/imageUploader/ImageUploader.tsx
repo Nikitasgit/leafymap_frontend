@@ -3,12 +3,13 @@ import { Plus } from "lucide-react";
 import styles from "./ImageUploader.module.scss";
 
 interface ImageUploaderProps {
-  onFilesSelected: (files: File[]) => void;
+  onFilesSelected?: (files: File[]) => void;
   accept?: string;
   multiple?: boolean;
   className?: string;
   iconSize?: number;
   disabled?: boolean;
+  isLoading?: boolean;
 }
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({
@@ -18,9 +19,10 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   className = "",
   iconSize = 24,
   disabled = false,
+  isLoading = false,
 }) => {
   const handleClick = () => {
-    if (disabled) return;
+    if (disabled || isLoading) return;
 
     try {
       const input = document.createElement("input");
@@ -31,7 +33,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       input.onchange = (e) => {
         const files = Array.from((e.target as HTMLInputElement).files || []);
         if (files.length > 0) {
-          onFilesSelected(files);
+          onFilesSelected?.(files);
         }
       };
 
@@ -46,9 +48,13 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       className={`${styles.imageUploader} ${className}`}
       onClick={handleClick}
       type="button"
-      disabled={disabled}
+      disabled={disabled || isLoading}
     >
-      <Plus size={iconSize} className={styles.plusIcon} />
+      {isLoading ? (
+        <div className={styles.loadingSpinner} />
+      ) : (
+        <Plus size={iconSize} className={styles.plusIcon} />
+      )}
     </button>
   );
 };

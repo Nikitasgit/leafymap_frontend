@@ -8,6 +8,7 @@ import styles from "./PlaceCard.module.scss";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter/SubscribersCounter";
+import ReviewsCounter from "@/components/common/counters/reviewsCounter";
 
 interface PlaceCardProps {
   place: PlacePopulated;
@@ -28,12 +29,15 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
           className={styles.placeImage}
         />
       </div>
-
       <div className={styles.placeInfo}>
         <div className={styles.placeHeader}>
           <div className={styles.placeTitle}>
             <MapPin size={18} className={styles.placeIcon} />
             <Text as="h3">{place.name}</Text>
+          </div>
+          <div className={styles.placeCounters}>
+            <SubscribersCounter followers={place.followers?.length || 0} />
+            <ReviewsCounter rating={place.rating || 0} />
           </div>
         </div>
 
@@ -50,11 +54,6 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
             <Text as="p" className={styles.locationName}>
               {place.location?.label}
             </Text>
-            <SubscribersCounter
-              title="Abonnés"
-              followers={place.followers?.length || 0}
-              withIcon={false}
-            />
           </div>
         </div>
       </div>

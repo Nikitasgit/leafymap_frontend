@@ -2,11 +2,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
-import { Event } from "@/types/place/event";
-
+import { EventPopulated } from "@/types/place/event";
 
 export const usePlaceEvents = (placeId: string | null) => {
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<EventPopulated[]>([]);
   const { isLoading, withLoading, stopLoading } = useLoading(true);
   const { showError } = useToast();
 
