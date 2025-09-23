@@ -1,0 +1,19 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.participantsList {
+  margin-top: spacing(1);
+
+  .participantsTitle {
+    color: $grey-500;
+    font-weight: 600;
+  }
+
+  .participantsGrid {
+    margin-top: spacing(1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing(1);
+  }
+}

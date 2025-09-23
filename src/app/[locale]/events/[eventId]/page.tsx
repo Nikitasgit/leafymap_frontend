@@ -1,22 +1,20 @@
 "use client";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useEvent } from "@/hooks/useEvent";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import React from "react";
 import styles from "./eventPage.module.scss";
-import { ArrowLeft } from "lucide-react";
 import Text from "@/components/common/typography/Text";
 import EventSchedule from "@/components/events/eventSchedule/EventSchedule";
 import EventHeader from "@/components/events/eventPublicPage/eventHeader";
-import Button from "@/components/common/buttons/button/Button";
-import ParticipantsList from "@/components/events/eventPublicPage/participantsList";
+import ParticipantsList from "@/components/common/users/participantsList";
 import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
 import { PartnershipPopulated } from "@/types/partnerships";
 import TitleWithLine from "@/components/common/typography/titleWithLine";
+import BackButton from "@/components/common/buttons/BackButton";
 
 const EventPage = () => {
   const { eventId } = useParams();
-  const router = useRouter();
   const { event, isLoading } = useEvent(eventId as string);
 
   const { partnerships, isLoading: partnershipsLoading } = usePlacePartnerships(
@@ -29,14 +27,7 @@ const EventPage = () => {
 
   return (
     <main className={styles.pageContainer}>
-      <Button
-        variant="simple"
-        onClick={() => router.back()}
-        className={styles.backButton}
-        startIcon={<ArrowLeft size={16} />}
-      >
-        Retour
-      </Button>
+      <BackButton />
       <EventHeader event={event} />
       <div className={styles.eventInfo}>
         <TitleWithLine as="h3" className={styles.eventDescriptionTitle}>

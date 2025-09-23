@@ -3,10 +3,6 @@
 @use "../../../styles/abstracts/mixins" as *;
 
 .container {
-  @include flex(column, flex-start, stretch, spacing(3));
+  @include flex(column, flex-start, stretch, spacing(2.5));
   width: 100%;
-}
-
-.titleContainer {
-  margin-bottom: spacing(1.5);
 }

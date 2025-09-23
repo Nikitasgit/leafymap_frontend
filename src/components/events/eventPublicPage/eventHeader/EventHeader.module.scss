@@ -21,6 +21,7 @@
         @include flex(row, flex-start, center, spacing(1));
 
         .title {
+          text-transform: capitalize;
           font-size: rem(20);
           font-weight: 600;
           color: $grey-600;

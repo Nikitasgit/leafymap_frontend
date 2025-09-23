@@ -5,6 +5,7 @@ import EventCard from "./EventCard/EventCard";
 import { PartnershipPopulated } from "@/types/partnerships";
 import { User } from "@/types/user";
 import styles from "./EventsSection.module.scss";
+import EmptyState from "@/components/common/noResults/emptyState";
 
 interface EventsSectionProps {
   eventPartnerships: PartnershipPopulated[];
@@ -27,12 +28,10 @@ const EventsSection: React.FC<EventsSectionProps> = ({
             );
           })
         ) : (
-          <div className={styles.emptyState}>
-            <Calendar className={styles.icon} />
-            <Text as="p" className={styles.text}>
-              Aucun événement prévu pour le moment
-            </Text>
-          </div>
+          <EmptyState
+            title="Aucun événement prévu pour le moment"
+            icon={<Calendar className={styles.icon} />}
+          />
         )}
       </div>
     </section>

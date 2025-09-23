@@ -12,7 +12,7 @@ import { usePartnershipByUserId } from "@/hooks/usePartnershipByUserId";
 import { useUser } from "@/hooks/useUser";
 import { Calendar } from "lucide-react";
 import { getEventDisplayInfo } from "@/utils/eventDates";
-import { useTranslation } from "next-i18next";
+import CreatorCategoryBadge from "@/components/common/users/creatorCategoryBadge";
 
 interface UserCardMapProps {
   userId: string;
@@ -20,7 +20,6 @@ interface UserCardMapProps {
 }
 
 const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
-  const { t } = useTranslation();
   const router = useRouter();
 
   const { user, isLoading: isLoadingUser } = useUser(userId);
@@ -70,13 +69,9 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
           />
           <div className={styles.creatorText}>
             <Text as="h3">{user.creatorName}</Text>
-            <Text as="p" className={styles.creatorCategories}>
-              {user.creatorCategories
-                ?.map((category: { name: string }) =>
-                  t(`creatorCategories.${category.name}`)
-                )
-                .join(", ")}
-            </Text>
+            <CreatorCategoryBadge
+              categoryName={user.creatorCategories[0].name}
+            />
           </div>
         </div>
         <Button
@@ -150,9 +145,7 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
                   <Button
                     variant="simple"
                     className={styles.eventButton}
-                    onClick={() =>
-                      router.push(`places/${place._id}/events/${event._id}`)
-                    }
+                    onClick={() => router.push(`/events/${event._id}`)}
                   >
                     <SquareArrowOutUpRight size={12} />
                   </Button>

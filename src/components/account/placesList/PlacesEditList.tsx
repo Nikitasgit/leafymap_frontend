@@ -6,7 +6,7 @@ import styles from "./PlacesEditList.module.scss";
 const PlacesEditList = ({ places }: { places: Place[] }) => {
   return (
     <div className={styles.container}>
-      <TitleWithLine as="h2" className={styles.titleContainer}>
+      <TitleWithLine as="h2">
         {places.length > 1 ? "Vos lieux" : "Votre lieu"}
       </TitleWithLine>
       <div className={styles.placesGrid}>

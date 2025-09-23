@@ -36,20 +36,6 @@
   font-weight: 600;
 }
 
-.editIcon {
-  color: $grey-500;
-  &:hover {
-    color: $primary-color;
-  }
-}
-
-.deleteIcon {
-  color: $error-color;
-  &:hover {
-    color: $error-color;
-  }
-}
-
 .description {
   color: $grey-500;
   font-size: rem(13);

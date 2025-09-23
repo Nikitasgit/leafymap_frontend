@@ -15,7 +15,7 @@ export default function EventsListPage() {
   const router = useRouter();
   const { events, isLoading } = usePlaceEvents(params.placeId as string);
 
-  const placeName = events?.[0]?.place?.name || "Événements de votre lieu";
+  const placeName = events?.[0]?.place?.name || "votre lieu";
 
   if (isLoading) return <LoadingBar />;
 

@@ -1,0 +1,28 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.partnershipsList {
+  @include flex(column, flex-start, stretch, spacing(0));
+}
+
+.emptyState {
+  @include flex(column, center, center, spacing(1.5));
+  padding: spacing(4);
+  text-align: center;
+  color: $grey-400;
+  background: $white;
+  border-radius: 8px;
+  border: 1px solid $grey-200;
+
+  .icon {
+    color: $grey-300;
+  }
+
+  .text {
+    margin: 0;
+    font-size: rem(16);
+    font-weight: 500;
+    color: $grey-400;
+  }
+}

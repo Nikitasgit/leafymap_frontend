@@ -1,0 +1,22 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.emptyState {
+  @include flex(column, center, center, spacing(1.5));
+  padding: spacing(4);
+  text-align: center;
+  color: $grey-400;
+  background-color: $grey-50;
+  border-radius: rem(8);
+  border: 2px dashed $grey-300;
+  .title {
+    font-style: italic;
+    font-size: rem(16);
+    font-weight: 500;
+  }
+  .description {
+    font-size: rem(14);
+    font-weight: 400;
+  }
+}

@@ -3,120 +3,60 @@
 @use "@/styles/abstracts/functions" as *;
 
 .header {
-  background: $white;
-  border-radius: 12px;
-  padding: spacing(2);
-  margin-bottom: spacing(2);
-  border: 1px solid $grey-200;
-}
-
-.topBar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: spacing(2);
-}
-
-.backButton {
-  padding: spacing(0.5);
-  border-radius: 8px;
-  color: $grey-600;
-
-  &:hover {
-    background: $grey-100;
-    color: $grey-800;
+  @include flex(row, space-between, center, spacing(1.5));
+  margin-top: spacing(1);
+  margin-bottom: spacing(2.5);
+  .placeImage {
+    border-radius: 8px;
+    overflow: hidden;
   }
-}
+  .headerInfo {
+    flex: 1;
+    .headerFirstRow {
+      @include flex(row, space-between, center, spacing(1));
 
-.headerMain {
-  display: flex;
-  gap: spacing(2);
-  align-items: flex-start;
-
-  @include respond-to(md) {
-    gap: spacing(3);
-  }
-}
-
-.placeInfo {
-  flex: 1;
-  min-width: 0;
-}
-
-.placeInfo h1 {
-  margin: 0 0 spacing(1) 0;
-  font-size: rem(24);
-  font-weight: 600;
-
-  line-height: 1.2;
-
-  @include respond-to(md) {
-    font-size: rem(28);
-  }
-}
-
-.counters {
-  display: flex;
-  gap: spacing(2);
-  margin-bottom: spacing(1.5);
-  flex-wrap: wrap;
-}
-
-.counterRow {
-  display: flex;
-  align-items: center;
-  gap: spacing(0.5);
-  color: $grey-600;
-  font-size: rem(14);
-  font-weight: 500;
-}
-
-.counter {
-  font-weight: 600;
-  color: $grey-800;
-}
-
-.starsContainer {
-  display: flex;
-  gap: 2px;
-}
-
-.star {
-  color: $grey-300;
-}
-
-.description {
-  margin: 0 0 spacing(1.5) 0;
-  color: $grey-700;
-  line-height: 1.5;
-  font-size: rem(14);
-
-  @include respond-to(md) {
-    font-size: rem(16);
-  }
-}
-
-.locationInfo {
-  display: flex;
-  align-items: center;
-  gap: spacing(0.5);
-  color: $grey-600;
-  font-size: rem(14);
-}
-
-.location {
-  margin: 0;
-  color: $grey-600;
-}
-
-.buttons {
-  display: flex;
-  flex-direction: column;
-  gap: spacing(1);
-  min-width: 120px;
-
-  @include respond-to(md) {
-    flex-direction: row;
-    min-width: auto;
+      .titleRow {
+        @include flex(row, flex-start, center, spacing(1));
+        .title {
+          text-transform: capitalize;
+          font-size: rem(20);
+          font-weight: 600;
+          color: $grey-600;
+        }
+      }
+      .counters {
+        @include flex(row, flex-start, center, spacing(2));
+      }
+    }
+    .headerMain {
+      @include flex(row, flex-start, flex-end, spacing(1));
+      .placeDetails {
+        @include flex(column, flex-start, flex-start, spacing(0));
+        flex: 1;
+        .description {
+          font-size: rem(14);
+          font-weight: 400;
+          color: $grey-600;
+          min-height: 36px;
+        }
+      }
+      .locationInfo {
+        display: flex;
+        align-items: center;
+        gap: spacing(0.5);
+        color: $grey-600;
+        font-size: rem(14);
+        border-top: 1px solid $grey-200;
+        min-width: 95%;
+        padding-top: spacing(0.5);
+        .location {
+          margin: 0;
+          color: $grey-600;
+        }
+      }
+      .buttons {
+        @include flex(row, flex-end, center, spacing(1));
+      }
+    }
   }
 }

@@ -1,7 +1,7 @@
 "use client";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useUser } from "@/hooks/useUser";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import React, { useState } from "react";
 import styles from "./userPage.module.scss";
 import { usePartnershipByUserId } from "@/hooks/usePartnershipByUserId";
@@ -15,10 +15,11 @@ import GallerySection from "@/components/userProfile/GallerySection/GallerySecti
 import TabsContainer from "@/components/common/tabs/TabsContainer";
 import Tab from "@/components/common/tabs/Tab";
 import { User as UserIcon, Star, MapPin, Calendar } from "lucide-react";
+import BackButton from "@/components/common/buttons/BackButton";
+import EmptyState from "@/components/common/noResults/emptyState";
 
 const UserPage = () => {
   const { userId } = useParams();
-  const router = useRouter();
   const [activeTab, setActiveTab] = useState("gallery");
 
   const { user: currentUser } = useAuth();
@@ -34,7 +35,6 @@ const UserPage = () => {
       onlyAccepted: "true",
     });
   const { submitImages, isLoading: isUploadingImages } = useSubmitImages();
-  const place = user?.places?.[0];
   const placePartnerships = partnerships.filter(
     (partnership) => partnership.type === "place"
   );
@@ -101,10 +101,10 @@ const UserPage = () => {
         );
       case "reviews":
         return (
-          <div className={styles.emptyState}>
-            <Star size={32} />
-            <p>Aucun avis pour le moment</p>
-          </div>
+          <EmptyState
+            title="Aucun avis pour le moment"
+            icon={<Star size={32} />}
+          />
         );
       case "places":
         return (
@@ -127,12 +127,11 @@ const UserPage = () => {
 
   return (
     <main className={styles.pageContainer}>
+      <BackButton />
       <UserHeader
         user={user}
-        place={place}
         onFollow={handleFollow}
         onMessage={handleMessage}
-        onBack={() => router.back()}
       />
 
       <TabsContainer>

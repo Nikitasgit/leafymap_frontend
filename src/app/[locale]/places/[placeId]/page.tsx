@@ -5,7 +5,7 @@ import { usePlaceEvents } from "@/hooks/usePlaceEvents";
 import { useGalleryImages } from "@/hooks/useGalleryImages";
 import { useAuth } from "@/hooks/useAuth";
 import useSubmitImages from "@/hooks/useSubmitImages";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import React, { useState } from "react";
 import styles from "./placePage.module.scss";
 import PlaceHeader from "@/components/placeProfile/PlaceHeader/PlaceHeader";
@@ -13,17 +13,26 @@ import PlaceEventsSection from "@/components/placeProfile/PlaceEventsSection/Pla
 import GallerySection from "@/components/userProfile/GallerySection/GallerySection";
 import TabsContainer from "@/components/common/tabs/TabsContainer";
 import Tab from "@/components/common/tabs/Tab";
-import { Image as ImageIcon, Star, Calendar } from "lucide-react";
+import { Image as ImageIcon, Star, Calendar, Users } from "lucide-react";
+import BackButton from "@/components/common/buttons/BackButton";
+import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
+import PartnershipsSection from "@/components/placeProfile/PartnershipsSection/PartnershipsSection";
+import { PartnershipPopulated } from "@/types/partnerships";
+import EmptyState from "@/components/common/noResults/emptyState/EmptyState";
 
 const PlacePage = () => {
   const { placeId } = useParams();
-  const router = useRouter();
   const [activeTab, setActiveTab] = useState("gallery");
 
   const { user: currentUser } = useAuth();
   const { place, isLoading: placeLoading } = usePlace(placeId as string);
   const { events, isLoading: eventsLoading } = usePlaceEvents(
     placeId as string
+  );
+  const { partnerships, isLoading: partnershipsLoading } = usePlacePartnerships(
+    placeId as string,
+    undefined,
+    "place"
   );
   const {
     images,
@@ -72,6 +81,7 @@ const PlacePage = () => {
   const tabs = [
     { id: "gallery", label: "Galerie", icon: ImageIcon },
     { id: "reviews", label: "Avis", icon: Star },
+    { id: "partnerships", label: "Createurs", icon: Users },
     { id: "events", label: "Événements", icon: Calendar },
   ];
 
@@ -89,23 +99,26 @@ const PlacePage = () => {
         );
       case "reviews":
         return (
-          <div className={styles.emptyState}>
-            <Star size={32} />
-            <p>Aucun avis pour le moment</p>
-          </div>
-        );
-      case "events":
-        return (
-          <PlaceEventsSection
-            events={events || []}
+          <EmptyState
+            title="Aucun avis pour le moment"
+            icon={<Star size={32} />}
           />
         );
+      case "partnerships":
+        return (
+          <PartnershipsSection
+            partnerships={partnerships as PartnershipPopulated[]}
+          />
+        );
+      case "events":
+        return <PlaceEventsSection events={events || []} />;
       default:
         return null;
     }
   };
 
-  if (placeLoading || eventsLoading) return <LoadingBar />;
+  if (placeLoading || eventsLoading || partnershipsLoading)
+    return <LoadingBar />;
 
   const isOwner =
     currentUser &&
@@ -117,11 +130,11 @@ const PlacePage = () => {
 
   return (
     <main className={styles.pageContainer}>
+      <BackButton />
       <PlaceHeader
         place={place}
         onFollow={handleFollow}
         onMessage={handleMessage}
-        onBack={() => router.back()}
       />
 
       <TabsContainer>

@@ -4,12 +4,13 @@ import Button from "@/components/common/buttons/button/Button";
 import Text from "@/components/common/typography/Text";
 import Schedule from "@/components/common/schedule";
 import styles from "./PlaceCardMap.module.scss";
-import { MapPin, Star } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { usePlace } from "@/hooks/usePlace";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 import { ExtendedMapRef } from "@/types/map";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
+import ReviewsCounter from "@/components/common/counters/reviewsCounter";
 
 interface PlaceCardMapProps {
   placeId: string;
@@ -30,19 +31,6 @@ const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
       });
     }
   }, [mapRef, place]);
-
-  const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }, (_, index) => (
-      <Star
-        key={index}
-        size={12}
-        className={`${styles.star} ${
-          index < rating ? styles.filled : styles.empty
-        }`}
-        fill={index < rating ? "currentColor" : "none"}
-      />
-    ));
-  };
 
   return (
     <div className={styles.placeCardMap}>
@@ -76,14 +64,14 @@ const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
             <div className={styles.categoryRow}>
               {place?.placeCategory && (
                 <Text className={styles.category}>
-                  {place.creatorCategories ? (
-                    place.creatorCategories.map((category) => (
-                      <Text key={category._id}>
+                  {place.user.creatorCategories ? (
+                    place.user.creatorCategories.map((category) => (
+                      <Text key={category._id} as="span">
                         {t(`creatorCategories.${category.name}`)}
                       </Text>
                     ))
                   ) : (
-                    <Text>
+                    <Text as="span">
                       {t(
                         `placeCategories.${
                           typeof place.placeCategory === "object"
@@ -95,12 +83,7 @@ const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
                   )}
                 </Text>
               )}
-              <div className={styles.ratingRow}>
-                <span className={styles.rating}>{place?.rating}</span>
-                <div className={styles.starsContainer}>
-                  {renderStars(place?.rating || 0)}
-                </div>
-              </div>
+              <ReviewsCounter rating={place?.rating || 0} />
             </div>
           </div>
           <div className={styles.buttons}>

@@ -1,0 +1,27 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.creatorCard {
+  cursor: pointer;
+  background: $white;
+  border: 1px solid $grey-200;
+  border-radius: 12px;
+  padding: spacing(0.5);
+  @include flex(row, center, center, spacing(1.25));
+  width: fit-content;
+  .avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid $grey-100;
+  }
+  .creatorInfo {
+    min-width: 0;
+    @include flex(row, space-between, center, spacing(0.75));
+    .creatorName {
+      font-size: rem(14);
+      font-weight: 600;
+      color: $grey-700;
+    }
+  }
+}

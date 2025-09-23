@@ -3,7 +3,7 @@ import { Place } from "@/types/place";
 import { useRouter } from "next/navigation";
 import Text from "@/components/common/typography/Text";
 import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader";
-import { Edit3, Trash2 } from "lucide-react";
+import { Edit3, Eye, Trash2 } from "lucide-react";
 import styles from "./PlaceEditCard.module.scss";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
 import useDeletePlace from "@/hooks/useDeletePlace";
@@ -45,10 +45,19 @@ const PlaceEditCard = ({ place }: { place: Place }) => {
           </Text>
           {!place.isCreatorPlace ? (
             <div className={styles.actionButtons}>
+              {!place.isCreatorPlace && (
+                <Button
+                  variant="simple"
+                  onClick={() => router.push(`/places/${place._id}`)}
+                  aria-label="Voir le lieu"
+                  disabled={isDeletingPlace}
+                >
+                  <Eye size={16} />
+                </Button>
+              )}
               <Button
                 variant="simple"
                 onClick={() => deletePlace(place._id)}
-                className={styles.deleteIcon}
                 aria-label="Supprimer"
                 disabled={isDeletingPlace}
               >
@@ -57,7 +66,6 @@ const PlaceEditCard = ({ place }: { place: Place }) => {
               <Button
                 variant="simple"
                 onClick={() => router.push(`account/places/${place._id}`)}
-                className={styles.editIcon}
                 aria-label="Modifier"
               >
                 <Edit3 size={16} />

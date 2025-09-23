@@ -19,7 +19,7 @@ const EventHeader: React.FC<EventHeaderProps> = ({ event }) => {
   const eventDisplayInfo = getEventDisplayInfo(event.schedule || []);
   const router = useRouter();
   return (
-    <div className={styles.header}>
+    <header className={styles.header}>
       <ProfilePictureUploader
         type="Event"
         className={styles.eventImage}
@@ -55,7 +55,7 @@ const EventHeader: React.FC<EventHeaderProps> = ({ event }) => {
           {event.place.name}
         </Button>
       </div>
-    </div>
+    </header>
   );
 };
 

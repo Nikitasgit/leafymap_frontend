@@ -7,6 +7,7 @@ import ImageUploader from "@/components/common/inputs/imageUploader/ImageUploade
 import ImageModal from "@/components/common/modals/imageModal/ImageModal";
 import useDeleteImages from "@/hooks/useDeleteImages";
 import styles from "./GallerySection.module.scss";
+import EmptyState from "@/components/common/noResults/emptyState";
 
 interface GallerySectionProps {
   images: ImageType[];
@@ -53,63 +54,54 @@ const GallerySection: React.FC<GallerySectionProps> = ({
       console.error("Error deleting image:", error);
     }
   };
-  if (isLoading) {
-    return (
-      <section>
-        <Text as="h3">Galerie</Text>
-        <div className={styles.loading}>
-          <div className={styles.spinner}></div>
-          <Text as="p">Chargement des images...</Text>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section>
-      <Text as="h3">Galerie</Text>
-      <div className={styles.imagesList}>
-        {isOwner && (
-          <ImageUploader
-            onFilesSelected={onFilesSelected || (() => {})}
-            disabled={isLoading}
-          />
-        )}
-        {images && images.length > 0
-          ? images.map((image, index) => (
-              <div
-                key={index}
-                className={styles.imageItem}
-                onClick={() => handleImageClick(index)}
-              >
-                <Image
-                  src={image.urls?.thumbnail}
-                  alt={`Image ${index + 1}`}
-                  className={styles.galleryImage}
-                  width={150}
-                  height={150}
-                />
-                {isOwner && (
-                  <button
-                    className={styles.deleteButton}
-                    onClick={(e) => handleDeleteImage(image._id, e)}
-                    disabled={isDeleting}
-                    title="Supprimer l'image"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                )}
-              </div>
-            ))
-          : !isOwner && (
-              <div className={styles.emptyState}>
-                <ImageIcon className={styles.icon} />
-                <Text as="p" className={styles.text}>
-                  Aucune image dans la galerie
-                </Text>
-              </div>
+      {!images || (images.length === 0 && !isOwner) ? (
+        <EmptyState
+          title="Aucune image dans la galerie"
+          icon={<ImageIcon className={styles.icon} />}
+        />
+      ) : (
+        <>
+          <Text as="h3">Galerie</Text>
+          <div className={styles.imagesList}>
+            {isOwner && (
+              <ImageUploader
+                onFilesSelected={onFilesSelected || (() => {})}
+                disabled={isLoading}
+              />
             )}
-      </div>
+            {images &&
+              images.length > 0 &&
+              images.map((image, index) => (
+                <div
+                  key={index}
+                  className={styles.imageItem}
+                  onClick={() => handleImageClick(index)}
+                >
+                  <Image
+                    src={image.urls?.thumbnail}
+                    alt={`Image ${index + 1}`}
+                    className={styles.galleryImage}
+                    width={150}
+                    height={150}
+                  />
+                  {isOwner && (
+                    <button
+                      className={styles.deleteButton}
+                      onClick={(e) => handleDeleteImage(image._id, e)}
+                      disabled={isDeleting}
+                      title="Supprimer l'image"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  )}
+                </div>
+              ))}
+          </div>
+        </>
+      )}
       <ImageModal
         isOpen={modalOpen}
         onClose={handleModalClose}

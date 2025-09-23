@@ -5,6 +5,7 @@ import PlaceCard from "./PlaceCard/PlaceCard";
 import { PartnershipPopulated } from "@/types/partnerships";
 import { User } from "@/types/user";
 import styles from "./PlacesSection.module.scss";
+import EmptyState from "@/components/common/noResults/emptyState";
 
 interface PlacesSectionProps {
   placePartnerships: PartnershipPopulated[];
@@ -23,18 +24,14 @@ const PlacesSection: React.FC<PlacesSectionProps> = ({
           <div className={styles.placesGrid}>
             {placePartnerships.map((partnership) => {
               const place = partnership.place;
-              return (
-                <PlaceCard key={partnership._id} place={place} user={user} />
-              );
+              return <PlaceCard key={partnership._id} place={place} />;
             })}
           </div>
         ) : (
-          <div className={styles.emptyState}>
-            <MapPin className={styles.icon} />
-            <Text as="p" className={styles.text}>
-              Aucun lieu associé pour le moment
-            </Text>
-          </div>
+          <EmptyState
+            title="Aucun lieu associé pour le moment"
+            icon={<MapPin className={styles.icon} />}
+          />
         )}
       </div>
     </section>

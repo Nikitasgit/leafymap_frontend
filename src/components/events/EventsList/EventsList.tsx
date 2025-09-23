@@ -5,6 +5,7 @@ import Text from "@/components/common/typography/Text";
 import EditEventCard from "@/components/events/editEventCard/EditEventCard";
 import { Event } from "@/types/place/event";
 import styles from "./EventsList.module.scss";
+import EmptyState from "@/components/common/noResults/emptyState/EmptyState";
 
 interface EventsListProps {
   events: Event[];
@@ -24,25 +25,21 @@ const EventsList: React.FC<EventsListProps> = ({
       <Text as="h2" className={styles.placeName}>
         Les événements de <span>{placeName}</span> :
       </Text>
-
       {events.length === 0 ? (
-        <div className={styles.emptyState}>
-          <Text as="h3" className={styles.emptyTitle}>
-            Aucun événement trouvé
-          </Text>
-          <Text as="p" className={styles.emptyDescription}>
-            Commencez par créer votre premier événement pour attirer des
-            visiteurs.
-          </Text>
-          <Button
-            variant="secondary"
-            onClick={() =>
-              router.push(`/account/places/${placeId}/events/create`)
-            }
-          >
-            Créer un événement
-          </Button>
-        </div>
+        <EmptyState
+          title="Aucun événement"
+          description="Commencez par créer votre premier événement pour attirer des visiteurs."
+          button={
+            <Button
+              variant="secondary"
+              onClick={() =>
+                router.push(`/account/places/${placeId}/events/create`)
+              }
+            >
+              Créer un événement
+            </Button>
+          }
+        />
       ) : (
         <div className={styles.eventsList}>
           {events.map((event) => (

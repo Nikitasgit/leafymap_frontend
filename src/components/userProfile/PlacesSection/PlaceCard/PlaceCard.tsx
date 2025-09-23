@@ -1,33 +1,33 @@
 import React from "react";
-import { MapPin, Users } from "lucide-react";
+import { MapPin } from "lucide-react";
 import Text from "@/components/common/typography/Text";
-import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader/ProfilePictureUploader";
-import { Place } from "@/types/place";
-import { User } from "@/types/user";
-import { Image } from "@/types/image";
+
+import { PlacePopulated } from "@/types/place";
+
 import styles from "./PlaceCard.module.scss";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import SubscribersCounter from "@/components/common/counters/SubscribersCounter/SubscribersCounter";
 
 interface PlaceCardProps {
-  place: Place;
-  user: User;
+  place: PlacePopulated;
 }
 
-const PlaceCard: React.FC<PlaceCardProps> = ({ place, user }) => {
+const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
   const router = useRouter();
-
   return (
     <div
       className={styles.placeCard}
       onClick={() => router.push(`/places/${place._id}`)}
     >
-      <ProfilePictureUploader
-        type="Place"
-        reference={place._id}
-        initialImage={place.image as Image}
-        size="medium"
-        isOwner={false}
-      />
+      <div className={styles.imageContainer}>
+        <Image
+          src={place.image?.urls?.thumbnail || "https://i.pravatar.cc/40?img=3"}
+          alt={place.name}
+          fill
+          className={styles.placeImage}
+        />
+      </div>
 
       <div className={styles.placeInfo}>
         <div className={styles.placeHeader}>
@@ -47,20 +47,14 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, user }) => {
           )}
 
           <div className={styles.placeDetails}>
-            <div className={styles.locationInfo}>
-              <MapPin size={14} className={styles.detailIcon} />
-              <div className={styles.locationDetails}>
-                <Text as="p" className={styles.locationName}>
-                  {place.location?.label || "Adresse non disponible"}
-                </Text>
-              </div>
-            </div>
-            <div className={styles.followersInfo}>
-              <Users size={14} className={styles.detailIcon} />
-              <Text as="p" className={styles.detailText}>
-                {user?.followers?.length || 0} followers
-              </Text>
-            </div>
+            <Text as="p" className={styles.locationName}>
+              {place.location?.label}
+            </Text>
+            <SubscribersCounter
+              title="Abonnés"
+              followers={place.followers?.length || 0}
+              withIcon={false}
+            />
           </div>
         </div>
       </div>

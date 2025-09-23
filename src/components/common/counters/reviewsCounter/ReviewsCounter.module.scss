@@ -1,0 +1,26 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.reviewsCounter {
+  @include flex(row, flex-start, center, spacing(0.5));
+  color: $grey-600;
+  font-size: rem(14);
+  font-weight: 500;
+  .counter {
+    font-weight: 600;
+    color: $grey-800;
+  }
+  .starsContainer {
+    @include flex(row, flex-start, center, 2px);
+  }
+  .star {
+    color: $grey-300;
+  }
+  .filled {
+    color: $primary-color;
+  }
+  .empty {
+    color: $grey-300;
+  }
+}
