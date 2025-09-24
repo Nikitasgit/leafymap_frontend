@@ -25,4 +25,5 @@ export interface Place extends BaseEntity, ContactInfo {
 export interface PlacePopulated extends Place {
   image: Image;
   user: User;
+  placeCategory: PlaceCategory;
 }

@@ -38,7 +38,6 @@ const UserPage = () => {
   const placePartnerships = partnerships.filter(
     (partnership) => partnership.type === "place"
   );
-
   const eventPartnerships = partnerships.filter(
     (partnership) => partnership.type === "event"
   );

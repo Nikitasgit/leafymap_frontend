@@ -7,8 +7,6 @@
   margin: 0 auto;
   padding: spacing(2);
 
-  min-height: 100vh;
-
   @include respond-to(md) {
     padding: spacing(3);
   }

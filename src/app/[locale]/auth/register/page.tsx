@@ -23,6 +23,7 @@ export default function Register() {
     email: "",
     password: "",
     confirmPassword: "",
+    acceptedCGU: false,
   });
   const [errors, setErrors] = useState<{
     register: Record<string, string>;
@@ -31,7 +32,10 @@ export default function Register() {
   const { isLoading, withLoading } = useLoading();
   const { handleApiError } = useHandleApiErrors();
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
-  const handleInputChange = (field: keyof RegisterFormData, value: string) => {
+  const handleInputChange = (
+    field: keyof RegisterFormData,
+    value: string | boolean
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setErrors((prev) => ({ ...prev, [field]: "" }));
   };
@@ -66,6 +70,7 @@ export default function Register() {
               email: formData.email,
               password: formData.password,
               username: formData.username,
+              acceptedCGU: formData.acceptedCGU,
             }
           );
           showSuccess(t("messages.success"));
@@ -152,6 +157,31 @@ export default function Register() {
             error={!!errors.register.confirmPassword}
             errorMessage={errors.register.confirmPassword}
           />
+
+          <div className={styles.checkboxGroup}>
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                checked={formData.acceptedCGU}
+                onChange={(e) =>
+                  handleInputChange("acceptedCGU", e.target.checked)
+                }
+                disabled={isLoading}
+                className={styles.checkbox}
+              />
+              <span className={styles.checkboxText}>
+                J&apos;accepte les{" "}
+                <Link href="/legal/cgu" className={styles.cguLink}>
+                  Conditions Générales d&apos;Utilisation
+                </Link>
+              </span>
+            </label>
+            {errors.register.acceptedCGU && (
+              <span className={styles.errorMessage}>
+                {errors.register.acceptedCGU}
+              </span>
+            )}
+          </div>
 
           <Button
             type="submit"

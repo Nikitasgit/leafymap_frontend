@@ -20,7 +20,8 @@ const EventPage = () => {
   const { partnerships, isLoading: partnershipsLoading } = usePlacePartnerships(
     event?.place?._id as string,
     eventId as string,
-    "event"
+    "event",
+    true
   );
 
   if (isLoading || partnershipsLoading || !event) return <LoadingBar />;
@@ -39,7 +40,7 @@ const EventPage = () => {
       </div>
       <ParticipantsList partnerships={partnerships as PartnershipPopulated[]} />
       <div className={styles.eventInfo}>
-        <EventSchedule schedule={event.schedule || []} />
+        <EventSchedule partnerships={partnerships as PartnershipPopulated[]} schedule={event.schedule || []} />
       </div>
     </main>
   );

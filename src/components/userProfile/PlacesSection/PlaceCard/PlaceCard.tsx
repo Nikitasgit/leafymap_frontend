@@ -26,7 +26,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
           src={place.image?.urls?.thumbnail || "https://i.pravatar.cc/40?img=3"}
           alt={place.name}
           fill
-          className={styles.placeImage}
+          className={styles.placeImagee}
         />
       </div>
       <div className={styles.placeInfo}>

@@ -123,8 +123,15 @@ const FiltersBar = ({
       }));
       return suggestions;
     } else {
-      const places = await searchPlaces(query);
-      return places as PlaceSearchResult[];
+      const places = await searchPlaces({ name: query });
+      const suggestions: PlaceSearchResult[] = places.map((place) => ({
+        _id: place._id,
+        image: place.image?.urls.thumbnail || "",
+        name: place.name,
+        location: place.location || { label: "" },
+        placeCategory: place.placeCategory || { _id: "", name: "" },
+      }));
+      return suggestions;
     }
   };
 

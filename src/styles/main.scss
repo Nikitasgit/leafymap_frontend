@@ -10,6 +10,10 @@
 // Components
 @use "components/sonner";
 
+main {
+  min-height: calc(100vh - #{$navbar-height} - #{$footer-height});
+}
+
 .skeleton {
   animation: skeleton-loading 2s linear infinite alternate;
 }

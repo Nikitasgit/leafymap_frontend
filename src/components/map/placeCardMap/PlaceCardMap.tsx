@@ -6,11 +6,12 @@ import Schedule from "@/components/common/schedule";
 import styles from "./PlaceCardMap.module.scss";
 import { MapPin } from "lucide-react";
 import { usePlace } from "@/hooks/usePlace";
-import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 import { ExtendedMapRef } from "@/types/map";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
 import ReviewsCounter from "@/components/common/counters/reviewsCounter";
+import CreatorCategoryBadge from "@/components/common/users/creatorCategoryBadge";
+import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
 
 interface PlaceCardMapProps {
   placeId: string;
@@ -19,9 +20,8 @@ interface PlaceCardMapProps {
 
 const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
   const { place, isLoading } = usePlace(placeId, true);
-  const { t } = useTranslation("common");
   const router = useRouter();
-
+  console.log(place);
   useEffect(() => {
     if (mapRef.current && place) {
       navigateToPlaceOnMap({
@@ -62,26 +62,14 @@ const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
           <div className={styles.headerMain}>
             <h2 className={styles.title}>{place?.name}</h2>
             <div className={styles.categoryRow}>
-              {place?.placeCategory && (
-                <Text className={styles.category}>
-                  {place.user.creatorCategories ? (
-                    place.user.creatorCategories.map((category) => (
-                      <Text key={category._id} as="span">
-                        {t(`creatorCategories.${category.name}`)}
-                      </Text>
-                    ))
-                  ) : (
-                    <Text as="span">
-                      {t(
-                        `placeCategories.${
-                          typeof place.placeCategory === "object"
-                            ? place.placeCategory?.name
-                            : place.placeCategory
-                        }`
-                      )}
-                    </Text>
-                  )}
-                </Text>
+              {place?.isCreatorPlace ? (
+                <CreatorCategoryBadge
+                  categoryName={place.user.creatorCategories[0].name}
+                />
+              ) : (
+                <PlaceCategoryBadge
+                  categoryName={place?.placeCategory?.name || ""}
+                />
               )}
               <ReviewsCounter rating={place?.rating || 0} />
             </div>

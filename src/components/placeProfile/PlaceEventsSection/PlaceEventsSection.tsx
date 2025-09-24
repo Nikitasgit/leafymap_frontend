@@ -7,12 +7,13 @@ import styles from "./PlaceEventsSection.module.scss";
 
 interface PlaceEventsSectionProps {
   events: EventPopulated[];
+  title?: string;
 }
 
-const PlaceEventsSection: React.FC<PlaceEventsSectionProps> = ({ events }) => {
+const PlaceEventsSection: React.FC<PlaceEventsSectionProps> = ({ events, title = "Événements" }) => {
   return (
     <section>
-      <Text as="h3">Événements</Text>
+      <Text as="h3">{title}</Text>
       <div className={styles.eventsList}>
         {events.length > 0 ? (
           events.map((event) => <EventCard key={event._id} event={event} />)

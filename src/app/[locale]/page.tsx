@@ -1,16 +1,12 @@
-import initTranslations from "../i18n";
+import HomeHeader from "@/components/home/appPresentation";
+import styles from "./HomePage.module.scss";
+import SuggestionsList from "@/components/home/suggestionsList";
 
-export default async function Home({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-  const { t } = await initTranslations(locale, ["common"]);
-
+export default async function Home() {
   return (
-    <main>
-      <h1>{t("hello")}</h1>
+    <main className={styles.home}>
+      <HomeHeader />
+      <SuggestionsList />
     </main>
   );
 }

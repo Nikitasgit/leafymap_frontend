@@ -10,10 +10,11 @@ export default function MessagesTab() {
     <div className={styles.emptyState}>
       <Mail size={64} className={styles.emptyIcon} />
       <Text as="h2" className={styles.emptyTitle}>
-        No Messages Yet
+        Cette fonctionnalité n&apos;est pas encore disponible
       </Text>
       <Text as="p" className={styles.emptyDescription}>
-        Your direct messages will appear here. This feature is coming soon!
+        Votre messagerie directes apparaîtront ici. Cette fonctionnalité est en
+        cours de développement!
       </Text>
     </div>
   );

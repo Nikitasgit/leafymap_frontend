@@ -3,6 +3,7 @@ import "@/styles/main.scss";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "@/components/navbar/Navbar";
+import Footer from "@/components/common/Footer";
 import Providers from "@/components/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -24,6 +25,7 @@ export default async function RootLayout({
           <SpeedInsights debug={false} />
           <Navbar />
           <main data-locale={locale}>{children}</main>
+          <Footer />
         </Providers>
       </body>
     </html>

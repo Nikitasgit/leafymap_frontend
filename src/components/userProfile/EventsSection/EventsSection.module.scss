@@ -2,7 +2,11 @@
 @use "@/styles/abstracts/mixins" as *;
 @use "@/styles/abstracts/functions" as *;
 
-.eventsList {
-  margin-top: spacing(2);
-  @include flex(column, flex-start, stretch, spacing(2));
+.eventsSection {
+  margin-bottom: spacing(2);
+
+  .eventsList {
+    margin-top: spacing(2);
+    @include flex(column, flex-start, stretch, spacing(2));
+  }
 }

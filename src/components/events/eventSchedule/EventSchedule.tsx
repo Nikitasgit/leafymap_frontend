@@ -1,26 +1,39 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { Period } from "@/types/place/schedule";
 import { Clock } from "lucide-react";
 import Text from "@/components/common/typography/Text";
 import styles from "./EventSchedule.module.scss";
 import TitleWithLine from "@/components/common/typography/titleWithLine";
 import { formatDateShort, sortPeriodsByStartDate } from "@/utils/dates";
+import { PartnershipPopulated } from "@/types/partnerships";
+import { Collaborator } from "@/types/place/collaborators";
 
 interface EventScheduleProps {
   schedule: Period[];
+  partnerships: PartnershipPopulated[];
 }
 
-const EventSchedule: React.FC<EventScheduleProps> = ({ schedule }) => {
-  const router = useRouter();
+const EventSchedule: React.FC<EventScheduleProps> = ({
+  schedule,
+  partnerships,
+}) => {
   const sortedSchedule = sortPeriodsByStartDate(schedule);
 
-  const handleCollaboratorClick = (collaboratorId: string) => {
-    if (collaboratorId) {
-      router.push(`/users/${collaboratorId}`);
-    }
+
+  const isCollaboratorInPartnerships = (collaboratorId: string): boolean => {
+    return partnerships.some(
+      (partnership) =>
+        partnership.collaborator._id === collaboratorId &&
+        partnership.status === "accepted"
+    );
+  };
+
+  const getFilteredCollaborators = (collaborators: Collaborator[]) => {
+    return collaborators.filter((collaborator) =>
+      isCollaboratorInPartnerships(collaborator._id)
+    );
   };
 
   return (
@@ -67,35 +80,38 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule }) => {
                         - {timeSlot.title}
                       </Text>
                     </div>
-                    {timeSlot.collaborators &&
-                      timeSlot.collaborators.length > 0 && (
-                        <div className={styles.participantsList}>
-                          {timeSlot.collaborators.map((collaborator) => (
-                            <div
-                              key={collaborator._id}
-                              className={styles.participant}
-                              onClick={() =>
-                                handleCollaboratorClick(collaborator._id)
-                              }
-                            >
-                              <Image
-                                src={
-                                  (collaborator.image as string) ||
-                                  "https://i.pravatar.cc/40?img=3"
-                                }
-                                alt={collaborator.name || "Participant"}
-                                className={styles.participantImage}
-                                width={24}
-                                height={24}
-                              />
+                    {(() => {
+                      const filteredCollaborators = getFilteredCollaborators(
+                        timeSlot.collaborators || []
+                      );
+                      return (
+                        filteredCollaborators.length > 0 && (
+                          <div className={styles.participantsList}>
+                            {filteredCollaborators.map((collaborator) => (
+                              <div
+                                key={collaborator._id}
+                                className={styles.participant}
+                              >
+                                <Image
+                                  src={
+                                    (collaborator.image as string) ||
+                                    "https://i.pravatar.cc/40?img=3"
+                                  }
+                                  alt={collaborator.name || "Participant"}
+                                  className={styles.participantImage}
+                                  width={24}
+                                  height={24}
+                                />
 
-                              <Text as="p" className={styles.participantName}>
-                                {collaborator.name}
-                              </Text>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                                <Text as="p" className={styles.participantName}>
+                                  {collaborator.name}
+                                </Text>
+                              </div>
+                            ))}
+                          </div>
+                        )
+                      );
+                    })()}
                   </div>
                 ))}
               </div>

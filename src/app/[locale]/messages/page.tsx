@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Handshake, Mail } from "lucide-react";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { usePartnershipByUserId } from "@/hooks/usePartnershipByUserId";
@@ -11,6 +11,7 @@ import { Tab, TabsContainer } from "@/components/common/tabs";
 import MessagesTab from "@/components/messages/MessagesTab";
 import InvitationsTab from "@/components/messages/InvitationsTab";
 import { PartnershipPopulated } from "@/types/partnerships";
+import { UserPopulated } from "@/types/user";
 
 type TabType = "messages" | "invitations";
 
@@ -28,10 +29,6 @@ export default function MessagesPage() {
   });
   const { submitPartnerships } = useSubmitPartnerships(refetch);
 
-  if (isLoadingUser || !user) {
-    return <LoadingBar />;
-  }
-
   const handleTabClick = (id: string) => {
     setActiveTab(id as TabType);
   };
@@ -40,12 +37,11 @@ export default function MessagesPage() {
     if (activeTab === "messages") {
       return <MessagesTab />;
     }
-
     if (activeTab === "invitations") {
       return (
         <InvitationsTab
           partnerships={partnerships as PartnershipPopulated[]}
-          currentUser={user}
+          currentUser={user as UserPopulated}
           isLoading={isLoadingPartnerships}
           onStatusChange={submitPartnerships}
         />
@@ -53,21 +49,32 @@ export default function MessagesPage() {
     }
   };
 
+  useEffect(() => {
+    if (user && user.userType === "creator") {
+      setActiveTab("invitations");
+    }
+  }, [user]);
+
+  if (isLoadingUser || !user) {
+    return <LoadingBar />;
+  }
   return (
     <main className={styles.container}>
       <TabsContainer>
+        {user.userType === "creator" && (
+          <Tab
+            id="invitations"
+            label="Invitations"
+            icon={Handshake}
+            isActive={activeTab === "invitations"}
+            onClick={handleTabClick}
+          />
+        )}
         <Tab
           id="messages"
           label="Messages"
           icon={Mail}
           isActive={activeTab === "messages"}
-          onClick={handleTabClick}
-        />
-        <Tab
-          id="invitations"
-          label="Invitations"
-          icon={Handshake}
-          isActive={activeTab === "invitations"}
           onClick={handleTabClick}
         />
       </TabsContainer>

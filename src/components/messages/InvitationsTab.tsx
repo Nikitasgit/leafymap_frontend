@@ -6,12 +6,12 @@ import Text from "@/components/common/typography/Text";
 import PartnershipMessage from "@/components/messages/PartnershipMessage";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { Partnership, PartnershipPopulated } from "@/types/partnerships";
-import { User } from "@/types/user";
+import { UserPopulated } from "@/types/user";
 import styles from "./InvitationsTab.module.scss";
 
 interface InvitationsTabProps {
   partnerships: PartnershipPopulated[];
-  currentUser: User;
+  currentUser: UserPopulated;
   isLoading: boolean;
   onStatusChange: (
     partnerships: Partnership[],

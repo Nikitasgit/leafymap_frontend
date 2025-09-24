@@ -1,0 +1,41 @@
+@use "../../../styles/abstracts/variables" as *;
+@use "../../../styles/abstracts/mixins" as *;
+@use "../../../styles/abstracts/functions" as *;
+@use "sass:color";
+
+.footer {
+  background-color: $grey-50;
+  border-top: 1px solid $grey-200;
+  padding: spacing(2) 0;
+  margin-top: auto;
+  height: $footer-height;
+}
+
+.container {
+  max-width: rem(1200);
+  margin: 0 auto;
+  padding: 0 spacing(2);
+}
+
+.content {
+  @include flex(column, center, center, spacing(1));
+  text-align: center;
+}
+
+.text {
+  color: $secondary-color;
+  font-size: rem(14);
+  margin: 0;
+}
+
+.link {
+  color: $primary-color;
+  font-size: rem(14);
+  text-decoration: none;
+  transition: $transition-default;
+
+  &:hover {
+    text-decoration: underline;
+    color: color.adjust($primary-color, $lightness: 10%);
+  }
+}
