@@ -18,7 +18,7 @@ const ParticipantsList = ({
   return (
     <div className={styles.participantsList}>
       {!noTitle && (
-        <TitleWithLine as="h3" className={styles.participantsTitle}>
+        <TitleWithLine className={styles.participantsTitle}>
           {title}
         </TitleWithLine>
       )}

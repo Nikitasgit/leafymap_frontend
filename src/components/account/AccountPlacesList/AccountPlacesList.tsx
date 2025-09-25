@@ -1,18 +1,18 @@
 import { Place } from "@/types/place";
-import PlaceEditCard from "./PlaceEditCard";
+import AccountPlaceCard from "../AccountPlaceCard/AccountPlaceCard";
 import TitleWithLine from "@/components/common/typography/titleWithLine";
-import styles from "./PlacesEditList.module.scss";
+import styles from "./AccountPlacesList.module.scss";
 
-const PlacesEditList = ({ places }: { places: Place[] }) => {
+const AccountPlacesList = ({ places }: { places: Place[] }) => {
   return (
     <div className={styles.container}>
-      <TitleWithLine as="h2">
+      <TitleWithLine>
         {places.length > 1 ? "Vos lieux" : "Votre lieu"}
       </TitleWithLine>
       <div className={styles.placesGrid}>
         {places.map((place) => (
           <section key={place._id}>
-            <PlaceEditCard place={place} />
+            <AccountPlaceCard place={place} />
           </section>
         ))}
       </div>
@@ -20,4 +20,4 @@ const PlacesEditList = ({ places }: { places: Place[] }) => {
   );
 };
 
-export default PlacesEditList;
+export default AccountPlacesList;

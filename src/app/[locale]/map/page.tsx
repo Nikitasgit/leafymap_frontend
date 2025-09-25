@@ -58,7 +58,7 @@ const MapPage = () => {
   }, [placeCategoriesIds, filters.placeCategories]);
 
   return (
-    <main className={styles.mapPage}>
+    <div className={styles.mapPage}>
       <FiltersBar
         mapRef={mapRef}
         filters={filters}
@@ -87,7 +87,7 @@ const MapPage = () => {
           />
         )}
       </div>
-    </main>
+    </div>
   );
 };
 

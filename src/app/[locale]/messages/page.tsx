@@ -59,7 +59,7 @@ export default function MessagesPage() {
     return <LoadingBar />;
   }
   return (
-    <main className={styles.container}>
+    <div className={styles.container}>
       <TabsContainer>
         {user.userType === "creator" && (
           <Tab
@@ -80,6 +80,6 @@ export default function MessagesPage() {
       </TabsContainer>
 
       <div className={styles.tabContent}>{renderTabContent()}</div>
-    </main>
+    </div>
   );
 }

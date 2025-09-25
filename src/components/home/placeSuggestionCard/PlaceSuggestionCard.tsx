@@ -2,7 +2,6 @@ import { PlacePopulated } from "@/types/place";
 import React from "react";
 import styles from "./PlaceSuggestionCard.module.scss";
 import Image from "next/image";
-import Text from "@/components/common/typography/Text";
 import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
 import { MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -19,7 +18,12 @@ const PlaceSuggestionCard = ({ place }: { place: PlacePopulated }) => {
   };
 
   return (
-    <div className={styles.placeSuggestionCard} onClick={handleRedirect}>
+    <a
+      className={styles.placeSuggestionCard}
+      onClick={handleRedirect}
+      role="link"
+      tabIndex={0}
+    >
       <div className={styles.imageContainer}>
         <Image
           src={place.image?.urls?.medium || "https://i.pravatar.cc/40?img=3"}
@@ -30,21 +34,17 @@ const PlaceSuggestionCard = ({ place }: { place: PlacePopulated }) => {
         />
       </div>
       <div className={styles.infoContainer}>
-        <Text as="h3" className={styles.title}>
-          {place.name}
-        </Text>
+        <h3 className={styles.title}>{place.name}</h3>
         <div className={styles.locationContainer}>
           <MapPin size={18} />
-          <Text as="p" className={styles.location}>
-            {place.location?.label}
-          </Text>
+          <p className={styles.location}>{place.location?.label}</p>
         </div>
-        <Text as="p" className={styles.description}>
+        <p className={styles.description}>
           {place.description || "Aucune description disponible"}
-        </Text>
+        </p>
         <PlaceCategoryBadge categoryName={place.placeCategory?.name || ""} />
       </div>
-    </div>
+    </a>
   );
 };
 

@@ -11,7 +11,7 @@ export default async function CGUPage({
   await initTranslations(locale, ["common"]);
 
   return (
-    <main className={styles.cguPage}>
+    <div className={styles.cguPage}>
       <div className={styles.backButtonContainer}>
         <BackButton />
       </div>
@@ -204,6 +204,6 @@ export default async function CGUPage({
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

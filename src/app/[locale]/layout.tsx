@@ -1,12 +1,10 @@
-import { Inter } from "next/font/google";
 import "@/styles/main.scss";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/common/Footer";
 import Providers from "@/components/Providers";
-
-const inter = Inter({ subsets: ["latin"] });
+import { roboto } from "@/fonts/font";
 
 export default async function RootLayout({
   children,
@@ -19,7 +17,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className={inter.className}>
+      <body className={roboto.className}>
         <Providers locale={locale}>
           <Analytics debug={false} />
           <SpeedInsights debug={false} />

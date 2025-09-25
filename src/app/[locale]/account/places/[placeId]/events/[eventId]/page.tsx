@@ -22,7 +22,7 @@ const UpdateEventPage = () => {
   const router = useRouter();
 
   return (
-    <main className={styles.pageContainer}>
+    <div className={styles.pageContainer}>
       <div className={styles.container}>
         <PageHeader
           title="Modifier un événement"
@@ -40,7 +40,7 @@ const UpdateEventPage = () => {
           />
         )}
       </div>
-    </main>
+    </div>
   );
 };
 

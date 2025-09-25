@@ -9,7 +9,7 @@ const CreateEventPage = () => {
   const router = useRouter();
 
   return (
-    <main className={styles.pageContainer}>
+    <div className={styles.pageContainer}>
       <div className={styles.container}>
         <PageHeader
           title="Créer un événement"
@@ -19,7 +19,7 @@ const CreateEventPage = () => {
         />
         <EventForm />
       </div>
-    </main>
+    </div>
   );
 };
 

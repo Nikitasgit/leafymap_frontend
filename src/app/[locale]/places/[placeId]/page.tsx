@@ -129,7 +129,7 @@ const PlacePage = () => {
   if (!place) return <LoadingBar />;
 
   return (
-    <main className={styles.pageContainer}>
+    <div className={styles.pageContainer}>
       <BackButton />
       <PlaceHeader
         place={place}
@@ -151,7 +151,7 @@ const PlacePage = () => {
       </TabsContainer>
 
       <div className={styles.tabContent}>{renderTabContent()}</div>
-    </main>
+    </div>
   );
 };
 

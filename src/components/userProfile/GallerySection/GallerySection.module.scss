@@ -85,7 +85,7 @@
   @include flex(column, center, center, spacing(1.5));
   padding: spacing(4);
   text-align: center;
-  color: $grey-400;
+  color: $grey-500;
 
   .icon {
     font-size: rem(32);
@@ -101,7 +101,7 @@
 .loading {
   @include flex(row, center, center, spacing(1));
   padding: spacing(4);
-  color: $grey-400;
+  color: $grey-500;
 
   .spinner {
     width: 20px;

@@ -3,19 +3,19 @@
 [data-sonner-toaster] {
   --normal-bg: #{$white};
   --normal-border: #{$grey-200};
-  --normal-text: #{$grey-400};
+  --normal-text: #{$grey-500};
 
   --success-bg: #{$white};
   --success-border: #{$success-color};
-  --success-text: #{$grey-400};
+  --success-text: #{$grey-500};
 
   --error-bg: #{$white};
   --error-border: #{$error-color};
-  --error-text: #{$grey-400};
+  --error-text: #{$grey-500};
 
   --info-bg: #{$white};
   --info-border: #{$input-border-color};
-  --info-text: #{$grey-400};
+  --info-text: #{$grey-500};
 }
 
 [data-sonner-toast] {
@@ -42,10 +42,10 @@
 }
 
 [data-sonner-toast] [data-close-button] {
-  color: #{$grey-400} !important;
+  color: #{$grey-500} !important;
   background-color: #{$white} !important;
 }
 
 [data-sonner-toast] [data-icon] {
-  color: $grey-400 !important;
+  color: $grey-500 !important;
 }

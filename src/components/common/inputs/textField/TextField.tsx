@@ -53,7 +53,12 @@ const TextField: React.FC<TextfieldProps> = ({
     <div className={`${styles.container} ${className}`}>
       {label && (
         <label className={styles.label} htmlFor={name}>
-          {label} {required ? <span>*</span> : <span>(optionnel)</span>}
+          {label}{" "}
+          {required ? (
+            <span aria-hidden="true">*</span>
+          ) : (
+            <span className={styles.srOnly}>(optionnel)</span>
+          )}
         </label>
       )}
       {multiline ? (
@@ -103,7 +108,9 @@ const TextField: React.FC<TextfieldProps> = ({
         />
       )}
       {error && errorMessage && (
-        <div className={styles.errorMessage}>{errorMessage}</div>
+        <div className={styles.errorMessage} role="alert" aria-live="assertive">
+          {errorMessage}
+        </div>
       )}
     </div>
   );

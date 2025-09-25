@@ -102,7 +102,7 @@ const ModifyCreator = () => {
   }, [placeData, user]);
 
   return (
-    <main className={styles.pageContainer}>
+    <div className={styles.pageContainer}>
       <section className={styles.container}>
         <PageHeader
           title="Modifier votre profil"
@@ -125,7 +125,7 @@ const ModifyCreator = () => {
           />
         )}
       </section>
-    </main>
+    </div>
   );
 };
 

@@ -1,0 +1,9 @@
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.accountContainer {
+  @include flex(column, flex-start, stretch, spacing(2));
+  max-width: 700px;
+  margin: 0 auto;
+  padding: spacing(2);
+}

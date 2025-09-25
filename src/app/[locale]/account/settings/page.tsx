@@ -15,7 +15,7 @@ const Page = () => {
   const router = useRouter();
 
   return (
-    <main className={styles.pageContainer}>
+    <div className={styles.pageContainer}>
       <section className={styles.container}>
         <PageHeader
           backButtonLabel="Retour au compte"
@@ -54,7 +54,7 @@ const Page = () => {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 };
 

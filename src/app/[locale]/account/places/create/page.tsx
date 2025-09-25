@@ -8,7 +8,7 @@ import styles from "./createPlacePage.module.scss";
 const CreatePlacePage = () => {
   const router = useRouter();
   return (
-    <main className={styles.pageContainer}>
+    <div className={styles.pageContainer}>
       <div className={styles.container}>
         <PageHeader
           title="Créer un lieu"
@@ -18,7 +18,7 @@ const CreatePlacePage = () => {
         />
         <CreatePlaceForm />
       </div>
-    </main>
+    </div>
   );
 };
 

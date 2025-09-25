@@ -107,8 +107,8 @@ const ProfilePictureUploader = ({
           <Image
             src={preview?.urls?.thumbnail || defaultAvatar}
             alt="Photo de profil"
-            width={size === "small" ? 80 : size === "large" ? 120 : 100}
-            height={size === "small" ? 80 : size === "large" ? 120 : 100}
+            width={size === "small" ? 65 : size === "large" ? 120 : 100}
+            height={size === "small" ? 65 : size === "large" ? 120 : 100}
             className={` ${styles.previewImage} ${
               rounded ? styles.rounded : ""
             }`}
@@ -129,7 +129,11 @@ const ProfilePictureUploader = ({
           className={`${styles.placeholder} ${rounded ? styles.rounded : ""}`}
         >
           <div className={styles.uploadIcon}>
-            {isLoading ? <div className={styles.loadingSpinner} /> : <Upload />}
+            {isLoading ? (
+              <div className={styles.loadingSpinner} />
+            ) : (
+              <Upload size={14} />
+            )}
           </div>
           <span className={styles.uploadText}>
             {isLoading ? "Téléchargement..." : "Ajouter une photo (max. 5MB)"}
@@ -141,6 +145,7 @@ const ProfilePictureUploader = ({
         <input
           type="file"
           accept="image/*"
+          multiple={false}
           onChange={handleFileChange}
           className={`${styles.fileInput} ${rounded ? styles.rounded : ""}`}
           disabled={isLoading || disabled}

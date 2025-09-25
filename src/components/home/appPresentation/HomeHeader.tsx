@@ -1,6 +1,5 @@
 "use client";
 
-import Text from "@/components/common/typography/Text";
 import styles from "./HomeHeader.module.scss";
 import Image from "next/image";
 import CeramistHands from "../../../../public/images/ceramist-hands.jpg";
@@ -11,6 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 const HomeHeader = () => {
   const router = useRouter();
   const { user } = useAuth();
+
   const handleCreateProfile = () => {
     if (user?.userType === "guest") {
       router.push("/account/create");
@@ -23,10 +23,10 @@ const HomeHeader = () => {
   return (
     <header className={styles.header}>
       <div className={styles.headerFirstRow}>
-        <Text as="h1">Bienvenue sur SpotLight</Text>
-        <Text as="h2" className={styles.subtitle}>
+        <h1 className={styles.title}>Bienvenue sur SpotLight</h1>
+        <h2 className={styles.subtitle}>
           Pour les amateurs de produits locaux, d&apos;artisanat et d&apos;art
-        </Text>
+        </h2>
       </div>
       <Image
         src={CeramistHands}
@@ -35,12 +35,14 @@ const HomeHeader = () => {
       />
       <div className={styles.HeaderCard}>
         <h3 className={styles.HeaderCardTitle}>
-          Vous êtes créateur ou organisateur ?
+          Vous êtes créateur, artisan, producteur ou responsable d&apos;un lieu
+          culturel/commercial?
         </h3>
         <p className={styles.HeaderCardDescription}>
           Rejoignez notre communauté de passionnés!
         </p>
         <Button
+          ariaLabel="Créer mon profil"
           variant="primary"
           size="small"
           onClick={() => {

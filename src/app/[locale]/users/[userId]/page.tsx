@@ -125,7 +125,7 @@ const UserPage = () => {
   if (!user) return <LoadingBar />;
 
   return (
-    <main className={styles.pageContainer}>
+    <div className={styles.pageContainer}>
       <BackButton />
       <UserHeader
         user={user}
@@ -147,7 +147,7 @@ const UserPage = () => {
       </TabsContainer>
 
       <div className={styles.tabContent}>{renderTabContent()}</div>
-    </main>
+    </div>
   );
 };
 

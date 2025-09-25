@@ -94,7 +94,7 @@ const UpdatePlace = () => {
     submitPartnershipsLoading;
 
   return (
-    <main className={styles.pageContainer}>
+    <div className={styles.pageContainer}>
       <div className={styles.container}>
         <PageHeader
           title="Modifier votre lieu"
@@ -117,7 +117,7 @@ const UpdatePlace = () => {
           />
         )}
       </div>
-    </main>
+    </div>
   );
 };
 

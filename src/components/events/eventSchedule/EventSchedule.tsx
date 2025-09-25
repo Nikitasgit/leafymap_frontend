@@ -21,7 +21,6 @@ const EventSchedule: React.FC<EventScheduleProps> = ({
 }) => {
   const sortedSchedule = sortPeriodsByStartDate(schedule);
 
-
   const isCollaboratorInPartnerships = (collaboratorId: string): boolean => {
     return partnerships.some(
       (partnership) =>
@@ -38,9 +37,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({
 
   return (
     <div className={styles.scheduleContainer}>
-      <TitleWithLine as="h3" className={styles.scheduleTitle}>
-        Programme
-      </TitleWithLine>
+      <TitleWithLine className={styles.scheduleTitle}>Programme</TitleWithLine>
       <div className={styles.scheduleList}>
         {sortedSchedule.map((period) => (
           <div key={period._id} className={styles.period}>

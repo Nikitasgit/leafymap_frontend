@@ -27,11 +27,11 @@ const EventPage = () => {
   if (isLoading || partnershipsLoading || !event) return <LoadingBar />;
 
   return (
-    <main className={styles.pageContainer}>
+    <div className={styles.pageContainer}>
       <BackButton />
       <EventHeader event={event} />
       <div className={styles.eventInfo}>
-        <TitleWithLine as="h3" className={styles.eventDescriptionTitle}>
+        <TitleWithLine className={styles.eventDescriptionTitle}>
           Description de l&apos;évènement
         </TitleWithLine>
         <Text as="p" className={styles.eventDescription}>
@@ -40,9 +40,12 @@ const EventPage = () => {
       </div>
       <ParticipantsList partnerships={partnerships as PartnershipPopulated[]} />
       <div className={styles.eventInfo}>
-        <EventSchedule partnerships={partnerships as PartnershipPopulated[]} schedule={event.schedule || []} />
+        <EventSchedule
+          partnerships={partnerships as PartnershipPopulated[]}
+          schedule={event.schedule || []}
+        />
       </div>
-    </main>
+    </div>
   );
 };
 

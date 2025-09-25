@@ -2,7 +2,6 @@
 import { useFindPlaces } from "@/hooks/useFindPlaces";
 import React, { useEffect } from "react";
 import styles from "./SuggestionsList.module.scss";
-import Text from "@/components/common/typography/Text";
 import PlaceSuggestionCard from "../placeSuggestionCard";
 
 const SuggestionsList = () => {
@@ -15,7 +14,7 @@ const SuggestionsList = () => {
 
   return (
     <section className={styles.suggestionsList}>
-      <Text as="h2">Les lieux à ne pas manquer</Text>
+      <h2>Les lieux à ne pas manquer</h2>
       {isLoading ? (
         <div className={`${styles.suggestionsListGrid} skeleton`}></div>
       ) : (

@@ -1,15 +1,14 @@
 import Button from "@/components/common/buttons/button/Button";
 import { Place } from "@/types/place";
 import { useRouter } from "next/navigation";
-import Text from "@/components/common/typography/Text";
 import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader";
 import { Edit3, Eye, Trash2 } from "lucide-react";
-import styles from "./PlaceEditCard.module.scss";
+import styles from "./AccountPlaceCard.module.scss";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
 import useDeletePlace from "@/hooks/useDeletePlace";
 import { Image } from "@/types/image";
 
-const PlaceEditCard = ({ place }: { place: Place }) => {
+const AccountPlaceCard = ({ place }: { place: Place }) => {
   const router = useRouter();
   const { submitPlace, isLoading: isLoadingPlace } = useSubmitPlace();
   const { deletePlace, isLoading: isDeletingPlace } = useDeletePlace();
@@ -37,12 +36,9 @@ const PlaceEditCard = ({ place }: { place: Place }) => {
         size="medium"
         disabled={isLoadingPlace}
       />
-
       <div className={styles.content}>
         <div className={styles.titleContainer}>
-          <Text as="h4" className={styles.title}>
-            {place.name}
-          </Text>
+          <h4 className={styles.title}>{place.name}</h4>
           {!place.isCreatorPlace ? (
             <div className={styles.actionButtons}>
               {!place.isCreatorPlace && (
@@ -81,9 +77,7 @@ const PlaceEditCard = ({ place }: { place: Place }) => {
             </span>
           )}
         </div>
-        <Text as="p" className={styles.description}>
-          {place.description}
-        </Text>
+        <p className={styles.description}>{place.description}</p>
         <div className={styles.buttonGroup}>
           <Button
             variant="secondary"
@@ -107,4 +101,4 @@ const PlaceEditCard = ({ place }: { place: Place }) => {
   );
 };
 
-export default PlaceEditCard;
+export default AccountPlaceCard;
