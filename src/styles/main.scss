@@ -12,6 +12,7 @@
 
 main {
   min-height: calc(100vh - $navbar-height - $footer-height);
+  min-height: calc(100svh - $navbar-height - $footer-height);
 }
 
 .skeleton {
