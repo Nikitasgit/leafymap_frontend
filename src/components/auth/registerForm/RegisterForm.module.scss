@@ -3,6 +3,7 @@
 @use "@/styles/abstracts/functions" as *;
 
 .container {
+  min-height: calc(100svh - #{$navbar-height} - #{$footer-height});
   min-height: calc(100vh - #{$navbar-height} - #{$footer-height});
   @include flex(column, center, center, 0);
   background-color: $grey-100;
