@@ -1,0 +1,76 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.periodContainer {
+  border-bottom: 1px solid $grey-100;
+  &:last-child {
+    border-bottom: none;
+  }
+  .datesSelectorContainer {
+    margin-bottom: spacing(1);
+  }
+  .periodHeader {
+    @include flex(column, flex-start, stretch, spacing(1));
+    margin-bottom: spacing(1);
+    padding-bottom: spacing(0.75);
+    border-bottom: 1px solid $grey-100;
+    .periodDates {
+      @include flex(row, flex-start, center, spacing(1));
+      .dateItem {
+        @include flex(row, flex-start, center, spacing(0.5));
+        .dateLabel {
+          color: $grey-600;
+          font-size: rem(11);
+          font-weight: 500;
+        }
+        .dateValue {
+          color: $grey-800;
+          font-size: rem(12);
+          font-weight: 600;
+        }
+      }
+    }
+
+    .actionsContainer {
+      @include flex(row, flex-end, center, spacing(0.5));
+      flex-wrap: wrap;
+    }
+    .deleteButton {
+      color: $error-color;
+    }
+  }
+  .timeSlotsContainer {
+    @include flex(column, flex-start, stretch, spacing(0.75));
+    margin-top: spacing(0.75);
+  }
+  @include respond-to(sm) {
+    padding: spacing(2);
+    .periodHeader {
+      @include flex(row, space-between, center, spacing(2));
+      margin-bottom: spacing(1.5);
+      padding-bottom: spacing(1);
+      .periodDates {
+        .dateItem {
+          @include flex(row, flex-start, center, spacing(1));
+          .dateLabel {
+            font-size: rem(12);
+          }
+          .dateValue {
+            font-size: rem(14);
+          }
+        }
+      }
+      .actionsContainer {
+        @include flex(row, flex-end, center, spacing(1));
+        align-self: flex-end;
+        min-width: auto;
+        flex-wrap: nowrap;
+      }
+    }
+    .timeSlotsContainer {
+      gap: spacing(1);
+      margin-top: spacing(1);
+    }
+  }
+}

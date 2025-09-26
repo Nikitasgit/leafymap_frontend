@@ -104,12 +104,7 @@ const ModifyCreator = () => {
   return (
     <div className={styles.pageContainer}>
       <section className={styles.container}>
-        <PageHeader
-          title="Modifier votre profil"
-          showBackButton={true}
-          onBackClick={() => router.back()}
-          backButtonLabel="Retour au compte"
-        />
+        <PageHeader title="Modifier votre profil" showBackButton={true} />
         {loading ? (
           <LoadingBar />
         ) : (

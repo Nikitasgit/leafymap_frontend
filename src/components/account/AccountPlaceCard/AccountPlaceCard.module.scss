@@ -3,23 +3,16 @@
 @use "../../../styles/abstracts/mixins" as *;
 
 .card {
-  @include flex(column, flex-start, stretch, spacing(1.5));
+  @include flex(column, flex-start, center, spacing(1.5));
   background-color: $white;
+  padding: spacing(1.5);
   border: 1px solid $grey-200;
   border-radius: rem(8);
-  padding: spacing(1);
-  transition: $transition-default;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  &:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-color: $primary-color;
-  }
   .content {
     @include flex(column, flex-start, stretch, spacing(1));
     flex: 1;
-    min-width: 0;
     .titleContainer {
-      @include flex(row, space-between, center, spacing(0.5));
+      @include flex(column-reverse, space-between, center, spacing(0.5));
       width: 100%;
       .title {
         color: $grey-700;
@@ -59,16 +52,26 @@
       }
     }
     .buttonGroup {
-      @include flex(column, flex-start, stretch, spacing(0.5));
+      @include flex(column, flex-start, stretch, spacing(0.75));
       margin-top: spacing(1);
     }
   }
   @include respond-to(sm) {
-    padding: spacing(2.5);
+    @include flex(row, space-between, center, spacing(1));
+
     gap: spacing(2);
+    border: 1px solid $grey-200;
+    border-radius: rem(8);
+    transition: $transition-default;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-color: $primary-color;
+    }
     .content {
       gap: spacing(1.25);
       .titleContainer {
+        flex-direction: row;
         .title {
           font-size: rem(18);
         }
@@ -87,7 +90,6 @@
   }
   @include respond-to(md) {
     @include flex(row, space-between, center, spacing(2));
-    padding: spacing(3);
     .content {
       gap: spacing(1);
       .titleContainer {

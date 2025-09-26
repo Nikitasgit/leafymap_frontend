@@ -1,6 +1,6 @@
 "use client";
 
-import SearchInput from "@/components/common/inputs/searchInput/SearchInput";
+import { SearchInput } from "@/components/common/inputs/searchInput";
 import styles from "./FiltersBar.module.scss";
 import { ChevronDown, Filter } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
@@ -115,11 +115,11 @@ const FiltersBar = ({
       const creators = await searchUsers({ creatorName: query });
       const suggestions: CreatorSearchResult[] = creators.map((user) => ({
         _id: user._id,
-        image:
-          typeof user.image === "string"
-            ? user.image
-            : user.image?.urls.thumbnail || "",
+        image: user.image?.urls.thumbnail || "",
         name: user.creatorName || "",
+        categories: user.creatorCategories?.map((category) => ({
+          name: category.name,
+        })),
       }));
       return suggestions;
     } else {
@@ -198,8 +198,7 @@ const FiltersBar = ({
         </div>
         <SearchInput
           value={searchValue}
-          withIcons={searchType.label === "Membres"}
-          debounce={500}
+          withIcons
           loading={loading}
           limit={10}
           onSelect={handleSelectSuggestion}
@@ -213,6 +212,7 @@ const FiltersBar = ({
         onClick={() => handleSelect({ id: "", type: "filters" })}
         disabled={loading}
         startIcon={<Filter size={17} />}
+        ariaLabel="Filtres"
       >
         Filtres
       </Button>

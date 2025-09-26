@@ -13,6 +13,7 @@ const BackButton = () => {
       onClick={() => router.back()}
       className={styles.backButton}
       startIcon={<ArrowLeft size={16} />}
+      ariaLabel="Retour"
     >
       Retour
     </Button>

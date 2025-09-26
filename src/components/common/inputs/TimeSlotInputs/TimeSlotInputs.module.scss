@@ -1,0 +1,70 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.container {
+  @include flex(column, flex-start, stretch, spacing(0.75));
+  padding: spacing(0.75) 0;
+  width: 100%;
+  :global(.react-datepicker-popper) {
+    z-index: 10000001 !important;
+  }
+  :global(.react-datepicker) {
+    z-index: 10000001 !important;
+    font-family: inherit;
+    border: 1px solid $grey-300;
+    border-radius: rem(6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  :global(.react-datepicker__header) {
+    background-color: $grey-50;
+    border-bottom: 1px solid $grey-200;
+  }
+  :global(.react-datepicker__time-container) {
+    border-left: 1px solid $grey-200;
+  }
+  :global(.react-datepicker__time-list-item--selected) {
+    background-color: $grey-300 !important;
+    color: white !important;
+  }
+  :global(.react-datepicker__time-list-item:hover) {
+    background-color: $grey-100;
+  }
+  .timePickerWrapper {
+    @include flex(row, flex-start, center, spacing(0));
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    .timePicker {
+      z-index: 10000000;
+      font-size: rem(14);
+      padding: spacing(0.5) spacing(0.75);
+      min-width: 0 !important;
+      width: 100% !important;
+      flex: 1;
+    }
+    .timeSeparator {
+      margin: 0 spacing(0.5);
+      font-size: rem(14);
+    }
+  }
+  @include respond-to(sm) {
+    @include flex(row, space-between, center, spacing(0.5));
+    padding: spacing(1) 0;
+    :global(.react-datepicker) {
+      border-radius: rem(8);
+    }
+    .timePickerWrapper {
+      .timePicker {
+        font-size: rem(14);
+        padding: spacing(0.5) spacing(1);
+        min-width: 0 !important;
+        width: 100% !important;
+        flex: 1;
+      }
+      .timeSeparator {
+        font-size: rem(14);
+      }
+    }
+  }
+}

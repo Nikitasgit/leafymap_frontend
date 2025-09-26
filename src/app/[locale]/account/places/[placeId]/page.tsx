@@ -96,12 +96,7 @@ const UpdatePlace = () => {
   return (
     <div className={styles.pageContainer}>
       <div className={styles.container}>
-        <PageHeader
-          title="Modifier votre lieu"
-          showBackButton={true}
-          onBackClick={() => router.back()}
-          backButtonLabel="Retour au compte"
-        />
+        <PageHeader title="Modifier votre lieu" showBackButton={true} />
         {loading || !place || !user ? (
           <LoadingBar />
         ) : (

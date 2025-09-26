@@ -5,7 +5,7 @@ import Button from "@/components/common/buttons/button/Button";
 import { useToast } from "@/hooks/useToast";
 import { Partnership } from "@/types/partnerships";
 import PlaceForm from "@/components/account/formComponents/placeForm/PlaceForm";
-import Partnerships from "@/components/account/formComponents/collaborators/Partnerships";
+import Partnerships from "@/components/account/formComponents/PartnershipsForm/PartnershipsForm";
 import { validateNewPlaceData } from "@/validations/placeValidations";
 import PlaceContactForm from "@/components/account/formComponents/contactForm/PlaceContactForm";
 import { ValidationResult } from "@/validations/commonValidations";

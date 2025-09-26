@@ -12,7 +12,7 @@ import styles from "./ActivityFormStep.module.scss";
 import { useToast } from "@/hooks/useToast";
 import { Partnership } from "@/types/partnerships";
 import PlaceForm from "@/components/account/formComponents/placeForm/PlaceForm";
-import Partnerships from "@/components/account/formComponents/collaborators/Partnerships";
+import Partnerships from "@/components/account/formComponents/PartnershipsForm/PartnershipsForm";
 import UserInfos from "@/components/account/formComponents/infos/UserInfos";
 import { validateNewPlaceData } from "@/validations/placeValidations";
 import { validateNewUserData } from "@/validations/userValidations";

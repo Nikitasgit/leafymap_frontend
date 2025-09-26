@@ -1,61 +1,34 @@
 "use client";
-
 import Image from "next/image";
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import useOnClickOutside from "../../../../hooks/useOnClickOutside";
 import styles from "./SearchInput.module.scss";
 import TextField from "../textField/TextField";
-import { useTranslation } from "react-i18next";
+import { SearchInputProps, SearchSuggestion } from "./SearchInput.types";
+import CreatorCategoryBadge from "../../users/creatorCategoryBadge";
 
-interface SearchInputProps<T> {
-  value?: string;
-  onSelect: (suggestion: T) => void;
-  fetchSuggestions: (input: string) => Promise<T[]>;
-  initialSuggestions?: T[];
-  placeholder?: string;
-  limit?: number;
-  withIcons?: boolean;
-  loading?: boolean;
-  debounce?: number;
-  label?: string;
-}
-
-const SearchInput = <
-  T extends {
-    _id: string;
-    username?: string;
-    name?: string;
-    image?: string;
-    location?: { label: string };
-    status?: string;
-    categories?: { name: string }[];
-  }
->({
+const SearchInput = <T extends SearchSuggestion>({
   value = "",
   onSelect,
-  fetchSuggestions,
-  initialSuggestions = [],
+  fetchSuggestions: fetchSuggestionsProps,
   placeholder = "Rechercher...",
   limit = 5,
   withIcons = false,
   loading = false,
-  debounce,
   label,
 }: SearchInputProps<T>) => {
   const [input, setInput] = useState(value);
-  const { t } = useTranslation();
   const [suggestions, setSuggestions] = useState<T[]>([]);
   const [isFocused, setIsFocused] = useState(false);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const showInitialSuggestions =
-    input.trim() === "" && initialSuggestions.length > 0;
 
-  const fetchSuggestionsDebounced = useCallback(
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const prevValueRef = useRef<string>(value);
+
+  const fetchSuggestions = useCallback(
     async (searchTerm: string) => {
       if (searchTerm.length > 2) {
         try {
-          const results = await fetchSuggestions(searchTerm);
-
+          const results = await fetchSuggestionsProps(searchTerm);
           setSuggestions(results.slice(0, limit));
         } catch (err) {
           console.error("Error fetching suggestions:", err);
@@ -64,23 +37,13 @@ const SearchInput = <
         setSuggestions([]);
       }
     },
-    [fetchSuggestions, limit]
+    [fetchSuggestionsProps, limit]
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInput(newValue);
-    if (debounceTimeoutRef.current) {
-      clearTimeout(debounceTimeoutRef.current);
-    }
-
-    if (debounce) {
-      debounceTimeoutRef.current = setTimeout(() => {
-        fetchSuggestionsDebounced(newValue);
-      }, debounce);
-    } else {
-      fetchSuggestionsDebounced(newValue);
-    }
+    fetchSuggestions(newValue);
   };
 
   const handleSuggestionClick = (suggestion: T) => {
@@ -89,53 +52,20 @@ const SearchInput = <
     onSelect(suggestion);
   };
 
-  const getDisplayName = (item: T) => {
-    return item.username || item.name || "";
+  const handleClickOutside = () => {
+    setSuggestions([]);
+    setIsFocused(false);
   };
 
-  const getCategories = (item: T) => {
-    if ("categories" in item && item.categories) {
-      return item.categories
-        .map((category) => t(`creatorCategories.${category.name}`))
-        .join(", ");
-    }
-    return null;
-  };
-
-  const getAddress = (item: T) => {
-    if ("location" in item && item.location && "label" in item.location) {
-      return item.location.label;
-    }
-    return null;
-  };
+  useOnClickOutside(wrapperRef, handleClickOutside);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
-      ) {
-        setSuggestions([]);
-        setIsFocused(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    if (value !== undefined && value !== input) {
+    if (value !== undefined && value !== prevValueRef.current) {
       setInput(value);
+      prevValueRef.current = value;
     }
   }, [value]);
 
-  useEffect(() => {
-    return () => {
-      if (debounceTimeoutRef.current) {
-        clearTimeout(debounceTimeoutRef.current);
-      }
-    };
-  }, []);
   return (
     <div ref={wrapperRef} className={styles.searchInput}>
       <TextField
@@ -148,9 +78,6 @@ const SearchInput = <
         }
         onFocus={() => {
           setIsFocused(true);
-          if (showInitialSuggestions) {
-            setSuggestions(initialSuggestions.slice(0, limit));
-          }
         }}
         placeholder={placeholder}
         fullWidth
@@ -167,24 +94,20 @@ const SearchInput = <
               {withIcons && (
                 <Image
                   src={sug.image || "https://i.pravatar.cc/40?img=3"}
-                  alt={getDisplayName(sug)}
+                  alt={sug.name}
                   width={32}
                   height={32}
                   className={styles.suggestionImage}
                 />
               )}
               <div className={styles.suggestionContent}>
-                <span className={styles.suggestionName}>
-                  {getDisplayName(sug)}
-                </span>
+                <span className={styles.suggestionName}>{sug.name}</span>
                 {sug.categories && (
-                  <span className={styles.suggestionInfos}>
-                    {getCategories(sug)}
-                  </span>
+                  <CreatorCategoryBadge categoryName={sug.categories[0].name} />
                 )}
-                {getAddress(sug) && (
+                {sug.location?.label && (
                   <div className={styles.suggestionInfos}>
-                    <span>{getAddress(sug)}</span>
+                    <span>{sug.location.label}</span>
                   </div>
                 )}
               </div>

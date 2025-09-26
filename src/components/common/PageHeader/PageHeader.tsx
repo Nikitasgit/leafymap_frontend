@@ -1,16 +1,11 @@
 import React from "react";
-import { ArrowLeft } from "lucide-react";
-import Button from "@/components/common/buttons/button/Button";
-import Text from "@/components/common/typography/Text";
 import styles from "./PageHeader.module.scss";
+import BackButton from "../buttons/BackButton";
 
 interface PageHeaderProps {
   title: string;
   subtitle?: string;
   showBackButton?: boolean;
-  onBackClick?: () => void;
-  backButtonLabel?: string;
-  rightComponent?: React.ReactNode;
   className?: string;
 }
 
@@ -18,39 +13,24 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   title,
   subtitle,
   showBackButton = false,
-  onBackClick,
-  backButtonLabel = "Retour",
-  rightComponent,
   className,
 }) => {
   return (
-    <div className={`${styles.header} ${className || ""}`}>
+    <header className={`${styles.header} ${className || ""}`}>
       <div className={styles.titleSection}>
         <div className={styles.titleRow}>
-          {showBackButton && (
-            <Button
-              variant="simple"
-              onClick={onBackClick}
-              className={styles.backButton}
-              aria-label={backButtonLabel}
-            >
-              <ArrowLeft size={20} />
-            </Button>
-          )}
-          <Text as="h1" className={styles.title}>
+          {showBackButton && <BackButton />}
+          <h1 className={styles.title}>
             {title}
-          </Text>
+          </h1>
         </div>
         {subtitle && (
-          <Text as="p" className={styles.subtitle}>
+          <p className={styles.subtitle}>
             {subtitle}
-          </Text>
+          </p>
         )}
       </div>
-      {rightComponent && (
-        <div className={styles.rightComponent}>{rightComponent}</div>
-      )}
-    </div>
+    </header>
   );
 };
 

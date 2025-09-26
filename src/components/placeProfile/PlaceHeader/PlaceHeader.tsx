@@ -1,6 +1,5 @@
 import React from "react";
 import { MapPin, Map } from "lucide-react";
-import Text from "@/components/common/typography/Text";
 import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader/ProfilePictureUploader";
 import { Place } from "@/types/place";
 import styles from "./PlaceHeader.module.scss";
@@ -34,9 +33,9 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
         <div className={styles.headerFirstRow}>
           <div className={styles.titleRow}>
             <Map size={18} className={styles.icon} />
-            <Text as="h1" className={styles.title}>
+            <h1 className={styles.title}>
               {place.name}
-            </Text>
+            </h1>
           </div>
           <div className={styles.counters}>
             <SubscribersCounter followers={place.followers?.length || 0} />
@@ -45,14 +44,14 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
         </div>
         <div className={styles.headerMain}>
           <div className={styles.placeDetails}>
-            <Text as="p" className={styles.description}>
+              <p className={styles.description}>
               {place.description}
-            </Text>
+            </p>
             <div className={styles.locationInfo}>
               <MapPin size={14} />
-              <Text as="p" className={styles.location}>
+                <p className={styles.location}>
                 {place.location?.label}
-              </Text>
+              </p>
             </div>
           </div>
           <div className={styles.buttons}>

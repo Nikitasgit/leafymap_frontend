@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { Calendar, MapPin } from "lucide-react";
-import Text from "@/components/common/typography/Text";
 import EventStatus from "@/components/common/eventStatus/EventStatus";
 import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader/ProfilePictureUploader";
 import { Image } from "@/types/image";
@@ -32,20 +31,20 @@ const EventHeader: React.FC<EventHeaderProps> = ({ event }) => {
         <div className={styles.headerFirstRow}>
           <div className={styles.titleRow}>
             <Calendar size={18} className={styles.icon} />
-            <Text as="h1" className={styles.title}>
+            <h1 className={styles.title}>
               {event.name}
-            </Text>
+            </h1>
           </div>
           <EventStatus status={eventDisplayInfo.status} />
         </div>
         <div className={styles.dateInfo}>
-          <Text as="p" className={styles.dateText}>
+          <p className={styles.dateText}>
             {eventDisplayInfo.formattedDateRange}
-          </Text>
+          </p>
         </div>
-        <Text as="p" className={styles.eventDescription}>
+        <p className={styles.eventDescription}>
           {event.description}
-        </Text>
+        </p>
         <Button
           variant="simple"
           className={styles.locationButton}

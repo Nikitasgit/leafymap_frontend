@@ -1,0 +1,125 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.timeSlotItem {
+  @include flex(column, flex-start, stretch, spacing(0.75));
+  padding: spacing(0.75);
+  background: $grey-50;
+  border-radius: rem(4);
+  border: 1px solid $grey-200;
+  transition: all 0.2s ease;
+  &:hover {
+    background: $grey-100;
+    border-color: $grey-300;
+  }
+  .timeSlotInfoContainer {
+    @include flex(column, flex-start, stretch, spacing(0.5));
+    .timeSlotInfo {
+      @include flex(column, flex-start, stretch, spacing(0.25));
+      .timeSlotTitle {
+        color: $grey-800;
+        font-size: rem(14);
+        font-weight: 600;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .timeSlotTime {
+        @include flex(row, flex-start, center, spacing(0.5));
+        color: $grey-600;
+        font-size: rem(12);
+        font-weight: 500;
+        .timeRange {
+          color: $grey-700;
+          font-weight: 600;
+        }
+      }
+    }
+    .participantsContainer {
+      @include flex(column, flex-start, stretch, spacing(0.25));
+      .participantsLabel {
+        color: $grey-600;
+        font-size: rem(13);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+      .participantsList {
+        color: $grey-700;
+        font-size: rem(12);
+        font-style: italic;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+  .actionsContainer {
+    @include flex(row, flex-end, center, spacing(0.5));
+    align-self: flex-end;
+    .actionButton {
+      @include flex(row, center, center, 0);
+      width: 24px;
+      height: 24px;
+      border: none;
+      border-radius: rem(3);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      &:hover {
+        background: $grey-200;
+      }
+      &.editButton {
+        color: $primary-color;
+        &:hover {
+          background: $grey-100;
+        }
+      }
+      &.deleteButton {
+        color: $error-color;
+        &:hover {
+          background: $grey-100;
+        }
+      }
+    }
+  }
+  @include respond-to(sm) {
+    @include flex(row, space-between, center, spacing(2));
+    padding: spacing(1);
+    border-radius: rem(6);
+    .timeSlotInfoContainer {
+      @include flex(row, space-between, center, spacing(2));
+      .timeSlotInfo {
+        width: 120px;
+        .timeSlotTitle {
+          font-size: rem(14);
+        }
+        .timeSlotTime {
+          gap: spacing(1);
+          font-size: rem(12);
+        }
+      }
+      .participantsContainer {
+        min-width: 120px;
+        flex: 1;
+        .participantsLabel {
+          font-size: rem(12);
+          letter-spacing: 0.5px;
+        }
+        .participantsList {
+          font-size: rem(12);
+        }
+      }
+    }
+    .actionsContainer {
+      min-width: 80px;
+      .actionButton {
+        width: 28px;
+        height: 28px;
+        border-radius: rem(4);
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import PageHeader from "@/components/common/PageHeader/PageHeader";
+import PageHeader from "@/components/common/PageHeader";
 import React from "react";
 import styles from "./pageSettings.module.scss";
 import Button from "@/components/common/buttons/button/Button";
@@ -8,20 +8,16 @@ import { useDeleteAccount } from "@/hooks/useDeleteAccount";
 import { Trash2 } from "lucide-react";
 import InfoIcon from "@/components/common/info/InfoIcon";
 import Text from "@/components/common/typography/Text";
-import { useRouter } from "next/navigation";
 
 const Page = () => {
   const { deleteAccount, isLoading } = useDeleteAccount();
-  const router = useRouter();
 
   return (
     <div className={styles.pageContainer}>
       <section className={styles.container}>
         <PageHeader
-          backButtonLabel="Retour au compte"
           subtitle="Gérez vos paramètres de compte"
           title="Paramètres du compte"
-          onBackClick={() => router.back()}
           showBackButton
         />
         <div className={styles.settingsContainer}>

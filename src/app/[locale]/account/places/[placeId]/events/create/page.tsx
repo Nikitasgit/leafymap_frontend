@@ -1,26 +1,7 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import EventForm from "@/components/events/form/EventForm/EventForm";
-import styles from "./createEventPage.module.scss";
-import PageHeader from "@/components/common/PageHeader/PageHeader";
+import EventCreateContainer from "@/components/account/EventCreateContainer";
 
 const CreateEventPage = () => {
-  const router = useRouter();
-
-  return (
-    <div className={styles.pageContainer}>
-      <div className={styles.container}>
-        <PageHeader
-          title="Créer un événement"
-          showBackButton={true}
-          onBackClick={() => router.back()}
-          backButtonLabel="Retour aux événements"
-        />
-        <EventForm />
-      </div>
-    </div>
-  );
+  return <EventCreateContainer />;
 };
 
 export default CreateEventPage;

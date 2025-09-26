@@ -1,5 +1,5 @@
 import { DaySchedule, TimeSlot, WeekDay } from "@/types/place/schedule";
-import TimeSlotInputs from "../../../../common/timetable/timeSlotInputs/TimeSlotInputs";
+import TimeSlotInputs from "../../../../common/inputs/TimeSlotInputs/TimeSlotInputs";
 import { Edit3, PlusCircle } from "lucide-react";
 
 import Button from "../../../../common/buttons/button/Button";

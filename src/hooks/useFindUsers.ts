@@ -1,11 +1,11 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
-import { User } from "@/types/user";
+import { UserPopulated } from "@/types/user";
 import { useToast } from "./useToast";
 import { useLoading } from "./useLoading";
 
 export const useFindUsers = () => {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserPopulated[]>([]);
   const { isLoading, withLoading } = useLoading();
   const { showError } = useToast();
 
@@ -13,7 +13,7 @@ export const useFindUsers = () => {
     async (
       queryParams: Record<string, string>,
       limit: number = 5
-    ): Promise<User[]> => {
+    ): Promise<UserPopulated[]> => {
       return withLoading(async () => {
         try {
           const searchParams = new URLSearchParams();

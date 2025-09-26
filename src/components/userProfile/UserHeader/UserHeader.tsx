@@ -1,6 +1,5 @@
 import React from "react";
 import { Users, MapPin } from "lucide-react";
-import Text from "@/components/common/typography/Text";
 import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader";
 import Button from "@/components/common/buttons/button/Button";
 import { Image as ImageType } from "@/types/image";
@@ -37,9 +36,9 @@ const UserHeader: React.FC<UserHeaderProps> = ({
         <div className={styles.headerFirstRow}>
           <div className={styles.titleRow}>
             <Users size={18} className={styles.icon} />
-            <Text as="h1" className={styles.title}>
+            <h1 className={styles.title}>
               {user.creatorName}
-            </Text>
+            </h1>
             <CreatorCategoryBadge
               categoryName={user.creatorCategories[0].name}
             />
@@ -51,15 +50,15 @@ const UserHeader: React.FC<UserHeaderProps> = ({
         </div>
         <div className={styles.headerMain}>
           <div className={styles.userDetails}>
-            <Text as="p" className={styles.description}>
+              <p className={styles.description}>
               {user.description}
-            </Text>
+            </p>
             {place && place.location && (
               <div className={styles.locationInfo}>
                 <MapPin size={14} />
-                <Text as="p" className={styles.location}>
+                <p className={styles.location}>
                   {place.location.label}
-                </Text>
+                </p>
               </div>
             )}
           </div>

@@ -4,7 +4,7 @@
 
 .emptyState {
   @include flex(column, center, center, spacing(1.5));
-  padding: spacing(4);
+  padding: spacing(2);
   text-align: center;
   color: $grey-500;
   background-color: $grey-50;
@@ -12,11 +12,15 @@
   border: 2px dashed $grey-300;
   .title {
     font-style: italic;
-    font-size: rem(16);
-    font-weight: 500;
+    font-size: rem(15);
+    font-weight: 400;
   }
   .description {
     font-size: rem(14);
     font-weight: 400;
   }
+}
+.error {
+  border: 2px solid $error-color;
+  color: $error-color;
 }

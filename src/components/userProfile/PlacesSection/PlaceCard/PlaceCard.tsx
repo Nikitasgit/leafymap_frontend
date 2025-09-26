@@ -1,6 +1,5 @@
 import React from "react";
 import { MapPin } from "lucide-react";
-import Text from "@/components/common/typography/Text";
 
 import { PlacePopulated } from "@/types/place";
 
@@ -33,7 +32,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
         <div className={styles.placeHeader}>
           <div className={styles.placeTitle}>
             <MapPin size={18} className={styles.placeIcon} />
-            <Text as="h3">{place.name}</Text>
+            <h3>{place.name}</h3>
           </div>
           <div className={styles.placeCounters}>
             <SubscribersCounter followers={place.followers?.length || 0} />
@@ -43,17 +42,15 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
 
         <div className={styles.placeContent}>
           {place.description && (
-            <Text as="p" className={styles.description}>
+            <p className={styles.description}>
               {place.description.length > 120
                 ? `${place.description.substring(0, 120)}...`
                 : place.description}
-            </Text>
+            </p>
           )}
 
           <div className={styles.placeDetails}>
-            <Text as="p" className={styles.locationName}>
-              {place.location?.label}
-            </Text>
+            <p className={styles.locationName}>{place.location?.label}</p>
           </div>
         </div>
       </div>

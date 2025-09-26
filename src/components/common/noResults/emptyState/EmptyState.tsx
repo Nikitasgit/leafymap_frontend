@@ -1,28 +1,29 @@
 import React from "react";
 import styles from "./EmptyState.module.scss";
-import Text from "../../typography/Text";
 
 const EmptyState = ({
   title,
   icon,
   description,
   button,
+  isError = false,
 }: {
   title: string;
   icon?: React.ReactNode;
   description?: string;
   button?: React.ReactNode;
+  isError?: boolean;
 }) => {
   return (
-    <div className={styles.emptyState}>
+    <div className={`${styles.emptyState} ${isError ? styles.error : ""}`}>
       {icon && icon}
-      <Text className={styles.title} as="p">
+      <p className={styles.title}>
         {title}
-      </Text>
+      </p>
       {description && (
-        <Text className={styles.description} as="p">
+        <p className={styles.description}>
           {description}
-        </Text>
+        </p>
       )}
       {button && button}
     </div>

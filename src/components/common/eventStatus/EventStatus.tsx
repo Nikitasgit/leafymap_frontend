@@ -1,5 +1,4 @@
 import React from "react";
-import Text from "@/components/common/typography/Text";
 import { useTranslation } from "next-i18next";
 import styles from "./EventStatus.module.scss";
 
@@ -24,9 +23,7 @@ const EventStatus: React.FC<EventStatusProps> = ({
 
   return (
     <span className={`${styles.eventStatus} ${styles[status]} ${className}`}>
-      <Text as="p" className={styles.statusText}>
-        {statusText}
-      </Text>
+      <p className={styles.statusText}>{statusText}</p>
     </span>
   );
 };

@@ -1,0 +1,130 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.card {
+  @include flex(row, flex-start, center, spacing(0));
+  border-bottom: 1px solid $grey-200;
+  border-radius: 12px;
+  .imageContainer {
+    overflow: hidden;
+    border-radius: 12px 0 0 12px;
+  }
+  .content {
+    @include flex(column, flex-start, stretch, spacing(0));
+    flex: 1;
+    min-width: 0;
+    padding: 0 spacing(0.5);
+    .titleContainer {
+      @include flex(column-reverse, space-between, center, spacing(0));
+      width: 100%;
+      .title {
+        color: $grey-700;
+        font-weight: 600;
+        margin: 0;
+        font-size: rem(14);
+        align-self: flex-start;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .actionButtons {
+        @include flex(row, flex-end, center, spacing(0.25));
+        align-self: flex-end;
+        .viewIcon {
+          color: $grey-500;
+          &:hover {
+            color: $primary-color;
+          }
+        }
+        .editIcon {
+          color: $grey-500;
+          &:hover {
+            color: $primary-color;
+          }
+        }
+        .deleteIcon {
+          color: $grey-500;
+          &:hover {
+            color: $error-color;
+          }
+        }
+      }
+    }
+    .description {
+      color: $grey-600;
+      font-size: rem(14);
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0;
+    }
+    .scheduleInfo {
+      @include flex(column, flex-start, stretch, spacing(0.25));
+      .scheduleItem {
+        @include flex(row, flex-start, center, spacing(0.5));
+        color: $grey-600;
+        align-items: center;
+        .scheduleText {
+          font-size: rem(12);
+          color: $grey-600;
+          font-weight: 500;
+          margin: 0;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+      .scheduleItem:first-child svg {
+        display: none;
+      }
+    }
+  }
+  @include respond-to(sm) {
+    .content {
+      gap: spacing(0.5);
+      .titleContainer {
+        @include flex(row, space-between, center, spacing(0.5));
+        .title {
+          font-size: rem(16);
+        }
+      }
+      .scheduleInfo {
+        .scheduleItem {
+          .scheduleText {
+            font-size: rem(11);
+          }
+        }
+        .scheduleItem:first-child svg {
+          display: block;
+        }
+      }
+    }
+  }
+  @include respond-to(md) {
+    .content {
+      gap: spacing(0.25);
+      .titleContainer {
+        .title {
+          font-size: rem(18);
+        }
+      }
+      .scheduleInfo {
+        .scheduleItem {
+          .scheduleText {
+            font-size: rem(12);
+          }
+        }
+      }
+    }
+  }
+}
