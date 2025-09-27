@@ -2,11 +2,15 @@
 import { useState, useEffect, useCallback } from "react";
 import Button from "@/components/common/buttons/button/Button";
 import PlaceForm from "@/components/account/Place/PlaceForm/PlaceForm";
-import PartnershipsForm from "@/components/account/FormComponents/PartnershipsForm/PartnershipsForm";
-import { UserInfo } from "@/components/account/FormComponents/ProfileInfo";
-import { UserContactForm } from "@/components/account/FormComponents/ContactForm";
-import { PlaceContactForm } from "@/components/account/FormComponents/ContactForm";
-import { PlaceInfo } from "@/components/account/FormComponents/ProfileInfo";
+import PartnershipsForm from "@/components/account/FormComponents/PartnershipsForm";
+import {
+  UserInfo,
+  PlaceInfo,
+} from "@/components/account/FormComponents/ProfileInfo";
+import {
+  UserContactForm,
+  PlaceContactForm,
+} from "@/components/account/FormComponents/ContactForm";
 import { useToast } from "@/hooks/useToast";
 import { ValidationResult } from "@/validations/commonValidations";
 import { validateNewPlaceData } from "@/validations/placeValidations";
