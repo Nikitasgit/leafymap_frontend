@@ -6,7 +6,7 @@ import PartnershipsForm from "@/components/account/FormComponents/PartnershipsFo
 import { UserInfo } from "@/components/account/FormComponents/ProfileInfo";
 import { UserContactForm } from "@/components/account/FormComponents/ContactForm";
 import { PlaceContactForm } from "@/components/account/FormComponents/ContactForm";
-import { PlaceInfo } from "../../FormComponents/ProfileInfo";
+import { PlaceInfo } from "@/components/account/FormComponents/ProfileInfo";
 import { useToast } from "@/hooks/useToast";
 import { ValidationResult } from "@/validations/commonValidations";
 import { validateNewPlaceData } from "@/validations/placeValidations";
