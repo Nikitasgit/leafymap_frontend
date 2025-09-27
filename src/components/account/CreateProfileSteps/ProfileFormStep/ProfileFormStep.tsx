@@ -2,11 +2,11 @@
 import { useState, useEffect, useCallback } from "react";
 import Button from "@/components/common/buttons/button/Button";
 import PlaceForm from "@/components/account/Place/PlaceForm/PlaceForm";
-import Partnerships from "@/components/account/FormComponents/PartnershipsForm/PartnershipsForm";
-import UserInfos from "@/components/account/FormComponents/ProfileInfo/UserInfo";
-import UserContactForm from "@/components/account/FormComponents/ContactForm/UserContactForm";
-import PlaceContactForm from "@/components/account/FormComponents/ContactForm/PlaceContactForm";
-import PlaceInfos from "../../FormComponents/ProfileInfo/PlaceInfo";
+import Partnerships from "@/components/account/FormComponents/PartnershipsForm";
+import { UserInfo } from "@/components/account/FormComponents/ProfileInfo";
+import { UserContactForm } from "@/components/account/FormComponents/ContactForm";
+import { PlaceContactForm } from "@/components/account/FormComponents/ContactForm";
+import { PlaceInfo }   from "../../FormComponents/ProfileInfo";
 import { useToast } from "@/hooks/useToast";
 import { ValidationResult } from "@/validations/commonValidations";
 import { validateNewPlaceData } from "@/validations/placeValidations";
@@ -75,13 +75,13 @@ const ProfileFormStep = ({
   return (
     <form onSubmit={handleSubmit} noValidate>
       {user.userType === "organizer" ? (
-        <PlaceInfos
+        <PlaceInfo
           place={place}
           onPlaceChange={onPlaceChange}
           errors={errors.place}
         />
       ) : (
-        <UserInfos
+        <UserInfo
           user={user}
           onUserChange={onUserChange}
           onPlaceChange={onPlaceChange}
