@@ -11,7 +11,7 @@ import {
   ProfileFormStepErrors,
   ProfileFormStepProps,
 } from "./ProfileFormStep.types";
-import PartnershipsForm from "@/components/account/FormComponents/PartnershipsForm";
+import PartnershipsForm from "@/components/account/PartnershipsForm";
 import {
   PlaceContactForm,
   UserContactForm,
