@@ -1,8 +1,8 @@
 import {
   InitialCreatorData,
   InitialPlaceData,
+  FormDataChangeHandler,
 } from "../../CreateProfileStepper/CreateProfileStepper.types";
-import { FormDataChangeHandler } from "../../CreateProfileStepper/CreateProfileStepper.types";
 
 export interface PlaceContactFormProps {
   place: InitialPlaceData;

@@ -1,1 +1,1 @@
-export { default } from "../PartnershipsForm/PartnershipsForm";
+export { default } from "./PartnershipsForm";

@@ -3,7 +3,7 @@ import CategorySelectorInput from "@/components/common/inputs/CategorySelectorIn
 import { UserInfoProps } from "./info.types";
 import styles from "./Info.module.scss";
 
-const UserInfos = ({
+const UserInfo = ({
   user,
   onUserChange,
   onPlaceChange,
@@ -50,4 +50,4 @@ const UserInfos = ({
   );
 };
 
-export default UserInfos;
+export default UserInfo;
