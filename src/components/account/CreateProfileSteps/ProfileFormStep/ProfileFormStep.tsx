@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Button from "@/components/common/buttons/button/Button";
 import PlaceForm from "@/components/account/Place/PlaceForm/PlaceForm";
-import PartnershipsForm from "@/components/account/FormComponents/PartnershipsForm";
+
 import {
   UserInfo,
   PlaceInfo,
@@ -20,6 +20,7 @@ import {
   ProfileFormStepErrors,
   ProfileFormStepProps,
 } from "./ProfileFormStep.types";
+import PartnershipsForm from "@/components/account/FormComponents/PartnershipsForm";
 
 const ProfileFormStep = ({
   place,
