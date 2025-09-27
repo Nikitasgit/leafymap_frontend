@@ -1,4 +1,4 @@
-import EventCreateContainer from "@/components/account/EventCreateContainer";
+import EventCreateContainer from "@/components/account/Event/EventCreateContainer";
 
 const CreateEventPage = () => {
   return <EventCreateContainer />;

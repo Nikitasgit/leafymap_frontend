@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { format } from "date-fns";
 import { EventTimeSlot, Period } from "@/types/place/schedule";
-import type { initialEventData } from "@/components/account/formComponents/Event/EventForm/EventForm.types";
+import type { initialEventData } from "@/components/account/Event/EventForm/EventForm.types";
 
 interface UseEventScheduleProps {
   setEvent: React.Dispatch<React.SetStateAction<initialEventData>>;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { descriptionSchema, ValidationResult } from "./commonValidations";
-import { initialEventData } from "@/components/account/formComponents/Event/EventForm/EventForm.types";
+import { initialEventData } from "@/components/account/Event/EventForm/EventForm.types";
 
 export const eventNameSchema = z
   .string()

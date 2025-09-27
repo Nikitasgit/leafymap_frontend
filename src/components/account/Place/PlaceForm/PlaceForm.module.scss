@@ -1,0 +1,75 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.placeForm {
+  width: 100%;
+  margin-top: spacing(1);
+  @include flex(column, flex-start, stretch, spacing(1));
+
+  .title {
+    color: $grey-500;
+    font-size: rem(18);
+    font-weight: 600;
+    margin-bottom: spacing(0.5);
+  }
+  .placeFormContainer {
+    @include flex(column, flex-start, stretch, spacing(1.5));
+    border-bottom: 1px solid $grey-200;
+    padding-bottom: spacing(2);
+  }
+  .mapSection {
+    .mapTitle {
+      color: $grey-500;
+      font-size: rem(13);
+      text-align: center;
+      margin-bottom: spacing(1);
+    }
+    .mapContainer {
+      border-radius: rem(6);
+      overflow: hidden;
+      border: 1px solid $grey-200;
+      transition: $transition-default;
+      &:hover {
+        border-color: $primary-color;
+      }
+    }
+  }
+  .required {
+    color: $error-color;
+    font-size: rem(14);
+    margin-top: spacing(0.25);
+    font-family: $font-family-base;
+  }
+  @include respond-to(sm) {
+    .title {
+      font-size: rem(20);
+    }
+    .placeFormContainer {
+      padding-bottom: spacing(2.5);
+    }
+    .mapSection {
+      .mapTitle {
+        font-size: rem(14);
+        margin-bottom: spacing(1.5);
+      }
+      .mapContainer {
+        border-radius: rem(8);
+        border: 2px solid $grey-200;
+      }
+    }
+  }
+  @include respond-to(md) {
+    .title {
+      font-size: rem(22);
+    }
+    .placeFormContainer {
+      padding-bottom: spacing(3);
+    }
+    .mapSection {
+      .mapTitle {
+        font-size: rem(15);
+      }
+    }
+  }
+}

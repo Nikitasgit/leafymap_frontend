@@ -1,11 +1,6 @@
-import CreateProfileStepper from "@/components/account/createProfileStepper/CreateProfileStepper";
-import styles from "./page.module.scss";
+import CreateProfileStepper from "@/components/account/CreateProfileStepper/CreateProfileStepper";
 
 const CreateProfilePage = () => {
-  return (
-    <div className={styles.pageContainer}>
-      <CreateProfileStepper />
-    </div>
-  );
+  return <CreateProfileStepper />;
 };
 export default CreateProfilePage;

@@ -4,19 +4,19 @@ import { useState, useEffect, useCallback } from "react";
 import Button from "@/components/common/buttons/button/Button";
 import { useToast } from "@/hooks/useToast";
 import { Partnership } from "@/types/partnerships";
-import PlaceForm from "@/components/account/formComponents/placeForm/PlaceForm";
-import Partnerships from "@/components/account/formComponents/PartnershipsForm/PartnershipsForm";
+import PlaceForm from "@/components/account/Place/PlaceForm/PlaceForm";
+import Partnerships from "@/components/account/FormComponents/PartnershipsForm/PartnershipsForm";
 import { validateNewPlaceData } from "@/validations/placeValidations";
-import PlaceContactForm from "@/components/account/formComponents/contactForm/PlaceContactForm";
+import PlaceContactForm from "@/components/account/FormComponents/ContactForm/PlaceContactForm";
 import { ValidationResult } from "@/validations/commonValidations";
 import {
   FormDataChangeHandler,
   InitialPlaceData,
-} from "../account/createProfileStepper/CreateProfileStepper.types";
+} from "../account/CreateProfileStepper/CreateProfileStepper.types";
 import { defaultSchedule } from "@/utils/createProfile";
 import { User } from "@/types/user";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import PlaceInfos from "../account/formComponents/infos/PlaceInfos";
+import PlaceInfos from "../account/FormComponents/ProfileInfo/PlaceInfo";
 import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
 import styles from "./CreatePlaceForm.module.scss";

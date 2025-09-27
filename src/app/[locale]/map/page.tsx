@@ -1,6 +1,6 @@
 "use client";
 
-import MapComponent from "@/components/map/mapComponent/Map";
+import MapComponent from "@/components/common/Map/MapComponent/Map";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useState, useRef, useEffect } from "react";
 import styles from "./mapPage.module.scss";

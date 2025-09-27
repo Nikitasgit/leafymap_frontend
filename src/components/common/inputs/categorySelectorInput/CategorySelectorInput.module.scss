@@ -26,15 +26,23 @@
 
 .list {
   @include flex(column, flex-start, stretch, 0);
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .item {
+  width: 100%;
   padding: spacing(1.25);
   @include flex(row, space-between, center, 0);
   cursor: pointer;
   transition: $transition-default;
   font-family: $font-family-base;
   font-size: $font-size-base;
+  background: none;
+  border: none;
+  text-align: left;
+  color: inherit;
 
   &:hover {
     background-color: $grey-100;
@@ -42,5 +50,15 @@
 
   &:active {
     background-color: $grey-200;
+  }
+
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: -2px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary-color;
+    outline-offset: -2px;
   }
 }

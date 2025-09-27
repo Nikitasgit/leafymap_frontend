@@ -4,9 +4,9 @@ import {
   FormDataChangeHandler,
   InitialCreatorData,
   InitialPlaceData,
-} from "@/components/account/createProfileStepper/CreateProfileStepper.types";
+} from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
 import { useState, useEffect } from "react";
-import ActivityFormStep from "@/components/account/createProfileStepper/steps/ActivityFormStep/ActivityFormStep";
+import ActivityFormStep from "@/components/account/CreateProfileSteps/ProfileFormStep/ProfileFormStep";
 import useUpdateUser from "@/hooks/useSubmitUser";
 import { defaultSchedule } from "@/utils/createProfile";
 import { useCurrentUser } from "@/hooks/useCurrentUser";

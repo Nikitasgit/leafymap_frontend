@@ -1,5 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuth, signIn, signOut } from "@/store/authSlice";
+import {
+  selectAuth,
+  signIn,
+  signOut,
+  fetchCurrentUser,
+} from "@/store/authSlice";
 import { User } from "@/types/user";
 import { useToast } from "./useToast";
 import useHandleApiErrors from "./useHandleApiErrors";
@@ -23,6 +28,7 @@ export const useAuth = (): AuthState => {
   const login = async (identifier: string, password: string) => {
     try {
       await dispatch(signIn({ identifier, password })).unwrap();
+      await dispatch(fetchCurrentUser()).unwrap();
       showSuccess("Connexion réussie");
       router.push("/");
     } catch (error: unknown) {

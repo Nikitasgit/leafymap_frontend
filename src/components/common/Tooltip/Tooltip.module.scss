@@ -1,0 +1,85 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.infoIconContainer {
+  position: relative;
+  width: min-content;
+  cursor: help;
+  color: $grey-500;
+  height: min-content;
+  line-height: 0.8;
+  transition: $transition-default;
+  @include flex(row, center, center, 0);
+  &:hover {
+    color: $grey-600;
+  }
+  .tooltip {
+    position: absolute;
+    background-color: $grey-50;
+    border: 1px solid $grey-200;
+    color: $grey-600;
+    padding: spacing(0.75);
+    border-radius: rem(4);
+    font-size: rem(12);
+    line-height: $line-height-base;
+    z-index: 10000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    min-width: 150px;
+    max-width: 280px;
+  }
+  &.top .tooltip {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: spacing(0.75);
+  }
+  &.bottom .tooltip {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: spacing(0.75);
+  }
+  &.left .tooltip {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: spacing(0.75);
+  }
+  &.right .tooltip {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: spacing(0.75);
+  }
+  @include respond-to(sm) {
+    .tooltip {
+      padding: spacing(1);
+      border-radius: rem(6);
+      font-size: rem(13);
+      min-width: 250px;
+      max-width: 320px;
+    }
+    &.top .tooltip {
+      margin-bottom: spacing(1);
+    }
+    &.bottom .tooltip {
+      margin-top: spacing(1);
+    }
+    &.left .tooltip {
+      margin-right: spacing(1);
+    }
+    &.right .tooltip {
+      margin-left: spacing(1);
+    }
+  }
+  @include respond-to(md) {
+    .tooltip {
+      padding: spacing(1.25);
+      border-radius: rem(8);
+      font-size: rem(14);
+      min-width: 300px;
+      max-width: 400px;
+    }
+  }
+}

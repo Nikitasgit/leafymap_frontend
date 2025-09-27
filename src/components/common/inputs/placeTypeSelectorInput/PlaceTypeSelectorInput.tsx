@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { PlaceType } from "@/types/place/placeCaterories";
-import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
 import styles from "./PlaceTypeSelectorInput.module.scss";
-
-interface PlaceTypeSelectorInputProps {
-  value: PlaceType[];
-  onChange: FormDataChangeHandler;
-  error?: boolean;
-  errorMessage?: string;
-}
+import { PlaceTypeSelectorInputProps } from "./PlaceTypeSelectorInput.types";
 
 const PlaceTypeSelectorInput: React.FC<PlaceTypeSelectorInputProps> = ({
   value = [],
@@ -41,6 +34,13 @@ const PlaceTypeSelectorInput: React.FC<PlaceTypeSelectorInputProps> = ({
     });
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent, type: PlaceType) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleTypeToggle(type);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <label className={styles.label}>
@@ -52,10 +52,19 @@ const PlaceTypeSelectorInput: React.FC<PlaceTypeSelectorInputProps> = ({
           <button
             key={type.value}
             type="button"
+            role="checkbox"
+            aria-checked={selectedTypes.includes(type.value)}
+            aria-label={`${type.label} - ${
+              selectedTypes.includes(type.value)
+                ? "sélectionné"
+                : "non sélectionné"
+            }`}
+            aria-describedby={error ? "place-type-error" : undefined}
             className={`${styles.option} ${
               selectedTypes.includes(type.value) ? styles.selected : ""
             } ${error ? styles.error : ""}`}
             onClick={() => handleTypeToggle(type.value)}
+            onKeyDown={(e) => handleKeyDown(e, type.value)}
           >
             <span className={styles.icon}>{type.icon}</span>
             <span className={styles.label}>{type.label}</span>
@@ -67,10 +76,12 @@ const PlaceTypeSelectorInput: React.FC<PlaceTypeSelectorInputProps> = ({
       </div>
 
       <div
+        id="place-type-error"
         className={`${styles.selectedInfo} ${error ? styles.errorMessage : ""}`}
+        role={error ? "alert" : undefined}
       >
-        Veuillez séléctionner au moins un type: {selectedTypes.length}{" "}
-        séléctionnés
+        Veuillez sélectionner au moins un type: {selectedTypes.length}{" "}
+        {selectedTypes.length > 1 ? "sélectionnés" : "sélectionné"}
       </div>
     </div>
   );

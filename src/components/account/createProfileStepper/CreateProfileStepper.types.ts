@@ -1,37 +1,10 @@
 import { Location } from "@/types/common";
 import { DefaultSchedule, Period } from "@/types/place/schedule";
-import { PlaceType } from "@/types/place/placeCaterories";
 import { Partnership } from "@/types/partnerships";
 import { User } from "@/types/user";
 import { Place } from "@/types/place";
 import { SubCategory } from "@/types/categories";
 
-export interface BaseProfileFormData {
-  userType: string;
-  name: string;
-  description: string;
-  categories: string[];
-  phone: string;
-  email: string;
-  website: string;
-}
-
-export interface PlaceFormData {
-  name: string;
-  description: string;
-  location: {
-    id: string;
-    label: string;
-    coordinates: [number, number];
-    type: "Point";
-  };
-  defaultSchedule: DefaultSchedule;
-  placeCategory: string;
-  phone: string;
-  email: string;
-  website: string;
-  placeType: PlaceType[];
-}
 
 export type FormDataChangeHandler = (
   e:

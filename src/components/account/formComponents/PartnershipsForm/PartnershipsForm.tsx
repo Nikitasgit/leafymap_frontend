@@ -1,8 +1,7 @@
 "use client";
 import { Collaborator } from "@/types/place/collaborators";
 import styles from "./PartnershipsForm.module.scss";
-import InfoIcon from "@/components/common/info/InfoIcon";
-import Text from "@/components/common/typography/Text";
+import Tooltip from "@/components/common/Tooltip/Tooltip";
 import { Users } from "lucide-react";
 import { generateTempId, isTempId } from "@/utils/tempId";
 import { Partnership } from "@/types/partnerships";
@@ -88,14 +87,14 @@ const PartnershipsForm = ({
   };
 
   return (
-    <section className={styles.partnerships}>
-      <header className={styles.titleContainer}>
-        <h3 className={styles.title}>Partenaires</h3>
-        <InfoIcon
+    <fieldset className={styles.partnerships}>
+      <legend className={styles.titleContainer}>
+        <span className={styles.title}>Partenaires</span>
+        <Tooltip
           tooltip="Ajoutez des artistes ou créez un profil provisoire pour des créateurs ou producteurs qui apparaîtront sur votre profil comme des partenaires de votre lieu."
           place="right"
         />
-      </header>
+      </legend>
       <div className={styles.searchContainer}>
         <div className={styles.header}>
           <p className={styles.label}>
@@ -105,10 +104,10 @@ const PartnershipsForm = ({
             />
             Ajouter un partenaire
           </p>
-          <Text className={styles.info}>
+          <p className={styles.info}>
             Vous pouvez rechercher des profils de partenaires enregistrés sur
             notre plateforme.
-          </Text>
+          </p>
         </div>
         <div className={styles.searchInputContainer}>
           <SearchInput
@@ -124,7 +123,7 @@ const PartnershipsForm = ({
         partnerships={partnerships}
         onDelete={handleDelete}
       />
-    </section>
+    </fieldset>
   );
 };
 

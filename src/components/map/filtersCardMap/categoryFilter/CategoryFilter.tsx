@@ -3,7 +3,7 @@ import Text from "@/components/common/typography/Text";
 import { Tag } from "lucide-react";
 import { useAppSelector } from "@/store";
 import { selectPlaceCategories } from "@/store/appSlice";
-import PlaceCategoryIcon from "@/components/common/icons/PlaceCategoryIcon";
+import PlaceCategoryIcon from "@/components/common/icons/PlaceCategoryIcon/PlaceCategoryIcon";
 import styles from "./CategoryFilter.module.scss";
 import { useTranslation } from "react-i18next";
 

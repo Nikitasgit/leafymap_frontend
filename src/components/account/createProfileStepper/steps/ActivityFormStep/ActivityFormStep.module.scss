@@ -1,9 +1,0 @@
-@use "@/styles/abstracts/variables" as *;
-@use "@/styles/abstracts/mixins" as *;
-@use "@/styles/abstracts/functions" as *;
-
-.buttonContainer {
-  @include flex(row, space-between, center, spacing(2));
-  width: 100%;
-  margin-top: spacing(2);
-}

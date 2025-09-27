@@ -1,13 +1,12 @@
 "use client";
-
 import { useEffect, useState } from "react";
-import UserTypeStep from "./steps/UserTypeStep/UserTypeStep";
-import ActivityFormStep from "./steps/ActivityFormStep/ActivityFormStep";
+import UserTypeStep from "../CreateProfileSteps/UserTypeStep/UserTypeStep";
+import ProfileFormStep from "../CreateProfileSteps/ProfileFormStep/ProfileFormStep";
 import {
   FormDataChangeHandler,
   InitialCreatorData,
   InitialPlaceData,
-} from "./CreateProfileStepper.types";
+} from "../CreateProfileStepper";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { defaultSchedule } from "@/utils/createProfile";
 import styles from "./CreateProfileStepper.module.scss";
@@ -19,6 +18,7 @@ import { User } from "@/types/user";
 import { Partnership } from "@/types/partnerships";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
+import PageHeader from "@/components/common/PageHeader";
 
 const initialUserData = (user: Partial<User> | null): InitialCreatorData => ({
   userType: "guest",
@@ -42,19 +42,20 @@ const initialPlaceData = (user: Partial<User> | null): InitialPlaceData => ({
 });
 
 const CreateProfileStepper = () => {
+  const router = useRouter();
+  const { showSuccess, showError } = useToast();
   const { user, isLoading: userLoading } = useCurrentUser();
   const { submitUser, isLoading: submitUserLoading } = useSubmitUser();
   const { submitPlace, isLoading: submitPlaceLoading } = useSubmitPlace();
   const { submitPartnerships, isLoading: submitPartnershipsLoading } =
     useSubmitPartnerships();
-  const { showSuccess, showError } = useToast();
+
   const [step, setStep] = useState(1);
   const [place, setPlace] = useState<InitialPlaceData>(initialPlaceData(null));
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
   const [newUser, setNewUser] = useState<InitialCreatorData>(
     initialUserData(null)
   );
-  const router = useRouter();
 
   useEffect(() => {
     if (user) {
@@ -96,7 +97,6 @@ const CreateProfileStepper = () => {
   };
 
   const handleNext = () => setStep((prev) => prev + 1);
-
   const handleBack = () => {
     const prevStep = step;
     setStep((prev) => prev - 1);
@@ -108,35 +108,37 @@ const CreateProfileStepper = () => {
   };
 
   return (
-    <div className={styles.container}>
-      {loading && <LoadingBar />}
-      <div className={styles.stepperHeader}>
-        <h1 className={styles.title}>Créer votre profil</h1>
-        <span className={styles.stepText}>Étape {step} sur 2</span>
-      </div>
-
-      <div className={styles.stepContainer}>
-        {step === 1 && (
-          <UserTypeStep
-            loading={loading}
-            userType={newUser.userType}
-            onChange={onUserChange}
-            onNext={handleNext}
-          />
-        )}
-        {step === 2 && (
-          <ActivityFormStep
-            place={place}
-            user={newUser}
-            partnerships={partnerships}
-            onPartnershipsChange={setPartnerships}
-            onPlaceChange={onPlaceChange}
-            onUserChange={onUserChange}
-            onSubmit={handleSubmit}
-            onBack={handleBack}
-          />
-        )}
-      </div>
+    <div className={styles.pageContainer}>
+      <section className={styles.container}>
+        {loading && <LoadingBar />}
+        <PageHeader
+          title="Créer votre profil"
+          showBackButton
+          subtitle={`Étape ${step} sur 2`}
+        />
+        <>
+          {step === 1 && (
+            <UserTypeStep
+              loading={loading}
+              userType={newUser.userType}
+              onChange={onUserChange}
+              onNext={handleNext}
+            />
+          )}
+          {step === 2 && (
+            <ProfileFormStep
+              place={place}
+              user={newUser}
+              partnerships={partnerships}
+              onPartnershipsChange={setPartnerships}
+              onPlaceChange={onPlaceChange}
+              onUserChange={onUserChange}
+              onSubmit={handleSubmit}
+              onBack={handleBack}
+            />
+          )}
+        </>
+      </section>
     </div>
   );
 };

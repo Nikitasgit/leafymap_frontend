@@ -17,7 +17,7 @@
       @include flex(column, center, center, spacing(0.75));
       text-align: center;
       .text {
-        color: $secondary-color;
+        color: $grey-600;
         font-size: rem(14);
         margin: 0;
       }

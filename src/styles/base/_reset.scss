@@ -73,6 +73,10 @@ textarea {
     border-color: #e0e0e0;
   }
 }
+fieldset {
+  border: none;
+  padding: 0;
+}
 textarea {
   resize: none;
 }

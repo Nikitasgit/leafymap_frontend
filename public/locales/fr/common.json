@@ -63,5 +63,16 @@
     "pending": "En attente",
     "accepted": "Accepté",
     "refused": "Refusé"
+  },
+  "defaultSchedule": {
+    "day": {
+      "monday": "Lundi",
+      "tuesday": "Mardi",
+      "wednesday": "Mercredi",
+      "thursday": "Jeudi",
+      "friday": "Vendredi",
+      "saturday": "Samedi",
+      "sunday": "Dimanche"
+    }
   }
 }

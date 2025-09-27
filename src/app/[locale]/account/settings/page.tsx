@@ -6,7 +6,7 @@ import styles from "./pageSettings.module.scss";
 import Button from "@/components/common/buttons/button/Button";
 import { useDeleteAccount } from "@/hooks/useDeleteAccount";
 import { Trash2 } from "lucide-react";
-import InfoIcon from "@/components/common/info/InfoIcon";
+import InfoIcon from "@/components/common/Tooltip/Tooltip";
 import Text from "@/components/common/typography/Text";
 
 const Page = () => {

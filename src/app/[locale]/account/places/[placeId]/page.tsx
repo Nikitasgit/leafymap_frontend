@@ -1,13 +1,13 @@
 "use client";
 
-import ActivityFormStep from "@/components/account/createProfileStepper/steps/ActivityFormStep/ActivityFormStep";
+import ActivityFormStep from "@/components/account/CreateProfileSteps/ProfileFormStep/ProfileFormStep";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { usePlace } from "@/hooks/usePlace";
 import {
   FormDataChangeHandler,
   InitialPlaceData,
-} from "@/components/account/createProfileStepper/CreateProfileStepper.types";
+} from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
 import { defaultSchedule } from "@/utils/createProfile";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import LoadingBar from "@/components/common/loading/LoadingBar";

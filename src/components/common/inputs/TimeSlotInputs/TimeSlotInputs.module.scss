@@ -3,7 +3,7 @@
 @use "@/styles/abstracts/functions" as *;
 
 .container {
-  @include flex(column, flex-start, stretch, spacing(0.75));
+  @include flex(row, space-between, center, spacing(0.5));
   padding: spacing(0.75) 0;
   width: 100%;
   :global(.react-datepicker-popper) {
@@ -49,7 +49,6 @@
     }
   }
   @include respond-to(sm) {
-    @include flex(row, space-between, center, spacing(0.5));
     padding: spacing(1) 0;
     :global(.react-datepicker) {
       border-radius: rem(8);

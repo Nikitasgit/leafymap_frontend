@@ -1,5 +1,4 @@
 import React from "react";
-import Text from "@/components/common/typography/Text";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from "react-datepicker";
@@ -60,7 +59,7 @@ const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
             strategy: "fixed",
           }}
         />
-        <Text className={styles.timeSeparator}>à</Text>
+        <p className={styles.timeSeparator}>à</p>
         <DatePicker
           selected={parseTimeString(slot.endTime)}
           onChange={(time) => onTimeChange("endTime", time)}

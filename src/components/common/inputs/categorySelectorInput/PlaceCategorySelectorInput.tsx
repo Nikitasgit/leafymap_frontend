@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import styles from "./CategorySelectorInput.module.scss";
-import { FormDataChangeHandler } from "@/components/account/createProfileStepper/CreateProfileStepper.types";
+import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
 import { PlaceCategory } from "@/types/categories";
 import { PlaceType } from "@/types/place/placeCaterories";
 import TextField from "../textField/TextField";
@@ -26,7 +26,6 @@ const PlaceCategorySelectorInput = ({
   const { placeCategories, loading, error: appError } = useApp();
   const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [search, setSearch] = useState("");
   const { showError } = useToast();
   const { t } = useTranslation("subscription");
   const ref = useRef<HTMLDivElement>(null);
@@ -35,7 +34,6 @@ const PlaceCategorySelectorInput = ({
     if (selectedTypes.length === 0) {
       return placeCategories;
     }
-
     const filtered = placeCategories.filter((category) => {
       const categoryTypes = category.types || [];
       return (
@@ -47,24 +45,22 @@ const PlaceCategorySelectorInput = ({
     return filtered;
   };
 
-  const isCurrentCategoryCompatible = () => {
-    if (!value || selectedTypes.length === 0) {
-      return true;
-    }
-
-    const currentCategory = placeCategories.find((cat) => cat._id === value);
-    if (!currentCategory) {
-      return false;
-    }
-
-    const categoryTypes = currentCategory.types || [];
-    return (
-      categoryTypes.length > 0 &&
-      categoryTypes.some((type: PlaceType) => selectedTypes.includes(type))
-    );
-  };
-
   useEffect(() => {
+    const isCurrentCategoryCompatible = () => {
+      if (!value || selectedTypes.length === 0) {
+        return true;
+      }
+      const currentCategory = placeCategories.find((cat) => cat._id === value);
+      if (!currentCategory) {
+        return false;
+      }
+      const categoryTypes = currentCategory.types || [];
+      return (
+        categoryTypes.length > 0 &&
+        categoryTypes.some((type: PlaceType) => selectedTypes.includes(type))
+      );
+    };
+
     if (value && !isCurrentCategoryCompatible()) {
       setInputValue("");
       onChange({
@@ -74,11 +70,10 @@ const PlaceCategorySelectorInput = ({
         },
       });
     }
-  }, [selectedTypes, value, onChange]);
+  }, [selectedTypes, value, onChange, placeCategories]);
 
   const handleClickOutside = () => {
     setIsOpen(false);
-    setSearch("");
   };
 
   useOnClickOutside(ref, handleClickOutside);
@@ -86,7 +81,6 @@ const PlaceCategorySelectorInput = ({
   const handleSelect = (category: PlaceCategory) => {
     setInputValue(category.name);
     setIsOpen(false);
-    setSearch("");
     onChange({
       target: {
         name: "placeCategory",
@@ -96,9 +90,6 @@ const PlaceCategorySelectorInput = ({
   };
 
   const filteredCategories = getFilteredCategories();
-  const searchFiltered = filteredCategories.filter((cat) =>
-    cat.name.toLowerCase().includes(search.toLowerCase())
-  );
 
   useEffect(() => {
     if (value) {
@@ -133,27 +124,22 @@ const PlaceCategorySelectorInput = ({
       />
 
       {isOpen && (
-        <div className={styles.dropdown}>
-          <TextField
-            name="search"
-            onClick={() => setIsOpen(true)}
-            placeholder={t("placeCategorySelector.searchPlaceholder")}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            fullWidth
-          />
-
-          <div className={styles.list}>
-            {searchFiltered.map((cat) => (
-              <div
-                key={cat._id}
-                className={styles.item}
-                onClick={() => handleSelect(cat)}
-              >
-                {t(`placeCategories.${cat.name}`)}
-              </div>
+        <div className={styles.dropdown} role="listbox">
+          <ul className={styles.list}>
+            {filteredCategories.map((cat) => (
+              <li key={cat._id}>
+                <button
+                  type="button"
+                  className={styles.item}
+                  onClick={() => handleSelect(cat)}
+                  role="option"
+                  aria-selected={value === cat._id}
+                >
+                  {t(`placeCategories.${cat.name}`)}
+                </button>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       )}
     </div>

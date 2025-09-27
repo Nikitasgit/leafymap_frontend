@@ -1,16 +1,6 @@
 import TextField from "@/components/common/inputs/textField/TextField";
 import styles from "./ContactForm.module.scss";
-
-import {
-  FormDataChangeHandler,
-  InitialPlaceData,
-} from "../../createProfileStepper/CreateProfileStepper.types";
-
-interface PlaceContactFormProps {
-  place: InitialPlaceData;
-  onPlaceChange: FormDataChangeHandler;
-  errors?: Record<string, string>;
-}
+import { PlaceContactFormProps } from "./ContactForm.types";
 
 const PlaceContactForm = ({
   place,
@@ -18,8 +8,8 @@ const PlaceContactForm = ({
   errors = {},
 }: PlaceContactFormProps) => {
   return (
-    <div className={styles.contactForm}>
-      <h3 className={styles.title}>Contact</h3>
+    <fieldset className={styles.contactForm}>
+      <legend className={styles.title}>Contact</legend>
       <div className={styles.formFields}>
         <TextField
           label="Numéro de téléphone"
@@ -33,7 +23,6 @@ const PlaceContactForm = ({
           error={!!errors.phone}
           errorMessage={errors.phone}
         />
-
         <TextField
           label="Adresse email"
           value={place.email}
@@ -46,7 +35,6 @@ const PlaceContactForm = ({
           error={!!errors.email}
           errorMessage={errors.email}
         />
-
         <TextField
           label="Site web"
           value={place.website}
@@ -59,7 +47,7 @@ const PlaceContactForm = ({
           errorMessage={errors.website}
         />
       </div>
-    </div>
+    </fieldset>
   );
 };
 
