@@ -5,7 +5,6 @@ import { useState, useEffect, useCallback } from "react";
 import NewDatesEventForm from "../EventNewDatesSelector/EventNewDatesSelector";
 import Button from "@/components/common/buttons/button/Button";
 import useSubmitEvent from "@/hooks/useSubmitEvent";
-import PartnershipsForm from "@/components/account/FormComponents/PartnershipsForm";
 import { useParams, useRouter } from "next/navigation";
 import styles from "./EventForm.module.scss";
 import EventScheduleList from "../EventScheduleList";
@@ -17,6 +16,7 @@ import { separateNewAndUpdatedArrayValues } from "@/utils/tempId";
 import { validateEventData } from "@/validations/eventValidations";
 import { useEventSchedule } from "@/hooks/useEventSchedule";
 import type { initialEventData, EventFormProps } from "./EventForm.types";
+import PartnershipsForm from "../../FormComponents/PartnershipsForm";
 
 const initialEventData = (
   event: initialEventData | null
