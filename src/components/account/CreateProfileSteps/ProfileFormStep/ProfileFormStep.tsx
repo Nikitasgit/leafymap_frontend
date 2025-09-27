@@ -2,11 +2,11 @@
 import { useState, useEffect, useCallback } from "react";
 import Button from "@/components/common/buttons/button/Button";
 import PlaceForm from "@/components/account/Place/PlaceForm/PlaceForm";
-import Partnerships from "@/components/account/FormComponents/PartnershipsForm";
+import PartnershipsForm from "@/components/account/FormComponents/PartnershipsForm/PartnershipsForm";
 import { UserInfo } from "@/components/account/FormComponents/ProfileInfo";
 import { UserContactForm } from "@/components/account/FormComponents/ContactForm";
 import { PlaceContactForm } from "@/components/account/FormComponents/ContactForm";
-import { PlaceInfo }   from "../../FormComponents/ProfileInfo";
+import { PlaceInfo } from "../../FormComponents/ProfileInfo";
 import { useToast } from "@/hooks/useToast";
 import { ValidationResult } from "@/validations/commonValidations";
 import { validateNewPlaceData } from "@/validations/placeValidations";
@@ -97,7 +97,7 @@ const ProfileFormStep = ({
         errors={errors.place}
       />
       {user.userType === "organizer" && (
-        <Partnerships
+        <PartnershipsForm
           onChange={onPartnershipsChange}
           partnerships={partnerships}
         />
