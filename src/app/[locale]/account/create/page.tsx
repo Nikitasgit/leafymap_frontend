@@ -1,4 +1,4 @@
-import CreateProfileStepper from "@/components/account/TempName/CreateProfileStepper";
+import CreateProfileStepper from "@/components/account/CreateProfileStepper";
 
 const CreateProfilePage = () => {
   return <CreateProfileStepper />;

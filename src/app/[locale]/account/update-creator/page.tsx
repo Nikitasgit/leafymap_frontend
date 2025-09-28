@@ -4,7 +4,7 @@ import {
   FormDataChangeHandler,
   InitialCreatorData,
   InitialPlaceData,
-} from "@/components/account/TempName/CreateProfileStepper.types";
+} from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
 import { useState, useEffect } from "react";
 import ActivityFormStep from "@/components/account/CreateProfileSteps/ProfileFormStep/ProfileFormStep";
 import useUpdateUser from "@/hooks/useSubmitUser";

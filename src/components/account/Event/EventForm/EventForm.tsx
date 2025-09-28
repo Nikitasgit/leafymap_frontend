@@ -1,5 +1,5 @@
 "use client";
-import { FormDataChangeHandler } from "@/components/account/TempName/CreateProfileStepper.types";
+import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
 import TextField from "@/components/common/inputs/textField/TextField";
 import { useState, useEffect, useCallback } from "react";
 import NewDatesEventForm from "../EventNewDatesSelector/EventNewDatesSelector";
@@ -16,7 +16,7 @@ import { separateNewAndUpdatedArrayValues } from "@/utils/tempId";
 import { validateEventData } from "@/validations/eventValidations";
 import { useEventSchedule } from "@/hooks/useEventSchedule";
 import type { initialEventData, EventFormProps } from "./EventForm.types";
-import PartnershipsForm from "../../PartnershipsForm";
+import PartnershipsForm from "../../Partnership/PartnershipsForm";
 
 const initialEventData = (
   event: initialEventData | null

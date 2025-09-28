@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import TimeTableForm from "@/components/account/Place/DefaultScheduleForm/DefaultScheduleForm";
-import AddressInput from "@/components/account/AddressInput";
+import AddressInput from "@/components/common/inputs/AddressInput";
 import PlaceCategorySelectorInput from "@/components/account/CategorySelectorInput/PlaceCategorySelectorInput";
-import PlaceTypeSelectorInput from "@/components/account/PlaceTypeSelectorInput/PlaceTypeSelectorInput";
+import PlaceTypeSelectorInput from "@/components/account/Place/PlaceTypeSelectorInput/PlaceTypeSelectorInput";
 import RadioYesOrNo from "@/components/common/inputs/RadioYesOrNo/RadioYesOrNo";
 import MapComponent from "@/components/common/Map/MapComponent";
 import { useGeolocation } from "@/hooks/useGeolocation";
@@ -13,7 +13,7 @@ import { defaultSchedule } from "@/utils/createProfile";
 import {
   FormDataChangeHandler,
   InitialPlaceData,
-} from "../../TempName/CreateProfileStepper.types";
+} from "../../CreateProfileStepper/CreateProfileStepper.types";
 import styles from "./PlaceForm.module.scss";
 
 const PlaceForm = ({

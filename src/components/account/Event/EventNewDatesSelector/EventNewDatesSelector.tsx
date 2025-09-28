@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { initialEventData } from "../EventForm/EventForm.types";
-import { FormDataChangeHandler } from "@/components/account/TempName/CreateProfileStepper.types";
+import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
 import Button from "@/components/common/buttons/button/Button";
 import { registerLocale } from "react-datepicker";
 import { fr } from "date-fns/locale/fr";

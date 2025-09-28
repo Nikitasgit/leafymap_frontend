@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./CategorySelectorInput.module.scss";
 import { useApp } from "@/hooks/useApp";
-import { FormDataChangeHandler } from "@/components/account/TempName/CreateProfileStepper.types";
+import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
 import { SubCategory } from "@/types/categories";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useToast } from "@/hooks/useToast";

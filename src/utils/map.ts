@@ -1,4 +1,4 @@
-import { InitialPlaceData } from "@/components/account/TempName/CreateProfileStepper.types";
+import { InitialPlaceData } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
 import { MapCoordinates, Location, MapboxFeature } from "@/types/common";
 import { USER_MARKER } from "./constants";
 import axios from "axios";

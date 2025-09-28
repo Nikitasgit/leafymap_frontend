@@ -7,7 +7,7 @@ import { usePlace } from "@/hooks/usePlace";
 import {
   FormDataChangeHandler,
   InitialPlaceData,
-} from "@/components/account/TempName/CreateProfileStepper.types";
+} from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
 import { defaultSchedule } from "@/utils/createProfile";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import LoadingBar from "@/components/common/loading/LoadingBar";

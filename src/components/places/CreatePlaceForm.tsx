@@ -5,14 +5,14 @@ import Button from "@/components/common/buttons/button/Button";
 import { useToast } from "@/hooks/useToast";
 import { Partnership } from "@/types/partnerships";
 import PlaceForm from "@/components/account/Place/PlaceForm/PlaceForm";
-import Partnerships from "@/components/account/PartnershipsForm/PartnershipsForm";
+import Partnerships from "@/components/account/Partnership/PartnershipsForm/PartnershipsForm";
 import { validateNewPlaceData } from "@/validations/placeValidations";
 import PlaceContactForm from "@/components/account/ContactForm/PlaceContactForm";
 import { ValidationResult } from "@/validations/commonValidations";
 import {
   FormDataChangeHandler,
   InitialPlaceData,
-} from "../account/TempName/CreateProfileStepper.types";
+} from "../account/CreateProfileStepper/CreateProfileStepper.types";
 import { defaultSchedule } from "@/utils/createProfile";
 import { User } from "@/types/user";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
