@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import styles from "./ImageModal.module.scss";
+import styles from "./GalleryImageModal.module.scss";
 import { ImageModalProps } from "./ImageModal.types";
 
 const ImageModal: React.FC<ImageModalProps> = ({
