@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import TimeTableForm from "@/components/account/Place/DefaultScheduleForm/DefaultScheduleForm";
-import AddressInput from "@/components/common/inputs/AddressInput";
+import AddressInput from "@/components/account/AddressInput";
 import PlaceCategorySelectorInput from "@/components/common/inputs/CategorySelectorInput/PlaceCategorySelectorInput";
 import PlaceTypeSelectorInput from "@/components/common/inputs/PlaceTypeSelectorInput/PlaceTypeSelectorInput";
 import RadioYesOrNo from "@/components/common/inputs/radios/RadioYesOrNo/RadioYesOrNo";

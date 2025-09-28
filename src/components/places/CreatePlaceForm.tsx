@@ -5,9 +5,9 @@ import Button from "@/components/common/buttons/button/Button";
 import { useToast } from "@/hooks/useToast";
 import { Partnership } from "@/types/partnerships";
 import PlaceForm from "@/components/account/Place/PlaceForm/PlaceForm";
-import Partnerships from "@/components/account/FormComponents/PartnershipsForm/PartnershipsForm";
+import Partnerships from "@/components/account/PartnershipsForm/PartnershipsForm";
 import { validateNewPlaceData } from "@/validations/placeValidations";
-import PlaceContactForm from "@/components/account/FormComponents/ContactForm/PlaceContactForm";
+import PlaceContactForm from "@/components/account/ContactForm/PlaceContactForm";
 import { ValidationResult } from "@/validations/commonValidations";
 import {
   FormDataChangeHandler,
@@ -16,7 +16,7 @@ import {
 import { defaultSchedule } from "@/utils/createProfile";
 import { User } from "@/types/user";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import PlaceInfos from "../account/FormComponents/ProfileInfo/PlaceInfo";
+import PlaceInfos from "../account/ProfileInfo/PlaceInfo";
 import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
 import styles from "./CreatePlaceForm.module.scss";

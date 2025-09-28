@@ -11,12 +11,9 @@ import {
   ProfileFormStepErrors,
   ProfileFormStepProps,
 } from "./ProfileFormStep.types";
-import PartnershipsForm from "@/components/account/FormComponents/PartnershipsForm";
-import {
-  PlaceContactForm,
-  UserContactForm,
-} from "../../FormComponents/ContactForm";
-import { PlaceInfo, UserInfo } from "../../FormComponents/ProfileInfo";
+import PartnershipsForm from "@/components/account/PartnershipsForm";
+import { PlaceContactForm, UserContactForm } from "../../ContactForm";
+import { PlaceInfo, UserInfo } from "../../ProfileInfo";
 
 const ProfileFormStep = ({
   place,
