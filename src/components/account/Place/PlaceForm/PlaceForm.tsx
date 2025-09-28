@@ -13,7 +13,7 @@ import { defaultSchedule } from "@/utils/createProfile";
 import {
   FormDataChangeHandler,
   InitialPlaceData,
-} from "../../CreateProfileStepper/CreateProfileStepper.types";
+} from "../../TempName/CreateProfileStepper.types";
 import styles from "./PlaceForm.module.scss";
 
 const PlaceForm = ({

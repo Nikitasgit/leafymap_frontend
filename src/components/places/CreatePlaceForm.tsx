@@ -12,7 +12,7 @@ import { ValidationResult } from "@/validations/commonValidations";
 import {
   FormDataChangeHandler,
   InitialPlaceData,
-} from "../account/CreateProfileStepper/CreateProfileStepper.types";
+} from "../account/TempName/CreateProfileStepper.types";
 import { defaultSchedule } from "@/utils/createProfile";
 import { User } from "@/types/user";
 import { useCurrentUser } from "@/hooks/useCurrentUser";

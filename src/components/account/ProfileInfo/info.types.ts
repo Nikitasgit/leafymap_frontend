@@ -2,7 +2,7 @@ import {
   FormDataChangeHandler,
   InitialPlaceData,
   InitialCreatorData,
-} from "../CreateProfileStepper/CreateProfileStepper.types";
+} from "../TempName/CreateProfileStepper.types";
 
 export interface PlaceInfoProps {
   place: InitialPlaceData;

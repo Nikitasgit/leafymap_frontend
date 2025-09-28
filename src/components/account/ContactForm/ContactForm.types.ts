@@ -2,7 +2,7 @@ import {
   InitialCreatorData,
   InitialPlaceData,
   FormDataChangeHandler,
-} from "../CreateProfileStepper/CreateProfileStepper.types";
+} from "../TempName/CreateProfileStepper.types";
 
 export interface PlaceContactFormProps {
   place: InitialPlaceData;

@@ -1,5 +1,5 @@
 "use client";
-import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
+import { FormDataChangeHandler } from "@/components/account/TempName/CreateProfileStepper.types";
 import TextField from "@/components/common/inputs/textField/TextField";
 import { useState, useEffect, useCallback } from "react";
 import NewDatesEventForm from "../EventNewDatesSelector/EventNewDatesSelector";

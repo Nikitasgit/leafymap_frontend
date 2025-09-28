@@ -2,7 +2,7 @@ import Button from "@/components/common/buttons/button/Button";
 import {
   FormDataChangeHandler,
   onNextHandler,
-} from "../../CreateProfileStepper/CreateProfileStepper.types";
+} from "../../TempName/CreateProfileStepper.types";
 import styles from "./UserTypeStep.module.scss";
 import { useToast } from "@/hooks/useToast";
 

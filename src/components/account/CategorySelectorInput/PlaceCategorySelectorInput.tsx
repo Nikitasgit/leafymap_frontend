@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./CategorySelectorInput.module.scss";
-import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
+import { FormDataChangeHandler } from "@/components/account/TempName/CreateProfileStepper.types";
 import { PlaceCategory } from "@/types/categories";
 import { PlaceType } from "@/types/place/placeCaterories";
 import TextField from "../../common/inputs/textField/TextField";
