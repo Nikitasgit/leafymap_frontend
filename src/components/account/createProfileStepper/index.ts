@@ -1,4 +1,4 @@
-export { default } from "./CreateProfileStepper";
+export { default as CreateProfileStepper } from "./CreateProfileStepper";
 export type {
   FormDataChangeHandler,
   onNextHandler,

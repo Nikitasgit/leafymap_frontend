@@ -6,7 +6,7 @@ import {
   FormDataChangeHandler,
   InitialCreatorData,
   InitialPlaceData,
-} from "../CreateProfileStepper";
+} from "./CreateProfileStepper.types";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { defaultSchedule } from "@/utils/createProfile";
 import styles from "./CreateProfileStepper.module.scss";
