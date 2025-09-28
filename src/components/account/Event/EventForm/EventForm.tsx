@@ -16,7 +16,7 @@ import { separateNewAndUpdatedArrayValues } from "@/utils/tempId";
 import { validateEventData } from "@/validations/eventValidations";
 import { useEventSchedule } from "@/hooks/useEventSchedule";
 import type { initialEventData, EventFormProps } from "./EventForm.types";
-import PartnershipsForm from "../../PartnershipsForm";
+import PartnershipsForm from "../../FormComponents/PartnershipsForm";
 
 const initialEventData = (
   event: initialEventData | null

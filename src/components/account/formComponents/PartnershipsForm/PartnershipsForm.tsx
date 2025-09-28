@@ -7,7 +7,7 @@ import { generateTempId, isTempId } from "@/utils/tempId";
 import { Partnership } from "@/types/partnerships";
 import { useToast } from "@/hooks/useToast";
 import { useFindUsers } from "@/hooks/useFindUsers";
-import PartnershipsFormList from "../FormComponents/PartnershipsFormList";
+import PartnershipsFormList from "../PartnershipsFormList";
 import { SearchInput } from "@/components/common/inputs/searchInput";
 
 const PartnershipsForm = ({
