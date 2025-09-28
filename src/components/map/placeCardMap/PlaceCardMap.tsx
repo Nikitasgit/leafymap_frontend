@@ -9,7 +9,7 @@ import { usePlace } from "@/hooks/usePlace";
 import { useRouter } from "next/navigation";
 import { ExtendedMapRef } from "@/types/map";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
-import ReviewsCounter from "@/components/common/counters/reviewsCounter";
+import ReviewsCounter from "@/components/common/counters/ReviewCounter";
 import CreatorCategoryBadge from "@/components/common/users/creatorCategoryBadge";
 import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
 

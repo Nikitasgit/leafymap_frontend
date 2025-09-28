@@ -7,7 +7,7 @@ import styles from "./PlaceCard.module.scss";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter/SubscribersCounter";
-import ReviewsCounter from "@/components/common/counters/reviewsCounter";
+import ReviewsCounter from "@/components/common/counters/ReviewCounter";
 
 interface PlaceCardProps {
   place: PlacePopulated;

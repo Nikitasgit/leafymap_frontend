@@ -1,76 +1,57 @@
-import React from "react";
 import { Users, MapPin } from "lucide-react";
 import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader";
 import Button from "@/components/common/buttons/button/Button";
 import { Image as ImageType } from "@/types/image";
 import { User } from "@/types/user";
 import styles from "./UserHeader.module.scss";
-import ReviewsCounter from "@/components/common/counters/reviewsCounter";
-import SubscribersCounter from "@/components/common/counters/SubscribersCounter/SubscribersCounter";
+import ReviewsCounter from "@/components/common/counters/ReviewCounter";
+import SubscribersCounter from "@/components/common/counters/SubscribersCounter";
 import CreatorCategoryBadge from "@/components/common/users/creatorCategoryBadge";
+import BackButton from "@/components/common/buttons/BackButton";
 
 interface UserHeaderProps {
   user: User;
   onFollow: () => void;
-  onMessage: () => void;
 }
 
-const UserHeader: React.FC<UserHeaderProps> = ({
-  user,
-  onFollow,
-  onMessage,
-}) => {
+const UserHeader: React.FC<UserHeaderProps> = ({ user, onFollow }) => {
   const place = user.places?.[0];
   return (
     <header className={styles.header}>
-      <ProfilePictureUploader
-        onImageUploaded={() => {}}
-        type="User"
-        reference={user._id}
-        initialImage={user.image as ImageType}
-        isOwner={false}
-        size="medium"
-        className={styles.userImage}
-      />
-      <div className={styles.headerInfo}>
-        <div className={styles.headerFirstRow}>
-          <div className={styles.titleRow}>
-            <Users size={18} className={styles.icon} />
-            <h1 className={styles.title}>
-              {user.creatorName}
-            </h1>
-            <CreatorCategoryBadge
-              categoryName={user.creatorCategories[0].name}
-            />
-          </div>
+      <BackButton />
+      <div className={styles.topRow}>
+        <ProfilePictureUploader
+          onImageUploaded={() => {}}
+          type="User"
+          reference={user._id}
+          initialImage={user.image as ImageType}
+          isOwner={false}
+          size="medium"
+          className={styles.userImage}
+        />
+        <div className={styles.rightInfo}>
           <div className={styles.counters}>
             <SubscribersCounter followers={user.followers?.length || 0} />
             {place && <ReviewsCounter rating={place.rating || 0} />}
           </div>
+          <CreatorCategoryBadge categoryName={user.creatorCategories[0].name} />
+          <Button variant="outline" size="small" onClick={onFollow}>
+            Suivre
+          </Button>
         </div>
-        <div className={styles.headerMain}>
-          <div className={styles.userDetails}>
-              <p className={styles.description}>
-              {user.description}
-            </p>
-            {place && place.location && (
-              <div className={styles.locationInfo}>
-                <MapPin size={14} />
-                <p className={styles.location}>
-                  {place.location.label}
-                </p>
-              </div>
-            )}
-          </div>
-          <div className={styles.buttons}>
-            <Button variant="outline" size="small" onClick={onFollow}>
-              Suivre
-            </Button>
-            <Button variant="primary" size="small" onClick={onMessage}>
-              Contacter
-            </Button>
-          </div>
+      </div>
+      <div className={styles.bottomRow}>
+        <div className={styles.titleRow}>
+          <Users size={18} className={styles.icon} />
+          <h1 className={styles.title}>{user.creatorName}</h1>
         </div>
+        {place && place.location && (
+          <div className={styles.locationInfo}>
+            <MapPin size={14} />
+            <p className={styles.location}>{place.location.label}</p>
+          </div>
+        )}
+        <p className={styles.description}>{user.description}</p>
       </div>
     </header>
   );

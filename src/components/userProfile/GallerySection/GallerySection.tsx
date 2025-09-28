@@ -4,7 +4,7 @@ import Image from "next/image";
 import Text from "@/components/common/typography/Text";
 import { Image as ImageType } from "@/types/image";
 import ImageUploader from "@/components/common/inputs/imageUploader/ImageUploader";
-import ImageModal from "@/components/common/modals/imageModal/ImageModal";
+import ImageModal from "@/components/common/modals/ImageModal/ImageModal";
 import useDeleteImages from "@/hooks/useDeleteImages";
 import styles from "./GallerySection.module.scss";
 import EmptyState from "@/components/common/noResults/emptyState";
@@ -57,14 +57,14 @@ const GallerySection: React.FC<GallerySectionProps> = ({
   };
 
   return (
-    <section>
+    <section className={styles.gallerySection}>
       {!images || (images.length === 0 && !isOwner) ? (
         <EmptyState
           title="Aucune image dans la galerie"
           icon={<ImageIcon className={styles.icon} />}
         />
       ) : (
-        <>
+        <section className={styles.gallerySection}>
           <Text as="h3">Galerie</Text>
           <div className={styles.imagesList}>
             {isOwner && (
@@ -102,7 +102,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
                 </div>
               ))}
           </div>
-        </>
+        </section>
       )}
       <ImageModal
         isOpen={modalOpen}

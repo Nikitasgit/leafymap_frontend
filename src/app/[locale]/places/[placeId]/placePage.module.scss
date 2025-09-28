@@ -12,10 +12,6 @@
   }
 }
 
-.tabContent {
-  margin-top: spacing(2);
-}
-
 .emptyState {
   @include flex(column, center, center, spacing(1.5));
   padding: spacing(4);

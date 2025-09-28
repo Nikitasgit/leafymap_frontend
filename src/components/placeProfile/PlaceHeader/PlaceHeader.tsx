@@ -5,7 +5,7 @@ import { Place } from "@/types/place";
 import styles from "./PlaceHeader.module.scss";
 import Button from "@/components/common/buttons/button/Button";
 import { Image } from "@/types/image";
-import ReviewsCounter from "@/components/common/counters/reviewsCounter";
+import ReviewsCounter from "@/components/common/counters/ReviewCounter";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter/SubscribersCounter";
 
 interface PlaceHeaderProps {
@@ -33,9 +33,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
         <div className={styles.headerFirstRow}>
           <div className={styles.titleRow}>
             <Map size={18} className={styles.icon} />
-            <h1 className={styles.title}>
-              {place.name}
-            </h1>
+            <h1 className={styles.title}>{place.name}</h1>
           </div>
           <div className={styles.counters}>
             <SubscribersCounter followers={place.followers?.length || 0} />
@@ -44,14 +42,10 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
         </div>
         <div className={styles.headerMain}>
           <div className={styles.placeDetails}>
-              <p className={styles.description}>
-              {place.description}
-            </p>
+            <p className={styles.description}>{place.description}</p>
             <div className={styles.locationInfo}>
               <MapPin size={14} />
-                <p className={styles.location}>
-                {place.location?.label}
-              </p>
+              <p className={styles.location}>{place.location?.label}</p>
             </div>
           </div>
           <div className={styles.buttons}>

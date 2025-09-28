@@ -24,7 +24,7 @@ export default function Tab({
       className={`${styles.tab} ${isActive ? styles.activeTab : ""}`}
       onClick={() => onClick(id)}
     >
-      <Icon size={20} />
+      <Icon size={16} />
       {label}
     </button>
   );

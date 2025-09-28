@@ -3,81 +3,96 @@
 @use "@/styles/abstracts/functions" as *;
 
 .header {
-  @include flex(row, space-between, center, spacing(1.5));
-  margin-top: spacing(1);
-  margin-bottom: spacing(2.5);
-
-  .userImage {
-    border-radius: 8px;
-    overflow: hidden;
+  @include flex(column, flex-start, stretch, spacing(1.5));
+  padding: spacing(1);
+  button {
+    align-self: flex-start;
   }
-
-  .headerInfo {
-    flex: 1;
-
-    .headerFirstRow {
-      @include flex(row, space-between, center, spacing(1));
-
-      .titleRow {
-        @include flex(row, flex-start, center, spacing(1));
-
-        .title {
-          text-transform: capitalize;
-          font-size: rem(20);
-          font-weight: 600;
-          color: $grey-600;
-        }
-
-        .category {
-          font-size: rem(14);
-          font-weight: 400;
-          color: $grey-600;
-          text-transform: capitalize;
-          background: $grey-50;
-          border: 1px solid $grey-200;
-          border-radius: 6px;
-          padding: spacing(0.25) spacing(0.75);
-        }
-      }
-
+  .topRow {
+    @include flex(row, space-between, stretch, spacing(1.5));
+    .userImage {
+      border-radius: rem(6);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .rightInfo {
+      @include flex(column, space-between, flex-start, spacing(0.75));
+      flex: 1;
       .counters {
-        @include flex(row, flex-start, center, spacing(2));
+        @include flex(row, flex-start, center, spacing(1.5));
       }
     }
-
-    .headerMain {
-      @include flex(row, flex-start, flex-end, spacing(1));
-
-      .userDetails {
-        @include flex(column, flex-start, flex-start, spacing(0));
-        flex: 1;
-
-        .description {
-          font-size: rem(14);
-          font-weight: 400;
-          color: $grey-600;
-          min-height: 36px;
-        }
+  }
+  .bottomRow {
+    @include flex(column, flex-start, stretch, spacing(0.75));
+    .titleRow {
+      @include flex(row, flex-start, center, spacing(0.75));
+      .icon {
+        color: $grey-500;
+        display: none;
       }
-
-      .locationInfo {
-        display: flex;
-        align-items: center;
-        gap: spacing(0.5);
+      .title {
+        font-size: rem(18);
+        font-weight: 600;
         color: $grey-600;
-        font-size: rem(14);
-        border-top: 1px solid $grey-200;
-        min-width: 95%;
-        padding-top: spacing(0.5);
-
-        .location {
-          margin: 0;
-          color: $grey-600;
+      }
+    }
+    .locationInfo {
+      display: flex;
+      align-items: center;
+      gap: spacing(0.5);
+      color: $grey-600;
+      font-size: rem(13);
+      border-bottom: 1px solid $grey-200;
+      padding-bottom: spacing(0.75);
+      .location {
+        margin: 0;
+        color: $grey-600;
+      }
+      svg {
+        display: none;
+      }
+    }
+    .description {
+      font-size: rem(13);
+      font-weight: 400;
+      color: $grey-600;
+      min-height: 32px;
+    }
+  }
+  @include respond-to(sm) {
+    padding: spacing(2);
+    .topRow {
+      .userImage {
+        border-radius: rem(8);
+      }
+      .rightInfo {
+        gap: spacing(1);
+        .counters {
+          gap: spacing(2);
         }
       }
-
-      .buttons {
-        @include flex(row, flex-end, center, spacing(1));
+    }
+    .bottomRow {
+      gap: spacing(1);
+      .titleRow {
+        gap: spacing(1);
+        .icon {
+          display: block;
+        }
+        .title {
+          font-size: rem(20);
+        }
+      }
+      .locationInfo {
+        font-size: rem(14);
+        svg {
+          display: block;
+        }
+      }
+      .description {
+        font-size: rem(14);
+        min-height: 36px;
       }
     }
   }

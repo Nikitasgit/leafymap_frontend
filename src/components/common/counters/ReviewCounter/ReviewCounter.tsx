@@ -1,6 +1,6 @@
 import { Star } from "lucide-react";
 import React from "react";
-import styles from "./ReviewsCounter.module.scss";
+import styles from "./ReviewCounter.module.scss";
 
 const ReviewsCounter = ({ rating }: { rating: number }) => {
   const renderStars = (rating: number) => {

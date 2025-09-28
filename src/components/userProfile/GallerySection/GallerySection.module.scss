@@ -2,112 +2,93 @@
 @use "@/styles/abstracts/mixins" as *;
 @use "@/styles/abstracts/functions" as *;
 
-.imagesList {
-  margin-top: spacing(2);
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: spacing(1.5);
-  min-height: 120px;
-  border-radius: 8px;
-  padding: spacing(2);
+.gallerySection {
+  padding: spacing(1);
+  .imagesList {
+    margin-top: spacing(1.5);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: spacing(1);
+    min-height: 100px;
+    border-radius: rem(6);
 
-  @include respond-to(md) {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: spacing(2);
-    padding: spacing(3);
-  }
-
-  &:has(.emptyState) {
-    border: 1px solid $grey-300;
-  }
-
-  &:not(:has(.emptyState)) {
-    border: 1px solid $grey-200;
     background: $white;
-  }
-}
-
-.imageItem {
-  position: relative;
-  overflow: hidden;
-  border-radius: 8px;
-  aspect-ratio: 1;
-  background: $white;
-  border: 1px solid $grey-200;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.02);
-
-    .deleteButton {
-      opacity: 1;
+    @include respond-to(sm) {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: spacing(1.5);
+      padding: spacing(2);
+      min-height: 120px;
+      border-radius: rem(8);
+    }
+    @include respond-to(md) {
+      gap: spacing(2);
+      padding: spacing(3);
     }
   }
-}
-
-.galleryImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.deleteButton {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(239, 68, 68, 0.9);
-  border: none;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.2s ease, background-color 0.2s ease;
-  color: white;
-  z-index: 10;
-
-  &:hover {
-    background: rgba(220, 38, 38, 1);
+  .imageItem {
+    position: relative;
+    overflow: hidden;
+    border-radius: rem(6);
+    aspect-ratio: 1;
+    background: $white;
+    border: 1px solid $grey-200;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    &:hover {
+      transform: scale(1.02);
+      .deleteButton {
+        opacity: 1;
+      }
+    }
+    @include respond-to(sm) {
+      border-radius: rem(8);
+    }
   }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  .galleryImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: rem(6);
+    @include respond-to(sm) {
+      border-radius: rem(8);
+    }
   }
-}
-
-.emptyState {
-  @include flex(column, center, center, spacing(1.5));
-  padding: spacing(4);
-  text-align: center;
-  color: $grey-500;
-
-  .icon {
-    font-size: rem(32);
-    opacity: 0.5;
-  }
-
-  .text {
-    font-size: rem(16);
-    font-weight: 500;
-  }
-}
-
-.loading {
-  @include flex(row, center, center, spacing(1));
-  padding: spacing(4);
-  color: $grey-500;
-
-  .spinner {
-    width: 20px;
-    height: 20px;
-    border: 2px solid $grey-200;
-    border-top: 2px solid $primary-color;
+  .deleteButton {
+    position: absolute;
+    top: spacing(0.5);
+    right: spacing(0.5);
+    background: rgba(239, 68, 68, 0.9);
+    border: none;
     border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+    color: white;
+    z-index: 10;
+    &:hover {
+      background: rgba(220, 38, 38, 1);
+    }
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    @include respond-to(sm) {
+      top: spacing(1);
+      right: spacing(1);
+      width: 28px;
+      height: 28px;
+    }
+  }
+  .icon {
+    font-size: rem(24);
+    opacity: 0.5;
+    @include respond-to(sm) {
+      font-size: rem(32);
+    }
   }
 }

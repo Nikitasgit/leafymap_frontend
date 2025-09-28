@@ -5,11 +5,8 @@
   @include flex(row, flex-start, center, 0);
   border-bottom: 1px solid $grey-200;
   background: $grey-50;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-
-  &::-webkit-scrollbar {
-    display: none;
+  flex-wrap: wrap;
+  @include respond-to(sm) {
+    flex-wrap: nowrap;
   }
 }

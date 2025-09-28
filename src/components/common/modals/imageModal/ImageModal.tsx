@@ -1,18 +1,8 @@
 import React, { useEffect } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { Image as ImageType } from "@/types/image";
 import styles from "./ImageModal.module.scss";
-
-interface ImageModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  images: ImageType[];
-  currentIndex: number;
-  onNavigate: (index: number) => void;
-  isOwner?: boolean;
-  onDeleteImage?: (imageId: string) => void;
-}
+import { ImageModalProps } from "./ImageModal.types";
 
 const ImageModal: React.FC<ImageModalProps> = ({
   isOpen,
@@ -85,6 +75,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
               <button
                 className={`${styles.navButton} ${styles.prevButton}`}
                 onClick={handlePrevious}
+                aria-label="Image précédente"
               >
                 <ChevronLeft size={24} />
               </button>
@@ -94,6 +85,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
               <button
                 className={`${styles.navButton} ${styles.nextButton}`}
                 onClick={handleNext}
+                aria-label="Image suivante"
               >
                 <ChevronRight size={24} />
               </button>
