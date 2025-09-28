@@ -10,7 +10,6 @@ import { useAuth } from "@/hooks/useAuth";
 const HomeHeader = () => {
   const router = useRouter();
   const { user } = useAuth();
-  console.log(user);
   const handleCreateProfile = () => {
     if (user?.userType === "guest") {
       router.push("/account/create");

@@ -21,7 +21,6 @@ interface PlaceCardMapProps {
 const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
   const { place, isLoading } = usePlace(placeId, true);
   const router = useRouter();
-  console.log(place);
   useEffect(() => {
     if (mapRef.current && place) {
       navigateToPlaceOnMap({

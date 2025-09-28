@@ -1,26 +1,28 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import Button from "@/components/common/buttons/button/Button";
+import { PlaceContactForm } from "@/components/account/ContactForm";
+import PlaceForm from "@/components/account/Place/PlaceForm";
+import PlaceInfos from "../../ProfileInfo/PlaceInfo";
+import PartnershipsForm from "../../Partnership/PartnershipsForm";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useToast } from "@/hooks/useToast";
+import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
+import useSubmitPlace from "@/hooks/useSubmitPlace";
 import { Partnership } from "@/types/partnerships";
-import PlaceForm from "@/components/account/Place/PlaceForm/PlaceForm";
-import Partnerships from "@/components/account/Partnership/PartnershipsForm/PartnershipsForm";
-import { validateNewPlaceData } from "@/validations/placeValidations";
-import PlaceContactForm from "@/components/account/ContactForm/PlaceContactForm";
+import { User } from "@/types/user";
 import { ValidationResult } from "@/validations/commonValidations";
+import { validateNewPlaceData } from "@/validations/placeValidations";
+import { defaultSchedule } from "@/utils/createProfile";
 import {
   FormDataChangeHandler,
   InitialPlaceData,
-} from "../account/CreateProfileStepper/CreateProfileStepper.types";
-import { defaultSchedule } from "@/utils/createProfile";
-import { User } from "@/types/user";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
-import PlaceInfos from "../account/ProfileInfo/PlaceInfo";
-import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
-import useSubmitPlace from "@/hooks/useSubmitPlace";
-import styles from "./CreatePlaceForm.module.scss";
-import { useRouter } from "next/navigation";
+} from "../../CreateProfileStepper";
+import styles from "./CreatePlaceContainer.module.scss";
+import { CreatePlaceContainerErrors } from "./CreatePlaceContainer.types";
+import PageHeader from "@/components/common/PageHeader";
 
 const initialPlaceData = (user: Partial<User> | null): InitialPlaceData => ({
   name: "",
@@ -35,9 +37,9 @@ const initialPlaceData = (user: Partial<User> | null): InitialPlaceData => ({
   active: true,
 });
 const CreatePlaceForm = () => {
-  const [errors, setErrors] = useState<{
-    place: Record<string, string>;
-  }>({ place: {} });
+  const [errors, setErrors] = useState<CreatePlaceContainerErrors>({
+    place: {},
+  });
   const { user, isLoading: userLoading } = useCurrentUser();
   const { submitPartnerships, isLoading: submitPartnershipsLoading } =
     useSubmitPartnerships();
@@ -101,40 +103,55 @@ const CreatePlaceForm = () => {
     userLoading || submitPartnershipsLoading || submitPlaceLoading;
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
-      <PlaceInfos
-        place={place}
-        onPlaceChange={onPlaceChange}
-        errors={errors.place}
-      />
-      <PlaceForm
-        place={place}
-        initialPlaceLocation={null}
-        userType="organizer"
-        onChange={onPlaceChange}
-        errors={errors.place}
-      />
-      <Partnerships onChange={setPartnerships} partnerships={partnerships} />
-      <PlaceContactForm
-        place={place}
-        onPlaceChange={onPlaceChange}
-        errors={errors.place}
-      />
-      <div className={styles.buttonContainer}>
-        <Button
-          type="button"
-          fullWidth
-          size="large"
-          variant="secondary"
-          onClick={() => router.back()}
-        >
-          Annuler
-        </Button>
-        <Button type="submit" fullWidth size="large" disabled={loading}>
-          Enregistrer
-        </Button>
-      </div>
-    </form>
+    <div className={styles.pageContainer}>
+      <section className={styles.container}>
+        <PageHeader title="Créer un lieu" showBackButton={true} />
+        <form onSubmit={handleSubmit} noValidate>
+          <PlaceInfos
+            place={place}
+            onPlaceChange={onPlaceChange}
+            errors={errors.place}
+          />
+          <PlaceForm
+            place={place}
+            initialPlaceLocation={null}
+            userType="organizer"
+            onChange={onPlaceChange}
+            errors={errors.place}
+          />
+          <PartnershipsForm
+            onChange={setPartnerships}
+            partnerships={partnerships}
+          />
+          <PlaceContactForm
+            place={place}
+            onPlaceChange={onPlaceChange}
+            errors={errors.place}
+          />
+          <div className={styles.buttonContainer}>
+            <Button
+              type="button"
+              fullWidth
+              size="large"
+              variant="secondary"
+              onClick={() => router.back()}
+              ariaLabel="Annuler"
+            >
+              Annuler
+            </Button>
+            <Button
+              type="submit"
+              fullWidth
+              size="large"
+              disabled={loading}
+              ariaLabel="Enregistrer"
+            >
+              Enregistrer
+            </Button>
+          </div>
+        </form>
+      </section>
+    </div>
   );
 };
 
