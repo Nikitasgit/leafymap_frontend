@@ -3,10 +3,10 @@ import styles from "./CategorySelectorInput.module.scss";
 import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
 import { PlaceCategory } from "@/types/categories";
 import { PlaceType } from "@/types/place/placeCaterories";
-import TextField from "../textField/TextField";
+import TextField from "../../common/inputs/textField/TextField";
 import { useApp } from "@/hooks/useApp";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
-import LoadingBar from "../../loading/LoadingBar";
+import LoadingBar from "../../common/loading/LoadingBar";
 import { useToast } from "@/hooks/useToast";
 import { useTranslation } from "react-i18next";
 

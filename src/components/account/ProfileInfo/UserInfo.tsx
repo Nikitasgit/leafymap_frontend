@@ -1,5 +1,5 @@
 import TextField from "@/components/common/inputs/textField/TextField";
-import CategorySelectorInput from "@/components/common/inputs/CategorySelectorInput/CreatorCategorySelectorInput";
+import CategorySelectorInput from "@/components/account/CategorySelectorInput/CreatorCategorySelectorInput";
 import { UserInfoProps } from "./info.types";
 import styles from "./Info.module.scss";
 

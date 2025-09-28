@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import TimeTableForm from "@/components/account/Place/DefaultScheduleForm/DefaultScheduleForm";
 import AddressInput from "@/components/account/AddressInput";
-import PlaceCategorySelectorInput from "@/components/common/inputs/CategorySelectorInput/PlaceCategorySelectorInput";
-import PlaceTypeSelectorInput from "@/components/common/inputs/PlaceTypeSelectorInput/PlaceTypeSelectorInput";
-import RadioYesOrNo from "@/components/common/inputs/radios/RadioYesOrNo/RadioYesOrNo";
+import PlaceCategorySelectorInput from "@/components/account/CategorySelectorInput/PlaceCategorySelectorInput";
+import PlaceTypeSelectorInput from "@/components/account/PlaceTypeSelectorInput/PlaceTypeSelectorInput";
+import RadioYesOrNo from "@/components/common/inputs/RadioYesOrNo/RadioYesOrNo";
 import MapComponent from "@/components/common/Map/MapComponent";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { Location } from "@/types/common";

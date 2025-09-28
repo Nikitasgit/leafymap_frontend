@@ -5,8 +5,8 @@ import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper
 import { SubCategory } from "@/types/categories";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useToast } from "@/hooks/useToast";
-import LoadingBar from "../../loading/LoadingBar";
-import TextField from "../textField/TextField";
+import LoadingBar from "../../common/loading/LoadingBar";
+import TextField from "../../common/inputs/textField/TextField";
 import { useTranslation } from "react-i18next";
 
 const CategorySelectorInput = ({
