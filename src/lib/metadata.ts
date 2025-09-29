@@ -15,8 +15,10 @@ export async function generateUserMetadata(userId: string): Promise<Metadata> {
       userData === null || userData === undefined
     );
 
-    if (typeof userData === "string" || !userData) {
-      console.log("generateUserMetadata - Using fallback metadata");
+    if (typeof userData === "string" || !userData || userData === null) {
+      console.log(
+        "generateUserMetadata - Using fallback metadata due to invalid userData"
+      );
       return {
         title: "Utilisateur | SpotLight",
         description: "Découvrez le profil de cet utilisateur sur SpotLight",
@@ -61,7 +63,9 @@ export async function generateUserMetadata(userId: string): Promise<Metadata> {
         description: `Découvrez le profil de ${creatorName} sur SpotLight. ${userData.description}`,
       },
     };
-  } catch {
+  } catch (error) {
+    console.error("generateUserMetadata - Error occurred:", error);
+    console.log("generateUserMetadata - Using fallback metadata due to error");
     return {
       title: "Utilisateur | SpotLight",
       description: "Découvrez le profil de cet utilisateur sur SpotLight",

@@ -5,10 +5,6 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const getUserById = async (userId: string) => {
   try {
     const url = `${API_URL}/api/users/${userId}`;
-    console.log("getUserById - API_URL:", API_URL);
-    console.log("getUserById - Full URL:", url);
-    console.log("getUserById - userId:", userId);
-
     const response = await axios.get(url);
     console.log("getUserById - Response status:", response.status);
     console.log(
