@@ -1,9 +1,9 @@
 import { capitalizeFirstLetter } from "@/utils/functions";
 import { Metadata } from "next";
+import { getUserById } from "./api/users";
 
 export async function generateUserMetadata(userId: string): Promise<Metadata> {
   try {
-    const { getUserById } = await import("@/lib/api/users");
     const userData = await getUserById(userId);
 
     if (typeof userData === "string" || !userData) {
