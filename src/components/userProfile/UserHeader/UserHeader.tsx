@@ -4,7 +4,6 @@ import Button from "@/components/common/buttons/button/Button";
 import { Image as ImageType } from "@/types/image";
 import { User } from "@/types/user";
 import styles from "./UserHeader.module.scss";
-import ReviewsCounter from "@/components/common/counters/ReviewCounter";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter";
 import CreatorCategoryBadge from "@/components/common/users/creatorCategoryBadge";
 import BackButton from "@/components/common/buttons/BackButton";
@@ -32,7 +31,6 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user, onFollow }) => {
         <div className={styles.rightInfo}>
           <div className={styles.counters}>
             <SubscribersCounter followers={user.followers?.length || 0} />
-            {place && <ReviewsCounter rating={place.rating || 0} />}
           </div>
           <CreatorCategoryBadge categoryName={user.creatorCategories[0].name} />
           <Button variant="outline" size="small" onClick={onFollow}>

@@ -1,14 +1,14 @@
 import React from "react";
-import styles from "./ParticipantsList.module.scss";
+import styles from "./PlacePartnershipsList.module.scss";
 import TitleWithLine from "@/components/common/typography/titleWithLine";
 import { PartnershipPopulated } from "@/types/partnerships";
-import CreatorSmallCard from "@/components/common/users/creatorSmallCard/CreatorSmallCard";
-import EmptyState from "../../noResults/emptyState";
+import EmptyState from "../../common/noResults/emptyState";
 import { Users } from "lucide-react";
+import PlacePartnershipCard from "@/components/placeProfile/PlacePartnershipCard";
 
-const ParticipantsList = ({
+const PlacePartnershipsList = ({
   partnerships,
-  title = "Participants",
+  title = "Partenaires",
   noTitle = false,
 }: {
   partnerships: PartnershipPopulated[];
@@ -16,16 +16,16 @@ const ParticipantsList = ({
   noTitle?: boolean;
 }) => {
   return (
-    <div className={styles.participantsList}>
+    <div className={styles.placePartnershipsList}>
       {!noTitle && (
-        <TitleWithLine className={styles.participantsTitle}>
+        <TitleWithLine className={styles.placePartnershipsTitle}>
           {title}
         </TitleWithLine>
       )}
       {partnerships.length > 0 ? (
-        <div className={styles.participantsGrid}>
+        <div className={styles.placePartnershipsGrid}>
           {partnerships.map((partnership) => (
-            <CreatorSmallCard
+            <PlacePartnershipCard
               key={partnership._id}
               creator={partnership.collaborator}
               showCategory={true}
@@ -34,7 +34,7 @@ const ParticipantsList = ({
         </div>
       ) : (
         <EmptyState
-          title="Aucun participant pour le moment"
+          title="Aucun partenaire associé pour le moment"
           icon={<Users className={styles.icon} />}
         />
       )}
@@ -42,4 +42,4 @@ const ParticipantsList = ({
   );
 };
 
-export default ParticipantsList;
+export default PlacePartnershipsList;

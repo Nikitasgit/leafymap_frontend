@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { UserPopulated } from "@/types/user";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
+import { getUserById } from "@/lib/api/users";
 
 export const useUser = (userId?: string) => {
   const [user, setUser] = useState<UserPopulated | null>(null);
@@ -11,24 +11,20 @@ export const useUser = (userId?: string) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}`;
-        const response = await axios.get(url);
-        setUser(response.data.data.user);
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error
-            ? err.message
-            : "Erreur lors du chargement de l'utilisateur";
+      if (!userId) return;
+      const result = await getUserById(userId);
+      if (typeof result === "string") {
         setUser(null);
-        showError(errorMessage);
+        showError(result);
+      } else {
+        setUser(result);
       }
     };
-
+    
     if (userId) {
       withLoading(fetchUser);
     }
-  }, [userId]);
+  }, [userId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { user, isLoading };
 };

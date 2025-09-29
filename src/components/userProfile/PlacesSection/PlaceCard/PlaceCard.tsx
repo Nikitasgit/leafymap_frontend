@@ -1,24 +1,19 @@
 import React from "react";
 import { MapPin } from "lucide-react";
-
-import { PlacePopulated } from "@/types/place";
-
+import { PlaceCardProps } from "./PlaceCard.types";
 import styles from "./PlaceCard.module.scss";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter/SubscribersCounter";
-import ReviewsCounter from "@/components/common/counters/ReviewCounter";
-
-interface PlaceCardProps {
-  place: PlacePopulated;
-}
 
 const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
   const router = useRouter();
   return (
-    <div
+    <a
       className={styles.placeCard}
       onClick={() => router.push(`/places/${place._id}`)}
+      role="link"
+      tabIndex={0}
     >
       <div className={styles.imageContainer}>
         <Image
@@ -36,7 +31,6 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
           </div>
           <div className={styles.placeCounters}>
             <SubscribersCounter followers={place.followers?.length || 0} />
-            <ReviewsCounter rating={place.rating || 0} />
           </div>
         </div>
 
@@ -54,7 +48,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
           </div>
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 

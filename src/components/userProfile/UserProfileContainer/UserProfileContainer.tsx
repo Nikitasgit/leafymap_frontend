@@ -9,8 +9,8 @@ import { useGalleryImages } from "@/hooks/useGalleryImages";
 import { useAuth } from "@/hooks/useAuth";
 import useSubmitImages from "@/hooks/useSubmitImages";
 import UserHeader from "@/components/userProfile/UserHeader/UserHeader";
-import PlacesSection from "@/components/userProfile/PlacesSection/PlacesSection";
-import EventsSection from "@/components/userProfile/EventsSection/EventsSection";
+import { PlacesSectionContainer } from "@/components/userProfile/PlacesSection/PlacesSectionContainer";
+import EventsSectionContainer from "@/components/userProfile/EventsSection/EventsSectionContainer";
 import GallerySection from "@/components/userProfile/GallerySection/GallerySection";
 import TabsContainer from "@/components/common/tabs/TabsContainer";
 import Tab from "@/components/common/tabs/Tab";
@@ -91,11 +91,17 @@ const UserProfileContainer = () => {
         );
       case "places":
         return (
-          <PlacesSection placePartnerships={placePartnerships} user={user!} />
+          <PlacesSectionContainer
+            placePartnerships={placePartnerships}
+            user={user!}
+          />
         );
       case "events":
         return (
-          <EventsSection eventPartnerships={eventPartnerships} user={user!} />
+          <EventsSectionContainer
+            eventPartnerships={eventPartnerships}
+            user={user!}
+          />
         );
       default:
         return null;
@@ -110,7 +116,7 @@ const UserProfileContainer = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <section className={styles.container}>
+      <div className={styles.container}>
         <UserHeader user={user} onFollow={handleFollow} />
         <TabsContainer>
           {tabs.map((tab) => (
@@ -124,9 +130,8 @@ const UserProfileContainer = () => {
             />
           ))}
         </TabsContainer>
-
-        <div className={styles.tabContent}>{renderTabContent()}</div>
-      </section>
+        {renderTabContent()}
+      </div>
     </div>
   );
 };

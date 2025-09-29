@@ -1,21 +1,14 @@
 import React from "react";
 import { Calendar } from "lucide-react";
-import Text from "@/components/common/typography/Text";
-import EventCard from "./EventCard/EventCard";
-import { PartnershipPopulated } from "@/types/partnerships";
-import { User } from "@/types/user";
-import styles from "./EventsSection.module.scss";
+import { EventCard } from "@/components/userProfile/EventsSection/EventCard";
+import styles from "./EventsSectionContainer.module.scss";
 import EmptyState from "@/components/common/noResults/emptyState";
 import PlaceEventsSection from "@/components/placeProfile/PlaceEventsSection/PlaceEventsSection";
 import { usePlaceEvents } from "@/hooks/usePlaceEvents";
 import LoadingBar from "@/components/common/loading/LoadingBar";
+import { EventsSectionContainerProps } from "./EventsSectionContainer.types";
 
-interface EventsSectionProps {
-  eventPartnerships: PartnershipPopulated[];
-  user: User;
-}
-
-const EventsSection: React.FC<EventsSectionProps> = ({
+const EventsSectionContainer: React.FC<EventsSectionContainerProps> = ({
   eventPartnerships,
   user,
 }) => {
@@ -27,7 +20,7 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   return (
     <>
       <section className={styles.eventsSection}>
-        <Text as="h3">{user.creatorName} participe à ces événements</Text>
+        <h3>{user.creatorName} participe à ces événements</h3>
         <div className={styles.eventsList}>
           {eventPartnerships.length > 0 ? (
             eventPartnerships.map((partnership) => {
@@ -44,9 +37,9 @@ const EventsSection: React.FC<EventsSectionProps> = ({
           )}
         </div>
       </section>
-      {user.places && user.places.length > 0 && (
+      {user.places && user.places.length > 0 && events.length > 0 && (
         <PlaceEventsSection
-          events={events || []}
+          events={events}
           title={`Événements créés par ${user.creatorName}`}
         />
       )}
@@ -54,4 +47,4 @@ const EventsSection: React.FC<EventsSectionProps> = ({
   );
 };
 
-export default EventsSection;
+export default EventsSectionContainer;

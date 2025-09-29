@@ -1,18 +1,11 @@
 import React from "react";
 import { Calendar, Clock, MapPin } from "lucide-react";
-import Text from "@/components/common/typography/Text";
 import EventStatus from "@/components/common/eventStatus/EventStatus";
-import { EventPopulated } from "@/types/place/event";
-import { Place } from "@/types/place";
 import { getEventDisplayInfo } from "@/utils/eventDates";
 import styles from "./EventCard.module.scss";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-
-interface EventCardProps {
-  event: EventPopulated;
-  place?: Place;
-}
+import { EventCardProps } from "./EventCard.types";
 
 const EventCard: React.FC<EventCardProps> = ({ event, place }) => {
   const eventDisplayInfo = getEventDisplayInfo(event.schedule || []);
@@ -23,12 +16,18 @@ const EventCard: React.FC<EventCardProps> = ({ event, place }) => {
   };
 
   return (
-    <div className={styles.eventCard} onClick={handleCardClick}>
+    <a
+      className={styles.eventCard}
+      onClick={handleCardClick}
+      role="link"
+      tabIndex={0}
+    >
       <div className={styles.imageContainer}>
         <Image
           src={event.image?.urls?.thumbnail || "https://i.pravatar.cc/40?img=3"}
           alt={event.name}
-          fill
+          width={60}
+          height={60}
           className={styles.placeImage}
         />
       </div>
@@ -36,40 +35,34 @@ const EventCard: React.FC<EventCardProps> = ({ event, place }) => {
         <div className={styles.eventHeader}>
           <div className={styles.eventTitle}>
             <Calendar size={18} className={styles.eventIcon} />
-            <Text as="h3">{event.name}</Text>
+            <h3>{event.name}</h3>
           </div>
           <EventStatus status={eventDisplayInfo.status} />
         </div>
 
         <div className={styles.eventContent}>
           {event.description && (
-            <Text as="p" className={styles.description}>
-              {event.description.length > 120
-                ? `${event.description.substring(0, 120)}...`
-                : event.description}
-            </Text>
+            <p className={styles.description}>{event.description}</p>
           )}
 
           <div className={styles.eventDetails}>
             {eventDisplayInfo.formattedDateRange && (
               <div className={styles.dateInfo}>
                 <Clock size={14} className={styles.detailIcon} />
-                <Text as="p" className={styles.detailText}>
+                <p className={styles.detailText}>
                   {eventDisplayInfo.formattedDateRange}
-                </Text>
+                </p>
               </div>
             )}
             {place && (
               <div className={styles.locationInfo}>
                 <MapPin size={14} className={styles.detailIcon} />
                 <div className={styles.locationDetails}>
-                  <Text as="p" className={styles.locationName}>
-                    {place.name}
-                  </Text>
+                  <p className={styles.locationName}>{place.name}</p>
                   {place.location && place.location.label && (
-                    <Text as="p" className={styles.locationAddress}>
+                    <p className={styles.locationAddress}>
                       {place.location.label}
-                    </Text>
+                    </p>
                   )}
                 </div>
               </div>
@@ -77,7 +70,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, place }) => {
           </div>
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 

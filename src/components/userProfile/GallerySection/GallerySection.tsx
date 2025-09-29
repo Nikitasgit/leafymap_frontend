@@ -1,22 +1,13 @@
 import React, { useState } from "react";
 import { Image as ImageIcon, Trash2 } from "lucide-react";
 import Image from "next/image";
-import Text from "@/components/common/typography/Text";
-import { Image as ImageType } from "@/types/image";
+import { GallerySectionProps } from "./GallerySection.types";
 import ImageUploader from "@/components/common/inputs/imageUploader/ImageUploader";
 import ImageModal from "@/components/common/modals/GalleryImageModal";
 import useDeleteImages from "@/hooks/useDeleteImages";
 import styles from "./GallerySection.module.scss";
 import EmptyState from "@/components/common/noResults/emptyState";
 import LoadingBar from "@/components/common/loading/LoadingBar";
-
-interface GallerySectionProps {
-  images: ImageType[];
-  isLoading?: boolean;
-  isOwner?: boolean;
-  onFilesSelected?: (files: File[]) => void;
-  onImageDeleted?: () => void;
-}
 
 const GallerySection: React.FC<GallerySectionProps> = ({
   images,
@@ -64,8 +55,8 @@ const GallerySection: React.FC<GallerySectionProps> = ({
           icon={<ImageIcon className={styles.icon} />}
         />
       ) : (
-        <section className={styles.gallerySection}>
-          <Text as="h3">Galerie</Text>
+        <>
+          <h3>Galerie</h3>
           <div className={styles.imagesList}>
             {isOwner && (
               <ImageUploader
@@ -95,6 +86,8 @@ const GallerySection: React.FC<GallerySectionProps> = ({
                       onClick={(e) => handleDeleteImage(image._id, e)}
                       disabled={isDeleting}
                       title="Supprimer l'image"
+                      type="button"
+                      aria-label="Supprimer l'image"
                     >
                       <Trash2 size={16} />
                     </button>
@@ -102,7 +95,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
                 </div>
               ))}
           </div>
-        </section>
+        </>
       )}
       <ImageModal
         isOpen={modalOpen}

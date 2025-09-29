@@ -1,24 +1,17 @@
 import React from "react";
 import { MapPin } from "lucide-react";
-import Text from "@/components/common/typography/Text";
-import PlaceCard from "./PlaceCard/PlaceCard";
-import { PartnershipPopulated } from "@/types/partnerships";
-import { User } from "@/types/user";
-import styles from "./PlacesSection.module.scss";
+import PlaceCard from "../PlaceCard/PlaceCard";
+import styles from "./PlacesSectionContainer.module.scss";
 import EmptyState from "@/components/common/noResults/emptyState";
+import { PlacesSectionProps } from "./PlacesSectionContainer.types";
 
-interface PlacesSectionProps {
-  placePartnerships: PartnershipPopulated[];
-  user: User;
-}
-
-const PlacesSection: React.FC<PlacesSectionProps> = ({
+const PlacesSectionContainer: React.FC<PlacesSectionProps> = ({
   placePartnerships,
   user,
 }) => {
   return (
-    <section>
-      <Text as="h3">Où retrouver {user.creatorName} ?</Text>
+    <section className={styles.placesSection}>
+      <h3>Où retrouver {user.creatorName} ?</h3>
       <div className={styles.placesList}>
         {placePartnerships.length > 0 ? (
           <div className={styles.placesGrid}>
@@ -38,4 +31,4 @@ const PlacesSection: React.FC<PlacesSectionProps> = ({
   );
 };
 
-export default PlacesSection;
+export default PlacesSectionContainer;

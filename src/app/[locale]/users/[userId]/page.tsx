@@ -1,10 +1,16 @@
 import { UserProfileContainer } from "@/components/userProfile";
-import { Metadata } from "next";
+import { generateUserMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: "Utilisateur | SpotLight",
-  description: "Utilisateur",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{
+    userId: string;
+  }>;
+}) {
+  const { userId } = await params;
+  return generateUserMetadata(userId);
+}
 
 const UserPage = () => {
   return <UserProfileContainer />;

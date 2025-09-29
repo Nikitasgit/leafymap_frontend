@@ -1,28 +1,11 @@
-import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Text from "@/components/common/typography/Text";
-import styles from "./CreatorSmallCard.module.scss";
-import CreatorCategoryBadge from "../creatorCategoryBadge";
+import styles from "./PlacePartnershipCard.module.scss";
+import CreatorCategoryBadge from "../../common/users/creatorCategoryBadge";
+import { PlacePartnershipCardProps } from "./PlacePartnershipCard.types";
 
-interface CreatorSmallCardProps {
-  creator: {
-    _id: string;
-    name?: string;
-    image?: {
-      urls?: {
-        thumbnail?: string;
-      };
-    };
-    categories?: Array<{
-      name: string;
-    }>;
-  };
-  showCategory?: boolean;
-  className?: string;
-}
-
-const CreatorSmallCard: React.FC<CreatorSmallCardProps> = ({
+const PlacePartnershipCard: React.FC<PlacePartnershipCardProps> = ({
   creator,
   showCategory = true,
   className = "",
@@ -33,10 +16,10 @@ const CreatorSmallCard: React.FC<CreatorSmallCardProps> = ({
     router.push(`/users/${creator._id}`);
   };
 
-  const cardClass = `${styles.creatorCard} ${className}`;
+  const cardClass = `${styles.placePartnershipCard} ${className}`;
 
   return (
-    <div className={cardClass} onClick={handleClick}>
+    <a className={cardClass} onClick={handleClick} role="link" tabIndex={0}>
       <Image
         src={creator.image?.urls?.thumbnail || "https://i.pravatar.cc/40?img=3"}
         alt={creator.name || "Createur"}
@@ -54,8 +37,8 @@ const CreatorSmallCard: React.FC<CreatorSmallCardProps> = ({
           <CreatorCategoryBadge categoryName={creator.categories[0].name} />
         )}
       </div>
-    </div>
+    </a>
   );
 };
 
-export default CreatorSmallCard;
+export default PlacePartnershipCard;

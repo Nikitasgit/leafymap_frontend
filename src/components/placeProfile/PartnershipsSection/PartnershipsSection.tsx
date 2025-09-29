@@ -1,9 +1,8 @@
-import Text from "@/components/common/typography/Text";
-import ParticipantsList from "@/components/common/users/participantsList";
 import { PartnershipPopulated } from "@/types/partnerships";
-import { Users } from "lucide-react";
 import React from "react";
 import styles from "./PartnershipsSection.module.scss";
+import EmptyState from "@/components/common/noResults/emptyState";
+import PlacePartnershipsList from "../PlacePartnershipsList";
 
 const PartnershipsSection = ({
   partnerships,
@@ -11,17 +10,12 @@ const PartnershipsSection = ({
   partnerships: PartnershipPopulated[];
 }) => {
   return (
-    <section className={styles.partnershipsList}>
-      <Text as="h3">Créateurs partenaires</Text>
+    <section className={styles.partnershipsSection}>
+      <h3>Créateurs partenaires</h3>
       {partnerships.length > 0 ? (
-        <ParticipantsList partnerships={partnerships} noTitle />
+        <PlacePartnershipsList partnerships={partnerships} noTitle />
       ) : (
-        <div className={styles.emptyState}>
-          <Users className={styles.icon} />
-          <Text as="p" className={styles.text}>
-            Aucun créateur partenaire pour le moment
-          </Text>
-        </div>
+        <EmptyState title="Aucun créateur partenaire pour le moment" />
       )}
     </section>
   );

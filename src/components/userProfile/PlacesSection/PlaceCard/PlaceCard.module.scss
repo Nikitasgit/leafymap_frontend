@@ -5,17 +5,17 @@
 .placeCard {
   background: $white;
   cursor: pointer;
-  border-bottom: 1px solid $grey-200;
-  border-radius: 12px;
+  border: 1px solid $grey-200;
+  border-radius: rem(8);
   @include flex(row, flex-start, center, spacing(0));
   .imageContainer {
     position: relative;
-    width: 70px;
+    width: 60px;
     align-self: stretch;
     flex-shrink: 0;
-    border-radius: 12px 0 0 12px;
+    border-radius: rem(8) 0 0 rem(8);
     overflow: hidden;
-    .placeImage {
+    .placeImagee {
       object-fit: cover;
       height: 100%;
     }
@@ -23,13 +23,19 @@
   .placeInfo {
     flex: 1;
     min-width: 0;
-    padding: spacing(1) spacing(2);
+    padding: spacing(0.75) spacing(1.5);
     .placeHeader {
       @include flex(row, space-between, center, spacing(0.5));
       .placeTitle {
         @include flex(row, flex-start, center, spacing(0.5));
         flex: 1;
         text-transform: capitalize;
+        h3 {
+          font-size: rem(14);
+          font-weight: 600;
+          color: $grey-800;
+          margin: 0;
+        }
         .placeIcon {
           color: $primary-color;
           flex-shrink: 0;
@@ -40,21 +46,51 @@
       }
     }
     .placeContent {
-      @include flex(column, flex-start, stretch, spacing(0));
+      @include flex(column, flex-start, stretch, spacing(0.5));
       .description {
         color: $grey-500;
-        font-size: rem(13);
+        font-size: rem(12);
         font-weight: 400;
+        line-height: 1.4;
       }
       .placeDetails {
         @include flex(column, flex-start, stretch, spacing(0));
-        padding-top: spacing(1);
+        padding-top: spacing(0.75);
         border-top: 1px solid $grey-100;
         .locationName {
           margin: 0;
           color: $grey-600;
-          font-size: rem(13);
+          font-size: rem(12);
           font-weight: 600;
+        }
+      }
+    }
+  }
+  @include respond-to(sm) {
+    border-radius: rem(12);
+    .imageContainer {
+      width: 70px;
+      border-radius: rem(12) 0 0 rem(12);
+    }
+    .placeInfo {
+      padding: spacing(1) spacing(2);
+      .placeHeader {
+        .placeTitle {
+          h3 {
+            font-size: rem(16);
+          }
+        }
+      }
+      .placeContent {
+        gap: spacing(0);
+        .description {
+          font-size: rem(13);
+        }
+        .placeDetails {
+          padding-top: spacing(1);
+          .locationName {
+            font-size: rem(13);
+          }
         }
       }
     }

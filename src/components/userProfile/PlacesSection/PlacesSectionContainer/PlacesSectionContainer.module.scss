@@ -1,0 +1,32 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.placesSection {
+  padding: spacing(1);
+  h3 {
+    font-size: rem(16);
+    font-weight: 600;
+  }
+  .placesList {
+    margin-top: spacing(1.5);
+    .placesGrid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: spacing(1);
+      @include respond-to(sm) {
+        gap: spacing(1.5);
+      }
+      @include respond-to(md) {
+        gap: spacing(2);
+      }
+    }
+  }
+  .icon {
+    font-size: rem(24);
+    opacity: 0.5;
+    @include respond-to(sm) {
+      font-size: rem(32);
+    }
+  }
+}

@@ -105,6 +105,7 @@ const ProfilePictureUploader = ({
       {preview || !isOwner ? (
         <div className={styles.imageContainer}>
           <Image
+            priority
             src={preview?.urls?.thumbnail || defaultAvatar}
             alt="Photo de profil"
             width={size === "small" ? 65 : size === "large" ? 120 : 100}

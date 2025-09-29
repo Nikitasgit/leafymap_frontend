@@ -7,7 +7,7 @@ import styles from "./eventPage.module.scss";
 import Text from "@/components/common/typography/Text";
 import EventSchedule from "@/components/events/eventSchedule/EventSchedule";
 import EventHeader from "@/components/events/eventPublicPage/eventHeader";
-import ParticipantsList from "@/components/common/users/participantsList";
+import ParticipantsList from "@/components/placeProfile/PlacePartnershipsList";
 import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
 import { PartnershipPopulated } from "@/types/partnerships";
 import TitleWithLine from "@/components/common/typography/titleWithLine";
