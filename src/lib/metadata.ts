@@ -5,6 +5,7 @@ export async function generateUserMetadata(userId: string): Promise<Metadata> {
   try {
     const { getUserById } = await import("@/lib/api/users");
     const userData = await getUserById(userId);
+    console.log("userData", userData);
 
     if (typeof userData === "string" || !userData) {
       return {

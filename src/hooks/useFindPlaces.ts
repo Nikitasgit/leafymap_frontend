@@ -49,7 +49,7 @@ export const useFindPlaces = () => {
         }
       });
     },
-    [showError]
+    [showError, withLoading]
   );
 
   const clearResults = useCallback(() => {

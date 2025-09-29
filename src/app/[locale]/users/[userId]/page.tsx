@@ -1,19 +1,13 @@
 import { UserProfileContainer } from "@/components/userProfile";
 import { generateUserMetadata } from "@/lib/metadata";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{
-    userId: string;
-  }>;
-}) {
-  const { userId } = await params;
+export async function generateMetadata({ params }: { params: { userId: string } }) {
+  const { userId } = params;
   return generateUserMetadata(userId);
 }
 
 const UserPage = () => {
-  return <UserProfileContainer />;
+  return <UserProfileContainer   />;
 };
 
 export default UserPage;

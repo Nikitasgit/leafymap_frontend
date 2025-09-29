@@ -130,6 +130,7 @@ const UserProfileContainer = () => {
             />
           ))}
         </TabsContainer>
+
         {renderTabContent()}
       </div>
     </div>
