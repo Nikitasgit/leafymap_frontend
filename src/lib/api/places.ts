@@ -8,7 +8,15 @@ export const getPlaceById = async (
     const url = `${
       process.env.NEXT_PUBLIC_API_URL
     }/api/places/${placeId}?enrichSchedule=${enrichSchedule.toString()}`;
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      headers: {
+        Origin:
+          process.env.NODE_ENV === "production"
+            ? "https://spotlight-project.vercel.app"
+            : "http://localhost:3000",
+        "Content-Type": "application/json",
+      },
+    });
     if (response.data && response.data.data) {
       return response.data.data;
     } else {

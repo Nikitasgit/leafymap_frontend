@@ -4,9 +4,16 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const getUserById = async (userId: string) => {
   try {
     const url = `${API_URL}/api/users/${userId}`;
-    console.log("url", url);
-    const response = await axios.get(url);
-    console.log("response", response);
+    const response = await axios.get(url, {
+      headers: {
+        Origin:
+          process.env.NODE_ENV === "production"
+            ? "https://spotlight-project.vercel.app"
+            : "http://localhost:3000",
+        "Content-Type": "application/json",
+      },
+    });
+
     return response.data.data.user;
   } catch (err) {
     const errorMessage =
