@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Text from "@/components/common/typography/Text";
-import styles from "./PlacePartnershipCard.module.scss";
+import styles from "./PartnershipCard.module.scss";
 import CreatorCategoryBadge from "../../common/users/creatorCategoryBadge";
-import { PlacePartnershipCardProps } from "./PlacePartnershipCard.types";
+import { PartnershipCardProps } from "./PartnershipCard.types";
 
-const PlacePartnershipCard: React.FC<PlacePartnershipCardProps> = ({
+const PartnershipCard: React.FC<PartnershipCardProps> = ({
   creator,
   showCategory = true,
   className = "",
@@ -16,10 +16,10 @@ const PlacePartnershipCard: React.FC<PlacePartnershipCardProps> = ({
     router.push(`/users/${creator._id}`);
   };
 
-  const cardClass = `${styles.placePartnershipCard} ${className}`;
+  const cardClass = `${styles.partnershipCard} ${className}`;
 
   return (
-    <a className={cardClass} onClick={handleClick} role="link" tabIndex={0}>
+    <button className={cardClass} onClick={handleClick} type="button">
       <Image
         src={creator.image?.urls?.thumbnail || "https://i.pravatar.cc/40?img=3"}
         alt={creator.name || "Createur"}
@@ -37,8 +37,8 @@ const PlacePartnershipCard: React.FC<PlacePartnershipCardProps> = ({
           <CreatorCategoryBadge categoryName={creator.categories[0].name} />
         )}
       </div>
-    </a>
+    </button>
   );
 };
 
-export default PlacePartnershipCard;
+export default PartnershipCard;

@@ -2,7 +2,7 @@
 @use "@/styles/abstracts/mixins" as *;
 @use "@/styles/abstracts/functions" as *;
 
-.placePartnershipCard {
+.partnershipCard {
   cursor: pointer;
   background: $white;
   border: 1px solid $grey-200;
@@ -21,6 +21,7 @@
     .creatorName {
       font-size: rem(14);
       font-weight: 600;
+      text-align: left;
       color: $grey-700;
     }
   }

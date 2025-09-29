@@ -10,7 +10,6 @@ import {
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { defaultSchedule } from "@/utils/createProfile";
 import styles from "./CreateProfileStepper.module.scss";
-import LoadingBar from "@/components/common/loading/LoadingBar";
 import useSubmitUser from "@/hooks/useSubmitUser";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
 import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
@@ -59,16 +58,21 @@ const CreateProfileStepper = () => {
 
   useEffect(() => {
     if (user) {
-      setNewUser(initialUserData(user));
-      setPlace(initialPlaceData(user));
+      if (user.userType !== "guest") {
+        router.push("/account");
+      } else {
+        setNewUser(initialUserData(user));
+        setPlace(initialPlaceData(user));
+      }
     }
-  }, [user]);
+  }, [user, router]);
 
   const loading =
     userLoading ||
     submitUserLoading ||
     submitPlaceLoading ||
-    submitPartnershipsLoading;
+    submitPartnershipsLoading ||
+    !user;
 
   const handleSubmit = async () => {
     try {
@@ -106,16 +110,15 @@ const CreateProfileStepper = () => {
       setPartnerships([]);
     }
   };
-
   return (
     <div className={styles.pageContainer}>
       <section className={styles.container}>
-        {loading && <LoadingBar />}
         <PageHeader
           title="Créer votre profil"
           showBackButton
           subtitle={`Étape ${step} sur 2`}
         />
+
         <>
           {step === 1 && (
             <UserTypeStep

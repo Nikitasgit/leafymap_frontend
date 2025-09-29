@@ -1,0 +1,91 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.header {
+  @include flex(column, flex-start, stretch, spacing(0.75));
+  padding: spacing(1);
+  button {
+    align-self: flex-start;
+  }
+  .topRow {
+    @include flex(row, space-between, stretch, spacing(1.5));
+    .eventImage {
+      border-radius: rem(6);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .programInfo {
+      @include flex(column, flex-start, flex-end, spacing(0.5));
+      .dateInfo {
+        @include flex(row, flex-start, center, spacing(0.5));
+        color: $grey-600;
+        font-size: rem(13);
+        .dateText {
+          margin: 0;
+          color: $grey-600;
+        }
+      }
+    }
+  }
+  .bottomRow {
+    @include flex(column, flex-start, stretch, spacing(0));
+    border-bottom: 1px solid $grey-200;
+    padding-bottom: spacing(0.75);
+
+    .titleRow {
+      @include flex(row, flex-start, center, spacing(0.75));
+      .icon {
+        color: $grey-500;
+        display: none;
+      }
+      .title {
+        font-size: rem(18);
+        font-weight: 600;
+        color: $grey-600;
+      }
+    }
+
+    .eventDescription {
+      font-size: rem(13);
+      font-weight: 400;
+      color: $grey-600;
+    }
+    .locationButton {
+      font-size: rem(13);
+      color: $grey-600;
+      padding: 0;
+      text-transform: capitalize;
+      align-self: flex-start;
+    }
+  }
+  @include respond-to(sm) {
+    padding: spacing(2);
+    .topRow {
+      .eventImage {
+        border-radius: rem(8);
+      }
+      .rightInfo {
+        gap: spacing(1);
+      }
+    }
+    .bottomRow {
+      .titleRow {
+        gap: spacing(1);
+        .icon {
+          display: block;
+        }
+        .title {
+          font-size: rem(20);
+        }
+      }
+
+      .eventDescription {
+        font-size: rem(14);
+      }
+      .locationButton {
+        font-size: rem(14);
+      }
+    }
+  }
+}

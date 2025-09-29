@@ -1,4 +1,4 @@
-export interface PlacePartnershipCardProps {
+export interface PartnershipCardProps {
   creator: {
     _id: string;
     name?: string;

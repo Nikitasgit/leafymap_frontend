@@ -1,12 +1,11 @@
-import React from "react";
-import styles from "./PlacePartnershipsList.module.scss";
+import styles from "./PartnershipsList.module.scss";
 import TitleWithLine from "@/components/common/typography/titleWithLine";
 import { PartnershipPopulated } from "@/types/partnerships";
 import EmptyState from "../../common/noResults/emptyState";
 import { Users } from "lucide-react";
-import PlacePartnershipCard from "@/components/placeProfile/PlacePartnershipCard";
+import PartnershipCard from "@/components/placeProfile/PartnershipCard";
 
-const PlacePartnershipsList = ({
+const PartnershipsList = ({
   partnerships,
   title = "Partenaires",
   noTitle = false,
@@ -16,16 +15,16 @@ const PlacePartnershipsList = ({
   noTitle?: boolean;
 }) => {
   return (
-    <div className={styles.placePartnershipsList}>
+    <section className={styles.partnershipsList}>
       {!noTitle && (
-        <TitleWithLine className={styles.placePartnershipsTitle}>
+        <TitleWithLine className={styles.partnershipsTitle}>
           {title}
         </TitleWithLine>
       )}
       {partnerships.length > 0 ? (
-        <div className={styles.placePartnershipsGrid}>
+        <div className={styles.partnershipsGrid}>
           {partnerships.map((partnership) => (
-            <PlacePartnershipCard
+            <PartnershipCard
               key={partnership._id}
               creator={partnership.collaborator}
               showCategory={true}
@@ -38,8 +37,8 @@ const PlacePartnershipsList = ({
           icon={<Users className={styles.icon} />}
         />
       )}
-    </div>
+    </section>
   );
 };
 
-export default PlacePartnershipsList;
+export default PartnershipsList;

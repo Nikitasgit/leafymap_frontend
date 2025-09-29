@@ -5,14 +5,9 @@ const origin =
     ? "https://spotlight-project.vercel.app"
     : "http://localhost:3000";
 
-export const getPlaceById = async (
-  placeId: string,
-  enrichSchedule: boolean = false
-) => {
+export const getEventById = async (eventId: string) => {
   try {
-    const url = `${
-      process.env.NEXT_PUBLIC_API_URL
-    }/api/places/${placeId}?enrichSchedule=${enrichSchedule.toString()}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/events/${eventId}`;
     const response = await axios.get(url, {
       headers: {
         Origin: origin,
@@ -26,7 +21,9 @@ export const getPlaceById = async (
     }
   } catch (err) {
     const errorMessage =
-      err instanceof Error ? err.message : "Erreur lors du chargement du lieu";
+      err instanceof Error
+        ? err.message
+        : "Erreur lors du chargement de l'événement";
     return errorMessage;
   }
 };

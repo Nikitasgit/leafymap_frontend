@@ -2,7 +2,7 @@ import { PartnershipPopulated } from "@/types/partnerships";
 import React from "react";
 import styles from "./PartnershipsSection.module.scss";
 import EmptyState from "@/components/common/noResults/emptyState";
-import PlacePartnershipsList from "../PlacePartnershipsList";
+import PlacePartnershipsList from "../PartnershipsList";
 
 const PartnershipsSection = ({
   partnerships,

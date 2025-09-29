@@ -1,0 +1,15 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.eventInfo {
+  padding: 0 spacing(1);
+  .eventDescription {
+    margin-top: spacing(1);
+    background-color: $grey-50;
+    padding: spacing(1);
+    border-radius: rem(6);
+    color: $grey-700;
+    font-size: rem(14);
+  }
+}

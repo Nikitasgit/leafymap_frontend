@@ -1,19 +1,11 @@
 "use client";
-import React from "react";
 import Image from "next/image";
-import { Period } from "@/types/place/schedule";
 import { Clock } from "lucide-react";
-import Text from "@/components/common/typography/Text";
-import styles from "./EventSchedule.module.scss";
+import styles from "./EventProfileSchedule.module.scss";
 import TitleWithLine from "@/components/common/typography/titleWithLine";
 import { formatDateShort, sortPeriodsByStartDate } from "@/utils/dates";
-import { PartnershipPopulated } from "@/types/partnerships";
 import { Collaborator } from "@/types/place/collaborators";
-
-interface EventScheduleProps {
-  schedule: Period[];
-  partnerships: PartnershipPopulated[];
-}
+import { EventScheduleProps } from "./EventProfileSchedule.types";
 
 const EventSchedule: React.FC<EventScheduleProps> = ({
   schedule,
@@ -36,28 +28,28 @@ const EventSchedule: React.FC<EventScheduleProps> = ({
   };
 
   return (
-    <div className={styles.scheduleContainer}>
+    <section className={styles.scheduleContainer}>
       <TitleWithLine className={styles.scheduleTitle}>Programme</TitleWithLine>
       <div className={styles.scheduleList}>
         {sortedSchedule.map((period) => (
           <div key={period._id} className={styles.period}>
             <div className={styles.periodDates}>
               <div className={styles.dateItem}>
-                <Text className={styles.dateLabel}>
+                <p className={styles.dateLabel}>
                   {period.endDate !== period.startDate && period.endDate
                     ? "Du"
                     : "Le"}
-                </Text>
-                <Text className={styles.dateValue}>
+                </p>
+                <p className={styles.dateValue}>
                   {formatDateShort(period.startDate)}
-                </Text>
+                </p>
               </div>
               {period.endDate !== period.startDate && period.endDate !== "" && (
                 <div className={styles.dateItem}>
-                  <Text className={styles.dateLabel}>Au</Text>
-                  <Text className={styles.dateValue}>
+                  <p className={styles.dateLabel}>Au</p>
+                  <p className={styles.dateValue}>
                     {formatDateShort(period.endDate)}
-                  </Text>
+                  </p>
                 </div>
               )}
             </div>
@@ -68,14 +60,12 @@ const EventSchedule: React.FC<EventScheduleProps> = ({
                     <div className={styles.timeSlotHeader}>
                       <div className={styles.timeSlotTime}>
                         <Clock size={14} />
-                        <Text as="p" className={styles.timeRange}>
+                        <p className={styles.timeRange}>
                           {timeSlot.startTime} à {timeSlot.endTime}
-                        </Text>
+                        </p>
                       </div>
 
-                      <Text as="p" className={styles.timeSlotTitle}>
-                        - {timeSlot.title}
-                      </Text>
+                      <p className={styles.timeSlotTitle}>- {timeSlot.title}</p>
                     </div>
                     {(() => {
                       const filteredCollaborators = getFilteredCollaborators(
@@ -100,9 +90,9 @@ const EventSchedule: React.FC<EventScheduleProps> = ({
                                   height={24}
                                 />
 
-                                <Text as="p" className={styles.participantName}>
+                                <p className={styles.participantName}>
                                   {collaborator.name}
-                                </Text>
+                                </p>
                               </div>
                             ))}
                           </div>
@@ -116,7 +106,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 
