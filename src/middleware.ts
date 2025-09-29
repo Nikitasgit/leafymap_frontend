@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { i18nRouter } from "next-i18n-router";
 import { i18nConfig } from "./i18nConfig";
-import { getCurrentUser } from "./lib/api/users";
+import { verifyJWT, getTokenFromCookies } from "./lib/api/users";
 
 export async function middleware(request: NextRequest) {
   try {
@@ -12,70 +12,59 @@ export async function middleware(request: NextRequest) {
 
     if (isProtectedRoute) {
       const cookieHeader = request.headers.get("cookie");
-      if (cookieHeader) {
-        try {
-          const user = await getCurrentUser(cookieHeader);
-          if (!user) {
-            console.log(
-              `[MIDDLEWARE DEBUG] No user found for path: ${pathname}`
-            );
-            console.log(
-              `[MIDDLEWARE DEBUG] Cookie header: ${cookieHeader.substring(
-                0,
-                50
-              )}...`
-            );
-            const redirectUrl = new URL("/auth/signin", request.url);
-            return NextResponse.redirect(redirectUrl);
-          }
+      if (!cookieHeader) {
+        return NextResponse.redirect(new URL("/auth/signin", request.url));
+      }
 
-          console.log(
-            `[MIDDLEWARE DEBUG] User found: ${user.userType} for path: ${pathname}`
-          );
-          if (pathname.includes("/account/create")) {
-            if (user.userType !== "guest") {
-              const redirectUrl = new URL("/account", request.url);
-              return NextResponse.redirect(redirectUrl);
-            }
-          }
+      const token = getTokenFromCookies(cookieHeader);
+      const decodedToken = token ? await verifyJWT(token) : null;
 
-          if (pathname.includes("/account/places")) {
-            if (user.userType !== "organizer" && user.userType !== "creator") {
-              const redirectUrl = new URL("/account", request.url);
-              return NextResponse.redirect(redirectUrl);
-            }
-          }
+      if (!decodedToken) {
+        return NextResponse.redirect(new URL("/auth/signin", request.url));
+      }
 
-          if (pathname.includes("/account/update-creator")) {
-            if (user.userType !== "creator") {
-              const redirectUrl = new URL("/account", request.url);
-              return NextResponse.redirect(redirectUrl);
-            }
-          }
+      const user = {
+        userType: decodedToken.userType,
+        _id: decodedToken.id,
+      };
 
-          if (pathname.includes("/account/places/create")) {
-            if (user.userType !== "organizer") {
-              const redirectUrl = new URL("/account", request.url);
-              return NextResponse.redirect(redirectUrl);
-            }
-          }
-        } catch {
-          const redirectUrl = new URL("/auth/signin", request.url);
-          return NextResponse.redirect(redirectUrl);
-        }
-      } else {
-        const redirectUrl = new URL("/auth/signin", request.url);
-        return NextResponse.redirect(redirectUrl);
+      // 🔒 Règles d'accès
+      if (pathname.includes("/account/create") && user.userType !== "guest") {
+        return NextResponse.redirect(new URL("/account", request.url));
+      }
+
+      if (
+        pathname.includes("/account/places") &&
+        !["organizer", "creator"].includes(user.userType)
+      ) {
+        return NextResponse.redirect(new URL("/account", request.url));
+      }
+
+      if (
+        pathname.includes("/account/update-creator") &&
+        user.userType !== "creator"
+      ) {
+        return NextResponse.redirect(new URL("/account", request.url));
+      }
+
+      if (
+        pathname.includes("/account/places/create") &&
+        user.userType !== "organizer"
+      ) {
+        return NextResponse.redirect(new URL("/account", request.url));
       }
     }
 
-    const i18nResponse = i18nRouter(request, i18nConfig);
-    return i18nResponse;
+    return i18nRouter(request, i18nConfig);
   } catch {
     return i18nRouter(request, i18nConfig);
   }
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\..*|_next).*)"],
+  matcher: [
+    "/account/:path*",
+    "/messages/:path*",
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\..*|_next).*)",
+  ],
 };
