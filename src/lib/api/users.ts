@@ -46,11 +46,7 @@ export const getCurrentUser = async (cookieHeader?: string) => {
     }
     const data = await response.json();
     return data.data?.user || null;
-  } catch (err) {
-    const errorMessage =
-      err instanceof Error
-        ? err.message
-        : "Erreur lors du chargement de l'utilisateur";
-    return errorMessage;
+  } catch {
+    return null;
   }
 };

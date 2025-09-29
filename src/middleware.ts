@@ -16,9 +16,22 @@ export async function middleware(request: NextRequest) {
         try {
           const user = await getCurrentUser(cookieHeader);
           if (!user) {
+            console.log(
+              `[MIDDLEWARE DEBUG] No user found for path: ${pathname}`
+            );
+            console.log(
+              `[MIDDLEWARE DEBUG] Cookie header: ${cookieHeader.substring(
+                0,
+                50
+              )}...`
+            );
             const redirectUrl = new URL("/auth/signin", request.url);
             return NextResponse.redirect(redirectUrl);
           }
+
+          console.log(
+            `[MIDDLEWARE DEBUG] User found: ${user.userType} for path: ${pathname}`
+          );
           if (pathname.includes("/account/create")) {
             if (user.userType !== "guest") {
               const redirectUrl = new URL("/account", request.url);
