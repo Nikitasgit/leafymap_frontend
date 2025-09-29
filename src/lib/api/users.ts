@@ -37,9 +37,12 @@ export const getUserById = async (userId: string) => {
 
 export async function verifyJWT(token: string): Promise<IDecodedToken | null> {
   try {
+    console.log("token", token);
     const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
+    console.log("JWT_SECRET:", process.env.JWT_SECRET);
+
     const { payload } = await jwtVerify(token, secret);
-    console.log(payload);
+    console.log("payload", payload);
 
     if (
       typeof payload.id === "string" &&
