@@ -3,11 +3,20 @@ import { Metadata } from "next";
 
 export async function generateUserMetadata(userId: string): Promise<Metadata> {
   try {
+    console.log("generateUserMetadata - Starting with userId:", userId);
     const { getUserById } = await import("@/lib/api/users");
+    console.log("generateUserMetadata - getUserById imported successfully");
+
     const userData = await getUserById(userId);
-    console.log("userData", userData);
+    console.log("generateUserMetadata - userData received:", userData);
+    console.log("generateUserMetadata - userData type:", typeof userData);
+    console.log(
+      "generateUserMetadata - userData is null/undefined:",
+      userData === null || userData === undefined
+    );
 
     if (typeof userData === "string" || !userData) {
+      console.log("generateUserMetadata - Using fallback metadata");
       return {
         title: "Utilisateur | SpotLight",
         description: "Découvrez le profil de cet utilisateur sur SpotLight",
@@ -23,6 +32,16 @@ export async function generateUserMetadata(userId: string): Promise<Metadata> {
         },
       };
     }
+
+    console.log("generateUserMetadata - Processing userData properties");
+    console.log(
+      "generateUserMetadata - userData.creatorName:",
+      userData.creatorName
+    );
+    console.log(
+      "generateUserMetadata - userData.description:",
+      userData.description
+    );
 
     const creatorName =
       capitalizeFirstLetter(userData.creatorName) || "Utilisateur";

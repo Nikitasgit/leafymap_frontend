@@ -5,9 +5,20 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const getUserById = async (userId: string) => {
   try {
     const url = `${API_URL}/api/users/${userId}`;
+    console.log("getUserById - API_URL:", API_URL);
+    console.log("getUserById - Full URL:", url);
+    console.log("getUserById - userId:", userId);
+
     const response = await axios.get(url);
+    console.log("getUserById - Response status:", response.status);
+    console.log(
+      "getUserById - Response data:",
+      JSON.stringify(response.data, null, 2)
+    );
+
     return response.data.data.user;
   } catch (err) {
+    console.error("getUserById - Error:", err);
     const errorMessage =
       err instanceof Error
         ? err.message
