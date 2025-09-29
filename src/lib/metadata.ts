@@ -6,6 +6,7 @@ export async function generateUserMetadata(userId: string): Promise<Metadata> {
   try {
     console.log("userId", userId);
     const userData = await getUserById(userId);
+    console.log("userData", userData);
     if (typeof userData === "string" || !userData) {
       return {
         title: "Utilisateur | SpotLight",
