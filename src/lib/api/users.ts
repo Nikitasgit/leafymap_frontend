@@ -6,15 +6,8 @@ export const getUserById = async (userId: string) => {
   try {
     const url = `${API_URL}/api/users/${userId}`;
     const response = await axios.get(url);
-    console.log("getUserById - Response status:", response.status);
-    console.log(
-      "getUserById - Response data:",
-      JSON.stringify(response.data, null, 2)
-    );
-
     return response.data.data.user;
   } catch (err) {
-    console.error("getUserById - Error:", err);
     const errorMessage =
       err instanceof Error
         ? err.message
