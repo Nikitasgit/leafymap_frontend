@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+
+# Disallow indexing of private pages and authentication
+Disallow: /account/
+Disallow: /messages/
+Disallow: /auth/
+Disallow: /api/
+
+# Disallow indexing of translation files
+Disallow: /locales/
+
+# Disallow indexing of default images
+Disallow: /images/default-*
+
+# Explicitly allow important pages
+Allow: /
+Allow: /map
+Allow: /places/
+Allow: /events/
+Allow: /users/
+Allow: /legal/
+
+# Sitemap
+Sitemap: https://spotlight-project.vercel.app/sitemap.xml
+
+# Crawl-delay to avoid server overload
+Crawl-delay: 1

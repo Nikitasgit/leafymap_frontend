@@ -28,7 +28,7 @@
     border-radius: 50%;
     width: 15px;
     height: 15px;
-    font-size: rem(10);
+    font-size: rem(12);
   }
   @include respond-to(sm) {
     @include flex(row, flex-start, center, spacing(1));

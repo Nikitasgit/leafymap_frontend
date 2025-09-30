@@ -1,6 +1,13 @@
 import BackButton from "@/components/common/buttons/BackButton";
 import initTranslations from "../../../i18n";
 import styles from "./cgu.module.scss";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Conditions Générales d'Utilisation | SpotLight",
+  description:
+    "Consultez les conditions générales d'utilisation de SpotLight. Découvrez nos règles, votre responsabilité et vos droits en tant qu'utilisateur de la plateforme.",
+};
 
 export default async function CGUPage({
   params,

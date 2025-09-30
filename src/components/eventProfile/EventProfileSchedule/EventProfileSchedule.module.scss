@@ -19,7 +19,7 @@
           @include flex(row, flex-start, center, spacing(0.5));
           .dateLabel {
             color: $grey-600;
-            font-size: rem(11);
+            font-size: rem(12);
             font-weight: 500;
           }
           .dateValue {
@@ -44,7 +44,7 @@
             }
             .timeRange {
               font-weight: 600;
-              font-size: rem(11);
+              font-size: rem(12);
             }
           }
           .timeSlotTitle {

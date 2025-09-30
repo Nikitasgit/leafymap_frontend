@@ -35,7 +35,7 @@
       margin: 0;
     }
     .placeStatus {
-      font-size: rem(9);
+      font-size: rem(12);
       font-weight: 500;
       padding: spacing(0.2) spacing(0.4);
       border-radius: rem(3);
@@ -80,7 +80,7 @@
         font-size: rem(13);
       }
       .placeStatus {
-        font-size: rem(10);
+        font-size: rem(12);
       }
       .buttonGroup {
         @include flex(row, flex-start, center, spacing(0.5));
@@ -101,7 +101,7 @@
         font-size: rem(14);
       }
       .placeStatus {
-        font-size: rem(11);
+        font-size: rem(12);
       }
     }
   }

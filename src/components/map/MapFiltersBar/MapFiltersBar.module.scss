@@ -44,7 +44,7 @@
   .search {
     @include flex(row, flex-start, center, 0);
     border: 1px solid $grey-200;
-    border-radius: rem(10);
+    border-radius: rem(12);
     width: 100%;
     position: relative;
 

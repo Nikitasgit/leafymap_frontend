@@ -7,7 +7,7 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  font-size: rem(9);
+  font-size: rem(12);
   padding: spacing(0.15) spacing(0.3);
   border-radius: rem(2);
   margin-left: spacing(0.25);
@@ -53,7 +53,7 @@
     border: 1px solid rgba($error-color, 0.2);
   }
   @include respond-to(sm) {
-    font-size: rem(10);
+    font-size: rem(12);
     padding: spacing(0.2) spacing(0.4);
     border-radius: rem(3);
     margin-left: spacing(0.5);

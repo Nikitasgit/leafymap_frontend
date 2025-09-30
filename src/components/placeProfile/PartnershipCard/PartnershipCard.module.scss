@@ -33,7 +33,7 @@
     }
   }
   @include respond-to(sm) {
-    border-radius: rem(10);
+    border-radius: rem(12);
     padding: spacing(1.25);
     gap: spacing(1.25);
     .avatar {
