@@ -5,7 +5,6 @@ export interface SearchInputProps<T> {
   placeholder?: string;
   limit?: number;
   withIcons?: boolean;
-  loading?: boolean;
   label?: string;
 }
 

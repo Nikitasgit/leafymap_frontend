@@ -14,7 +14,6 @@ const SearchInput = <T extends SearchSuggestion>({
   placeholder = "Rechercher...",
   limit = 5,
   withIcons = false,
-  loading = false,
   label,
 }: SearchInputProps<T>) => {
   const [input, setInput] = useState(value);
@@ -23,6 +22,7 @@ const SearchInput = <T extends SearchSuggestion>({
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const prevValueRef = useRef<string>(value);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const fetchSuggestions = useCallback(
     async (searchTerm: string) => {
@@ -43,7 +43,16 @@ const SearchInput = <T extends SearchSuggestion>({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInput(newValue);
-    fetchSuggestions(newValue);
+
+    // Annuler le debounce précédent
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // Lancer un nouveau debounce
+    debounceTimerRef.current = setTimeout(() => {
+      fetchSuggestions(newValue);
+    }, 300);
   };
 
   const handleSuggestionClick = (suggestion: T) => {
@@ -66,6 +75,15 @@ const SearchInput = <T extends SearchSuggestion>({
     }
   }, [value]);
 
+  // Nettoyer le timer lors du démontage
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div ref={wrapperRef} className={styles.searchInput}>
       <TextField
@@ -81,7 +99,6 @@ const SearchInput = <T extends SearchSuggestion>({
         }}
         placeholder={placeholder}
         fullWidth
-        disabled={loading}
       />
       {isFocused && suggestions.length > 0 && (
         <ul className={styles.suggestions}>

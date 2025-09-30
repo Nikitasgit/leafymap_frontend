@@ -1,7 +1,5 @@
-import React from "react";
 import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
-
 import styles from "./MapCreatorCard.module.scss";
 import { Map, SquareArrowOutUpRight } from "lucide-react";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
@@ -46,29 +44,30 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
   if (isLoading || !user || isLoadingPartnerships) return <LoadingBar />;
 
   return (
-    <div className={styles.userCardMap}>
-      <div className={styles.creatorProfile}>
-        <div
+    <article className={styles.userCardMap}>
+      <header className={styles.creatorProfile}>
+        <button
           className={styles.creatorInfo}
           onClick={() => router.push(`/users/${user?._id}`)}
+          type="button"
+          aria-label={`Voir le profil de ${user.creatorName}`}
         >
           <Image
             src={
               user.image?.urls?.thumbnail || "https://i.pravatar.cc/40?img=3"
             }
-            onClick={() => router.push(`/users/${user?._id}`)}
-            alt={user.creatorName}
+            alt={user.creatorName || "Créateur"}
             width={55}
             height={55}
             className={styles.creatorImage}
           />
           <div className={styles.creatorText}>
-            <h3>{user.creatorName}</h3>
+            <h2>{user.creatorName}</h2>
             <CreatorCategoryBadge
               categoryName={user.creatorCategories[0].name}
             />
           </div>
-        </div>
+        </button>
         <Button
           variant="simple"
           onClick={() =>
@@ -77,17 +76,19 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
               _id: user.places![0]._id,
             })
           }
+          type="button"
+          ariaLabel="Voir sur la carte"
         >
           <Map size={12} />
         </Button>
-      </div>
+      </header>
 
       <div className={styles.placesAndEventsSection}>
         {eventPartnerships && eventPartnerships.length > 0 && (
-          <div className={styles.section}>
-            <p className={styles.sectionTitle}>
+          <section className={styles.section}>
+            <h3 className={styles.sectionTitle}>
               Evenements en cours et à venir ({eventPartnerships.length}):
-            </p>
+            </h3>
             {eventPartnerships.map((partnership) => {
               const event =
                 typeof partnership.event === "object"
@@ -97,6 +98,7 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
                 typeof partnership.place === "object"
                   ? partnership.place
                   : null;
+
               if (!event || !place) return null;
 
               const eventDisplayInfo = getEventDisplayInfo(event.schedule);
@@ -106,9 +108,8 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
                     <div className={styles.imageContainer}>
                       <Image
                         src={
-                          typeof event.image === "object" && event.image?.urls
-                            ? event.image.urls.thumbnail
-                            : "https://i.pravatar.cc/40?img=3"
+                          event.image.urls.thumbnail ||
+                          "https://i.pravatar.cc/40?img=3"
                         }
                         alt={event.name}
                         width={54}
@@ -130,6 +131,8 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
                         variant="simple"
                         startIcon={<SquareArrowOutUpRight size={12} />}
                         onClick={() => router.push(`/places/${place._id}`)}
+                        type="button"
+                        ariaLabel={`Voir le lieu ${place.name}`}
                       >
                         {place.name}
                       </Button>
@@ -139,18 +142,20 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
                     variant="simple"
                     className={styles.eventButton}
                     onClick={() => router.push(`/events/${event._id}`)}
+                    type="button"
+                    ariaLabel={`Voir l'événement ${event.name}`}
                   >
                     <SquareArrowOutUpRight size={12} />
                   </Button>
                 </div>
               );
             })}
-          </div>
+          </section>
         )}
-        <div className={styles.section}>
-          <p className={styles.sectionTitle}>
+        <section className={styles.section} aria-labelledby="places-title">
+          <h3 id="places-title" className={styles.sectionTitle}>
             Lieux partenaires ({placePartnerships.length})
-          </p>
+          </h3>
 
           {placePartnerships.map((partnership) => {
             const place =
@@ -165,9 +170,8 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
                   >
                     <Image
                       src={
-                        typeof place.image === "object" && place.image?.urls
-                          ? place.image.urls.thumbnail
-                          : "/images/default-place.png"
+                        place.image.urls.thumbnail ||
+                        "https://i.pravatar.cc/40?img=3"
                       }
                       alt={place.name}
                       width={48}
@@ -185,15 +189,17 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
                   variant="simple"
                   className={styles.mapButton}
                   onClick={() => handleMapButtonClick(place)}
+                  type="button"
+                  ariaLabel={`Voir ${place.name} sur la carte`}
                 >
                   <Map size={12} />
                 </Button>
               </div>
             );
           })}
-        </div>
+        </section>
       </div>
-    </div>
+    </article>
   );
 };
 export default MapCreatorCard;

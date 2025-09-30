@@ -77,6 +77,14 @@ const MapFiltersBar = ({
     });
   };
 
+  const handleFilterToggle = () => {
+    if (selectedItem.type === "filters") {
+      handleSelect({ id: "", type: null });
+    } else {
+      handleSelect({ id: "", type: "filters" });
+    }
+  };
+
   const handleSearch = async (
     query: string
   ): Promise<(CreatorSearchResult | PlaceSearchResult)[]> => {
@@ -131,60 +139,78 @@ const MapFiltersBar = ({
 
   return (
     <div className={styles.filtersBar}>
-      <div className={styles.categories}>
-        {types.map((type) => (
-          <button
-            key={type.key}
-            type="button"
-            className={`${styles.category} ${
-              type.value === filters.placeType ? styles.active : ""
-            }`}
-            onClick={() => handleTypeSelect(type)}
-          >
-            {type.label}
-          </button>
-        ))}
+      <div className={styles.topRow}>
+        <div
+          className={styles.categories}
+          role="group"
+          aria-label="Filtres par catégorie"
+        >
+          {types.map((type) => (
+            <button
+              key={type.key}
+              type="button"
+              className={`${styles.category} ${
+                type.value === filters.placeType ? styles.active : ""
+              }`}
+              onClick={() => handleTypeSelect(type)}
+              aria-pressed={type.value === filters.placeType}
+            >
+              {type.label}
+            </button>
+          ))}
+        </div>
+        <Button
+          variant="secondary"
+          size="small"
+          type="button"
+          onClick={handleFilterToggle}
+          disabled={loading}
+          startIcon={<Filter size={17} />}
+          ariaLabel="Filtres"
+        >
+          Filtres
+        </Button>
       </div>
       <div className={styles.search}>
         <div className={styles.searchDropdownWrapper} ref={dropdownRef}>
-          <div className={styles.searchDropdown} onClick={handleDropdownToggle}>
+          <button
+            type="button"
+            className={styles.searchDropdown}
+            onClick={handleDropdownToggle}
+            aria-expanded={isDropdownOpen}
+            aria-haspopup="listbox"
+            aria-label="Sélectionner le type de recherche"
+          >
             <span>{searchType.label}</span>
-            <ChevronDown size={20} />
-          </div>
+            <ChevronDown size={20} aria-hidden="true" />
+          </button>
           {isDropdownOpen && (
-            <div className={styles.dropdownMenu}>
+            <ul className={styles.dropdownMenu} role="listbox">
               {searchTypes.map((type) => (
-                <div
-                  key={type.label}
-                  className={styles.dropdownItem}
-                  onClick={() => handleSearchTypeSelect(type)}
-                >
-                  {type.label}
-                </div>
+                <li key={type.label} role="presentation">
+                  <button
+                    type="button"
+                    className={styles.dropdownItem}
+                    onClick={() => handleSearchTypeSelect(type)}
+                    role="option"
+                    aria-selected={searchType.label === type.label}
+                  >
+                    {type.label}
+                  </button>
+                </li>
               ))}
-            </div>
+            </ul>
           )}
         </div>
         <SearchInput
           value={searchValue}
           withIcons
-          loading={loading}
           limit={10}
           onSelect={handleSelectSuggestion}
           fetchSuggestions={handleSearch}
           placeholder={searchType.placeholder}
         />
       </div>
-      <Button
-        variant="secondary"
-        type="button"
-        onClick={() => handleSelect({ id: "", type: "filters" })}
-        disabled={loading}
-        startIcon={<Filter size={17} />}
-        ariaLabel="Filtres"
-      >
-        Filtres
-      </Button>
     </div>
   );
 };

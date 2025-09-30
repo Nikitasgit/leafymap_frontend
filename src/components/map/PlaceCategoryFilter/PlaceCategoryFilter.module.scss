@@ -1,49 +1,77 @@
 @use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
 
 .categoryFilter {
-  margin-bottom: $spacing-large;
-
+  border: none;
+  padding: 0;
+  margin: 0 0 spacing(1.5) 0;
   .header {
-    display: flex;
-    align-items: center;
-    gap: $spacing-small;
-    margin-bottom: $spacing-medium;
+    @include flex(row, flex-start, center, spacing(0.5));
+    margin-bottom: spacing(1);
     color: $grey-500;
     .title {
       font-weight: 600;
-      font-size: 14px;
+      font-size: rem(14);
       margin: 0;
     }
   }
-
   .categoriesList {
     list-style: none;
     padding: 0;
     margin: 0;
-    display: flex;
+    @include flex(row, flex-start, center, spacing(0.75));
     flex-wrap: wrap;
-    gap: $spacing-small;
-  }
-
-  .categoryItem {
-    display: flex;
-    align-items: center;
-    gap: $spacing-xsmall;
-    padding: $spacing-xsmall;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: 1px solid $grey-200;
-    &.selected {
-      border-color: $primary-color;
+    li {
+      .categoryItem {
+        @include flex(row, center, center, spacing(0.5));
+        padding: spacing(0.5) spacing(1);
+        border-radius: rem(6);
+        cursor: pointer;
+        border: 1px solid $grey-200;
+        background: $white;
+        font-size: rem(13);
+        font-weight: 500;
+        transition: all 0.2s ease;
+        &.selected {
+          border-color: $primary-color;
+          background-color: rgba($primary-color, 0.1);
+        }
+        &:hover {
+          border-color: $grey-300;
+          background-color: $grey-50;
+          &.selected {
+            border-color: $primary-color;
+            background-color: rgba($primary-color, 0.15);
+          }
+        }
+        .selectedText {
+          color: $primary-color;
+        }
+        .unselectedText {
+          color: $grey-500;
+        }
+      }
     }
   }
-
-  .selectedText {
-    color: $primary-color;
-  }
-
-  .unselectedText {
-    color: $grey-500;
+  @include respond-to(sm) {
+    margin-bottom: spacing(2);
+    .header {
+      gap: spacing(0.75);
+      margin-bottom: spacing(1.5);
+      .title {
+        font-size: rem(15);
+      }
+    }
+    .categoriesList {
+      gap: spacing(1);
+      li {
+        .categoryItem {
+          padding: spacing(0.75) spacing(1.25);
+          border-radius: rem(8);
+          font-size: rem(14);
+        }
+      }
+    }
   }
 }

@@ -38,11 +38,18 @@ export const navigateToPlaceOnMap = async ({
   }
 
   const [longitude, latitude] = coordinates;
-  const offsetLocation = applyPixelOffsetToLocation(
-    { latitude, longitude },
-    pixelOffsetX,
-    pixelOffsetY
-  );
+
+  // Detect if mobile (screen width < 768px for md breakpoint)
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
+  // Apply offset only on desktop
+  const offsetLocation = isMobile
+    ? { latitude, longitude }
+    : applyPixelOffsetToLocation(
+        { latitude, longitude },
+        pixelOffsetX,
+        pixelOffsetY
+      );
 
   const mapInstance = mapRef.current;
   mapInstance.setSelectedPlaceId(placeId);

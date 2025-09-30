@@ -3,6 +3,7 @@ import { Marker } from "react-map-gl/mapbox";
 import PlaceCategoryIcon from "@/components/common/icons/PlaceCategoryIcon/PlaceCategoryIcon";
 import styles from "./CategoryMarker.module.scss";
 import { CategoryMarkerProps } from "./CategoryMarker.types";
+import { capitalizeFirstLetter } from "@/utils/functions";
 
 const CategoryMarker: React.FC<CategoryMarkerProps> = ({
   longitude,
@@ -28,12 +29,17 @@ const CategoryMarker: React.FC<CategoryMarkerProps> = ({
         isSelected ? styles.selected : ""
       }`}
     >
-      <div
+      <button
         className={styles.marker}
         onMouseEnter={() => !isZoomedIn && setIsHovered(true)}
         onMouseLeave={() => !isZoomedIn && setIsHovered(false)}
+        type="button"
+        aria-label={`${
+          capitalizeFirstLetter(placeName) || "Lieu"
+        } - ${categoryName}`}
+        aria-pressed={isSelected}
       >
-        <div className={styles.markerIconContainer}>
+        <div className={styles.markerIconContainer} aria-hidden="true">
           <PlaceCategoryIcon
             categoryName={categoryName}
             size="small"
@@ -44,15 +50,16 @@ const CategoryMarker: React.FC<CategoryMarkerProps> = ({
           />
         </div>
         {placeName && shouldShowLabel && (
-          <div
+          <span
             className={`${styles.placeLabel} ${
               isSelected ? styles.selected : ""
             }`}
+            aria-hidden="true"
           >
-            {placeName}
-          </div>
+            {capitalizeFirstLetter(placeName)}
+          </span>
         )}
-      </div>
+      </button>
     </Marker>
   );
 };

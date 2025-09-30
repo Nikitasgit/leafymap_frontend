@@ -9,7 +9,7 @@
   @include flex(row, space-between, center, 0);
   padding: spacing(0.75) spacing(1);
   position: relative;
-  z-index: 1000;
+  z-index: 10000000;
 
   .logo {
     font-size: rem(18);

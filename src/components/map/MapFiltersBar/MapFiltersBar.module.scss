@@ -1,68 +1,157 @@
 @use "@/styles/abstracts/variables" as *;
 @use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
 
 .filtersBar {
-  @include flex(row, space-between, center);
-  padding: $spacing-small;
+  @include flex(column, flex-start, stretch, spacing(1));
+  padding: spacing(1);
   background-color: $white;
   width: 100%;
   border-top: 1px solid $grey-200;
-}
+  .topRow {
+    @include flex(row, space-between, center, spacing(1));
+    width: 100%;
+    .categories {
+      @include flex(row, flex-start, center, spacing(0));
+      overflow-x: auto;
 
-.categories {
-  @include flex(row, center, center, $spacing-medium);
-
-  .category {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: $font-size-base;
-    color: $grey-500;
-    white-space: nowrap;
-    &.active {
-      color: $primary-color;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      .category {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: rem(13);
+        color: $grey-500;
+        white-space: nowrap;
+        padding: spacing(0.5) spacing(1);
+        border-radius: rem(6);
+        font-weight: 500;
+        &.active {
+          color: $primary-color;
+          background: rgba($primary-color, 0.1);
+        }
+      }
+    }
+    button {
+      span {
+        display: none;
+      }
     }
   }
-}
+  .search {
+    @include flex(row, flex-start, center, 0);
+    border: 1px solid $grey-200;
+    border-radius: rem(10);
+    width: 100%;
+    position: relative;
 
-.search {
-  @include flex(row, space-between, center, 0);
-  border: 1px solid $grey-200;
-  border-radius: 8px;
-  width: 100%;
-  max-width: 700px;
-}
-
-.searchDropdown {
-  @include flex(row, space-between, center, 0);
-  min-width: 130px;
-  padding: 0 $spacing-medium;
-
-  cursor: pointer;
-  span {
-    font-weight: 500;
+    .searchDropdownWrapper {
+      position: relative;
+      flex-shrink: 0;
+      z-index: 100000;
+      .searchDropdown {
+        @include flex(row, space-between, center, spacing(0.5));
+        min-width: 100px;
+        padding: spacing(0.75) spacing(1);
+        cursor: pointer;
+        background: none;
+        border: none;
+        span {
+          font-weight: 500;
+          font-size: rem(13);
+          color: $grey-700;
+        }
+      }
+      .dropdownMenu {
+        position: absolute;
+        top: calc(100% + spacing(0.5));
+        left: 0;
+        background-color: $white;
+        width: 100%;
+        min-width: 150px;
+        z-index: 10000000;
+        border: 1px solid $grey-200;
+        border-radius: rem(6);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .dropdownItem {
+          width: 100%;
+          padding: spacing(0.75) spacing(1);
+          cursor: pointer;
+          font-size: rem(13);
+          color: $grey-700;
+          background-color: $white;
+          border: none;
+          text-align: left;
+          &:hover {
+            background-color: $grey-100;
+          }
+          &:first-child {
+            border-radius: rem(6) rem(6) 0 0;
+          }
+          &:last-child {
+            border-radius: 0 0 rem(6) rem(6);
+          }
+        }
+      }
+    }
   }
-}
-
-.searchDropdownWrapper {
-  position: relative;
-}
-
-.dropdownMenu {
-  position: absolute;
-  top: 130%;
-  left: 0;
-  background-color: $white;
-  width: 100%;
-  z-index: 9999999;
-  border: 1px solid #ccc;
-}
-
-.dropdownItem {
-  padding: $spacing-small $spacing-medium;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $grey-100;
+  @include respond-to(sm) {
+    padding: spacing(1.5);
+    .topRow {
+      gap: spacing(1.5);
+      .categories {
+        gap: spacing(1);
+        .category {
+          font-size: rem(14);
+          padding: spacing(0.5) spacing(1.25);
+        }
+      }
+      button {
+        span {
+          display: inline;
+        }
+      }
+    }
+    .search {
+      .searchDropdownWrapper {
+        .searchDropdown {
+          min-width: 120px;
+          padding: spacing(1) spacing(1.25);
+          span {
+            font-size: rem(14);
+          }
+        }
+        .dropdownMenu {
+          border-radius: rem(8);
+          .dropdownItem {
+            font-size: rem(14);
+            padding: spacing(1) spacing(1.25);
+            &:first-child {
+              border-radius: rem(8) rem(8) 0 0;
+            }
+            &:last-child {
+              border-radius: 0 0 rem(8) rem(8);
+            }
+          }
+        }
+      }
+    }
+  }
+  @include respond-to(md) {
+    @include flex(row, space-between, center, spacing(1.5));
+    .topRow {
+      justify-content: flex-start;
+    }
+    .search {
+      .searchDropdownWrapper {
+        .searchDropdown {
+          min-width: 130px;
+          padding: spacing(1) spacing(1.5);
+        }
+      }
+    }
   }
 }

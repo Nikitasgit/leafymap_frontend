@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Button.module.scss";
 
 interface ButtonProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   variant?: "primary" | "secondary" | "outline" | "simple";
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
@@ -39,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({
       } ${className}`}
     >
       {startIcon && <span className={styles.startIcon}>{startIcon}</span>}
-      {children}
+      {children && children}
       {endIcon && <span className={styles.endIcon}>{endIcon}</span>}
     </button>
   );

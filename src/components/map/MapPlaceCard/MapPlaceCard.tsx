@@ -27,71 +27,69 @@ const MapPlaceCard = ({ placeId, mapRef }: MapPlaceCardProps) => {
   }, [mapRef, place]);
 
   return (
-    <div className={styles.placeCardMap}>
-      <div>
-        <div
-          className={`${styles.imageContainer} ${isLoading ? "skeleton" : ""}`}
-        >
-          {!isLoading && (
-            <Image
-              onClick={() => {
-                if (place?.isCreatorPlace) {
-                  router.push(`/users/${place.user._id}`);
-                } else {
-                  router.push(`/places/${place?._id}`);
-                }
-              }}
-              src={
-                place?.image?.urls.medium || "https://i.pravatar.cc/40?img=3"
-              }
-              alt={place?.name || "Place image"}
-              width={100}
-              height={200}
-            />
-          )}
-        </div>
-        <div className={styles.header}>
-          <div className={styles.headerMain}>
-            <h2 className={styles.title}>
-              {capitalizeFirstLetter(place?.name)}
-            </h2>
-            <div className={styles.categoryRow}>
-              {place?.isCreatorPlace ? (
-                <CreatorCategoryBadge
-                  categoryName={place.user.creatorCategories[0].name}
-                />
-              ) : (
-                <PlaceCategoryBadge
-                  categoryName={place?.placeCategory?.name || ""}
-                />
-              )}
-            </div>
-          </div>
-          <div className={styles.buttons}>
-            <div className={styles.buttonGroup}>
-              <Button ariaLabel="Itinéraire" variant="secondary">
-                Itinéraire
-              </Button>
-              <Button ariaLabel="Favoris" variant="primary">
-                Favoris
-              </Button>
-            </div>
-          </div>
-          <div className={styles.addressRow}>
-            <span className={styles.addressIcon}>
-              <MapPin size={14} />
-            </span>
-            <p className={styles.address}>{place?.location?.label}</p>
-          </div>
-        </div>
-        <div className={styles.descriptionRow}>
-          <p>{capitalizeFirstLetter(place?.description)}</p>
-        </div>
-        {place?.defaultSchedule && (
-          <MapPlaceCardSchedule schedule={place?.defaultSchedule} />
+    <article className={styles.placeCardMap}>
+      <button
+        className={`${styles.imageContainer} ${isLoading ? "skeleton" : ""}`}
+        onClick={() => {
+          if (place?.isCreatorPlace) {
+            router.push(`/users/${place.user._id}`);
+          } else {
+            router.push(`/places/${place?._id}`);
+          }
+        }}
+        type="button"
+        aria-label={`Voir ${
+          place?.isCreatorPlace
+            ? "le profil de " + place.user.creatorName
+            : place?.name
+        }`}
+      >
+        {!isLoading && (
+          <Image
+            src={place?.image?.urls.medium || "https://i.pravatar.cc/40?img=3"}
+            alt={place?.name || "Lieu"}
+            width={100}
+            height={200}
+          />
         )}
+      </button>
+      <header className={styles.header}>
+        <div className={styles.headerMain}>
+          <h2 className={styles.title}>{capitalizeFirstLetter(place?.name)}</h2>
+          <div className={styles.categoryRow}>
+            {place?.isCreatorPlace ? (
+              <CreatorCategoryBadge
+                categoryName={place.user.creatorCategories[0].name}
+              />
+            ) : (
+              <PlaceCategoryBadge
+                categoryName={place?.placeCategory?.name || ""}
+              />
+            )}
+          </div>
+        </div>
+        <div className={styles.addressRow}>
+          <MapPin size={14} className={styles.addressIcon} aria-hidden="true" />
+          <p className={styles.address}>{place?.location?.label}</p>
+        </div>
+        <div className={styles.buttons}>
+          <div className={styles.buttonGroup}>
+            <Button ariaLabel="Itinéraire" variant="secondary" type="button">
+              Itinéraire
+            </Button>
+            <Button ariaLabel="Favoris" variant="primary" type="button">
+              Favoris
+            </Button>
+          </div>
+        </div>
+      </header>
+      <div className={styles.descriptionRow}>
+        <p>{capitalizeFirstLetter(place?.description)}</p>
       </div>
-    </div>
+      {place?.defaultSchedule && (
+        <MapPlaceCardSchedule schedule={place?.defaultSchedule} />
+      )}
+    </article>
   );
 };
 

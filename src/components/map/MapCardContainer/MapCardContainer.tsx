@@ -22,20 +22,28 @@ const MapCardContainer = ({
   }, [selectedItem]);
 
   return (
-    <div
+    <aside
       className={`${styles.cardMapContainer} ${
         isCollapsed ? styles.collapsed : ""
       }`}
+      aria-label="Informations de la sélection"
+      aria-hidden={isCollapsed}
     >
       <button
         className={styles.collapseButton}
         onClick={toggleCollapse}
-        aria-label={isCollapsed ? "Expand card" : "Collapse card"}
+        aria-label={
+          isCollapsed ? "Ouvrir les informations" : "Fermer les informations"
+        }
+        aria-expanded={!isCollapsed}
+        type="button"
       >
-        {isCollapsed ? "›" : "‹"}
+        <span className={styles.desktopText} aria-hidden="true">
+          {isCollapsed ? "›" : "‹"}
+        </span>
       </button>
 
-      <div className={styles.cardContent}>
+      <div className={styles.cardContent} role="region" aria-live="polite">
         {selectedItem.type === "place" && (
           <MapPlaceCard placeId={selectedItem.id} mapRef={mapRef} />
         )}
@@ -47,10 +55,11 @@ const MapCardContainer = ({
             filters={filters}
             onFiltersChange={setFilters}
             onResetFilters={onResetFilters}
+            onClose={() => setIsCollapsed(true)}
           />
         )}
       </div>
-    </div>
+    </aside>
   );
 };
 

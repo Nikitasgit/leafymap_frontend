@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "@/components/common/buttons/button/Button";
 import styles from "./MapFiltersCard.module.scss";
 import { RotateCcw } from "lucide-react";
@@ -12,6 +12,7 @@ const MapFiltersCard = ({
   onApplyFilters,
   filters,
   onResetFilters,
+  onClose,
 }: MapFiltersCardProps) => {
   const [localFilters, setLocalFilters] = useState<MapFilters>(filters);
   const { t } = useTranslation("common");
@@ -43,15 +44,18 @@ const MapFiltersCard = ({
     } else if (onFiltersChange) {
       onFiltersChange(localFilters);
     }
+    if (onClose) {
+      onClose();
+    }
   };
 
   return (
-    <div className={styles.filtersCardMap}>
-      <div className={styles.header}>
-        <h3 className={styles.title}>
+    <section className={styles.filtersCardMap} aria-labelledby="filters-title">
+      <header className={styles.header}>
+        <h2 id="filters-title" className={styles.title}>
           {t("filters")}
-        </h3>
-      </div>
+        </h2>
+      </header>
       <div className={styles.content}>
         <PlaceCategoryFilter
           selectedCategories={localFilters.placeCategories}
@@ -63,15 +67,22 @@ const MapFiltersCard = ({
           startIcon={<RotateCcw size={14} />}
           onClick={handleResetFilters}
           fullWidth
+          type="button"
+          ariaLabel="Réinitialiser les filtres"
         >
-          <p>Réinitialiser les filtres</p>
+          Réinitialiser les filtres
         </Button>
 
-        <Button fullWidth onClick={handleApplyFilters}>
-          <p>Appliquer les filtres</p>
+        <Button
+          fullWidth
+          onClick={handleApplyFilters}
+          type="button"
+          ariaLabel="Appliquer les filtres"
+        >
+          Appliquer les filtres
         </Button>
       </div>
-    </div>
+    </section>
   );
 };
 

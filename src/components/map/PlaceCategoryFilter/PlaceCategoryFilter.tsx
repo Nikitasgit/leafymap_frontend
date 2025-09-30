@@ -20,38 +20,44 @@ const PlaceCategoryFilter: React.FC<PlaceCategoryFilterProps> = ({
   };
 
   return (
-    <div className={styles.categoryFilter}>
-      <div className={styles.header}>
-        <Tag size={16} />
-        <p className={styles.title}>{t("categories")}</p>
-      </div>
-      <ul className={styles.categoriesList}>
+    <fieldset className={styles.categoryFilter}>
+      <legend className={styles.header}>
+        <Tag size={16} aria-hidden="true" />
+        <span className={styles.title}>{t("categories")}</span>
+      </legend>
+      <ul className={styles.categoriesList} role="group">
         {placeCategories.map((category) => {
           const isSelected = selectedCategories.includes(category._id);
           return (
-            <li
-              key={category._id}
-              className={`${styles.categoryItem} ${
-                isSelected ? styles.selected : ""
-              }`}
-              onClick={() => onCategoryClick(category._id)}
-            >
-              <PlaceCategoryIcon
-                categoryName={category.name}
-                variant={isSelected ? "primary" : "grey"}
-              />
-              <p
-                className={
-                  isSelected ? styles.selectedText : styles.unselectedText
-                }
+            <li key={category._id}>
+              <button
+                type="button"
+                className={`${styles.categoryItem} ${
+                  isSelected ? styles.selected : ""
+                }`}
+                onClick={() => onCategoryClick(category._id)}
+                aria-pressed={isSelected}
+                aria-label={`${t(
+                  `placeCategories.${category.name.toLowerCase()}`
+                )}${isSelected ? " - sélectionné" : ""}`}
               >
-                {t(`placeCategories.${category.name.toLowerCase()}`)}
-              </p>
+                <PlaceCategoryIcon
+                  categoryName={category.name}
+                  variant={isSelected ? "primary" : "grey"}
+                />
+                <span
+                  className={
+                    isSelected ? styles.selectedText : styles.unselectedText
+                  }
+                >
+                  {t(`placeCategories.${category.name.toLowerCase()}`)}
+                </span>
+              </button>
             </li>
           );
         })}
       </ul>
-    </div>
+    </fieldset>
   );
 };
 
