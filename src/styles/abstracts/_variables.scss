@@ -31,15 +31,9 @@ $breakpoint-sm: 576px;
 $breakpoint-md: 768px;
 $breakpoint-lg: 992px;
 $breakpoint-xl: 1200px;
-$breakpoint-mobile: 480px;
-$breakpoint-tablet: 768px;
 
 // Spacing
 $spacing-unit: 8px;
-$spacing-xsmall: calc($spacing-unit / 2);
-$spacing-small: $spacing-unit;
-$spacing-medium: calc($spacing-unit * 2);
-$spacing-large: calc($spacing-unit * 3);
 
 // Transitions
 $transition-default: all 0.2s ease;

@@ -8,6 +8,9 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0px;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 body,
@@ -59,7 +62,8 @@ textarea {
   border-radius: 8px;
   background-color: $input-bg-color;
   color: $grey-500;
-
+  -webkit-user-select: text;
+  user-select: text;
   transition: border-color 0.2s;
   &:focus {
     outline: none;
@@ -80,6 +84,20 @@ fieldset {
 textarea {
   resize: none;
 }
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+a {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+// limit the motion for accessibility
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
     scroll-behavior: auto;

@@ -33,6 +33,9 @@
       @include flex(row, center, center, spacing(0.5));
       flex-shrink: 0;
       display: none;
+      list-style: none;
+      margin: 0;
+      padding: 0;
     }
 
     .navLink {
@@ -45,9 +48,12 @@
       border-radius: 4px;
       position: relative;
 
-      &:hover {
+      &:hover,
+      &:focus {
         color: $grey-600;
         background-color: rgba($grey-100, 0.5);
+        outline: 2px solid $primary-color;
+        outline-offset: 2px;
       }
 
       &.active {
@@ -89,6 +95,11 @@
         color: $grey-300;
         font-weight: 300;
       }
+
+      .separator {
+        color: $grey-300;
+        font-weight: 300;
+      }
     }
 
     .mobileMenuButton {
@@ -100,13 +111,6 @@
       color: $grey-500;
       cursor: pointer;
       padding: spacing(0.5);
-      border-radius: 4px;
-      transition: $transition-default;
-
-      &:hover {
-        color: $grey-600;
-        background-color: rgba($grey-100, 0.5);
-      }
     }
   }
 
@@ -130,15 +134,12 @@
         color: $grey-500;
         text-decoration: none;
         padding: spacing(1);
-        border-radius: 4px;
         transition: $transition-default;
         font-weight: 500;
-
-        &:hover {
-          color: $grey-600;
-          background-color: rgba($grey-100, 0.5);
+        &:hover,
+        &:focus {
+          color: $grey-700;
         }
-
         &.active {
           color: $primary-color;
           background-color: rgba($primary-color, 0.1);

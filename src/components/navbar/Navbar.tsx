@@ -4,17 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Map, MessageSquare, User, Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import SignOutButton from "../common/buttons/SignOutButton";
 import styles from "./Navbar.module.scss";
 import LoadingBar from "../common/loading/LoadingBar";
 import { useAuth } from "@/hooks/useAuth";
+import useOnClickOutside from "@/hooks/useOnClickOutside";
 
 export default function Navbar() {
   const pathname = usePathname();
   const { t } = useTranslation("common");
   const { loading, user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navbarRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
     { href: "/", label: t("nav.home"), icon: Home, display: true },
@@ -36,30 +38,40 @@ export default function Navbar() {
     setIsMobileMenuOpen(false);
   };
 
+  useOnClickOutside(navbarRef, closeMobileMenu);
   return (
-    <nav className={styles.navbar}>
+    <nav
+      className={styles.navbar}
+      ref={navbarRef}
+      aria-label="Navigation principale"
+    >
       <Link href="/" className={styles.logo}>
         SpotLight
       </Link>
 
       <div className={styles.navContainer}>
-        <div className={styles.navLinks}>
+        <ul className={styles.navLinks} role="menubar">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
             if (!item.display) return null;
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`${styles.navLink} ${isActive ? styles.active : ""}`}
-              >
-                <Icon className={styles.navIcon} />
-                <span>{item.label}</span>
-              </Link>
+              <li key={item.href} role="none">
+                <Link
+                  href={item.href}
+                  className={`${styles.navLink} ${
+                    isActive ? styles.active : ""
+                  }`}
+                  role="menuitem"
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  <Icon className={styles.navIcon} aria-hidden="true" />
+                  <span>{item.label}</span>
+                </Link>
+              </li>
             );
           })}
-        </div>
+        </ul>
 
         {loading ? (
           <LoadingBar />
@@ -77,7 +89,9 @@ export default function Navbar() {
                 >
                   {t("nav.register")}
                 </Link>
-                <span>|</span>
+                <span className={styles.separator} aria-hidden="true">
+                  |
+                </span>
                 <Link
                   href="/auth/signin"
                   className={`${styles.navLink} ${
@@ -98,7 +112,11 @@ export default function Navbar() {
           aria-expanded={isMobileMenuOpen}
           aria-controls="mobile-menu"
         >
-          {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          {isMobileMenuOpen ? (
+            <X size={20} aria-hidden="true" />
+          ) : (
+            <Menu size={20} aria-hidden="true" />
+          )}
         </button>
       </div>
 
@@ -107,6 +125,7 @@ export default function Navbar() {
           id="mobile-menu"
           className={styles.mobileMenu}
           aria-hidden={!isMobileMenuOpen}
+          role="menu"
         >
           <div className={styles.mobileMenuContent}>
             {navItems.map((item) => {
@@ -121,8 +140,10 @@ export default function Navbar() {
                     isActive ? styles.active : ""
                   }`}
                   onClick={closeMobileMenu}
+                  role="menuitem"
+                  aria-current={isActive ? "page" : undefined}
                 >
-                  <Icon className={styles.mobileNavIcon} />
+                  <Icon className={styles.mobileNavIcon} aria-hidden="true" />
                   <span>{item.label}</span>
                 </Link>
               );
