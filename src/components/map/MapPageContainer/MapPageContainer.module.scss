@@ -1,0 +1,13 @@
+@use "@/styles/abstracts/variables" as *;
+
+.mapPage {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - #{$navbar-height});
+  overflow: hidden;
+}
+
+.mapContainer {
+  flex-grow: 1;
+  position: relative;
+}

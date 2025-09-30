@@ -35,7 +35,7 @@ const ProfileFormStep = ({
     place: {},
     user: {},
   });
-
+  console.log(errors);
   const validateFormData = useCallback((): boolean => {
     const userValidation = validateNewUserData(user);
     let placeValidation: ValidationResult = {

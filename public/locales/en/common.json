@@ -68,6 +68,10 @@
       "friday": "Friday",
       "saturday": "Saturday",
       "sunday": "Sunday"
-    }
+    },
+    "title": "Opening Hours",
+    "today": "Today",
+    "open": "Open",
+    "closed": "Closed"
   }
 }

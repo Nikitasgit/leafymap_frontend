@@ -4,19 +4,14 @@ import { PlacePopulated } from "@/types/place";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 
-export const usePlace = (
-  placeId: string | null,
-  enrichSchedule: boolean = false
-) => {
+export const usePlace = (placeId: string | null) => {
   const [place, setPlace] = useState<PlacePopulated | null>(null);
   const { isLoading, withLoading, stopLoading } = useLoading(true);
   const { showError } = useToast();
   useEffect(() => {
     const fetchPlace = async () => {
       try {
-        const url = `${
-          process.env.NEXT_PUBLIC_API_URL
-        }/api/places/${placeId}?enrichSchedule=${enrichSchedule.toString()}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}`;
 
         const response = await axios.get(url);
 
@@ -42,7 +37,7 @@ export const usePlace = (
       setPlace(null);
       stopLoading();
     }
-  }, [placeId, enrichSchedule]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placeId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { place, isLoading };
 };

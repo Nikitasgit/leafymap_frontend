@@ -73,6 +73,10 @@
       "friday": "Vendredi",
       "saturday": "Samedi",
       "sunday": "Dimanche"
-    }
+    },
+    "title": "Horaires d'ouverture",
+    "today": "Aujourd'hui",
+    "open": "Ouvert",
+    "closed": "Fermé"
   }
 }

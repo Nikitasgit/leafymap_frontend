@@ -5,7 +5,6 @@ import { User } from "@/types/user";
 import { Place } from "@/types/place";
 import { SubCategory } from "@/types/categories";
 
-
 export type FormDataChangeHandler = (
   e:
     | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

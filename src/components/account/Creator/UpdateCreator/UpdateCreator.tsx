@@ -11,13 +11,11 @@ import ActivityFormStep from "@/components/account/CreateProfileSteps/ProfileFor
 import useUpdateUser from "@/hooks/useSubmitUser";
 import { defaultSchedule } from "@/utils/createProfile";
 import LoadingBar from "@/components/common/loading/LoadingBar";
-import { usePlace } from "@/hooks/usePlace";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
 import { useToast } from "@/hooks/useToast";
 import PageHeader from "@/components/common/PageHeader";
-
 import styles from "./UpdateCreator.module.scss";
-import { useAuth } from "@/hooks/useAuth";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 const initialUserData = (user: InitialCreatorData): InitialCreatorData => ({
   userType: user.userType || "creator",
@@ -46,20 +44,16 @@ const initialPlaceData = (
 });
 
 const UpdateCreator = () => {
-  const { user, loading: userLoading } = useAuth();
+  const { user, isLoading: userLoading } = useCurrentUser();
   const { submitUser, isLoading: submitUserLoading } = useUpdateUser();
   const { submitPlace, isLoading: submitPlaceLoading } = useSubmitPlace();
-  const { place: placeData, isLoading: placeLoading } = usePlace(
-    user?.places?.[0]?._id || null
-  );
+
   const { showSuccess, showError } = useToast();
   const router = useRouter();
   const [updatedUser, setUpdatedUser] = useState<InitialCreatorData | null>(
     null
   );
-  const [place, setPlace] = useState<InitialPlaceData>(
-    initialPlaceData(placeData)
-  );
+  const [place, setPlace] = useState<InitialPlaceData>(initialPlaceData(null));
 
   const onUserChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -75,12 +69,12 @@ const UpdateCreator = () => {
     try {
       if (updatedUser) {
         await submitUser(updatedUser);
-        if (placeData) {
+        if (user && user.places?.[0]) {
           const dataToSubmit = place.active
             ? place
             : { active: false, placeType: place.placeType };
-          await submitPlace(dataToSubmit, true, placeData?._id);
-        } else if (!placeData && place.active) {
+          await submitPlace(dataToSubmit, true, user.places?.[0]?._id);
+        } else if (!user?.places?.[0] && place.active) {
           await submitPlace(place);
         }
         showSuccess("Profil mis à jour avec succès");
@@ -92,16 +86,21 @@ const UpdateCreator = () => {
   };
 
   const loading =
-    userLoading ||
-    !updatedUser ||
-    submitUserLoading ||
-    submitPlaceLoading ||
-    placeLoading;
+    userLoading || !updatedUser || submitUserLoading || submitPlaceLoading;
 
   useEffect(() => {
-    if (placeData) setPlace(initialPlaceData(placeData));
-    if (user) setUpdatedUser(initialUserData(user));
-  }, [placeData, user]);
+    if (user) {
+      setUpdatedUser(
+        initialUserData({
+          ...user,
+          creatorCategories: user.creatorCategories.map(
+            (category) => category._id
+          ),
+        })
+      );
+      setPlace(initialPlaceData(user.places?.[0] || null));
+    }
+  }, [user]);
 
   return (
     <div className={styles.pageContainer}>
@@ -114,7 +113,7 @@ const UpdateCreator = () => {
             firstStep={true}
             user={updatedUser}
             place={place}
-            initialPlaceLocation={placeData?.location}
+            initialPlaceLocation={place?.location}
             onUserChange={onUserChange}
             onPlaceChange={onPlaceChange}
             onSubmit={handleSubmit}

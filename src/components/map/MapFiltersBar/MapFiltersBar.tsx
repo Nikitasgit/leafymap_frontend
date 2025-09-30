@@ -1,64 +1,33 @@
 "use client";
 
 import { SearchInput } from "@/components/common/inputs/searchInput";
-import styles from "./FiltersBar.module.scss";
+import styles from "./MapFiltersBar.module.scss";
 import { ChevronDown, Filter } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
-import { MapFilters, ExtendedMapRef } from "@/types/map";
 import { useFindPlaces } from "@/hooks/useFindPlaces";
 import { useFindUsers } from "@/hooks/useFindUsers";
 import Button from "@/components/common/buttons/button/Button";
-
-type CreatorSearchResult = {
-  _id: string;
-  name: string;
-  image: string;
-};
-
-type PlaceSearchResult = {
-  _id: string;
-  name: string;
-  image?: string;
-  location: {
-    label: string;
-  };
-  placeCategory: {
-    _id: string;
-    name: string;
-  };
-};
-
-type SearchResult = {
-  id: string;
-  type: "user" | "place" | "filters" | null;
-};
-
-type SearchType = {
-  label: string;
-  placeholder: string;
-};
+import {
+  CreatorSearchResult,
+  PlaceSearchResult,
+  SearchType,
+  MapFiltersBarProps,
+} from "./MapFiltersBar.types";
 
 const searchTypes: SearchType[] = [
   { label: "Membres", placeholder: "Rechercher un membre" },
   { label: "Lieux", placeholder: "Rechercher un lieu" },
 ];
 
-const FiltersBar = ({
+const MapFiltersBar = ({
   mapRef,
   loading: loadingProps,
   filters,
   setFilters,
   handleSelect,
   selectedItem,
-}: {
-  mapRef: React.RefObject<ExtendedMapRef | null>;
-  loading: boolean;
-  filters: MapFilters;
-  setFilters: (filters: MapFilters) => void;
-  handleSelect: (item: SearchResult) => void;
-  selectedItem: SearchResult;
-}) => {
+}: MapFiltersBarProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchType, setSearchType] = useState<SearchType>(searchTypes[0]);
   const [searchValue, setSearchValue] = useState("");
@@ -220,4 +189,4 @@ const FiltersBar = ({
   );
 };
 
-export default FiltersBar;
+export default MapFiltersBar;

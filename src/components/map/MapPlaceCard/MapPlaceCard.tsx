@@ -1,26 +1,21 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
-import Text from "@/components/common/typography/Text";
-import Schedule from "@/components/common/schedule";
-import styles from "./PlaceCardMap.module.scss";
+import MapPlaceCardSchedule from "../MapPlaceCardSchedule";
+import styles from "./MapPlaceCard.module.scss";
 import { MapPin } from "lucide-react";
 import { usePlace } from "@/hooks/usePlace";
 import { useRouter } from "next/navigation";
-import { ExtendedMapRef } from "@/types/map";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
-import ReviewsCounter from "@/components/common/counters/ReviewCounter";
 import CreatorCategoryBadge from "@/components/common/users/creatorCategoryBadge";
 import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
+import { MapPlaceCardProps } from "./MapPlaceCard.types";
+import { capitalizeFirstLetter } from "@/utils/functions";
 
-interface PlaceCardMapProps {
-  placeId: string;
-  mapRef: React.RefObject<ExtendedMapRef | null>;
-}
-
-const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
-  const { place, isLoading } = usePlace(placeId, true);
+const MapPlaceCard = ({ placeId, mapRef }: MapPlaceCardProps) => {
+  const { place, isLoading } = usePlace(placeId);
   const router = useRouter();
+
   useEffect(() => {
     if (mapRef.current && place) {
       navigateToPlaceOnMap({
@@ -47,9 +42,7 @@ const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
                 }
               }}
               src={
-                typeof place?.image === "object" && place?.image?.urls
-                  ? place.image.urls.medium
-                  : "/images/default-event.png"
+                place?.image?.urls.medium || "https://i.pravatar.cc/40?img=3"
               }
               alt={place?.name || "Place image"}
               width={100}
@@ -59,7 +52,9 @@ const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
         </div>
         <div className={styles.header}>
           <div className={styles.headerMain}>
-            <h2 className={styles.title}>{place?.name}</h2>
+            <h2 className={styles.title}>
+              {capitalizeFirstLetter(place?.name)}
+            </h2>
             <div className={styles.categoryRow}>
               {place?.isCreatorPlace ? (
                 <CreatorCategoryBadge
@@ -70,31 +65,34 @@ const PlaceCardMap = ({ placeId, mapRef }: PlaceCardMapProps) => {
                   categoryName={place?.placeCategory?.name || ""}
                 />
               )}
-              <ReviewsCounter rating={place?.rating || 0} />
             </div>
           </div>
           <div className={styles.buttons}>
             <div className={styles.buttonGroup}>
-              <Button variant="secondary">Itinéraire</Button>
-              <Button variant="primary">Favoris</Button>
+              <Button ariaLabel="Itinéraire" variant="secondary">
+                Itinéraire
+              </Button>
+              <Button ariaLabel="Favoris" variant="primary">
+                Favoris
+              </Button>
             </div>
           </div>
           <div className={styles.addressRow}>
             <span className={styles.addressIcon}>
               <MapPin size={14} />
             </span>
-            <Text className={styles.address}>{place?.location?.label}</Text>
+            <p className={styles.address}>{place?.location?.label}</p>
           </div>
         </div>
         <div className={styles.descriptionRow}>
-          <Text>{place?.description}</Text>
+          <p>{capitalizeFirstLetter(place?.description)}</p>
         </div>
         {place?.defaultSchedule && (
-          <Schedule schedule={place?.defaultSchedule} />
+          <MapPlaceCardSchedule schedule={place?.defaultSchedule} />
         )}
       </div>
     </div>
   );
 };
 
-export default PlaceCardMap;
+export default MapPlaceCard;

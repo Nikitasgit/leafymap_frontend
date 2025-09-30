@@ -1,23 +1,17 @@
-import { ExtendedMapRef, MapFilters } from "@/types/map";
 import React, { useEffect, useState } from "react";
-import PlaceCardMap from "../placeCardMap/PlaceCardMap";
-import FiltersCardMap from "../filtersCardMap/FiltersCardMap";
-import UserCardMap from "../userCardMap/UserCardMap";
-import styles from "./CardMapContainer.module.scss";
+import MapPlaceCard from "../MapPlaceCard";
+import MapFiltersCard from "../MapFiltersCard";
+import MapCreatorCard from "../MapCreatorCard";
+import styles from "./MapCardContainer.module.scss";
+import { MapCardContainerProps } from "./MapCardContainer.types";
 
-const CardMapContainer = ({
+const MapCardContainer = ({
   selectedItem,
   mapRef,
   filters,
   setFilters,
   onResetFilters,
-}: {
-  selectedItem: { id: string; type: "place" | "user" | "filters" | null };
-  mapRef: React.RefObject<ExtendedMapRef | null>;
-  filters: MapFilters;
-  setFilters: (filters: MapFilters) => void;
-  onResetFilters: () => void;
-}) => {
+}: MapCardContainerProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleCollapse = () => {
@@ -43,13 +37,13 @@ const CardMapContainer = ({
 
       <div className={styles.cardContent}>
         {selectedItem.type === "place" && (
-          <PlaceCardMap placeId={selectedItem.id} mapRef={mapRef} />
+          <MapPlaceCard placeId={selectedItem.id} mapRef={mapRef} />
         )}
         {selectedItem.type === "user" && (
-          <UserCardMap userId={selectedItem.id} mapRef={mapRef} />
+          <MapCreatorCard userId={selectedItem.id} mapRef={mapRef} />
         )}
         {selectedItem.type === "filters" && (
-          <FiltersCardMap
+          <MapFiltersCard
             filters={filters}
             onFiltersChange={setFilters}
             onResetFilters={onResetFilters}
@@ -60,4 +54,4 @@ const CardMapContainer = ({
   );
 };
 
-export default CardMapContainer;
+export default MapCardContainer;

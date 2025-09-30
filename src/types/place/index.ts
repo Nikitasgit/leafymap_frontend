@@ -1,6 +1,6 @@
 import { BaseEntity, ContactInfo, Location } from "../common";
 import { PlaceCategory, SubCategory } from "../categories";
-import { User } from "../user";
+import { User, UserPopulated } from "../user";
 import { Image } from "../image";
 import { DefaultSchedule } from "./schedule";
 import { PlaceType } from "./placeCaterories";
@@ -24,6 +24,6 @@ export interface Place extends BaseEntity, ContactInfo {
 
 export interface PlacePopulated extends Place {
   image: Image;
-  user: User;
+  user: UserPopulated;
   placeCategory: PlaceCategory;
 }

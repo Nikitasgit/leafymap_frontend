@@ -30,7 +30,7 @@ export const useCurrentUser = () => {
     };
 
     withLoading(fetchCurrentUser);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { user, isLoading };
 };

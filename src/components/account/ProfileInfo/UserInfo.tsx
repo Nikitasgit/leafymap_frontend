@@ -40,7 +40,7 @@ const UserInfo = ({
           <CategorySelectorInput
             onUserChange={onUserChange}
             onPlaceChange={onPlaceChange}
-            value={user.creatorCategories.map((category) => category._id)}
+            value={user.creatorCategories[0] as string}
             error={!!errors.creatorCategories}
             errorMessage={errors.creatorCategories}
           />

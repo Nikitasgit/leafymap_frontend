@@ -1,5 +1,4 @@
 import React from "react";
-import Text from "@/components/common/typography/Text";
 import AccountEventCard from "@/components/account/AccountEventCard";
 import { Event } from "@/types/place/event";
 import styles from "./AccountEventsList.module.scss";
@@ -18,9 +17,9 @@ const EventsList: React.FC<EventsListProps> = ({
 }) => {
   return (
     <section className={styles.content}>
-      <Text as="h2" className={styles.placeName}>
+      <h2 className={styles.placeName}>
         Les événements de <span>{placeName}</span> :
-      </Text>
+      </h2>
       {events.length === 0 ? (
         <EmptyState
           title="Aucun événement"

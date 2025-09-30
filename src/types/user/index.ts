@@ -22,12 +22,13 @@ export interface User extends BaseEntity {
   places?: Place[];
   _id: string;
   creatorName: string;
-  creatorCategories: SubCategory[];
+  creatorCategories: string[] | SubCategory[];
 }
 
 export interface UserPopulated extends User {
   places?: PlacePopulated[];
   image?: Image;
+  creatorCategories: SubCategory[];
 }
 
 export interface Organizer extends User {

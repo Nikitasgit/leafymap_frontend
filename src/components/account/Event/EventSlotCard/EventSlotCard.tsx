@@ -1,7 +1,6 @@
 import { EventTimeSlot } from "@/types/place/schedule";
 import styles from "./EventSlotCard.module.scss";
 import React from "react";
-import Text from "@/components/common/typography/Text";
 import { Edit, Trash2 } from "lucide-react";
 
 const EventSlotCard = ({
@@ -17,23 +16,23 @@ const EventSlotCard = ({
     <div className={styles.timeSlotItem}>
       <div className={styles.timeSlotInfoContainer}>
         <div className={styles.timeSlotInfo}>
-          <Text className={styles.timeSlotTitle}>{slot.title}</Text>
+          <p className={styles.timeSlotTitle}>{slot.title}</p>
           <div className={styles.timeSlotTime}>
-            <Text className={styles.timeRange}>
+            <p className={styles.timeRange}>
               {slot.startTime} - {slot.endTime}
-            </Text>
+            </p>
           </div>
         </div>
 
         <div className={styles.participantsContainer}>
-          <Text className={styles.participantsLabel}>Participants</Text>
-          <Text className={styles.participantsList}>
+          <p className={styles.participantsLabel}>Participants</p>
+          <p className={styles.participantsList}>
             {slot.collaborators?.length > 0
               ? slot.collaborators
                   .map((collaborator) => collaborator.name)
                   .join(", ")
               : "Aucun collaborateur ajouté"}
-          </Text>
+          </p>
         </div>
       </div>
       <div className={styles.actionsContainer}>

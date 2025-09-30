@@ -18,7 +18,7 @@ const CategorySelectorInput = ({
 }: {
   onUserChange: FormDataChangeHandler;
   onPlaceChange: FormDataChangeHandler;
-  value: string[];
+  value: string;
   error?: boolean;
   errorMessage?: string;
 }) => {
@@ -55,24 +55,18 @@ const CategorySelectorInput = ({
   };
 
   useEffect(() => {
-    if (value && value.length > 0) {
-      const categoryId = value[0];
+    if (value) {
+      const categoryId = value;
       if (categoryId) {
         const subCategory = creatorCategories.find(
           (cat) => cat._id === categoryId
         );
         if (subCategory) {
           setInputValue(subCategory.name);
-          onPlaceChange({
-            target: {
-              name: "placeType",
-              value: [subCategory.category.name],
-            },
-          });
         }
       }
     }
-  }, [value, creatorCategories, onPlaceChange]);
+  }, [value, creatorCategories]);
 
   if (appError) {
     showError(appError);
@@ -106,7 +100,7 @@ const CategorySelectorInput = ({
                   className={styles.item}
                   onClick={() => handleSelect(sub)}
                   role="option"
-                  aria-selected={value.includes(sub._id)}
+                  aria-selected={value === sub._id}
                 >
                   {t(`creatorCategories.${sub.name}`)}
                 </button>

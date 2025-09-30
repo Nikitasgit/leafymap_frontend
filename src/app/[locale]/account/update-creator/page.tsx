@@ -5,7 +5,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Modifier votre profil créateur | SpotLight",
   description:
-    "Mettez à jour votre profil créateur sur SpotLight : description, catégories, photos et informations de contact. Valorisez votre activité et attirez de nouveaux partenaires et visiteurs.",
+    "Mettez à jour vos informations de profil créateur, vos catégories d'activité et les détails de votre lieu sur InnovaStay.",
 };
 
 const ModifyCreator = () => {

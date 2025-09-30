@@ -1,18 +1,12 @@
-import React from "react";
-import Text from "@/components/common/typography/Text";
 import { Tag } from "lucide-react";
 import { useAppSelector } from "@/store";
 import { selectPlaceCategories } from "@/store/appSlice";
 import PlaceCategoryIcon from "@/components/common/icons/PlaceCategoryIcon/PlaceCategoryIcon";
-import styles from "./CategoryFilter.module.scss";
+import styles from "./PlaceCategoryFilter.module.scss";
 import { useTranslation } from "react-i18next";
+import { PlaceCategoryFilterProps } from "./PlaceCategoryFilter.types";
 
-interface CategoryFilterProps {
-  selectedCategories: string[];
-  onCategoryChange: (categories: string[]) => void;
-}
-
-const CategoryFilter: React.FC<CategoryFilterProps> = ({
+const PlaceCategoryFilter: React.FC<PlaceCategoryFilterProps> = ({
   selectedCategories,
   onCategoryChange,
 }) => {
@@ -29,7 +23,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
     <div className={styles.categoryFilter}>
       <div className={styles.header}>
         <Tag size={16} />
-        <Text className={styles.title}>{t("categories")}</Text>
+        <p className={styles.title}>{t("categories")}</p>
       </div>
       <ul className={styles.categoriesList}>
         {placeCategories.map((category) => {
@@ -46,13 +40,13 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
                 categoryName={category.name}
                 variant={isSelected ? "primary" : "grey"}
               />
-              <Text
+              <p
                 className={
                   isSelected ? styles.selectedText : styles.unselectedText
                 }
               >
                 {t(`placeCategories.${category.name.toLowerCase()}`)}
-              </Text>
+              </p>
             </li>
           );
         })}
@@ -61,4 +55,4 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
   );
 };
 
-export default CategoryFilter;
+export default PlaceCategoryFilter;

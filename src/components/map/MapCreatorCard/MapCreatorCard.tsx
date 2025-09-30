@@ -1,10 +1,9 @@
 import React from "react";
 import Image from "next/image";
 import Button from "@/components/common/buttons/button/Button";
-import Text from "@/components/common/typography/Text";
-import styles from "./UserCardMap.module.scss";
+
+import styles from "./MapCreatorCard.module.scss";
 import { Map, SquareArrowOutUpRight } from "lucide-react";
-import { ExtendedMapRef } from "@/types/map";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
 import { useRouter } from "next/navigation";
 import LoadingBar from "@/components/common/loading/LoadingBar";
@@ -13,13 +12,9 @@ import { useUser } from "@/hooks/useUser";
 import { Calendar } from "lucide-react";
 import { getEventDisplayInfo } from "@/utils/eventDates";
 import CreatorCategoryBadge from "@/components/common/users/creatorCategoryBadge";
+import { MapCreatorCardProps } from "./MapCreatorCard.types";
 
-interface UserCardMapProps {
-  userId: string;
-  mapRef?: React.RefObject<ExtendedMapRef | null>;
-}
-
-const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
+const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
   const router = useRouter();
 
   const { user, isLoading: isLoadingUser } = useUser(userId);
@@ -68,7 +63,7 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
             className={styles.creatorImage}
           />
           <div className={styles.creatorText}>
-            <Text as="h3">{user.creatorName}</Text>
+            <h3>{user.creatorName}</h3>
             <CreatorCategoryBadge
               categoryName={user.creatorCategories[0].name}
             />
@@ -90,9 +85,9 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
       <div className={styles.placesAndEventsSection}>
         {eventPartnerships && eventPartnerships.length > 0 && (
           <div className={styles.section}>
-            <Text className={styles.sectionTitle}>
+            <p className={styles.sectionTitle}>
               Evenements en cours et à venir ({eventPartnerships.length}):
-            </Text>
+            </p>
             {eventPartnerships.map((partnership) => {
               const event =
                 typeof partnership.event === "object"
@@ -121,17 +116,15 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
                       />
                     </div>
                     <div className={styles.cardText}>
-                      <Text as="h5">{event.name}</Text>
+                      <h5>{event.name}</h5>
                       <div className={styles.scheduleItem}>
                         <Calendar size={12} />
-                        <Text as="p" className={styles.scheduleText}>
+                        <p className={styles.scheduleText}>
                           {eventDisplayInfo.formattedDateRange}
-                        </Text>
+                        </p>
                       </div>
 
-                      <Text className={styles.description}>
-                        {event.description}
-                      </Text>
+                      <p className={styles.description}>{event.description}</p>
                       <Button
                         className={styles.eventLocationButton}
                         variant="simple"
@@ -155,9 +148,9 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
           </div>
         )}
         <div className={styles.section}>
-          <Text className={styles.sectionTitle}>
+          <p className={styles.sectionTitle}>
             Lieux partenaires ({placePartnerships.length})
-          </Text>
+          </p>
 
           {placePartnerships.map((partnership) => {
             const place =
@@ -182,10 +175,10 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
                     />
                   </div>
                   <div className={styles.cardText}>
-                    <Text as="h5">{place.name}</Text>
-                    <Text as="p" className={styles.locationText}>
+                    <h5>{place.name}</h5>
+                    <p className={styles.locationText}>
                       {place.location?.label}
-                    </Text>
+                    </p>
                   </div>
                 </div>
                 <Button
@@ -203,4 +196,4 @@ const UserCardMap = ({ userId, mapRef }: UserCardMapProps) => {
     </div>
   );
 };
-export default UserCardMap;
+export default MapCreatorCard;

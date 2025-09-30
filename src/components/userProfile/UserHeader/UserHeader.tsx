@@ -2,14 +2,14 @@ import { Users, MapPin } from "lucide-react";
 import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader";
 import Button from "@/components/common/buttons/button/Button";
 import { Image as ImageType } from "@/types/image";
-import { User } from "@/types/user";
+import { UserPopulated } from "@/types/user";
 import styles from "./UserHeader.module.scss";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter";
 import CreatorCategoryBadge from "@/components/common/users/creatorCategoryBadge";
 import BackButton from "@/components/common/buttons/BackButton";
 
 interface UserHeaderProps {
-  user: User;
+  user: UserPopulated;
   onFollow: () => void;
 }
 

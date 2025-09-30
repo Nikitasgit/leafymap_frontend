@@ -1,25 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Button from "@/components/common/buttons/button/Button";
-import Text from "@/components/common/typography/Text";
-import styles from "./FiltersCardMap.module.scss";
+import styles from "./MapFiltersCard.module.scss";
 import { RotateCcw } from "lucide-react";
-import CategoryFilter from "./categoryFilter/CategoryFilter";
+import PlaceCategoryFilter from "../PlaceCategoryFilter";
 import { MapFilters } from "@/types/map";
 import { useTranslation } from "react-i18next";
+import { MapFiltersCardProps } from "./MapFiltersCard.types";
 
-interface FiltersCardMapProps {
-  onResetFilters?: () => void;
-  onFiltersChange?: (filters: MapFilters) => void;
-  onApplyFilters?: (filters: MapFilters) => void;
-  filters: MapFilters;
-}
-
-const FiltersCardMap = ({
+const MapFiltersCard = ({
   onFiltersChange,
   onApplyFilters,
   filters,
   onResetFilters,
-}: FiltersCardMapProps) => {
+}: MapFiltersCardProps) => {
   const [localFilters, setLocalFilters] = useState<MapFilters>(filters);
   const { t } = useTranslation("common");
   useEffect(() => {
@@ -55,12 +48,12 @@ const FiltersCardMap = ({
   return (
     <div className={styles.filtersCardMap}>
       <div className={styles.header}>
-        <Text as="h3" className={styles.title}>
+        <h3 className={styles.title}>
           {t("filters")}
-        </Text>
+        </h3>
       </div>
       <div className={styles.content}>
-        <CategoryFilter
+        <PlaceCategoryFilter
           selectedCategories={localFilters.placeCategories}
           onCategoryChange={handleCategoryChange}
         />
@@ -71,15 +64,15 @@ const FiltersCardMap = ({
           onClick={handleResetFilters}
           fullWidth
         >
-          <Text>Réinitialiser les filtres</Text>
+          <p>Réinitialiser les filtres</p>
         </Button>
 
         <Button fullWidth onClick={handleApplyFilters}>
-          <Text>Appliquer les filtres</Text>
+          <p>Appliquer les filtres</p>
         </Button>
       </div>
     </div>
   );
 };
 
-export default FiltersCardMap;
+export default MapFiltersCard;
