@@ -10,7 +10,6 @@ import {
 import ActivityFormStep from "@/components/account/CreateProfileSteps/ProfileFormStep";
 import useUpdateUser from "@/hooks/useSubmitUser";
 import { defaultSchedule } from "@/utils/createProfile";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { usePlace } from "@/hooks/usePlace";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
@@ -18,6 +17,7 @@ import { useToast } from "@/hooks/useToast";
 import PageHeader from "@/components/common/PageHeader";
 
 import styles from "./UpdateCreator.module.scss";
+import { useAuth } from "@/hooks/useAuth";
 
 const initialUserData = (user: InitialCreatorData): InitialCreatorData => ({
   userType: user.userType || "creator",
@@ -46,7 +46,7 @@ const initialPlaceData = (
 });
 
 const UpdateCreator = () => {
-  const { user, isLoading: userLoading } = useCurrentUser();
+  const { user, loading: userLoading } = useAuth();
   const { submitUser, isLoading: submitUserLoading } = useUpdateUser();
   const { submitPlace, isLoading: submitPlaceLoading } = useSubmitPlace();
   const { place: placeData, isLoading: placeLoading } = usePlace(

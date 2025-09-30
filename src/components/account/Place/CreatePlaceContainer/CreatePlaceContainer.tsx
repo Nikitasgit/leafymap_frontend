@@ -7,7 +7,6 @@ import { PlaceContactForm } from "@/components/account/ContactForm";
 import PlaceForm from "@/components/account/Place/PlaceForm";
 import PlaceInfos from "../../ProfileInfo/PlaceInfo";
 import PartnershipsForm from "../../Partnership/PartnershipsForm";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useToast } from "@/hooks/useToast";
 import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
@@ -23,6 +22,7 @@ import {
 import styles from "./CreatePlaceContainer.module.scss";
 import { CreatePlaceContainerErrors } from "./CreatePlaceContainer.types";
 import PageHeader from "@/components/common/PageHeader";
+import { useAuth } from "@/hooks/useAuth";
 
 const initialPlaceData = (user: Partial<User> | null): InitialPlaceData => ({
   name: "",
@@ -40,7 +40,7 @@ const CreatePlaceForm = () => {
   const [errors, setErrors] = useState<CreatePlaceContainerErrors>({
     place: {},
   });
-  const { user, isLoading: userLoading } = useCurrentUser();
+  const { user, loading: userLoading } = useAuth();
   const { submitPartnerships, isLoading: submitPartnershipsLoading } =
     useSubmitPartnerships();
   const { submitPlace, isLoading: submitPlaceLoading } = useSubmitPlace();

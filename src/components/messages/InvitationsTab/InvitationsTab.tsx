@@ -2,17 +2,18 @@
 
 import React from "react";
 import { Handshake } from "lucide-react";
-import Text from "@/components/common/typography/Text";
 import PartnershipMessage from "@/components/messages/PartnershipMessage";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { Partnership, PartnershipPopulated } from "@/types/partnerships";
 import { UserPopulated } from "@/types/user";
 import styles from "./InvitationsTab.module.scss";
+import EmptyState from "@/components/common/noResults/emptyState";
 
 interface InvitationsTabProps {
   partnerships: PartnershipPopulated[];
   currentUser: UserPopulated;
   isLoading: boolean;
+  pendingPartnerships: PartnershipPopulated[];
   onStatusChange: (
     partnerships: Partnership[],
     isUpdate: boolean,
@@ -26,14 +27,12 @@ export default function InvitationsTab({
   currentUser,
   isLoading,
   onStatusChange,
+  pendingPartnerships,
 }: InvitationsTabProps) {
   if (isLoading) {
     return <LoadingBar />;
   }
 
-  const pendingPartnerships = partnerships.filter(
-    (p) => p.status === "pending" && !p.deleted
-  );
   const acceptedPartnerships = partnerships.filter(
     (p) => p.status === "accepted" && !p.deleted
   );
@@ -45,9 +44,9 @@ export default function InvitationsTab({
     <div className={styles.content}>
       {pendingPartnerships.length > 0 && (
         <section className={styles.section}>
-          <Text as="h2" className={styles.sectionTitle}>
-            Pending Partnerships ({pendingPartnerships.length})
-          </Text>
+          <h2 className={styles.sectionTitle}>
+            Invitations en attente ({pendingPartnerships.length})
+          </h2>
           <div className={styles.partnershipsList}>
             {pendingPartnerships.map((partnership) => (
               <PartnershipMessage
@@ -64,9 +63,9 @@ export default function InvitationsTab({
 
       {acceptedPartnerships.length > 0 && (
         <section className={styles.section}>
-          <Text as="h2" className={styles.sectionTitle}>
+          <h2 className={styles.sectionTitle}>
             Invitations acceptées ({acceptedPartnerships.length})
-          </Text>
+          </h2>
           <div className={styles.partnershipsList}>
             {acceptedPartnerships.map((partnership) => (
               <PartnershipMessage
@@ -83,9 +82,9 @@ export default function InvitationsTab({
 
       {refusedPartnerships.length > 0 && (
         <section className={styles.section}>
-          <Text as="h2" className={styles.sectionTitle}>
+          <h2 className={styles.sectionTitle}>
             Invitations refusées ({refusedPartnerships.length})
-          </Text>
+          </h2>
           <div className={styles.partnershipsList}>
             {refusedPartnerships.map((partnership) => (
               <PartnershipMessage
@@ -101,17 +100,11 @@ export default function InvitationsTab({
       )}
 
       {partnerships.length === 0 && (
-        <div className={styles.emptyState}>
-          <Handshake size={64} className={styles.emptyIcon} />
-          <Text as="h2" className={styles.emptyTitle}>
-            Aucune invitation de partenariat
-          </Text>
-          <Text as="p" className={styles.emptyDescription}>
-            Vous n&apos;avez aucune invitation de partenariat. Lorsque les
-            organisateurs vous envoient des demandes de partenariat, elles
-            apparaîtront ici.
-          </Text>
-        </div>
+        <EmptyState
+          title="Aucune invitation"
+          description="Vous n'avez pas d'invitations, lorsque les organisateurs vous envoient des demandes de partenariat, elles apparaîtront ici."
+          icon={<Handshake size={64} />}
+        />
       )}
     </div>
   );

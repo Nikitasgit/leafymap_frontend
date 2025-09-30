@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Text from "@/components/common/typography/Text";
 import styles from "./PartnershipCard.module.scss";
 import CreatorCategoryBadge from "../../common/users/creatorCategoryBadge";
 import { PartnershipCardProps } from "./PartnershipCard.types";
@@ -29,9 +28,9 @@ const PartnershipCard: React.FC<PartnershipCardProps> = ({
       />
 
       <div className={styles.creatorInfo}>
-        <Text as="p" className={styles.creatorName}>
+        <p className={styles.creatorName}>
           {creator.name || "Createur"}
-        </Text>
+        </p>
 
         {showCategory && creator.categories?.[0] && (
           <CreatorCategoryBadge categoryName={creator.categories[0].name} />

@@ -71,7 +71,7 @@ const PlaceProfileContainer: React.FC = () => {
 
   const tabs = [
     { id: "gallery", label: "Galerie", icon: ImageIcon },
-    { id: "partnerships", label: "Créateurs partenaires", icon: Users },
+    { id: "partnerships", label: "Partenaires", icon: Users },
     { id: "events", label: "Événements", icon: Calendar },
   ];
 
@@ -113,20 +113,22 @@ const PlaceProfileContainer: React.FC = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <PlaceHeader place={place} onFollow={handleFollow} />
-      <TabsContainer>
-        {tabs.map((tab) => (
-          <Tab
-            key={tab.id}
-            id={tab.id}
-            label={tab.label}
-            icon={tab.icon}
-            isActive={activeTab === tab.id}
-            onClick={handleTabClick}
-          />
-        ))}
-      </TabsContainer>
-      {renderTabContent()}
+      <div className={styles.container}>
+        <PlaceHeader place={place} onFollow={handleFollow} />
+        <TabsContainer>
+          {tabs.map((tab) => (
+            <Tab
+              key={tab.id}
+              id={tab.id}
+              label={tab.label}
+              icon={tab.icon}
+              isActive={activeTab === tab.id}
+              onClick={handleTabClick}
+            />
+          ))}
+        </TabsContainer>
+        {renderTabContent()}
+      </div>
     </div>
   );
 };

@@ -4,6 +4,16 @@
 
 .pageContainer {
   background: linear-gradient(135deg, $grey-50 0%, $white 100%);
+  @include respond-to(sm) {
+    .container {
+      border-radius: 8px;
+    }
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: $white;
+  }
   @include respond-to(md) {
     padding: spacing(4);
   }

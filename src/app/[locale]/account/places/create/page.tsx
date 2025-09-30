@@ -1,4 +1,5 @@
 import CreatePlaceForm from "@/components/account/Place/CreatePlaceContainer";
+import ProtectedRoute from "@/components/common/ProtectedRoute";
 
 import { Metadata } from "next";
 
@@ -9,7 +10,11 @@ export const metadata: Metadata = {
 };
 
 const CreatePlacePage = () => {
-  return <CreatePlaceForm />;
+  return (
+    <ProtectedRoute allowedUserTypes={["organizer"]} redirectTo="/account">
+      <CreatePlaceForm />
+    </ProtectedRoute>
+  );
 };
 
 export default CreatePlacePage;

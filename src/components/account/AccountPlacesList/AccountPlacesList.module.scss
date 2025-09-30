@@ -5,4 +5,8 @@
 .container {
   @include flex(column, flex-start, stretch, spacing(2.5));
   width: 100%;
+  .placesGrid {
+    @include flex(column, flex-start, stretch, spacing(1.5));
+    width: 100%;
+  }
 }

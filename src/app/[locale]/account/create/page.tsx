@@ -1,4 +1,5 @@
 import CreateProfileStepper from "@/components/account/CreateProfileStepper";
+import ProtectedRoute from "@/components/common/ProtectedRoute";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,6 +10,10 @@ export const metadata: Metadata = {
 };
 
 const CreateProfilePage = () => {
-  return <CreateProfileStepper />;
+  return (
+    <ProtectedRoute allowedUserTypes={["guest"]} redirectTo="/account">
+      <CreateProfileStepper />
+    </ProtectedRoute>
+  );
 };
 export default CreateProfilePage;

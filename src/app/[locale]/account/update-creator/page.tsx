@@ -1,4 +1,5 @@
 import { UpdateCreator } from "@/components/account/Creator/UpdateCreator";
+import ProtectedRoute from "@/components/common/ProtectedRoute";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,7 +9,11 @@ export const metadata: Metadata = {
 };
 
 const ModifyCreator = () => {
-  return <UpdateCreator />;
+  return (
+    <ProtectedRoute allowedUserTypes={["creator"]} redirectTo="/account">
+      <UpdateCreator />
+    </ProtectedRoute>
+  );
 };
 
 export default ModifyCreator;

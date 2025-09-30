@@ -18,6 +18,18 @@
   &:hover {
     color: $grey-700;
   }
+  .notification {
+    position: absolute;
+    @include flex(row, center, center, 0);
+    top: 7px;
+    right: 7px;
+    background: $primary-color;
+    color: $white;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    font-size: rem(10);
+  }
   @include respond-to(sm) {
     @include flex(row, flex-start, center, spacing(1));
     flex: none;

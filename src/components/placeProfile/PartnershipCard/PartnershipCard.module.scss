@@ -6,23 +6,53 @@
   cursor: pointer;
   background: $white;
   border: 1px solid $grey-200;
-  border-radius: 12px;
-  padding: spacing(0.5);
-  @include flex(row, center, center, spacing(1.25));
-  width: fit-content;
+  border-radius: rem(8);
+  padding: spacing(1);
+  @include flex(row, flex-start, center, spacing(1));
+  width: 100%;
+  min-width: 0;
   .avatar {
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid $grey-100;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
   }
   .creatorInfo {
+    @include flex(column, flex-start, stretch, spacing(0.5));
+    flex: 1;
     min-width: 0;
-    @include flex(row, space-between, center, spacing(0.75));
     .creatorName {
-      font-size: rem(14);
+      font-size: rem(13);
       font-weight: 600;
-      text-align: left;
       color: $grey-700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  @include respond-to(sm) {
+    border-radius: rem(10);
+    padding: spacing(1.25);
+    gap: spacing(1.25);
+    .avatar {
+      width: 36px;
+      height: 36px;
+    }
+    .creatorInfo {
+      gap: spacing(0.5);
+      .creatorName {
+        font-size: rem(14);
+      }
+    }
+  }
+  @include respond-to(md) {
+    border-radius: rem(12);
+    padding: spacing(1.5);
+    .avatar {
+      width: 40px;
+      height: 40px;
     }
   }
 }

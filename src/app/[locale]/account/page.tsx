@@ -1,5 +1,13 @@
 import AccountContainer from "@/components/account/AccountContainer";
+import ProtectedRoute from "@/components/common/ProtectedRoute";
 
 export default function AccountPage() {
-  return <AccountContainer />;
+  return (
+    <ProtectedRoute
+      allowedUserTypes={["guest", "creator", "organizer"]}
+      redirectTo="/"
+    >
+      <AccountContainer />
+    </ProtectedRoute>
+  );
 }

@@ -7,7 +7,6 @@ import {
   InitialCreatorData,
   InitialPlaceData,
 } from "./CreateProfileStepper.types";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { defaultSchedule } from "@/utils/createProfile";
 import styles from "./CreateProfileStepper.module.scss";
 import useSubmitUser from "@/hooks/useSubmitUser";
@@ -18,6 +17,9 @@ import { Partnership } from "@/types/partnerships";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
 import PageHeader from "@/components/common/PageHeader";
+import LoadingBar from "@/components/common/loading/LoadingBar";
+import ProtectedRoute from "@/components/common/ProtectedRoute";
+import { useAuth } from "@/hooks/useAuth";
 
 const initialUserData = (user: Partial<User> | null): InitialCreatorData => ({
   userType: "guest",
@@ -43,7 +45,7 @@ const initialPlaceData = (user: Partial<User> | null): InitialPlaceData => ({
 const CreateProfileStepper = () => {
   const router = useRouter();
   const { showSuccess, showError } = useToast();
-  const { user, isLoading: userLoading } = useCurrentUser();
+  const { user, loading: userLoading } = useAuth();
   const { submitUser, isLoading: submitUserLoading } = useSubmitUser();
   const { submitPlace, isLoading: submitPlaceLoading } = useSubmitPlace();
   const { submitPartnerships, isLoading: submitPartnershipsLoading } =
@@ -57,22 +59,17 @@ const CreateProfileStepper = () => {
   );
 
   useEffect(() => {
-    if (user) {
-      if (user.userType !== "guest") {
-        router.push("/account");
-      } else {
-        setNewUser(initialUserData(user));
-        setPlace(initialPlaceData(user));
-      }
+    if (user && user.userType === "guest") {
+      setNewUser(initialUserData(user));
+      setPlace(initialPlaceData(user));
     }
-  }, [user, router]);
+  }, [user]);
 
   const loading =
     userLoading ||
     submitUserLoading ||
     submitPlaceLoading ||
-    submitPartnershipsLoading ||
-    !user;
+    submitPartnershipsLoading;
 
   const handleSubmit = async () => {
     try {
@@ -111,38 +108,44 @@ const CreateProfileStepper = () => {
     }
   };
   return (
-    <div className={styles.pageContainer}>
-      <section className={styles.container}>
-        <PageHeader
-          title="Créer votre profil"
-          showBackButton
-          subtitle={`Étape ${step} sur 2`}
-        />
+    <ProtectedRoute
+      allowedUserTypes={["guest"]}
+      redirectTo="/account"
+      fallback={<LoadingBar />}
+    >
+      <div className={styles.pageContainer}>
+        <section className={styles.container}>
+          <PageHeader
+            title="Créer votre profil"
+            showBackButton
+            subtitle={`Étape ${step} sur 2`}
+          />
 
-        <>
-          {step === 1 && (
-            <UserTypeStep
-              loading={loading}
-              userType={newUser.userType}
-              onChange={onUserChange}
-              onNext={handleNext}
-            />
-          )}
-          {step === 2 && (
-            <ProfileFormStep
-              place={place}
-              user={newUser}
-              partnerships={partnerships}
-              onPartnershipsChange={setPartnerships}
-              onPlaceChange={onPlaceChange}
-              onUserChange={onUserChange}
-              onSubmit={handleSubmit}
-              onBack={handleBack}
-            />
-          )}
-        </>
-      </section>
-    </div>
+          <>
+            {step === 1 && (
+              <UserTypeStep
+                loading={loading}
+                userType={newUser.userType}
+                onChange={onUserChange}
+                onNext={handleNext}
+              />
+            )}
+            {step === 2 && (
+              <ProfileFormStep
+                place={place}
+                user={newUser}
+                partnerships={partnerships}
+                onPartnershipsChange={setPartnerships}
+                onPlaceChange={onPlaceChange}
+                onUserChange={onUserChange}
+                onSubmit={handleSubmit}
+                onBack={handleBack}
+              />
+            )}
+          </>
+        </section>
+      </div>
+    </ProtectedRoute>
   );
 };
 

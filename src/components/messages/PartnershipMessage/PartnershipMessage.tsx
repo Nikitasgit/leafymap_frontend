@@ -7,13 +7,9 @@ import Button from "@/components/common/buttons/button/Button";
 import { Check, X } from "lucide-react";
 import styles from "./PartnershipMessage.module.scss";
 import { Partnership, PartnershipPopulated } from "@/types/partnerships";
-import {
-  getEventDateRange,
-  getEventStatusFromSchedule,
-} from "@/utils/eventDates";
-import { format } from "date-fns";
-import Text from "../common/typography/Text";
-import { fr } from "date-fns/locale";
+import { getEventDisplayInfo } from "@/utils/eventDates";
+import EventStatus from "@/components/common/eventStatus/EventStatus";
+import { capitalizeFirstLetter } from "@/utils/functions";
 
 interface PartnershipMessageProps {
   partnership: PartnershipPopulated;
@@ -32,30 +28,9 @@ export default function PartnershipMessage({
   onStatusChange,
   isLoading = false,
 }: PartnershipMessageProps) {
-  const getEventStatus = (status: string) => {
-    switch (status) {
-      case "upcoming":
-        return { label: "À venir", color: "upcoming" };
-      case "ongoing":
-        return { label: "En cours", color: "ongoing" };
-      case "completed":
-        return { label: "Terminé", color: "completed" };
-      case "cancelled":
-        return { label: "Annulé", color: "cancelled" };
-      case "full":
-        return { label: "Complet", color: "full" };
-      case "unvalid":
-        return { label: "Dates invalides", color: "unvalid" };
-      default:
-        return { label: "À venir", color: "upcoming" };
-    }
-  };
-
-  const eventStatus = ["cancelled", "full"].includes(partnership.event?.status)
-    ? partnership.event.status
-    : getEventStatusFromSchedule(partnership.event?.schedule || []);
-  const statusDisplay = getEventStatus(eventStatus);
-  const dateRange = getEventDateRange(partnership.event?.schedule || []);
+  const eventDisplayInfo = getEventDisplayInfo(
+    partnership.event?.schedule || []
+  );
 
   return (
     <div className={styles.partnershipCard}>
@@ -71,7 +46,9 @@ export default function PartnershipMessage({
         </div>
         <div className={styles.placeInfo}>
           <div className={styles.placeDetails}>
-            <span className={styles.placeName}>{partnership.place.name}</span>
+            <span className={styles.placeName}>
+              {capitalizeFirstLetter(partnership.place.name)}
+            </span>
             <span className={styles.placeAddress}>
               {partnership.place.location?.label}
             </span>
@@ -84,9 +61,9 @@ export default function PartnershipMessage({
             <div className={styles.eventDetails}>
               <span className={styles.eventLabel}>Événement</span>
               <span className={styles.eventName}>
-                {partnership.event?.name}
+                {capitalizeFirstLetter(partnership.event?.name)}
               </span>
-              {dateRange.firstDate && (
+              {eventDisplayInfo.formattedDateRange && (
                 <div className={styles.scheduleInfo}>
                   <div className={styles.scheduleItem}>
                     <Image
@@ -94,37 +71,15 @@ export default function PartnershipMessage({
                         partnership.event?.image?.urls?.thumbnail ||
                         "https://i.pravatar.cc/40?img=3"
                       }
-                      alt={partnership.event?.name}
+                      alt={partnership.event?.name || "Event"}
                       width={32}
                       height={32}
                       className={styles.eventImage}
                     />
-                    <Text as="p" className={styles.scheduleText}>
-                      {format(new Date(dateRange.firstDate), "dd MMM yyyy", {
-                        locale: fr,
-                      })}
-                      {dateRange.latestDate &&
-                        dateRange.latestDate !== dateRange.firstDate && (
-                          <>
-                            {" "}
-                            -{" "}
-                            {format(
-                              new Date(dateRange.latestDate),
-                              "dd MMM yyyy",
-                              {
-                                locale: fr,
-                              }
-                            )}
-                          </>
-                        )}
-                    </Text>
-                    <span
-                      className={`${styles.status} ${
-                        styles[statusDisplay.color]
-                      }`}
-                    >
-                      {statusDisplay.label}
-                    </span>
+                    <p className={styles.scheduleText}>
+                      {eventDisplayInfo.formattedDateRange}
+                    </p>
+                    <EventStatus status={eventDisplayInfo.status} />
                   </div>
                 </div>
               )}
@@ -139,6 +94,7 @@ export default function PartnershipMessage({
               partnership.status === "accepted" ? "primary" : "secondary"
             }
             size="small"
+            ariaLabel="Accepter"
             onClick={() =>
               onStatusChange?.(
                 [{ ...partnership, status: "accepted" }],
@@ -156,6 +112,7 @@ export default function PartnershipMessage({
           <Button
             variant={partnership.status === "refused" ? "primary" : "secondary"}
             size="small"
+            ariaLabel="Refuser"
             onClick={() =>
               onStatusChange?.(
                 [{ ...partnership, status: "refused" }],

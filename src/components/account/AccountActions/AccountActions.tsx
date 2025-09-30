@@ -44,15 +44,6 @@ export default function AccountActions({
       >
         Paramètres du compte
       </Button>
-      <Button
-        disabled={isLoadingUser}
-        variant="secondary"
-        onClick={() => router.push("/account/reviews")}
-        fullWidth
-        ariaLabel="Voir mes avis"
-      >
-        Mes Avis
-      </Button>
       {userType === "creator" && (
         <Button
           disabled={isLoadingUser}
