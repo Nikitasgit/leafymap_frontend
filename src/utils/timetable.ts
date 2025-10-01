@@ -1,5 +1,16 @@
 import { DaySchedule, TimeSlot } from "@/types/place/schedule";
 
+/**
+ * Calculates which times should be disabled in a time picker to prevent overlapping time slots.
+ * Complex logic ensures that:
+ * - Time slots don't overlap with each other
+ * - There's at least a 10-minute gap between consecutive slots
+ * - Start time must be before end time for the same slot
+ *
+ * @param isStartTime - Whether we're picking a start or end time
+ * @param currentSlotIndex - Index of the slot being edited
+ * @param schedule - The day's schedule containing all time slots
+ */
 export const getStrictExcludedTimes = (
   isStartTime: boolean,
   currentSlotIndex: number,
@@ -8,6 +19,7 @@ export const getStrictExcludedTimes = (
   const excludedTimes: Date[] = [];
   const currentSlot = schedule.timeSlots?.[currentSlotIndex];
 
+  // Get all other slots (excluding the current one being edited)
   const otherSlots =
     schedule.timeSlots?.filter(
       (slot: TimeSlot, index: number) =>

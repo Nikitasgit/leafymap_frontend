@@ -3,6 +3,15 @@ import { MapCoordinates, Location, MapboxFeature } from "@/types/common";
 import { USER_MARKER } from "./constants";
 import axios from "axios";
 
+/**
+ * Converts pixel offset to geographic coordinates offset.
+ * Used to shift the map center so that markers don't get hidden behind UI elements.
+ *
+ * @param coords - Original coordinates
+ * @param offsetX - Horizontal pixel offset (positive = east)
+ * @param offsetY - Vertical pixel offset (positive = south)
+ * @returns Adjusted coordinates
+ */
 export const applyPixelOffsetToLocation = (
   coords: MapCoordinates,
   offsetX: number,
@@ -20,7 +29,10 @@ export const applyPixelOffsetToLocation = (
   };
 };
 
-// build a user marker from place and user location
+/**
+ * Builds a temporary marker for the user's place during creation/editing.
+ * Falls back through: place location -> user geolocation -> default marker location.
+ */
 export const buildUserMarker = (
   place: InitialPlaceData,
   creatorName: string,
@@ -49,7 +61,10 @@ export const buildUserMarker = (
   };
 };
 
-// return a location from coordinates
+/**
+ * Reverse geocoding: converts coordinates to a human-readable address.
+ * Uses Mapbox Geocoding API.
+ */
 export const getLocationFromCoordinates = async (coordinates: {
   latitude: number;
   longitude: number;
@@ -80,7 +95,11 @@ export const getLocationFromCoordinates = async (coordinates: {
   }
 };
 
-// fetch location suggestions from Mapbox Geocoding API
+/**
+ * Forward geocoding: searches for places matching a text query.
+ * Restricted to France (country: "fr") and returns French localized names.
+ * Used for the address autocomplete input.
+ */
 export const fetchLocationSuggestions = async (
   input: string
 ): Promise<Location[]> => {

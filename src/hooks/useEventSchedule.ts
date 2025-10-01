@@ -55,6 +55,10 @@ export const useEventSchedule = ({
     [setEvent]
   );
 
+  /**
+   * Updates or adds a time slot within a period.
+   * If the slot ID exists, it's updated; otherwise, it's added as a new slot.
+   */
   const onUpdateTimeSlot = useCallback(
     (periodId: string, timeSlot: EventTimeSlot) => {
       setEvent((prev: initialEventData) => ({

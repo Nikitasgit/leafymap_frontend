@@ -85,6 +85,10 @@ const MapFiltersBar = ({
     }
   };
 
+  /**
+   * Unified search handler that switches between user and place search
+   * based on the selected search type. Transforms API responses to a common format.
+   */
   const handleSearch = async (
     query: string
   ): Promise<(CreatorSearchResult | PlaceSearchResult)[]> => {

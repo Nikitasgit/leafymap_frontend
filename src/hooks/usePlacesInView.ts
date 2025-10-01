@@ -13,6 +13,10 @@ export const usePlacesInView = ({ filters }: UsePlacesInViewProps = {}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
+  /**
+   * Fetches places within the visible map bounds.
+   * Used to dynamically load places as the user pans/zooms the map.
+   */
   const fetchPlacesInView = useCallback(
     async (
       bounds: mapboxgl.LngLatBounds | null,
@@ -35,6 +39,7 @@ export const usePlacesInView = ({ filters }: UsePlacesInViewProps = {}) => {
       setIsLoading(true);
       setError(null);
 
+      // Extract northeast and southwest corners for bounding box query
       const ne = currentBounds.getNorthEast().toArray();
       const sw = currentBounds.getSouthWest().toArray();
 

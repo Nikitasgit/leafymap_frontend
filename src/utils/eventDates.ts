@@ -13,6 +13,10 @@ interface EventDisplayInfo {
   dateRange: EventDates;
 }
 
+/**
+ * Extracts the earliest and latest dates from an event's schedule.
+ * Events can have multiple periods, this finds the overall date range.
+ */
 export const getEventDateRange = (schedule: Period[]): EventDates => {
   if (!schedule || schedule.length === 0) {
     return { firstDate: "", latestDate: "" };
@@ -41,6 +45,10 @@ export const getEventDateRange = (schedule: Period[]): EventDates => {
   };
 };
 
+/**
+ * Determines the current status of an event based on its schedule.
+ * Compares the event's date range with today's date.
+ */
 export const getEventStatusFromSchedule = (
   schedule: Period[]
 ): "upcoming" | "ongoing" | "completed" | "unvalid" => {
@@ -96,12 +104,4 @@ export const formatEventDateRange = (dateRange: EventDates): string => {
   });
 
   return `${firstDate} - ${latestDate}`;
-};
-
-export const formatEventDate = (dateString: string): string => {
-  if (!dateString) return "";
-
-  return format(new Date(dateString), "dd MMM yyyy", {
-    locale: fr,
-  });
 };

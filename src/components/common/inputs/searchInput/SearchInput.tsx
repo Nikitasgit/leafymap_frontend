@@ -44,12 +44,12 @@ const SearchInput = <T extends SearchSuggestion>({
     const newValue = e.target.value;
     setInput(newValue);
 
-    // Annuler le debounce précédent
+    // Cancel previous debounce timer
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
 
-    // Lancer un nouveau debounce
+    // Debounce API calls to avoid excessive requests (300ms delay)
     debounceTimerRef.current = setTimeout(() => {
       fetchSuggestions(newValue);
     }, 300);
@@ -75,7 +75,7 @@ const SearchInput = <T extends SearchSuggestion>({
     }
   }, [value]);
 
-  // Nettoyer le timer lors du démontage
+  // Cleanup: clear debounce timer when component unmounts
   useEffect(() => {
     return () => {
       if (debounceTimerRef.current) {

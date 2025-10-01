@@ -14,7 +14,10 @@ interface MapNavigationParams {
 }
 
 /**
- * Reusable function to navigate to a place on the map
+ * Navigates smoothly to a place on the map with optional pixel offset.
+ * The offset is useful on desktop to keep the place card visible while centering the marker.
+ * On mobile, no offset is applied since the card is overlayed.
+ *
  * @param params - Map navigation parameters
  */
 export const navigateToPlaceOnMap = async ({
@@ -42,7 +45,7 @@ export const navigateToPlaceOnMap = async ({
   // Detect if mobile (screen width < 768px for md breakpoint)
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
-  // Apply offset only on desktop
+  // Apply offset only on desktop to accommodate the side card
   const offsetLocation = isMobile
     ? { latitude, longitude }
     : applyPixelOffsetToLocation(
@@ -54,6 +57,7 @@ export const navigateToPlaceOnMap = async ({
   const mapInstance = mapRef.current;
   mapInstance.setSelectedPlaceId(placeId);
 
+  // Create a small bounding box around the target location
   const bounds = new mapboxgl.LngLatBounds();
   bounds.extend([
     offsetLocation.longitude - boundsOffset,
