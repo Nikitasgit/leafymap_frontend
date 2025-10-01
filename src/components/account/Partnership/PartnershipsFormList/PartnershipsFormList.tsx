@@ -2,7 +2,7 @@ import { Partnership } from "@/types/partnerships";
 import styles from "./PartnershipsFormList.module.scss";
 import { Delete } from "lucide-react";
 import Image from "next/image";
-import Button from "@/components/common/buttons/Button";
+import Button from "@/components/common/buttons/Buttontempname";
 import EventStatus from "@/components/common/eventStatus/EventStatus";
 import EmptyState from "@/components/common/noResults/EmptyState";
 

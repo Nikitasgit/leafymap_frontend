@@ -1,4 +1,4 @@
-import Button from "@/components/common/buttons/Button";
+import Button from "@/components/common/buttons/Buttontempname";
 import { Place } from "@/types/place";
 import { useRouter } from "next/navigation";
 import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader";

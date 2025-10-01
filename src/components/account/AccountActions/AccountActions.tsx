@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import Button from "@/components/common/buttons/Button";
+import Button from "@/components/common/buttons/Buttontempname";
 import { Edit, Eye } from "lucide-react";
 import styles from "./AccountActions.module.scss";
 import { User } from "@/types/user";

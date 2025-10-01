@@ -3,7 +3,7 @@ import { MapPin, Map } from "lucide-react";
 import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader/ProfilePictureUploader";
 import { PlacePopulated } from "@/types/place";
 import styles from "./PlaceHeader.module.scss";
-import Button from "@/components/common/buttons/Button";
+import Button from "@/components/common/buttons/Buttontempname";
 import { Image } from "@/types/image";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter/SubscribersCounter";
 import BackButton from "@/components/common/buttons/BackButton";

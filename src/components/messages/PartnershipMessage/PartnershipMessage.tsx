@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { User } from "@/types/user";
-import Button from "@/components/common/buttons/Button";
+import Button from "@/components/common/buttons/Buttontempname";
 import { Check, X } from "lucide-react";
 import styles from "./PartnershipMessage.module.scss";
 import { Partnership, PartnershipPopulated } from "@/types/partnerships";

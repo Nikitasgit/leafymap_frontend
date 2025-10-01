@@ -38,7 +38,7 @@ export const usePlaceEvents = (placeId: string | null) => {
       setEvents([]);
       stopLoading();
     }
-  }, [placeId]);
+  }, [placeId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { events, isLoading };
 };

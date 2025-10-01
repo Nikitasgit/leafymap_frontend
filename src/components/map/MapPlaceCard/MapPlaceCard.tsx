@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
-import Button from "@/components/common/buttons/Button";
+import Button from "@/components/common/buttons/Buttontempname";
 import MapPlaceCardSchedule from "../MapPlaceCardSchedule";
 import styles from "./MapPlaceCard.module.scss";
 import { MapPin } from "lucide-react";

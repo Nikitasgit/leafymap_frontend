@@ -45,7 +45,7 @@ export const usePlacePartnerships = (
     if (placeId) {
       withLoading(fetchPartnerships);
     }
-  }, [placeId, eventId]);
+  }, [placeId, eventId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { partnerships, isLoading };
 };

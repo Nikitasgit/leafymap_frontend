@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Button from "@/components/common/buttons/Button";
+import Button from "@/components/common/buttons/Buttontempname";
 import styles from "./MapCreatorCard.module.scss";
 import { Map, SquareArrowOutUpRight } from "lucide-react";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";

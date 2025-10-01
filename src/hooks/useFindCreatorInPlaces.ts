@@ -77,7 +77,7 @@ export const useFindCreatorInPlaces = (userId: string) => {
     if (userId) {
       withLoading(findCreatorInPlaces);
     }
-  }, [userId]);
+  }, [userId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     data,

@@ -1,4 +1,4 @@
-import Button from "@/components/common/buttons/Button";
+import Button from "@/components/common/buttons/Buttontempname";
 import { Partnership } from "@/types/partnerships";
 import { Collaborator } from "@/types/place/collaborators";
 import styles from "./EventPartnershipsSelect.module.scss";

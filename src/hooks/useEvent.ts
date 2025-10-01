@@ -35,7 +35,7 @@ export const useEvent = (eventId: string) => {
     if (eventId) {
       withLoading(fetchEvent);
     }
-  }, [eventId]);
+  }, [eventId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { event, isLoading };
 };

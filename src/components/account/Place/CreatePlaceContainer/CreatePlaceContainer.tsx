@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import Button from "@/components/common/buttons/Button";
+import Button from "@/components/common/buttons/Buttontempname";
 import { PlaceContactForm } from "@/components/account/ContactForm";
 import PlaceForm from "@/components/account/Place/PlaceForm";
 import PlaceInfos from "../../ProfileInfo/PlaceInfo";

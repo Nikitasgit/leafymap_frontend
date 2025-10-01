@@ -43,7 +43,7 @@ export const usePartnershipByUserId = (
     if (userId) {
       withLoading(fetchPartnerships);
     }
-  }, [userId]);
+  }, [userId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { partnerships, isLoading, refetch: fetchPartnerships };
 };
