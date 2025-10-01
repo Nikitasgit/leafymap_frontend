@@ -5,6 +5,9 @@ import styles from "./ProfilePictureUploader.module.scss";
 import useSubmitImages from "@/hooks/useSubmitImages";
 import useDeleteImages from "@/hooks/useDeleteImages";
 import { Image as IImage } from "@/types/image";
+import placeDefaultsSvg from "@public/images/place_default.svg";
+import creatorDefaultsSvg from "@public/images/creator_default.svg";
+import eventDefaultsSvg from "@public/images/event_default.svg";
 
 interface ProfilePictureUploaderProps {
   initialImage?: IImage;
@@ -90,7 +93,12 @@ const ProfilePictureUploader = ({
     return isOwner ? styles.owner : styles.nonOwner;
   };
 
-  const defaultAvatar = "/images/default-avatar.png";
+  const defaultAvatar =
+    type === "Place"
+      ? placeDefaultsSvg
+      : type === "User"
+      ? creatorDefaultsSvg
+      : eventDefaultsSvg;
 
   useEffect(() => {
     setPreview(initialImage || null);

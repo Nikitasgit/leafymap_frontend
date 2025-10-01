@@ -76,3 +76,11 @@ export const navigateToPlaceOnMap = async ({
     duration,
   });
 };
+
+// Open Google Maps with the destination
+export const handleGetDirections = (coordinates: number[]) => {
+  if (!coordinates) return;
+  const [longitude, latitude] = coordinates;
+  const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
+  window.open(googleMapsUrl, "_blank");
+};

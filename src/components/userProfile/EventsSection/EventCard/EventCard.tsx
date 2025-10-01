@@ -6,6 +6,7 @@ import styles from "./EventCard.module.scss";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { EventCardProps } from "./EventCard.types";
+import eventDefaultsSvg from "@public/images/event_default.svg";
 
 const EventCard: React.FC<EventCardProps> = ({ event, place }) => {
   const eventDisplayInfo = getEventDisplayInfo(event.schedule || []);
@@ -24,7 +25,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, place }) => {
     >
       <div className={styles.imageContainer}>
         <Image
-          src={event.image?.urls?.thumbnail || "https://i.pravatar.cc/40?img=3"}
+          src={event.image?.urls?.thumbnail || eventDefaultsSvg}
           alt={event.name}
           width={60}
           height={60}

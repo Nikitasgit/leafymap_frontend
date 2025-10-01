@@ -6,6 +6,7 @@ import TitleWithLine from "@/components/common/typography/TitleWithLine";
 import { formatDateShort, sortPeriodsByStartDate } from "@/utils/dates";
 import { Collaborator } from "@/types/place/collaborators";
 import { EventScheduleProps } from "./EventProfileSchedule.types";
+import creatorDefaultsSvg from "@public/images/creator_default.svg";
 
 const EventSchedule: React.FC<EventScheduleProps> = ({
   schedule,
@@ -82,7 +83,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({
                                 <Image
                                   src={
                                     (collaborator.image as string) ||
-                                    "https://i.pravatar.cc/40?img=3"
+                                    creatorDefaultsSvg
                                   }
                                   alt={collaborator.name || "Participant"}
                                   className={styles.participantImage}

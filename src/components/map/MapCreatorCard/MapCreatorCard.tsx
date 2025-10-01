@@ -11,6 +11,9 @@ import { Calendar } from "lucide-react";
 import { getEventDisplayInfo } from "@/utils/eventDates";
 import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge";
 import { MapCreatorCardProps } from "./MapCreatorCard.types";
+import creatorDefaultsSvg from "@public/images/creator_default.svg";
+import eventDefaultsSvg from "@public/images/event_default.svg";
+import placeDefaultsSvg from "@public/images/place_default.svg";
 
 const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
   const router = useRouter();
@@ -53,9 +56,7 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
           aria-label={`Voir le profil de ${user.creatorName}`}
         >
           <Image
-            src={
-              user.image?.urls?.thumbnail || "https://i.pravatar.cc/40?img=3"
-            }
+            src={user.image?.urls?.thumbnail || creatorDefaultsSvg}
             alt={user.creatorName || "Créateur"}
             width={55}
             height={55}
@@ -107,10 +108,7 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
                   <div className={styles.cardInfo}>
                     <div className={styles.imageContainer}>
                       <Image
-                        src={
-                          event.image.urls.thumbnail ||
-                          "https://i.pravatar.cc/40?img=3"
-                        }
+                        src={event.image.urls.thumbnail || eventDefaultsSvg}
                         alt={event.name}
                         width={54}
                         height={54}
@@ -169,10 +167,7 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
                     onClick={() => router.push(`/places/${place._id}`)}
                   >
                     <Image
-                      src={
-                        place.image.urls.thumbnail ||
-                        "https://i.pravatar.cc/40?img=3"
-                      }
+                      src={place.image.urls.thumbnail || placeDefaultsSvg}
                       alt={place.name}
                       width={48}
                       height={48}

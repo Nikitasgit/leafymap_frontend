@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import styles from "./PartnershipCard.module.scss";
 import CreatorCategoryBadge from "../../common/users/CreatorCategoryBadge";
 import { PartnershipCardProps } from "./PartnershipCard.types";
+import creatorDefaultsSvg from "@public/images/creator_default.svg";
 
 const PartnershipCard: React.FC<PartnershipCardProps> = ({
   creator,
@@ -20,7 +21,7 @@ const PartnershipCard: React.FC<PartnershipCardProps> = ({
   return (
     <button className={cardClass} onClick={handleClick} type="button">
       <Image
-        src={creator.image?.urls?.thumbnail || "https://i.pravatar.cc/40?img=3"}
+        src={creator.image?.urls?.thumbnail || creatorDefaultsSvg}
         alt={creator.name || "Createur"}
         width={32}
         height={32}

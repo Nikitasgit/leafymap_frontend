@@ -5,6 +5,7 @@ import Image from "next/image";
 import Button from "@/components/common/buttons/Button";
 import EventStatus from "@/components/common/eventStatus/EventStatus";
 import EmptyState from "@/components/common/noResults/EmptyState";
+import creatorDefaultsSvg from "@public/images/creator_default.svg";
 
 interface PartnershipsFormListProps {
   partnerships: Partnership[];
@@ -34,7 +35,7 @@ const PartnershipsFormList = ({
                         typeof partnership.collaborator?.image === "object"
                           ? partnership.collaborator.image?.urls?.thumbnail
                           : partnership.collaborator?.image ||
-                            "https://i.pravatar.cc/40?img=3"
+                            creatorDefaultsSvg
                       }
                       alt={partnership.collaborator.name || ""}
                       width={32}

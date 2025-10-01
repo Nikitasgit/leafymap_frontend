@@ -5,6 +5,7 @@ import styles from "./PlaceCard.module.scss";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter/SubscribersCounter";
+import placeDefaultsSvg from "@public/images/place_default.svg";
 
 const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
   const router = useRouter();
@@ -17,7 +18,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
     >
       <div className={styles.imageContainer}>
         <Image
-          src={place.image?.urls?.thumbnail || "https://i.pravatar.cc/40?img=3"}
+          src={place.image?.urls?.thumbnail || placeDefaultsSvg}
           alt={place.name}
           fill
           className={styles.placeImagee}

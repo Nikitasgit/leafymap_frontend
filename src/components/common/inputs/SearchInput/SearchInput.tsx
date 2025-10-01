@@ -6,6 +6,7 @@ import styles from "./SearchInput.module.scss";
 import TextField from "../TextField/TextField";
 import { SearchInputProps, SearchSuggestion } from "./SearchInput.types";
 import CreatorCategoryBadge from "../../users/CreatorCategoryBadge";
+import creatorDefaultsSvg from "@public/images/creator_default.svg";
 
 const SearchInput = <T extends SearchSuggestion>({
   value = "",
@@ -110,8 +111,8 @@ const SearchInput = <T extends SearchSuggestion>({
             >
               {withIcons && (
                 <Image
-                  src={sug.image || "https://i.pravatar.cc/40?img=3"}
-                  alt={sug.name}
+                  src={sug.image || creatorDefaultsSvg}
+                  alt={sug.name || "Créateur"}
                   width={32}
                   height={32}
                   className={styles.suggestionImage}

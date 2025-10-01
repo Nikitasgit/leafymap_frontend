@@ -64,7 +64,7 @@
       padding-top: spacing(0.75);
       border-top: 1px solid $grey-200;
       .buttonGroup {
-        @include flex(row, flex-start, center, spacing(1));
+        @include flex(row, flex-end, center, spacing(1));
         flex: 1;
         button {
           padding: spacing(0.5) spacing(1.25);

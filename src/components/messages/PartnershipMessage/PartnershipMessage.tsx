@@ -10,6 +10,8 @@ import { Partnership, PartnershipPopulated } from "@/types/partnerships";
 import { getEventDisplayInfo } from "@/utils/eventDates";
 import EventStatus from "@/components/common/eventStatus/EventStatus";
 import { capitalizeFirstLetter } from "@/utils/functions";
+import eventDefaultsSvg from "@public/images/event_default.svg";
+import placeDefaultsSvg from "@public/images/place_default.svg";
 
 interface PartnershipMessageProps {
   partnership: PartnershipPopulated;
@@ -37,7 +39,7 @@ export default function PartnershipMessage({
       <div className={styles.placeContainer}>
         <div className={styles.imageContainer}>
           <Image
-            src={partnership.place.image?.urls?.thumbnail || ""}
+            src={partnership.place.image?.urls?.thumbnail || placeDefaultsSvg}
             alt={partnership.place.name}
             width={32}
             height={32}
@@ -69,7 +71,7 @@ export default function PartnershipMessage({
                     <Image
                       src={
                         partnership.event?.image?.urls?.thumbnail ||
-                        "https://i.pravatar.cc/40?img=3"
+                        eventDefaultsSvg
                       }
                       alt={partnership.event?.name || "Event"}
                       width={32}

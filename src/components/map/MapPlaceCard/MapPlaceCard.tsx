@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 import Button from "@/components/common/buttons/Button";
 import MapPlaceCardSchedule from "../MapPlaceCardSchedule";
@@ -6,11 +6,15 @@ import styles from "./MapPlaceCard.module.scss";
 import { MapPin } from "lucide-react";
 import { usePlace } from "@/hooks/usePlace";
 import { useRouter } from "next/navigation";
-import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
+import {
+  handleGetDirections,
+  navigateToPlaceOnMap,
+} from "@/utils/mapNavigation";
 import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge";
 import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
 import { MapPlaceCardProps } from "./MapPlaceCard.types";
 import { capitalizeFirstLetter } from "@/utils/functions";
+import placeDefaultSvg from "@public/images/place_default.svg";
 
 const MapPlaceCard = ({ placeId, mapRef }: MapPlaceCardProps) => {
   const { place, isLoading } = usePlace(placeId);
@@ -46,7 +50,7 @@ const MapPlaceCard = ({ placeId, mapRef }: MapPlaceCardProps) => {
       >
         {!isLoading && (
           <Image
-            src={place?.image?.urls.medium || "https://i.pravatar.cc/40?img=3"}
+            src={place?.image?.urls.medium || placeDefaultSvg}
             alt={place?.name || "Lieu"}
             fill
             sizes="(max-width: 768px) 100vw, 400px"
@@ -75,11 +79,25 @@ const MapPlaceCard = ({ placeId, mapRef }: MapPlaceCardProps) => {
         </div>
         <div className={styles.buttons}>
           <div className={styles.buttonGroup}>
-            <Button ariaLabel="Itinéraire" variant="secondary" type="button">
+            {place?.website && (
+              <Button
+                onClick={() => window.open(place?.website, "_blank ")}
+                ariaLabel="Site web"
+                variant="secondary"
+                type="button"
+              >
+                Site web
+              </Button>
+            )}
+            <Button
+              ariaLabel="Itinéraire"
+              variant="primary"
+              type="button"
+              onClick={() =>
+                handleGetDirections(place?.location?.coordinates || [])
+              }
+            >
               Itinéraire
-            </Button>
-            <Button ariaLabel="Favoris" variant="primary" type="button">
-              Favoris
             </Button>
           </div>
         </div>

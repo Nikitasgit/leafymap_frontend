@@ -5,6 +5,7 @@ import Image from "next/image";
 import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
 import { MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
+import placeDefaultsSvg from "@public/images/place_default.svg";
 
 const PlaceSuggestionCard = ({ place }: { place: PlacePopulated }) => {
   const router = useRouter();
@@ -26,7 +27,7 @@ const PlaceSuggestionCard = ({ place }: { place: PlacePopulated }) => {
     >
       <div className={styles.imageContainer}>
         <Image
-          src={place.image?.urls?.medium || "https://i.pravatar.cc/40?img=3"}
+          src={place.image?.urls?.medium || placeDefaultsSvg}
           alt={place.name}
           fill
           sizes="(min-width: 768px) 300px, (min-width: 576px) 280px, 220px"
