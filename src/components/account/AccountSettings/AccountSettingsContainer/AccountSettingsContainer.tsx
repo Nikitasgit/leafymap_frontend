@@ -1,6 +1,4 @@
 "use client";
-
-import React from "react";
 import PageHeader from "@/components/common/PageHeader";
 import Button from "@/components/common/buttons/Button";
 import InfoIcon from "@/components/common/Tooltip/Tooltip";
@@ -13,19 +11,24 @@ const AccountSettingsContainer = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <section className={styles.container}>
+      <section className={styles.container} aria-labelledby="settings-title">
         <PageHeader
           subtitle="Gérez vos paramètres de compte"
           title="Paramètres du compte"
           showBackButton
         />
-        <div className={styles.settingsContainer}>
-          <div className={styles.deleteAccountCard}>
+        <section
+          className={styles.settingsContainer}
+          aria-labelledby="danger-zone-title"
+        >
+          <article className={styles.deleteAccountCard}>
             <div className={styles.deleteAccountInfo}>
               <div className={styles.titleRow}>
-                <h4 className={styles.deleteTitle}>Supprimer mon compte</h4>
+                <h3 id="danger-zone-title" className={styles.deleteTitle}>
+                  Supprimer mon compte
+                </h3>
                 <InfoIcon
-                  tooltip="La suppression de votre compte entraînera la suppression définitive de : • Tous vos lieux • Tous vos événements • Tous vos partenariats • Tous vos avis et commentaires • Votre profil utilisateur. Cette action est irréversible et ne peut pas être annulée."
+                  tooltip="La suppression de votre compte entraînera la suppression définitive de : vos lieux, vos événements, vos partenariats, vos avis et commentaires et votre profil utilisateur. Cette action est irréversible et ne peut pas être annulée."
                   place="right"
                   className={styles.infoIcon}
                 />
@@ -41,12 +44,12 @@ const AccountSettingsContainer = () => {
               onClick={deleteAccount}
               disabled={isLoading}
               startIcon={<Trash2 size={16} />}
-              ariaLabel="Supprimer mon compte"
+              ariaLabel="Supprimer définitivement mon compte et toutes mes données"
             >
               {isLoading ? "Suppression..." : "Supprimer"}
             </Button>
-          </div>
-        </div>
+          </article>
+        </section>
       </section>
     </div>
   );
