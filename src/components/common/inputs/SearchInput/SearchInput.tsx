@@ -3,9 +3,9 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import useOnClickOutside from "../../../../hooks/useOnClickOutside";
 import styles from "./SearchInput.module.scss";
-import TextField from "../TextFieldtempname/TextField";
+import TextField from "../TextField/TextField";
 import { SearchInputProps, SearchSuggestion } from "./SearchInput.types";
-import CreatorCategoryBadge from "../../users/CreatorCategoryBadgetempname";
+import CreatorCategoryBadge from "../../users/CreatorCategoryBadge";
 
 const SearchInput = <T extends SearchSuggestion>({
   value = "",

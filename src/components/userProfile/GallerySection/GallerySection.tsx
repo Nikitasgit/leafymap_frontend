@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Image as ImageIcon, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { GallerySectionProps } from "./GallerySection.types";
-import ImageUploader from "@/components/common/inputs/ImageUploadertempname/ImageUploader";
+import ImageUploader from "@/components/common/inputs/ImageUploader/ImageUploader";
 import ImageModal from "@/components/common/modals/GalleryImageModal";
 import useDeleteImages from "@/hooks/useDeleteImages";
 import styles from "./GallerySection.module.scss";
-import EmptyState from "@/components/common/noResults/EmptyStatetempname";
+import EmptyState from "@/components/common/noResults/EmptyState";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 
 const GallerySection: React.FC<GallerySectionProps> = ({

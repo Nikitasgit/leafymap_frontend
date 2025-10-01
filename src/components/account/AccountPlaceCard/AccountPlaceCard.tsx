@@ -1,7 +1,7 @@
 import Button from "@/components/common/buttons/Button";
 import { Place } from "@/types/place";
 import { useRouter } from "next/navigation";
-import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploadertempname";
+import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader";
 import { Edit3, Eye, Trash2 } from "lucide-react";
 import styles from "./AccountPlaceCard.module.scss";
 import useSubmitPlace from "@/hooks/useSubmitPlace";

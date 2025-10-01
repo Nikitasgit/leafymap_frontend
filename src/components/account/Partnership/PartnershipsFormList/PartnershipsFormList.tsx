@@ -4,7 +4,7 @@ import { Delete } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/common/buttons/Button";
 import EventStatus from "@/components/common/eventStatus/EventStatus";
-import EmptyState from "@/components/common/noResults/EmptyStatetempname";
+import EmptyState from "@/components/common/noResults/EmptyState";
 
 interface PartnershipsFormListProps {
   partnerships: Partnership[];

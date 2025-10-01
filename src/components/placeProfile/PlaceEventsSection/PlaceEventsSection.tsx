@@ -2,7 +2,7 @@ import { Calendar } from "lucide-react";
 import EventCard from "@/components/userProfile/EventsSection/EventCard/EventCard";
 import styles from "./PlaceEventsSection.module.scss";
 import { PlaceEventsSectionProps } from "./PlaceEventsSection.types";
-import EmptyState from "@/components/common/noResults/EmptyStatetempname";
+import EmptyState from "@/components/common/noResults/EmptyState";
 
 const PlaceEventsSection: React.FC<PlaceEventsSectionProps> = ({
   events,

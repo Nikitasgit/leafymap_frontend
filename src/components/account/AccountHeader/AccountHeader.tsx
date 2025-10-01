@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import { Image } from "@/types/image";
-import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploadertempname";
+import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import styles from "./AccountHeader.module.scss";
 import useSubmitUser from "@/hooks/useSubmitUser";
-import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadgetempname";
+import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge";
 
 interface AccountHeaderProps {
   user: {

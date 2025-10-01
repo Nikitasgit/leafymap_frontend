@@ -3,7 +3,7 @@ import styles from "./CategorySelectorInput.module.scss";
 import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
 import { PlaceCategory } from "@/types/categories";
 import { PlaceType } from "@/types/place/placeCaterories";
-import TextField from "../../common/inputs/TextFieldtempname/TextField";
+import TextField from "../../common/inputs/TextField/TextField";
 import { useApp } from "@/hooks/useApp";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import LoadingBar from "../../common/loading/LoadingBar/LoadingBar";

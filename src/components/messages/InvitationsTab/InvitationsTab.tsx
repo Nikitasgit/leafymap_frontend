@@ -7,7 +7,7 @@ import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { Partnership, PartnershipPopulated } from "@/types/partnerships";
 import { UserPopulated } from "@/types/user";
 import styles from "./InvitationsTab.module.scss";
-import EmptyState from "@/components/common/noResults/EmptyStatetempname";
+import EmptyState from "@/components/common/noResults/EmptyState";
 
 interface InvitationsTabProps {
   partnerships: PartnershipPopulated[];

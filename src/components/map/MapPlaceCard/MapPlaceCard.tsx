@@ -7,7 +7,7 @@ import { MapPin } from "lucide-react";
 import { usePlace } from "@/hooks/usePlace";
 import { useRouter } from "next/navigation";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
-import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadgetempname";
+import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge";
 import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
 import { MapPlaceCardProps } from "./MapPlaceCard.types";
 import { capitalizeFirstLetter } from "@/utils/functions";

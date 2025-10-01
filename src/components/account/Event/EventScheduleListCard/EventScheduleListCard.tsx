@@ -8,7 +8,7 @@ import { parseDateStringToDate } from "@/utils/dates";
 import NewEventSlot from "@/components/account/Event/EventEditTimeSlot";
 import EventSlotCard from "@/components/account/Event/EventSlotCard";
 import { Partnership } from "@/types/partnerships";
-import EmptyState from "@/components/common/noResults/EmptyStatetempname";
+import EmptyState from "@/components/common/noResults/EmptyState";
 
 const EventScheduleListCard = ({
   period,

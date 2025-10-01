@@ -9,7 +9,7 @@ import { usePartnershipByUserId } from "@/hooks/usePartnershipByUserId";
 import { useUser } from "@/hooks/useUser";
 import { Calendar } from "lucide-react";
 import { getEventDisplayInfo } from "@/utils/eventDates";
-import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadgetempname";
+import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge";
 import { MapCreatorCardProps } from "./MapCreatorCard.types";
 
 const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {

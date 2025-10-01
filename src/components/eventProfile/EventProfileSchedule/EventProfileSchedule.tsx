@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Clock } from "lucide-react";
 import styles from "./EventProfileSchedule.module.scss";
-import TitleWithLine from "@/components/common/typography/TitleWithLinetempname";
+import TitleWithLine from "@/components/common/typography/TitleWithLine";
 import { formatDateShort, sortPeriodsByStartDate } from "@/utils/dates";
 import { Collaborator } from "@/types/place/collaborators";
 import { EventScheduleProps } from "./EventProfileSchedule.types";

@@ -6,7 +6,7 @@ import { SubCategory } from "@/types/categories";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useToast } from "@/hooks/useToast";
 import LoadingBar from "../../common/loading/LoadingBar/LoadingBar";
-import TextField from "../../common/inputs/TextFieldtempname/TextField";
+import TextField from "../../common/inputs/TextField/TextField";
 import { useTranslation } from "react-i18next";
 
 const CategorySelectorInput = ({

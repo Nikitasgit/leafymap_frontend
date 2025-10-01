@@ -2,7 +2,7 @@ import React from "react";
 import { Calendar } from "lucide-react";
 import { EventCard } from "@/components/userProfile/EventsSection/EventCard";
 import styles from "./EventsSectionContainer.module.scss";
-import EmptyState from "@/components/common/noResults/EmptyStatetempname";
+import EmptyState from "@/components/common/noResults/EmptyState";
 import PlaceEventsSection from "@/components/placeProfile/PlaceEventsSection/PlaceEventsSection";
 import { usePlaceEvents } from "@/hooks/usePlaceEvents";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";

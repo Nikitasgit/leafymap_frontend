@@ -1,6 +1,6 @@
 "use client";
 
-import { SearchInput } from "@/components/common/inputs/SearchInputtempname";
+import { SearchInput } from "@/components/common/inputs/SearchInput";
 import styles from "./MapFiltersBar.module.scss";
 import { ChevronDown, Filter } from "lucide-react";
 import { useRef, useState, useEffect } from "react";

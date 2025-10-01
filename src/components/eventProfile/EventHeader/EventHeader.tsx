@@ -2,7 +2,7 @@
 import React from "react";
 import { Calendar, MapPin } from "lucide-react";
 import EventStatus from "@/components/common/eventStatus/EventStatus";
-import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploadertempname/ProfilePictureUploader";
+import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader/ProfilePictureUploader";
 import { Image } from "@/types/image";
 import { getEventDisplayInfo } from "@/utils/eventDates";
 import styles from "./EventHeader.module.scss";

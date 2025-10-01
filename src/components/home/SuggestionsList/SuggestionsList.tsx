@@ -2,7 +2,7 @@
 import { useFindPlaces } from "@/hooks/useFindPlaces";
 import React, { useEffect } from "react";
 import styles from "./SuggestionsList.module.scss";
-import PlaceSuggestionCard from "../PlaceSuggestionCardtempname";
+import PlaceSuggestionCard from "../PlaceSuggestionCard";
 
 const SuggestionsList = () => {
   const { searchResults, isLoading, searchPlaces } = useFindPlaces();

@@ -1,7 +1,7 @@
 import styles from "./PartnershipsList.module.scss";
-import TitleWithLine from "@/components/common/typography/TitleWithLinetempname";
+import TitleWithLine from "@/components/common/typography/TitleWithLine";
 import { PartnershipPopulated } from "@/types/partnerships";
-import EmptyState from "../../common/noResults/EmptyStatetempname";
+import EmptyState from "../../common/noResults/EmptyState";
 import { Users } from "lucide-react";
 import PartnershipCard from "@/components/placeProfile/PartnershipCard";
 

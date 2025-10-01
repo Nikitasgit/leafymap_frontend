@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import styles from "./PartnershipCard.module.scss";
-import CreatorCategoryBadge from "../../common/users/CreatorCategoryBadgetempname";
+import CreatorCategoryBadge from "../../common/users/CreatorCategoryBadge";
 import { PartnershipCardProps } from "./PartnershipCard.types";
 
 const PartnershipCard: React.FC<PartnershipCardProps> = ({

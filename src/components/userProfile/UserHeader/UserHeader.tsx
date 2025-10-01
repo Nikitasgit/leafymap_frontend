@@ -1,11 +1,11 @@
 import { Users, MapPin } from "lucide-react";
-import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploadertempname";
+import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader";
 import Button from "@/components/common/buttons/Button";
 import { Image as ImageType } from "@/types/image";
 import { UserPopulated } from "@/types/user";
 import styles from "./UserHeader.module.scss";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter";
-import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadgetempname";
+import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge";
 import BackButton from "@/components/common/buttons/BackButton";
 
 interface UserHeaderProps {
