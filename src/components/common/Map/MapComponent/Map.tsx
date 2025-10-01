@@ -15,28 +15,10 @@ import {
 } from "react";
 import { usePlacesInView } from "@/hooks/usePlacesInView";
 import CategoryMarker from "../CategoryMarker/CategoryMarker";
-import { MapFilters, ExtendedMapRef } from "@/types/map";
+import { ExtendedMapRef } from "@/types/map";
 import { DEFAULT_LOCATION } from "@/utils/constants";
 import { useGeolocation } from "@/hooks/useGeolocation";
-
-interface MapComponentProps {
-  width?: string;
-  height?: string;
-  filters?: MapFilters;
-  withDefaultMarker?: boolean;
-  withPlacesInView?: boolean;
-  setLoading?: (loading: boolean) => void;
-  onMarkerClick?: (placeId: string) => void;
-  onMapClick?: (coords: { longitude: number; latitude: number }) => void;
-  onMapReady?: () => void;
-  selectedPlaceId?: string;
-  userMarker?: {
-    location: { coordinates: number[] };
-    placeCategory: { name: string };
-    name: string;
-    _id: string;
-  };
-}
+import { MapComponentProps } from "./Map.types";
 
 const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
   (
@@ -94,10 +76,10 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
       if (setLoading) {
         setLoading(isLoading);
       }
-    }, [isLoading]);
+    }, [isLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-      if (latitude && longitude) {
+      if (latitude && longitude && isMapReady) {
         setViewState({
           latitude,
           longitude,

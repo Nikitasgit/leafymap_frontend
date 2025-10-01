@@ -133,7 +133,7 @@ const MapFiltersBar = ({
   };
 
   useEffect(() => {
-    if (mapRef.current) {
+    if (mapRef.current && mapRef.current.isReady) {
       mapRef.current.fetchPlacesInView(null);
       mapRef.current.setSelectedPlaceId(null);
     }

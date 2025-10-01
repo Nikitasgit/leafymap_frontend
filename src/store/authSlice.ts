@@ -16,9 +16,6 @@ export const fetchCurrentUser = createAsyncThunk(
 
       return response.data.data.user;
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        return null;
-      }
       throw error;
     }
   }

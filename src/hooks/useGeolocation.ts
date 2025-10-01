@@ -16,6 +16,7 @@ export const useGeolocation = () => {
   });
 
   useEffect(() => {
+    // browser does not support geolocation
     if (typeof window === "undefined" || !navigator.geolocation) {
       setGeolocation((prev) => ({
         ...prev,
@@ -25,6 +26,7 @@ export const useGeolocation = () => {
       return;
     }
 
+    // user shared their location
     const success = (position: GeolocationPosition) => {
       setGeolocation({
         latitude: position.coords.latitude,
@@ -34,6 +36,7 @@ export const useGeolocation = () => {
       });
     };
 
+    // user refused to share their location or the location is not available
     const error = (error: GeolocationPositionError) => {
       let errorMessage = "Erreur de géolocalisation";
 
@@ -57,12 +60,14 @@ export const useGeolocation = () => {
       });
     };
 
+    // options for the geolocation
     const options = {
       enableHighAccuracy: true,
       timeout: 10000,
       maximumAge: 60000, // 1 minute
     };
 
+    // get user's location
     navigator.geolocation.getCurrentPosition(success, error, options);
   }, []);
 

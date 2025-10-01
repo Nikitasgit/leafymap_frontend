@@ -29,6 +29,7 @@ const PlaceSuggestionCard = ({ place }: { place: PlacePopulated }) => {
           src={place.image?.urls?.medium || "https://i.pravatar.cc/40?img=3"}
           alt={place.name}
           fill
+          sizes="(min-width: 768px) 300px, (min-width: 576px) 280px, 220px"
           className={styles.image}
           style={{ objectFit: "cover" }}
         />

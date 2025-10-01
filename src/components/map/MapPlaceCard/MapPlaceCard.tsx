@@ -48,8 +48,9 @@ const MapPlaceCard = ({ placeId, mapRef }: MapPlaceCardProps) => {
           <Image
             src={place?.image?.urls.medium || "https://i.pravatar.cc/40?img=3"}
             alt={place?.name || "Lieu"}
-            width={100}
-            height={200}
+            fill
+            sizes="(max-width: 768px) 100vw, 400px"
+            style={{ objectFit: "cover", objectPosition: "center" }}
           />
         )}
       </button>
