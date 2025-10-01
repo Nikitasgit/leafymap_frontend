@@ -17,7 +17,7 @@ import { Partnership } from "@/types/partnerships";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
 import PageHeader from "@/components/common/PageHeader";
-import LoadingBar from "@/components/common/loading/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import ProtectedRoute from "@/components/common/ProtectedRoute";
 import { useAuth } from "@/hooks/useAuth";
 

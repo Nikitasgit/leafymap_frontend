@@ -1,10 +1,10 @@
 import "@/styles/main.scss";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Navbar from "@/components/navbar/Navbar";
 import ConditionalFooter from "@/components/common/Footer/ConditionalFooter";
 import Providers from "@/components/Providers";
 import { roboto } from "@/fonts/font";
+import NavbarMain from "@/components/navbar/Navbar";
 
 export default async function RootLayout({
   children,
@@ -21,7 +21,7 @@ export default async function RootLayout({
         <Providers locale={locale}>
           <Analytics debug={false} />
           <SpeedInsights debug={false} />
-          <Navbar />
+          <NavbarMain />
           <main data-locale={locale}>{children}</main>
           <ConditionalFooter />
         </Providers>

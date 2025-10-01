@@ -1,9 +1,9 @@
 "use client";
 import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
-import TextField from "@/components/common/inputs/textField/TextField";
+import TextField from "@/components/common/inputs/TextFieldtempname/TextField";
 import { useState, useEffect, useCallback } from "react";
 import NewDatesEventForm from "../EventNewDatesSelector/EventNewDatesSelector";
-import Button from "@/components/common/buttons/button/Button";
+import Button from "@/components/common/buttons/Button";
 import useSubmitEvent from "@/hooks/useSubmitEvent";
 import { useParams, useRouter } from "next/navigation";
 import styles from "./EventForm.module.scss";

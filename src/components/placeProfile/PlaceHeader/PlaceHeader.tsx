@@ -1,9 +1,9 @@
 import React from "react";
 import { MapPin, Map } from "lucide-react";
-import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader/ProfilePictureUploader";
+import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploadertempname/ProfilePictureUploader";
 import { PlacePopulated } from "@/types/place";
 import styles from "./PlaceHeader.module.scss";
-import Button from "@/components/common/buttons/button/Button";
+import Button from "@/components/common/buttons/Button";
 import { Image } from "@/types/image";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter/SubscribersCounter";
 import BackButton from "@/components/common/buttons/BackButton";

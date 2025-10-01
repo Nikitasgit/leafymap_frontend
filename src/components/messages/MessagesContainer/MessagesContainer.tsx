@@ -4,14 +4,15 @@ import { useState } from "react";
 import { Handshake, Mail } from "lucide-react";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { usePartnershipByUserId } from "@/hooks/usePartnershipByUserId";
-import LoadingBar from "@/components/common/loading/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
-import { Tab, TabsContainer } from "@/components/common/tabs";
 import MessagesTab from "@/components/messages/MessagesTab";
 import InvitationsTab from "@/components/messages/InvitationsTab";
 import { PartnershipPopulated } from "@/types/partnerships";
 import { UserPopulated } from "@/types/user";
 import styles from "./MessagesContainer.module.scss";
+import TabsContainer from "@/components/common/tabs/TabsContainer";
+import Tab from "@/components/common/tabs/Tab";
 
 type TabType = "messages" | "invitations";
 

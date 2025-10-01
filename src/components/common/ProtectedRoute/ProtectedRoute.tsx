@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import LoadingBar from "@/components/common/loading/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -37,7 +37,7 @@ const ProtectedRoute = ({
   if (isLoading) {
     return <>{fallback}</>;
   }
-  
+
   if (
     !user ||
     (allowedUserTypes && !allowedUserTypes.includes(user.userType))

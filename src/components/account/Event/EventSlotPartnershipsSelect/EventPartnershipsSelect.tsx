@@ -1,4 +1,4 @@
-import Button from "@/components/common/buttons/button/Button";
+import Button from "@/components/common/buttons/Button";
 import { Partnership } from "@/types/partnerships";
 import { Collaborator } from "@/types/place/collaborators";
 import styles from "./EventPartnershipsSelect.module.scss";
@@ -20,7 +20,7 @@ const EventPartnershipsSelect = ({
         {partnerships.map((partnership) => (
           <li key={partnership._id}>
             <Button
-            className={styles.partnershipButton}
+              className={styles.partnershipButton}
               variant={
                 selectedPartnerships.some(
                   (p) => p._id === partnership.collaborator._id

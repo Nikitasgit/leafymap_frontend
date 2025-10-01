@@ -2,11 +2,11 @@
 import React from "react";
 import { Calendar, MapPin } from "lucide-react";
 import EventStatus from "@/components/common/eventStatus/EventStatus";
-import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader/ProfilePictureUploader";
+import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploadertempname/ProfilePictureUploader";
 import { Image } from "@/types/image";
 import { getEventDisplayInfo } from "@/utils/eventDates";
 import styles from "./EventHeader.module.scss";
-import Button from "@/components/common/buttons/button/Button";
+import Button from "@/components/common/buttons/Button";
 import { useRouter } from "next/navigation";
 import BackButton from "@/components/common/buttons/BackButton";
 import { capitalizeFirstLetter } from "@/utils/functions";

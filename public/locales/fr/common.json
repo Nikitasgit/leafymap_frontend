@@ -10,7 +10,8 @@
     "messages": "Messages",
     "account": "Compte",
     "register": "S'inscrire",
-    "signin": "Se connecter"
+    "signin": "Se connecter",
+    "signout": "Se déconnecter"
   },
   "placeTypes": {
     "food": "Alimentaire",

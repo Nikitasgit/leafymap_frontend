@@ -101,12 +101,12 @@ export const useRegister = (): RegisterState => {
     },
     [
       formData,
+      router,
+      t,
+      handleApiError,
       validateFormData,
       withLoading,
       showSuccess,
-      t,
-      router,
-      handleApiError,
     ]
   );
 

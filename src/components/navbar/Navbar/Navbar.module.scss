@@ -1,0 +1,49 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.navbar {
+  height: $navbar-height;
+  background-color: $white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  @include flex(row, space-between, center, 0);
+  padding: spacing(0.75) spacing(1);
+  position: relative;
+  z-index: 10000000;
+
+  .logo {
+    font-size: rem(18);
+    font-weight: bold;
+    color: $grey-500;
+    text-decoration: none;
+    transition: $transition-default;
+    flex-shrink: 0;
+
+    &:hover {
+      color: $primary-color;
+    }
+  }
+
+  @include respond-to(xs) {
+    padding: spacing(0.5) spacing(0.5);
+
+    .logo {
+      font-size: rem(14);
+    }
+  }
+
+  @include respond-to(sm) {
+    padding: spacing(1) spacing(1.5);
+    .logo {
+      font-size: rem(20);
+    }
+  }
+
+  @include respond-to(md) {
+    padding: spacing(1) spacing(2);
+
+    .logo {
+      font-size: rem(22);
+    }
+  }
+}

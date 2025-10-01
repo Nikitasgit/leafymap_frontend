@@ -10,7 +10,7 @@ import {
 import ActivityFormStep from "@/components/account/CreateProfileSteps/ProfileFormStep";
 import useUpdateUser from "@/hooks/useSubmitUser";
 import { defaultSchedule } from "@/utils/createProfile";
-import LoadingBar from "@/components/common/loading/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
 import { useToast } from "@/hooks/useToast";
 import PageHeader from "@/components/common/PageHeader";

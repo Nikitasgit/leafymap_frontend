@@ -2,7 +2,7 @@ import React from "react";
 import AccountEventCard from "@/components/account/AccountEventCard";
 import { Event } from "@/types/place/event";
 import styles from "./AccountEventsList.module.scss";
-import EmptyState from "@/components/common/noResults/emptyState/EmptyState";
+import EmptyState from "@/components/common/noResults/EmptyStatetempname/EmptyState";
 
 interface EventsListProps {
   events: Event[];

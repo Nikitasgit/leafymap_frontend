@@ -1,0 +1,97 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: $white;
+  border-top: 1px solid $grey-200;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  animation: slideDown 0.2s ease-out;
+
+  .content {
+    padding: spacing(1);
+    @include flex(column, flex-start, stretch, spacing(0.5));
+
+    .navLink {
+      @include flex(row, flex-start, center, spacing(1));
+      color: $grey-500;
+      text-decoration: none;
+      padding: spacing(1);
+      transition: $transition-default;
+      font-weight: 500;
+      background: none;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      font-size: inherit;
+
+      &:hover,
+      &:focus {
+        color: $grey-700;
+      }
+
+      &.active {
+        color: $primary-color;
+        background-color: rgba($primary-color, 0.1);
+      }
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .authSection {
+      margin-top: spacing(1);
+      padding-top: spacing(1);
+      border-top: 1px solid $grey-200;
+    }
+
+    .authLinks {
+      @include flex(column, flex-start, stretch, spacing(0.5));
+    }
+  }
+}
+
+@include respond-to(xs) {
+  .menu {
+    .content {
+      padding: spacing(0.75);
+
+      .navLink {
+        padding: spacing(0.75);
+        font-size: rem(14);
+      }
+
+      .icon {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}
+
+@include respond-to(md) {
+  .menu {
+    display: none;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

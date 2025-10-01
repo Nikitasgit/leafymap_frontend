@@ -1,15 +1,15 @@
 import Image from "next/image";
-import Button from "@/components/common/buttons/button/Button";
+import Button from "@/components/common/buttons/Button";
 import styles from "./MapCreatorCard.module.scss";
 import { Map, SquareArrowOutUpRight } from "lucide-react";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
 import { useRouter } from "next/navigation";
-import LoadingBar from "@/components/common/loading/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { usePartnershipByUserId } from "@/hooks/usePartnershipByUserId";
 import { useUser } from "@/hooks/useUser";
 import { Calendar } from "lucide-react";
 import { getEventDisplayInfo } from "@/utils/eventDates";
-import CreatorCategoryBadge from "@/components/common/users/creatorCategoryBadge";
+import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadgetempname";
 import { MapCreatorCardProps } from "./MapCreatorCard.types";
 
 const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {

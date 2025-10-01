@@ -3,7 +3,7 @@
 import styles from "./HomeHeader.module.scss";
 import Image from "next/image";
 import CeramistHands from "../../../../public/images/ceramist-hands.jpg";
-import Button from "@/components/common/buttons/button/Button";
+import Button from "@/components/common/buttons/Button";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -31,6 +31,7 @@ const HomeHeader = () => {
         src={CeramistHands}
         alt="Home Header"
         className={styles.headerImage}
+        priority
       />
       <div className={styles.HeaderCard}>
         <h3 className={styles.HeaderCardTitle}>

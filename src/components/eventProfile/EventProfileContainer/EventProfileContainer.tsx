@@ -1,5 +1,5 @@
 "use client";
-import LoadingBar from "@/components/common/loading/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { useEvent } from "@/hooks/useEvent";
 import { useParams } from "next/navigation";
 import styles from "./EventProfileContainer.module.scss";

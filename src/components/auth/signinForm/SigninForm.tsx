@@ -3,12 +3,12 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./SigninForm.module.scss";
-import Button from "@/components/common/buttons/button/Button";
-import LoadingBar from "@/components/common/loading/LoadingBar";
+import Button from "@/components/common/buttons/Button";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { validateLoginData } from "@/validations/authValidations";
-import TextField from "@/components/common/inputs/textField/TextField";
+import TextField from "@/components/common/inputs/TextFieldtempname/TextField";
 
 export default function SigninForm() {
   const [identifier, setIdentifier] = useState("");
@@ -87,6 +87,7 @@ export default function SigninForm() {
             type="submit"
             variant="primary"
             size="medium"
+            ariaLabel={t("signin.form.submit")}
             disabled={loading}
           >
             {loading ? t("signin.form.submitLoading") : t("signin.form.submit")}

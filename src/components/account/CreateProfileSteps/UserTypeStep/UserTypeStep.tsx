@@ -1,4 +1,4 @@
-import Button from "@/components/common/buttons/button/Button";
+import Button from "@/components/common/buttons/Button";
 import {
   FormDataChangeHandler,
   onNextHandler,

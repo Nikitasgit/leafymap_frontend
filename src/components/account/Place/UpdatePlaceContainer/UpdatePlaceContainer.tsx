@@ -10,7 +10,7 @@ import {
 } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
 import { defaultSchedule } from "@/utils/createProfile";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import LoadingBar from "@/components/common/loading/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import styles from "./UpdatePlaceContainer.module.scss";
 import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
 import useSubmitPlace from "@/hooks/useSubmitPlace";

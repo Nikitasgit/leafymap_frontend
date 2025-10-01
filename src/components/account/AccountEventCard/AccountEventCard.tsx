@@ -1,7 +1,7 @@
-import Button from "@/components/common/buttons/button/Button";
+import Button from "@/components/common/buttons/Button";
 import { Event } from "@/types/place/event";
 import { useRouter } from "next/navigation";
-import ProfilePictureUploader from "@/components/common/inputs/profilePictureUploader";
+import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploadertempname";
 import EventStatus from "@/components/common/eventStatus";
 import { Edit3, Calendar, Eye, Trash2 } from "lucide-react";
 import { getEventDisplayInfo } from "@/utils/eventDates";

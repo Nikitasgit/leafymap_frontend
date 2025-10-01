@@ -1,13 +1,13 @@
 "use client";
 
-import { SearchInput } from "@/components/common/inputs/searchInput";
+import { SearchInput } from "@/components/common/inputs/SearchInputtempname";
 import styles from "./MapFiltersBar.module.scss";
 import { ChevronDown, Filter } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useFindPlaces } from "@/hooks/useFindPlaces";
 import { useFindUsers } from "@/hooks/useFindUsers";
-import Button from "@/components/common/buttons/button/Button";
+import Button from "@/components/common/buttons/Button";
 import {
   CreatorSearchResult,
   PlaceSearchResult,

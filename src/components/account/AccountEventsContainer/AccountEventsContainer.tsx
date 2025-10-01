@@ -2,12 +2,12 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { usePlaceEvents } from "@/hooks/usePlaceEvents";
-import LoadingBar from "@/components/common/loading/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import styles from "./AccountEventsContainer.module.scss";
 import { getEventStatusFromSchedule } from "@/utils/eventDates";
 import PageHeader from "@/components/common/PageHeader";
 import EventsList from "@/components/account/AccountEventsList";
-import Button from "@/components/common/buttons/button/Button";
+import Button from "@/components/common/buttons/Button";
 import { Plus } from "lucide-react";
 import { capitalizeFirstLetter } from "@/utils/functions";
 

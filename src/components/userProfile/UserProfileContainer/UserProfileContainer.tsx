@@ -1,5 +1,5 @@
 "use client";
-import LoadingBar from "@/components/common/loading/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { useUser } from "@/hooks/useUser";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
@@ -12,8 +12,8 @@ import UserHeader from "@/components/userProfile/UserHeader/UserHeader";
 import { PlacesSectionContainer } from "@/components/userProfile/PlacesSection/PlacesSectionContainer";
 import EventsSectionContainer from "@/components/userProfile/EventsSection/EventsSectionContainer";
 import GallerySection from "@/components/userProfile/GallerySection/GallerySection";
-import TabsContainer from "@/components/common/tabs/TabsContainer";
-import Tab from "@/components/common/tabs/Tab";
+import TabsContainer from "@/components/common/tabs/TabsContainer/TabsContainer";
+import Tab from "@/components/common/tabs/Tab/Tab";
 import { User as UserIcon, MapPin, Calendar } from "lucide-react";
 
 const UserProfileContainer = () => {

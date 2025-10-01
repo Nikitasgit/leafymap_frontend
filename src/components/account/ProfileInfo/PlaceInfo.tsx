@@ -1,4 +1,4 @@
-import TextField from "@/components/common/inputs/textField/TextField";
+import TextField from "@/components/common/inputs/TextFieldtempname/TextField";
 import { PlaceInfoProps } from "./info.types";
 import styles from "./Info.module.scss";
 

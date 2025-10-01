@@ -1,6 +1,6 @@
 import { Place } from "@/types/place";
 import AccountPlaceCard from "../AccountPlaceCard/AccountPlaceCard";
-import TitleWithLine from "@/components/common/typography/titleWithLine";
+import TitleWithLine from "@/components/common/typography/TitleWithLinetempname";
 import styles from "./AccountPlacesList.module.scss";
 
 const AccountPlacesList = ({ places }: { places: Place[] }) => {

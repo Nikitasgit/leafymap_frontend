@@ -30,7 +30,7 @@ export const useAuth = (): AuthState => {
       await dispatch(signIn({ identifier, password })).unwrap();
       await dispatch(fetchCurrentUser()).unwrap();
       showSuccess("Connexion réussie");
-      router.push("/");
+      router.push("/account");
     } catch (error: unknown) {
       if (
         error &&

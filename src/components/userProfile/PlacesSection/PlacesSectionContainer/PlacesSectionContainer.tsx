@@ -2,7 +2,7 @@ import React from "react";
 import { MapPin } from "lucide-react";
 import PlaceCard from "../PlaceCard/PlaceCard";
 import styles from "./PlacesSectionContainer.module.scss";
-import EmptyState from "@/components/common/noResults/emptyState";
+import EmptyState from "@/components/common/noResults/EmptyStatetempname";
 import { PlacesSectionProps } from "./PlacesSectionContainer.types";
 
 const PlacesSectionContainer: React.FC<PlacesSectionProps> = ({

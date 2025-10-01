@@ -10,7 +10,8 @@
     "messages": "Messages",
     "account": "Account",
     "register": "Register",
-    "signin": "Sign In"
+    "signin": "Sign In",
+    "signout": "Sign Out"
   },
   "placeTypes": {
     "food": "Food",

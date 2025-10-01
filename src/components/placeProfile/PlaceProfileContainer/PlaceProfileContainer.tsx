@@ -1,5 +1,5 @@
 "use client";
-import LoadingBar from "@/components/common/loading/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { usePlace } from "@/hooks/usePlace";
 import { usePlaceEvents } from "@/hooks/usePlaceEvents";
 import { useGalleryImages } from "@/hooks/useGalleryImages";
@@ -10,8 +10,8 @@ import styles from "./PlaceProfileContainer.module.scss";
 import PlaceHeader from "@/components/placeProfile/PlaceHeader/PlaceHeader";
 import PlaceEventsSection from "@/components/placeProfile/PlaceEventsSection/PlaceEventsSection";
 import GallerySection from "@/components/userProfile/GallerySection/GallerySection";
-import TabsContainer from "@/components/common/tabs/TabsContainer";
-import Tab from "@/components/common/tabs/Tab";
+import TabsContainer from "@/components/common/tabs/TabsContainer/TabsContainer";
+import Tab from "@/components/common/tabs/Tab/Tab";
 import { Image as ImageIcon, Calendar, Users } from "lucide-react";
 import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
 import PartnershipsSection from "@/components/placeProfile/PartnershipsSection/PartnershipsSection";

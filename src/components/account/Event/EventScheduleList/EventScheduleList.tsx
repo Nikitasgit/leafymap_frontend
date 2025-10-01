@@ -3,7 +3,7 @@ import { EventTimeSlot, Period } from "@/types/place/schedule";
 import styles from "./EventScheduleList.module.scss";
 import EventScheduleListCard from "../EventScheduleListCard";
 import { Partnership } from "@/types/partnerships";
-import EmptyState from "@/components/common/noResults/emptyState";
+import EmptyState from "@/components/common/noResults/EmptyStatetempname";
 
 interface EventScheduleListProps {
   schedule: Period[];

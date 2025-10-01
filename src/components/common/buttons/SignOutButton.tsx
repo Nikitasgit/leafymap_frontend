@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Button from "./button/Button";
+import Button from "./Button";
 
 function SignOutButton({ logout }: { logout: () => Promise<void> }) {
   const router = useRouter();

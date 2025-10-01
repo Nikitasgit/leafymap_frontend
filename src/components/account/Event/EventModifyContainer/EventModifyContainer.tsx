@@ -3,7 +3,7 @@ import EventForm from "@/components/account/Event/EventForm/EventForm";
 import { useEvent } from "@/hooks/useEvent";
 import { useParams } from "next/navigation";
 import React from "react";
-import LoadingBar from "@/components/common/loading/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
 import PageHeader from "@/components/common/PageHeader";
 import styles from "./EventModifyContainer.module.scss";

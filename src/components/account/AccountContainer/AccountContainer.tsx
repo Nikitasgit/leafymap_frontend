@@ -4,7 +4,7 @@ import AccountPlacesList from "@/components/account/AccountPlacesList/AccountPla
 import AccountHeader from "@/components/account/AccountHeader";
 import AccountActions from "@/components/account/AccountActions";
 import styles from "./AccountContainer.module.scss";
-import LoadingBar from "@/components/common/loading/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export default function AccountContainer() {

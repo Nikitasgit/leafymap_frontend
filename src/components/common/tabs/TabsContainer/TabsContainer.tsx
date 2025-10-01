@@ -1,6 +1,4 @@
 "use client";
-
-import React from "react";
 import styles from "./TabsContainer.module.scss";
 
 interface TabsContainerProps {

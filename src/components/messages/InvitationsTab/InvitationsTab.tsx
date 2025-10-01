@@ -3,11 +3,11 @@
 import React from "react";
 import { Handshake } from "lucide-react";
 import PartnershipMessage from "@/components/messages/PartnershipMessage";
-import LoadingBar from "@/components/common/loading/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { Partnership, PartnershipPopulated } from "@/types/partnerships";
 import { UserPopulated } from "@/types/user";
 import styles from "./InvitationsTab.module.scss";
-import EmptyState from "@/components/common/noResults/emptyState";
+import EmptyState from "@/components/common/noResults/EmptyStatetempname";
 
 interface InvitationsTabProps {
   partnerships: PartnershipPopulated[];

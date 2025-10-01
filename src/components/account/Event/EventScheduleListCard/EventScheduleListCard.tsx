@@ -1,14 +1,14 @@
 import { EventTimeSlot, Period } from "@/types/place/schedule";
 import styles from "./EventScheduleListCard.module.scss";
 import { Plus, Trash2 } from "lucide-react";
-import Button from "@/components/common/buttons/button/Button";
+import Button from "@/components/common/buttons/Button";
 import { useState } from "react";
 import DatesSelector from "@/components/common/inputs/DatesSelector";
 import { parseDateStringToDate } from "@/utils/dates";
 import NewEventSlot from "@/components/account/Event/EventEditTimeSlot";
 import EventSlotCard from "@/components/account/Event/EventSlotCard";
 import { Partnership } from "@/types/partnerships";
-import EmptyState from "@/components/common/noResults/emptyState";
+import EmptyState from "@/components/common/noResults/EmptyStatetempname";
 
 const EventScheduleListCard = ({
   period,

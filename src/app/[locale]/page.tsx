@@ -1,5 +1,5 @@
-import HomeHeader from "@/components/home/appPresentation";
-import SuggestionsList from "@/components/home/suggestionsList";
+import HomeHeader from "@/components/home/HomeHeader";
+import SuggestionsList from "@/components/home/SuggestionsListtempname";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

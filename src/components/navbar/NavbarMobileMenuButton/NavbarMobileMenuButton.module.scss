@@ -1,0 +1,31 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: $grey-500;
+  cursor: pointer;
+  padding: spacing(0.5);
+  margin-left: auto;
+  transition: $transition-default;
+  &:hover {
+    color: $grey-700;
+  }
+}
+
+@include respond-to(xs) {
+  .button {
+    padding: spacing(0.25);
+  }
+}
+
+@include respond-to(md) {
+  .button {
+    display: none;
+  }
+}

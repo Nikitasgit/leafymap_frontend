@@ -1,5 +1,5 @@
 import { Mail } from "lucide-react";
-import EmptyState from "@/components/common/noResults/emptyState";
+import EmptyState from "@/components/common/noResults/EmptyStatetempname";
 import styles from "./MessagesTab.module.scss";
 
 export default function MessagesTab() {

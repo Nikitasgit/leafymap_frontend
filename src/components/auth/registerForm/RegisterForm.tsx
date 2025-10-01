@@ -4,10 +4,10 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import styles from "./RegisterForm.module.scss";
-import Button from "@/components/common/buttons/button/Button";
-import LoadingBar from "@/components/common/loading/LoadingBar";
-import TextField from "@/components/common/inputs/textField/TextField";
-import CGUCheckbox from "@/components/common/inputs/cguCheckbox";
+import Button from "@/components/common/buttons/Button";
+import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import TextField from "@/components/common/inputs/TextFieldtempname/TextField";
+import CGUCheckbox from "@/components/common/inputs/CguCheckboxtempname";
 import { useRegister } from "@/hooks/useRegister";
 
 export default function RegisterForm() {

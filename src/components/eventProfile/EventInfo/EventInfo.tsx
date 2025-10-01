@@ -1,5 +1,5 @@
 "use client";
-import TitleWithLine from "@/components/common/typography/titleWithLine";
+import TitleWithLine from "@/components/common/typography/TitleWithLinetempname";
 import styles from "./EventInfo.module.scss";
 import EventInfoProps from "./EventInfo.types";
 

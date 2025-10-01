@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
-import Button from "@/components/common/buttons/button/Button";
+import Button from "@/components/common/buttons/Button";
 import MapPlaceCardSchedule from "../MapPlaceCardSchedule";
 import styles from "./MapPlaceCard.module.scss";
 import { MapPin } from "lucide-react";
 import { usePlace } from "@/hooks/usePlace";
 import { useRouter } from "next/navigation";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
-import CreatorCategoryBadge from "@/components/common/users/creatorCategoryBadge";
+import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadgetempname";
 import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
 import { MapPlaceCardProps } from "./MapPlaceCard.types";
 import { capitalizeFirstLetter } from "@/utils/functions";
