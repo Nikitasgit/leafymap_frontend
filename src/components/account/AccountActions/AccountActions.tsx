@@ -55,10 +55,11 @@ export default function AccountActions({
           Voir mon profil public
         </Button>
       )}
+
       {buttonParameters && (
         <Button
           disabled={isLoadingUser}
-          variant="secondary"
+          variant="outline"
           endIcon={<Edit size={16} />}
           onClick={() => {
             router.push(buttonParameters.route);
@@ -68,6 +69,22 @@ export default function AccountActions({
         >
           {buttonParameters.text}
         </Button>
+      )}
+
+      {userType === "guest" && (
+        <div className={styles.infoCard}>
+          <p className={styles.infoText}>
+            ✨ Artisan, artiste, producteur local ou responsable de lieu
+            (marché, boutique, espace culturel…)?
+          </p>
+          <p className={styles.infoText}>
+            Mettez en lumière votre activité et rejoignez SpotLight dès
+            aujourd&apos;hui.
+          </p>
+          <p className={styles.infoText}>
+            👉 Cliquez sur «Ajouter mon activité » pour créer votre profil !
+          </p>
+        </div>
       )}
     </section>
   );
