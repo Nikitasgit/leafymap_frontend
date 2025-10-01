@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./SigninForm.module.scss";
-import Button from "@/components/common/buttons/Buttontempname";
+import Button from "@/components/common/buttons/Button";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";

@@ -7,7 +7,7 @@ import styles from "./AccountEventsContainer.module.scss";
 import { getEventStatusFromSchedule } from "@/utils/eventDates";
 import PageHeader from "@/components/common/PageHeader";
 import EventsList from "@/components/account/AccountEventsList";
-import Button from "@/components/common/buttons/Buttontempname";
+import Button from "@/components/common/buttons/Button";
 import { Plus } from "lucide-react";
 import { capitalizeFirstLetter } from "@/utils/functions";
 

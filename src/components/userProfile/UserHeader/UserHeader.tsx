@@ -1,6 +1,6 @@
 import { Users, MapPin } from "lucide-react";
 import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader";
-import Button from "@/components/common/buttons/Buttontempname";
+import Button from "@/components/common/buttons/Button";
 import { Image as ImageType } from "@/types/image";
 import { UserPopulated } from "@/types/user";
 import styles from "./UserHeader.module.scss";

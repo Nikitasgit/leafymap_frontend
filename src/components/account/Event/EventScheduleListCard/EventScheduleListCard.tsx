@@ -1,7 +1,7 @@
 import { EventTimeSlot, Period } from "@/types/place/schedule";
 import styles from "./EventScheduleListCard.module.scss";
 import { Plus, Trash2 } from "lucide-react";
-import Button from "@/components/common/buttons/Buttontempname";
+import Button from "@/components/common/buttons/Button";
 import { useState } from "react";
 import DatesSelector from "@/components/common/inputs/DatesSelector";
 import { parseDateStringToDate } from "@/utils/dates";

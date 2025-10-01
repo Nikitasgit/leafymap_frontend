@@ -6,7 +6,7 @@ import { fr } from "date-fns/locale/fr";
 import { EventTimeSlot, TimeSlot } from "@/types/place/schedule";
 import styles from "./TimeSlotInputs.module.scss";
 import { XCircle } from "lucide-react";
-import Button from "../../buttons/Buttontempname";
+import Button from "../../buttons/Button";
 
 registerLocale("fr", fr);
 

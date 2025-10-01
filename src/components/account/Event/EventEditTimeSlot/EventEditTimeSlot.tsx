@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TimeSlotInputs from "@/components/common/inputs/TimeSlotInputs";
 import TextField from "@/components/common/inputs/TextField/TextField";
-import Button from "@/components/common/buttons/Buttontempname";
+import Button from "@/components/common/buttons/Button";
 import { EventTimeSlot } from "@/types/place/schedule";
 import styles from "./EventEditTimeSlot.module.scss";
 import { useToast } from "@/hooks/useToast";

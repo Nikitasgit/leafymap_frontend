@@ -7,7 +7,7 @@ import { useRef, useState, useEffect } from "react";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useFindPlaces } from "@/hooks/useFindPlaces";
 import { useFindUsers } from "@/hooks/useFindUsers";
-import Button from "@/components/common/buttons/Buttontempname";
+import Button from "@/components/common/buttons/Button";
 import {
   CreatorSearchResult,
   PlaceSearchResult,

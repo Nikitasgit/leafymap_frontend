@@ -3,7 +3,7 @@
 import styles from "./HomeHeader.module.scss";
 import Image from "next/image";
 import CeramistHands from "../../../../public/images/ceramist-hands.jpg";
-import Button from "@/components/common/buttons/Buttontempname";
+import Button from "@/components/common/buttons/Button";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 

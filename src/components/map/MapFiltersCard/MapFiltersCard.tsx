@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Button from "@/components/common/buttons/Buttontempname";
+import Button from "@/components/common/buttons/Button";
 import styles from "./MapFiltersCard.module.scss";
 import { RotateCcw } from "lucide-react";
 import PlaceCategoryFilter from "../PlaceCategoryFilter";

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Button from "../Buttontempname";
+import Button from "../Button";
 import { ArrowLeft } from "lucide-react";
 import styles from "./BackButton.module.scss";
 import { useRouter } from "next/navigation";

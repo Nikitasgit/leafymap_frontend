@@ -2,7 +2,7 @@
 
 import React from "react";
 import PageHeader from "@/components/common/PageHeader";
-import Button from "@/components/common/buttons/Buttontempname";
+import Button from "@/components/common/buttons/Button";
 import InfoIcon from "@/components/common/Tooltip/Tooltip";
 import { useDeleteAccount } from "@/hooks/useDeleteAccount";
 import { Trash2 } from "lucide-react";
