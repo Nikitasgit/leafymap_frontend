@@ -565,19 +565,17 @@ L'application respecte les standards d'accessibilité suivants :
 
 - **ARIA labels obligatoires** : Chaque bouton doit avoir un `aria-label` descriptif
 
-  // ✅ Bon
-  <button aria-label="Fermer le menu">
+```typescript
+// ✅ Bon
+<button aria-label="Fermer le menu">
   <CloseIcon />
-  </button>
+</button>
 
-  // ❌ Mauvais (pas d'aria-label avec icône seule)
-  <button>
+// ❌ Mauvais (pas d'aria-label avec icône seule)
+<button>
   <CloseIcon />
-  </button>
-
-  ```
-
-  ```
+</button>
+```
 
 - Boutons cliquables au clavier (Enter/Space)
 - Focus visible sur tous les éléments interactifs
