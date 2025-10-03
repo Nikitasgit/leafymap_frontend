@@ -106,7 +106,10 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
               return (
                 <div key={partnership._id} className={styles.card}>
                   <div className={styles.cardInfo}>
-                    <div className={styles.imageContainer}>
+                    <div
+                      className={styles.imageContainer}
+                      onClick={() => router.push(`/events/${event._id}`)}
+                    >
                       <Image
                         src={event.image?.urls?.thumbnail || eventDefaultsSvg}
                         alt={event.name}
