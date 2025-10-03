@@ -18,20 +18,24 @@ const SuggestionsList = () => {
   return (
     <section className={styles.suggestionsList}>
       <h2>Les lieux à ne pas manquer</h2>
-      {isLoading ? (
-        <div className={`${styles.suggestionsListGrid} skeleton`}></div>
-      ) : searchResults.length > 0 ? (
-        <div className={styles.suggestionsListGrid}>
-          {searchResults.map((suggestion) => (
-            <PlaceSuggestionCard key={suggestion._id} place={suggestion} />
-          ))}
-        </div>
-      ) : hasFetched ? (
+      {hasFetched && searchResults.length === 0 ? (
         <EmptyState
           title="Aucun lieu trouvé"
           icon={<MapPin className={styles.icon} />}
         />
-      ) : null}
+      ) : (
+        <div
+          className={
+            styles.suggestionsListGrid +
+            " " +
+            (!hasFetched || isLoading ? "skeleton" : "")
+          }
+        >
+          {searchResults.map((suggestion) => (
+            <PlaceSuggestionCard key={suggestion._id} place={suggestion} />
+          ))}
+        </div>
+      )}
     </section>
   );
 };

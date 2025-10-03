@@ -1,0 +1,71 @@
+@use "../../../styles/abstracts/variables" as *;
+@use "../../../styles/abstracts/functions" as *;
+@use "../../../styles/abstracts/mixins" as *;
+
+.HeaderCard {
+  background-color: rgba($white, 0.7);
+  backdrop-filter: blur(10px);
+  text-align: center;
+  @include flex(column, center, center, spacing(1));
+  padding: spacing(1.5);
+  width: calc(100% - #{spacing(2)});
+  max-width: 280px;
+  min-height: 200px;
+  border-radius: 12px;
+  position: absolute;
+  bottom: spacing(2);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+
+  h3 {
+    font-size: rem(16);
+    font-weight: 600;
+    color: $grey-600;
+    margin: 0;
+  }
+
+  p {
+    font-size: rem(14);
+    color: $grey-500;
+    margin: 0;
+  }
+}
+
+@include respond-to(sm) {
+  .HeaderCard {
+    width: 300px;
+    max-width: none;
+    bottom: auto;
+    top: 50%;
+    left: spacing(2);
+    transform: translateY(-50%);
+    padding: spacing(2);
+
+    h3 {
+      font-size: rem(18);
+    }
+
+    p {
+      font-size: rem(16);
+    }
+  }
+}
+
+@include respond-to(md) {
+  .HeaderCard {
+    width: 350px;
+    padding: spacing(2.5);
+
+    h3 {
+      font-size: rem(20);
+    }
+  }
+}
+
+@include respond-to(lg) {
+  .HeaderCard {
+    width: 400px;
+    padding: spacing(3);
+  }
+}
