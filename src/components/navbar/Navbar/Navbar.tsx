@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Home, Map, MessageSquare, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -11,6 +12,7 @@ import NavbarMenuDesktop from "../NavbarMenuDesktop";
 import NavbarMenuMobile from "../NavbarMenuMobile";
 import NavbarMobileMenuButton from "../NavbarMobileMenuButton";
 import styles from "./Navbar.module.scss";
+import logo from "../../../../public/logo/logo.png";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -48,7 +50,14 @@ export default function Navbar() {
       aria-label="Navigation principale"
     >
       <Link href="/" className={styles.logo}>
-        Spotlight
+        <Image
+          src={logo}
+          alt="SpotLight"
+          width={150}
+          height={40}
+          priority
+          className={styles.logoImage}
+        />
       </Link>
       <NavbarMenuDesktop
         navItems={navItems}

@@ -14,6 +14,14 @@ export async function generateUserMetadata(userId: string): Promise<Metadata> {
           title: "Utilisateur | SpotLight",
           description: "Découvrez le profil de cet utilisateur sur SpotLight",
           siteName: "SpotLight",
+          images: [
+            {
+              url: "/logo/logo.svg",
+              width: 120,
+              height: 40,
+              alt: "SpotLight Logo",
+            },
+          ],
         },
         twitter: {
           card: "summary",
@@ -34,6 +42,14 @@ export async function generateUserMetadata(userId: string): Promise<Metadata> {
         description: `Découvrez le profil de ${creatorName} sur SpotLight. ${userData.description}`,
         siteName: "SpotLight",
         type: "profile",
+        images: [
+          {
+            url: "/logo/logo.svg",
+            width: 120,
+            height: 40,
+            alt: "SpotLight Logo",
+          },
+        ],
       },
       twitter: {
         card: "summary",
@@ -49,6 +65,14 @@ export async function generateUserMetadata(userId: string): Promise<Metadata> {
         title: "Utilisateur | SpotLight",
         description: "Découvrez le profil de cet utilisateur sur SpotLight",
         siteName: "SpotLight",
+        images: [
+          {
+            url: "/logo/logo.svg",
+            width: 120,
+            height: 40,
+            alt: "SpotLight Logo",
+          },
+        ],
       },
       twitter: {
         card: "summary",
@@ -73,6 +97,14 @@ export async function generatePlaceMetadata(
           title: "Lieu | SpotLight",
           description: "Découvrez ce lieu sur SpotLight",
           siteName: "SpotLight",
+          images: [
+            {
+              url: "/logo/logo.svg",
+              width: 120,
+              height: 40,
+              alt: "SpotLight Logo",
+            },
+          ],
         },
         twitter: {
           card: "summary",
@@ -95,6 +127,14 @@ export async function generatePlaceMetadata(
         description: `Découvrez ce lieu sur SpotLight. ${placeDescription}`,
         siteName: "SpotLight",
         type: "website",
+        images: [
+          {
+            url: "/logo/logo.svg",
+            width: 120,
+            height: 40,
+            alt: "SpotLight Logo",
+          },
+        ],
       },
       twitter: {
         card: "summary_large_image",
@@ -110,6 +150,14 @@ export async function generatePlaceMetadata(
         title: "Lieu | SpotLight",
         description: "Découvrez ce lieu sur SpotLight",
         siteName: "SpotLight",
+        images: [
+          {
+            url: "/logo/logo.svg",
+            width: 120,
+            height: 40,
+            alt: "SpotLight Logo",
+          },
+        ],
       },
       twitter: {
         card: "summary",
@@ -133,6 +181,14 @@ export async function generateEventMetadata(
           title: "Événement | SpotLight",
           description: "Découvrez cet événement sur SpotLight",
           siteName: "SpotLight",
+          images: [
+            {
+              url: "/logo/logo.svg",
+              width: 120,
+              height: 40,
+              alt: "SpotLight Logo",
+            },
+          ],
         },
         twitter: {
           card: "summary",
@@ -158,6 +214,14 @@ export async function generateEventMetadata(
         description: `Découvrez cet événement sur SpotLight${placeName}. ${eventDescription}`,
         siteName: "SpotLight",
         type: "website",
+        images: [
+          {
+            url: "/logo/logo.svg",
+            width: 120,
+            height: 40,
+            alt: "SpotLight Logo",
+          },
+        ],
       },
       twitter: {
         card: "summary_large_image",
@@ -173,6 +237,14 @@ export async function generateEventMetadata(
         title: "Événement | SpotLight",
         description: "Découvrez cet événement sur SpotLight",
         siteName: "SpotLight",
+        images: [
+          {
+            url: "/logo/logo.svg",
+            width: 120,
+            height: 40,
+            alt: "SpotLight Logo",
+          },
+        ],
       },
       twitter: {
         card: "summary",
