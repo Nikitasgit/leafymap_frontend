@@ -20,7 +20,7 @@ const DefaultScheduleForm = ({
   const handleDayChange = (day: WeekDay, updated: DaySchedule) => {
     onChange({ ...schedule, [day]: updated });
   };
-
+  console.log(schedule);
   return (
     <fieldset className={styles.defaultScheduleForm}>
       <legend className={styles.title}>Horaires</legend>

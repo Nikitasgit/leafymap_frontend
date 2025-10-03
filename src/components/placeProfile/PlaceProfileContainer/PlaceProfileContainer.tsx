@@ -37,10 +37,6 @@ const PlaceProfileContainer: React.FC = () => {
   } = useGalleryImages(placeId, "Place");
   const { submitImages, isLoading: isUploadingImages } = useSubmitImages();
 
-  const handleFollow = () => {
-    // TODO: Implement follow functionality
-    console.log("Follow place");
-  };
 
   const handleFilesSelected = async (files: File[]) => {
     if (files.length === 0) return;
@@ -114,7 +110,7 @@ const PlaceProfileContainer: React.FC = () => {
   return (
     <div className={styles.pageContainer}>
       <div className={styles.container}>
-        <PlaceHeader place={place} onFollow={handleFollow} />
+        <PlaceHeader place={place} />
         <TabsContainer>
           {tabs.map((tab) => (
             <Tab

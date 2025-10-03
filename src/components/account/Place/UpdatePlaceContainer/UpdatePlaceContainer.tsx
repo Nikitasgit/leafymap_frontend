@@ -25,7 +25,7 @@ const initialPlaceData = (place: InitialPlaceData): InitialPlaceData => ({
   name: place?.name || "",
   description: place?.description || "",
   location: place?.location || null,
-  defaultSchedule: defaultSchedule,
+  defaultSchedule: place?.defaultSchedule || defaultSchedule,
   placeCategory:
     typeof place?.placeCategory === "string"
       ? place.placeCategory

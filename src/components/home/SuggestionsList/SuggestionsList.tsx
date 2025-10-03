@@ -1,6 +1,6 @@
 "use client";
 import { useFindPlaces } from "@/hooks/useFindPlaces";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./SuggestionsList.module.scss";
 import PlaceSuggestionCard from "../PlaceSuggestionCard";
 import EmptyState from "@/components/common/noResults/EmptyState";
@@ -8,8 +8,10 @@ import { MapPin } from "lucide-react";
 
 const SuggestionsList = () => {
   const { searchResults, isLoading, searchPlaces } = useFindPlaces();
+  const [hasFetched, setHasFetched] = useState(false);
+
   useEffect(() => {
-    searchPlaces();
+    searchPlaces().finally(() => setHasFetched(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -24,12 +26,12 @@ const SuggestionsList = () => {
             <PlaceSuggestionCard key={suggestion._id} place={suggestion} />
           ))}
         </div>
-      ) : (
+      ) : hasFetched ? (
         <EmptyState
           title="Aucun lieu trouvé"
           icon={<MapPin className={styles.icon} />}
         />
-      )}
+      ) : null}
     </section>
   );
 };

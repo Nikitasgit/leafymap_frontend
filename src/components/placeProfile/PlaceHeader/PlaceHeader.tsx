@@ -11,10 +11,9 @@ import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/Pl
 
 interface PlaceHeaderProps {
   place: PlacePopulated;
-  onFollow: () => void;
 }
 
-const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, onFollow }) => {
+const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place }) => {
   return (
     <header className={styles.header}>
       <BackButton />
@@ -37,7 +36,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, onFollow }) => {
           <Button
             variant="outline"
             size="small"
-            onClick={onFollow}
+            onClick={() => {}}
             ariaLabel="Suivre"
           >
             Suivre
