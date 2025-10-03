@@ -11,14 +11,18 @@ export const useFindUsers = () => {
 
   const searchUsers = useCallback(
     async (
-      queryParams: Record<string, string>,
+      queryParams: Record<string, string | string[]>,
       limit: number = 5
     ): Promise<UserPopulated[]> => {
       return withLoading(async () => {
         try {
           const searchParams = new URLSearchParams();
           Object.entries(queryParams || {}).forEach(([key, value]) => {
-            searchParams.append(key, value);
+            if (Array.isArray(value)) {
+              value.forEach((v) => searchParams.append(key, v));
+            } else {
+              searchParams.append(key, value);
+            }
           });
           searchParams.append("limit", limit.toString());
 

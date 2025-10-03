@@ -7,6 +7,7 @@ import { generateTempId, isTempId } from "@/utils/tempId";
 import { Partnership } from "@/types/partnerships";
 import { useToast } from "@/hooks/useToast";
 import { useFindUsers } from "@/hooks/useFindUsers";
+import { useAuth } from "@/hooks/useAuth";
 import PartnershipsFormList from "../PartnershipsFormList";
 import { SearchInput } from "@/components/common/inputs/SearchInput";
 
@@ -19,9 +20,16 @@ const PartnershipsForm = ({
 }) => {
   const { searchUsers } = useFindUsers();
   const { showError } = useToast();
-
+  const { user } = useAuth();
   const fetchSuggestions = async (query: string) => {
-    const users = await searchUsers({ creatorName: query });
+    const searchParams: Record<string, string | string[]> = {
+      creatorName: query,
+    };
+    if (user?._id) {
+      searchParams.excludeIds = [user._id];
+    }
+
+    const users = await searchUsers(searchParams);
     const suggestions = users.map((user) => ({
       _id: user._id,
       image: user.image?.urls.thumbnail,

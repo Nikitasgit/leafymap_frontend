@@ -9,7 +9,6 @@ import placeDefaultsSvg from "@public/images/place_default.svg";
 
 const PlaceSuggestionCard = ({ place }: { place: PlacePopulated }) => {
   const router = useRouter();
-  console.log("place", place);
 
   const handleRedirect = () => {
     if (place.isCreatorPlace) {

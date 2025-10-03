@@ -20,12 +20,10 @@ export const useCurrentUser = () => {
         );
         setUser(response.data.data.user);
       } catch (err) {
-        // Ne pas afficher d'erreur si l'utilisateur n'est simplement pas connecté (401)
         if (axios.isAxiosError(err) && err.response?.status === 401) {
           setUser(null);
           return;
         }
-        console.log(err);
         const errorMessage = "Erreur lors du chargement de l'utilisateur";
         setUser(null);
         showError(errorMessage);
