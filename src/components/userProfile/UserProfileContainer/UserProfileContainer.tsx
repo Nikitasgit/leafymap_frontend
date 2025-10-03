@@ -15,10 +15,12 @@ import GallerySection from "@/components/userProfile/GallerySection/GallerySecti
 import TabsContainer from "@/components/common/tabs/TabsContainer/TabsContainer";
 import Tab from "@/components/common/tabs/Tab/Tab";
 import { User as UserIcon, MapPin, Calendar } from "lucide-react";
+import { useToast } from "@/hooks/useToast";
 
 const UserProfileContainer = () => {
   const { userId } = useParams();
   const [activeTab, setActiveTab] = useState("gallery");
+  const { showInfo } = useToast();
   const { user: currentUser } = useAuth();
   const { user, isLoading } = useUser(userId as string);
   const {
@@ -40,8 +42,7 @@ const UserProfileContainer = () => {
   );
 
   const handleFollow = () => {
-    // TODO: Implement follow functionality
-    console.log("Follow user");
+    showInfo("Cette fonctionnalité arrivera bientôt!");
   };
 
   const handleFilesSelected = async (files: File[]) => {

@@ -48,7 +48,7 @@ export default function Navbar() {
       aria-label="Navigation principale"
     >
       <Link href="/" className={styles.logo}>
-        SpotLight
+        Spotlight
       </Link>
       <NavbarMenuDesktop
         navItems={navItems}

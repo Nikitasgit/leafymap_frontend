@@ -29,7 +29,6 @@ const PlaceCategorySelectorInput = ({
   const { showError } = useToast();
   const { t } = useTranslation("subscription");
   const ref = useRef<HTMLDivElement>(null);
-
   const getFilteredCategories = () => {
     if (selectedTypes.length === 0) {
       return placeCategories;

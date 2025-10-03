@@ -8,12 +8,14 @@ import { Image } from "@/types/image";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter/SubscribersCounter";
 import BackButton from "@/components/common/buttons/BackButton";
 import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
+import { useToast } from "@/hooks/useToast";
 
 interface PlaceHeaderProps {
   place: PlacePopulated;
 }
 
 const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place }) => {
+  const { showInfo } = useToast();
   return (
     <header className={styles.header}>
       <BackButton />
@@ -36,7 +38,9 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place }) => {
           <Button
             variant="outline"
             size="small"
-            onClick={() => {}}
+            onClick={() => {
+              showInfo("Cette fonctionnalité arrivera bientôt!");
+            }}
             ariaLabel="Suivre"
           >
             Suivre

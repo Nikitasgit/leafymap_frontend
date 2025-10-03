@@ -108,7 +108,7 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
                   <div className={styles.cardInfo}>
                     <div className={styles.imageContainer}>
                       <Image
-                        src={event.image.urls.thumbnail || eventDefaultsSvg}
+                        src={event.image?.urls?.thumbnail || eventDefaultsSvg}
                         alt={event.name}
                         width={54}
                         height={54}
@@ -167,7 +167,7 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
                     onClick={() => router.push(`/places/${place._id}`)}
                   >
                     <Image
-                      src={place.image.urls.thumbnail || placeDefaultsSvg}
+                      src={place.image?.urls?.thumbnail || placeDefaultsSvg}
                       alt={place.name}
                       width={48}
                       height={48}

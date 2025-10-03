@@ -9,6 +9,7 @@ import placeDefaultsSvg from "@public/images/place_default.svg";
 
 const PlaceSuggestionCard = ({ place }: { place: PlacePopulated }) => {
   const router = useRouter();
+  console.log("place", place);
 
   const handleRedirect = () => {
     if (place.isCreatorPlace) {
@@ -42,7 +43,9 @@ const PlaceSuggestionCard = ({ place }: { place: PlacePopulated }) => {
           <p className={styles.location}>{place.location?.label}</p>
         </div>
         <p className={styles.description}>
-          {place.description || "Aucune description disponible"}
+          {place.description ||
+            place.user?.description ||
+            "Aucune description disponible"}
         </p>
         <PlaceCategoryBadge categoryName={place.placeCategory?.name || ""} />
       </div>

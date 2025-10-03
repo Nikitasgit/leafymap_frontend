@@ -28,7 +28,8 @@ const PlaceProfileContainer: React.FC = () => {
   const { partnerships, isLoading: partnershipsLoading } = usePlacePartnerships(
     placeId,
     undefined,
-    "place"
+    "place",
+    true
   );
   const {
     images,
@@ -36,7 +37,6 @@ const PlaceProfileContainer: React.FC = () => {
     refetch: refetchImages,
   } = useGalleryImages(placeId, "Place");
   const { submitImages, isLoading: isUploadingImages } = useSubmitImages();
-
 
   const handleFilesSelected = async (files: File[]) => {
     if (files.length === 0) return;
