@@ -193,9 +193,7 @@ function MyComponent() {
 #### Système d'authentification
 
 - **Redux state** : `authSlice.ts` gère l'état auth
-- **Cookie-based** : Tokens JWT stockés en cookies HTTP-only
 - **Protected routes** : Redirection si non authentifié
-- **Session persistante** : Token valide 1 jour
 
 #### Processus de connexion
 
@@ -596,7 +594,7 @@ L'application respecte les standards d'accessibilité suivants :
 
 ## 🚢 Déploiement
 
-- **Platform** : Vercel
-- **URL** : innovastay.fr
+- **Platform** : Vercel (ou autre plateforme)
+- **URL** : yourdomain.com
 - **Auto-deploy** : Sur push `main`
 - **Preview** : Une URL par PR

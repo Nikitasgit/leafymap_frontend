@@ -11,6 +11,12 @@ const Footer: React.FC = () => {
           <Link href="/legal/cgu" className={styles.link}>
             Conditions Générales d&apos;Utilisation
           </Link>
+          <p className={styles.text}>
+            Support:{" "}
+            <a href="mailto:victorleman1@gmail.com" className={styles.link}>
+              victorleman1@gmail.com
+            </a>
+          </p>
         </div>
       </div>
     </footer>
