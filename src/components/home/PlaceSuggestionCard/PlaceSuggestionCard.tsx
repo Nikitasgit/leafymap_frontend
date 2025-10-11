@@ -6,6 +6,7 @@ import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/Pl
 import { MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import placeDefaultsSvg from "@public/images/place_default.svg";
+import { capitalizeFirstLetter } from "@/utils/functions";
 
 const PlaceSuggestionCard = ({ place }: { place: PlacePopulated }) => {
   const router = useRouter();
@@ -36,7 +37,7 @@ const PlaceSuggestionCard = ({ place }: { place: PlacePopulated }) => {
         />
       </div>
       <div className={styles.infoContainer}>
-        <h3 className={styles.title}>{place.name}</h3>
+        <h3 className={styles.title}>{capitalizeFirstLetter(place.name)}</h3>
         <div className={styles.locationContainer}>
           <MapPin size={18} />
           <p className={styles.location}>{place.location?.label}</p>
