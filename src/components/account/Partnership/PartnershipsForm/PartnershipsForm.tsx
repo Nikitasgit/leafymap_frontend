@@ -100,7 +100,8 @@ const PartnershipsForm = ({
         <span className={styles.title}>Partenaires</span>
         <Tooltip
           tooltip="Ajoutez des artistes ou créez un profil provisoire pour des créateurs ou producteurs qui apparaîtront sur votre profil comme des partenaires de votre lieu."
-          place="right"
+          place="top-right"
+          maxWidth={300}
         />
       </legend>
       <div className={styles.searchContainer}>

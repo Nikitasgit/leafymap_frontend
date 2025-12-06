@@ -5,22 +5,25 @@ import { usePlaceEvents } from "@/hooks/usePlaceEvents";
 import { useGalleryImages } from "@/hooks/useGalleryImages";
 import { useAuth } from "@/hooks/useAuth";
 import useSubmitImages from "@/hooks/useSubmitImages";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./PlaceProfileContainer.module.scss";
 import PlaceHeader from "@/components/placeProfile/PlaceHeader/PlaceHeader";
 import PlaceEventsSection from "@/components/placeProfile/PlaceEventsSection/PlaceEventsSection";
 import GallerySection from "@/components/userProfile/GallerySection/GallerySection";
 import TabsContainer from "@/components/common/tabs/TabsContainer/TabsContainer";
 import Tab from "@/components/common/tabs/Tab/Tab";
-import { Image as ImageIcon, Calendar, Users } from "lucide-react";
+import { Image as ImageIcon, Calendar, Users, Star } from "lucide-react";
 import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
 import PartnershipsSection from "@/components/placeProfile/PartnershipsSection/PartnershipsSection";
 import { PartnershipPopulated } from "@/types/partnerships";
-import { useParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import ReviewsTab from "@/components/reviews/ReviewsTab/ReviewsTab";
 
 const PlaceProfileContainer: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("gallery");
   const params = useParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [activeTab, setActiveTab] = useState("gallery");
   const placeId = params.placeId as string;
   const { user: currentUser } = useAuth();
   const { place, isLoading: placeLoading } = usePlace(placeId);
@@ -61,14 +64,27 @@ const PlaceProfileContainer: React.FC = () => {
     await refetchImages();
   };
 
+  // Initialize tab from URL on mount
+  useEffect(() => {
+    const tabFromUrl = searchParams.get("tab");
+    const tabs = ["gallery", "partnerships", "events", "reviews"];
+    if (tabFromUrl && tabs.includes(tabFromUrl)) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [searchParams]);
+
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("tab", tabId);
+    router.push(`?${newSearchParams.toString()}`, { scroll: false });
   };
 
   const tabs = [
     { id: "gallery", label: "Galerie", icon: ImageIcon },
     { id: "partnerships", label: "Partenaires", icon: Users },
     { id: "events", label: "Événements", icon: Calendar },
+    { id: "reviews", label: "Avis", icon: Star },
   ];
 
   const renderTabContent = () => {
@@ -91,6 +107,15 @@ const PlaceProfileContainer: React.FC = () => {
         );
       case "events":
         return <PlaceEventsSection events={events || []} />;
+      case "reviews":
+        return (
+          <ReviewsTab
+            reference={place?._id || ""}
+            referenceType="Place"
+            canReview={!isOwner}
+            canReply={isOwner || false}
+          />
+        );
       default:
         return null;
     }

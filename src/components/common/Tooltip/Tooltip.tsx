@@ -8,12 +8,31 @@ const Tooltip: React.FC<TooltipProps> = ({
   className = "",
   place = "right",
   style,
+  children,
+  delay = 0,
+  maxWidth,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleMouseEnter = () => setIsVisible(true);
-  const handleMouseLeave = () => setIsVisible(false);
+  const handleMouseEnter = () => {
+    if (delay > 0) {
+      timeoutRef.current = setTimeout(() => {
+        setIsVisible(true);
+      }, delay);
+    } else {
+      setIsVisible(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setIsVisible(false);
+  };
 
   const handleTouchStart = (e: React.TouchEvent) => {
     e.preventDefault();
@@ -38,20 +57,41 @@ const Tooltip: React.FC<TooltipProps> = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
     };
   }, [isVisible]);
+
+  const placeClassName = place.replace(/-([a-z])/g, (_, letter) =>
+    letter.toUpperCase()
+  );
+
+  const containerClassName = `${styles.tooltipWrapper} ${
+    styles[placeClassName] || ""
+  } ${className}`;
 
   return (
     <div
       ref={containerRef}
-      className={`${styles.infoIconContainer} ${styles[place]} ${className}`}
+      className={containerClassName}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onTouchStart={handleTouchStart}
       style={style}
     >
-      <Info size={16} />
-      {isVisible && <div className={styles.tooltip}>{tooltip}</div>}
+      {children || <Info size={16} />}
+      {isVisible && (
+        <div
+          className={styles.tooltip}
+          style={{
+            width: maxWidth ? `${maxWidth}px` : undefined,
+            whiteSpace: maxWidth ? "normal" : "nowrap",
+          }}
+        >
+          {tooltip}
+        </div>
+      )}
     </div>
   );
 };

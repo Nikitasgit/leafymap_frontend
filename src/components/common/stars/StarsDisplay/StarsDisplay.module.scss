@@ -1,0 +1,49 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.starsContainer {
+  @include flex(row, flex-start, center, spacing(0.25));
+  color: $orange-medium;
+
+  .star {
+    flex-shrink: 0;
+    transition: $transition-default;
+  }
+
+  .halfStar {
+    position: relative;
+    display: inline-block;
+
+    .halfStarOverlay {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      background: $white;
+      mix-blend-mode: color;
+    }
+  }
+
+  &.small {
+    .star {
+      width: rem(14);
+      height: rem(14);
+    }
+  }
+
+  &.medium {
+    .star {
+      width: rem(18);
+      height: rem(18);
+    }
+  }
+
+  &.large {
+    .star {
+      width: rem(24);
+      height: rem(24);
+    }
+  }
+}
