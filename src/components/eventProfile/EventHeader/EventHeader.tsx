@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import BackButton from "@/components/common/buttons/BackButton";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import { EventHeaderProps } from "./EventHeader.types";
+import StarsDisplay from "@/components/common/stars/StarsDisplay/StarsDisplay";
 
 const EventHeader: React.FC<EventHeaderProps> = ({ event }) => {
   const eventDisplayInfo = getEventDisplayInfo(event.schedule || []);
@@ -28,6 +29,14 @@ const EventHeader: React.FC<EventHeaderProps> = ({ event }) => {
           isOwner={false}
         />
         <div className={styles.programInfo}>
+          {event.rating > 0 && (
+            <div className={styles.rating}>
+              <StarsDisplay rating={event.rating} size="small" />
+              <span className={styles.ratingValue}>
+                ({event.rating.toFixed(1)})
+              </span>
+            </div>
+          )}
           <EventStatus status={eventDisplayInfo.status} />
           <div className={styles.dateInfo}>
             <p className={styles.dateText}>

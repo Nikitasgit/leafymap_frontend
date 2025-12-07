@@ -21,6 +21,13 @@
     @include flex(column, flex-start, stretch, spacing(1.5));
   }
 
+  .separator {
+    width: 100%;
+    height: 1px;
+    background: $grey-200;
+    margin: spacing(1.5) 0;
+  }
+
   .emptyIcon {
     color: $grey-400;
     width: rem(48);

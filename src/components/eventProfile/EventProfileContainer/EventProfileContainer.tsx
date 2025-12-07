@@ -22,7 +22,11 @@ const EventProfileContainer = () => {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState("schedule");
   const { user: currentUser } = useAuth();
-  const { event, isLoading } = useEvent(eventId as string);
+  const {
+    event,
+    isLoading,
+    refetch: refetchEvent,
+  } = useEvent(eventId as string);
 
   const { partnerships, isLoading: partnershipsLoading } = usePlacePartnerships(
     event?.place?._id as string,
@@ -74,6 +78,7 @@ const EventProfileContainer = () => {
             referenceType="Event"
             canReview={!isOwner}
             canReply={isOwner || false}
+            onRatingUpdated={refetchEvent}
           />
         ) : null;
       default:

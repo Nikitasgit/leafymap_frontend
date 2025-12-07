@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
 import { PlacePopulated } from "@/types/place";
 import { useLoading } from "./useLoading";
@@ -8,36 +8,52 @@ export const usePlace = (placeId: string | null) => {
   const [place, setPlace] = useState<PlacePopulated | null>(null);
   const { isLoading, withLoading, stopLoading } = useLoading(true);
   const { showError } = useToast();
+  const showErrorRef = useRef(showError);
+  const stopLoadingRef = useRef(stopLoading);
+
+  // Keep refs updated
   useEffect(() => {
-    const fetchPlace = async () => {
-      try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}`;
+    showErrorRef.current = showError;
+    stopLoadingRef.current = stopLoading;
+  }, [showError, stopLoading]);
 
-        const response = await axios.get(url);
+  const fetchPlace = useCallback(async () => {
+    try {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}`;
 
-        if (response.data && response.data.data) {
-          setPlace(response.data.data);
-        } else {
-          setPlace(null);
-          showError("Invalid response from server");
-        }
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error
-            ? err.message
-            : "Erreur lors du chargement du lieu";
+      const response = await axios.get(url);
+
+      if (response.data && response.data.data) {
+        setPlace(response.data.data);
+      } else {
         setPlace(null);
-        showError(errorMessage);
+        showErrorRef.current("Invalid response from server");
       }
-    };
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Erreur lors du chargement du lieu";
+      setPlace(null);
+      showErrorRef.current(errorMessage);
+    }
+  }, [placeId]);
 
+  useEffect(() => {
     if (placeId) {
       withLoading(fetchPlace);
     } else {
       setPlace(null);
-      stopLoading();
+      stopLoadingRef.current();
     }
-  }, [placeId]); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [placeId]);
 
-  return { place, isLoading };
+  const refetch = useCallback(() => {
+    if (placeId) {
+      fetchPlace();
+    }
+  }, [placeId, fetchPlace]);
+
+  return { place, isLoading, refetch };
 };

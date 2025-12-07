@@ -54,12 +54,12 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
           comment: comment.trim() || undefined,
         });
       } else {
-        await submitReview({
-          rating,
-          comment: comment.trim() || undefined,
-          reference,
-          referenceType,
-        });
+      await submitReview({
+        rating,
+        comment: comment.trim() || undefined,
+        reference,
+        referenceType,
+      });
       }
       onSuccess?.();
       onClose();

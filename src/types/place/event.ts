@@ -18,6 +18,7 @@ export interface Event extends BaseEntity {
     | "ongoing"
     | "completed"
     | "unvalid";
+  rating: number;
   place: Place;
 }
 

@@ -25,7 +25,7 @@ const UserProfileContainer = () => {
   const [activeTab, setActiveTab] = useState("gallery");
   const { showInfo } = useToast();
   const { user: currentUser } = useAuth();
-  const { user, isLoading } = useUser(userId as string);
+  const { user, isLoading, refetch: refetchUser } = useUser(userId as string);
   const {
     images,
     isLoading: isLoadingImages,
@@ -127,6 +127,7 @@ const UserProfileContainer = () => {
             referenceType="User"
             canReview={!isOwner}
             canReply={isOwner || false}
+            onRatingUpdated={refetchUser}
           />
         ) : null;
       default:

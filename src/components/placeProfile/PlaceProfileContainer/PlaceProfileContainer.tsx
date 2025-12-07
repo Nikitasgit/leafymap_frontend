@@ -26,7 +26,11 @@ const PlaceProfileContainer: React.FC = () => {
   const [activeTab, setActiveTab] = useState("gallery");
   const placeId = params.placeId as string;
   const { user: currentUser } = useAuth();
-  const { place, isLoading: placeLoading } = usePlace(placeId);
+  const {
+    place,
+    isLoading: placeLoading,
+    refetch: refetchPlace,
+  } = usePlace(placeId);
   const { events, isLoading: eventsLoading } = usePlaceEvents(placeId);
   const { partnerships, isLoading: partnershipsLoading } = usePlacePartnerships(
     placeId,
@@ -114,6 +118,7 @@ const PlaceProfileContainer: React.FC = () => {
             referenceType="Place"
             canReview={!isOwner}
             canReply={isOwner || false}
+            onRatingUpdated={refetchPlace}
           />
         );
       default:

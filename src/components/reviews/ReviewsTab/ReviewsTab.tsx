@@ -15,6 +15,7 @@ interface ReviewsTabProps {
   referenceType: ReviewReferenceType;
   canReview?: boolean;
   canReply?: boolean;
+  onRatingUpdated?: () => void;
 }
 
 const ReviewsTab: React.FC<ReviewsTabProps> = ({
@@ -22,6 +23,7 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
   referenceType,
   canReview = true,
   canReply = false,
+  onRatingUpdated,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { reviews, isLoading, refetch } = useReviews({
@@ -39,8 +41,18 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
     });
   }, [reviews, user]);
 
+  // Sort reviews to put user's review first
+  const sortedReviews = useMemo(() => {
+    if (!userReview) return reviews;
+    const otherReviews = reviews.filter(
+      (review) => review._id !== userReview._id
+    );
+    return [userReview, ...otherReviews];
+  }, [reviews, userReview]);
+
   const handleReviewSuccess = () => {
     refetch();
+    onRatingUpdated?.();
   };
 
   // Reply functionality is handled in ReviewCard
@@ -81,15 +93,23 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
         />
       ) : (
         <div className={styles.reviewsList}>
-          {reviews.map((review) => (
-            <ReviewCard
-              key={review._id}
-              review={review}
-              onReply={user && canReply ? handleReply : undefined}
-              onReviewUpdated={handleReviewSuccess}
-              onReviewDeleted={handleReviewSuccess}
-            />
-          ))}
+          {sortedReviews.map((review, index) => {
+            const isUserReview = userReview && review._id === userReview._id;
+            const showSeparator =
+              isUserReview && index === 0 && sortedReviews.length > 1;
+
+            return (
+              <React.Fragment key={review._id}>
+                <ReviewCard
+                  review={review}
+                  onReply={user && canReply ? handleReply : undefined}
+                  onReviewUpdated={handleReviewSuccess}
+                  onReviewDeleted={handleReviewSuccess}
+                />
+                {showSeparator && <div className={styles.separator} />}
+              </React.Fragment>
+            );
+          })}
         </div>
       )}
 
