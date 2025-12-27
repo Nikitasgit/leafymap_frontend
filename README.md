@@ -267,7 +267,7 @@ function MyComponent() {
 
 #### Images
 
-- `useGalleryImages()` : Images d'une galerie
+- `useImages()` : Images (peut filtrer par type : gallery, profile, cover, other)
 - `useSubmitImages()` : Upload d'images
 - `useDeleteImages()` : Suppression d'images
 

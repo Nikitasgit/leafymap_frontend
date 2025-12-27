@@ -5,7 +5,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const origin =
   process.env.NODE_ENV === "production"
     ? "https://spotlight-project.vercel.app"
-    : "http://localhost:3000";
+    : "http://localhost:3001";
 
 export const getUserById = async (userId: string) => {
   try {

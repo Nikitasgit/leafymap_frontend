@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import React, { useState } from "react";
 import styles from "./UserProfileContainer.module.scss";
 import { usePartnershipByUserId } from "@/hooks/usePartnershipByUserId";
-import { useGalleryImages } from "@/hooks/useGalleryImages";
+import { useImages } from "@/hooks/useImages";
 import { useAuth } from "@/hooks/useAuth";
 import useSubmitImages from "@/hooks/useSubmitImages";
 import UserHeader from "@/components/userProfile/UserHeader/UserHeader";
@@ -27,7 +27,7 @@ const UserProfileContainer = () => {
     images,
     isLoading: isLoadingImages,
     refetch: refetchImages,
-  } = useGalleryImages(userId as string, "User");
+  } = useImages(userId as string, "User", "gallery");
   const { partnerships, isLoading: isLoadingPartnerships } =
     usePartnershipByUserId(userId as string, {
       asCollaborator: "true",

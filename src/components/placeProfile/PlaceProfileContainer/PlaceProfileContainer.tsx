@@ -2,7 +2,7 @@
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { usePlace } from "@/hooks/usePlace";
 import { usePlaceEvents } from "@/hooks/usePlaceEvents";
-import { useGalleryImages } from "@/hooks/useGalleryImages";
+import { useImages } from "@/hooks/useImages";
 import { useAuth } from "@/hooks/useAuth";
 import useSubmitImages from "@/hooks/useSubmitImages";
 import React, { useState } from "react";
@@ -35,7 +35,7 @@ const PlaceProfileContainer: React.FC = () => {
     images,
     isLoading: isLoadingImages,
     refetch: refetchImages,
-  } = useGalleryImages(placeId, "Place");
+  } = useImages(placeId, "Place", "gallery");
   const { submitImages, isLoading: isUploadingImages } = useSubmitImages();
 
   const handleFilesSelected = async (files: File[]) => {

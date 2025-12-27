@@ -4,17 +4,22 @@ import { Image } from "@/types/image";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 
-export const useGalleryImages = (
+export const useImages = (
   reference: string | null,
-  referenceType: "Place" | "User" | "Event" | "Message" | "Review" | null
+  referenceType: "Place" | "User" | "Event" | "Message" | "Review" | null,
+  type?: "profile" | "cover" | "gallery" | "other"
 ) => {
   const [images, setImages] = useState<Image[]>([]);
   const { isLoading, withLoading, stopLoading } = useLoading(true);
   const { showError } = useToast();
 
-  const fetchGalleryImages = async () => {
+  const fetchImages = async () => {
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/images/gallery?reference=${reference}&referenceType=${referenceType}`;
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/api/images/?reference=${reference}&referenceType=${referenceType}`;
+
+      if (type) {
+        url += `&type=${type}`;
+      }
 
       const response = await axios.get(url, {
         withCredentials: true,
@@ -30,7 +35,7 @@ export const useGalleryImages = (
       const errorMessage =
         err instanceof Error
           ? err.message
-          : "Erreur lors du chargement des images de la galerie";
+          : "Erreur lors du chargement des images";
       setImages([]);
       showError(errorMessage);
     }
@@ -38,18 +43,18 @@ export const useGalleryImages = (
 
   const refetch = async () => {
     if (reference && referenceType) {
-      await withLoading(fetchGalleryImages);
+      await withLoading(fetchImages);
     }
   };
 
   useEffect(() => {
     if (reference && referenceType) {
-      withLoading(fetchGalleryImages);
+      withLoading(fetchImages);
     } else {
       setImages([]);
       stopLoading();
     }
-  }, [reference, referenceType]);
+  }, [reference, referenceType, type]);
 
   return { images, isLoading, refetch };
 };

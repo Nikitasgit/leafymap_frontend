@@ -4,7 +4,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl =
     process.env.NODE_ENV === "production"
       ? "https://spotlight-project.vercel.app"
-      : "http://localhost:3000";
+      : "http://localhost:3001";
 
   return [
     {
