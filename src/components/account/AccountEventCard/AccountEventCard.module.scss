@@ -32,26 +32,7 @@
         text-overflow: ellipsis;
       }
       .actionButtons {
-        @include flex(row, flex-end, center, spacing(0.25));
         align-self: flex-end;
-        .viewIcon {
-          color: $grey-500;
-          &:hover {
-            color: $primary-color;
-          }
-        }
-        .editIcon {
-          color: $grey-500;
-          &:hover {
-            color: $primary-color;
-          }
-        }
-        .deleteIcon {
-          color: $grey-500;
-          &:hover {
-            color: $error-color;
-          }
-        }
       }
     }
     .description {

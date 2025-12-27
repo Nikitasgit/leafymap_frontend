@@ -1,0 +1,77 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.starsContainer {
+  @include flex(row, flex-start, center, spacing(0.25));
+  color: $orange-medium;
+  height: fit-content;
+  align-items: center;
+
+  .star {
+    flex-shrink: 0;
+    transition: $transition-default;
+    display: block;
+  }
+
+  .halfStar {
+    position: relative;
+    display: inline-block;
+    flex-shrink: 0;
+
+    .star {
+      display: block;
+    }
+
+    // Stroke complet (contour orange)
+    .halfStarStroke {
+      position: relative;
+      z-index: 1;
+    }
+
+    // Fill pour la moitié gauche seulement
+    .halfStarFill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      clip-path: inset(0 50% 0 0);
+    }
+  }
+
+  &.small {
+    min-height: rem(14);
+    .star {
+      width: rem(14);
+      height: rem(14);
+    }
+    .halfStar {
+      width: rem(14);
+      height: rem(14);
+    }
+  }
+
+  &.medium {
+    min-height: rem(18);
+    .star {
+      width: rem(18);
+      height: rem(18);
+    }
+    .halfStar {
+      width: rem(18);
+      height: rem(18);
+    }
+  }
+
+  &.large {
+    min-height: rem(24);
+    .star {
+      width: rem(24);
+      height: rem(24);
+    }
+    .halfStar {
+      width: rem(24);
+      height: rem(24);
+    }
+  }
+}

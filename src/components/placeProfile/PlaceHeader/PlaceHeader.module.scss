@@ -9,17 +9,32 @@
     align-self: flex-start;
   }
   .topRow {
-    @include flex(row, space-between, stretch, spacing(1.5));
+    @include flex(row, space-between, flex-start, spacing(1.5));
     .placeImage {
       border-radius: rem(6);
       overflow: hidden;
       flex-shrink: 0;
     }
-    .rightInfo {
-      @include flex(column, space-between, flex-start, spacing(0.75));
+    .middleSection {
+      @include flex(column, flex-start, flex-start, spacing(0.75));
       flex: 1;
       .counters {
         @include flex(row, flex-start, center, spacing(1.5));
+      }
+    }
+    .ratingSection {
+      @include flex(column, center, center, spacing(0.25));
+      align-items: center;
+      flex-shrink: 0;
+      height: fit-content;
+      .ratingValue {
+        font-size: rem(13);
+        font-weight: 500;
+        color: $grey-600;
+        text-align: center;
+        min-width: rem(40);
+        display: inline-block;
+        line-height: 1.2;
       }
     }
   }
@@ -67,7 +82,7 @@
       .placeImage {
         border-radius: rem(8);
       }
-      .rightInfo {
+      .middleSection {
         gap: spacing(1);
         .counters {
           gap: spacing(2);

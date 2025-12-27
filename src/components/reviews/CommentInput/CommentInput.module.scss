@@ -1,0 +1,19 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.commentInput {
+  @include flex(column, flex-start, stretch, spacing(0.75));
+  margin-top: spacing(1);
+  padding: spacing(1);
+  background: $grey-50;
+  border-radius: rem(6);
+
+  .commentField {
+    width: 100%;
+  }
+
+  .actions {
+    @include flex(row, flex-end, center, spacing(0.5));
+  }
+}

@@ -4,7 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import ConditionalFooter from "@/components/common/Footer/ConditionalFooter";
 import Providers from "@/components/Providers";
 import { roboto } from "@/fonts/font";
-import NavbarMain from "@/components/navbar/Navbar";
+import Navbar from "@/components/navbar/Navbar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -51,7 +51,7 @@ export default async function RootLayout({
         <Providers locale={locale}>
           <Analytics debug={false} />
           <SpeedInsights debug={false} />
-          <NavbarMain />
+          <Navbar />
           <main data-locale={locale}>{children}</main>
           <ConditionalFooter />
         </Providers>

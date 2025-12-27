@@ -7,6 +7,7 @@ import styles from "./UserHeader.module.scss";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter";
 import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge";
 import BackButton from "@/components/common/buttons/BackButton";
+import StarsDisplay from "@/components/common/stars/StarsDisplay/StarsDisplay";
 
 interface UserHeaderProps {
   user: UserPopulated;
@@ -28,7 +29,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user, onFollow }) => {
           size="medium"
           className={styles.userImage}
         />
-        <div className={styles.rightInfo}>
+        <div className={styles.middleSection}>
           <div className={styles.counters}>
             <SubscribersCounter followers={user.followers?.length || 0} />
           </div>
@@ -37,6 +38,14 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user, onFollow }) => {
             Suivre
           </Button>
         </div>
+        {user.rating > 0 && (
+          <div className={styles.ratingSection}>
+            <StarsDisplay rating={user.rating} size="small" />
+            <span className={styles.ratingValue}>
+              ({user.rating.toFixed(1)})
+            </span>
+          </div>
+        )}
       </div>
       <div className={styles.bottomRow}>
         <div className={styles.titleRow}>

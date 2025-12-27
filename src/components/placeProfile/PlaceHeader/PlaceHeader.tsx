@@ -9,6 +9,7 @@ import SubscribersCounter from "@/components/common/counters/SubscribersCounter/
 import BackButton from "@/components/common/buttons/BackButton";
 import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
 import { useToast } from "@/hooks/useToast";
+import StarsDisplay from "@/components/common/stars/StarsDisplay/StarsDisplay";
 
 interface PlaceHeaderProps {
   place: PlacePopulated;
@@ -28,7 +29,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place }) => {
           isOwner={false}
           size="medium"
         />
-        <div className={styles.rightInfo}>
+        <div className={styles.middleSection}>
           <div className={styles.counters}>
             <SubscribersCounter followers={place.followers?.length || 0} />
           </div>
@@ -46,6 +47,14 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place }) => {
             Suivre
           </Button>
         </div>
+        {place.rating > 0 && (
+          <div className={styles.ratingSection}>
+            <StarsDisplay rating={place.rating} size="small" />
+            <span className={styles.ratingValue}>
+              ({place.rating.toFixed(1)})
+            </span>
+          </div>
+        )}
       </div>
       <div className={styles.bottomRow}>
         <div className={styles.titleRow}>
