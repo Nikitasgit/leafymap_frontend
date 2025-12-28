@@ -40,9 +40,9 @@ const UserInfo = ({
           <CategorySelectorInput
             onUserChange={onUserChange}
             onPlaceChange={onPlaceChange}
-            value={user.creatorCategories[0] as string}
-            error={!!errors.creatorCategories}
-            errorMessage={errors.creatorCategories}
+            value={user.userCategories[0] as string}
+            error={!!errors.userCategories}
+            errorMessage={errors.userCategories}
           />
         </div>
       </fieldset>

@@ -98,7 +98,7 @@ const MapFiltersBar = ({
         _id: user._id,
         image: user.image?.urls.thumbnail || "",
         name: user.creatorName || "",
-        categories: user.creatorCategories?.map((category) => ({
+        categories: user.userCategories?.map((category) => ({
           name: category.name,
         })),
       }));

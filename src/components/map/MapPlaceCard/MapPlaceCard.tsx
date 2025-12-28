@@ -64,7 +64,7 @@ const MapPlaceCard = ({ placeId, mapRef }: MapPlaceCardProps) => {
           <div className={styles.categoryRow}>
             {place?.isCreatorPlace ? (
               <CreatorCategoryBadge
-                categoryName={place.user.creatorCategories[0].name}
+                categoryName={place.user.userCategories[0].name}
               />
             ) : (
               <PlaceCategoryBadge

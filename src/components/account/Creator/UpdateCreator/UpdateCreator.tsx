@@ -21,7 +21,7 @@ const initialUserData = (user: InitialCreatorData): InitialCreatorData => ({
   userType: user.userType || "creator",
   creatorName: user.creatorName || "",
   description: user.description || "",
-  creatorCategories: user.creatorCategories || [],
+  userCategories: user.userCategories || [],
   website: user.website || "",
 });
 
@@ -93,7 +93,7 @@ const UpdateCreator = () => {
       setUpdatedUser(
         initialUserData({
           ...user,
-          creatorCategories: user.creatorCategories.map(
+          userCategories: user.userCategories.map(
             (category) => category._id
           ),
         })

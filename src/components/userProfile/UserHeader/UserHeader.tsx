@@ -33,7 +33,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user, onFollow }) => {
           <div className={styles.counters}>
             <SubscribersCounter followers={user.followers?.length || 0} />
           </div>
-          <CreatorCategoryBadge categoryName={user.creatorCategories[0].name} />
+          <CreatorCategoryBadge categoryName={user.userCategories[0].name} />
           <Button variant="outline" size="small" onClick={onFollow}>
             Suivre
           </Button>

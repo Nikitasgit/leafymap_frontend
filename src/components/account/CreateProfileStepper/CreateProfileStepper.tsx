@@ -25,7 +25,7 @@ const initialUserData = (user: Partial<User> | null): InitialCreatorData => ({
   userType: "guest",
   creatorName: "",
   description: "",
-  creatorCategories: [],
+  userCategories: [],
   website: user?.website || "",
 });
 

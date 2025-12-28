@@ -65,7 +65,7 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
           <div className={styles.creatorText}>
             <h2>{user.creatorName}</h2>
             <CreatorCategoryBadge
-              categoryName={user.creatorCategories[0].name}
+              categoryName={user.userCategories[0].name}
             />
           </div>
         </button>

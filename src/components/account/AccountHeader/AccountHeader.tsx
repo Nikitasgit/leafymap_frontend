@@ -14,7 +14,7 @@ interface AccountHeaderProps {
     email: string;
     creatorName?: string;
     image?: string | Image;
-    creatorCategories?: Array<{ name: string }>;
+    userCategories?: Array<{ name: string }>;
   };
   isLoadingUser: boolean;
 }
@@ -44,7 +44,7 @@ export default function AccountHeader({
               {capitalizeFirstLetter(user.creatorName)}
             </p>
             <CreatorCategoryBadge
-              categoryName={user.creatorCategories?.[0]?.name || ""}
+              categoryName={user.userCategories?.[0]?.name || ""}
             />
           </div>
         )}

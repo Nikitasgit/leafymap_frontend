@@ -3,7 +3,7 @@ import { DefaultSchedule, Period } from "@/types/place/schedule";
 import { Partnership } from "@/types/partnerships";
 import { User } from "@/types/user";
 import { Place } from "@/types/place";
-import { SubCategory } from "@/types/categories";
+import { UserCategory } from "@/types/categories";
 
 export type FormDataChangeHandler = (
   e:
@@ -21,7 +21,7 @@ export type FormDataChangeHandler = (
             | Period[]
             | boolean
             | null
-            | SubCategory[];
+            | UserCategory[];
         };
       }
 ) => void;
@@ -45,5 +45,5 @@ export type InitialPlaceData = Pick<
 
 export type InitialCreatorData = Pick<
   User,
-  "userType" | "creatorName" | "description" | "creatorCategories" | "website"
+  "userType" | "username" | "description" | "userCategories" | "website"
 >;

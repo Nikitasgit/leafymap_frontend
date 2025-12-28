@@ -1,27 +1,27 @@
 import { useSelector } from "react-redux";
 import {
-  selectCreatorCategories,
+  selectUserCategories,
   selectPlaceCategories,
   selectAppLoading,
   selectAppError,
 } from "@/store/appSlice";
-import { PlaceCategory, SubCategory } from "@/types/categories";
+import { PlaceCategory, UserCategory } from "@/types/categories";
 
 export interface AppState {
-  creatorCategories: SubCategory[];
+  userCategories: UserCategory[];
   placeCategories: PlaceCategory[];
   loading: boolean;
   error: string | null;
 }
 
 export const useApp = (): AppState => {
-  const creatorCategories = useSelector(selectCreatorCategories);
+  const userCategories = useSelector(selectUserCategories);
   const placeCategories = useSelector(selectPlaceCategories);
   const loading = useSelector(selectAppLoading);
   const error = useSelector(selectAppError);
 
   return {
-    creatorCategories,
+    userCategories,
     placeCategories,
     loading,
     error,

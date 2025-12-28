@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import styles from "./CategorySelectorInput.module.scss";
 import { useApp } from "@/hooks/useApp";
 import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
-import { SubCategory } from "@/types/categories";
+import { UserCategory } from "@/types/categories";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useToast } from "@/hooks/useToast";
 import LoadingBar from "../../common/loading/LoadingBar/LoadingBar";
@@ -22,7 +22,7 @@ const CategorySelectorInput = ({
   error?: boolean;
   errorMessage?: string;
 }) => {
-  const { creatorCategories, loading, error: appError } = useApp();
+  const { userCategories, loading, error: appError } = useApp();
   const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation("subscription");
@@ -37,19 +37,19 @@ const CategorySelectorInput = ({
 
   useOnClickOutside(ref, handleClickOutside);
 
-  const handleSelect = (subCategory: SubCategory) => {
-    setInputValue(subCategory.name);
+  const handleSelect = (userCategory: UserCategory) => {
+    setInputValue(userCategory.name);
     setIsOpen(false);
     onUserChange({
       target: {
-        name: "creatorCategories",
-        value: [subCategory._id],
+        name: "userCategories",
+        value: [userCategory._id],
       },
     });
     onPlaceChange({
       target: {
         name: "placeType",
-        value: [subCategory.category.name],
+        value: [userCategory.category.name],
       },
     });
   };
@@ -58,15 +58,15 @@ const CategorySelectorInput = ({
     if (value) {
       const categoryId = value;
       if (categoryId) {
-        const subCategory = creatorCategories.find(
+        const userCategory = userCategories.find(
           (cat) => cat._id === categoryId
         );
-        if (subCategory) {
-          setInputValue(subCategory.name);
+        if (userCategory) {
+          setInputValue(userCategory.name);
         }
       }
     }
-  }, [value, creatorCategories]);
+  }, [value, userCategories]);
 
   if (appError) {
     showError(appError);
@@ -76,7 +76,7 @@ const CategorySelectorInput = ({
     <div className={styles.categoryInputWrapper} ref={ref}>
       {loading && <LoadingBar />}
       <TextField
-        name="creatorCategories"
+        name="userCategories"
         label={t("categorySelector.label")}
         readOnly
         fullWidth
@@ -93,7 +93,7 @@ const CategorySelectorInput = ({
       {isOpen && (
         <div className={styles.dropdown} role="listbox">
           <ul className={styles.list}>
-            {creatorCategories.map((sub) => (
+            {userCategories.map((sub) => (
               <li key={sub._id}>
                 <button
                   type="button"
