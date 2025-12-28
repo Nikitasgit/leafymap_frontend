@@ -12,6 +12,7 @@ import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 const GallerySection: React.FC<GallerySectionProps> = ({
   images,
   isLoading = false,
+  isUploading = false,
   isOwner = false,
   onFilesSelected,
   onImageDeleted,
@@ -62,6 +63,8 @@ const GallerySection: React.FC<GallerySectionProps> = ({
               <ImageUploader
                 onFilesSelected={onFilesSelected}
                 disabled={isLoading}
+                isLoading={isLoading} 
+                isUploading={isUploading}
                 iconSize={28}
               />
             )}

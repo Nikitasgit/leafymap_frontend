@@ -40,19 +40,16 @@ const useSubmitEvent = () => {
         })),
       };
       const method = isUpdate ? "put" : "post";
+      const url = isUpdate
+        ? `${process.env.NEXT_PUBLIC_API_URL}/api/events/${eventId}`
+        : `${process.env.NEXT_PUBLIC_API_URL}/api/events/place/${placeId}`;
       const response = await withLoading(() =>
-        axios[method](
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}/events/${
-            isUpdate ? eventId : ""
-          }`,
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        )
+        axios[method](url, payload, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        })
       );
       return response.data.data;
     } catch (err: unknown) {

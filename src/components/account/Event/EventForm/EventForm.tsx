@@ -98,7 +98,7 @@ const EventForm = ({
       }
       if (event) {
         // send event data to server
-        const eventId = await submitEvent(event, isUpdate, eventData?._id);
+        const { _id: eventId } = await submitEvent(event, isUpdate, eventData?._id);
         // send partnerships data to server if event is created
         if (eventId && partnerships.length > 0) {
           // separate new and updated partnerships
@@ -117,7 +117,7 @@ const EventForm = ({
           ? "Évènement modifié avec succès"
           : "Évènement créé avec succès"
       );
-      router.back();
+      router.push(`/account/places/${placeId}/events`);
     } catch {
       showError(
         isUpdate

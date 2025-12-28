@@ -1,5 +1,6 @@
 import React from "react";
 import { Plus } from "lucide-react";
+import LoadingSpinner from "@/components/common/loading/LoadingSpinner/LoadingSpinner";
 import styles from "./ImageUploader.module.scss";
 
 interface ImageUploaderProps {
@@ -10,6 +11,7 @@ interface ImageUploaderProps {
   iconSize?: number;
   disabled?: boolean;
   isLoading?: boolean;
+  isUploading?: boolean;
 }
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({
@@ -20,9 +22,10 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   iconSize = 24,
   disabled = false,
   isLoading = false,
-}) => {
+  isUploading = false,
+  }) => {
   const handleClick = () => {
-    if (disabled || isLoading) return;
+    if (disabled || isLoading || isUploading) return;
 
     try {
       const input = document.createElement("input");
@@ -50,8 +53,8 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       type="button"
       disabled={disabled || isLoading}
     >
-      {isLoading ? (
-        <div className={styles.loadingSpinner} />
+      {isUploading ? (
+        <LoadingSpinner size={iconSize} />
       ) : (
         <Plus size={iconSize} className={styles.plusIcon} />
       )}

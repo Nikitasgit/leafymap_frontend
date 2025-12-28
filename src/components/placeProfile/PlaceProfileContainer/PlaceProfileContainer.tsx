@@ -81,7 +81,7 @@ const PlaceProfileContainer: React.FC = () => {
     setActiveTab(tabId);
     const newSearchParams = new URLSearchParams(searchParams.toString());
     newSearchParams.set("tab", tabId);
-    router.push(`?${newSearchParams.toString()}`, { scroll: false });
+    router.replace(`?${newSearchParams.toString()}`, { scroll: false });
   };
 
   const tabs = [
@@ -97,7 +97,8 @@ const PlaceProfileContainer: React.FC = () => {
         return (
           <GallerySection
             images={images || []}
-            isLoading={isLoadingImages || isUploadingImages}
+            isLoading={isLoadingImages }
+            isUploading={isUploadingImages}
             isOwner={isOwner || false}
             onFilesSelected={handleFilesSelected}
             onImageDeleted={handleImageDeleted}

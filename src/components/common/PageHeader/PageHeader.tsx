@@ -6,20 +6,22 @@ interface PageHeaderProps {
   title: string;
   subtitle?: string;
   showBackButton?: boolean;
+  path?: string;
   className?: string;
-}
+  }
 
 const PageHeader: React.FC<PageHeaderProps> = ({
   title,
   subtitle,
   showBackButton = false,
+    path,
   className,
 }) => {
   return (
     <header className={`${styles.header} ${className || ""}`}>
       <div className={styles.titleSection}>
         <div className={styles.titleRow}>
-          {showBackButton && <BackButton />}
+          {showBackButton && <BackButton path={path} />}
           <h1 className={styles.title}>
             {title}
           </h1>

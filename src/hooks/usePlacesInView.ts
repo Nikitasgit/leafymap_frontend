@@ -12,7 +12,7 @@ export const usePlacesInView = ({ filters }: UsePlacesInViewProps = {}) => {
   const [places, setPlaces] = useState<Place[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-
+  console.log(places);
   /**
    * Fetches places within the visible map bounds.
    * Used to dynamically load places as the user pans/zooms the map.

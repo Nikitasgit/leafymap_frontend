@@ -6,11 +6,11 @@ const useDeleteEvent = () => {
   const { isLoading, withLoading } = useLoading();
   const { showError, showSuccess } = useToast();
 
-  const deleteEvent = async (eventId: string, placeId: string) => {
+  const deleteEvent = async (eventId: string) => {
     try {
       await withLoading(() =>
         axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}/events/${eventId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/events/${eventId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -43,10 +43,7 @@ const useDeleteEvent = () => {
     }
   };
 
-  const deleteEventWithConfirmation = async (
-    eventId: string,
-    placeId: string
-  ) => {
+  const deleteEventWithConfirmation = async (eventId: string) => {
     const confirmed = window.confirm(
       "Êtes-vous sûr de vouloir supprimer cet événement ? Cette action est définitive."
     );
@@ -57,7 +54,7 @@ const useDeleteEvent = () => {
       );
 
       if (doubleConfirmed) {
-        await withLoading(() => deleteEvent(eventId, placeId));
+        await withLoading(() => deleteEvent(eventId));
       }
     }
   };

@@ -48,7 +48,7 @@ const EventProfileContainer = () => {
     setActiveTab(tabId);
     const newSearchParams = new URLSearchParams(searchParams.toString());
     newSearchParams.set("tab", tabId);
-    router.push(`?${newSearchParams.toString()}`, { scroll: false });
+    router.replace(`?${newSearchParams.toString()}`, { scroll: false });
   };
 
   const tabs = [

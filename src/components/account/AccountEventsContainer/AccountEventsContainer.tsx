@@ -36,6 +36,7 @@ export default function AccountEventsContainer() {
         title="Événements"
         subtitle="Gérez les événements de votre lieu"
         showBackButton={true}
+        path={`/account`}
       />
       <Button
         onClick={() =>

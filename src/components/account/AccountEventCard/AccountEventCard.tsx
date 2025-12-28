@@ -56,7 +56,7 @@ const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
               },
               {
                 type: "delete",
-                onClick: () => deleteEvent(event._id, placeId),
+                onClick: () => deleteEvent(event._id),
                 ariaLabel: "Supprimer l'événement",
                 disabled: isDeletingEvent,
               },

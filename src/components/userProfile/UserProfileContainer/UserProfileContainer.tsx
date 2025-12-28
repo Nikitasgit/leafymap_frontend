@@ -84,7 +84,7 @@ const UserProfileContainer = () => {
     setActiveTab(tabId);
     const newSearchParams = new URLSearchParams(searchParams.toString());
     newSearchParams.set("tab", tabId);
-    router.push(`?${newSearchParams.toString()}`, { scroll: false });
+    router.replace(`?${newSearchParams.toString()}`, { scroll: false });
   };
 
   const tabs = [
@@ -100,7 +100,8 @@ const UserProfileContainer = () => {
         return (
           <GallerySection
             images={images || []}
-            isLoading={isLoadingImages || isUploadingImages}
+            isLoading={isLoadingImages}
+            isUploading={isUploadingImages}
             isOwner={isOwner || false}
             onFilesSelected={handleFilesSelected}
             onImageDeleted={handleImageDeleted}
