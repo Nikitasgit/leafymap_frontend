@@ -29,7 +29,6 @@ export const useRegister = (): RegisterState => {
   const { isLoading, withLoading } = useLoading();
 
   const [formData, setFormData] = useState<RegisterFormData>({
-    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -76,7 +75,6 @@ export const useRegister = (): RegisterState => {
               {
                 email: formData.email,
                 password: formData.password,
-                username: formData.username,
                 acceptedCGU: formData.acceptedCGU,
               }
             );

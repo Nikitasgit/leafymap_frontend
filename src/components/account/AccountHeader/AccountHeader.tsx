@@ -12,7 +12,6 @@ interface AccountHeaderProps {
     _id: string;
     username: string;
     email: string;
-    creatorName?: string;
     image?: string | Image;
     userCategories?: Array<{ name: string }>;
   };
@@ -31,20 +30,17 @@ export default function AccountHeader({
       });
     }
   };
-
+console.log(user.userCategories); 
   return (
     <header className={styles.header}>
       <div className={styles.userInfo}>
         <h1 className={styles.username}>
           {capitalizeFirstLetter(user.username)}
         </h1>
-        {user.creatorName && (
+        {user.userCategories && user.userCategories.length > 0 && (
           <div className={styles.creatorInfoContainer}>
-            <p className={styles.creatorName}>
-              {capitalizeFirstLetter(user.creatorName)}
-            </p>
             <CreatorCategoryBadge
-              categoryName={user.userCategories?.[0]?.name || ""}
+              categoryName={user.userCategories[0].name}
             />
           </div>
         )}

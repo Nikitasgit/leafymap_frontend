@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const CreatePlacePage = () => {
   return (
-    <ProtectedRoute allowedUserTypes={["organizer"]} redirectTo="/account">
+    <ProtectedRoute allowedUserTypes={["creator"]} redirectTo="/account">
       <CreatePlaceForm />
     </ProtectedRoute>
   );

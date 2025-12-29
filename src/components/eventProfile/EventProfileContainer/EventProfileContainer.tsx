@@ -7,7 +7,7 @@ import styles from "./EventProfileContainer.module.scss";
 import EventProfileSchedule from "@/components/eventProfile/EventProfileSchedule";
 import EventHeader from "@/components/eventProfile/EventHeader";
 import EventInfo from "@/components/eventProfile/EventInfo";
-import PartnershipsList from "@/components/placeProfile/PartnershipsList";
+import PartnershipsList from "@/components/common/partnerships/PartnershipsList";
 import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
 import { PartnershipPopulated } from "@/types/partnerships";
 import TabsContainer from "@/components/common/tabs/TabsContainer/TabsContainer";

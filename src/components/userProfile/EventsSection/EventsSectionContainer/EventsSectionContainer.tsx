@@ -12,15 +12,17 @@ const EventsSectionContainer: React.FC<EventsSectionContainerProps> = ({
   eventPartnerships,
   user,
 }) => {
+  const placeId =
+    user?.place && typeof user.place === "object" ? user.place._id : null;
   const { events, isLoading: eventsLoading } = usePlaceEvents(
-    user?.places?.[0]._id as string
+    placeId as string
   );
 
   if (eventsLoading) return <LoadingBar />;
   return (
     <>
       <section className={styles.eventsSection}>
-        <h3>{user.creatorName} participe à ces événements</h3>
+        <h3>{user.username} participe à ces événements</h3>
         <div className={styles.eventsList}>
           {eventPartnerships.length > 0 ? (
             eventPartnerships.map((partnership) => {
@@ -37,10 +39,10 @@ const EventsSectionContainer: React.FC<EventsSectionContainerProps> = ({
           )}
         </div>
       </section>
-      {user.places && user.places.length > 0 && events.length > 0 && (
+      {user.place && typeof user.place === "object" && events.length > 0 && (
         <PlaceEventsSection
           events={events}
-          title={`Événements créés par ${user.creatorName}`}
+          title={`Événements créés par ${user.username}`}
         />
       )}
     </>

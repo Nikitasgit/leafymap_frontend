@@ -16,18 +16,37 @@ const UserInfo = ({
         <div className={styles.infosContainer}>
           <TextField
             fullWidth
-            label={"Nom de votre activité"}
-            name="creatorName"
-            required
-            value={user.creatorName}
+            label={"Prénom"}
+            name="firstname"
+            value={user.firstname || ""}
             onChange={onUserChange}
-            error={!!errors.creatorName}
-            errorMessage={errors.creatorName}
+            error={!!errors.firstname}
+            errorMessage={errors.firstname}
+          />
+          <TextField
+            fullWidth
+            label={"Nom"}
+            name="lastname"
+            value={user.lastname || ""}
+            onChange={onUserChange}
+            error={!!errors.lastname}
+            errorMessage={errors.lastname}
+          />
+          <TextField
+            fullWidth
+            label={"Nom de votre activité"}
+            name="username"
+            required
+            value={user.username}
+            onChange={onUserChange}
+            error={!!errors.username}
+            errorMessage={errors.username}
           />
           <TextField
             fullWidth
             label="Description"
             name="description"
+            required
             value={user.description}
             onChange={onUserChange}
             multiline

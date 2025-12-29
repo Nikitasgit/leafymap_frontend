@@ -3,7 +3,7 @@ import { Image } from "../image";
 import { Place, PlacePopulated } from "../place";
 import { UserCategory } from "../categories";
 
-export type UserType = "creator" | "organizer" | "guest";
+export type UserType = "creator" | "guest";
 
 export interface User extends BaseEntity {
   email: string;
@@ -17,21 +17,15 @@ export interface User extends BaseEntity {
   description: string;
   location?: LocationWithLabel;
   deleted?: boolean;
-  rating: number;
   followers?: string[];
   interests?: string[];
-  places?: Place[];
+  place?: Place;
   _id: string;
-  creatorName: string;
   userCategories: string[] | UserCategory[];
 }
 
 export interface UserPopulated extends User {
-  places?: PlacePopulated[];
+  place?: PlacePopulated;
   image?: Image;
   userCategories: UserCategory[];
-}
-
-export interface Organizer extends User {
-  places?: Place[];
 }

@@ -1,32 +1,56 @@
-@use "../../../styles/abstracts/variables" as *;
-@use "../../../styles/abstracts/functions" as *;
-@use "../../../styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+@use "@/styles/abstracts/mixins" as *;
 
 .card {
-  @include flex(column, flex-start, center, spacing(1.5));
-  background-color: $white;
-  padding: spacing(1.5);
-  border: 1px solid $grey-200;
-  border-radius: rem(8);
+  @include flex(row, flex-start, stretch, spacing(0));
+  border-bottom: 1px solid $grey-200;
+  border-radius: 12px;
+  min-height: 180px;
+  .imageContainer {
+    position: relative;
+    width: 120px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 12px 0 0 12px;
+  }
   .content {
-    @include flex(column, flex-start, stretch, spacing(1));
+    @include flex(column, flex-start, stretch, spacing(0.75));
     flex: 1;
-    .titleContainer {
-      @include flex(column-reverse, space-between, center, spacing(0.5));
+    min-width: 0;
+    padding: spacing(1) spacing(1.5);
+    .topRow {
+      @include flex(row, flex-end, center, spacing(0));
       width: 100%;
+      .actionButtons {
+        align-self: flex-end;
+      }
+    }
+    .addressRow {
+      @include flex(row, flex-start, center, spacing(0.5));
+      width: 100%;
+      .addressIcon {
+        color: $primary-color;
+        flex-shrink: 0;
+        width: 12px;
+        height: 12px;
+      }
       .title {
         color: $grey-700;
-        font-weight: 600;
-        font-size: rem(16);
+        font-weight: 500;
         margin: 0;
-      }
-      .actionButtons {
-        @include flex(row, flex-end, center, spacing(0.2));
+        font-size: rem(12);
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
     .description {
-      color: $grey-500;
-      font-size: rem(12);
+      color: $grey-600;
+      font-size: rem(14);
       display: -webkit-box;
       -webkit-line-clamp: 2;
       line-clamp: 2;
@@ -34,74 +58,40 @@
       overflow: hidden;
       margin: 0;
     }
-    .placeStatus {
-      font-size: rem(12);
-      font-weight: 500;
-      padding: spacing(0.2) spacing(0.4);
-      border-radius: rem(3);
-      text-transform: uppercase;
-      color: $white;
-      letter-spacing: 0.5px;
-      &.active {
-        background-color: rgba(8, 161, 8, 0.546);
-        border: 1px solid $success-color;
-      }
-      &.inactive {
-        border: 1px solid $error-color;
-        background-color: rgba(171, 0, 0, 0.42);
-      }
-    }
     .buttonGroup {
-      @include flex(column, flex-start, stretch, spacing(0.75));
-      margin-top: spacing(1);
+      @include flex(column, flex-end, stretch, spacing(0.5));
+      width: 100%;
+      margin-top: auto;
     }
   }
   @include respond-to(sm) {
-    @include flex(row, space-between, center, spacing(1));
-
-    gap: spacing(2);
-    border: 1px solid $grey-200;
-    border-radius: rem(8);
-    transition: $transition-default;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    &:hover {
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      border-color: $primary-color;
+    .imageContainer {
+      width: 200px;
     }
     .content {
-      gap: spacing(1.25);
-      .titleContainer {
-        flex-direction: row;
-        .title {
-          font-size: rem(18);
-        }
-      }
-      .description {
-        font-size: rem(13);
-      }
-      .placeStatus {
-        font-size: rem(12);
-      }
       .buttonGroup {
-        @include flex(row, flex-start, center, spacing(0.5));
-        flex-wrap: wrap;
+        @include flex(row, flex-end, center, spacing(0.5));
+      }
+    }
+    .content {
+      gap: spacing(1);
+      .addressRow {
+        .title {
+          font-size: rem(13);
+        }
       }
     }
   }
   @include respond-to(md) {
-    @include flex(row, space-between, center, spacing(2));
+    .imageContainer {
+      width: 250px;
+    }
     .content {
       gap: spacing(1);
-      .titleContainer {
+      .addressRow {
         .title {
-          font-size: rem(20);
+          font-size: rem(14);
         }
-      }
-      .description {
-        font-size: rem(14);
-      }
-      .placeStatus {
-        font-size: rem(12);
       }
     }
   }

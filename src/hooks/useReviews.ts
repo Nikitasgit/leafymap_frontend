@@ -6,7 +6,7 @@ import axios from "axios";
 
 interface UseReviewsParams {
   reference?: string;
-  referenceType?: "Place" | "Event" | "User";
+  referenceType?: "Place" | "Event";
   author?: string;
 }
 

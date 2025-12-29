@@ -55,20 +55,6 @@ export default function RegisterForm() {
           />
 
           <TextField
-            label={t("form.username.label")}
-            name="username"
-            type="text"
-            placeholder={t("form.username.placeholder")}
-            required
-            fullWidth
-            value={formData.username}
-            onChange={(e) => handleInputChange("username", e.target.value)}
-            disabled={isLoading}
-            error={!!errors.register.username}
-            errorMessage={errors.register.username}
-          />
-
-          <TextField
             label={t("form.password.label")}
             name="password"
             type="password"

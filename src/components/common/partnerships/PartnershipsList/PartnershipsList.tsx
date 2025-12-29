@@ -1,19 +1,25 @@
 import styles from "./PartnershipsList.module.scss";
 import TitleWithLine from "@/components/common/typography/TitleWithLine";
 import { PartnershipPopulated } from "@/types/partnerships";
-import EmptyState from "../../common/noResults/EmptyState";
+import EmptyState from "@/components/common/noResults/EmptyState";
 import { Users } from "lucide-react";
-import PartnershipCard from "@/components/placeProfile/PartnershipCard";
+import PartnershipCard from "@/components/common/partnerships/PartnershipCard";
+
+interface PartnershipsListProps {
+  partnerships: PartnershipPopulated[];
+  title?: string;
+  noTitle?: boolean;
+}
 
 const PartnershipsList = ({
   partnerships,
   title = "Partenaires",
   noTitle = false,
-}: {
-  partnerships: PartnershipPopulated[];
-  title?: string;
-  noTitle?: boolean;
-}) => {
+}: PartnershipsListProps) => {
+  const filteredPartnerships = partnerships.filter(
+    (partnership) => !partnership.deleted && partnership.status === "accepted"
+  );
+
   return (
     <section className={styles.partnershipsList}>
       {!noTitle && (
@@ -21,9 +27,9 @@ const PartnershipsList = ({
           {title}
         </TitleWithLine>
       )}
-      {partnerships.length > 0 ? (
+      {filteredPartnerships.length > 0 ? (
         <div className={styles.partnershipsGrid}>
-          {partnerships.map((partnership) => (
+          {filteredPartnerships.map((partnership) => (
             <PartnershipCard
               key={partnership._id}
               creator={partnership.collaborator}
@@ -42,3 +48,4 @@ const PartnershipsList = ({
 };
 
 export default PartnershipsList;
+

@@ -1,7 +1,7 @@
 import { BaseEntity } from "../common";
 import { User, UserPopulated } from "../user";
 
-export type ReviewReferenceType = "Place" | "Event" | "User";
+export type ReviewReferenceType = "Place" | "Event";
 
 export interface Review extends BaseEntity {
   _id: string;

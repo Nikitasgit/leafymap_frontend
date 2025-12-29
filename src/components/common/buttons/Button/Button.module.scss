@@ -54,6 +54,16 @@
     color: $grey-450;
     border: none;
   }
+
+  &.danger {
+    background-color: transparent;
+    color: $error-color;
+    border: 1px solid $error-color;
+    &:hover {
+      color: darken($error-color, 10%);
+      border-color: darken($error-color, 10%);
+    }
+  }
 }
 
 .startIcon {

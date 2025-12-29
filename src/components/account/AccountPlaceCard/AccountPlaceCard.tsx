@@ -1,88 +1,66 @@
-import Button from "@/components/common/buttons/Button";
 import { Place } from "@/types/place";
 import { useRouter } from "next/navigation";
-import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader";
-import { Edit3, Eye, Trash2 } from "lucide-react";
+import { MapPin, Calendar, Plus } from "lucide-react";
 import styles from "./AccountPlaceCard.module.scss";
-import useSubmitPlace from "@/hooks/useSubmitPlace";
+import ActionButtons from "@/components/common/actions/ActionButtons";
 import useDeletePlace from "@/hooks/useDeletePlace";
-import { Image } from "@/types/image";
+import Image from "next/image";
+import placeDefaultSvg from "@public/images/place_default.svg";
+import Button from "@/components/common/buttons/Button";
 
 const AccountPlaceCard = ({ place }: { place: Place }) => {
   const router = useRouter();
-  const { submitPlace, isLoading: isLoadingPlace } = useSubmitPlace();
   const { deletePlace, isLoading: isDeletingPlace } = useDeletePlace();
 
-  const handleImageUploaded = async (imageId: string | null) => {
-    if (imageId) {
-      await submitPlace(
-        {
-          image: imageId,
-        },
-        true,
-        place._id
-      );
-    }
-  };
+  const placeUser = typeof place.user === "object" ? place.user : null;
+  const placeDescription = place.description || placeUser?.description || "";
+  const placeAddress = place.location?.label || "";
 
   return (
     <div className={styles.card}>
-      <ProfilePictureUploader
-        onImageUploaded={handleImageUploaded}
-        type="Place"
-        reference={place._id}
-        initialImage={place.image as Image}
-        isOwner={true}
-        size="medium"
-        disabled={isLoadingPlace}
-      />
+      <div className={styles.imageContainer}>
+        <Image
+          src={placeDefaultSvg}
+          alt="Lieu"
+          fill
+          sizes="(max-width: 768px) 100vw, 120px"
+          style={{ objectFit: "cover", objectPosition: "center" }}
+        />
+      </div>
+
       <div className={styles.content}>
-        <div className={styles.titleContainer}>
-          <h4 className={styles.title}>{place.name}</h4>
-          {!place.isCreatorPlace ? (
-            <div className={styles.actionButtons}>
-              {!place.isCreatorPlace && (
-                <Button
-                  variant="simple"
-                  onClick={() => router.push(`/places/${place._id}`)}
-                  aria-label="Voir le lieu"
-                  disabled={isDeletingPlace}
-                >
-                  <Eye size={16} />
-                </Button>
-              )}
-              <Button
-                variant="simple"
-                onClick={() => deletePlace(place._id)}
-                aria-label="Supprimer"
-                disabled={isDeletingPlace}
-              >
-                <Trash2 size={16} />
-              </Button>
-              <Button
-                variant="simple"
-                onClick={() => router.push(`account/places/${place._id}`)}
-                aria-label="Modifier"
-              >
-                <Edit3 size={16} />
-              </Button>
-            </div>
-          ) : (
-            <span
-              className={`${styles.placeStatus} ${
-                styles[place.active ? "active" : "inactive"]
-              }`}
-            >
-              {place.active ? "visible" : "désactivée"}
-            </span>
-          )}
+        <div className={styles.topRow}>
+          <ActionButtons
+            actions={[
+              {
+                type: "edit",
+                onClick: () => router.push(`/account/places/${place._id}`),
+                ariaLabel: "Modifier le lieu",
+              },
+              {
+                type: "delete",
+                onClick: () => deletePlace(place._id),
+                ariaLabel: "Supprimer le lieu",
+                disabled: isDeletingPlace,
+              },
+            ]}
+            className={styles.actionButtons}
+          />
         </div>
-        <p className={styles.description}>{place.description}</p>
+        <div className={styles.addressRow}>
+          <MapPin size={14} className={styles.addressIcon} />
+          <h4 className={styles.title}>{placeAddress}</h4>
+        </div>
+        {placeDescription && (
+          <p className={styles.description}>{placeDescription}</p>
+        )}
         <div className={styles.buttonGroup}>
           <Button
             variant="secondary"
             size="small"
-            onClick={() => router.push(`account/places/${place._id}/events`)}
+            onClick={() => router.push(`/account/places/${place._id}/events`)}
+            endIcon={<Calendar size={16} />}
+            ariaLabel="Voir les événements"
           >
             Voir les événements
           </Button>
@@ -90,8 +68,10 @@ const AccountPlaceCard = ({ place }: { place: Place }) => {
             variant="secondary"
             size="small"
             onClick={() =>
-              router.push(`account/places/${place._id}/events/create`)
+              router.push(`/account/places/${place._id}/events/create`)
             }
+            endIcon={<Plus size={16} />}
+            ariaLabel="Ajouter un événement"
           >
             Ajouter un événement
           </Button>
@@ -102,3 +82,4 @@ const AccountPlaceCard = ({ place }: { place: Place }) => {
 };
 
 export default AccountPlaceCard;
+

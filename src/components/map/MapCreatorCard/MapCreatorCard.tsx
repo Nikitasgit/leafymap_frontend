@@ -53,17 +53,17 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
           className={styles.creatorInfo}
           onClick={() => router.push(`/users/${user?._id}`)}
           type="button"
-          aria-label={`Voir le profil de ${user.creatorName}`}
+          aria-label={`Voir le profil de ${user.username}`}
         >
           <Image
             src={user.image?.urls?.thumbnail || creatorDefaultsSvg}
-            alt={user.creatorName || "Créateur"}
+            alt={user.username || "Créateur"}
             width={55}
             height={55}
             className={styles.creatorImage}
           />
           <div className={styles.creatorText}>
-            <h2>{user.creatorName}</h2>
+            <h2>{user.username}</h2>
             <CreatorCategoryBadge
               categoryName={user.userCategories[0].name}
             />
@@ -71,12 +71,15 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
         </button>
         <Button
           variant="simple"
-          onClick={() =>
-            handleMapButtonClick({
-              location: user.places![0].location,
-              _id: user.places![0]._id,
-            })
-          }
+          onClick={() => {
+            const place = user.place && typeof user.place === "object" ? user.place : null;
+            if (place) {
+              handleMapButtonClick({
+                location: place.location,
+                _id: place._id,
+              });
+            }
+          }}
           type="button"
           ariaLabel="Voir sur la carte"
         >
@@ -127,16 +130,24 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
                       </div>
 
                       <p className={styles.description}>{event.description}</p>
-                      <Button
-                        className={styles.eventLocationButton}
-                        variant="simple"
-                        startIcon={<SquareArrowOutUpRight size={12} />}
-                        onClick={() => router.push(`/places/${place._id}`)}
-                        type="button"
-                        ariaLabel={`Voir le lieu ${place.name}`}
-                      >
-                        {place.name}
-                      </Button>
+                      {(() => {
+                        const placeUser =
+                          place && typeof place.user === "object"
+                            ? place.user
+                            : null;
+                        return placeUser ? (
+                          <Button
+                            className={styles.eventLocationButton}
+                            variant="simple"
+                            startIcon={<SquareArrowOutUpRight size={12} />}
+                            onClick={() => router.push(`/users/${placeUser._id}`)}
+                            type="button"
+                            ariaLabel={`Voir le profil de ${placeUser.username}`}
+                          >
+                            {placeUser.username}
+                          </Button>
+                        ) : null;
+                      })()}
                     </div>
                   </div>
                   <Button
@@ -167,7 +178,15 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
                 <div className={styles.cardInfo}>
                   <div
                     className={styles.imageContainer}
-                    onClick={() => router.push(`/places/${place._id}`)}
+                    onClick={() => {
+                      const placeUser =
+                        place && typeof place.user === "object"
+                          ? place.user
+                          : null;
+                      if (placeUser) {
+                        router.push(`/users/${placeUser._id}`);
+                      }
+                    }}
                   >
                     <Image
                       src={place.image?.urls?.thumbnail || placeDefaultsSvg}

@@ -3,9 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/common/buttons/Button";
-import { PlaceContactForm } from "@/components/account/ContactForm";
 import PlaceForm from "@/components/account/Place/PlaceForm";
-import PlaceInfos from "../../ProfileInfo/PlaceInfo";
 import PartnershipsForm from "../../Partnership/PartnershipsForm";
 import { useToast } from "@/hooks/useToast";
 import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
@@ -37,25 +35,25 @@ const initialPlaceData = (user: Partial<User> | null): InitialPlaceData => ({
   active: true,
 });
 const CreatePlaceForm = () => {
-  const [errors, setErrors] = useState<CreatePlaceContainerErrors>({
-    place: {},
-  });
+  const router = useRouter();
+  const { showError, showSuccess } = useToast();
   const { user, loading: userLoading } = useAuth();
   const { submitPartnerships, isLoading: submitPartnershipsLoading } =
     useSubmitPartnerships();
   const { submitPlace, isLoading: submitPlaceLoading } = useSubmitPlace();
+  const [errors, setErrors] = useState<CreatePlaceContainerErrors>({
+    place: {},
+  });
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [place, setPlace] = useState<InitialPlaceData>(initialPlaceData(user));
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
-  const router = useRouter();
-  const { showError, showSuccess } = useToast();
 
   const validateFormData = useCallback((): boolean => {
     let placeValidation: ValidationResult = {
       errors: {},
       isValid: true,
     };
-    placeValidation = validateNewPlaceData(place, "organizer");
+    placeValidation = validateNewPlaceData(place);
 
     setErrors((prev) => ({
       ...prev,
@@ -107,26 +105,16 @@ const CreatePlaceForm = () => {
       <section className={styles.container}>
         <PageHeader title="Créer un lieu" showBackButton={true} />
         <form onSubmit={handleSubmit} noValidate>
-          <PlaceInfos
-            place={place}
-            onPlaceChange={onPlaceChange}
-            errors={errors.place}
-          />
           <PlaceForm
             place={place}
             initialPlaceLocation={null}
-            userType="organizer"
+            username={user?.username || ""}
             onChange={onPlaceChange}
             errors={errors.place}
           />
           <PartnershipsForm
             onChange={setPartnerships}
             partnerships={partnerships}
-          />
-          <PlaceContactForm
-            place={place}
-            onPlaceChange={onPlaceChange}
-            errors={errors.place}
           />
           <div className={styles.buttonContainer}>
             <Button

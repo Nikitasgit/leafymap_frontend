@@ -4,16 +4,26 @@
 
 .pageContainer {
   background: linear-gradient(135deg, $grey-50 0%, $white 100%);
-  @include respond-to(sm) {
-    .container {
-      border-radius: 8px;
-    }
-  }
   .container {
     max-width: 1000px;
     margin: 0 auto;
     padding: spacing(1);
     background-color: $white;
+    .buttonContainer {
+      @include flex(column, flex-start, stretch, spacing(1.5));
+      width: 100%;
+      margin-top: spacing(1.5);
+    }
+  }
+
+  @include respond-to(sm) {
+    .container {
+      border-radius: 8px;
+      .buttonContainer {
+        @include flex(row, space-between, center, spacing(2));
+        margin-top: spacing(2);
+      }
+    }
   }
   @include respond-to(md) {
     padding: spacing(4);

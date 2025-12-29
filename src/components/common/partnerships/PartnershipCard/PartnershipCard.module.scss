@@ -1,0 +1,47 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.card {
+  @include flex(column, flex-start, center, spacing(0.75));
+  padding: spacing(1.5);
+  background-color: $white;
+  border: 1px solid $grey-200;
+  border-radius: rem(8);
+  cursor: pointer;
+  transition: $transition-default;
+  text-align: center;
+
+  &:hover {
+    border-color: $primary-color;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .imageContainer {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    .image {
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+
+  .info {
+    @include flex(column, flex-start, center, spacing(0.5));
+    width: 100%;
+    .name {
+      color: $grey-700;
+      font-weight: 600;
+      font-size: rem(14);
+      margin: 0;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+  }
+}
+

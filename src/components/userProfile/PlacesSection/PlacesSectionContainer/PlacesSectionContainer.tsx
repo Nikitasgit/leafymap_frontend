@@ -11,7 +11,7 @@ const PlacesSectionContainer: React.FC<PlacesSectionProps> = ({
 }) => {
   return (
     <section className={styles.placesSection}>
-      <h3>Où retrouver {user.creatorName} ?</h3>
+      <h3>Où retrouver {user.username} ?</h3>
       <div className={styles.placesList}>
         {placePartnerships.length > 0 ? (
           <div className={styles.placesGrid}>

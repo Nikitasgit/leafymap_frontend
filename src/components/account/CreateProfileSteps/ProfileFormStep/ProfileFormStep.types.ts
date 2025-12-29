@@ -1,23 +1,25 @@
-import { Partnership } from "@/types/partnerships";
 import { Location } from "@/types/common";
 import {
   FormDataChangeHandler,
   InitialCreatorData,
   InitialPlaceData,
 } from "../../CreateProfileStepper/CreateProfileStepper.types";
+import { Partnership } from "@/types/partnerships";
 
 export interface ProfileFormStepProps {
-  place: InitialPlaceData;
+  place?: InitialPlaceData;
   user: InitialCreatorData;
-  partnerships?: Partnership[];
   firstStep?: boolean;
   submitButtonText?: string;
   initialPlaceLocation?: Location | null;
   onPlaceChange: FormDataChangeHandler;
   onUserChange?: FormDataChangeHandler;
   onPartnershipsChange?: (partnerships: Partnership[]) => void;
+  partnerships?: Partnership[];
   onSubmit: () => Promise<void>;
   onBack?: () => void;
+  showPlaceForm?: boolean;
+  showPlaceRadioYesOrNo?: boolean;
 }
 
 export interface ProfileFormStepErrors {

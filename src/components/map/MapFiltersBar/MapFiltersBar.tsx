@@ -93,11 +93,11 @@ const MapFiltersBar = ({
     query: string
   ): Promise<(CreatorSearchResult | PlaceSearchResult)[]> => {
     if (searchType.label === "Membres") {
-      const creators = await searchUsers({ creatorName: query });
+      const creators = await searchUsers({ username: query });
       const suggestions: CreatorSearchResult[] = creators.map((user) => ({
         _id: user._id,
         image: user.image?.urls.thumbnail || "",
-        name: user.creatorName || "",
+        name: user.username || "",
         categories: user.userCategories?.map((category) => ({
           name: category.name,
         })),

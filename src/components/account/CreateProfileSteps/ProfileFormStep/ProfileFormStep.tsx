@@ -11,22 +11,24 @@ import {
   ProfileFormStepErrors,
   ProfileFormStepProps,
 } from "./ProfileFormStep.types";
-import PartnershipsForm from "@/components/account/Partnership/PartnershipsForm";
-import { PlaceContactForm, UserContactForm } from "../../ContactForm";
-import { PlaceInfo, UserInfo } from "../../ProfileInfo";
+import { UserContactForm } from "../../ContactForm";
+import { UserInfo } from "../../ProfileInfo";
+import PartnershipsForm from "@/components/account/Partnership/PartnershipsForm/PartnershipsForm";
 
 const ProfileFormStep = ({
   place,
   user,
-  partnerships = [],
   initialPlaceLocation,
   onPlaceChange,
   onUserChange = () => {},
   onPartnershipsChange = () => {},
+  partnerships = [],
   onSubmit,
   onBack = () => {},
   submitButtonText = "Créer mon profil",
   firstStep = false,
+  showPlaceForm = true,
+  showPlaceRadioYesOrNo = false,
 }: ProfileFormStepProps) => {
   const { showError } = useToast();
 
@@ -41,8 +43,8 @@ const ProfileFormStep = ({
       errors: {},
       isValid: true,
     };
-    if (place.active) {
-      placeValidation = validateNewPlaceData(place, user.userType);
+    if (place && place.active) {
+      placeValidation = validateNewPlaceData(place);
     }
     setErrors((prev) => ({
       ...prev,
@@ -71,47 +73,33 @@ const ProfileFormStep = ({
 
   return (
     <form onSubmit={handleSubmit} noValidate>
-      {user.userType === "organizer" ? (
-        <PlaceInfo
-          place={place}
-          onPlaceChange={onPlaceChange}
-          errors={errors.place}
-        />
-      ) : (
-        <UserInfo
-          user={user}
-          onUserChange={onUserChange}
-          onPlaceChange={onPlaceChange}
-          errors={errors.user}
-        />
-      )}
-      <PlaceForm
-        place={place}
-        initialPlaceLocation={initialPlaceLocation}
-        creatorName={user.creatorName}
-        userType={user.userType}
-        onChange={onPlaceChange}
-        errors={errors.place}
+      <UserInfo
+        user={user}
+        onUserChange={onUserChange}
+        onPlaceChange={onPlaceChange}
+        errors={errors.user}
       />
-      {user.userType === "organizer" && (
-        <PartnershipsForm
-          onChange={onPartnershipsChange}
-          partnerships={partnerships}
-        />
+      {showPlaceForm && place && (
+        <>
+          <PlaceForm
+            place={place}
+            initialPlaceLocation={initialPlaceLocation}
+            username={user.username}
+            onChange={onPlaceChange}
+            errors={errors.place}
+            showRadioYesOrNo={showPlaceRadioYesOrNo}
+          />
+          <PartnershipsForm
+            onChange={onPartnershipsChange}
+            partnerships={partnerships}
+          />
+        </>
       )}
-      {user.userType === "creator" ? (
-        <UserContactForm
-          user={user}
-          onUserChange={onUserChange}
-          errors={errors.user}
-        />
-      ) : (
-        <PlaceContactForm
-          place={place}
-          onPlaceChange={onPlaceChange}
-          errors={errors.place}
-        />
-      )}
+      <UserContactForm
+        user={user}
+        onUserChange={onUserChange}
+        errors={errors.user}
+      />
 
       <div className={styles.buttonContainer}>
         {!firstStep && (

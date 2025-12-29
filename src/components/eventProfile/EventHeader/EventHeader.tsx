@@ -50,15 +50,21 @@ const EventHeader: React.FC<EventHeaderProps> = ({ event }) => {
           <Calendar size={18} className={styles.icon} />
           <h1 className={styles.title}>{capitalizeFirstLetter(event.name)}</h1>
         </div>
-        <Button
-          variant="simple"
-          className={styles.locationButton}
-          onClick={() => router.push(`/places/${event.place._id}`)}
-          startIcon={<MapPin size={14} />}
-          ariaLabel="Voir le lieu"
-        >
-          {event.place.name}
-        </Button>
+        {(() => {
+          const place = typeof event.place === "object" ? event.place : null;
+          const user = place && typeof place.user === "object" ? place.user : null;
+          return user ? (
+            <Button
+              variant="simple"
+              className={styles.locationButton}
+              onClick={() => router.push(`/users/${user._id}`)}
+              startIcon={<MapPin size={14} />}
+              ariaLabel="Voir le profil"
+            >
+              {user.username}
+            </Button>
+          ) : null;
+        })()}
       </div>
     </header>
   );

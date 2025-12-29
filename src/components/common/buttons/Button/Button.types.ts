@@ -1,6 +1,6 @@
-export  interface ButtonProps {
+export interface ButtonProps {
   children?: React.ReactNode;
-  variant?: "primary" | "secondary" | "outline" | "simple";
+  variant?: "primary" | "secondary" | "outline" | "simple" | "danger";
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;

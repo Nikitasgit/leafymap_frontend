@@ -35,7 +35,7 @@ export const applyPixelOffsetToLocation = (
  */
 export const buildUserMarker = (
   place: InitialPlaceData,
-  creatorName: string,
+  username: string,
   userLocation?: { latitude: number; longitude: number }
 ) => {
   let location;
@@ -56,7 +56,7 @@ export const buildUserMarker = (
           ? place.placeCategory
           : place.placeCategory?.name ?? USER_MARKER.placeCategory.name,
     },
-    name: creatorName || place.name || USER_MARKER.name,
+    name: username || USER_MARKER.name,
     _id: "user-marker",
   };
 };

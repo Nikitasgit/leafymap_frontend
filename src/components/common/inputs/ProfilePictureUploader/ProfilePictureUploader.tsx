@@ -8,6 +8,7 @@ import { Image as IImage } from "@/types/image";
 import placeDefaultsSvg from "@public/images/place_default.svg";
 import creatorDefaultsSvg from "@public/images/creator_default.svg";
 import eventDefaultsSvg from "@public/images/event_default.svg";
+import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
 
 interface ProfilePictureUploaderProps {
   initialImage?: IImage;
@@ -139,13 +140,13 @@ const ProfilePictureUploader = ({
         >
           <div className={styles.uploadIcon}>
             {isLoading ? (
-              <div className={styles.loadingSpinner} />
+              <LoadingSpinner size={18}  />
             ) : (
               <Upload size={14} />
             )}
           </div>
           <span className={styles.uploadText}>
-            {isLoading ? "Téléchargement..." : "Ajouter une photo (max. 5MB)"}
+            Ajouter une photo (max. 5MB)
           </span>
         </div>
       )}

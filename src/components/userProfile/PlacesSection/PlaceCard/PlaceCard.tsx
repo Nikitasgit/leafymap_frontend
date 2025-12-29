@@ -12,7 +12,12 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
   return (
     <a
       className={styles.placeCard}
-      onClick={() => router.push(`/places/${place._id}`)}
+      onClick={() => {
+        const user = typeof place.user === "object" ? place.user : null;
+        if (user) {
+          router.push(`/users/${user._id}`);
+        }
+      }}
       role="link"
       tabIndex={0}
     >

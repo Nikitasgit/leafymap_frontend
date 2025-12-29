@@ -12,10 +12,9 @@ const PlaceSuggestionCard = ({ place }: { place: PlacePopulated }) => {
   const router = useRouter();
 
   const handleRedirect = () => {
-    if (place.isCreatorPlace) {
-      router.push(`/users/${place.user._id}`);
-    } else {
-      router.push(`/places/${place._id}`);
+    const user = typeof place.user === "object" ? place.user : null;
+    if (user) {
+      router.push(`/users/${user._id}`);
     }
   };
 

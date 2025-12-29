@@ -50,8 +50,8 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   const getDisplayName = (user: typeof author): string => {
     if (!user) return "Utilisateur";
 
-    if (user.creatorName) {
-      return user.creatorName;
+    if (user.username) {
+      return user.username;
     }
 
     if (user.firstname && user.lastname) {

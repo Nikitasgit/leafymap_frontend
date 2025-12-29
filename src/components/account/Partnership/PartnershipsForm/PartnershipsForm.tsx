@@ -23,7 +23,7 @@ const PartnershipsForm = ({
   const { user } = useAuth();
   const fetchSuggestions = async (query: string) => {
     const searchParams: Record<string, string | string[]> = {
-      creatorName: query,
+      username: query,
     };
     if (user?._id) {
       searchParams.excludeIds = [user._id];
@@ -33,7 +33,7 @@ const PartnershipsForm = ({
     const suggestions = users.map((user) => ({
       _id: user._id,
       image: user.image?.urls.thumbnail,
-      name: user.creatorName,
+      name: user.username,
       categories: user.userCategories?.map((category) => ({
         name: category.name,
       })),

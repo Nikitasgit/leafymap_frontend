@@ -1,12 +1,6 @@
 import { Place } from "@/types/place";
 import { z } from "zod";
-import {
-  descriptionSchema,
-  emailSchema,
-  phoneSchema,
-  ValidationResult,
-  websiteSchema,
-} from "./commonValidations";
+import { ValidationResult } from "./commonValidations";
 
 export const placeNameSchema = z
   .string()
@@ -40,26 +34,11 @@ const newPlaceSchema = z.object({
   active: z.boolean(),
 });
 
-const newOrganizerPlaceSchema = newPlaceSchema.extend({
-  email: emailSchema,
-  active: z.literal(true),
-  name: placeNameSchema,
-  website: websiteSchema.optional(),
-  phone: phoneSchema,
-  description: descriptionSchema,
-});
-
 export const validateNewPlaceData = (
-  data: Partial<Place>,
-  userType: "organizer" | "creator" | "guest"
+  data: Partial<Place>
 ): ValidationResult => {
   const errors: Record<string, string> = {};
-  let placeSchema;
-  if (userType === "organizer") {
-    placeSchema = newOrganizerPlaceSchema;
-  } else {
-    placeSchema = newPlaceSchema;
-  }
+  const placeSchema = newPlaceSchema;
   const result = placeSchema.safeParse(data);
   if (!result.success) {
     result.error.errors.forEach((err) => {

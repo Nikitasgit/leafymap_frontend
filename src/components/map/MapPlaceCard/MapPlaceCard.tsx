@@ -35,17 +35,14 @@ const MapPlaceCard = ({ placeId, mapRef }: MapPlaceCardProps) => {
       <button
         className={`${styles.imageContainer} ${isLoading ? "skeleton" : ""}`}
         onClick={() => {
-          if (place?.isCreatorPlace) {
-            router.push(`/users/${place.user._id}`);
-          } else {
-            router.push(`/places/${place?._id}`);
+          const user = typeof place?.user === "object" ? place.user : null;
+          if (user) {
+            router.push(`/users/${user._id}`);
           }
         }}
         type="button"
-        aria-label={`Voir ${
-          place?.isCreatorPlace
-            ? "le profil de " + place.user.creatorName
-            : place?.name
+        aria-label={`Voir le profil de ${
+          typeof place?.user === "object" ? place.user.username : "l'utilisateur"
         }`}
       >
         {!isLoading && (

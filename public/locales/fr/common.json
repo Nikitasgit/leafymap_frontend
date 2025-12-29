@@ -49,7 +49,8 @@
     "herbalist": "Herboriste",
     "cabinetmaker": "Menuisier",
     "ceramicist": "Céramiste",
-    "weaver": "Tisserand"
+    "weaver": "Tisserand",
+    "organizer": "Organisateur"
   },
   "partnershipStatus": {
     "pending": "En attente",

@@ -14,9 +14,8 @@ import EventsSectionContainer from "@/components/userProfile/EventsSection/Event
 import GallerySection from "@/components/userProfile/GallerySection/GallerySection";
 import TabsContainer from "@/components/common/tabs/TabsContainer/TabsContainer";
 import Tab from "@/components/common/tabs/Tab/Tab";
-import { User as UserIcon, MapPin, Calendar, Star } from "lucide-react";
+import { User as UserIcon, MapPin, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/useToast";
-import ReviewsTab from "@/components/reviews/ReviewsTab/ReviewsTab";
 
 const UserProfileContainer = () => {
   const { userId } = useParams();
@@ -25,7 +24,7 @@ const UserProfileContainer = () => {
   const [activeTab, setActiveTab] = useState("gallery");
   const { showInfo } = useToast();
   const { user: currentUser } = useAuth();
-  const { user, isLoading, refetch: refetchUser } = useUser(userId as string);
+  const { user, isLoading } = useUser(userId as string);
   const {
     images,
     isLoading: isLoadingImages,
@@ -74,7 +73,7 @@ const UserProfileContainer = () => {
   // Initialize tab from URL on mount
   useEffect(() => {
     const tabFromUrl = searchParams.get("tab");
-    const tabs = ["gallery", "places", "events", "reviews"];
+    const tabs = ["gallery", "places", "events"];
     if (tabFromUrl && tabs.includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     }
@@ -91,7 +90,6 @@ const UserProfileContainer = () => {
     { id: "gallery", label: "Galerie", icon: UserIcon },
     { id: "places", label: "Lieux partenaires", icon: MapPin },
     { id: "events", label: "Événements", icon: Calendar },
-    { id: "reviews", label: "Avis", icon: Star },
   ];
 
   const renderTabContent = () => {
@@ -121,16 +119,6 @@ const UserProfileContainer = () => {
             user={user!}
           />
         );
-      case "reviews":
-        return user ? (
-          <ReviewsTab
-            reference={user._id}
-            referenceType="User"
-            canReview={!isOwner}
-            canReply={isOwner || false}
-            onRatingUpdated={refetchUser}
-          />
-        ) : null;
       default:
         return null;
     }

@@ -25,12 +25,11 @@ export default function AccountActions({
           route: "/account/create",
           text: "Ajouter mon activité",
         }
-      : userType === "organizer" && user?.places && user.places.length < 3
-      ? {
-          route: "/account/places/create",
-          text: "Ajouter un lieu",
-        }
       : null;
+
+
+  const shouldShowAddPlace =
+    userType === "creator" && !user?.place;
 
   return (
     <section className={styles.actions}>
@@ -68,6 +67,21 @@ export default function AccountActions({
           ariaLabel={buttonParameters.text}
         >
           {buttonParameters.text}
+        </Button>
+      )}
+
+      {shouldShowAddPlace && (
+        <Button
+          disabled={isLoadingUser}
+          variant="outline"
+          endIcon={<Edit size={16} />}
+          onClick={() => {
+            router.push("/account/places/create");
+          }}
+          fullWidth
+          ariaLabel="Ajouter un lieu"
+        >
+          Ajouter un lieu
         </Button>
       )}
 

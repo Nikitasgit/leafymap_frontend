@@ -1,25 +1,28 @@
 "use client";
 
-import ProfileFormStep from "@/components/account/CreateProfileSteps/ProfileFormStep";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useEffect, useState, useCallback } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { usePlace } from "@/hooks/usePlace";
 import {
   FormDataChangeHandler,
   InitialPlaceData,
 } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
 import { defaultSchedule } from "@/utils/createProfile";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import styles from "./UpdatePlaceContainer.module.scss";
 import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
 import { Partnership } from "@/types/partnerships";
 import { useToast } from "@/hooks/useToast";
-import { useRouter } from "next/navigation";
 import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
 import { separateNewAndUpdatedArrayValues } from "@/utils/tempId";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
+import Button from "@/components/common/buttons/Button";
+import PlaceForm from "@/components/account/Place/PlaceForm/PlaceForm";
+import PartnershipsForm from "@/components/account/Partnership/PartnershipsForm/PartnershipsForm";
+import { ValidationResult } from "@/validations/commonValidations";
+import { validateNewPlaceData } from "@/validations/placeValidations";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 const initialPlaceData = (place: InitialPlaceData): InitialPlaceData => ({
   name: place?.name || "",
@@ -51,6 +54,8 @@ const UpdatePlaceContainer = () => {
   const [partnerships, setPartnerships] = useState<Partnership[]>(
     partnershipsData || []
   );
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const { showError, showSuccess } = useToast();
   const router = useRouter();
 
@@ -59,7 +64,28 @@ const UpdatePlaceContainer = () => {
     setPlace((prev) => (prev ? { ...prev, [name]: value } : null));
   };
 
-  const onSubmit = async () => {
+  const validateFormData = useCallback((): boolean => {
+    if (!place) return false;
+    const placeValidation: ValidationResult = validateNewPlaceData(place);
+    setErrors(placeValidation.errors);
+    return placeValidation.isValid;
+  }, [place]);
+
+  useEffect(() => {
+    if (hasAttemptedSubmit) {
+      validateFormData();
+    }
+  }, [hasAttemptedSubmit, validateFormData]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setHasAttemptedSubmit(true);
+
+    if (!validateFormData()) {
+      showError("Veuillez corriger les erreurs du formulaire");
+      return;
+    }
+
     try {
       if (placeData && place) {
         const id = placeData._id;
@@ -74,9 +100,9 @@ const UpdatePlaceContainer = () => {
             await submitPartnerships(updatedValues, true, id);
           }
         }
+        showSuccess("Lieu modifié avec succès");
+        router.push("/account");
       }
-      showSuccess("Lieu modifié avec succès");
-      router.push("/account");
     } catch {
       showError("Erreur lors de la modification du lieu");
     }
@@ -90,9 +116,9 @@ const UpdatePlaceContainer = () => {
   const loading =
     placeLoading ||
     submitPlaceLoading ||
-    userLoading ||
     partnershipsLoading ||
-    submitPartnershipsLoading;
+    submitPartnershipsLoading ||
+    userLoading;
 
   return (
     <div className={styles.pageContainer}>
@@ -101,16 +127,42 @@ const UpdatePlaceContainer = () => {
         {loading || !place || !user ? (
           <LoadingBar />
         ) : (
-          <ProfileFormStep
-            firstStep={true}
-            place={place}
-            user={user}
-            partnerships={partnerships}
-            onPlaceChange={onPlaceChange}
-            onPartnershipsChange={setPartnerships}
-            onSubmit={onSubmit}
-            submitButtonText="Enregistrer"
-          />
+          <form onSubmit={handleSubmit} noValidate>
+            <PlaceForm
+              place={place}
+              username={user.username}
+              initialPlaceLocation={place.location}
+              onChange={onPlaceChange}
+              errors={errors}
+              showRadioYesOrNo={false}
+            />
+            <PartnershipsForm
+              onChange={setPartnerships}
+              partnerships={partnerships}
+            />
+            <div className={styles.buttonContainer}>
+              <Button
+                type="button"
+                fullWidth
+                size="large"
+                variant="secondary"
+                onClick={() => router.back()}
+                ariaLabel="Annuler"
+                disabled={loading}
+              >
+                Annuler
+              </Button>
+              <Button
+                type="submit"
+                fullWidth
+                size="large"
+                disabled={loading}
+                ariaLabel="Enregistrer"
+              >
+                Enregistrer
+              </Button>
+            </div>
+          </form>
         )}
       </section>
     </div>

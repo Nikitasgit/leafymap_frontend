@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import UserTypeStep from "../CreateProfileSteps/UserTypeStep/UserTypeStep";
 import ProfileFormStep from "../CreateProfileSteps/ProfileFormStep/ProfileFormStep";
 import {
   FormDataChangeHandler,
@@ -22,11 +21,14 @@ import ProtectedRoute from "@/components/common/ProtectedRoute";
 import { useAuth } from "@/hooks/useAuth";
 
 const initialUserData = (user: Partial<User> | null): InitialCreatorData => ({
-  userType: "guest",
-  creatorName: "",
+  userType: "creator",
+  username: "",
   description: "",
   userCategories: [],
   website: user?.website || "",
+  phone: user?.phone || "",
+  firstname: user?.firstname || "",
+  lastname: user?.lastname || "",
 });
 
 const initialPlaceData = (user: Partial<User> | null): InitialPlaceData => ({
@@ -45,13 +47,11 @@ const initialPlaceData = (user: Partial<User> | null): InitialPlaceData => ({
 const CreateProfileStepper = () => {
   const router = useRouter();
   const { showSuccess, showError } = useToast();
-  const { user, loading: userLoading } = useAuth();
-  const { submitUser, isLoading: submitUserLoading } = useSubmitUser();
-  const { submitPlace, isLoading: submitPlaceLoading } = useSubmitPlace();
-  const { submitPartnerships, isLoading: submitPartnershipsLoading } =
-    useSubmitPartnerships();
+  const { user } = useAuth();
+  const { submitUser } = useSubmitUser();
+  const { submitPlace } = useSubmitPlace();
+  const { submitPartnerships } = useSubmitPartnerships();
 
-  const [step, setStep] = useState(1);
   const [place, setPlace] = useState<InitialPlaceData>(initialPlaceData(null));
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
   const [newUser, setNewUser] = useState<InitialCreatorData>(
@@ -64,12 +64,6 @@ const CreateProfileStepper = () => {
       setPlace(initialPlaceData(user));
     }
   }, [user]);
-
-  const loading =
-    userLoading ||
-    submitUserLoading ||
-    submitPlaceLoading ||
-    submitPartnershipsLoading;
 
   const handleSubmit = async () => {
     try {
@@ -96,17 +90,6 @@ const CreateProfileStepper = () => {
     const { name, value } = e.target;
     setPlace((prev) => ({ ...prev, [name]: value }));
   };
-
-  const handleNext = () => setStep((prev) => prev + 1);
-  const handleBack = () => {
-    const prevStep = step;
-    setStep((prev) => prev - 1);
-    if (prevStep === 2) {
-      setNewUser(initialUserData(user));
-      setPlace(initialPlaceData(user));
-      setPartnerships([]);
-    }
-  };
   return (
     <ProtectedRoute
       allowedUserTypes={["guest"]}
@@ -118,31 +101,20 @@ const CreateProfileStepper = () => {
           <PageHeader
             title="Créer votre profil"
             showBackButton
-            subtitle={`Étape ${step} sur 2`}
           />
 
-          <>
-            {step === 1 && (
-              <UserTypeStep
-                loading={loading}
-                userType={newUser.userType}
-                onChange={onUserChange}
-                onNext={handleNext}
-              />
-            )}
-            {step === 2 && (
-              <ProfileFormStep
-                place={place}
-                user={newUser}
-                partnerships={partnerships}
-                onPartnershipsChange={setPartnerships}
-                onPlaceChange={onPlaceChange}
-                onUserChange={onUserChange}
-                onSubmit={handleSubmit}
-                onBack={handleBack}
-              />
-            )}
-          </>
+          <ProfileFormStep
+            place={place}
+            user={newUser}
+            onPlaceChange={onPlaceChange}
+            onUserChange={onUserChange}
+            onPartnershipsChange={setPartnerships}
+            partnerships={partnerships}
+            onSubmit={handleSubmit}
+            firstStep={true}
+            showPlaceForm={true}
+            showPlaceRadioYesOrNo={true}
+          />
         </section>
       </div>
     </ProtectedRoute>

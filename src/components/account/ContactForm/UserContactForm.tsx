@@ -12,6 +12,17 @@ const UserContactForm = ({
       <legend className={styles.title}>Contact</legend>
       <div className={styles.formFields}>
         <TextField
+          label="Téléphone"
+          value={user.phone}
+          onChange={onUserChange}
+          name="phone"
+          type="tel"
+          placeholder="Entrez votre numéro de téléphone"
+          fullWidth
+          error={!!errors.phone}
+          errorMessage={errors.phone}
+        />
+        <TextField
           label="Site web"
           value={user.website}
           onChange={onUserChange}
