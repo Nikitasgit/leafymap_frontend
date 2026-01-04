@@ -19,6 +19,7 @@ import { ExtendedMapRef } from "@/types/map";
 import { DEFAULT_LOCATION } from "@/utils/constants";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { MapComponentProps } from "./Map.types";
+import { User } from "@/types/user";
 
 const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
   (
@@ -134,7 +135,11 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
                     ? place.placeCategory
                     : place.placeCategory.name
                 }
-                placeName={place.name}
+                placeName={
+                  typeof place === "object" && "user" in place
+                    ? (place.user as User).username
+                    : ""
+                }
                 zoom={viewState.zoom}
                 isSelected={place._id === internalSelectedPlaceId}
                 onClick={() => {

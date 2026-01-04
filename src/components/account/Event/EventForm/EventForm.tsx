@@ -98,7 +98,11 @@ const EventForm = ({
       }
       if (event) {
         // send event data to server
-        const { _id: eventId } = await submitEvent(event, isUpdate, eventData?._id);
+        const { _id: eventId } = await submitEvent(
+          event,
+          isUpdate,
+          eventData?._id
+        );
         // send partnerships data to server if event is created
         if (eventId && partnerships.length > 0) {
           // separate new and updated partnerships

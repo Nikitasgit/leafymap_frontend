@@ -69,31 +69,30 @@ const ImageModal: React.FC<ImageModalProps> = ({
           <X size={24} />
         </button>
 
-        {images.length > 1 && (
-          <>
-            {currentIndex > 0 && (
-              <button
-                className={`${styles.navButton} ${styles.prevButton}`}
-                onClick={handlePrevious}
-                aria-label="Image précédente"
-              >
-                <ChevronLeft size={24} />
-              </button>
-            )}
-
-            {currentIndex < images.length - 1 && (
-              <button
-                className={`${styles.navButton} ${styles.nextButton}`}
-                onClick={handleNext}
-                aria-label="Image suivante"
-              >
-                <ChevronRight size={24} />
-              </button>
-            )}
-          </>
-        )}
-
         <div className={styles.imageContainer}>
+          {images.length > 1 && (
+            <>
+              {currentIndex > 0 && (
+                <button
+                  className={`${styles.navButton} ${styles.prevButton}`}
+                  onClick={handlePrevious}
+                  aria-label="Image précédente"
+                >
+                  <ChevronLeft size={24} />
+                </button>
+              )}
+
+              {currentIndex < images.length - 1 && (
+                <button
+                  className={`${styles.navButton} ${styles.nextButton}`}
+                  onClick={handleNext}
+                  aria-label="Image suivante"
+                >
+                  <ChevronRight size={24} />
+                </button>
+              )}
+            </>
+          )}
           <Image
             src={currentImage.urls?.medium || ""}
             alt={`Image ${currentIndex + 1}`}

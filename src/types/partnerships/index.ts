@@ -9,6 +9,7 @@ export interface Partnership {
   event?: string | Event;
   initiator?: {
     _id: string;
+    username?: string;
     name?: string;
     image?: string | Image;
     categories?: string[];

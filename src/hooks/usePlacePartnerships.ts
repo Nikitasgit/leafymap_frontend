@@ -8,7 +8,7 @@ export const usePlacePartnerships = (
   placeId: string,
   eventId?: string,
   type: "place" | "event" = "place",
-  onlyAccepted: boolean = false
+  queryParams: Record<string, string> = {}
 ) => {
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
   const { isLoading, withLoading } = useLoading(true);
@@ -16,15 +16,21 @@ export const usePlacePartnerships = (
   useEffect(() => {
     const fetchPartnerships = async () => {
       try {
+        const searchParams = new URLSearchParams();
+        searchParams.append("type", type);
+        Object.entries(queryParams).forEach(([key, value]) => {
+          searchParams.append(key, value);
+        });
+
         const url = `${
           process.env.NEXT_PUBLIC_API_URL
         }/api/partnerships/${placeId}${
           eventId ? `/${eventId}` : ""
-        }?type=${type}${
-          onlyAccepted ? `&onlyAccepted=${onlyAccepted.toString()}` : ""
-        }`;
+        }?${searchParams.toString()}`;
 
-        const response = await axios.get(url);
+        const response = await axios.get(url, {
+          withCredentials: true,
+        });
 
         if (response.data && response.data.data) {
           setPartnerships(response.data.data);
@@ -45,7 +51,7 @@ export const usePlacePartnerships = (
     if (placeId) {
       withLoading(fetchPartnerships);
     }
-  }, [placeId, eventId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placeId, eventId, type, JSON.stringify(queryParams)]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { partnerships, isLoading };
 };

@@ -1,10 +1,7 @@
-import { Image } from "@/types/image";
-
 export interface GallerySectionProps {
-  images: Image[];
-  isLoading?: boolean;
+  reference: string | null;
+  referenceType: "Place" | "User" | "Event" | "Message" | "Review" | null;
   isUploading?: boolean;
   isOwner?: boolean;
   onFilesSelected?: (files: File[]) => void;
-  onImageDeleted?: () => void;
 }

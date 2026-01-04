@@ -31,8 +31,7 @@ const EventProfileContainer = () => {
   const { partnerships, isLoading: partnershipsLoading } = usePlacePartnerships(
     event?.place?._id as string,
     eventId as string,
-    "event",
-    true
+    "event"
   );
 
   // Initialize tab from URL on mount

@@ -5,7 +5,6 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import styles from "./UserProfileContainer.module.scss";
 import { usePartnershipByUserId } from "@/hooks/usePartnershipByUserId";
-import { useImages } from "@/hooks/useImages";
 import { useAuth } from "@/hooks/useAuth";
 import useSubmitImages from "@/hooks/useSubmitImages";
 import UserHeader from "@/components/userProfile/UserHeader/UserHeader";
@@ -14,8 +13,9 @@ import EventsSectionContainer from "@/components/userProfile/EventsSection/Event
 import GallerySection from "@/components/userProfile/GallerySection/GallerySection";
 import TabsContainer from "@/components/common/tabs/TabsContainer/TabsContainer";
 import Tab from "@/components/common/tabs/Tab/Tab";
-import { User as UserIcon, MapPin, Calendar } from "lucide-react";
+import { User as UserIcon, MapPin, Calendar, Star } from "lucide-react";
 import { useToast } from "@/hooks/useToast";
+import ReviewsTab from "@/components/reviews/ReviewsTab/ReviewsTab";
 
 const UserProfileContainer = () => {
   const { userId } = useParams();
@@ -25,15 +25,9 @@ const UserProfileContainer = () => {
   const { showInfo } = useToast();
   const { user: currentUser } = useAuth();
   const { user, isLoading } = useUser(userId as string);
-  const {
-    images,
-    isLoading: isLoadingImages,
-    refetch: refetchImages,
-  } = useImages(userId as string, "User", "gallery");
   const { partnerships, isLoading: isLoadingPartnerships } =
     usePartnershipByUserId(userId as string, {
       asCollaborator: "true",
-      onlyAccepted: "true",
     });
   const { submitImages, isLoading: isUploadingImages } = useSubmitImages();
   const placePartnerships = partnerships.filter(
@@ -60,24 +54,32 @@ const UserProfileContainer = () => {
         referenceType: "User",
         type: "gallery",
       });
-      await refetchImages();
     } catch (error) {
       console.error("Error uploading images:", error);
     }
   };
 
-  const handleImageDeleted = async () => {
-    await refetchImages();
-  };
-
   // Initialize tab from URL on mount
   useEffect(() => {
     const tabFromUrl = searchParams.get("tab");
-    const tabs = ["gallery", "places", "events"];
-    if (tabFromUrl && tabs.includes(tabFromUrl)) {
-      setActiveTab(tabFromUrl);
+    const availableTabs = ["gallery", "places", "events"];
+    const userPlace =
+      user?.place && typeof user.place === "object" && user.place._id
+        ? user.place
+        : null;
+    if (userPlace) {
+      availableTabs.push("reviews");
     }
-  }, [searchParams]);
+    if (tabFromUrl && availableTabs.includes(tabFromUrl)) {
+      setActiveTab(tabFromUrl);
+    } else if (tabFromUrl === "reviews" && !userPlace) {
+      // If user tries to access reviews tab but has no place, redirect to gallery
+      setActiveTab("gallery");
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+      newSearchParams.set("tab", "gallery");
+      router.replace(`?${newSearchParams.toString()}`, { scroll: false });
+    }
+  }, [searchParams, user, router]);
 
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
@@ -86,10 +88,15 @@ const UserProfileContainer = () => {
     router.replace(`?${newSearchParams.toString()}`, { scroll: false });
   };
 
+  const userPlace =
+    user?.place && typeof user.place === "object" && user.place._id
+      ? user.place
+      : null;
   const tabs = [
     { id: "gallery", label: "Galerie", icon: UserIcon },
     { id: "places", label: "Lieux partenaires", icon: MapPin },
     { id: "events", label: "Événements", icon: Calendar },
+    ...(userPlace ? [{ id: "reviews", label: "Avis", icon: Star }] : []),
   ];
 
   const renderTabContent = () => {
@@ -97,12 +104,11 @@ const UserProfileContainer = () => {
       case "gallery":
         return (
           <GallerySection
-            images={images || []}
-            isLoading={isLoadingImages}
+            reference={userId as string}
+            referenceType="User"
             isUploading={isUploadingImages}
             isOwner={isOwner || false}
             onFilesSelected={handleFilesSelected}
-            onImageDeleted={handleImageDeleted}
           />
         );
       case "places":
@@ -119,6 +125,19 @@ const UserProfileContainer = () => {
             user={user!}
           />
         );
+      case "reviews":
+        const place =
+          user?.place && typeof user.place === "object" && user.place._id
+            ? user.place
+            : null;
+        return place ? (
+          <ReviewsTab
+            reference={place._id}
+            referenceType="Place"
+            canReview={!isOwner}
+            canReply={isOwner || false}
+          />
+        ) : null;
       default:
         return null;
     }

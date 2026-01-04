@@ -30,7 +30,7 @@ export default function AccountHeader({
       });
     }
   };
-console.log(user.userCategories); 
+
   return (
     <header className={styles.header}>
       <div className={styles.userInfo}>
@@ -39,9 +39,7 @@ console.log(user.userCategories);
         </h1>
         {user.userCategories && user.userCategories.length > 0 && (
           <div className={styles.creatorInfoContainer}>
-            <CreatorCategoryBadge
-              categoryName={user.userCategories[0].name}
-            />
+            <CreatorCategoryBadge categoryName={user.userCategories[0].name} />
           </div>
         )}
         <p className={styles.email}>{user.email}</p>

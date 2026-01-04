@@ -1,0 +1,22 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.content {
+  width: 100%;
+  border-top: 1px solid $grey-200;
+  margin-top: spacing(1);
+}
+
+.tabContent {
+  width: 100%;
+
+  padding: spacing(1);
+  
+  @include respond-to(sm) {
+    padding: spacing(1.5);
+
+  }
+}
+
+

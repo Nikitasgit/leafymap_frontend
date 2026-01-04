@@ -15,35 +15,15 @@ const useSubmitComment = () => {
 
   const submitComment = async (data: SubmitCommentData) => {
     try {
-      // If commenting on a Review, use the specific review comment endpoint
-      if (data.referenceType === "Review") {
-        await withLoading(() =>
-          axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/comments/review`,
-            {
-              content: data.content,
-              reference: data.reference,
-              referenceType: data.referenceType,
-            },
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-              withCredentials: true,
-            }
-          )
-        );
-      } else {
-        // For other reference types, use the generic endpoint
-        await withLoading(() =>
-          axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/comments`, data, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          })
-        );
-      }
+      // Use the generic endpoint for all comment types (including Review)
+      await withLoading(() =>
+        axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/comments`, data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        })
+      );
       showSuccess("Commentaire publié avec succès");
       return true;
     } catch (err: unknown) {

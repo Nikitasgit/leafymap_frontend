@@ -5,20 +5,25 @@ import { GallerySectionProps } from "./GallerySection.types";
 import ImageUploader from "@/components/common/inputs/ImageUploader/ImageUploader";
 import ImageModal from "@/components/common/modals/GalleryImageModal";
 import useDeleteImages from "@/hooks/useDeleteImages";
+import { useImages } from "@/hooks/useImages";
 import styles from "./GallerySection.module.scss";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 
 const GallerySection: React.FC<GallerySectionProps> = ({
-  images,
-  isLoading = false,
+  reference,
+  referenceType,
   isUploading = false,
   isOwner = false,
   onFilesSelected,
-  onImageDeleted,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { images, isLoading, refetch } = useImages(
+    reference,
+    referenceType,
+    "gallery"
+  );
   const { deleteImages, isLoading: isDeleting } = useDeleteImages();
 
   const handleImageClick = (index: number) => {
@@ -42,9 +47,16 @@ const GallerySection: React.FC<GallerySectionProps> = ({
     if (!isOwner) return;
     try {
       await deleteImages([imageId]);
-      onImageDeleted?.();
+      await refetch();
     } catch (error) {
       console.error("Error deleting image:", error);
+    }
+  };
+
+  const handleFilesSelected = async (files: File[]) => {
+    if (onFilesSelected) {
+      await onFilesSelected(files);
+      await refetch();
     }
   };
 
@@ -56,49 +68,46 @@ const GallerySection: React.FC<GallerySectionProps> = ({
           icon={<ImageIcon className={styles.icon} />}
         />
       ) : (
-        <>
-          <h3>Galerie</h3>
-          <div className={styles.imagesList}>
-            {isOwner && (
-              <ImageUploader
-                onFilesSelected={onFilesSelected}
-                disabled={isLoading}
-                isLoading={isLoading} 
-                isUploading={isUploading}
-                iconSize={28}
-              />
-            )}
-            {images &&
-              images.length > 0 &&
-              images.map((image, index) => (
-                <div
-                  key={index}
-                  className={styles.imageItem}
-                  onClick={() => handleImageClick(index)}
-                >
-                  <Image
-                    src={image.urls?.thumbnail}
-                    alt={`Image ${index + 1}`}
-                    className={styles.galleryImage}
-                    width={150}
-                    height={150}
-                  />
-                  {isOwner && (
-                    <button
-                      className={styles.deleteButton}
-                      onClick={(e) => handleDeleteImage(image._id, e)}
-                      disabled={isDeleting}
-                      title="Supprimer l'image"
-                      type="button"
-                      aria-label="Supprimer l'image"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  )}
-                </div>
-              ))}
-          </div>
-        </>
+        <div className={styles.imagesList}>
+          {isOwner && (
+            <ImageUploader
+              onFilesSelected={handleFilesSelected}
+              disabled={isLoading}
+              isLoading={isLoading}
+              isUploading={isUploading}
+              iconSize={28}
+            />
+          )}
+          {images &&
+            images.length > 0 &&
+            images.map((image, index) => (
+              <div
+                key={index}
+                className={styles.imageItem}
+                onClick={() => handleImageClick(index)}
+              >
+                <Image
+                  src={image.urls?.thumbnail}
+                  alt={`Image ${index + 1}`}
+                  className={styles.galleryImage}
+                  width={150}
+                  height={150}
+                />
+                {isOwner && (
+                  <button
+                    className={styles.deleteButton}
+                    onClick={(e) => handleDeleteImage(image._id, e)}
+                    disabled={isDeleting}
+                    title="Supprimer l'image"
+                    type="button"
+                    aria-label="Supprimer l'image"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                )}
+              </div>
+            ))}
+        </div>
       )}
       <ImageModal
         isOpen={modalOpen}

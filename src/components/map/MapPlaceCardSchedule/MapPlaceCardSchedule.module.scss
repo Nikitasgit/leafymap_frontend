@@ -5,7 +5,7 @@
 .schedule {
   @include flex(column, flex-start, flex-start, spacing(0.5));
   width: 100%;
-  padding: spacing(1);
+  padding: 0 spacing(1);
   background-color: $white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba-color($grey-600, 0.1);
@@ -15,8 +15,7 @@
   font-size: rem(15);
   font-weight: 600;
   color: $grey-600;
-  margin-bottom: spacing(1);
-  margin-top: 0;
+
 }
 
 .scheduleList {
@@ -35,7 +34,7 @@
 .scheduleItem {
   @include flex(row, space-between, center, spacing(1));
   width: 100%;
-  padding: spacing(0.75) 0;
+
 }
 
 .dayInfo {
@@ -89,7 +88,7 @@
 // Responsive design
 @include respond-to(sm) {
   .scheduleItem {
-    padding: spacing(1) spacing(1.5);
+    padding: spacing(0.5) 0;
   }
 
   .dayName {
@@ -103,7 +102,7 @@
 
 @include respond-to(md) {
   .schedule {
-    padding: spacing(1.5);
+    padding: 0 spacing(1.5);
   }
 
   .scheduleTitle {

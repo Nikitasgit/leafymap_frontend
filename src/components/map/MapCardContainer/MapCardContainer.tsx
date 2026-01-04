@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import MapPlaceCard from "../MapPlaceCard";
-import MapFiltersCard from "../MapFiltersCard";
 import MapCreatorCard from "../MapCreatorCard";
+import MapFiltersCard from "../MapFiltersCard";
 import styles from "./MapCardContainer.module.scss";
 import { MapCardContainerProps } from "./MapCardContainer.types";
 
@@ -48,10 +47,7 @@ const MapCardContainer = ({
         aria-hidden={isCollapsed}
       >
         {selectedItem.type === "place" && (
-          <MapPlaceCard placeId={selectedItem.id} mapRef={mapRef} />
-        )}
-        {selectedItem.type === "user" && (
-          <MapCreatorCard userId={selectedItem.id} mapRef={mapRef} />
+          <MapCreatorCard placeId={selectedItem.id} mapRef={mapRef} />
         )}
         {selectedItem.type === "filters" && (
           <MapFiltersCard

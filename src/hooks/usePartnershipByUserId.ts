@@ -22,7 +22,9 @@ export const usePartnershipByUserId = (
         process.env.NEXT_PUBLIC_API_URL
       }/api/partnerships/user/${userId}?${searchParams.toString()}`;
 
-      const response = await axios.get(url);
+      const response = await axios.get(url, {
+        withCredentials: true,
+      });
       if (response.data && response.data.data) {
         setPartnerships(response.data.data);
       } else {
