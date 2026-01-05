@@ -1,56 +1,211 @@
-import React from "react";
-import { DefaultSchedule } from "@/types/place/schedule";
+import React, { useState } from "react";
+import Image from "next/image";
+import { ChevronRight, ExternalLink } from "lucide-react";
+import { DefaultSchedule, Event, WeekDay } from "@/types/place/schedule";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/navigation";
 import styles from "./MapPlaceCardSchedule.module.scss";
 import { MapPlaceCardScheduleProps } from "./MapPlaceCardSchedule.types";
+import Button from "@/components/common/buttons/Button";
+import eventDefaultsSvg from "@public/images/event_default.svg";
+
+interface ScheduleEventItemProps {
+  event: Event;
+}
+
+const ScheduleEventItem: React.FC<ScheduleEventItemProps> = ({ event }) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/events/${event.id}`);
+  };
+
+  return (
+    <button
+      type="button"
+      className={styles.eventCard}
+      onClick={handleClick}
+      aria-label={`Voir l'événement ${event.name}`}
+    >
+      <div className={styles.eventImageContainer}>
+        <Image
+          src={event.image?.urls?.thumbnail || eventDefaultsSvg}
+          alt={event.name}
+          fill
+          sizes="28px"
+          style={{ objectFit: "cover" }}
+        />
+      </div>
+      <div className={styles.eventInfo}>
+        <span className={styles.eventName}>{event.name}</span>
+      </div>
+      <ExternalLink size={14} className={styles.eventIcon} aria-hidden="true" />
+    </button>
+  );
+};
+
+interface ScheduleDayProps {
+  dayKey: WeekDay;
+  daySchedule: DefaultSchedule[keyof DefaultSchedule];
+  isTimeSlotsExpanded: boolean;
+  isEventsExpanded: boolean;
+  onToggleTimeSlots: () => void;
+  onToggleEvents: () => void;
+}
+
+const ScheduleDay: React.FC<ScheduleDayProps> = ({
+  dayKey,
+  daySchedule,
+  isTimeSlotsExpanded,
+  isEventsExpanded,
+  onToggleTimeSlots,
+  onToggleEvents,
+}) => {
+  const { t } = useTranslation("common");
+  const isOpen = daySchedule.open;
+  const hasTimeSlots = daySchedule.timeSlots?.length > 0;
+  const hasEvents = daySchedule.events && daySchedule.events.length > 0;
+
+  const handleEventsClick = () => {
+    onToggleEvents();
+  };
+
+  return (
+    <div className={styles.scheduleDayContainer}>
+      <div className={styles.dayHeader}>
+        <div className={styles.dayHeaderContent}>
+          <span className={styles.dayName}>
+            {t(`defaultSchedule.day.${dayKey}`)}
+          </span>
+          <div className={styles.statusContainer}>
+            {hasEvents && (
+              <Button
+                type="button"
+                variant="outline"
+                size="xSmall"
+                onClick={handleEventsClick}
+                ariaLabel="Afficher les événements"
+                endIcon={
+                  <ChevronRight
+                    size={12}
+                    className={`${styles.eventsChevron} ${
+                      isEventsExpanded ? styles.eventsChevronExpanded : ""
+                    }`}
+                  />
+                }
+              >
+                Événements
+              </Button>
+            )}
+            <div
+              className={`${styles.statusDisplay} ${
+                isOpen ? styles.openStatus : styles.closedStatus
+              }`}
+            >
+              <span className={styles.statusText}>
+                {t(`defaultSchedule.${isOpen ? "open" : "closed"}`)}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className={styles.chevronContainer}>
+          {hasTimeSlots && (
+            <button
+              type="button"
+              className={styles.chevronButton}
+              onClick={onToggleTimeSlots}
+              aria-expanded={isTimeSlotsExpanded}
+              aria-label="Afficher les horaires"
+            >
+              <ChevronRight
+                size={16}
+                className={`${styles.chevron} ${
+                  isTimeSlotsExpanded ? styles.chevronExpanded : ""
+                }`}
+                aria-hidden="true"
+              />
+            </button>
+          )}
+        </div>
+      </div>
+      {isTimeSlotsExpanded && hasTimeSlots && (
+        <div className={styles.dayContent}>
+          <div className={styles.timeSlots}>
+            {daySchedule.timeSlots.map((slot, index) => (
+              <span key={index} className={styles.timeSlot}>
+                {slot.startTime} - {slot.endTime}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+      {isEventsExpanded && hasEvents && (
+        <div className={styles.eventsContainer}>
+          <div className={styles.events}>
+            {daySchedule.events?.map((event) => (
+              <ScheduleEventItem key={event.id} event={event} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const MapPlaceCardSchedule: React.FC<MapPlaceCardScheduleProps> = ({
   schedule,
   className,
 }) => {
   const { t } = useTranslation("common");
+  const [expandedTimeSlots, setExpandedTimeSlots] = useState<Set<WeekDay>>(
+    new Set()
+  );
+  const [expandedEvents, setExpandedEvents] = useState<Set<WeekDay>>(new Set());
+
+  const toggleTimeSlots = (dayKey: WeekDay) => {
+    setExpandedTimeSlots((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(dayKey)) {
+        newSet.delete(dayKey);
+      } else {
+        newSet.add(dayKey);
+        setExpandedEvents((eventsSet) => {
+          const newEventsSet = new Set(eventsSet);
+          newEventsSet.delete(dayKey);
+          return newEventsSet;
+        });
+      }
+      return newSet;
+    });
+  };
+
+  const toggleEvents = (dayKey: WeekDay) => {
+    setExpandedEvents((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(dayKey)) {
+        newSet.delete(dayKey);
+      } else {
+        newSet.add(dayKey);
+      }
+      return newSet;
+    });
+  };
 
   return (
     <div className={`${styles.schedule} ${className || ""}`}>
       <h4 className={styles.scheduleTitle}>{t("defaultSchedule.title")}</h4>
       <div className={styles.scheduleList}>
-        {Object.keys(schedule).map((dayKey) => {
-          const daySchedule = schedule[dayKey as keyof DefaultSchedule];
-          const isOpen = daySchedule.open;
-          const hasTimeSlots = daySchedule.timeSlots?.length > 0;
-
-          return (
-            <div key={dayKey} className={styles.scheduleDayContainer}>
-              <div className={styles.scheduleItem}>
-                <div className={styles.dayInfo}>
-                  <span className={styles.dayName}>
-                    {t(`defaultSchedule.day.${dayKey}`)}
-                  </span>
-                  {hasTimeSlots && (
-                    <div className={styles.timeSlots}>
-                      {daySchedule.timeSlots.map((slot, index) => (
-                        <span key={index} className={styles.timeSlot}>
-                          {slot.startTime} - {slot.endTime}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <div className={styles.scheduleStatus}>
-                  <div
-                    className={`${styles.statusDisplay} ${
-                      isOpen ? styles.openStatus : styles.closedStatus
-                    }`}
-                  >
-                    <span className={styles.statusText}>
-                      {t(`defaultSchedule.${isOpen ? "open" : "closed"}`)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+        {Object.keys(schedule).map((dayKey) => (
+          <ScheduleDay
+            key={dayKey}
+            dayKey={dayKey as WeekDay}
+            daySchedule={schedule[dayKey as keyof DefaultSchedule]}
+            isTimeSlotsExpanded={expandedTimeSlots.has(dayKey as WeekDay)}
+            isEventsExpanded={expandedEvents.has(dayKey as WeekDay)}
+            onToggleTimeSlots={() => toggleTimeSlots(dayKey as WeekDay)}
+            onToggleEvents={() => toggleEvents(dayKey as WeekDay)}
+          />
+        ))}
       </div>
     </div>
   );

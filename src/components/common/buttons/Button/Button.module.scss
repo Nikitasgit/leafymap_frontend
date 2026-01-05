@@ -16,13 +16,18 @@
     cursor: not-allowed;
   }
 
+  &.xSmall {
+    font-size: rem(12);
+    padding: spacing(0.25) spacing(0.5);
+  }
+
   &.small {
-    font-size: 14px;
+    font-size: rem(14);
     padding: spacing(0.5) spacing(1);
   }
 
   &.large {
-    font-size: 16px;
+    font-size: rem(16);
     padding: spacing(2) spacing(4);
   }
 

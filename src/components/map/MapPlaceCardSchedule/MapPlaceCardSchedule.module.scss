@@ -4,8 +4,9 @@
 
 .schedule {
   @include flex(column, flex-start, flex-start, spacing(0.5));
+  margin-top: spacing(0.5);
   width: 100%;
-  padding: 0 spacing(1);
+  padding: spacing(1) 0;
   background-color: $white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba-color($grey-600, 0.1);
@@ -25,38 +26,167 @@
 
 .scheduleDayContainer {
   width: 100%;
+  border-bottom: 1px solid $grey-200;
 
-  &:not(:last-child) {
-    margin-bottom: spacing(0.25);
+  &:last-child {
+    border-bottom: none;
   }
 }
 
-.scheduleItem {
+.dayHeader {
   @include flex(row, space-between, center, spacing(1));
   width: 100%;
-
+  padding: spacing(0.75) 0;
+  background: none;
+  border: none;
+  text-align: left;
 }
 
-.dayInfo {
-  @include flex(column, flex-start, flex-start, spacing(0.25));
-  min-width: 90px;
+.dayHeaderContent {
+  @include flex(row, space-between, center, spacing(1));
+  flex: 1;
+  min-width: 0;
 }
 
 .dayName {
   font-weight: 500;
   color: $grey-600;
   font-size: rem(12);
+  flex-shrink: 0;
+}
+
+.statusContainer {
+  @include flex(row, flex-end, center, spacing(0.75));
+  flex-shrink: 0;
+}
+
+
+.chevronContainer {
+  width: 16px;
+  height: 16px;
+  @include flex(row, center, center, 0);
+  flex-shrink: 0;
+}
+
+.chevronButton {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  @include flex(row, center, center, 0);
+  color: $grey-400;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $grey-600;
+  }
+}
+
+.dayContent {
+  @include flex(column, flex-start, flex-start, spacing(0.75));
+  padding: spacing(0.5) 0 spacing(0.75) 0;
+  padding-left: spacing(1);
+}
+
+.chevron {
+  color: $grey-400;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.chevronExpanded {
+  transform: rotate(90deg);
+}
+
+.eventsChevron {
+  color: currentColor;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.eventsChevronExpanded {
+  transform: rotate(90deg);
 }
 
 .timeSlots {
   @include flex(column, flex-start, flex-start, spacing(0.15));
-  margin-top: spacing(0.25);
+  width: 100%;
 }
 
 .timeSlot {
   font-size: rem(12);
   color: $grey-500;
   font-weight: 400;
+}
+
+.eventsContainer {
+  width: 100%;
+  padding: spacing(0.75) 0;
+
+  border-top: 1px solid $grey-100;
+  margin-top: spacing(0.5);
+}
+
+.events {
+  @include flex(column, flex-start, flex-start, spacing(0.75));
+  width: 100%;
+}
+
+.eventCard {
+  @include flex(row, flex-start, center, spacing(0.5));
+  width: 100%;
+  padding: spacing(0.5);
+  background-color: $grey-50;
+  border-radius: 6px;
+  border: 1px solid $grey-200;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: left;
+
+  &:hover {
+    background-color: $grey-100;
+    border-color: $grey-300;
+  }
+}
+
+.eventImageContainer {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: $grey-200;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.eventInfo {
+  @include flex(column, flex-start, flex-start, spacing(0.25));
+  flex: 1;
+  min-width: 0;
+}
+
+.eventName {
+  font-size: rem(12);
+  color: $grey-800;
+  font-weight: 500;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.eventIcon {
+  color: $grey-400;
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+
+.eventCard:hover .eventIcon {
+  color: $grey-600;
 }
 
 .scheduleStatus {
@@ -71,6 +201,7 @@
   border-radius: 4px;
   font-size: rem(12);
   font-weight: 500;
+  flex-shrink: 0;
 }
 
 .openStatus .statusText {
@@ -87,8 +218,8 @@
 
 // Responsive design
 @include respond-to(sm) {
-  .scheduleItem {
-    padding: spacing(0.5) 0;
+  .dayHeader {
+    padding: spacing(1) 0;
   }
 
   .dayName {
@@ -98,18 +229,34 @@
   .statusText {
     font-size: rem(13);
   }
+
+  .dayContent {
+    padding-left: spacing(1.5);
+  }
+
+ 
+
+  .eventCard {
+    padding: spacing(0.625);
+    gap: spacing(0.75);
+  }
+
+  .eventImageContainer {
+    width: 32px;
+    height: 32px;
+  }
+
+  .eventName {
+    font-size: rem(13);
+  }
 }
 
 @include respond-to(md) {
-  .schedule {
-    padding: 0 spacing(1.5);
-  }
-
   .scheduleTitle {
     font-size: rem(16);
   }
 
-  .dayInfo {
+  .dayHeaderContent {
     min-width: 110px;
   }
 }

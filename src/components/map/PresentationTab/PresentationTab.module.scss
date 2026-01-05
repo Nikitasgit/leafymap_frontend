@@ -3,10 +3,10 @@
 @use "@/styles/abstracts/functions" as *;
 
 .descriptionRow {
-  padding: spacing(1) spacing(1.5);
+  padding: spacing(0.5) spacing(1.5);
   background-color: $grey-50;
   border-radius: rem(8);
-  margin: spacing(1) spacing(1.5);
+
   p {
     text-transform: capitalize;
     font-size: rem(13);
@@ -19,8 +19,8 @@
 
 @include respond-to(sm) {
   .descriptionRow {
-    padding: spacing(1.25);
-    margin: spacing(1);
+    padding: spacing(1);
+
     p {
       font-size: rem(14);
     }

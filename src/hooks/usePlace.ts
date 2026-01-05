@@ -4,7 +4,10 @@ import { PlacePopulated } from "@/types/place";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 
-export const usePlace = (placeId: string | null) => {
+export const usePlace = (
+  placeId: string | null,
+  options?: { scheduleWithEvents?: boolean }
+) => {
   const [place, setPlace] = useState<PlacePopulated | null>(null);
   const { isLoading, withLoading, stopLoading } = useLoading(true);
   const { showError } = useToast();
@@ -19,7 +22,14 @@ export const usePlace = (placeId: string | null) => {
 
   const fetchPlace = useCallback(async () => {
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}`;
+      const params = new URLSearchParams();
+      if (options?.scheduleWithEvents) {
+        params.append("scheduleWithEvents", "true");
+      }
+      const queryString = params.toString();
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}${
+        queryString ? `?${queryString}` : ""
+      }`;
 
       const response = await axios.get(url);
 
@@ -37,7 +47,7 @@ export const usePlace = (placeId: string | null) => {
       setPlace(null);
       showErrorRef.current(errorMessage);
     }
-  }, [placeId]);
+  }, [placeId, options?.scheduleWithEvents]);
 
   useEffect(() => {
     if (placeId) {

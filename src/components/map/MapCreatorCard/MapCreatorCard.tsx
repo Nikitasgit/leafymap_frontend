@@ -8,7 +8,7 @@ import MapCreatorCardHeader from "../MapCreatorCardHeader";
 import MapCreatorCardContent from "../MapCreatorCardContent";
 
 const MapCreatorCard = ({ placeId, mapRef }: MapCreatorCardProps) => {
-  const { place, isLoading } = usePlace(placeId);
+  const { place, isLoading } = usePlace(placeId, { scheduleWithEvents: true });
   const user = place?.user;
   const { partnerships } = usePartnershipByUserId(user?._id, {
     asCollaborator: "true",

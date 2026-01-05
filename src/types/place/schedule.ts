@@ -8,9 +8,12 @@ export interface DaySchedule {
   events?: Event[];
 }
 
+import { Image } from "../image";
+
 export interface Event {
   id: string;
   name: string;
+  image?: Image | null;
 }
 
 export interface TimeSlot {
@@ -30,7 +33,6 @@ export interface Period {
   timeSlots: EventTimeSlot[];
   _id: string;
 }
-
 
 export type WeekDay =
   | "monday"

@@ -16,14 +16,14 @@ const useSubmitComment = () => {
   const submitComment = async (data: SubmitCommentData) => {
     try {
       // Use the generic endpoint for all comment types (including Review)
-      await withLoading(() =>
-        axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/comments`, data, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        })
-      );
+        await withLoading(() =>
+          axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/comments`, data, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          })
+        );
       showSuccess("Commentaire publié avec succès");
       return true;
     } catch (err: unknown) {
