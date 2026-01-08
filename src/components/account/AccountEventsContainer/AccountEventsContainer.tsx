@@ -4,7 +4,6 @@ import { useParams, useRouter } from "next/navigation";
 import { usePlaceEvents } from "@/hooks/usePlaceEvents";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import styles from "./AccountEventsContainer.module.scss";
-import { getEventStatusFromSchedule } from "@/utils/eventDates";
 import PageHeader from "@/components/common/PageHeader";
 import EventsList from "@/components/account/AccountEventsList";
 import Button from "@/components/common/buttons/Button";
@@ -22,13 +21,6 @@ export default function AccountEventsContainer() {
     capitalizeFirstLetter(events?.[0]?.place?.name) || "votre lieu";
 
   if (eventsLoading) return <LoadingBar />;
-
-  const eventsWithStatus = events?.map((event) => ({
-    ...event,
-    status: ["cancelled", "full"].includes(event.status)
-      ? event.status
-      : getEventStatusFromSchedule(event.schedule || []),
-  }));
 
   return (
     <div className={styles.container}>
@@ -50,7 +42,7 @@ export default function AccountEventsContainer() {
         Ajouter un événement
       </Button>
       <EventsList
-        events={eventsWithStatus || []}
+        events={events || []}
         placeId={params.placeId as string}
         placeName={placeName}
       />

@@ -1,19 +1,22 @@
 import React from "react";
-import { MapPin } from "lucide-react";
+import { MapPin, Tag } from "lucide-react";
 import { PlaceCardProps } from "./PlaceCard.types";
 import styles from "./PlaceCard.module.scss";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter/SubscribersCounter";
-import placeDefaultsSvg from "@public/images/place_default.svg";
+import ActionButtons from "@/components/common/actions/ActionButtons";
+import creatorDefaultsSvg from "@public/images/creator_default.svg";
 
-const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
+const PlaceCard: React.FC<PlaceCardProps> = ({ place, actions, user }) => {
   const router = useRouter();
+  const { t } = useTranslation("common");
+
   return (
     <a
       className={styles.placeCard}
       onClick={() => {
-        const user = typeof place.user === "object" ? place.user : null;
         if (user) {
           router.push(`/users/${user._id}`);
         }
@@ -23,8 +26,8 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
     >
       <div className={styles.imageContainer}>
         <Image
-          src={place.image?.urls?.thumbnail || placeDefaultsSvg}
-          alt={place.name}
+          src={user?.image?.urls?.thumbnail || creatorDefaultsSvg}
+          alt={user?.username || ""}
           fill
           className={styles.placeImagee}
         />
@@ -33,24 +36,44 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place }) => {
         <div className={styles.placeHeader}>
           <div className={styles.placeTitle}>
             <MapPin size={18} className={styles.placeIcon} />
-            <h3>{place.name}</h3>
+            <h3>{user?.username}</h3>
           </div>
-          <div className={styles.placeCounters}>
-            <SubscribersCounter followers={place.followers?.length || 0} />
+          <div className={styles.placeHeaderActions}>
+            {actions && actions.length > 0 && (
+              <ActionButtons
+                actions={actions}
+                className={styles.actionButtons}
+                iconSize={14}
+              />
+            )}
+            <div className={styles.placeCounters}>
+              <SubscribersCounter followers={place.followers?.length || 0} />
+            </div>
           </div>
         </div>
 
         <div className={styles.placeContent}>
           {place.description && (
-            <p className={styles.description}>
-              {place.description.length > 120
-                ? `${place.description.substring(0, 120)}...`
-                : place.description}
-            </p>
+            <p className={styles.description}>{place.description}</p>
           )}
 
           <div className={styles.placeDetails}>
-            <p className={styles.locationName}>{place.location?.label}</p>
+            {place.placeCategory && (
+              <div className={styles.categoryInfo}>
+                <Tag size={14} className={styles.detailIcon} />
+                <p className={styles.detailText}>
+                  {t(
+                    `placeCategories.${place.placeCategory.name.toLowerCase()}`
+                  )}
+                </p>
+              </div>
+            )}
+            {place.location && place.location.label && (
+              <div className={styles.locationInfo}>
+                <MapPin size={14} className={styles.detailIcon} />
+                <p className={styles.detailText}>{place.location.label}</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

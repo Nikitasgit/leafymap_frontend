@@ -23,26 +23,37 @@
   .placeInfo {
     flex: 1;
     min-width: 0;
-    padding: spacing(0.75) spacing(1.5);
+    padding: spacing(0.5) spacing(1);
     .placeHeader {
       @include flex(row, space-between, center, spacing(0.5));
       .placeTitle {
         @include flex(row, flex-start, center, spacing(0.5));
         flex: 1;
+        min-width: 0;
         text-transform: capitalize;
         h3 {
           font-size: rem(14);
           font-weight: 600;
           color: $grey-800;
           margin: 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         .placeIcon {
           color: $primary-color;
           flex-shrink: 0;
         }
       }
-      .placeCounters {
-        @include flex(row, flex-start, center, spacing(1));
+      .placeHeaderActions {
+        @include flex(row, flex-end, center, spacing(0.75));
+        flex-shrink: 0;
+        .actionButtons {
+          @include flex(row, flex-end, center, spacing(0.5));
+        }
+        .placeCounters {
+          @include flex(row, flex-start, center, spacing(1));
+        }
       }
     }
     .placeContent {
@@ -52,16 +63,36 @@
         font-size: rem(12);
         font-weight: 400;
         line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .placeDetails {
-        @include flex(column, flex-start, stretch, spacing(0));
+        @include flex(column, flex-start, stretch, spacing(0.75));
         padding-top: spacing(0.75);
         border-top: 1px solid $grey-100;
-        .locationName {
-          margin: 0;
-          color: $grey-600;
-          font-size: rem(12);
-          font-weight: 600;
+        .categoryInfo,
+        .locationInfo {
+          @include flex(row, flex-start, flex-start, spacing(0.5));
+          .detailIcon {
+            color: $grey-500;
+            flex-shrink: 0;
+            margin-top: 2px;
+          }
+          .detailText {
+            margin: 0;
+            color: $grey-500;
+            font-size: rem(12);
+            font-weight: 400;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+            min-width: 0;
+          }
         }
       }
     }
@@ -69,11 +100,11 @@
   @include respond-to(sm) {
     border-radius: rem(12);
     .imageContainer {
-      width: 70px;
+      width: 60px;
       border-radius: rem(12) 0 0 rem(12);
     }
     .placeInfo {
-      padding: spacing(1) spacing(2);
+      padding: spacing(0.75) spacing(1.5);
       .placeHeader {
         .placeTitle {
           h3 {
@@ -87,9 +118,14 @@
           font-size: rem(13);
         }
         .placeDetails {
+          gap: spacing(1);
           padding-top: spacing(1);
-          .locationName {
-            font-size: rem(13);
+          .categoryInfo,
+          .locationInfo {
+            gap: spacing(0.75);
+            .detailText {
+              font-size: rem(12);
+            }
           }
         }
       }

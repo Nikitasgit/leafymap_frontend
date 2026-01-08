@@ -1,48 +1,11 @@
 import React, { useState } from "react";
-import Image from "next/image";
-import { ChevronRight, ExternalLink } from "lucide-react";
-import { DefaultSchedule, Event, WeekDay } from "@/types/place/schedule";
+import { ChevronRight } from "lucide-react";
+import { DefaultSchedule, WeekDay } from "@/types/place/schedule";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/navigation";
 import styles from "./MapPlaceCardSchedule.module.scss";
 import { MapPlaceCardScheduleProps } from "./MapPlaceCardSchedule.types";
 import Button from "@/components/common/buttons/Button";
-import eventDefaultsSvg from "@public/images/event_default.svg";
-
-interface ScheduleEventItemProps {
-  event: Event;
-}
-
-const ScheduleEventItem: React.FC<ScheduleEventItemProps> = ({ event }) => {
-  const router = useRouter();
-
-  const handleClick = () => {
-    router.push(`/events/${event.id}`);
-  };
-
-  return (
-    <button
-      type="button"
-      className={styles.eventCard}
-      onClick={handleClick}
-      aria-label={`Voir l'événement ${event.name}`}
-    >
-      <div className={styles.eventImageContainer}>
-        <Image
-          src={event.image?.urls?.thumbnail || eventDefaultsSvg}
-          alt={event.name}
-          fill
-          sizes="28px"
-          style={{ objectFit: "cover" }}
-        />
-      </div>
-      <div className={styles.eventInfo}>
-        <span className={styles.eventName}>{event.name}</span>
-      </div>
-      <ExternalLink size={14} className={styles.eventIcon} aria-hidden="true" />
-    </button>
-  );
-};
+import EventSmallCard from "@/components/common/events/EventSmallCard";
 
 interface ScheduleDayProps {
   dayKey: WeekDay;
@@ -143,7 +106,7 @@ const ScheduleDay: React.FC<ScheduleDayProps> = ({
         <div className={styles.eventsContainer}>
           <div className={styles.events}>
             {daySchedule.events?.map((event) => (
-              <ScheduleEventItem key={event.id} event={event} />
+              <EventSmallCard key={event.id} event={event} />
             ))}
           </div>
         </div>

@@ -52,3 +52,29 @@ export const sortPeriodsByStartDate = <T extends { startDate: string }>(
     return dateA.getTime() - dateB.getTime();
   });
 };
+
+/**
+ * Formats an event date range for display.
+ * @param dateRange - The date range object with firstDate and latestDate
+ * @returns Formatted date string (e.g., "15 Jan 2024" or "15 Jan 2024 - 20 Jan 2024")
+ */
+export const formatEventDateRange = (dateRange: {
+  firstDate: Date | string;
+  latestDate: Date | string;
+}): string => {
+  if (!dateRange.firstDate) return "";
+
+  const firstDate = format(new Date(dateRange.firstDate), "dd MMM yyyy", {
+    locale: fr,
+  });
+
+  if (!dateRange.latestDate || dateRange.latestDate === dateRange.firstDate) {
+    return firstDate;
+  }
+
+  const latestDate = format(new Date(dateRange.latestDate), "dd MMM yyyy", {
+    locale: fr,
+  });
+
+  return `${firstDate} - ${latestDate}`;
+};

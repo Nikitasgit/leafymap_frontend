@@ -2,7 +2,7 @@ import Button from "@/components/common/buttons/Button";
 import { Partnership } from "@/types/partnerships";
 import { Collaborator } from "@/types/place/collaborators";
 import styles from "./EventPartnershipsSelect.module.scss";
-import EventStatus from "@/components/common/eventStatus";
+import EventStatus from "@/components/common/events/EventStatus";
 
 const EventPartnershipsSelect = ({
   partnerships,

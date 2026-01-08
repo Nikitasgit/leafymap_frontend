@@ -1,9 +1,9 @@
 import { Event } from "@/types/place/event";
 import { useRouter } from "next/navigation";
 import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader";
-import EventStatus from "@/components/common/eventStatus";
+import EventStatus from "@/components/common/events/EventStatus";
 import { Calendar } from "lucide-react";
-import { getEventDisplayInfo } from "@/utils/eventDates";
+import DateRange from "@/components/common/dateRange";
 import styles from "./AccountEventCard.module.scss";
 import { Image } from "@/types/image";
 import useSubmitEvent from "@/hooks/useSubmitEvent";
@@ -20,7 +20,6 @@ const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
   const { submitEvent } = useSubmitEvent();
   const { deleteEvent, isLoading: isDeletingEvent } = useDeleteEvent();
 
-  const eventDisplayInfo = getEventDisplayInfo(event.schedule || []);
   const handleImageUploaded = async (imageId: string | null) => {
     if (imageId && typeof imageId === "string") {
       await submitEvent(
@@ -70,14 +69,14 @@ const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
             className={styles.actionButtons}
           />
         </div>
-        {eventDisplayInfo.formattedDateRange && (
+        {event.dateRange?.firstDate && (
           <div className={styles.scheduleInfo}>
             <div className={styles.scheduleItem}>
               <Calendar size={14} />
               <p className={styles.scheduleText}>
-                {eventDisplayInfo.formattedDateRange}
+                <DateRange dateRange={event.dateRange} />
               </p>
-              <EventStatus status={eventDisplayInfo.status} />
+              <EventStatus status={event.lifecycleStatus} />
             </div>
           </div>
         )}

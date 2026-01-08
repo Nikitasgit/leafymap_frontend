@@ -2,12 +2,13 @@ import { useState } from "react";
 import ReviewsTab from "@/components/reviews/ReviewsTab/ReviewsTab";
 import TabsContainer from "@/components/common/tabs/TabsContainer/TabsContainer";
 import Tab from "@/components/common/tabs/Tab/Tab";
-import { FileText, Star, Image as ImageIcon } from "lucide-react";
+import { FileText, Star, Image as ImageIcon, Calendar } from "lucide-react";
 import { Place } from "@/types/place";
 import { PartnershipPopulated } from "@/types/partnerships";
 import { useAuth } from "@/hooks/useAuth";
 import PresentationTab from "../PresentationTab";
 import GallerySection from "@/components/userProfile/GallerySection/GallerySection";
+import EventsTab from "../../common/events/EventsTab";
 import styles from "./MapCreatorCardContent.module.scss";
 import { UserPopulated } from "@/types/user";
 
@@ -41,6 +42,7 @@ const MapCreatorCardContent = ({
   const tabs = [
     { id: "presentation", label: "Présentation", icon: FileText },
     { id: "reviews", label: "Avis", icon: Star },
+    { id: "events", label: "Événements", icon: Calendar },
     { id: "images", label: "Images", icon: ImageIcon },
   ];
 
@@ -56,6 +58,10 @@ const MapCreatorCardContent = ({
             onMapButtonClick={onMapButtonClick}
           />
         );
+      case "events":
+        return place?._id && placeUser?.username ? (
+          <EventsTab placeId={place._id} username={placeUser.username} />
+        ) : null;
       case "reviews":
         return place?._id ? (
           <ReviewsTab

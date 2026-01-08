@@ -3,7 +3,7 @@ import styles from "./PartnershipsFormList.module.scss";
 import { Delete } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/common/buttons/Button";
-import EventStatus from "@/components/common/eventStatus/EventStatus";
+import EventStatus from "@/components/common/events/EventStatus";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import creatorDefaultsSvg from "@public/images/creator_default.svg";
 

@@ -39,7 +39,10 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
             delay={1000}
           >
             <button
-              onClick={action.onClick}
+              onClick={(e) => {
+                e.stopPropagation();
+                action.onClick();
+              }}
               disabled={action.disabled}
               aria-label={action.ariaLabel || `${action.type} action`}
               className={`${styles.actionButton} ${styles[action.type]}`}

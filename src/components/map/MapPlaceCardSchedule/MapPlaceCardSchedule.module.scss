@@ -132,63 +132,6 @@
   width: 100%;
 }
 
-.eventCard {
-  @include flex(row, flex-start, center, spacing(0.5));
-  width: 100%;
-  padding: spacing(0.5);
-  background-color: $grey-50;
-  border-radius: 6px;
-  border: 1px solid $grey-200;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  text-align: left;
-
-  &:hover {
-    background-color: $grey-100;
-    border-color: $grey-300;
-  }
-}
-
-.eventImageContainer {
-  position: relative;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  overflow: hidden;
-  flex-shrink: 0;
-  background-color: $grey-200;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-.eventInfo {
-  @include flex(column, flex-start, flex-start, spacing(0.25));
-  flex: 1;
-  min-width: 0;
-}
-
-.eventName {
-  font-size: rem(12);
-  color: $grey-800;
-  font-weight: 500;
-  line-height: 1.4;
-  word-break: break-word;
-}
-
-.eventIcon {
-  color: $grey-400;
-  flex-shrink: 0;
-  transition: color 0.2s ease;
-}
-
-.eventCard:hover .eventIcon {
-  color: $grey-600;
-}
-
 .scheduleStatus {
   @include flex(column, flex-start, flex-end, 0);
   flex: 1;
@@ -232,22 +175,6 @@
 
   .dayContent {
     padding-left: spacing(1.5);
-  }
-
- 
-
-  .eventCard {
-    padding: spacing(0.625);
-    gap: spacing(0.75);
-  }
-
-  .eventImageContainer {
-    width: 32px;
-    height: 32px;
-  }
-
-  .eventName {
-    font-size: rem(13);
   }
 }
 

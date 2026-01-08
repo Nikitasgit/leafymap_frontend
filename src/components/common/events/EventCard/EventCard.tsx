@@ -1,7 +1,7 @@
 import React from "react";
 import { Calendar, Clock, MapPin } from "lucide-react";
-import EventStatus from "@/components/common/eventStatus/EventStatus";
-import { getEventDisplayInfo } from "@/utils/eventDates";
+import EventStatus from "../EventStatus/EventStatus";
+import DateRange from "@/components/common/dateRange";
 import styles from "./EventCard.module.scss";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -9,7 +9,6 @@ import { EventCardProps } from "./EventCard.types";
 import eventDefaultsSvg from "@public/images/event_default.svg";
 
 const EventCard: React.FC<EventCardProps> = ({ event, place }) => {
-  const eventDisplayInfo = getEventDisplayInfo(event.schedule || []);
   const router = useRouter();
 
   const handleCardClick = () => {
@@ -38,7 +37,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, place }) => {
             <Calendar size={18} className={styles.eventIcon} />
             <h3>{event.name}</h3>
           </div>
-          <EventStatus status={eventDisplayInfo.status} />
+          <EventStatus status={event.lifecycleStatus} />
         </div>
 
         <div className={styles.eventContent}>
@@ -47,11 +46,11 @@ const EventCard: React.FC<EventCardProps> = ({ event, place }) => {
           )}
 
           <div className={styles.eventDetails}>
-            {eventDisplayInfo.formattedDateRange && (
+            {event.dateRange?.firstDate && (
               <div className={styles.dateInfo}>
                 <Clock size={14} className={styles.detailIcon} />
                 <p className={styles.detailText}>
-                  {eventDisplayInfo.formattedDateRange}
+                  <DateRange dateRange={event.dateRange} />
                 </p>
               </div>
             )}

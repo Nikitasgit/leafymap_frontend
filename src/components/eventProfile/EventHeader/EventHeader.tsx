@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import { Calendar, MapPin } from "lucide-react";
-import EventStatus from "@/components/common/eventStatus/EventStatus";
+import EventStatus from "@/components/common/events/EventStatus";
 import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader/ProfilePictureUploader";
 import { Image } from "@/types/image";
-import { getEventDisplayInfo } from "@/utils/eventDates";
+import DateRange from "@/components/common/dateRange";
 import styles from "./EventHeader.module.scss";
 import Button from "@/components/common/buttons/Button";
 import { useRouter } from "next/navigation";
@@ -14,7 +14,6 @@ import { EventHeaderProps } from "./EventHeader.types";
 import StarsDisplay from "@/components/common/stars/StarsDisplay/StarsDisplay";
 
 const EventHeader: React.FC<EventHeaderProps> = ({ event }) => {
-  const eventDisplayInfo = getEventDisplayInfo(event.schedule || []);
   const router = useRouter();
   return (
     <header className={styles.header}>
@@ -37,10 +36,10 @@ const EventHeader: React.FC<EventHeaderProps> = ({ event }) => {
               </span>
             </div>
           )}
-          <EventStatus status={eventDisplayInfo.status} />
+          <EventStatus status={event.lifecycleStatus} />
           <div className={styles.dateInfo}>
             <p className={styles.dateText}>
-              {eventDisplayInfo.formattedDateRange}
+              <DateRange dateRange={event.dateRange} />
             </p>
           </div>
         </div>
@@ -52,7 +51,8 @@ const EventHeader: React.FC<EventHeaderProps> = ({ event }) => {
         </div>
         {(() => {
           const place = typeof event.place === "object" ? event.place : null;
-          const user = place && typeof place.user === "object" ? place.user : null;
+          const user =
+            place && typeof place.user === "object" ? place.user : null;
           return user ? (
             <Button
               variant="simple"

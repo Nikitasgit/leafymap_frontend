@@ -3,43 +3,41 @@
 @use "@/styles/abstracts/mixins" as *;
 
 .tab {
-  @include flex(column, center, center, spacing(0.25));
-  padding: spacing(0.75) spacing(0.5);
+  @include flex(column, center, center, spacing(0.15));
+  padding: spacing(0.6) spacing(0.6);
   border: none;
   background: transparent;
   color: $grey-500;
-  font-size: rem(12);
+  font-size: rem(11);
   font-weight: 500;
   cursor: pointer;
   position: relative;
   white-space: nowrap;
-  flex: 1;
-  min-width: 0;
+  flex-shrink: 0;
+  min-width: fit-content;
   &:hover {
     color: $grey-700;
   }
   .notification {
     position: absolute;
     @include flex(row, center, center, 0);
-    top: 7px;
-    right: 7px;
+    top: 6px;
+    right: 6px;
     background: $primary-color;
     color: $white;
     border-radius: 50%;
-    width: 15px;
-    height: 15px;
-    font-size: rem(12);
+    width: 14px;
+    height: 14px;
+    font-size: rem(10);
   }
   @include respond-to(sm) {
-    @include flex(row, flex-start, center, spacing(1));
-    flex: none;
-    min-width: auto;
-    justify-content: flex-start;
-    padding: spacing(1.25) spacing(2);
-    font-size: rem(15);
+    @include flex(row, flex-start, center, spacing(0.5));
+    padding: spacing(1) spacing(1.5);
+    font-size: rem(13);
   }
   @include respond-to(md) {
-    padding: spacing(1.5) spacing(3);
+    padding: spacing(1.25) spacing(2);
+    font-size: rem(14);
   }
 }
 

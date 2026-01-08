@@ -7,8 +7,8 @@ import Button from "@/components/common/buttons/Button";
 import { Check, X } from "lucide-react";
 import styles from "./PartnershipMessage.module.scss";
 import { Partnership, PartnershipPopulated } from "@/types/partnerships";
-import { getEventDisplayInfo } from "@/utils/eventDates";
-import EventStatus from "@/components/common/eventStatus/EventStatus";
+import DateRange from "@/components/common/dateRange";
+import EventStatus from "@/components/common/events/EventStatus";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import eventDefaultsSvg from "@public/images/event_default.svg";
 import placeDefaultsSvg from "@public/images/place_default.svg";
@@ -30,9 +30,10 @@ export default function PartnershipMessage({
   onStatusChange,
   isLoading = false,
 }: PartnershipMessageProps) {
-  const eventDisplayInfo = getEventDisplayInfo(
-    partnership.event?.schedule || []
-  );
+  const event =
+    partnership.event && typeof partnership.event === "object"
+      ? partnership.event
+      : null;
 
   return (
     <div className={styles.partnershipCard}>
@@ -65,23 +66,20 @@ export default function PartnershipMessage({
               <span className={styles.eventName}>
                 {capitalizeFirstLetter(partnership.event?.name)}
               </span>
-              {eventDisplayInfo.formattedDateRange && (
+              {event && event.dateRange?.firstDate && (
                 <div className={styles.scheduleInfo}>
                   <div className={styles.scheduleItem}>
                     <Image
-                      src={
-                        partnership.event?.image?.urls?.thumbnail ||
-                        eventDefaultsSvg
-                      }
-                      alt={partnership.event?.name || "Event"}
+                      src={event.image?.urls?.thumbnail || eventDefaultsSvg}
+                      alt={event.name || "Event"}
                       width={32}
                       height={32}
                       className={styles.eventImage}
                     />
                     <p className={styles.scheduleText}>
-                      {eventDisplayInfo.formattedDateRange}
+                      <DateRange dateRange={event.dateRange} />
                     </p>
-                    <EventStatus status={eventDisplayInfo.status} />
+                    <EventStatus status={event.lifecycleStatus} />
                   </div>
                 </div>
               )}

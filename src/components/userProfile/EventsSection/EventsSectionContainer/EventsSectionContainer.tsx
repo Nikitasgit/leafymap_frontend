@@ -1,6 +1,6 @@
 import React from "react";
 import { Calendar } from "lucide-react";
-import { EventCard } from "@/components/userProfile/EventsSection/EventCard";
+import EventCard from "@/components/common/events/EventCard";
 import styles from "./EventsSectionContainer.module.scss";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import PlaceEventsSection from "@/components/placeProfile/PlaceEventsSection/PlaceEventsSection";
