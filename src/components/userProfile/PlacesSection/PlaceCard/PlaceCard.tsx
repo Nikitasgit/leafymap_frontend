@@ -3,15 +3,14 @@ import { MapPin, Tag } from "lucide-react";
 import { PlaceCardProps } from "./PlaceCard.types";
 import styles from "./PlaceCard.module.scss";
 import { useRouter } from "next/navigation";
-import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter/SubscribersCounter";
 import ActionButtons from "@/components/common/actions/ActionButtons";
+import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
 import creatorDefaultsSvg from "@public/images/creator_default.svg";
 
 const PlaceCard: React.FC<PlaceCardProps> = ({ place, actions, user }) => {
   const router = useRouter();
-  const { t } = useTranslation("common");
 
   return (
     <a
@@ -61,11 +60,13 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, actions, user }) => {
             {place.placeCategory && (
               <div className={styles.categoryInfo}>
                 <Tag size={14} className={styles.detailIcon} />
-                <p className={styles.detailText}>
-                  {t(
-                    `placeCategories.${place.placeCategory.name.toLowerCase()}`
-                  )}
-                </p>
+                <PlaceCategoryBadge
+                  categoryName={
+                    typeof place.placeCategory === "string"
+                      ? place.placeCategory
+                      : place.placeCategory.name
+                  }
+                />
               </div>
             )}
             {place.location && place.location.label && (

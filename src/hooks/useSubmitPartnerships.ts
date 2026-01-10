@@ -14,6 +14,11 @@ export const useSubmitPartnerships = (onUpdate?: () => void) => {
     eventId: string = ""
   ) => {
     try {
+      // Validate placeId before sending request
+      if (!placeId || typeof placeId !== "string" || placeId.trim() === "") {
+        throw new Error("Place ID is required and must be a valid string");
+      }
+
       const filteredPartnerships = partnerships.map((partnership) => {
         if (isUpdate) {
           return {

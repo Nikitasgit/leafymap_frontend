@@ -1,24 +1,29 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import styles from "./MapCreatorCard.module.scss";
+import { useUser } from "@/hooks/useUser";
 import { usePlace } from "@/hooks/usePlace";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
-import { usePartnershipByUserId } from "@/hooks/usePartnershipByUserId";
 import { MapCreatorCardProps } from "./MapCreatorCard.types";
 import MapCreatorCardHeader from "../MapCreatorCardHeader";
 import MapCreatorCardContent from "../MapCreatorCardContent";
 
-const MapCreatorCard = ({ placeId, mapRef }: MapCreatorCardProps) => {
-  const { place, isLoading } = usePlace(placeId, { scheduleWithEvents: true });
-  const user = place?.user;
-  const { partnerships } = usePartnershipByUserId(user?._id, {
-    asCollaborator: "true",
+const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
+  const { user, isLoading: isLoadingUser } = useUser(userId);
+
+  const placeId = useMemo(() => {
+    if (!user?.place) return null;
+    return typeof user.place === "string" ? user.place : user.place._id;
+  }, [user?.place]);
+
+  const {
+    place,
+    isLoading: isLoadingPlace,
+    refetch: refetchPlace,
+  } = usePlace(placeId, {
+    scheduleWithEvents: true,
   });
-  const placePartnerships = partnerships.filter(
-    (partnership) => partnership.type === "place"
-  );
-  const eventPartnerships = partnerships.filter(
-    (partnership) => partnership.type === "event"
-  );
+
+  const isLoading = isLoadingUser || isLoadingPlace;
 
   useEffect(() => {
     if (mapRef.current && place) {
@@ -42,15 +47,22 @@ const MapCreatorCard = ({ placeId, mapRef }: MapCreatorCardProps) => {
     });
   };
 
+  if (!user) {
+    return null;
+  }
+
   return (
     <article className={styles.placeCardMap}>
-      <MapCreatorCardHeader place={place} user={user} isLoading={isLoading} />
+      <MapCreatorCardHeader
+        place={place || null}
+        user={user}
+        isLoading={isLoading}
+      />
       <MapCreatorCardContent
-        place={place}
-        placeUser={user || null}
-        eventPartnerships={eventPartnerships}
-        placePartnerships={placePartnerships}
+        place={place || null}
+        user={user}
         onMapButtonClick={handleMapButtonClick}
+        onPlaceRefetch={refetchPlace}
       />
     </article>
   );

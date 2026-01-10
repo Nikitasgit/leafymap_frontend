@@ -138,6 +138,8 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
                 placeName={
                   typeof place === "object" && "user" in place
                     ? (place.user as User).username
+                    : "name" in place && typeof place.name === "string"
+                    ? place.name
                     : ""
                 }
                 zoom={viewState.zoom}
@@ -145,7 +147,13 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
                 onClick={() => {
                   setInternalSelectedPlaceId(place._id);
                   if (onMarkerClick) {
-                    onMarkerClick(place._id);
+                    const userId =
+                      typeof place === "object" && "user" in place
+                        ? (place.user as User)?._id
+                        : undefined;
+                    if (userId) {
+                      onMarkerClick(userId);
+                    }
                   }
                 }}
               />

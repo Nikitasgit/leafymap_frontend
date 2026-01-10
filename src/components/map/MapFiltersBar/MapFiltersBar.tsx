@@ -5,19 +5,18 @@ import styles from "./MapFiltersBar.module.scss";
 import { ChevronDown, Filter } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
-import { useFindPlaces } from "@/hooks/useFindPlaces";
 import { useFindUsers } from "@/hooks/useFindUsers";
 import Button from "@/components/common/buttons/Button";
 import {
   CreatorSearchResult,
-  PlaceSearchResult,
+  LocationSearchResult,
   SearchType,
   MapFiltersBarProps,
 } from "./MapFiltersBar.types";
 
 const searchTypes: SearchType[] = [
   { label: "Membres", placeholder: "Rechercher un membre" },
-  { label: "Lieux", placeholder: "Rechercher un lieu" },
+  { label: "Lieux", placeholder: "Rechercher un lieu (ex: Paris)" },
 ];
 
 const MapFiltersBar = ({
@@ -30,10 +29,8 @@ const MapFiltersBar = ({
 }: MapFiltersBarProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchType, setSearchType] = useState<SearchType>(searchTypes[0]);
-  const [searchValue, setSearchValue] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { searchUsers, isLoading: isLoadingUsers } = useFindUsers();
-  const { searchPlaces, isLoading: isLoadingPlaces } = useFindPlaces();
   useOnClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 
   const types = [
@@ -54,16 +51,6 @@ const MapFiltersBar = ({
     },
   ];
 
-  const handleDropdownToggle = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const handleSearchTypeSelect = (type: SearchType) => {
-    setSearchType(type);
-    setSearchValue("");
-    setIsDropdownOpen(false);
-  };
-
   const handleTypeSelect = (type: { value: string }) => {
     if (selectedItem.type !== "filters") {
       handleSelect({
@@ -77,6 +64,15 @@ const MapFiltersBar = ({
     });
   };
 
+  const handleDropdownToggle = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleSearchTypeSelect = (type: SearchType) => {
+    setSearchType(type);
+    setIsDropdownOpen(false);
+  };
+
   const handleFilterToggle = () => {
     if (selectedItem.type === "filters") {
       handleSelect({ id: "", type: null });
@@ -84,51 +80,55 @@ const MapFiltersBar = ({
       handleSelect({ id: "", type: "filters" });
     }
   };
-
   /**
-   * Unified search handler that switches between user and place search
-   * based on the selected search type. Transforms API responses to a common format.
+   * Search handler that switches between user and location search
+   * based on the selected search type.
    */
   const handleSearch = async (
     query: string
-  ): Promise<(CreatorSearchResult | PlaceSearchResult)[]> => {
+  ): Promise<(CreatorSearchResult | LocationSearchResult)[]> => {
     if (searchType.label === "Membres") {
       const creators = await searchUsers({ username: query });
+      console.log(creators);
       const suggestions: CreatorSearchResult[] = creators.map((user) => ({
         _id: user._id,
         image: user.image?.urls.thumbnail || "",
         name: user.username || "",
+        place: user.place?.location
+          ? {
+              label: user.place.location.label,
+              placeCategory: user.place.placeCategory,
+            }
+          : undefined,
         categories: user.userCategories?.map((category) => ({
-          name: category.name,
+          name: typeof category === "object" ? category.name : "",
+          userCategoryType:
+            typeof category === "object"
+              ? category.userCategoryType
+              : undefined,
         })),
       }));
+
       return suggestions;
     } else {
-      const places = await searchPlaces({ name: query });
-      const suggestions: PlaceSearchResult[] = places.map((place) => ({
-        _id: place._id,
-        image: place.image?.urls.thumbnail || "",
-        name: place.name,
-        location: place.location || { label: "" },
-        placeCategory: place.placeCategory || { _id: "", name: "" },
-      }));
-      return suggestions;
+      // Recherche de lieux géographiques - logique à implémenter plus tard
+      // Pour l'instant, retourner un tableau vide
+      return [];
     }
   };
 
   const handleSelectSuggestion = (
-    item: CreatorSearchResult | PlaceSearchResult
+    item: CreatorSearchResult | LocationSearchResult
   ) => {
     if (searchType.label === "Membres") {
+      // Pour les membres, ouvrir la MapCreatorCard
       handleSelect({
         id: item._id,
-        type: "user",
+        type: "creator",
       });
     } else {
-      handleSelect({
-        id: item._id,
-        type: "place",
-      });
+      // Pour les lieux géographiques - logique à implémenter plus tard
+      // Pour l'instant, ne rien faire
     }
   };
 
@@ -139,7 +139,7 @@ const MapFiltersBar = ({
     }
   }, [filters, mapRef]);
 
-  const loading = isLoadingUsers || isLoadingPlaces || loadingProps;
+  const loading = isLoadingUsers || loadingProps;
 
   return (
     <div className={styles.filtersBar}>
@@ -207,7 +207,6 @@ const MapFiltersBar = ({
           )}
         </div>
         <SearchInput
-          value={searchValue}
           withIcons
           limit={10}
           onSelect={handleSelectSuggestion}

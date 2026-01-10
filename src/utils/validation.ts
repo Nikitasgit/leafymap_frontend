@@ -9,10 +9,17 @@ export const emailSchema = z
   .min(1, "L'email est requis")
   .email("L'email n'est pas valide");
 
-export const phoneSchema = z
-  .string()
-  .min(1, "Le téléphone est requis")
-  .regex(/^[0-9]{10}$/, "Le numéro de téléphone doit contenir 10 chiffres");
+export const phoneSchema = z.string().refine(
+  (val) => {
+    // Si vide, c'est valide (optionnel)
+    if (!val || val.trim() === "") return true;
+    // Sinon, doit contenir exactement 10 chiffres
+    return /^[0-9]{10}$/.test(val);
+  },
+  {
+    message: "Le numéro de téléphone doit contenir 10 chiffres",
+  }
+);
 
 export const websiteSchema = z
   .string()

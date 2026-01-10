@@ -10,6 +10,7 @@ import MapCardContainer from "@/components/map/MapCardContainer";
 import { useAppSelector } from "@/store";
 import { selectPlaceCategories } from "@/store/appSlice";
 import { SearchResult } from "./MapPageContainer.types";
+import { usePlacesInView } from "@/hooks/usePlacesInView";
 
 const defaultFilters: MapFilters = {
   placeType: "all",
@@ -21,7 +22,7 @@ const defaultFilters: MapFilters = {
 const MapPageContainer = () => {
   const [selectedItem, setSelectedItem] = useState<{
     id: string;
-    type: "place" | "user" | "filters" | null;
+    type: "creator" | "filters" | null;
   }>({ id: "", type: null });
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState<MapFilters>(defaultFilters);
@@ -30,8 +31,8 @@ const MapPageContainer = () => {
     (category) => category._id
   );
 
-  const handleMarkerClick = (placeId: string) => {
-    setSelectedItem({ id: placeId, type: "place" });
+  const handleMarkerClick = (userId: string) => {
+    setSelectedItem({ id: userId, type: "creator" });
   };
 
   const handleSelect = (item: SearchResult) => {

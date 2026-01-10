@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Button from "@/components/common/buttons/Button";
+import WebsiteButton from "@/components/common/buttons/WebsiteButton";
 import styles from "./MapCreatorCardHeader.module.scss";
 import { MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -14,7 +15,7 @@ import { UserPopulated } from "@/types/user";
 
 export interface MapCreatorCardHeaderProps {
   place: Place | null;
-  user: UserPopulated | null | undefined;
+  user: UserPopulated;
   isLoading: boolean;
 }
 
@@ -24,23 +25,21 @@ const MapCreatorCardHeader = ({
   isLoading,
 }: MapCreatorCardHeaderProps) => {
   const router = useRouter();
-
+  console.log(user);
   return (
     <>
       <button
         className={`${styles.imageContainer} ${isLoading ? "skeleton" : ""}`}
         onClick={() => {
-          if (user) {
-            router.push(`/users/${user?._id}`);
-          }
+          router.push(`/users/${user._id}`);
         }}
         type="button"
-        aria-label={`Voir le profil de ${user?.username || "l'utilisateur"}`}
+        aria-label={`Voir le profil de ${user.username || "l'utilisateur"}`}
       >
         {!isLoading && (
           <Image
-            src={user?.image?.urls.medium || placeDefaultSvg}
-            alt={user?.username || "Lieu"}
+            src={user.image?.urls.medium || placeDefaultSvg}
+            alt={user.username || "Lieu"}
             fill
             sizes="(max-width: 768px) 100vw, 400px"
             style={{ objectFit: "cover", objectPosition: "center" }}
@@ -50,71 +49,80 @@ const MapCreatorCardHeader = ({
       <header className={styles.header}>
         <div className={styles.headerMain}>
           <h2 className={styles.title}>
-            {capitalizeFirstLetter(user?.username || "")}
+            {capitalizeFirstLetter(user.username || "")}
           </h2>
-          <div className={styles.categoryRow}>
-            <PlaceCategoryBadge
-              categoryName={
-                typeof place?.placeCategory === "object"
-                  ? place.placeCategory.name || ""
-                  : ""
-              }
+          {place && (
+            <div className={styles.categoryRow}>
+              <PlaceCategoryBadge
+                categoryName={
+                  typeof place.placeCategory === "object"
+                    ? place.placeCategory.name || ""
+                    : ""
+                }
+              />
+            </div>
+          )}
+        </div>
+        {place?.location?.label && (
+          <div className={styles.addressRow}>
+            <MapPin
+              size={14}
+              className={styles.addressIcon}
+              aria-hidden="true"
             />
+            <p className={styles.address}>{place.location.label}</p>
           </div>
-        </div>
-        <div className={styles.addressRow}>
-          <MapPin size={14} className={styles.addressIcon} aria-hidden="true" />
-          <p className={styles.address}>{place?.location?.label}</p>
-        </div>
+        )}
         <div className={styles.ownerRow}>
           <span className={styles.ownerName}>
             Par:{" "}
             <b>
-              {capitalizeFirstLetter(user?.firstname || "")}{" "}
-              {capitalizeFirstLetter(user?.lastname || "")}
+              {capitalizeFirstLetter(user.firstname || "")}{" "}
+              {capitalizeFirstLetter(user.lastname || "")}
             </b>{" "}
-            {user?.userCategories &&
-              user?.userCategories[0]?.userCategoryType === "creation" && (
+            {user.userCategories &&
+              user.userCategories[0]?.userCategoryType === "creation" && (
                 <CreatorCategoryBadge
-                  categoryName={user?.userCategories[0].name || ""}
+                  categoryName={user.userCategories[0].name || ""}
                 />
               )}
           </span>
         </div>
-        <div className={styles.buttons}>
-          {place?.rating != null &&
-            typeof place.rating === "number" &&
-            place.rating > 0 && (
-              <div className={styles.ratingContainer}>
-                <StarsDisplay rating={place.rating} size="small" />
-                <span className={styles.ratingValue}>
-                  ({place.rating.toFixed(1)})
-                </span>
-              </div>
-            )}{" "}
-          <div className={styles.buttonGroup}>
-            {user?.website && (
-              <Button
-                onClick={() => window.open(user?.website, "_blank")}
-                ariaLabel="Site web"
-                variant="secondary"
-                type="button"
-              >
-                Site web
-              </Button>
-            )}
-            <Button
-              ariaLabel="Itinéraire"
-              variant="primary"
-              type="button"
-              onClick={() =>
-                handleGetDirections(place?.location?.coordinates || [])
-              }
-            >
-              Itinéraire
-            </Button>
+        {(place || user.website) && (
+          <div className={styles.buttons}>
+            {place?.rating != null &&
+              typeof place.rating === "number" &&
+              place.rating > 0 && (
+                <div className={styles.ratingContainer}>
+                  <StarsDisplay rating={place.rating} size="small" />
+                  <span className={styles.ratingValue}>
+                    ({place.rating.toFixed(1)})
+                  </span>
+                </div>
+              )}
+            <div className={styles.buttonGroup}>
+              {user.website && (
+                <WebsiteButton
+                  website={user.website}
+                  variant="secondary"
+                  ariaLabel="Site web"
+                />
+              )}
+              {place && (
+                <Button
+                  ariaLabel="Itinéraire"
+                  variant="primary"
+                  type="button"
+                  onClick={() =>
+                    handleGetDirections(place.location?.coordinates || [])
+                  }
+                >
+                  Itinéraire
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </header>
     </>
   );

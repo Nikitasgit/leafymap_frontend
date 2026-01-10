@@ -68,9 +68,12 @@ const CreateProfileStepper = () => {
   const handleSubmit = async () => {
     try {
       const user = await submitUser(newUser);
-      if (place.active && user) {
-        const placeId = await submitPlace(place);
-        if (partnerships.length > 0 && placeId) {
+
+      if (place.active === true && user) {
+        const placeResult = await submitPlace(place);
+        const placeId =
+          typeof placeResult === "string" ? placeResult : placeResult?._id;
+        if (partnerships.length > 0 && placeId && typeof placeId === "string") {
           await submitPartnerships(partnerships, false, placeId);
         }
       }
@@ -98,10 +101,7 @@ const CreateProfileStepper = () => {
     >
       <div className={styles.pageContainer}>
         <section className={styles.container}>
-          <PageHeader
-            title="Créer votre profil"
-            showBackButton
-          />
+          <PageHeader title="Créer votre profil" showBackButton />
 
           <ProfileFormStep
             place={place}

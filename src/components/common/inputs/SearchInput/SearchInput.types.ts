@@ -13,7 +13,16 @@ export interface SearchSuggestion {
   name: string;
   image?: string;
   location?: { label: string };
-  categories?: { name: string }[];
+  categories?: {
+    name: string;
+    userCategoryType?: "creation" | "organization";
+  }[];
+  place?: {
+    label: string;
+    placeCategory: {
+      name: string;
+    };
+  };
 }
 
 export type SearchInputGeneric<T extends SearchSuggestion> =

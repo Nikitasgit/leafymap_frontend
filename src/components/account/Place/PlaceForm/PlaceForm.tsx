@@ -123,6 +123,7 @@ const PlaceForm = ({
                   onMapClick={handleMapClick}
                   userMarker={userMarker}
                   withDefaultMarker
+                  selectedPlaceId="user-marker"
                   ref={mapRef}
                   onMapReady={() => setMapReady(true)}
                 />

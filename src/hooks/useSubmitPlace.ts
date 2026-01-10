@@ -2,6 +2,7 @@ import axios from "axios";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { Place } from "@/types/place";
+import { cleanIncompleteTimeSlots } from "@/utils/schedule";
 
 const useSubmitPlace = () => {
   const { isLoading, withLoading } = useLoading();
@@ -16,13 +17,19 @@ const useSubmitPlace = () => {
       if (isUpdate && !placeId) {
         throw new Error("Place ID is required for update");
       }
+
+      const cleanedData = {
+        ...data,
+        defaultSchedule: cleanIncompleteTimeSlots(data.defaultSchedule),
+      };
+
       const method = isUpdate ? "put" : "post";
       const response = await withLoading(() =>
         axios[method](
           `${process.env.NEXT_PUBLIC_API_URL}/api/places/${
             isUpdate ? placeId : ""
           }`,
-          data,
+          cleanedData,
           {
             headers: {
               "Content-Type": "application/json",

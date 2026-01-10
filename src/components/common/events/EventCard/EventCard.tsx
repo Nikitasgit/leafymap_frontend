@@ -8,7 +8,7 @@ import Image from "next/image";
 import { EventCardProps } from "./EventCard.types";
 import eventDefaultsSvg from "@public/images/event_default.svg";
 
-const EventCard: React.FC<EventCardProps> = ({ event, place }) => {
+const EventCard: React.FC<EventCardProps> = ({ event, place, user }) => {
   const router = useRouter();
 
   const handleCardClick = () => {
@@ -58,7 +58,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, place }) => {
               <div className={styles.locationInfo}>
                 <MapPin size={14} className={styles.detailIcon} />
                 <div className={styles.locationDetails}>
-                  <p className={styles.locationName}>{place.name}</p>
+                  <p className={styles.locationName}>{user?.username}</p>
                   {place.location && place.location.label && (
                     <p className={styles.locationAddress}>
                       {place.location.label}

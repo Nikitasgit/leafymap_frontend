@@ -1,6 +1,6 @@
 import { ExtendedMapRef } from "@/types/map";
 
 export interface MapCreatorCardProps {
-  placeId: string;
+  userId: string;
   mapRef: React.RefObject<ExtendedMapRef | null>;
 }

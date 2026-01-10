@@ -70,6 +70,15 @@ const BaseModal: React.FC<BaseModalProps> = ({
     }
   };
 
+  const handlePrimaryClick = () => {
+    if (primaryButtonType === "button") {
+      const syntheticEvent = {
+        preventDefault: () => {},
+      } as React.FormEvent;
+      onPrimaryAction(syntheticEvent);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -98,6 +107,9 @@ const BaseModal: React.FC<BaseModalProps> = ({
               type={primaryButtonType}
               variant="primary"
               disabled={isPrimaryDisabled || isLoading}
+              onClick={
+                primaryButtonType === "button" ? handlePrimaryClick : undefined
+              }
             >
               {isLoading ? "Chargement..." : primaryButtonLabel}
             </Button>

@@ -6,7 +6,9 @@ import styles from "./SearchInput.module.scss";
 import TextField from "../TextField/TextField";
 import { SearchInputProps, SearchSuggestion } from "./SearchInput.types";
 import CreatorCategoryBadge from "../../users/CreatorCategoryBadge";
+import PlaceCategoryBadge from "../../places/placeCategoryBadge/PlaceCategoryBadge";
 import creatorDefaultsSvg from "@public/images/creator_default.svg";
+import { MapPin } from "lucide-react";
 
 const SearchInput = <T extends SearchSuggestion>({
   value = "",
@@ -84,7 +86,7 @@ const SearchInput = <T extends SearchSuggestion>({
       }
     };
   }, []);
-
+  console.log("suggestions", suggestions);
   return (
     <div ref={wrapperRef} className={styles.searchInput}>
       <TextField
@@ -119,11 +121,30 @@ const SearchInput = <T extends SearchSuggestion>({
                 />
               )}
               <div className={styles.suggestionContent}>
-                <span className={styles.suggestionName}>{sug.name}</span>
-                {sug.categories && (
-                  <CreatorCategoryBadge categoryName={sug.categories[0].name} />
+                <div className={styles.suggestionNameRow}>
+                  <span className={styles.suggestionName}>{sug.name}</span>
+                  {sug.categories &&
+                    sug.categories.length > 0 &&
+                    sug.categories[0]?.userCategoryType === "creation" && (
+                      <CreatorCategoryBadge
+                        categoryName={sug.categories[0].name}
+                      />
+                    )}
+                </div>
+                {sug.place?.label && (
+                  <div className={styles.locationInfo}>
+                    <MapPin size={14} className={styles.detailIcon} />
+                    <div className={styles.locationInfoRow}>
+                      <p className={styles.detailText}>{sug.place.label}</p>
+                      {sug.place.placeCategory?.name && (
+                        <PlaceCategoryBadge
+                          categoryName={sug.place.placeCategory.name}
+                        />
+                      )}
+                    </div>
+                  </div>
                 )}
-                {sug.location?.label && (
+                {!sug.place && sug.location?.label && (
                   <div className={styles.suggestionInfos}>
                     <span>{sug.location.label}</span>
                   </div>

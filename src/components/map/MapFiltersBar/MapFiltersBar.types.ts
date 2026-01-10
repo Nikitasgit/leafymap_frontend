@@ -2,24 +2,21 @@ export type CreatorSearchResult = {
   _id: string;
   name: string;
   image: string;
+  categories?: {
+    name: string;
+    userCategoryType?: "creation" | "organization";
+  }[];
 };
 
-export type PlaceSearchResult = {
+export type LocationSearchResult = {
   _id: string;
   name: string;
-  image?: string;
-  location: {
-    label: string;
-  };
-  placeCategory: {
-    _id: string;
-    name: string;
-  };
+  coordinates?: number[];
 };
 
 export type SearchResult = {
   id: string;
-  type: "user" | "place" | "filters" | null;
+  type: "creator" | "filters" | null;
 };
 
 export type SearchType = {

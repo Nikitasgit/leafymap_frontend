@@ -5,10 +5,17 @@ export interface ValidationResult {
   isValid: boolean;
 }
 
-export const phoneSchema = z
-  .string()
-  .min(1, "Le téléphone est requis")
-  .regex(/^[0-9]{10}$/, "Le numéro de téléphone doit contenir 10 chiffres");
+export const phoneSchema = z.string().refine(
+  (val) => {
+    // Si vide, c'est valide (optionnel)
+    if (!val || val.trim() === "") return true;
+    // Sinon, doit contenir exactement 10 chiffres
+    return /^[0-9]{10}$/.test(val);
+  },
+  {
+    message: "Le numéro de téléphone doit contenir 10 chiffres",
+  }
+);
 
 export const emailSchema = z
   .string()

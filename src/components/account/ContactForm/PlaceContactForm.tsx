@@ -18,7 +18,6 @@ const PlaceContactForm = ({
           name="phone"
           type="tel"
           placeholder="Entrez votre numéro de téléphone"
-          required
           fullWidth
           error={!!errors.phone}
           errorMessage={errors.phone}

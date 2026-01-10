@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReviewsTab from "@/components/reviews/ReviewsTab/ReviewsTab";
 import TabsContainer from "@/components/common/tabs/TabsContainer/TabsContainer";
 import Tab from "@/components/common/tabs/Tab/Tab";
 import { FileText, Star, Image as ImageIcon, Calendar } from "lucide-react";
 import { Place } from "@/types/place";
-import { PartnershipPopulated } from "@/types/partnerships";
 import { useAuth } from "@/hooks/useAuth";
 import PresentationTab from "../PresentationTab";
 import GallerySection from "@/components/userProfile/GallerySection/GallerySection";
@@ -13,36 +12,44 @@ import styles from "./MapCreatorCardContent.module.scss";
 import { UserPopulated } from "@/types/user";
 
 export interface MapCreatorCardContentProps {
-  placeUser: UserPopulated | null;
+  user: UserPopulated;
   place: Place | null;
-  eventPartnerships: PartnershipPopulated[];
-  placePartnerships: PartnershipPopulated[];
   onMapButtonClick: (placeItem: {
     location: { coordinates: number[] } | null;
     _id: string;
   }) => Promise<void>;
+  onPlaceRefetch?: () => void;
 }
 
 const MapCreatorCardContent = ({
-  placeUser,
+  user,
   place,
-  eventPartnerships,
-  placePartnerships,
   onMapButtonClick,
+  onPlaceRefetch,
 }: MapCreatorCardContentProps) => {
   const [activeTab, setActiveTab] = useState("presentation");
   const { user: currentUser } = useAuth();
 
+  useEffect(() => {
+    if (!place && (activeTab === "reviews" || activeTab === "events")) {
+      setActiveTab("presentation");
+    }
+  }, [place, activeTab]);
+
   // Check if current user is the owner of the place
   const isOwner = (() => {
     if (!currentUser || !place) return false;
-    return currentUser._id === placeUser?._id;
+    return currentUser._id === user._id;
   })();
 
   const tabs = [
     { id: "presentation", label: "Présentation", icon: FileText },
-    { id: "reviews", label: "Avis", icon: Star },
-    { id: "events", label: "Événements", icon: Calendar },
+    ...(place
+      ? [
+          { id: "reviews", label: "Avis", icon: Star },
+          { id: "events", label: "Événements", icon: Calendar },
+        ]
+      : []),
     { id: "images", label: "Images", icon: ImageIcon },
   ];
 
@@ -52,15 +59,13 @@ const MapCreatorCardContent = ({
         return (
           <PresentationTab
             place={place}
-            placeUser={placeUser}
-            eventPartnerships={eventPartnerships}
-            placePartnerships={placePartnerships}
+            user={user}
             onMapButtonClick={onMapButtonClick}
           />
         );
       case "events":
-        return place?._id && placeUser?.username ? (
-          <EventsTab placeId={place._id} username={placeUser.username} />
+        return place?._id && user.username ? (
+          <EventsTab placeId={place._id} username={user.username} />
         ) : null;
       case "reviews":
         return place?._id ? (
@@ -69,12 +74,13 @@ const MapCreatorCardContent = ({
             referenceType="Place"
             canReview={!isOwner}
             canReply={isOwner}
+            onRatingUpdated={onPlaceRefetch}
           />
         ) : null;
       case "images":
         return (
           <GallerySection
-            reference={placeUser?._id || null}
+            reference={user._id || null}
             referenceType="User"
             isOwner={false}
           />

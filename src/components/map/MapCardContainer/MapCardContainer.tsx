@@ -46,8 +46,8 @@ const MapCardContainer = ({
         aria-label="Informations de la sélection"
         aria-hidden={isCollapsed}
       >
-        {selectedItem.type === "place" && (
-          <MapCreatorCard placeId={selectedItem.id} mapRef={mapRef} />
+        {selectedItem.type === "creator" && (
+          <MapCreatorCard userId={selectedItem.id} mapRef={mapRef} />
         )}
         {selectedItem.type === "filters" && (
           <MapFiltersCard

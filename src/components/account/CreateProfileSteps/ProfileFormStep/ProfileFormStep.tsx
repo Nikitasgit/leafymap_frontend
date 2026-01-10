@@ -89,10 +89,12 @@ const ProfileFormStep = ({
             errors={errors.place}
             showRadioYesOrNo={showPlaceRadioYesOrNo}
           />
-          <PartnershipsForm
-            onChange={onPartnershipsChange}
-            partnerships={partnerships}
-          />
+          {Boolean(place.active) && (
+            <PartnershipsForm
+              onChange={onPartnershipsChange}
+              partnerships={partnerships}
+            />
+          )}
         </>
       )}
       <UserContactForm

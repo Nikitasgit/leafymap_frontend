@@ -3,15 +3,14 @@ import MapCreatorCardPartnerships from "../MapCreatorCardPartnerships";
 import PlaceInitiatorPartnerships from "../PlaceInitiatorPartnerships";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import { Place } from "@/types/place";
-import { PartnershipPopulated } from "@/types/partnerships";
 import { UserPopulated } from "@/types/user";
+import { useUserPlacesPartnershipsByUserId } from "@/hooks/useUserPlacesPartnershipsByUserId";
+import { useUserEventsPartnershipsByUserId } from "@/hooks/useUserEventsPartnershipsByUserId";
 import styles from "./PresentationTab.module.scss";
 
 export interface PresentationTabProps {
   place: Place | null;
-  placeUser: UserPopulated | null;
-  eventPartnerships: PartnershipPopulated[];
-  placePartnerships: PartnershipPopulated[];
+  user: UserPopulated;
   onMapButtonClick: (placeItem: {
     location: { coordinates: number[] } | null;
     _id: string;
@@ -20,20 +19,36 @@ export interface PresentationTabProps {
 
 const PresentationTab = ({
   place,
-  placeUser,
-  eventPartnerships,
-  placePartnerships,
+  user,
   onMapButtonClick,
 }: PresentationTabProps) => {
+  const { partnerships: placePartnerships } = useUserPlacesPartnershipsByUserId(
+    user._id,
+    {
+      asCollaborator: "true",
+      onlyAccepted: "true",
+    }
+  );
+
+  const { partnerships: eventPartnerships } = useUserEventsPartnershipsByUserId(
+    user._id,
+    {
+      asCollaborator: "true",
+      includeCancelledEvents: "false",
+      includePastEvents: "false",
+      onlyAccepted: "true",
+    }
+  );
+
   return (
     <>
       <div className={styles.descriptionRow}>
-        <p>{capitalizeFirstLetter(placeUser?.description || "")}</p>
-      </div>{" "}
+        <p>{capitalizeFirstLetter(user.description || "")}</p>
+      </div>
       {place?._id && (
         <PlaceInitiatorPartnerships
           placeId={place._id}
-          username={placeUser?.username || ""}
+          username={user.username || ""}
         />
       )}
       {place?.defaultSchedule && (
@@ -42,7 +57,7 @@ const PresentationTab = ({
       <MapCreatorCardPartnerships
         eventPartnerships={eventPartnerships}
         placePartnerships={placePartnerships}
-        username={placeUser?.username || ""}
+        username={user.username || ""}
         onMapButtonClick={onMapButtonClick}
       />
     </>

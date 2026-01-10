@@ -42,10 +42,14 @@
         line-height: 1.2;
         flex: 1;
         min-width: 0;
-        .suggestionName {
-          font-weight: 500;
-          color: $grey-600;
-          font-size: rem(13);
+        .suggestionNameRow {
+          @include flex(row, flex-start, center, spacing(0.5));
+          width: 100%;
+          .suggestionName {
+            font-weight: 500;
+            color: $grey-600;
+            font-size: rem(13);
+          }
         }
         .suggestionInfos {
           font-size: rem(12);
@@ -53,9 +57,33 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          margin-top: spacing(0.25);
           span {
             overflow: hidden;
             text-overflow: ellipsis;
+          }
+        }
+        .locationInfo {
+          @include flex(row, flex-start, center, spacing(0.5));
+          margin-top: spacing(0.25);
+          width: 100%;
+          .detailIcon {
+            color: $grey-500;
+            flex-shrink: 0;
+          }
+          .locationInfoRow {
+            @include flex(row, flex-start, center, spacing(0.5));
+            flex: 1;
+            min-width: 0;
+            .detailText {
+              margin: 0;
+              color: $grey-500;
+              font-size: rem(12);
+              font-weight: 400;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
           }
         }
       }
@@ -73,8 +101,10 @@
           border: 2px solid $primary-color;
         }
         .suggestionContent {
-          .suggestionName {
-            font-size: rem(14);
+          .suggestionNameRow {
+            .suggestionName {
+              font-size: rem(14);
+            }
           }
           .suggestionInfos {
             font-size: rem(12);
