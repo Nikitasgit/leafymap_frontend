@@ -1,12 +1,12 @@
 import MapPlaceCardSchedule from "../MapPlaceCardSchedule";
 import MapCreatorCardPartnerships from "../MapCreatorCardPartnerships";
-import PlaceInitiatorPartnerships from "../PlaceInitiatorPartnerships";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import { Place } from "@/types/place";
 import { UserPopulated } from "@/types/user";
 import { useUserPlacesPartnershipsByUserId } from "@/hooks/useUserPlacesPartnershipsByUserId";
 import { useUserEventsPartnershipsByUserId } from "@/hooks/useUserEventsPartnershipsByUserId";
 import styles from "./PresentationTab.module.scss";
+import UsersListXScroll from "@/components/common/users/UsersListXScroll";
 
 export interface PresentationTabProps {
   place: Place | null;
@@ -25,7 +25,7 @@ const PresentationTab = ({
   const { partnerships: placePartnerships } = useUserPlacesPartnershipsByUserId(
     user._id,
     {
-      asCollaborator: "true",
+      asCollaborator: "false",
       onlyAccepted: "true",
     }
   );
@@ -45,10 +45,24 @@ const PresentationTab = ({
       <div className={styles.descriptionRow}>
         <p>{capitalizeFirstLetter(user.description || "")}</p>
       </div>
-      {place?._id && (
-        <PlaceInitiatorPartnerships
-          placeId={place._id}
-          username={user.username || ""}
+      {place?._id && placePartnerships.length > 0 && (
+        <UsersListXScroll
+          users={placePartnerships.map((partnership: any) => {
+            const collaborator = partnership.collaborator;
+            return {
+              _id: collaborator._id,
+              name: collaborator.username,
+              image: collaborator.image?.urls?.thumbnail,
+              category: collaborator.userCategories?.[0]?.name,
+            };
+          })}
+          title={
+            <>
+              <b>{capitalizeFirstLetter(user.username || "")}</b> collabore avec
+              :
+            </>
+          }
+          showCategory={true}
         />
       )}
       {place?.defaultSchedule && (

@@ -7,6 +7,7 @@ import { useRef, useState, useEffect } from "react";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useFindUsers } from "@/hooks/useFindUsers";
 import Button from "@/components/common/buttons/Button";
+import { fetchLocationSuggestions } from "@/utils/map";
 import {
   CreatorSearchResult,
   LocationSearchResult,
@@ -111,9 +112,25 @@ const MapFiltersBar = ({
 
       return suggestions;
     } else {
-      // Recherche de lieux géographiques - logique à implémenter plus tard
-      // Pour l'instant, retourner un tableau vide
-      return [];
+      if (query.length < 2) {
+        return [];
+      }
+      try {
+        const locations = await fetchLocationSuggestions(query);
+        const suggestions: LocationSearchResult[] = locations.map(
+          (location) => ({
+            _id:
+              location.id ||
+              `location-${location.coordinates[0]}-${location.coordinates[1]}`,
+            name: location.label,
+            coordinates: location.coordinates,
+          })
+        );
+        return suggestions;
+      } catch (error) {
+        console.error("Error fetching location suggestions:", error);
+        return [];
+      }
     }
   };
 
@@ -127,8 +144,24 @@ const MapFiltersBar = ({
         type: "creator",
       });
     } else {
-      // Pour les lieux géographiques - logique à implémenter plus tard
-      // Pour l'instant, ne rien faire
+      if (
+        "coordinates" in item &&
+        item.coordinates &&
+        mapRef.current?.isReady
+      ) {
+        const [longitude, latitude] = item.coordinates;
+        handleSelect({ id: "", type: null });
+        mapRef.current.setSelectedPlaceId(null);
+        mapRef.current.flyTo({
+          center: [longitude, latitude],
+          zoom: 12,
+          duration: 1000,
+        });
+
+        if (mapRef.current) {
+          mapRef.current.fetchPlacesInView(null);
+        }
+      }
     }
   };
 

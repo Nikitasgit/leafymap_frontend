@@ -3,20 +3,29 @@
 @use "@/styles/abstracts/functions" as *;
 
 .partnershipsList {
-  padding: spacing(1);
-  margin-top: spacing(1);
-  .partnershipsGrid {
-    margin-top: spacing(1.5);
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: spacing(1);
+  padding: spacing(0.75) 0;
+  margin-top: 0;
+  
+  .sectionTitle {
+    font-size: rem(14);
+    font-weight: 500;
+    color: $grey-700;
+    margin: 0 0 spacing(0.5) 0;
+    width: 100%;
+    
     @include respond-to(sm) {
-      grid-template-columns: repeat(2, 1fr);
-      gap: spacing(1.5);
+      font-size: rem(15);
     }
-    @include respond-to(md) {
-      grid-template-columns: repeat(3, 1fr);
-      gap: spacing(2);
+  }
+  
+  .partnershipsGrid {
+    margin-top: spacing(0.5);
+    @include flex(row, flex-start, flex-start, spacing(0.75));
+    flex-wrap: wrap;
+    width: 100%;
+    
+    @include respond-to(sm) {
+      gap: spacing(1);
     }
   }
   .icon {

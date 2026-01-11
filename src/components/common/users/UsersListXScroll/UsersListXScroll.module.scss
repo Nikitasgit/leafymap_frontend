@@ -4,24 +4,23 @@
 
 .section {
   width: 100%;
-  margin-top: spacing(1.5);
-  padding: spacing(0.5) spacing(1);
-  border-top: 1px solid $grey-200;
-  border-bottom: 1px solid $grey-200;
-  border-radius: rem(8);
-  @include flex(column, flex-start, flex-start, spacing(1));
+  margin-top: 0;
+  padding: spacing(0.75) 0;
+  @include flex(column, flex-start, flex-start, spacing(0.5));
 }
 
 .sectionTitle {
   font-size: rem(14);
   font-weight: 500;
   color: $grey-700;
-  margin: 0;
+  margin: 0 0 spacing(0.5) 0;
   width: 100%;
+  
   b {
     font-weight: 600;
     color: $grey-800;
   }
+  
   @include respond-to(sm) {
     font-size: rem(15);
   }
@@ -43,6 +42,10 @@
   padding: spacing(0.5) 0;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   // Hide scrollbar
   scrollbar-width: none; // Firefox
   -ms-overflow-style: none; // IE and Edge
@@ -52,7 +55,7 @@
   }
 
   @include respond-to(sm) {
-    gap: spacing(1.5);
+    gap: spacing(0.5);
   }
 }
 
@@ -76,43 +79,13 @@
   }
 }
 
-.card {
+.cardWrapper {
   flex-shrink: 0;
-  @include flex(column, flex-start, center, spacing(0.5));
-  width: 60px;
-  cursor: pointer;
-
-}
-
-.imageContainer {
-  position: relative;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid $grey-200;
-  background: $grey-50;
-  flex-shrink: 0;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    user-select: none;
-    -webkit-user-drag: none;
-  }
-
-}
-
-.username {
-  font-size: rem(12);
-  font-weight: 500;
-  color: $grey-700;
-  text-align: center;
-  margin: 0;
-  word-break: break-word;
-  @include respond-to(sm) {
-    font-size: rem(13);
-  }
+  width: fit-content;
+  max-width: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 

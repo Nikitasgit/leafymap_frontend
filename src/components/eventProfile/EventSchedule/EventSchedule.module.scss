@@ -3,14 +3,16 @@
 @use "@/styles/abstracts/functions" as *;
 
 .scheduleContainer {
-  padding: spacing(1);
-  margin-top: spacing(1.5);
+  padding: spacing(0.75) 0;
+  margin-top: 0;
+  border-top: 1px solid $grey-200;
+  padding-top: spacing(0.75);
   
   .sectionTitle {
     font-size: rem(14);
     font-weight: 500;
     color: $grey-700;
-    margin: 0 0 spacing(1) 0;
+    margin: 0 0 spacing(0.5) 0;
     width: 100%;
     
     @include respond-to(sm) {
@@ -19,13 +21,13 @@
   }
   
   .scheduleList {
-    margin-top: spacing(1.5);
+    margin-top: spacing(0.5);
     @include flex(column, flex-start, flex-start, spacing(1));
     .period {
       border-radius: rem(6);
       width: 100%;
-      padding: spacing(0.75);
-      border: 1px solid $grey-300;
+      padding: spacing(0.75) 0;
+      border: none;
       .periodDates {
         @include flex(row, flex-start, center, spacing(0.75));
         .dateItem {
@@ -92,7 +94,7 @@
       gap: spacing(1.5);
       .period {
         border-radius: rem(8);
-        padding: spacing(1);
+        padding: spacing(1) 0;
         .periodDates {
           gap: spacing(1);
           .dateItem {
@@ -136,7 +138,7 @@
     .scheduleList {
       gap: spacing(2);
       .period {
-        padding: spacing(1.5);
+        padding: spacing(1.5) 0;
         .timeSlotsList {
           gap: spacing(1);
           .timeSlot {

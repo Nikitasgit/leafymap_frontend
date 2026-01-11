@@ -1,41 +1,58 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { ExternalLink } from "lucide-react";
 import styles from "./PartnershipCard.module.scss";
 import creatorDefaultsSvg from "@public/images/creator_default.svg";
 import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge";
-import { PartnershipPopulated } from "@/types/partnerships";
 
 interface PartnershipCardProps {
-  creator: PartnershipPopulated["collaborator"];
+  user: {
+    _id: string;
+    name: string;
+    image: string;
+    category: string;
+  };
+
   showCategory?: boolean;
 }
 
-const PartnershipCard = ({ creator, showCategory = false }: PartnershipCardProps) => {
+const PartnershipCard = ({
+  user,
+  showCategory = false,
+}: PartnershipCardProps) => {
   const router = useRouter();
 
-  const handleClick = () => {
-    router.push(`/users/${creator._id}`);
+  const handleIconClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    router.push(`/users/${user._id}`);
   };
 
   return (
-    <div className={styles.card} onClick={handleClick} role="button" tabIndex={0}>
+    <div className={styles.card}>
       <div className={styles.imageContainer}>
         <Image
-          src={
-            typeof creator.image === "object"
-              ? creator.image?.urls?.thumbnail
-              : creator.image || creatorDefaultsSvg
-          }
-          alt={creator.name || "Créateur"}
-          width={80}
-          height={80}
+          src={user.image || creatorDefaultsSvg}
+          alt={user.name || "Créateur"}
+          width={50}
+          height={50}
           className={styles.image}
+          draggable={false}
         />
       </div>
       <div className={styles.info}>
-        <h4 className={styles.name}>{creator.name}</h4>
-        {showCategory && creator.categories && creator.categories.length > 0 && (
-          <CreatorCategoryBadge categoryName={creator.categories[0].name} />
+        <div className={styles.nameRow}>
+          <h4 className={styles.name}>blablablablablablablabla</h4>
+          <button
+            className={styles.iconButton}
+            onClick={handleIconClick}
+            aria-label={`Voir le profil de ${user.name}`}
+            type="button"
+          >
+            <ExternalLink size={14} />
+          </button>
+        </div>
+        {showCategory && user.category && user.category && (
+          <CreatorCategoryBadge categoryName={user.category} />
         )}
       </div>
     </div>
@@ -43,4 +60,3 @@ const PartnershipCard = ({ creator, showCategory = false }: PartnershipCardProps
 };
 
 export default PartnershipCard;
-

@@ -111,7 +111,7 @@ const SearchInput = <T extends SearchSuggestion>({
               onClick={() => handleSuggestionClick(sug)}
               className={styles.suggestionItem}
             >
-              {withIcons && (
+              {withIcons && !("coordinates" in sug) && (
                 <Image
                   src={sug.image || creatorDefaultsSvg}
                   alt={sug.name || "Créateur"}

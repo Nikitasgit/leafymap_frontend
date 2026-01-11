@@ -4,7 +4,7 @@ import { useUser } from "@/hooks/useUser";
 import { usePlace } from "@/hooks/usePlace";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
 import { MapCreatorCardProps } from "./MapCreatorCard.types";
-import MapCreatorCardHeader from "../MapCreatorCardHeader";
+import CreatorHeader from "@/components/creator/creatorHeader";
 import MapCreatorCardContent from "../MapCreatorCardContent";
 
 const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
@@ -53,11 +53,7 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
 
   return (
     <article className={styles.placeCardMap}>
-      <MapCreatorCardHeader
-        place={place || null}
-        user={user}
-        isLoading={isLoading}
-      />
+      <CreatorHeader place={place || null} user={user} isLoading={isLoading} />
       <MapCreatorCardContent
         place={place || null}
         user={user}

@@ -6,4 +6,5 @@ export interface EventCardProps {
   event: EventPopulated;
   place?: PlacePopulated;
   user?: UserPopulated;
+  clickable?: boolean;
 }

@@ -1,5 +1,4 @@
 import styles from "./PartnershipsList.module.scss";
-import TitleWithLine from "@/components/common/typography/TitleWithLine";
 import { PartnershipPopulated } from "@/types/partnerships";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import { Users } from "lucide-react";
@@ -13,7 +12,7 @@ interface PartnershipsListProps {
 
 const PartnershipsList = ({
   partnerships,
-  title = "Partenaires",
+  title = "Participants",
   noTitle = false,
 }: PartnershipsListProps) => {
   const filteredPartnerships = partnerships.filter(
@@ -22,11 +21,7 @@ const PartnershipsList = ({
 
   return (
     <section className={styles.partnershipsList}>
-      {!noTitle && (
-        <TitleWithLine className={styles.partnershipsTitle}>
-          {title}
-        </TitleWithLine>
-      )}
+      {!noTitle && <h3 className={styles.sectionTitle}>{title}</h3>}
       {filteredPartnerships.length > 0 ? (
         <div className={styles.partnershipsGrid}>
           {filteredPartnerships.map((partnership) => (
@@ -39,7 +34,7 @@ const PartnershipsList = ({
         </div>
       ) : (
         <EmptyState
-          title="Aucun partenaire associé pour le moment"
+          title="Aucun participant pour le moment"
           icon={<Users className={styles.icon} />}
         />
       )}
@@ -48,4 +43,3 @@ const PartnershipsList = ({
 };
 
 export default PartnershipsList;
-

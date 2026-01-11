@@ -4,13 +4,16 @@
 
 .eventCard {
   background: $white;
-  cursor: pointer;
   border: 1px solid $grey-200;
   border-radius: rem(8);
   @include flex(row, flex-start, center, spacing(0));
   width: 100%;
   min-width: 0;
   max-width: 100%;
+  
+  &[role="link"] {
+    cursor: pointer;
+  }
   .imageContainer {
     position: relative;
     width: 60px;

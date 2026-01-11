@@ -8,20 +8,31 @@ import Image from "next/image";
 import { EventCardProps } from "./EventCard.types";
 import eventDefaultsSvg from "@public/images/event_default.svg";
 
-const EventCard: React.FC<EventCardProps> = ({ event, place, user }) => {
+const EventCard: React.FC<EventCardProps> = ({
+  event,
+  place,
+  user,
+  clickable = true,
+}) => {
   const router = useRouter();
 
   const handleCardClick = () => {
-    router.push(`/events/${event._id}`);
+    if (clickable) {
+      router.push(`/events/${event._id}`);
+    }
   };
 
+  const Component = clickable ? "a" : "div";
+  const componentProps = clickable
+    ? {
+        onClick: handleCardClick,
+        role: "link" as const,
+        tabIndex: 0,
+      }
+    : {};
+
   return (
-    <a
-      className={styles.eventCard}
-      onClick={handleCardClick}
-      role="link"
-      tabIndex={0}
-    >
+    <Component className={styles.eventCard} {...componentProps}>
       <div className={styles.imageContainer}>
         <Image
           src={event.image?.urls?.thumbnail || eventDefaultsSvg}
@@ -70,7 +81,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, place, user }) => {
           </div>
         </div>
       </div>
-    </a>
+    </Component>
   );
 };
 

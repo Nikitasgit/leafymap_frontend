@@ -4,7 +4,7 @@ import { useEvent } from "@/hooks/useEvent";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import styles from "./EventProfileContainer.module.scss";
-import EventProfileSchedule from "@/components/eventProfile/EventProfileSchedule";
+import EventSchedule from "@/components/eventProfile/EventSchedule";
 import EventHeader from "@/components/eventProfile/EventHeader";
 import EventInfo from "@/components/eventProfile/EventInfo";
 import PartnershipsList from "@/components/common/partnerships/PartnershipsList";
@@ -27,7 +27,6 @@ const EventProfileContainer = () => {
     isLoading,
     refetch: refetchEvent,
   } = useEvent(eventId as string);
-
   const { partnerships, isLoading: partnershipsLoading } = usePlacePartnerships(
     event?.place?._id as string,
     eventId as string,
@@ -64,7 +63,7 @@ const EventProfileContainer = () => {
             <PartnershipsList
               partnerships={partnerships as PartnershipPopulated[]}
             />
-            <EventProfileSchedule
+            <EventSchedule
               partnerships={partnerships as PartnershipPopulated[]}
               schedule={event?.schedule || []}
             />

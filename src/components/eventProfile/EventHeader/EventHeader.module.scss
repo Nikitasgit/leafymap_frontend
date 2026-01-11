@@ -3,102 +3,48 @@
 @use "@/styles/abstracts/functions" as *;
 
 .header {
-  @include flex(column, flex-start, stretch, spacing(0.75));
+  @include flex(column, flex-start, stretch, spacing(1));
   padding: spacing(1);
-  button {
+  
+  button:first-child {
     align-self: flex-start;
+    margin-bottom: spacing(0.5);
   }
-  .topRow {
-    @include flex(row, space-between, stretch, spacing(1.5));
-    .eventImage {
-      border-radius: rem(6);
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    .programInfo {
-      @include flex(column, flex-start, flex-end, spacing(0.5));
-      .rating {
-        @include flex(column, center, center, spacing(0.25));
-        align-items: center;
-        height: fit-content;
-        .ratingValue {
-          font-size: rem(13);
-          font-weight: 500;
-          color: $grey-600;
-          text-align: center;
-          min-width: rem(40);
-          display: inline-block;
-          line-height: 1.2;
-        }
-      }
-      .dateInfo {
-        @include flex(row, flex-start, center, spacing(0.5));
-        color: $grey-600;
+
+  .eventCardWrapper {
+    @include flex(column, flex-start, stretch, spacing(0.75));
+    position: relative;
+
+    .rating {
+      @include flex(row, flex-end, center, spacing(0.5));
+      align-items: center;
+      position: absolute;
+      top: spacing(1);
+      right: spacing(1);
+      z-index: 1;
+
+      .ratingValue {
         font-size: rem(13);
-        .dateText {
-          margin: 0;
-          color: $grey-600;
-        }
-      }
-    }
-  }
-  .bottomRow {
-    @include flex(column, flex-start, stretch, spacing(0));
-    border-bottom: 1px solid $grey-200;
-    padding-bottom: spacing(0.75);
-
-    .titleRow {
-      @include flex(row, flex-start, center, spacing(0.75));
-      .icon {
-        color: $grey-500;
-        display: none;
-      }
-      .title {
-        font-size: rem(18);
-        font-weight: 600;
+        font-weight: 500;
         color: $grey-600;
+        text-align: center;
+        line-height: 1.2;
       }
-    }
-
-    .eventDescription {
-      font-size: rem(13);
-      font-weight: 400;
-      color: $grey-600;
-    }
-    .locationButton {
-      font-size: rem(13);
-      color: $grey-600;
-      padding: 0;
-      text-transform: capitalize;
-      align-self: flex-start;
     }
   }
-  @include respond-to(sm) {
-    padding: spacing(2);
-    .topRow {
-      .eventImage {
-        border-radius: rem(8);
-      }
-      .rightInfo {
-        gap: spacing(1);
-      }
-    }
-    .bottomRow {
-      .titleRow {
-        gap: spacing(1);
-        .icon {
-          display: block;
-        }
-        .title {
-          font-size: rem(20);
-        }
-      }
 
-      .eventDescription {
-        font-size: rem(14);
-      }
-      .locationButton {
-        font-size: rem(14);
+  @include respond-to(sm) {
+    padding: spacing(1.5);
+
+    .eventCardWrapper {
+      .rating {
+        top: spacing(1.5);
+        right: spacing(1.5);
+        gap: spacing(0.75);
+
+        .ratingValue {
+          font-size: rem(14);
+        }
       }
     }
   }
