@@ -2,44 +2,48 @@
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { useUser } from "@/hooks/useUser";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styles from "./UserProfileContainer.module.scss";
-import { usePartnershipByUserId } from "@/hooks/usePartnershipByUserId";
 import { useAuth } from "@/hooks/useAuth";
 import useSubmitImages from "@/hooks/useSubmitImages";
-import UserHeader from "@/components/userProfile/UserHeader/UserHeader";
-import { PlacesSectionContainer } from "@/components/userProfile/PlacesSection/PlacesSectionContainer";
-import EventsSectionContainer from "@/components/userProfile/EventsSection/EventsSectionContainer";
+import MapCreatorCardHeader from "@/components/map/MapCreatorCardHeader";
 import GallerySection from "@/components/userProfile/GallerySection/GallerySection";
 import TabsContainer from "@/components/common/tabs/TabsContainer/TabsContainer";
 import Tab from "@/components/common/tabs/Tab/Tab";
-import { User as UserIcon, MapPin, Calendar, Star } from "lucide-react";
-import { useToast } from "@/hooks/useToast";
+import { FileText, Star, Image as ImageIcon, Calendar } from "lucide-react";
 import ReviewsTab from "@/components/reviews/ReviewsTab/ReviewsTab";
+import PresentationTab from "@/components/map/PresentationTab";
+import EventsTab from "@/components/common/events/EventsTab";
+import { usePlace } from "@/hooks/usePlace";
+import { usePlaceEvents } from "@/hooks/usePlaceEvents";
 
 const UserProfileContainer = () => {
   const { userId } = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState("gallery");
-  const { showInfo } = useToast();
+  const [activeTab, setActiveTab] = useState("presentation");
   const { user: currentUser } = useAuth();
-  const { user, isLoading } = useUser(userId as string);
-  const { partnerships, isLoading: isLoadingPartnerships } =
-    usePartnershipByUserId(userId as string, {
-      asCollaborator: "true",
-    });
+  const { user, isLoading: isLoadingUser } = useUser(userId as string);
   const { submitImages, isLoading: isUploadingImages } = useSubmitImages();
-  const placePartnerships = partnerships.filter(
-    (partnership) => partnership.type === "place"
-  );
-  const eventPartnerships = partnerships.filter(
-    (partnership) => partnership.type === "event"
+
+  const placeId = useMemo(() => {
+    if (!user?.place) return null;
+    return typeof user.place === "string" ? user.place : user.place._id;
+  }, [user?.place]);
+
+  const {
+    place,
+    isLoading: isLoadingPlace,
+    refetch: refetchPlace,
+  } = usePlace(placeId, {
+    scheduleWithEvents: true,
+  });
+
+  const { events, isLoading: isLoadingEvents } = usePlaceEvents(
+    place?._id || null
   );
 
-  const handleFollow = () => {
-    showInfo("Cette fonctionnalité arrivera bientôt!");
-  };
+  const isLoading = isLoadingUser || isLoadingPlace;
 
   const handleFilesSelected = async (files: File[]) => {
     if (files.length === 0) return;
@@ -59,27 +63,40 @@ const UserProfileContainer = () => {
     }
   };
 
+  useEffect(() => {
+    if (!place && (activeTab === "reviews" || activeTab === "events")) {
+      setActiveTab("presentation");
+    }
+    if (
+      activeTab === "events" &&
+      !isLoadingEvents &&
+      events.length === 0 &&
+      place
+    ) {
+      setActiveTab("presentation");
+    }
+  }, [place, activeTab, events.length, isLoadingEvents]);
+
   // Initialize tab from URL on mount
   useEffect(() => {
     const tabFromUrl = searchParams.get("tab");
-    const availableTabs = ["gallery", "places", "events"];
-    const userPlace =
-      user?.place && typeof user.place === "object" && user.place._id
-        ? user.place
-        : null;
-    if (userPlace) {
+    const availableTabs = ["presentation", "images"];
+    if (place) {
       availableTabs.push("reviews");
+      if (!isLoadingEvents && events.length > 0) {
+        availableTabs.push("events");
+      }
     }
     if (tabFromUrl && availableTabs.includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
-    } else if (tabFromUrl === "reviews" && !userPlace) {
-      // If user tries to access reviews tab but has no place, redirect to gallery
-      setActiveTab("gallery");
+    } else if (tabFromUrl && !availableTabs.includes(tabFromUrl)) {
+      // If user tries to access a tab that's not available, redirect to presentation
+      setActiveTab("presentation");
       const newSearchParams = new URLSearchParams(searchParams.toString());
-      newSearchParams.set("tab", "gallery");
+      newSearchParams.set("tab", "presentation");
       router.replace(`?${newSearchParams.toString()}`, { scroll: false });
     }
-  }, [searchParams, user, router]);
+  }, [searchParams, place, events.length, isLoadingEvents, router]);
 
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
@@ -88,71 +105,82 @@ const UserProfileContainer = () => {
     router.replace(`?${newSearchParams.toString()}`, { scroll: false });
   };
 
-  const userPlace =
-    user?.place && typeof user.place === "object" && user.place._id
-      ? user.place
-      : null;
+  const isOwner = (() => {
+    if (!currentUser || !place) return false;
+    return currentUser._id === user?._id;
+  })();
+
+  const shouldShowEventsTab = place && !isLoadingEvents && events.length > 0;
+
   const tabs = [
-    { id: "gallery", label: "Galerie", icon: UserIcon },
-    { id: "places", label: "Lieux partenaires", icon: MapPin },
-    { id: "events", label: "Événements", icon: Calendar },
-    ...(userPlace ? [{ id: "reviews", label: "Avis", icon: Star }] : []),
+    { id: "presentation", label: "Présentation", icon: FileText },
+    ...(place
+      ? [
+          { id: "reviews", label: "Avis", icon: Star },
+          ...(shouldShowEventsTab
+            ? [{ id: "events", label: "Événements", icon: Calendar }]
+            : []),
+        ]
+      : []),
+    { id: "images", label: "Images", icon: ImageIcon },
   ];
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case "gallery":
+      case "presentation":
         return (
-          <GallerySection
-            reference={userId as string}
-            referenceType="User"
-            isUploading={isUploadingImages}
-            isOwner={isOwner || false}
-            onFilesSelected={handleFilesSelected}
-          />
-        );
-      case "places":
-        return (
-          <PlacesSectionContainer
-            placePartnerships={placePartnerships}
+          <PresentationTab
+            place={place || null}
             user={user!}
+            onMapButtonClick={async () => {
+              // No-op for user profile page
+            }}
           />
         );
       case "events":
-        return (
-          <EventsSectionContainer
-            eventPartnerships={eventPartnerships}
-            user={user!}
-          />
-        );
+        return place?._id && user?.username ? (
+          <EventsTab placeId={place._id} username={user.username} />
+        ) : null;
       case "reviews":
-        const place =
-          user?.place && typeof user.place === "object" && user.place._id
-            ? user.place
-            : null;
-        return place ? (
+        return place?._id ? (
           <ReviewsTab
             reference={place._id}
             referenceType="Place"
             canReview={!isOwner}
-            canReply={isOwner || false}
+            canReply={isOwner}
+            onRatingUpdated={refetchPlace}
           />
         ) : null;
+      case "images":
+        return (
+          <GallerySection
+            reference={user?._id || null}
+            referenceType="User"
+            isOwner={isOwner}
+            isUploading={isUploadingImages}
+            onFilesSelected={handleFilesSelected}
+          />
+        );
       default:
         return null;
     }
   };
 
-  if (isLoading || isLoadingPartnerships) return <LoadingBar />;
-
-  const isOwner = currentUser && user && currentUser._id === user._id;
+  if (isLoading) return <LoadingBar />;
 
   if (!user) return <LoadingBar />;
 
   return (
     <div className={styles.pageContainer}>
       <div className={styles.container}>
-        <UserHeader user={user} onFollow={handleFollow} />
+        <div className={styles.headerSpacing}>
+          <MapCreatorCardHeader
+            place={place || null}
+            user={user}
+            isLoading={isLoading}
+            variant="full"
+          />
+        </div>
         <TabsContainer>
           {tabs.map((tab) => (
             <Tab
@@ -165,8 +193,7 @@ const UserProfileContainer = () => {
             />
           ))}
         </TabsContainer>
-
-        {renderTabContent()}
+        <div className={styles.tabContent}>{renderTabContent()}</div>
       </div>
     </div>
   );

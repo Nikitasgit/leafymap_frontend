@@ -2,16 +2,30 @@
 @use "@/styles/abstracts/mixins" as *;
 @use "@/styles/abstracts/functions" as *;
 
+.headerWrapper {
+  width: 100%;
+  @include flex(column, flex-start, flex-start, 0);
+  
+  &.fullWidth {
+    @include respond-to(md) {
+      @include flex(row, flex-start, center, spacing(1));
+    }
+  }
+}
+
 .imageContainer {
   position: relative;
   width: 100%;
-  height: 180px;
+  height: 150px;
   overflow: hidden;
+  margin: 0;
   cursor: pointer;
   background-color: $grey-50;
   border: none;
   padding: 0;
   display: block;
+  flex-shrink: 0;
+  
   img {
     width: 100%;
     object-fit: cover;
@@ -19,10 +33,22 @@
   }
 }
 
+.headerWrapper.fullWidth {
+  .imageContainer {
+    @include respond-to(md) {
+      width:150px;
+      height: 150px;
+      border-radius: rem(8);
+      margin: spacing(1.5);
+    }
+  }
+}
+
 .header {
   @include flex(column, flex-start, flex-start, spacing(0.75));
   padding: spacing(1) spacing(1.5);
   width: 100%;
+  flex: 1;
   .headerMain {
     @include flex(column, flex-start, flex-start, spacing(0.5));
     width: 100%;
@@ -103,9 +129,6 @@
 }
 
 @include respond-to(sm) {
-  .imageContainer {
-    height: 200px;
-  }
   .header {
     padding: spacing(1.5) spacing(2) spacing(0) spacing(2);
     gap: spacing(1);
@@ -130,6 +153,12 @@
         }
       }
     }
+  }
+}
+
+@include respond-to(md) {
+  .header {
+    padding: spacing(1.5) spacing(2);
   }
 }
 

@@ -3,12 +3,12 @@
 @use "@/styles/abstracts/mixins" as *;
 
 .tab {
-  @include flex(column, center, center, spacing(0.15));
-  padding: spacing(0.6) spacing(0.6);
+  @include flex(row, flex-start, center, spacing(0.5));
+  padding: spacing(1.25) spacing(1.5);
   border: none;
   background: transparent;
   color: $grey-500;
-  font-size: rem(11);
+  font-size: rem(14);
   font-weight: 500;
   cursor: pointer;
   position: relative;
@@ -29,15 +29,6 @@
     width: 14px;
     height: 14px;
     font-size: rem(10);
-  }
-  @include respond-to(sm) {
-    @include flex(row, flex-start, center, spacing(0.5));
-    padding: spacing(1) spacing(1.5);
-    font-size: rem(13);
-  }
-  @include respond-to(md) {
-    padding: spacing(1.25) spacing(2);
-    font-size: rem(14);
   }
 }
 

@@ -17,17 +17,22 @@ export interface MapCreatorCardHeaderProps {
   place: Place | null;
   user: UserPopulated;
   isLoading: boolean;
+  variant?: "compact" | "full";
 }
 
 const MapCreatorCardHeader = ({
   place,
   user,
   isLoading,
+  variant = "compact",
 }: MapCreatorCardHeaderProps) => {
   const router = useRouter();
-  console.log(user);
   return (
-    <>
+    <div
+      className={`${styles.headerWrapper} ${
+        variant === "full" ? styles.fullWidth : ""
+      }`}
+    >
       <button
         className={`${styles.imageContainer} ${isLoading ? "skeleton" : ""}`}
         onClick={() => {
@@ -124,7 +129,7 @@ const MapCreatorCardHeader = ({
           </div>
         )}
       </header>
-    </>
+    </div>
   );
 };
 

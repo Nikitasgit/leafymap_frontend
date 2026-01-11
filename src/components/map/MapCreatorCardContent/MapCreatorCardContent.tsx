@@ -5,6 +5,7 @@ import Tab from "@/components/common/tabs/Tab/Tab";
 import { FileText, Star, Image as ImageIcon, Calendar } from "lucide-react";
 import { Place } from "@/types/place";
 import { useAuth } from "@/hooks/useAuth";
+import { usePlaceEvents } from "@/hooks/usePlaceEvents";
 import PresentationTab from "../PresentationTab";
 import GallerySection from "@/components/userProfile/GallerySection/GallerySection";
 import EventsTab from "../../common/events/EventsTab";
@@ -29,25 +30,39 @@ const MapCreatorCardContent = ({
 }: MapCreatorCardContentProps) => {
   const [activeTab, setActiveTab] = useState("presentation");
   const { user: currentUser } = useAuth();
+  const { events, isLoading: isLoadingEvents } = usePlaceEvents(
+    place?._id || null
+  );
 
   useEffect(() => {
     if (!place && (activeTab === "reviews" || activeTab === "events")) {
       setActiveTab("presentation");
     }
-  }, [place, activeTab]);
+    if (
+      activeTab === "events" &&
+      !isLoadingEvents &&
+      events.length === 0 &&
+      place
+    ) {
+      setActiveTab("presentation");
+    }
+  }, [place, activeTab, events.length, isLoadingEvents]);
 
-  // Check if current user is the owner of the place
   const isOwner = (() => {
     if (!currentUser || !place) return false;
     return currentUser._id === user._id;
   })();
+
+  const shouldShowEventsTab = place && !isLoadingEvents && events.length > 0;
 
   const tabs = [
     { id: "presentation", label: "Présentation", icon: FileText },
     ...(place
       ? [
           { id: "reviews", label: "Avis", icon: Star },
-          { id: "events", label: "Événements", icon: Calendar },
+          ...(shouldShowEventsTab
+            ? [{ id: "events", label: "Événements", icon: Calendar }]
+            : []),
         ]
       : []),
     { id: "images", label: "Images", icon: ImageIcon },
