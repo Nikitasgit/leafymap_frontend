@@ -1,15 +1,17 @@
-import MapPlaceCardSchedule from "../MapPlaceCardSchedule";
-import MapCreatorCardPartnerships from "../MapCreatorCardPartnerships";
+import MapPlaceCardSchedule from "@/components/map/MapPlaceCardSchedule";
+import MapCreatorCardPartnerships from "@/components/map/MapCreatorCardPartnerships";
 import { capitalizeFirstLetter } from "@/utils/functions";
-import { Place } from "@/types/place";
+import { Place, PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
 import { useUserPlacesPartnershipsByUserId } from "@/hooks/useUserPlacesPartnershipsByUserId";
 import { useUserEventsPartnershipsByUserId } from "@/hooks/useUserEventsPartnershipsByUserId";
 import styles from "./PresentationTab.module.scss";
 import UsersListXScroll from "@/components/common/users/UsersListXScroll";
+import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
 
 export interface PresentationTabProps {
   place: Place | null;
+  isPlaceLoading: boolean;
   user: UserPopulated;
   onMapButtonClick: (placeItem: {
     location: { coordinates: number[] } | null;
@@ -19,27 +21,32 @@ export interface PresentationTabProps {
 
 const PresentationTab = ({
   place,
+  isPlaceLoading = false,
   user,
   onMapButtonClick,
 }: PresentationTabProps) => {
-  const { partnerships: placePartnerships } = useUserPlacesPartnershipsByUserId(
-    user._id,
-    {
-      asCollaborator: "false",
+  const { partnerships: placesPartnerships } =
+    useUserPlacesPartnershipsByUserId(user._id, {
+      asCollaborator: "true",
       onlyAccepted: "true",
-    }
-  );
+    });
 
-  const { partnerships: eventPartnerships } = useUserEventsPartnershipsByUserId(
-    user._id,
-    {
+  const { partnerships: eventsPartnerships } =
+    useUserEventsPartnershipsByUserId(user._id, {
       asCollaborator: "true",
       includeCancelledEvents: "false",
       includePastEvents: "false",
       onlyAccepted: "true",
-    }
+    });
+
+  const { partnerships: placePartnerships } = usePlacePartnerships(
+    place?._id || "",
+    undefined,
+    "place",
+    { onlyAccepted: "true" }
   );
 
+  
   return (
     <>
       <div className={styles.descriptionRow}>
@@ -66,11 +73,16 @@ const PresentationTab = ({
         />
       )}
       {place?.defaultSchedule && (
-        <MapPlaceCardSchedule schedule={place?.defaultSchedule} />
+        <MapPlaceCardSchedule
+          schedule={place?.defaultSchedule}
+          place={place as PlacePopulated | null}
+          user={user} 
+          isPlaceLoading={isPlaceLoading}
+        />
       )}
       <MapCreatorCardPartnerships
-        eventPartnerships={eventPartnerships}
-        placePartnerships={placePartnerships}
+        eventPartnerships={eventsPartnerships}
+        placePartnerships={placesPartnerships}
         username={user.username || ""}
         onMapButtonClick={onMapButtonClick}
       />

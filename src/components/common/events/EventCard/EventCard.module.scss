@@ -10,13 +10,13 @@
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  
+
   &[role="link"] {
     cursor: pointer;
   }
   .imageContainer {
     position: relative;
-    width: 60px;
+    width: 70px;
     align-self: stretch;
     flex-shrink: 0;
     border-radius: rem(8) 0 0 rem(8);
@@ -116,7 +116,7 @@
   @include respond-to(sm) {
     border-radius: rem(12);
     .imageContainer {
-      width: 60px;
+      width: 80px;
       border-radius: rem(12) 0 0 rem(12);
     }
     .eventInfo {
@@ -156,4 +156,3 @@
     }
   }
 }
-

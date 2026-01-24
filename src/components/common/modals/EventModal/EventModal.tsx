@@ -2,15 +2,14 @@
 import React from "react";
 import BaseModal from "@/components/common/modals/BaseModal/BaseModal";
 import EventCard from "@/components/common/events/EventCard/EventCard";
-import EventSchedule from "@/components/eventProfile/EventSchedule/EventSchedule";
+
 import UsersListXScroll from "@/components/common/users/UsersListXScroll";
 import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
 import { EventPopulated } from "@/types/place/event";
 import { PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
-import { PartnershipPopulated } from "@/types/partnerships";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import styles from "./EventModal.module.scss";
+import EventSchedule from "@/components/eventProfile/EventSchedule";
 
 export interface EventModalProps {
   isOpen: boolean;
@@ -18,6 +17,7 @@ export interface EventModalProps {
   event: EventPopulated;
   place?: PlacePopulated;
   user?: UserPopulated;
+  isContentLoading?: boolean;
 }
 
 const EventModal: React.FC<EventModalProps> = ({
@@ -26,6 +26,7 @@ const EventModal: React.FC<EventModalProps> = ({
   event,
   place,
   user,
+  isContentLoading = false,
 }) => {
   const placeId =
     place?._id || (typeof event.place === "object" ? event.place?._id : null);
@@ -36,19 +37,29 @@ const EventModal: React.FC<EventModalProps> = ({
     "event",
     { onlyAccepted: "true" }
   );
-  console.log(partnerships);
+
+  const users = partnerships.map((partnership) => {
+    return {
+      _id: partnership.collaborator._id,
+      name: partnership.collaborator.username,
+      image: partnership.collaborator.image?.urls?.thumbnail,
+      category: partnership.collaborator.userCategories?.[0]?.name,
+    };
+  });
+
   const handleClose = () => {
     onClose();
   };
+
   return (
     <BaseModal
       isOpen={isOpen}
       onClose={handleClose}
-      title=""
+      title={event.name}
       primaryButtonLabel="Fermer"
       onPrimaryAction={handleClose}
-      primaryButtonType="button"
-      secondaryButtonLabel={undefined}
+      withFooter={false}
+      isContentLoading={partnershipsLoading || isContentLoading}
     >
       <div className={styles.eventModalContent}>
         <div className={styles.eventCardContainer}>
@@ -60,40 +71,18 @@ const EventModal: React.FC<EventModalProps> = ({
           />
         </div>
 
-        {partnershipsLoading ? (
-          <LoadingBar />
-        ) : (
+        {partnerships.length > 0 ? (
           <>
-            {(() => {
-              if (partnerships.length === 0) return null;
-
-              const users = (partnerships as any[]).map((partnership) => {
-                const collaborator = partnership.collaborator;
-                return {
-                  _id: collaborator._id,
-                  name: collaborator.username,
-                  image: collaborator.image?.urls?.thumbnail,
-                  category: collaborator.userCategories?.[0]?.name,
-                };
-              });
-
-              return (
-                <UsersListXScroll
-                  users={users}
-                  title="Participants"
-                  showCategory={true}
-                />
-              );
-            })()}
-
+            <UsersListXScroll
+              users={users}
+              title="Participants"
+              showCategory={true}
+            />
             {event.schedule && event.schedule.length > 0 && (
-              <EventSchedule
-                schedule={event.schedule}
-                partnerships={partnerships as PartnershipPopulated[]}
-              />
+              <EventSchedule schedule={event.schedule} users={users} />
             )}
           </>
-        )}
+        ) : null}
       </div>
     </BaseModal>
   );

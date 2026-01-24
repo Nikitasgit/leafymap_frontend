@@ -7,29 +7,30 @@
   margin-top: 0;
   border-top: 1px solid $grey-200;
   padding-top: spacing(0.75);
-  
+
   .sectionTitle {
     font-size: rem(14);
     font-weight: 500;
     color: $grey-700;
     margin: 0 0 spacing(0.5) 0;
     width: 100%;
-    
+
     @include respond-to(sm) {
       font-size: rem(15);
     }
   }
-  
+
   .scheduleList {
     margin-top: spacing(0.5);
     @include flex(column, flex-start, flex-start, spacing(1));
     .period {
       border-radius: rem(6);
+      background-color: $grey-50;
       width: 100%;
-      padding: spacing(0.75) 0;
+      padding: spacing(0.75);
       border: none;
       .periodDates {
-        @include flex(row, flex-start, center, spacing(0.75));
+        @include flex(row, flex-start, center, spacing(0.5));
         .dateItem {
           @include flex(row, flex-start, center, spacing(0.5));
           .dateLabel {
@@ -51,39 +52,39 @@
           width: 100%;
           border-top: 1px solid $grey-200;
           padding-top: spacing(0.75);
+          padding-bottom: spacing(0.5);
+
           .timeSlotHeader {
             @include flex(row, flex-start, center, spacing(0.5));
+            margin-bottom: spacing(0.5);
+
             .timeSlotTime {
               @include flex(row, flex-start, center, spacing(0.5));
-              color: $grey-500;
+              color: $grey-600;
+
+              svg {
+                flex-shrink: 0;
+              }
             }
+
             .timeRange {
               font-weight: 600;
               font-size: rem(12);
+              color: $grey-700;
             }
           }
+
           .timeSlotTitle {
             font-size: rem(12);
-            font-weight: 600;
+            font-weight: 500;
+            color: $grey-700;
+            margin: 0;
           }
           .participantsList {
-            @include flex(row, flex-start, center, spacing(0.5));
+            @include flex(row, flex-start, flex-start, spacing(0.5));
             flex-wrap: wrap;
-            margin-top: spacing(0.5);
-            .participant {
-              border-radius: rem(4);
-              padding: spacing(0.5);
-              background: $grey-50;
-              border: 1px solid $grey-200;
-              @include flex(row, flex-start, center, spacing(0.5));
-              .participantImage {
-                border-radius: 50%;
-              }
-              .participantName {
-                font-size: rem(12);
-                font-weight: 500;
-              }
-            }
+            margin-top: spacing(0.75);
+            gap: spacing(0.5);
           }
         }
       }
@@ -94,9 +95,7 @@
       gap: spacing(1.5);
       .period {
         border-radius: rem(8);
-        padding: spacing(1) 0;
         .periodDates {
-          gap: spacing(1);
           .dateItem {
             gap: spacing(0.75);
             .dateLabel {
@@ -122,12 +121,7 @@
             }
             .participantsList {
               gap: spacing(0.75);
-              .participant {
-                padding: spacing(0.75);
-                .participantName {
-                  font-size: rem(13);
-                }
-              }
+              margin-top: spacing(1);
             }
           }
         }
@@ -138,18 +132,12 @@
     .scheduleList {
       gap: spacing(2);
       .period {
-        padding: spacing(1.5) 0;
         .timeSlotsList {
           gap: spacing(1);
           .timeSlot {
             .participantsList {
               gap: spacing(1);
-              .participant {
-                padding: spacing(1);
-                .participantName {
-                  font-size: rem(14);
-                }
-              }
+              margin-top: spacing(1.25);
             }
           }
         }

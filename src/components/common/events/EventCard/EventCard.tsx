@@ -37,8 +37,8 @@ const EventCard: React.FC<EventCardProps> = ({
         <Image
           src={event.image?.urls?.thumbnail || eventDefaultsSvg}
           alt={event.name}
-          width={60}
-          height={60}
+          width={80}
+          height={80}
           className={styles.placeImage}
         />
       </div>

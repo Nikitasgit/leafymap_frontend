@@ -22,39 +22,34 @@ const PartnershipCard = ({
 }: PartnershipCardProps) => {
   const router = useRouter();
 
-  const handleIconClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleButtonClick = () => {
     router.push(`/users/${user._id}`);
   };
 
   return (
     <div className={styles.card}>
+      <button
+        className={styles.iconButton}
+        onClick={handleButtonClick}
+        aria-label={`Voir le profil de ${user.name}`}
+        type="button"
+      >
+        <ExternalLink size={12} />
+      </button>
       <div className={styles.imageContainer}>
         <Image
           src={user.image || creatorDefaultsSvg}
           alt={user.name || "Créateur"}
-          width={50}
-          height={50}
+          width={60}
+          height={60}
           className={styles.image}
           draggable={false}
         />
       </div>
-      <div className={styles.info}>
-        <div className={styles.nameRow}>
-          <h4 className={styles.name}>blablablablablablablabla</h4>
-          <button
-            className={styles.iconButton}
-            onClick={handleIconClick}
-            aria-label={`Voir le profil de ${user.name}`}
-            type="button"
-          >
-            <ExternalLink size={14} />
-          </button>
-        </div>
-        {showCategory && user.category && user.category && (
-          <CreatorCategoryBadge categoryName={user.category} />
-        )}
-      </div>
+      <h4 className={styles.name}>{user.name}</h4>
+      {showCategory && user.category && (
+        <CreatorCategoryBadge categoryName={user.category} />
+      )}
     </div>
   );
 };

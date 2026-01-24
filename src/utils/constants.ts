@@ -15,3 +15,10 @@ export const USER_MARKER = {
   isSelected: true,
   _id: "user-marker",
 };
+
+// Event constants
+
+export const ACTIVE_LIFECYCLE_STATUSES: ("upcoming" | "ongoing")[] = [
+  "upcoming",
+  "ongoing",
+];

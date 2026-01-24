@@ -1,6 +1,7 @@
 import styles from "./UsersListXScroll.module.scss";
 import { useRef, useState, MouseEvent, useEffect } from "react";
 import PartnershipCard from "@/components/common/partnerships/PartnershipCard/PartnershipCard";
+import LoadingSpinner from "../../loading/LoadingSpinner";
 
 export interface UserItem {
   _id: string;
@@ -21,9 +22,11 @@ export interface UsersListXScrollProps {
   title?: string | React.ReactNode;
   showTitle?: boolean;
   showCategory?: boolean;
+  loading?: boolean;
 }
 
 const UsersListXScroll = ({
+  loading = false,
   users,
   title,
   showTitle = true,
@@ -148,26 +151,33 @@ const UsersListXScroll = ({
               : "default",
           }}
         >
-          {users.map((user) => {
-            // Convertir UserItem au format attendu par PartnershipCard
-            const imageUrl =
-              typeof user.image === "string"
-                ? user.image
-                : user.image?.urls?.thumbnail || "";
+          {loading ? (
+            <LoadingSpinner />
+          ) : (
+            users.map((user) => {
+              // Convertir UserItem au format attendu par PartnershipCard
+              const imageUrl =
+                typeof user.image === "string"
+                  ? user.image
+                  : user.image?.urls?.thumbnail || "";
 
-            const cardUser = {
-              _id: user._id,
-              name: user.name || user.username || "Utilisateur",
-              image: imageUrl,
-              category: user.category || "",
-            };
+              const cardUser = {
+                _id: user._id,
+                name: user.name || user.username || "Utilisateur",
+                image: imageUrl,
+                category: user.category || "",
+              };
 
-            return (
-              <div key={user._id} className={styles.cardWrapper}>
-                <PartnershipCard user={cardUser} showCategory={showCategory} />
-              </div>
-            );
-          })}
+              return (
+                <div key={user._id} className={styles.cardWrapper}>
+                  <PartnershipCard
+                    user={cardUser}
+                    showCategory={showCategory}
+                  />
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
     </section>
