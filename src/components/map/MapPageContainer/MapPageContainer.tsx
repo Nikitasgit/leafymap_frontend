@@ -10,7 +10,7 @@ import MapCardContainer from "@/components/map/MapCardContainer";
 import { useAppSelector } from "@/store";
 import { selectPlaceCategories } from "@/store/appSlice";
 import { SearchResult } from "./MapPageContainer.types";
-import { usePlacesInView } from "@/hooks/usePlacesInView";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 const defaultFilters: MapFilters = {
   placeType: "all",
@@ -20,13 +20,23 @@ const defaultFilters: MapFilters = {
 };
 
 const MapPageContainer = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const initialCreatorId = searchParams.get("creator");
   const [selectedItem, setSelectedItem] = useState<{
     id: string;
     type: "creator" | "filters" | null;
-  }>({ id: "", type: null });
+  }>(
+    initialCreatorId
+      ? { id: initialCreatorId, type: "creator" }
+      : { id: "", type: null }
+  );
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState<MapFilters>(defaultFilters);
   const mapRef = useRef<ExtendedMapRef | null>(null);
+  const isUpdatingFromUrl = useRef(false);
   const placeCategoriesIds = useAppSelector(selectPlaceCategories).map(
     (category) => category._id
   );
@@ -53,6 +63,47 @@ const MapPageContainer = () => {
       }));
     }
   }, [placeCategoriesIds, filters.placeCategories]);
+
+  useEffect(() => {
+    const urlCreatorId = searchParams.get("creator");
+    const currentCreatorId =
+      selectedItem.type === "creator" ? selectedItem.id : null;
+    if (urlCreatorId !== currentCreatorId) {
+      isUpdatingFromUrl.current = true;
+      if (urlCreatorId) {
+        setSelectedItem({ id: urlCreatorId, type: "creator" });
+      } else {
+        setSelectedItem({ id: "", type: null });
+      }
+      setTimeout(() => {
+        isUpdatingFromUrl.current = false;
+      }, 0);
+    }
+  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (isUpdatingFromUrl.current) {
+      return;
+    }
+    const currentCreatorId = searchParams.get("creator");
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (selectedItem.type === "creator" && selectedItem.id) {
+      if (currentCreatorId !== selectedItem.id) {
+        params.set("creator", selectedItem.id);
+        const newUrl = `${pathname}?${params.toString()}`;
+        router.replace(newUrl, { scroll: false });
+      }
+    } else {
+      if (currentCreatorId) {
+        params.delete("creator");
+        const newUrl = params.toString()
+          ? `${pathname}?${params.toString()}`
+          : pathname;
+        router.replace(newUrl, { scroll: false });
+      }
+    }
+  }, [selectedItem, pathname, router, searchParams]);
 
   return (
     <div className={styles.mapPage}>

@@ -11,14 +11,14 @@ export interface Partnership {
     _id: string;
     username?: string;
     name?: string;
-    image?: string | Image;
+    image?: Image;
     categories?: string[];
   };
   collaborator: {
     _id: string;
-    name?: string;
-    image?: string | Image;
-    categories?: string[] | UserCategory[];
+    username?: string;
+    image?: Image;
+    userCategories?: UserCategory[];
   };
   status: "pending" | "accepted" | "refused";
   type?: "place" | "event";
@@ -30,8 +30,8 @@ export interface PartnershipPopulated extends Partnership {
   event: EventPopulated;
   collaborator: {
     _id: string;
-    name?: string;
+    username?: string;
     image?: Image;
-    categories: UserCategory[];
+    userCategories: UserCategory[];
   };
 }

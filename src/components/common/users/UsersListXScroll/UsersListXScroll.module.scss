@@ -15,12 +15,12 @@
   color: $grey-700;
   margin: 0 0 spacing(0.5) 0;
   width: 100%;
-  
+
   b {
     font-weight: 600;
     color: $grey-800;
   }
-  
+
   @include respond-to(sm) {
     font-size: rem(15);
   }
@@ -55,7 +55,7 @@
   }
 
   @include respond-to(sm) {
-    gap: spacing(0.5);
+    gap: spacing(0.75);
   }
 }
 
@@ -88,4 +88,3 @@
   -moz-user-select: none;
   -ms-user-select: none;
 }
-

@@ -1,9 +1,14 @@
+import { useState } from "react";
 import styles from "./MapCreatorCardPartnerships.module.scss";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import EventCard from "@/components/common/events/EventCard";
 import { PlaceCard } from "@/components/userProfile/PlacesSection/PlaceCard";
 import { PartnershipPopulated } from "@/types/partnerships";
 import { UserPopulated } from "@/types/user";
+import EventModal from "@/components/common/modals/EventModal/EventModal";
+import { useEvent } from "@/hooks/useEvent";
+import { EventPopulated } from "@/types/place/event";
+import { PlacePopulated } from "@/types/place";
 
 export interface MapCreatorCardPartnershipsProps {
   eventPartnerships: PartnershipPopulated[];
@@ -21,6 +26,35 @@ const MapCreatorCardPartnerships = ({
   username,
   onMapButtonClick,
 }: MapCreatorCardPartnershipsProps) => {
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState<PlacePopulated | null>(
+    null
+  );
+  const [selectedUser, setSelectedUser] = useState<UserPopulated | null>(null);
+
+  const { event: selectedEvent, isLoading: isLoadingEvent } = useEvent(
+    selectedEventId || ""
+  );
+
+  const handleEventClick = (
+    eventId: string,
+    place: PlacePopulated,
+    user: UserPopulated | undefined
+  ) => {
+    setSelectedEventId(eventId);
+    setSelectedPlace(place);
+    setSelectedUser(user || null);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedEventId(null);
+    setSelectedPlace(null);
+    setSelectedUser(null);
+  };
+
   if (eventPartnerships.length === 0 && placePartnerships.length === 0) {
     return null;
   }
@@ -41,12 +75,26 @@ const MapCreatorCardPartnerships = ({
 
             if (!event || !placeItem) return null;
 
+            const placeUser =
+              typeof placeItem.user === "object"
+                ? (placeItem.user as UserPopulated)
+                : undefined;
+
             return (
-              <EventCard
+              <div
                 key={partnership._id}
-                event={event}
-                place={placeItem}
-              />
+                onClick={() =>
+                  handleEventClick(event._id, placeItem, placeUser)
+                }
+                style={{ cursor: "pointer" }}
+              >
+                <EventCard
+                  event={event}
+                  place={placeItem}
+                  user={placeUser}
+                  clickable={false}
+                />
+              </div>
             );
           })}
         </section>
@@ -80,6 +128,16 @@ const MapCreatorCardPartnerships = ({
             );
           })}
         </section>
+      )}
+
+      {isModalOpen && selectedEvent && !isLoadingEvent && (
+        <EventModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          event={selectedEvent as EventPopulated}
+          place={selectedPlace || undefined}
+          user={selectedUser || undefined}
+        />
       )}
     </div>
   );

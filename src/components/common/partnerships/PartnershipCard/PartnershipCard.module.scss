@@ -3,30 +3,52 @@
 @use "@/styles/abstracts/mixins" as *;
 
 .card {
-  @include flex(row, flex-start, center, spacing(1));
-  padding: spacing(1);
-  background-color: $white;
-  border: none;
-  border-radius: rem(8);
-  width: fit-content;
-  min-width: 200px;
-  max-width: 300px;
+  @include flex(column, flex-start, center, spacing(0.5));
   position: relative;
+  width: 100px;
+  max-width: 100px;
+  padding: spacing(0.75) spacing(0.5);
+  background-color: $white;
+  border-radius: rem(8);
   user-select: none;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+
+  .iconButton {
+    position: absolute;
+    top: spacing(0.5);
+    right: spacing(0.5);
+    background: transparent;
+    border: none;
+    padding: spacing(0.25);
+    cursor: pointer;
+    color: $grey-600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: rem(4);
+    transition: all 0.2s ease;
+    z-index: 1;
+
+    &:hover {
+      color: $grey-800;
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    &:active {
+      transform: scale(0.9);
+    }
+  }
 
   .imageContainer {
     position: relative;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     flex-shrink: 0;
     overflow: hidden;
     border-radius: 50%;
     user-select: none;
     -webkit-user-drag: none;
-    
+
     .image {
       border-radius: 50%;
       object-fit: cover;
@@ -38,81 +60,29 @@
     }
   }
 
-  .info {
-    @include flex(column, flex-start, flex-start, spacing(0.75));
-    flex: 1;
-    min-width: 0;
-    max-width: calc(100% - 60px); // Espace pour l'image + gap
-
-    .nameRow {
-      @include flex(row, space-between, center, spacing(0.5));
-      width: 100%;
-      min-width: 0;
-    }
-
-    .name {
-      color: $grey-700;
-      font-weight: 600;
-      font-size: rem(14);
-      margin: 0;
-      text-align: left;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      flex: 1;
-      min-width: 100px; // Largeur minimale pour le nom
-      max-width: calc(100% - 30px); // Espace pour le bouton
-      user-select: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-    }
-  }
-
-  .iconButton {
-    background: transparent;
-    border: none;
-    border-radius: rem(4);
-    padding: spacing(0.25);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: $grey-600;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-
-    &:hover {
-      color: $grey-800;
-      background: rgba(0, 0, 0, 0.05);
-    }
-
-    &:active {
-      transform: scale(0.95);
-    }
+  .name {
+    color: $grey-700;
+    font-weight: 600;
+    font-size: rem(12);
+    margin: 0;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    line-height: 1.3;
   }
 
   @include respond-to(sm) {
-    padding: spacing(1);
-    gap: spacing(1);
-    
+    padding: spacing(1) spacing(0.5);
+
     .imageContainer {
-      width: 55px;
-      height: 55px;
-    }
-    
-    .info {
-      gap: spacing(1);
-      max-width: calc(100% - 70px); // Espace pour l'image + gap sur mobile
-
-      .name {
-        font-size: rem(15);
-      }
+      width: 65px;
+      height: 65px;
     }
 
-    .iconButton {
-      padding: spacing(0.375);
+    .name {
+      font-size: rem(13);
     }
   }
 }
-
