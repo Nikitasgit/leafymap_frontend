@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ExternalLink } from "lucide-react";
 import styles from "./PartnershipCard.module.scss";
 import creatorDefaultsSvg from "@public/images/creator_default.svg";
 import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge";
+import { PartnershipPopulated } from "@/types/partnerships";
 
 interface PartnershipCardProps {
   user: {
@@ -22,13 +22,17 @@ const PartnershipCard = ({
 }: PartnershipCardProps) => {
   const router = useRouter();
 
-  const handleIconClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleClick = () => {
     router.push(`/users/${user._id}`);
   };
 
   return (
-    <div className={styles.card}>
+    <div
+      className={styles.card}
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+    >
       <div className={styles.imageContainer}>
         <Image
           src={user.image || creatorDefaultsSvg}
@@ -36,21 +40,10 @@ const PartnershipCard = ({
           width={50}
           height={50}
           className={styles.image}
-          draggable={false}
         />
       </div>
       <div className={styles.info}>
-        <div className={styles.nameRow}>
-          <h4 className={styles.name}>blablablablablablablabla</h4>
-          <button
-            className={styles.iconButton}
-            onClick={handleIconClick}
-            aria-label={`Voir le profil de ${user.name}`}
-            type="button"
-          >
-            <ExternalLink size={14} />
-          </button>
-        </div>
+        <h4 className={styles.name}>{user.name}</h4>
         {showCategory && user.category && user.category && (
           <CreatorCategoryBadge categoryName={user.category} />
         )}
