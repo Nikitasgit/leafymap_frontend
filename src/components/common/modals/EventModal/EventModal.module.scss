@@ -4,12 +4,9 @@
 
 .eventModalContent {
   @include flex(column, flex-start, stretch, spacing(0.5));
-  max-height: 70vh;
-  overflow-y: auto;
 
   .eventCardContainer {
     width: 100%;
     margin-bottom: spacing(0.25);
   }
 }
-

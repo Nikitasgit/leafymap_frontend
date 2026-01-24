@@ -1,30 +1,21 @@
 "use client";
-import Image from "next/image";
 import { Clock } from "lucide-react";
 import styles from "./EventSchedule.module.scss";
 import { formatDateShort, sortPeriodsByStartDate } from "@/utils/dates";
-import { Collaborator } from "@/types/place/collaborators";
-import { EventScheduleProps } from "./EventSchedule.types";
-import creatorDefaultsSvg from "@public/images/creator_default.svg";
 
-const EventSchedule: React.FC<EventScheduleProps> = ({
-  schedule,
-  partnerships,
-}) => {
+import { EventScheduleProps } from "./EventSchedule.types";
+import ParticipantMiniCard from "./ParticipantMiniCard";
+import { Collaborator } from "@/types/place/collaborators";
+
+const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
   const sortedSchedule = sortPeriodsByStartDate(schedule);
 
-  const isCollaboratorInPartnerships = (collaboratorId: string): boolean => {
-    return partnerships.some(
-      (partnership) =>
-        partnership.collaborator._id === collaboratorId &&
-        partnership.status === "accepted"
-    );
-  };
-
-  const getFilteredCollaborators = (collaborators: Collaborator[]) => {
-    return collaborators.filter((collaborator) =>
-      isCollaboratorInPartnerships(collaborator._id)
-    );
+  const getCollaborator = (
+    collaborator: Collaborator | string
+  ): EventScheduleProps["users"][0] | undefined => {
+    const collaboratorId =
+      typeof collaborator === "string" ? collaborator : collaborator._id;
+    return users.find((user) => user._id === collaboratorId);
   };
 
   return (
@@ -67,38 +58,20 @@ const EventSchedule: React.FC<EventScheduleProps> = ({
 
                       <p className={styles.timeSlotTitle}>- {timeSlot.title}</p>
                     </div>
-                    {(() => {
-                      const filteredCollaborators = getFilteredCollaborators(
-                        timeSlot.collaborators || []
-                      );
-                      return (
-                        filteredCollaborators.length > 0 && (
-                          <div className={styles.participantsList}>
-                            {filteredCollaborators.map((collaborator) => (
-                              <div
-                                key={collaborator._id}
-                                className={styles.participant}
-                              >
-                                <Image
-                                  src={
-                                    (collaborator.image as string) ||
-                                    creatorDefaultsSvg
-                                  }
-                                  alt={collaborator.name || "Participant"}
-                                  className={styles.participantImage}
-                                  width={24}
-                                  height={24}
-                                />
-
-                                <p className={styles.participantName}>
-                                  {collaborator.name}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
+                    <div className={styles.participantsList}>
+                      {timeSlot.collaborators
+                        .map((collaborator) => getCollaborator(collaborator))
+                        .filter(
+                          (user): user is EventScheduleProps["users"][0] =>
+                            user !== undefined
                         )
-                      );
-                    })()}
+                        .map((user) => (
+                          <ParticipantMiniCard
+                            key={user._id}
+                            collaborator={user}
+                          />
+                        ))}
+                    </div>
                   </div>
                 ))}
               </div>

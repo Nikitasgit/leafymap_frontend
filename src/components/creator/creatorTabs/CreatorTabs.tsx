@@ -5,7 +5,8 @@ import { FileText, Star, Image as ImageIcon, Calendar } from "lucide-react";
 import { Place, PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
 import { usePlaceEvents } from "@/hooks/usePlaceEvents";
-import PresentationTab from "@/components/map/PresentationTab";
+import { ACTIVE_LIFECYCLE_STATUSES } from "@/utils/constants";
+import PresentationTab from "@/components/creator/PresentationTab";
 import EventsTab from "@/components/common/events/EventsTab";
 import ReviewsTab from "@/components/reviews/ReviewsTab/ReviewsTab";
 import GallerySection from "@/components/userProfile/GallerySection/GallerySection";
@@ -39,12 +40,12 @@ const CreatorTabs = ({
 }: CreatorTabsProps) => {
   const [internalActiveTab, setInternalActiveTab] = useState("presentation");
   const { events, isLoading: isLoadingEvents } = usePlaceEvents(
-    place?._id || null
+    place?._id || null,
+    ACTIVE_LIFECYCLE_STATUSES
   );
 
   const activeTab = controlledActiveTab ?? internalActiveTab;
   const setActiveTab = onTabChange ?? setInternalActiveTab;
-
   useEffect(() => {
     if (!place && (activeTab === "reviews" || activeTab === "events")) {
       setActiveTab("presentation");
@@ -87,10 +88,10 @@ const CreatorTabs = ({
       case "events":
         return place?._id && user.username ? (
           <EventsTab
-            placeId={place._id}
             username={user.username}
             place={place as PlacePopulated}
             user={user}
+            events={events}
           />
         ) : null;
       case "reviews":

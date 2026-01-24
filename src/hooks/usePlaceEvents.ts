@@ -4,7 +4,10 @@ import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { EventPopulated } from "@/types/place/event";
 
-export const usePlaceEvents = (placeId: string | null) => {
+export const usePlaceEvents = (
+  placeId: string | null,
+  lifecycleStatus?: ("upcoming" | "ongoing" | "completed" | "unvalid")[]
+) => {
   const [events, setEvents] = useState<EventPopulated[]>([]);
   const { isLoading, withLoading, stopLoading } = useLoading(true);
   const { showError } = useToast();
@@ -12,7 +15,11 @@ export const usePlaceEvents = (placeId: string | null) => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/events?placeId=${placeId}`;
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/events?placeId=${placeId}`;
+
+        if (lifecycleStatus && lifecycleStatus.length > 0) {
+          url += `&lifecycleStatus=${lifecycleStatus.join(",")}`;
+        }
 
         const response = await axios.get(url);
 
@@ -38,7 +45,7 @@ export const usePlaceEvents = (placeId: string | null) => {
       setEvents([]);
       stopLoading();
     }
-  }, [placeId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placeId, lifecycleStatus]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { events, isLoading };
 };

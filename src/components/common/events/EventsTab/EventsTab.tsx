@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import styles from "./EventsTab.module.scss";
-import { usePlaceEvents } from "@/hooks/usePlaceEvents";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import EventCard from "@/components/common/events/EventCard";
 import EventModal from "@/components/common/modals/EventModal";
@@ -10,14 +9,13 @@ import { PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
 
 export interface EventsTabProps {
-  placeId: string;
   username: string;
   place?: PlacePopulated;
   user?: UserPopulated;
+  events: EventPopulated[];
 }
 
-const EventsTab = ({ placeId, username, place, user }: EventsTabProps) => {
-  const { events, isLoading } = usePlaceEvents(placeId);
+const EventsTab = ({ username, place, user, events }: EventsTabProps) => {
   const [selectedEvent, setSelectedEvent] = useState<EventPopulated | null>(
     null
   );
@@ -33,7 +31,7 @@ const EventsTab = ({ placeId, username, place, user }: EventsTabProps) => {
     setSelectedEvent(null);
   };
 
-  if (isLoading || events.length === 0) {
+  if (events.length === 0) {
     return null;
   }
 

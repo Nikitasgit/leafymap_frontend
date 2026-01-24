@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { X } from "lucide-react";
 import Button from "@/components/common/buttons/Button/Button";
 import styles from "./BaseModal.module.scss";
+import LoadingSpinner from "../../loading/LoadingSpinner";
 
 interface BaseModalProps {
   isOpen: boolean;
@@ -13,8 +14,10 @@ interface BaseModalProps {
   onPrimaryAction: (e: React.FormEvent) => void | Promise<void>;
   onSecondaryAction?: () => void;
   isPrimaryDisabled?: boolean;
-  isLoading?: boolean;
+  isSubmitLoading?: boolean;
+  isContentLoading?: boolean;
   primaryButtonType?: "button" | "submit";
+  withFooter?: boolean;
 }
 
 const BaseModal: React.FC<BaseModalProps> = ({
@@ -27,8 +30,10 @@ const BaseModal: React.FC<BaseModalProps> = ({
   onPrimaryAction,
   onSecondaryAction,
   isPrimaryDisabled = false,
-  isLoading = false,
+  isSubmitLoading = false,
   primaryButtonType = "submit",
+  isContentLoading = false,
+  withFooter = true,
 }) => {
   useEffect(() => {
     if (isOpen) {
@@ -84,37 +89,45 @@ const BaseModal: React.FC<BaseModalProps> = ({
   return (
     <div className={styles.modal} onClick={handleBackdropClick}>
       <div className={styles.modalContent}>
-        <button
-          className={styles.closeButton}
-          onClick={onClose}
-          aria-label="Fermer la modale"
-        >
-          <X size={24} />
-        </button>
-        <form onSubmit={onPrimaryAction} className={styles.form}>
-          <h2 className={styles.title}>{title}</h2>
-          <div className={styles.content}>{children}</div>
-          <div className={styles.actions}>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={handleSecondaryClick}
-              disabled={isLoading}
-            >
-              {secondaryButtonLabel}
-            </Button>
-            <Button
-              type={primaryButtonType}
-              variant="primary"
-              disabled={isPrimaryDisabled || isLoading}
-              onClick={
-                primaryButtonType === "button" ? handlePrimaryClick : undefined
-              }
-            >
-              {isLoading ? "Chargement..." : primaryButtonLabel}
-            </Button>
+        <div className={styles.modalContentHeader}>
+          <h2 className={styles.title}>{title}</h2>{" "}
+          <button
+            className={styles.closeButton}
+            onClick={onClose}
+            aria-label="Fermer la modale"
+          >
+            <X size={24} />
+          </button>
+        </div>
+        <div className={styles.modalContentBody}>
+          {isContentLoading ? <LoadingSpinner /> : children}
+        </div>
+        {withFooter && (
+          <div className={styles.modalFooter}>
+            <div className={styles.modalFooterButtons}>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={handleSecondaryClick}
+                disabled={isSubmitLoading}
+              >
+                {secondaryButtonLabel}
+              </Button>
+              <Button
+                type={primaryButtonType}
+                variant="primary"
+                disabled={isPrimaryDisabled || isSubmitLoading}
+                onClick={
+                  primaryButtonType === "button"
+                    ? handlePrimaryClick
+                    : undefined
+                }
+              >
+                {isSubmitLoading ? "Chargement..." : primaryButtonLabel}
+              </Button>
+            </div>
           </div>
-        </form>
+        )}
       </div>
     </div>
   );
