@@ -5,6 +5,7 @@ import { LucideIcon } from "lucide-react";
 import { User } from "@/types/user";
 import SignOutButton from "../../common/buttons/SignOutButton";
 import LoadingBar from "../../common/loading/LoadingBar/LoadingBar";
+import NavbarNotificationBadge from "../../common/badges/NotificationBadge/NotificationBadge";
 import styles from "./NavbarMenuDesktop.module.scss";
 
 interface NavItem {
@@ -21,6 +22,7 @@ interface NavbarMenuDesktopProps {
   user: User | null;
   logout: () => Promise<void>;
   t: (key: string) => string;
+  unreadMessagesCount: number;
 }
 
 export default function NavbarMenuDesktop({
@@ -30,13 +32,16 @@ export default function NavbarMenuDesktop({
   user,
   logout,
   t,
+  unreadMessagesCount,
 }: NavbarMenuDesktopProps) {
+
   return (
     <div className={styles.container}>
       <ul className={styles.navLinks} role="menubar">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
+          const isMessages = item.href === "/messages";
           if (!item.display) return null;
           return (
             <li key={item.href} role="none">
@@ -45,8 +50,13 @@ export default function NavbarMenuDesktop({
                 className={`${styles.navLink} ${isActive ? styles.active : ""}`}
                 role="menuitem"
               >
-                <Icon className={styles.navIcon} aria-hidden="true" />
-                <span>{item.label}</span>
+                <div className={styles.iconContainer}>
+                  <Icon className={styles.navIcon} aria-hidden="true" />
+                 
+                </div>
+                <span>{item.label}</span> {isMessages && (
+                    <NavbarNotificationBadge count={unreadMessagesCount} absolutePosition/>
+                  )}
               </Link>
             </li>
           );

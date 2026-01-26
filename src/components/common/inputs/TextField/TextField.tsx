@@ -7,6 +7,9 @@ type TextfieldProps = {
   value: string;
   onFocus?: () => void;
   onClick?: () => void;
+  onKeyDown?: (
+    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   onChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -32,6 +35,7 @@ const TextField: React.FC<TextfieldProps> = ({
   onChange,
   onFocus,
   onClick,
+  onKeyDown,
   type = "text",
   placeholder = "",
   readOnly = false,
@@ -71,6 +75,7 @@ const TextField: React.FC<TextfieldProps> = ({
             onChange={onChange}
             onFocus={onFocus}
             onClick={onClick}
+            onKeyDown={onKeyDown}
             rows={rows}
             maxLength={maxLength}
             className={`${error ? styles.error : ""} ${
@@ -101,6 +106,7 @@ const TextField: React.FC<TextfieldProps> = ({
           required={required}
           onFocus={onFocus}
           onClick={onClick}
+          onKeyDown={onKeyDown}
           maxLength={maxLength}
           className={`${error ? styles.error : ""} ${
             fullWidth ? styles.fullWidth : ""

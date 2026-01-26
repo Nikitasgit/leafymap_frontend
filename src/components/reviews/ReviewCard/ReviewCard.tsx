@@ -11,7 +11,7 @@ import useDeleteComment from "@/hooks/useDeleteComment";
 import { useAuth } from "@/hooks/useAuth";
 import ActionButtons from "@/components/common/actions/ActionButtons";
 import styles from "./ReviewCard.module.scss";
-import { formatDate } from "@/utils/formatDate";
+import DisplayPublishingDate from "@/components/common/date/DisplayPublishingDate/DisplayPublishingDate";
 
 interface ReviewCardProps {
   review: ReviewPopulated;
@@ -125,15 +125,16 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           )}
           <div className={styles.authorDetails}>
             <span className={styles.authorName}>{getDisplayName(author)}</span>
-            <span className={styles.reviewDate}>
-              {review.createdAt
-                ? formatDate(
-                    typeof review.createdAt === "string"
-                      ? review.createdAt
-                      : review.createdAt
-                  )
-                : "Date inconnue"}
-            </span>
+            {review.createdAt && (
+              <DisplayPublishingDate
+                date={
+                  typeof review.createdAt === "string"
+                    ? review.createdAt
+                    : review.createdAt
+                }
+                className={styles.reviewDate}
+              />
+            )}
           </div>
         </div>
         <div className={styles.ratingSection}>
@@ -224,15 +225,16 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                         <span className={styles.commentAuthorName}>
                           {getDisplayName(commentAuthor)}
                         </span>
-                        <span className={styles.commentDate}>
-                          {comment.createdAt
-                            ? formatDate(
-                                typeof comment.createdAt === "string"
-                                  ? comment.createdAt
-                                  : comment.createdAt
-                              )
-                            : "Date inconnue"}
-                        </span>
+                        {comment.createdAt && (
+                          <DisplayPublishingDate
+                            date={
+                              typeof comment.createdAt === "string"
+                                ? comment.createdAt
+                                : comment.createdAt
+                            }
+                            className={styles.commentDate}
+                          />
+                        )}
                         {isCommentAuthor && (
                           <ActionButtons
                             actions={[

@@ -34,9 +34,6 @@ export default function PartnershipMessage({
   const user = partnership.initiator as UserPopulated;
   return (
     <div className={styles.partnershipCard}>
-      <div className={styles.placeContainer}>
-        <PlaceCard place={partnership.place} user={user} />
-      </div>
       {partnership.type === "event" && event && (
         <div className={styles.eventContainer}>
           <EventCard event={event} user={user} place={partnership.place} />

@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import styles from "./BackButton.module.scss";
 import { useRouter } from "next/navigation";
 
-const BackButton = ( { path }: { path?: string } ) => {
+const BackButton = ( { path}: { path?: string } ) => {
   const router = useRouter();
 
   const handleBack = () => {

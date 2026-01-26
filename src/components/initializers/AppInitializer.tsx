@@ -6,6 +6,10 @@ import {
   selectPlaceCategories,
 } from "@/store/appSlice";
 import { fetchCurrentUser, selectAuth } from "@/store/authSlice";
+import {
+  fetchUserNotifications,
+  selectNotifications,
+} from "@/store/notificationSlice";
 import type { AppDispatch } from "@/store";
 
 export default function AppInitializer() {
@@ -13,6 +17,7 @@ export default function AppInitializer() {
   const { user } = useSelector(selectAuth);
   const userCategories = useSelector(selectUserCategories);
   const placeCategories = useSelector(selectPlaceCategories);
+  const { lastFetched } = useSelector(selectNotifications);
 
   useEffect(() => {
     if (!user) {
@@ -25,6 +30,12 @@ export default function AppInitializer() {
       dispatch(fetchCategories());
     }
   }, [dispatch, userCategories, placeCategories]);
+
+  useEffect(() => {
+    if (user && !lastFetched) {
+      dispatch(fetchUserNotifications());
+    }
+  }, [dispatch, user, lastFetched]);
 
   return null;
 }

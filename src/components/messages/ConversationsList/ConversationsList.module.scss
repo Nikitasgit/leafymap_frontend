@@ -1,0 +1,25 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.conversationsList {
+  width: 100%;
+  background: $white;
+  display: flex;
+  flex-direction: column;
+  border-radius: rem(8);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  .loading {
+    padding: spacing(2);
+    text-align: center;
+    color: $grey-600;
+    font-size: rem(14);
+  }
+
+  .icon {
+    width: rem(48);
+    height: rem(48);
+    color: $grey-400;
+  }
+}

@@ -1,0 +1,50 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.pageContainer {
+  height: 100%;
+  @include flex(column, flex-start, stretch, 0);
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: spacing(0.5);
+    background-color: $white;
+    @include flex(column, flex-start, stretch, 0);
+    height: 100%;
+    overflow: hidden;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .backButtonWrapper {
+    flex-shrink: 0;
+    margin-bottom: spacing(1);
+    align-self: flex-start;
+  }
+
+  .placeCardContainer {
+    border-bottom: 1px solid $grey-200;
+    padding-bottom: spacing(2);
+    flex-shrink: 0;
+  }
+
+  @include respond-to(sm) {
+    .container {
+      border-radius: 8px;
+    }
+  }
+
+  @include respond-to(md) {
+    padding: spacing(2);
+
+    .container {
+      padding: spacing(1.5);
+    }
+  }
+
+  @include respond-to(lg) {
+    padding: spacing(3);
+  }
+}

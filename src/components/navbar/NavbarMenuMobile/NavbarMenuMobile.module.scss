@@ -43,6 +43,19 @@
       }
     }
 
+    .iconContainer {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      height: fit-content;
+    }
+
+    .labelContainer {
+      @include flex(row, center, center, spacing(1));
+    }
+
     .icon {
       width: 20px;
       height: 20px;
@@ -90,6 +103,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

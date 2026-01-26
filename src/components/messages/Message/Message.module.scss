@@ -1,0 +1,150 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.messageContainer {
+  @include flex(row, flex-start, flex-end, spacing(0.75));
+  width: 100%;
+  margin-bottom: spacing(1);
+  padding: 0 spacing(1);
+
+  &.ownMessage {
+    justify-content: flex-end;
+  }
+
+  &.otherMessage {
+    justify-content: flex-start;
+  }
+
+  .avatarContainer {
+    flex-shrink: 0;
+  }
+
+  .avatar,
+  .avatarPlaceholder {
+    width: rem(32);
+    height: rem(32);
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .avatarPlaceholder {
+    background: $grey-200;
+    @include flex(row, center, center, 0);
+    color: $grey-600;
+    font-size: rem(14);
+    font-weight: 600;
+  }
+
+  .messageBubble {
+    max-width: 75%;
+    padding: spacing(0.75) spacing(1);
+    border-radius: rem(12);
+    position: relative;
+    @include flex(column, flex-start, stretch, spacing(0.25));
+
+    .partnershipBadge {
+      @include flex(row, flex-start, center, spacing(0.5));
+      font-size: rem(11);
+      font-weight: 600;
+      margin-bottom: spacing(0.5);
+      padding: spacing(0.25) spacing(0.5);
+      border-radius: rem(6);
+      background: rgba($white, 0.15);
+      width: fit-content;
+    }
+
+    .senderName {
+      font-size: rem(11);
+      font-weight: 600;
+      color: rgba($white, 0.9);
+      margin-bottom: rem(2);
+    }
+
+    .messageContent {
+      font-size: rem(14);
+      line-height: 1.4;
+      margin: 0;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+
+    .messageFooter {
+      @include flex(row, flex-end, center, spacing(0.25));
+      margin-top: rem(2);
+      align-self: flex-end;
+    }
+
+    .timestamp {
+      font-size: rem(10);
+      opacity: 0.8;
+    }
+  }
+}
+
+.messageContainer.ownMessage {
+  .messageBubble {
+    background: $primary-color;
+    color: $white;
+    border-bottom-right-radius: rem(4);
+
+    .senderName {
+      color: rgba($white, 0.9);
+    }
+
+    .timestamp {
+      color: rgba($white, 0.8);
+    }
+
+    .partnershipBadge {
+      color: rgba($white, 0.95);
+      background: rgba($white, 0.2);
+    }
+  }
+
+  &.partnershipMessage .messageBubble {
+    border: 2px solid rgba($white, 0.3);
+  }
+}
+
+.messageContainer.otherMessage {
+  .messageBubble {
+    background: $grey-100;
+    color: $grey-800;
+    border-bottom-left-radius: rem(4);
+
+    .senderName {
+      color: $grey-600;
+    }
+
+    .timestamp {
+      color: $grey-500;
+    }
+
+    .partnershipBadge {
+      color: $primary-color;
+      background: rgba($primary-color, 0.1);
+    }
+  }
+
+  &.partnershipMessage .messageBubble {
+    border: 2px solid rgba($primary-color, 0.3);
+  }
+}
+
+@include respond-to(sm) {
+  .messageContainer {
+    .messageBubble {
+      max-width: 70%;
+    }
+  }
+}
+
+@include respond-to(md) {
+  .messageContainer {
+    .messageBubble {
+      max-width: 65%;
+    }
+  }
+}

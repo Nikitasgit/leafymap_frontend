@@ -11,7 +11,7 @@ import creatorDefaultsSvg from "@public/images/creator_default.svg";
 
 const PlaceCard: React.FC<PlaceCardProps> = ({ place, actions, user }) => {
   const router = useRouter();
-
+console.log(user);
   return (
     <a
       className={styles.placeCard}

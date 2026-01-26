@@ -43,6 +43,15 @@
     }
   }
 
+  .iconContainer {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    height: fit-content;
+  }
+
   .navIcon {
     width: 18px;
     height: 18px;
@@ -99,6 +108,8 @@
     }
 
     .navLink {
+      display: block;
+
       span {
         display: inline;
       }
