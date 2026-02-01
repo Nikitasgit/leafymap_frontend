@@ -7,8 +7,11 @@ export interface Conversation {
   _id: string;
   participants: {
     _id: string;
-    username: string;
-    image: {
+    username?: string;
+    firstname?: string;
+    lastname?: string;
+    email?: string;
+    image?: {
       urls: {
         thumbnail: string;
         medium: string;

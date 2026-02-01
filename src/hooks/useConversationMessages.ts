@@ -5,35 +5,16 @@ import { useSocket } from "./useSocket";
 import axios from "axios";
 import { Message } from "@/components/messages/Message/Message";
 
-interface Participant {
-  _id: string;
-  username: string;
-  image?: {
-    urls: {
-      thumbnail: string;
-      medium: string;
-    };
-  };
-  place?: {
-    placeCategory?: string | { name: string };
-    location?: {
-      label: string;
-    };
-  };
-}
-
 export const useConversationMessages = (
   conversationId: string | null,
   options?: { autoFetch?: boolean }
 ) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [participants, setParticipants] = useState<Participant[]>([]);
-  const { isLoading, withLoading } = useLoading(true);
+  const { isLoading, withLoading, stopLoading } = useLoading(!!conversationId);
   const { showError } = useToast();
   const { socket } = useSocket();
   const showErrorRef = useRef(showError);
 
-  // Keep ref updated
   useEffect(() => {
     showErrorRef.current = showError;
   }, [showError]);
@@ -41,7 +22,6 @@ export const useConversationMessages = (
   const fetchMessages = useCallback(async () => {
     if (!conversationId) {
       setMessages([]);
-      setParticipants([]);
       return;
     }
 
@@ -59,14 +39,8 @@ export const useConversationMessages = (
         } else {
           setMessages([]);
         }
-        if (response.data.data.participants) {
-          setParticipants(response.data.data.participants);
-        } else {
-          setParticipants([]);
-        }
       } else {
         setMessages([]);
-        setParticipants([]);
         showErrorRef.current("Invalid response from server");
       }
     } catch (err) {
@@ -75,7 +49,6 @@ export const useConversationMessages = (
           ? err.message
           : "Erreur lors du chargement des messages";
       setMessages([]);
-      setParticipants([]);
       if (axios.isAxiosError(err) && err.response?.status !== 401) {
         showErrorRef.current(errorMessage);
       }
@@ -106,7 +79,12 @@ export const useConversationMessages = (
   }, [socket, conversationId]);
 
   useEffect(() => {
-    if (options?.autoFetch !== false && conversationId) {
+    if (!conversationId) {
+      setMessages([]);
+      stopLoading();
+      return;
+    }
+    if (options?.autoFetch !== false) {
       withLoading(fetchMessages);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,5 +94,5 @@ export const useConversationMessages = (
     fetchMessages();
   }, [fetchMessages]);
 
-  return { messages, participants, isLoading, refetch };
+  return { messages, isLoading, refetch };
 };

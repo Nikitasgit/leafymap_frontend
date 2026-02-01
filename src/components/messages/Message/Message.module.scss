@@ -20,23 +20,6 @@
     flex-shrink: 0;
   }
 
-  .avatar,
-  .avatarPlaceholder {
-    width: rem(32);
-    height: rem(32);
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-
-  .avatarPlaceholder {
-    background: $grey-200;
-    @include flex(row, center, center, 0);
-    color: $grey-600;
-    font-size: rem(14);
-    font-weight: 600;
-  }
-
   .messageBubble {
     max-width: 75%;
     padding: spacing(0.75) spacing(1);

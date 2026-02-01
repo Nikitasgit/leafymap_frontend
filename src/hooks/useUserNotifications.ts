@@ -1,4 +1,5 @@
 import { useEffect, useCallback } from "react";
+import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/store";
 import {
   fetchUserNotifications,
@@ -19,7 +20,7 @@ export const useUserNotifications = (options?: {
   }, [dispatch]);
 
   useEffect(() => {
-    if (options?.autoFetch !== false) {
+    if (options?.autoFetch) {
       fetchNotifications();
     }
   }, [fetchNotifications, options?.autoFetch]);
@@ -34,10 +35,25 @@ export const useUserNotifications = (options?: {
     }
   }, [fetchNotifications, options?.refetchInterval]);
 
+  const markConversationAsRead = useCallback(
+    async (conversationId: string) => {
+      try {
+        await axios.put(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/messages/conversation/${conversationId}/read`,
+          {},
+          { withCredentials: true }
+        );
+        fetchNotifications();
+      } catch {}
+    },
+    [fetchNotifications]
+  );
+
   return {
     unreadMessagesCount,
     isLoading: notifications.loading,
     error: notifications.error,
     refetch: fetchNotifications,
+    markConversationAsRead,
   };
 };

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Button from "@/components/common/buttons/Button";
 import WebsiteButton from "@/components/common/buttons/WebsiteButton";
 import styles from "./CreatorHeader.module.scss";
-import { MapPin } from "lucide-react";
+import { MapPin, MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { handleGetDirections } from "@/utils/mapNavigation";
 import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
@@ -18,6 +18,7 @@ export interface CreatorHeaderProps {
   user: UserPopulated;
   isLoading: boolean;
   variant?: "compact" | "full";
+  onMessageClick?: (user: UserPopulated) => void;
 }
 
 const CreatorHeader = ({
@@ -25,6 +26,7 @@ const CreatorHeader = ({
   user,
   isLoading,
   variant = "compact",
+  onMessageClick,
 }: CreatorHeaderProps) => {
   const router = useRouter();
   return (
@@ -93,8 +95,8 @@ const CreatorHeader = ({
               )}
           </span>
         </div>
-        {(place || user.website) && (
-          <div className={styles.buttons}>
+        {(place || user.website || onMessageClick) && (
+          <div className={styles.actionsWrapper}>
             {place?.rating != null &&
               typeof place.rating === "number" &&
               place.rating > 0 && (
@@ -106,6 +108,17 @@ const CreatorHeader = ({
                 </div>
               )}
             <div className={styles.buttonGroup}>
+              {onMessageClick && (
+                <Button
+                  ariaLabel="Envoyer un message"
+                  variant="secondary"
+                  type="button"
+                  onClick={() => onMessageClick(user)}
+                  startIcon={<MessageSquare size={16} />}
+                >
+                  Envoyer un message
+                </Button>
+              )}
               {user.website && (
                 <WebsiteButton
                   website={user.website}

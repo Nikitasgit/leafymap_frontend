@@ -90,7 +90,6 @@ const MapFiltersBar = ({
   ): Promise<(CreatorSearchResult | LocationSearchResult)[]> => {
     if (searchType.label === "Membres") {
       const creators = await searchUsers({ username: query });
-      console.log(creators);
       const suggestions: CreatorSearchResult[] = creators.map((user) => ({
         _id: user._id,
         image: user.image?.urls.thumbnail || "",

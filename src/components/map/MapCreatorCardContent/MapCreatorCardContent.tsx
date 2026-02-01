@@ -5,6 +5,7 @@ import { UserPopulated } from "@/types/user";
 
 export interface MapCreatorCardContentProps {
   user: UserPopulated;
+  isOwner: boolean;
   place: Place | null;
   onMapButtonClick: (placeItem: {
     location: { coordinates: number[] } | null;
@@ -15,6 +16,7 @@ export interface MapCreatorCardContentProps {
 
 const MapCreatorCardContent = ({
   user,
+  isOwner,
   place,
   onMapButtonClick,
   onPlaceRefetch,
@@ -26,6 +28,7 @@ const MapCreatorCardContent = ({
         place={place}
         onMapButtonClick={onMapButtonClick}
         onPlaceRefetch={onPlaceRefetch}
+        isOwner={isOwner}
       />
     </div>
   );

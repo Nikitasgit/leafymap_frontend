@@ -54,12 +54,12 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
           comment: comment.trim() || undefined,
         });
       } else {
-      await submitReview({
-        rating,
-        comment: comment.trim() || undefined,
-        reference,
-        referenceType,
-      });
+        await submitReview({
+          rating,
+          comment: comment.trim() || undefined,
+          reference,
+          referenceType,
+        });
       }
       onSuccess?.();
       onClose();
@@ -77,7 +77,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       secondaryButtonLabel="Annuler"
       onPrimaryAction={handleSubmit}
       isPrimaryDisabled={rating === 0}
-      isLoading={isLoading}
+      isSubmitLoading={isLoading}
       primaryButtonType="submit"
     >
       <div className={styles.starsSection}>

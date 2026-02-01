@@ -2,7 +2,7 @@ import { useState } from "react";
 import styles from "./MapCreatorCardPartnerships.module.scss";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import EventCard from "@/components/common/events/EventCard";
-import { PlaceCard } from "@/components/userProfile/PlacesSection/PlaceCard";
+import { CreatorCard } from "@/components/userProfile/PlacesSection/CreatorCard";
 import { PartnershipPopulated } from "@/types/partnerships";
 import { UserPopulated } from "@/types/user";
 import EventModal from "@/components/common/modals/EventModal/EventModal";
@@ -113,7 +113,7 @@ const MapCreatorCardPartnerships = ({
             if (!place) return null;
 
             return (
-              <PlaceCard
+              <CreatorCard
                 key={partnership._id}
                 user={partnership.initiator as UserPopulated}
                 place={place}

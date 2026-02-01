@@ -3,28 +3,36 @@
 @use "@/styles/abstracts/functions" as *;
 
 .pageContainer {
-  height: 100%;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  min-width: 0;
   @include flex(column, flex-start, stretch, 0);
+  overflow: hidden;
 
   .container {
+    width: 100%;
     max-width: 1000px;
     margin: 0 auto;
     padding: spacing(0.5);
     background-color: $white;
     @include flex(column, flex-start, stretch, 0);
-    height: 100%;
-    overflow: hidden;
     flex: 1;
     min-height: 0;
+    overflow: hidden;
   }
 
   .backButtonWrapper {
     flex-shrink: 0;
     margin-bottom: spacing(1);
     align-self: flex-start;
+
+    @include respond-to(xl) {
+      display: none;
+    }
   }
 
-  .placeCardContainer {
+  .userCardContainer {
     border-bottom: 1px solid $grey-200;
     padding-bottom: spacing(2);
     flex-shrink: 0;

@@ -11,6 +11,7 @@ import EmptyState from "@/components/common/noResults/EmptyState";
 import styles from "./ReviewsTab.module.scss";
 
 interface ReviewsTabProps {
+  isOwner: boolean;
   reference: string;
   referenceType: ReviewReferenceType;
   canReview?: boolean;
@@ -19,6 +20,7 @@ interface ReviewsTabProps {
 }
 
 const ReviewsTab: React.FC<ReviewsTabProps> = ({
+  isOwner,
   reference,
   referenceType,
   canReview = true,
@@ -32,7 +34,6 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
   });
   const { user } = useAuth();
 
-  // Find if the current user has already left a review
   const userReview = useMemo<ReviewPopulated | undefined>(() => {
     if (!user) return undefined;
     return reviews.find((review) => {
@@ -41,7 +42,6 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
     });
   }, [reviews, user]);
 
-  // Sort reviews to put user's review first
   const sortedReviews = useMemo(() => {
     if (!userReview) return reviews;
     const otherReviews = reviews.filter(
@@ -55,11 +55,8 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
     onRatingUpdated?.();
   };
 
-  // Reply functionality is handled in ReviewCard
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleReply = (_reviewId: string) => {
-    // No-op: reply is handled internally by ReviewCard
-  };
+  const handleReply = (_reviewId: string) => {};
 
   if (isLoading) {
     return <LoadingBar />;
@@ -69,7 +66,7 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
     <div className={styles.reviewsTab}>
       <div className={styles.header}>
         <h3>Avis ({reviews.length})</h3>
-        {user && canReview && (
+        {user && canReview && !isOwner && (
           <Button
             variant="primary"
             size="small"

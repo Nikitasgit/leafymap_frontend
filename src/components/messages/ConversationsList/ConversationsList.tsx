@@ -1,21 +1,28 @@
 import React from "react";
-import { useConversations } from "@/hooks/useConversations";
+import { Conversation } from "@/hooks/useConversations";
 import ConversationCard from "../ConversationCard/ConversationCard";
+import { ConversationCardSkeleton } from "../skeletons";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import { MessageSquare } from "lucide-react";
 import styles from "./ConversationsList.module.scss";
 
+const SKELETON_COUNT = 5;
 
-const ConversationsList: React.FC = () => {
-  const {
-    conversations,
-    isLoading,
-  } = useConversations({ autoFetch: true });
+interface ConversationsListProps {
+  conversations: Conversation[];
+  isLoading: boolean;
+}
 
+const ConversationsList: React.FC<ConversationsListProps> = ({
+  conversations,
+  isLoading,
+}) => {
   if (isLoading) {
     return (
       <div className={styles.conversationsList}>
-        <div className={styles.loading}>Chargement...</div>
+        {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+          <ConversationCardSkeleton key={i} />
+        ))}
       </div>
     );
   }
@@ -35,10 +42,7 @@ const ConversationsList: React.FC = () => {
   return (
     <div className={styles.conversationsList}>
       {conversations.map((conversation) => (
-        <ConversationCard
-          key={conversation._id}
-          conversation={conversation}
-        />
+        <ConversationCard key={conversation._id} conversation={conversation} />
       ))}
     </div>
   );

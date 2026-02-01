@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import TextField from "@/components/common/inputs/TextField/TextField";
 import { Send } from "lucide-react";
 import { useSendMessage } from "@/hooks/useSendMessage";
@@ -8,7 +8,7 @@ import styles from "./MessageInput.module.scss";
 
 interface MessageInputProps {
   recipientId: string;
-  onMessageSent?: () => void;
+  onMessageSent?: (result?: { _id: string; conversationId: string }) => void;
 }
 
 const MessageInput: React.FC<MessageInputProps> = ({
@@ -38,7 +38,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   }, [message, isSending, recipientId, sendMessage]);
 
   const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         handleSend();

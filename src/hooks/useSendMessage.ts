@@ -7,19 +7,27 @@ interface SendMessageParams {
   content: string;
 }
 
+interface SendMessageResult {
+  _id: string;
+  conversationId: string;
+}
+
 interface UseSendMessageReturn {
-  sendMessage: (params: SendMessageParams) => Promise<void>;
+  sendMessage: (params: SendMessageParams) => Promise<SendMessageResult | void>;
   isSending: boolean;
 }
 
 export const useSendMessage = (
-  onMessageSent?: () => void
+  onMessageSent?: (result: SendMessageResult) => void
 ): UseSendMessageReturn => {
   const [isSending, setIsSending] = useState(false);
   const { showError, showSuccess } = useToast();
 
   const sendMessage = useCallback(
-    async ({ recipientId, content }: SendMessageParams) => {
+    async ({
+      recipientId,
+      content,
+    }: SendMessageParams): Promise<SendMessageResult | void> => {
       if (!content.trim() || isSending) {
         return;
       }
@@ -27,7 +35,7 @@ export const useSendMessage = (
       setIsSending(true);
 
       try {
-        await axios.post(
+        const response = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/messages`,
           {
             recipientId,
@@ -38,8 +46,10 @@ export const useSendMessage = (
           }
         );
 
+        const result = response.data?.data as SendMessageResult;
         showSuccess("Message envoyé");
-        onMessageSent?.();
+        onMessageSent?.(result);
+        return result;
       } catch (err) {
         const errorMessage =
           err instanceof Error

@@ -96,10 +96,9 @@
       flex-wrap: wrap;
     }
   }
-  .buttons {
-    @include flex(row, space-between, center, spacing(1));
+  .actionsWrapper {
+    @include flex(column, flex-start, flex-start, spacing(1));
     width: 100%;
- 
 
     .ratingContainer {
       @include flex(row, flex-start, center, spacing(0.5));
@@ -111,7 +110,8 @@
     }
     .buttonGroup {
       @include flex(row, flex-end, center, spacing(1));
-      flex: 1;
+      width: 100%;
+      flex-wrap: wrap;
       button {
         padding: spacing(0.5) spacing(1.25);
         font-size: rem(13);
@@ -144,8 +144,9 @@
         font-size: rem(14);
       }
     }
-    .buttons {
- 
+    .actionsWrapper {
+      gap: spacing(1.25);
+
       .buttonGroup {
         button {
           padding: spacing(0.5) spacing(1.5);

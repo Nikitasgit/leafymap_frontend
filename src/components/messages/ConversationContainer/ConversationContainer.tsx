@@ -1,49 +1,93 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { useConversationMessages } from "@/hooks/useConversationMessages";
+import { useUser } from "@/hooks/useUser";
+import { useUserNotifications } from "@/hooks/useUserNotifications";
 import MessagesList from "../MessagesList/MessagesList";
 import MessageInput from "../MessageInput/MessageInput";
-import PlaceCard from "@/components/userProfile/PlacesSection/PlaceCard/PlaceCard";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import { CreatorCard } from "@/components/userProfile/PlacesSection/CreatorCard";
+import { GuestCard } from "@/components/userProfile/PlacesSection/GuestCard";
+import { ConversationViewSkeleton } from "../skeletons";
 import { PlacePopulated } from "@/types/place";
-import { UserPopulated } from "@/types/user";
-import styles from "./ConversationContainer.module.scss";
 import BackButton from "@/components/common/buttons/BackButton";
+import styles from "./ConversationContainer.module.scss";
 
 interface ConversationContainerProps {
   conversationId: string;
+  recipientId: string;
+  onConversationCreated?: () => void;
   children?: React.ReactNode;
 }
 
 const ConversationContainer: React.FC<ConversationContainerProps> = ({
   conversationId,
+  recipientId,
+  onConversationCreated,
   children,
 }) => {
+  const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string;
   const { user: currentUser } = useAuth();
-  const { participants, messages, isLoading } = useConversationMessages(
-    conversationId,
-    {
-      autoFetch: true,
-    }
+
+  const isNewConversation = conversationId === "new";
+
+  const { messages: conversationMessages, isLoading: isLoadingConversation } =
+    useConversationMessages(isNewConversation ? null : conversationId, {
+      autoFetch: !isNewConversation,
+    });
+
+  const { user: otherParticipant, isLoading: isLoadingRecipient } =
+    useUser(recipientId);
+  const { markConversationAsRead } = useUserNotifications({
+    autoFetch: !!currentUser,
+  });
+  const hasMarkedAsReadRef = useRef(false);
+
+  const handleMessageSent = useCallback(
+    (result?: { conversationId?: string }) => {
+      if (!isNewConversation || !result?.conversationId) return;
+      onConversationCreated?.();
+      router.replace(
+        `/${locale}/inbox?conversationId=${result.conversationId}&recipientId=${recipientId}`
+      );
+    },
+    [isNewConversation, onConversationCreated, router, locale, recipientId]
   );
 
-  const otherParticipant = useMemo(() => {
-    if (!currentUser?._id || !participants || participants.length === 0) {
-      return null;
+  useEffect(() => {
+    if (
+      !isNewConversation &&
+      !isLoadingConversation &&
+      conversationId &&
+      currentUser &&
+      !hasMarkedAsReadRef.current
+    ) {
+      hasMarkedAsReadRef.current = true;
+      markConversationAsRead(conversationId);
     }
-    const participant = participants.find(
-      (p) => p._id.toString() !== currentUser._id
-    );
-    if (!participant) {
-      return null;
-    }
-    return participant;
-  }, [currentUser?._id, participants]);
+  }, [
+    isNewConversation,
+    isLoadingConversation,
+    conversationId,
+    currentUser,
+    markConversationAsRead,
+  ]);
+
+  useEffect(() => {
+    hasMarkedAsReadRef.current = false;
+  }, [conversationId]);
+
+  const messages = isNewConversation ? [] : conversationMessages;
+  const isLoading = isNewConversation
+    ? isLoadingRecipient
+    : isLoadingConversation || isLoadingRecipient;
 
   if (isLoading) {
-    return <LoadingBar />;
+    return <ConversationViewSkeleton />;
   }
 
   return (
@@ -53,16 +97,23 @@ const ConversationContainer: React.FC<ConversationContainerProps> = ({
           <BackButton />
         </div>
         {otherParticipant && (
-          <div className={styles.placeCardContainer}>
-            <PlaceCard
-              place={otherParticipant.place as PlacePopulated}
-              user={otherParticipant as UserPopulated}
-            />
+          <div className={styles.userCardContainer}>
+            {otherParticipant.userType === "creator" ? (
+              <CreatorCard
+                user={otherParticipant}
+                place={otherParticipant.place as PlacePopulated}
+              />
+            ) : (
+              <GuestCard user={otherParticipant} />
+            )}
           </div>
         )}
         <MessagesList messages={messages} />
         {otherParticipant && (
-          <MessageInput recipientId={otherParticipant._id.toString()} />
+          <MessageInput
+            recipientId={otherParticipant._id.toString()}
+            onMessageSent={isNewConversation ? handleMessageSent : undefined}
+          />
         )}
         {children}
       </section>

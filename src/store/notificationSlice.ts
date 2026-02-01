@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { RootState } from "./index";
+import { signOut } from "./authSlice";
 
 export const fetchUserNotifications = createAsyncThunk(
   "notifications/fetchUserNotifications",
@@ -52,13 +53,17 @@ const notificationSlice = createSlice({
       })
       .addCase(fetchUserNotifications.fulfilled, (state, action) => {
         state.loading = false;
-        state.messages =
-          action.payload.messages;
+        state.messages = action.payload.messages;
         state.lastFetched = Date.now();
       })
       .addCase(fetchUserNotifications.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Failed to fetch notifications";
+      })
+      .addCase(signOut.fulfilled, (state) => {
+        state.messages = 0;
+        state.error = null;
+        state.lastFetched = null;
       });
   },
 });

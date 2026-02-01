@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { LucideIcon, LogOut } from "lucide-react";
 import { User } from "@/types/user";
+import NavbarSkeleton from "../NavbarSkeleton";
 import NavbarNotificationBadge from "../../common/badges/NotificationBadge/NotificationBadge";
 import styles from "./NavbarMenuMobile.module.scss";
 
@@ -17,6 +18,7 @@ interface NavbarMenuMobileProps {
   isOpen: boolean;
   navItems: NavItem[];
   pathname: string;
+  loading?: boolean;
   user: User | null;
   logout: () => Promise<void>;
   onClose: () => void;
@@ -28,14 +30,29 @@ export default function NavbarMenuMobile({
   isOpen,
   navItems,
   pathname,
+  loading = false,
   user,
   logout,
   onClose,
   t,
   unreadMessagesCount,
 }: NavbarMenuMobileProps) {
-
   if (!isOpen) return null;
+
+  if (loading) {
+    return (
+      <div
+        id="mobile-menu"
+        className={styles.menu}
+        aria-hidden={!isOpen}
+        role="menu"
+      >
+        <div className={styles.content}>
+          <NavbarSkeleton variant="mobile" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -48,7 +65,7 @@ export default function NavbarMenuMobile({
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
-          const isMessages = item.href === "/messages";
+          const isMessages = item.href === "/inbox";
           if (!item.display) return null;
           return (
             <Link
@@ -61,10 +78,10 @@ export default function NavbarMenuMobile({
             >
               <div className={styles.iconContainer}>
                 <Icon className={styles.icon} aria-hidden="true" />
-              
               </div>
               <div className={styles.labelContainer}>
-                <span>{item.label}</span>  {isMessages && (
+                <span>{item.label}</span>{" "}
+                {isMessages && (
                   <NavbarNotificationBadge count={unreadMessagesCount} />
                 )}
               </div>

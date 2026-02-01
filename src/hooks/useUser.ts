@@ -6,16 +6,16 @@ import axios from "axios";
 
 export const useUser = (userId?: string) => {
   const [user, setUser] = useState<UserPopulated | null>(null);
-  const { isLoading, withLoading } = useLoading(true);
+  const { isLoading, withLoading } = useLoading(!!userId);
   const { showError } = useToast();
   const showErrorRef = useRef(showError);
 
-  // Keep ref updated
   useEffect(() => {
     showErrorRef.current = showError;
   }, [showError]);
 
   const fetchUser = useCallback(async () => {
+    if (!userId) return;
     try {
       const url = `${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}`;
       const response = await axios.get(url);
@@ -31,9 +31,11 @@ export const useUser = (userId?: string) => {
   }, [userId]);
 
   useEffect(() => {
-    if (userId) {
-      withLoading(fetchUser);
+    if (!userId) {
+      setUser(null);
+      return;
     }
+    withLoading(fetchUser);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 

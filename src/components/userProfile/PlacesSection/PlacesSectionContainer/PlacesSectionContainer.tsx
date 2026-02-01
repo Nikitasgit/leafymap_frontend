@@ -1,6 +1,6 @@
 import React from "react";
 import { MapPin } from "lucide-react";
-import PlaceCard from "../PlaceCard/PlaceCard";
+import { CreatorCard } from "../CreatorCard";
 import styles from "./PlacesSectionContainer.module.scss";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import { PlacesSectionProps } from "./PlacesSectionContainer.types";
@@ -17,7 +17,13 @@ const PlacesSectionContainer: React.FC<PlacesSectionProps> = ({
           <div className={styles.placesGrid}>
             {placePartnerships.map((partnership) => {
               const place = partnership.place;
-              return <PlaceCard key={partnership._id} place={place} />;
+              return (
+                <CreatorCard
+                  key={partnership._id}
+                  user={place.user}
+                  place={place}
+                />
+              );
             })}
           </div>
         ) : (

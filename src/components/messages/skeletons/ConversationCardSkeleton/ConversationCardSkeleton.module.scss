@@ -1,0 +1,37 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.card {
+  @include flex(row, flex-start, center, spacing(1.5));
+  padding: spacing(1.5);
+  background: $white;
+  border-bottom: 1px solid $grey-200;
+  width: 100%;
+}
+
+.avatar {
+  width: rem(56);
+  height: rem(56);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.content {
+  @include flex(column, flex-start, stretch, spacing(0.5));
+  flex: 1;
+  min-width: 0;
+}
+
+.line {
+  height: rem(14);
+  border-radius: rem(4);
+
+  &.short {
+    width: 40%;
+  }
+
+  &.long {
+    width: 85%;
+  }
+}

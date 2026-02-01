@@ -84,7 +84,46 @@ const BaseModal: React.FC<BaseModalProps> = ({
     }
   };
 
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (primaryButtonType === "submit") {
+      onPrimaryAction(e);
+    }
+  };
+
   if (!isOpen) return null;
+
+  const modalBody = (
+    <>
+      <div className={styles.modalContentBody}>
+        {isContentLoading ? <LoadingSpinner /> : children}
+      </div>
+      {withFooter && (
+        <div className={styles.modalFooter}>
+          <div className={styles.modalFooterButtons}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={handleSecondaryClick}
+              disabled={isSubmitLoading}
+            >
+              {secondaryButtonLabel}
+            </Button>
+            <Button
+              type={primaryButtonType}
+              variant="primary"
+              disabled={isPrimaryDisabled || isSubmitLoading}
+              onClick={
+                primaryButtonType === "button" ? handlePrimaryClick : undefined
+              }
+            >
+              {isSubmitLoading ? "Chargement..." : primaryButtonLabel}
+            </Button>
+          </div>
+        </div>
+      )}
+    </>
+  );
 
   return (
     <div className={styles.modal} onClick={handleBackdropClick}>
@@ -99,34 +138,10 @@ const BaseModal: React.FC<BaseModalProps> = ({
             <X size={24} />
           </button>
         </div>
-        <div className={styles.modalContentBody}>
-          {isContentLoading ? <LoadingSpinner /> : children}
-        </div>
-        {withFooter && (
-          <div className={styles.modalFooter}>
-            <div className={styles.modalFooterButtons}>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={handleSecondaryClick}
-                disabled={isSubmitLoading}
-              >
-                {secondaryButtonLabel}
-              </Button>
-              <Button
-                type={primaryButtonType}
-                variant="primary"
-                disabled={isPrimaryDisabled || isSubmitLoading}
-                onClick={
-                  primaryButtonType === "button"
-                    ? handlePrimaryClick
-                    : undefined
-                }
-              >
-                {isSubmitLoading ? "Chargement..." : primaryButtonLabel}
-              </Button>
-            </div>
-          </div>
+        {primaryButtonType === "submit" && withFooter ? (
+          <form onSubmit={handleFormSubmit}>{modalBody}</form>
+        ) : (
+          modalBody
         )}
       </div>
     </div>

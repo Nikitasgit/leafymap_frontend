@@ -1,86 +1,104 @@
 "use client";
 
 import React from "react";
-import { User } from "@/types/user";
-import Button from "@/components/common/buttons/Button";
-import { Check, X } from "lucide-react";
+import { MapPin, Calendar } from "lucide-react";
 import styles from "./PartnershipMessage.module.scss";
-import { Partnership, PartnershipPopulated } from "@/types/partnerships";
-import PlaceCard from "@/components/userProfile/PlacesSection/PlaceCard/PlaceCard";
-import EventCard from "@/components/common/events/EventCard/EventCard";
+import { PartnershipPopulated } from "@/types/partnerships";
 import { UserPopulated } from "@/types/user";
+import { CreatorCard } from "@/components/userProfile/PlacesSection/CreatorCard";
+import EventCard from "@/components/common/events/EventCard/EventCard";
+
+export interface MessagePartnership {
+  type?: "event" | "place";
+  event?: { name?: string };
+  place?: { location?: { label?: string } };
+}
 
 interface PartnershipMessageProps {
-  partnership: PartnershipPopulated;
-  currentUser: User;
-  onStatusChange: (
-    partnerships: Partnership[],
-    isUpdate: boolean,
-    placeId: string,
-    eventId: string
-  ) => void;
-  isLoading?: boolean;
+  partnership: PartnershipPopulated | MessagePartnership;
+  sender?: { username?: string };
 }
 
 export default function PartnershipMessage({
   partnership,
-  onStatusChange,
-  isLoading = false,
+  sender,
 }: PartnershipMessageProps) {
-  const event =
-    partnership.event && typeof partnership.event === "object"
-      ? partnership.event
-      : null;
-  const user = partnership.initiator as UserPopulated;
-  return (
-    <div className={styles.partnershipCard}>
-      {partnership.type === "event" && event && (
-        <div className={styles.eventContainer}>
-          <EventCard event={event} user={user} place={partnership.place} />
-        </div>
-      )}
-      <div className={styles.actions}>
-        <>
-          <Button
-            variant={
-              partnership.status === "accepted" ? "primary" : "secondary"
-            }
-            size="small"
-            ariaLabel="Accepter"
-            onClick={() =>
-              onStatusChange?.(
-                [{ ...partnership, status: "accepted" }],
-                true,
-                partnership.place._id,
-                partnership.event?._id
-              )
-            }
-            disabled={isLoading}
-            className={styles.actionButton}
-            startIcon={<Check size={16} />}
-          >
-            {partnership.status === "accepted" ? "Acceptée" : "Accepter"}
-          </Button>
-          <Button
-            variant={partnership.status === "refused" ? "primary" : "secondary"}
-            size="small"
-            ariaLabel="Refuser"
-            onClick={() =>
-              onStatusChange?.(
-                [{ ...partnership, status: "refused" }],
-                true,
-                partnership.place._id,
-                partnership.event?._id
-              )
-            }
-            disabled={isLoading}
-            className={styles.actionButton}
-            startIcon={<X size={16} />}
-          >
-            {partnership.status === "refused" ? "Refusée" : "Refuser"}
-          </Button>
-        </>
+  const senderName =
+    sender?.username ||
+    (partnership as PartnershipPopulated).initiator?.username ||
+    "Utilisateur";
+
+  const isEvent = partnership.type === "event" || !!partnership.event?.name;
+  const isPlace = partnership.type === "place" || !!partnership.place?.location;
+
+  const fullEvent =
+    (partnership as PartnershipPopulated).event &&
+    typeof (partnership as PartnershipPopulated).event === "object" &&
+    "_id" in (partnership as PartnershipPopulated).event;
+  const fullPlace =
+    (partnership as PartnershipPopulated).place &&
+    typeof (partnership as PartnershipPopulated).place === "object" &&
+    "_id" in (partnership as PartnershipPopulated).place;
+
+  if (isEvent) {
+    const event = (partnership as PartnershipPopulated).event;
+    const place = (partnership as PartnershipPopulated).place;
+    const initiator = (partnership as PartnershipPopulated)
+      .initiator as UserPopulated;
+
+    return (
+      <div className={styles.partnershipCard}>
+        <p className={styles.invitationMessage}>
+          <strong>{senderName}</strong> vous envoie une invitation à participer
+          à un événement
+        </p>
+        {fullEvent && event && typeof event === "object" ? (
+          <div className={styles.eventContainer}>
+            <EventCard
+              event={event}
+              user={initiator}
+              place={place}
+              clickable={!!event._id}
+            />
+          </div>
+        ) : (
+          partnership.event?.name && (
+            <div className={styles.compactCard}>
+              <Calendar size={18} className={styles.compactIcon} />
+              <span>{partnership.event.name}</span>
+            </div>
+          )
+        )}
       </div>
-    </div>
-  );
+    );
+  }
+
+  if (isPlace) {
+    const place = (partnership as PartnershipPopulated).place;
+    const initiator = (partnership as PartnershipPopulated)
+      .initiator as UserPopulated;
+
+    return (
+      <div className={styles.partnershipCard}>
+        <p className={styles.invitationMessage}>
+          <strong>{senderName}</strong> souhaite vous ajouter comme
+          collaborateur de son lieu
+        </p>
+        {fullPlace && place && typeof place === "object" ? (
+          <div className={styles.placeContainer}>
+            <CreatorCard user={initiator} place={place} />
+          </div>
+        ) : (
+          partnership.place?.location?.label && (
+            <div className={styles.compactCard}>
+              <MapPin size={18} className={styles.compactIcon} />
+              <span>{partnership.place.location.label}</span>
+            </div>
+          )
+        )}
+      </div>
+    );
+  }
+
+  return null;
 }

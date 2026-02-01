@@ -7,24 +7,18 @@ import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { PartnershipPopulated } from "@/types/partnerships";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useUserEventsPartnershipsByUserId } from "@/hooks/useUserEventsPartnershipsByUserId";
-import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
 import styles from "./EventInvitationsTab.module.scss";
 import EmptyState from "@/components/common/noResults/EmptyState";
 
 export default function EventInvitationsTab() {
   const { user, isLoading: isLoadingUser } = useCurrentUser();
-  const {
-    partnerships,
-    isLoading: isLoadingPartnerships,
-    refetch,
-  } = useUserEventsPartnershipsByUserId(user?._id, {
-    asCollaborator: "true",
-    includeCancelledEvents: "false",
-    includePastEvents: "false",
-    onlyAccepted: "false",
-  });
-
-  const { submitPartnerships } = useSubmitPartnerships(refetch);
+  const { partnerships, isLoading: isLoadingPartnerships } =
+    useUserEventsPartnershipsByUserId(user?._id, {
+      asCollaborator: "true",
+      includeCancelledEvents: "false",
+      includePastEvents: "false",
+      onlyAccepted: "false",
+    });
 
   const isLoading = isLoadingUser || isLoadingPartnerships;
 
@@ -58,9 +52,6 @@ export default function EventInvitationsTab() {
               <PartnershipMessage
                 key={partnership._id}
                 partnership={partnership}
-                currentUser={user}
-                onStatusChange={submitPartnerships}
-                isLoading={false}
               />
             ))}
           </div>
@@ -77,9 +68,6 @@ export default function EventInvitationsTab() {
               <PartnershipMessage
                 key={partnership._id}
                 partnership={partnership}
-                currentUser={user}
-                onStatusChange={submitPartnerships}
-                isLoading={false}
               />
             ))}
           </div>
@@ -96,9 +84,6 @@ export default function EventInvitationsTab() {
               <PartnershipMessage
                 key={partnership._id}
                 partnership={partnership}
-                currentUser={user}
-                onStatusChange={submitPartnerships}
-                isLoading={false}
               />
             ))}
           </div>

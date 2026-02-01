@@ -7,8 +7,7 @@ import { Home, Map, MessageSquare, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useAppSelector } from "@/store";
-import { selectUnreadMessagesCount } from "@/store/notificationSlice";
+import { useUserNotifications } from "@/hooks/useUserNotifications";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import NavbarMenuDesktop from "../NavbarMenuDesktop";
 import NavbarMenuMobile from "../NavbarMenuMobile";
@@ -20,7 +19,10 @@ export default function Navbar() {
   const pathname = usePathname();
   const { t } = useTranslation("common");
   const { loading, user, logout } = useAuth();
-  const unreadMessagesCount = useAppSelector(selectUnreadMessagesCount);
+  const { unreadMessagesCount } = useUserNotifications({
+    autoFetch: !!user,
+    refetchInterval: 60000,
+  });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navbarRef = useRef<HTMLDivElement>(null);
 
@@ -28,7 +30,7 @@ export default function Navbar() {
     { href: "/", label: t("nav.home"), icon: Home, display: true },
     { href: "/map", label: t("nav.map"), icon: Map, display: true },
     {
-      href: "/messages",
+      href: "/inbox",
       label: t("nav.messages"),
       icon: MessageSquare,
       display: !!user,
@@ -79,6 +81,7 @@ export default function Navbar() {
         isOpen={isMobileMenuOpen}
         navItems={navItems}
         pathname={pathname}
+        loading={loading}
         user={user}
         logout={logout}
         onClose={closeMobileMenu}

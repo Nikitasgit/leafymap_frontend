@@ -86,7 +86,7 @@ const SearchInput = <T extends SearchSuggestion>({
       }
     };
   }, []);
-  console.log("suggestions", suggestions);
+
   return (
     <div ref={wrapperRef} className={styles.searchInput}>
       <TextField

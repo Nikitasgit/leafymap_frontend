@@ -3,37 +3,38 @@
 @use "@/styles/abstracts/mixins" as *;
 
 .partnershipCard {
-  background: $white;
-  border: 1px solid $grey-200;
-  border-radius: rem(8);
-  padding: spacing(1.5);
+
+
   @include flex(column, flex-start, stretch, spacing(1));
-  
+
+  .invitationMessage {
+    margin: 0;
+    font-size: rem(14);
+    line-height: 1.4;
+    color: $grey-800;
+  }
+
   .placeContainer {
     width: 100%;
     margin-bottom: 0;
   }
-  
+
   .eventContainer {
     width: 100%;
     margin-bottom: 0;
   }
-  .actions {
-    @include flex(column, flex-start, stretch, spacing(0.75));
-    margin-top: spacing(1);
-    padding-top: spacing(1);
-    border-top: 1px solid $grey-200;
-    .actionButton {
-      width: 100%;
-    }
-  }
-  @include respond-to(sm) {
-    .actions {
-      @include flex(row, flex-start, center, spacing(1));
-      .actionButton {
-        width: auto;
-        flex: 1;
-      }
+
+  .compactCard {
+    @include flex(row, flex-start, center, spacing(0.5));
+    padding: spacing(1);
+    background: $grey-50;
+    border-radius: rem(8);
+    font-size: rem(14);
+    color: $grey-800;
+
+    .compactIcon {
+      flex-shrink: 0;
+      color: $grey-600;
     }
   }
 }

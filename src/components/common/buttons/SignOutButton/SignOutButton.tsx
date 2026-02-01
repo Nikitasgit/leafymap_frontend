@@ -8,8 +8,8 @@ function SignOutButton({ logout }: { logout: () => Promise<void> }) {
 
   const handleSignOut = async () => {
     try {
-      await logout();
       router.push("/auth/signin");
+      await logout();
     } catch (error) {
       console.error("Sign out failed", error);
     }

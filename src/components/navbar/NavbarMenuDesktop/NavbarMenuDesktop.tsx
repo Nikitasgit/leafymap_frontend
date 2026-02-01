@@ -4,7 +4,7 @@ import Link from "next/link";
 import { LucideIcon } from "lucide-react";
 import { User } from "@/types/user";
 import SignOutButton from "../../common/buttons/SignOutButton";
-import LoadingBar from "../../common/loading/LoadingBar/LoadingBar";
+import NavbarSkeleton from "../NavbarSkeleton";
 import NavbarNotificationBadge from "../../common/badges/NotificationBadge/NotificationBadge";
 import styles from "./NavbarMenuDesktop.module.scss";
 
@@ -34,6 +34,13 @@ export default function NavbarMenuDesktop({
   t,
   unreadMessagesCount,
 }: NavbarMenuDesktopProps) {
+  if (loading) {
+    return (
+      <div className={styles.container}>
+        <NavbarSkeleton variant="desktop" />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
@@ -41,7 +48,7 @@ export default function NavbarMenuDesktop({
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
-          const isMessages = item.href === "/messages";
+          const isMessages = item.href === "/inbox";
           if (!item.display) return null;
           return (
             <li key={item.href} role="none">
@@ -52,48 +59,47 @@ export default function NavbarMenuDesktop({
               >
                 <div className={styles.iconContainer}>
                   <Icon className={styles.navIcon} aria-hidden="true" />
-                 
                 </div>
-                <span>{item.label}</span> {isMessages && (
-                    <NavbarNotificationBadge count={unreadMessagesCount} absolutePosition/>
-                  )}
+                <span>{item.label}</span>{" "}
+                {isMessages && (
+                  <NavbarNotificationBadge
+                    count={unreadMessagesCount}
+                    absolutePosition
+                  />
+                )}
               </Link>
             </li>
           );
         })}
       </ul>
 
-      {loading ? (
-        <LoadingBar />
-      ) : (
-        <div>
-          {user ? (
-            <SignOutButton logout={logout} />
-          ) : (
-            <div className={styles.authLinks}>
-              <Link
-                href="/auth/register"
-                className={`${styles.navLink} ${
-                  pathname === "/auth/register" ? styles.active : ""
-                }`}
-              >
-                {t("nav.register")}
-              </Link>
-              <span className={styles.separator} aria-hidden="true">
-                |
-              </span>
-              <Link
-                href="/auth/signin"
-                className={`${styles.navLink} ${
-                  pathname === "/auth/signin" ? styles.active : ""
-                }`}
-              >
-                {t("nav.signin")}
-              </Link>
-            </div>
-          )}
-        </div>
-      )}
+      <div>
+        {user ? (
+          <SignOutButton logout={logout} />
+        ) : (
+          <div className={styles.authLinks}>
+            <Link
+              href="/auth/register"
+              className={`${styles.navLink} ${
+                pathname === "/auth/register" ? styles.active : ""
+              }`}
+            >
+              {t("nav.register")}
+            </Link>
+            <span className={styles.separator} aria-hidden="true">
+              |
+            </span>
+            <Link
+              href="/auth/signin"
+              className={`${styles.navLink} ${
+                pathname === "/auth/signin" ? styles.active : ""
+              }`}
+            >
+              {t("nav.signin")}
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

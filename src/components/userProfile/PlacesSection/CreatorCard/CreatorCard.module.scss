@@ -2,7 +2,7 @@
 @use "@/styles/abstracts/mixins" as *;
 @use "@/styles/abstracts/functions" as *;
 
-.placeCard {
+.creatorCard {
   background: $white;
   cursor: pointer;
   border: 1px solid $grey-200;
@@ -15,18 +15,18 @@
     flex-shrink: 0;
     border-radius: rem(8) 0 0 rem(8);
     overflow: hidden;
-    .placeImagee {
+    .cardImage {
       object-fit: cover;
       height: 100%;
     }
   }
-  .placeInfo {
+  .cardInfo {
     flex: 1;
     min-width: 0;
     padding: spacing(0.5) spacing(1);
-    .placeHeader {
+    .cardHeader {
       @include flex(row, space-between, center, spacing(0.5));
-      .placeTitle {
+      .cardTitle {
         @include flex(row, flex-start, center, spacing(0.5));
         flex: 1;
         min-width: 0;
@@ -40,18 +40,18 @@
           overflow: hidden;
           text-overflow: ellipsis;
         }
-        .placeIcon {
+        .cardIcon {
           color: $primary-color;
           flex-shrink: 0;
         }
       }
-      .placeHeaderActions {
+      .cardHeaderActions {
         @include flex(row, flex-end, center, spacing(0.75));
         flex-shrink: 0;
         .actionButtons {
           @include flex(row, flex-end, center, spacing(0.5));
         }
-        .placeCounters {
+        .cardCounters {
           @include flex(row, flex-start, center, spacing(1));
         }
       }
@@ -103,10 +103,10 @@
       width: 60px;
       border-radius: rem(12) 0 0 rem(12);
     }
-    .placeInfo {
+    .cardInfo {
       padding: spacing(0.75) spacing(1.5);
-      .placeHeader {
-        .placeTitle {
+      .cardHeader {
+        .cardTitle {
           h3 {
             font-size: rem(16);
           }

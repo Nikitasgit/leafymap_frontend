@@ -1,0 +1,73 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.pageContainer {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  min-width: 0;
+  @include flex(column, flex-start, stretch, 0);
+  overflow: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: spacing(0.5);
+  background-color: $white;
+  @include flex(column, flex-start, stretch, 0);
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.backBar {
+  width: rem(80);
+  height: rem(36);
+  border-radius: rem(6);
+  margin-bottom: spacing(1);
+  flex-shrink: 0;
+}
+
+.cardBlock {
+  width: 100%;
+  height: rem(140);
+  border-radius: rem(8);
+  border-bottom: 1px solid $grey-200;
+  padding-bottom: spacing(2);
+  margin-bottom: spacing(1);
+  flex-shrink: 0;
+}
+
+.messagesArea {
+  flex: 1;
+  min-height: 0;
+  @include flex(column, flex-end, stretch, spacing(1));
+  padding: spacing(1.5) 0;
+}
+
+.bubble {
+  border-radius: rem(16);
+  height: rem(44);
+  max-width: 75%;
+
+  &.left {
+    align-self: flex-start;
+    width: 60%;
+  }
+
+  &.right {
+    align-self: flex-end;
+    width: 45%;
+  }
+}
+
+.inputBar {
+  width: 100%;
+  height: rem(52);
+  border-radius: rem(8);
+  flex-shrink: 0;
+  margin-top: spacing(1);
+}

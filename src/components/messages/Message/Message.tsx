@@ -1,14 +1,19 @@
 import React from "react";
-import Image from "next/image";
-import { UserPlus } from "lucide-react";
 import DisplayPublishingDate from "@/components/common/date/DisplayPublishingDate/DisplayPublishingDate";
+import PartnershipMessage from "@/components/messages/PartnershipMessage";
+import type { MessagePartnership } from "@/components/messages/PartnershipMessage";
+import { Avatar } from "@/components/common/Avatar";
+import { getDisplayName } from "@/utils/userDisplay";
 import styles from "./Message.module.scss";
 
 export interface Message {
   _id: string;
   sender: {
     _id: string;
-    username: string;
+    username?: string;
+    firstname?: string;
+    lastname?: string;
+    email?: string;
     image?: {
       urls: {
         thumbnail: string;
@@ -19,7 +24,7 @@ export interface Message {
   content?: string;
   createdAt: Date | string;
   readBy: string[];
-  partnership?: string;
+  partnership?: MessagePartnership | string;
 }
 
 interface MessageProps {
@@ -34,8 +39,7 @@ const MessageComponent: React.FC<MessageProps> = ({
   const isOwnMessage = currentUserId === message.sender._id;
   const isPartnershipMessage = !!message.partnership;
 
-  const senderImage = message.sender.image?.urls?.thumbnail;
-  const senderName = message.sender.username || "Utilisateur";
+  const senderName = getDisplayName(message.sender);
 
   return (
     <div
@@ -45,56 +49,45 @@ const MessageComponent: React.FC<MessageProps> = ({
     >
       {!isOwnMessage && (
         <div className={styles.avatarContainer}>
-          {senderImage ? (
-            <Image
-              src={senderImage}
-              alt={senderName}
-              width={32}
-              height={32}
-              className={styles.avatar}
-            />
-          ) : (
-            <div className={styles.avatarPlaceholder}>
-              {senderName[0]?.toUpperCase() || "U"}
-            </div>
-          )}
+          <Avatar user={message.sender} size={32} />
         </div>
       )}
       <div className={styles.messageBubble}>
-        {isPartnershipMessage && (
-          <div className={styles.partnershipBadge}>
-            <UserPlus size={14} />
-            <span>Invitation</span>
-          </div>
+        {isPartnershipMessage &&
+        message.partnership &&
+        typeof message.partnership === "object" ? (
+          <>
+            <PartnershipMessage
+              partnership={message.partnership}
+              sender={message.sender}
+            />
+            <div className={styles.messageFooter}>
+              <DisplayPublishingDate
+                date={message.createdAt}
+                className={styles.timestamp}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            {!isOwnMessage && (
+              <span className={styles.senderName}>{senderName}</span>
+            )}
+            <p className={styles.messageContent}>
+              {message.content || "Message vide"}
+            </p>
+            <div className={styles.messageFooter}>
+              <DisplayPublishingDate
+                date={message.createdAt}
+                className={styles.timestamp}
+              />
+            </div>
+          </>
         )}
-        {!isOwnMessage && (
-          <span className={styles.senderName}>{senderName}</span>
-        )}
-        <p className={styles.messageContent}>
-          {message.content || "Message vide"}
-        </p>
-        <div className={styles.messageFooter}>
-          <DisplayPublishingDate
-            date={message.createdAt}
-            className={styles.timestamp}
-          />
-        </div>
       </div>
       {isOwnMessage && (
         <div className={styles.avatarContainer}>
-          {senderImage ? (
-            <Image
-              src={senderImage}
-              alt={senderName}
-              width={32}
-              height={32}
-              className={styles.avatar}
-            />
-          ) : (
-            <div className={styles.avatarPlaceholder}>
-              {senderName[0]?.toUpperCase() || "U"}
-            </div>
-          )}
+          <Avatar user={message.sender} size={32} />
         </div>
       )}
     </div>

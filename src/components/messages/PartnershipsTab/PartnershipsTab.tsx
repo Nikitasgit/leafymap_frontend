@@ -7,22 +7,16 @@ import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { PartnershipPopulated } from "@/types/partnerships";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useUserPlacesPartnershipsByUserId } from "@/hooks/useUserPlacesPartnershipsByUserId";
-import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
 import styles from "./PartnershipsTab.module.scss";
 import EmptyState from "@/components/common/noResults/EmptyState";
 
 export default function PartnershipsTab() {
   const { user, isLoading: isLoadingUser } = useCurrentUser();
-  const {
-    partnerships,
-    isLoading: isLoadingPartnerships,
-    refetch,
-  } = useUserPlacesPartnershipsByUserId(user?._id, {
-    asCollaborator: "true",
-    onlyAccepted: "false",
-  });
-
-  const { submitPartnerships } = useSubmitPartnerships(refetch);
+  const { partnerships, isLoading: isLoadingPartnerships } =
+    useUserPlacesPartnershipsByUserId(user?._id, {
+      asCollaborator: "true",
+      onlyAccepted: "false",
+    });
 
   const isLoading = isLoadingUser || isLoadingPartnerships;
 
@@ -56,9 +50,6 @@ export default function PartnershipsTab() {
               <PartnershipMessage
                 key={partnership._id}
                 partnership={partnership}
-                currentUser={user}
-                onStatusChange={submitPartnerships}
-                isLoading={false}
               />
             ))}
           </div>
@@ -75,9 +66,6 @@ export default function PartnershipsTab() {
               <PartnershipMessage
                 key={partnership._id}
                 partnership={partnership}
-                currentUser={user}
-                onStatusChange={submitPartnerships}
-                isLoading={false}
               />
             ))}
           </div>
@@ -94,9 +82,6 @@ export default function PartnershipsTab() {
               <PartnershipMessage
                 key={partnership._id}
                 partnership={partnership}
-                currentUser={user}
-                onStatusChange={submitPartnerships}
-                isLoading={false}
               />
             ))}
           </div>

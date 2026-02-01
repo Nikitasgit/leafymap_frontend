@@ -4,9 +4,10 @@ import { Handshake } from "lucide-react";
 import { Conversation } from "@/hooks/useConversations";
 import { useAuth } from "@/hooks/useAuth";
 import DisplayPublishingDate from "@/components/common/date/DisplayPublishingDate/DisplayPublishingDate";
+import { getDisplayName, getAvatarLetter } from "@/utils/userDisplay";
 import styles from "./ConversationCard.module.scss";
 import NotificationBadge from "@/components/common/badges/NotificationBadge";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 interface ConversationCardProps {
   conversation: Conversation;
@@ -17,6 +18,8 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
 }) => {
   const { user } = useAuth();
   const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string;
   const otherParticipant = conversation.participants.find(
     (participant) => participant._id !== user?._id
   );
@@ -26,18 +29,20 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
   }
 
   const participantImage = otherParticipant.image?.urls?.thumbnail;
-  const participantName = otherParticipant.username || "Utilisateur";
+  const participantName = getDisplayName(otherParticipant);
+  const avatarLetter = getAvatarLetter(otherParticipant);
   const lastMessageDate = conversation.lastMessage?.createdAt;
-  
+
   const getMessageContent = (): { text: string; isPartnership: boolean } => {
     const lastMessage = conversation.lastMessage;
     if (!lastMessage) return { text: "Aucun message", isPartnership: false };
-    
+
     if (lastMessage.partnership) {
-      const partnership = typeof lastMessage.partnership === "object" 
-        ? lastMessage.partnership 
-        : null;
-      
+      const partnership =
+        typeof lastMessage.partnership === "object"
+          ? lastMessage.partnership
+          : null;
+
       if (partnership?.type === "place") {
         return { text: "Proposition de collaboration", isPartnership: true };
       }
@@ -45,19 +50,24 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
         return { text: "Invitation à un évènement", isPartnership: true };
       }
     }
-    
-    return { text: lastMessage.content || "Aucun message", isPartnership: false };
+
+    return {
+      text: lastMessage.content || "Aucun message",
+      isPartnership: false,
+    };
   };
-  
+
   const messageContent = getMessageContent();
 
   return (
-    <div 
+    <div
       className={`${styles.conversationCard} ${
         conversation.unreadCount > 0 ? styles.hasUnread : ""
       }`}
       onClick={() => {
-        router.push(`/messages/${conversation._id}`);
+        router.push(
+          `/${locale}/inbox?conversationId=${conversation._id}&recipientId=${otherParticipant._id}`
+        );
       }}
     >
       <div className={styles.avatarContainer}>
@@ -70,11 +80,9 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
             className={styles.avatar}
           />
         ) : (
-          <div className={styles.avatarPlaceholder}>
-            {participantName[0]?.toUpperCase() || "U"}
-          </div>
+          <div className={styles.avatarPlaceholder}>{avatarLetter}</div>
         )}
-        <NotificationBadge count={conversation.unreadCount} absolutePosition/>
+        <NotificationBadge count={conversation.unreadCount} absolutePosition />
       </div>
       <div className={styles.content}>
         <div className={styles.header}>
