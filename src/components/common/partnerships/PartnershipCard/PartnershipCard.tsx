@@ -28,14 +28,6 @@ const PartnershipCard = ({
 
   return (
     <div className={styles.card}>
-      <button
-        className={styles.iconButton}
-        onClick={handleButtonClick}
-        aria-label={`Voir le profil de ${user.name}`}
-        type="button"
-      >
-        <ExternalLink size={12} />
-      </button>
       <div className={styles.imageContainer}>
         <Image
           src={user.image || creatorDefaultsSvg}
@@ -44,11 +36,21 @@ const PartnershipCard = ({
           height={60}
           className={styles.image}
         />
+        <button
+          className={styles.iconButton}
+          onClick={handleButtonClick}
+          aria-label={`Voir le profil de ${user.name}`}
+          type="button"
+        >
+          <ExternalLink size={12} />
+        </button>
       </div>
-      <h4 className={styles.name}>{user.name}</h4>
-      {showCategory && user.category && (
-        <CreatorCategoryBadge categoryName={user.category} />
-      )}
+      <div className={styles.info}>
+        <h4 className={styles.name}>{user.name}</h4>
+        {showCategory && user.category && (
+          <CreatorCategoryBadge categoryName={user.category} />
+        )}
+      </div>
     </div>
   );
 };

@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useConversations } from "@/hooks/useConversations";
-import { useUserEventsPartnershipsByUserId } from "@/hooks/useUserEventsPartnershipsByUserId";
+import { useEventInvitationsByUserId } from "@/hooks/useEventInvitationsByUserId";
 import { useUserPlacesPartnershipsByUserId } from "@/hooks/useUserPlacesPartnershipsByUserId";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import ConversationsList from "@/components/messages/ConversationsList";
@@ -18,14 +18,16 @@ export default function InboxContainer() {
   const conversationId = searchParams.get("conversationId");
   const recipientId = searchParams.get("recipientId");
 
-  const { partnerships: eventPartnerships, isLoading: isLoadingEvents } =
-    useUserEventsPartnershipsByUserId(user?._id, {
-      asCollaborator: "true",
-      includeCancelledEvents: "false",
-      includePastEvents: "false",
-      onlyAccepted: "false",
-      onlyPending: "true",
-    });
+  const {
+    eventInvitations,
+    isLoading: isLoadingEventInvitations,
+    refetch: refetchEventInvitations,
+  } = useEventInvitationsByUserId(user?._id, {
+    asCollaborator: "true",
+    includeCancelledEvents: "false",
+    includePastEvents: "false",
+    onlyPending: "true",
+  });
   const { partnerships: placePartnerships, isLoading: isLoadingPlaces } =
     useUserPlacesPartnershipsByUserId(user?._id, {
       asCollaborator: "true",
@@ -42,9 +44,9 @@ export default function InboxContainer() {
   const isCreator = user?.userType === "creator";
   const hasConversation = !!(conversationId && recipientId);
 
-  const pendingEventCount = eventPartnerships.length;
+  const pendingEventCount = eventInvitations.length;
   const pendingPlaceCount = placePartnerships.length;
-  const invitationsLoaded = !isLoadingEvents && !isLoadingPlaces;
+  const invitationsLoaded = !isLoadingEventInvitations && !isLoadingPlaces;
   const hasAnyInvitations =
     isCreator &&
     invitationsLoaded &&
@@ -64,7 +66,11 @@ export default function InboxContainer() {
         {hasAnyInvitations && (
           <aside className={styles.invitationsColumn}>
             <div className={styles.invitationsWrapper}>
-              <EventInvitationsSection />
+              <EventInvitationsSection
+                eventInvitations={eventInvitations}
+                isLoading={isLoadingEventInvitations}
+                refetch={refetchEventInvitations}
+              />
               <PartnershipInvitationsSection />
             </div>
           </aside>

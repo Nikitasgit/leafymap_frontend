@@ -37,14 +37,14 @@ const PartnershipsFormList = ({
                           : partnership.collaborator?.image ||
                             creatorDefaultsSvg
                       }
-                      alt={partnership.collaborator.name || ""}
+                      alt={partnership.collaborator.username || ""}
                       width={32}
                       height={32}
                       className={styles.itemImage}
                     />
 
                     <span className={styles.itemName}>
-                      {partnership.collaborator.name}
+                      {partnership.collaborator.username}
                     </span>
                   </div>
                   <EventStatus status={partnership.status} />

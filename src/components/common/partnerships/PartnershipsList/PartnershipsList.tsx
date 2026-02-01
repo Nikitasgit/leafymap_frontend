@@ -24,13 +24,34 @@ const PartnershipsList = ({
       {!noTitle && <h3 className={styles.sectionTitle}>{title}</h3>}
       {filteredPartnerships.length > 0 ? (
         <div className={styles.partnershipsGrid}>
-          {filteredPartnerships.map((partnership) => (
-            <PartnershipCard
-              key={partnership._id}
-              creator={partnership.collaborator}
-              showCategory={true}
-            />
-          ))}
+          {filteredPartnerships.map((partnership) => {
+            const collaborator = partnership.collaborator;
+            const user = {
+              _id: collaborator?._id ?? partnership._id,
+              name:
+                (collaborator as { username?: string })?.username ||
+                (collaborator as { name?: string })?.name ||
+                "Utilisateur",
+              image:
+                typeof collaborator?.image === "string"
+                  ? collaborator.image
+                  : (
+                      collaborator as {
+                        image?: { urls?: { thumbnail?: string } };
+                      }
+                    )?.image?.urls?.thumbnail ?? "",
+              category:
+                (collaborator as { userCategories?: { name: string }[] })
+                  ?.userCategories?.[0]?.name ?? "",
+            };
+            return (
+              <PartnershipCard
+                key={partnership._id}
+                user={user}
+                showCategory={true}
+              />
+            );
+          })}
         </div>
       ) : (
         <EmptyState

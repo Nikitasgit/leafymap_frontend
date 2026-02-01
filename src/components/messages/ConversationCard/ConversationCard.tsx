@@ -46,9 +46,6 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
       if (partnership?.type === "place") {
         return { text: "Proposition de collaboration", isPartnership: true };
       }
-      if (partnership?.type === "event") {
-        return { text: "Invitation à un évènement", isPartnership: true };
-      }
     }
 
     return {

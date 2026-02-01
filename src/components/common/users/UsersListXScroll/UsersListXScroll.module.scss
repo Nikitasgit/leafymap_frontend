@@ -29,6 +29,47 @@
 .containerWrapper {
   position: relative;
   width: 100%;
+
+  &.withChevrons {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.chevronButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: rem(32);
+  height: rem(32);
+  padding: 0;
+  background-color: $white;
+  border: 1px solid $grey-200;
+  border-radius: 50%;
+  color: $grey-700;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+
+  &:hover {
+    background-color: $grey-100;
+    color: $grey-800;
+    border-color: $grey-300;
+  }
+
+  &.chevronRight {
+    left: auto;
+    right: 0;
+  }
+
+  &:not(.chevronRight) {
+    left: 0;
+    right: auto;
+  }
 }
 
 .cardsContainer {

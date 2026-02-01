@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./MapCreatorCardPartnerships.module.scss";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import EventCard from "@/components/common/events/EventCard";
 import { CreatorCard } from "@/components/userProfile/PlacesSection/CreatorCard";
 import { PartnershipPopulated } from "@/types/partnerships";
+import { EventInvitationPopulated } from "@/types/eventInvitation";
 import { UserPopulated } from "@/types/user";
 import EventModal from "@/components/common/modals/EventModal/EventModal";
 import { useEvent } from "@/hooks/useEvent";
@@ -11,7 +12,7 @@ import { EventPopulated } from "@/types/place/event";
 import { PlacePopulated } from "@/types/place";
 
 export interface MapCreatorCardPartnershipsProps {
-  eventPartnerships: PartnershipPopulated[];
+  eventInvitations?: EventInvitationPopulated[];
   placePartnerships: PartnershipPopulated[];
   username: string;
   onMapButtonClick: (placeItem: {
@@ -21,7 +22,7 @@ export interface MapCreatorCardPartnershipsProps {
 }
 
 const MapCreatorCardPartnerships = ({
-  eventPartnerships,
+  eventInvitations = [],
   placePartnerships,
   username,
   onMapButtonClick,
@@ -37,13 +38,19 @@ const MapCreatorCardPartnerships = ({
     selectedEventId || ""
   );
 
+  useEffect(() => {
+    if (selectedEvent?.place && typeof selectedEvent.place === "object") {
+      setSelectedPlace(selectedEvent.place as PlacePopulated);
+    }
+  }, [selectedEvent]);
+
   const handleEventClick = (
     eventId: string,
-    place: PlacePopulated,
+    place: PlacePopulated | null | undefined,
     user: UserPopulated | undefined
   ) => {
     setSelectedEventId(eventId);
-    setSelectedPlace(place);
+    setSelectedPlace(place ?? null);
     setSelectedUser(user || null);
     setIsModalOpen(true);
   };
@@ -55,43 +62,40 @@ const MapCreatorCardPartnerships = ({
     setSelectedUser(null);
   };
 
-  if (eventPartnerships.length === 0 && placePartnerships.length === 0) {
+  if (eventInvitations.length === 0 && placePartnerships.length === 0) {
     return null;
   }
 
   return (
     <div className={styles.placesAndEventsSection}>
-      {eventPartnerships.length > 0 && (
+      {eventInvitations.length > 0 && (
         <section className={styles.section}>
           <h3 className={styles.sectionTitle}>
             <b> {capitalizeFirstLetter(username)} </b> participe à ces
-            événements ({eventPartnerships.length}):
+            événements ({eventInvitations.length}):
           </h3>
-          {eventPartnerships.map((partnership) => {
-            const event =
-              typeof partnership.event === "object" ? partnership.event : null;
-            const placeItem =
-              typeof partnership.place === "object" ? partnership.place : null;
+          {eventInvitations.map((invitation) => {
+            const event = invitation.event;
+            const initiator = invitation.initiator;
 
-            if (!event || !placeItem) return null;
-
-            const placeUser =
-              typeof placeItem.user === "object"
-                ? (placeItem.user as UserPopulated)
-                : undefined;
+            if (!event || !event._id) return null;
 
             return (
               <div
-                key={partnership._id}
+                key={invitation._id}
                 onClick={() =>
-                  handleEventClick(event._id, placeItem, placeUser)
+                  handleEventClick(
+                    event._id,
+                    undefined,
+                    initiator as UserPopulated | undefined
+                  )
                 }
                 style={{ cursor: "pointer" }}
               >
                 <EventCard
-                  event={event}
-                  place={placeItem}
-                  user={placeUser}
+                  event={event as EventPopulated}
+                  place={undefined}
+                  user={initiator as UserPopulated | undefined}
                   clickable={false}
                 />
               </div>

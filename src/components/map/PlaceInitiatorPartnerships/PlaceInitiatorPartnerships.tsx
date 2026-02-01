@@ -16,7 +16,7 @@ const PlaceInitiatorPartnerships = ({
   placeId,
   username,
 }: PlaceInitiatorPartnershipsProps) => {
-  const { partnerships } = usePlacePartnerships(placeId, undefined, "place", {
+  const { partnerships } = usePlacePartnerships(placeId, {
     onlyAccepted: "true",
   });
 

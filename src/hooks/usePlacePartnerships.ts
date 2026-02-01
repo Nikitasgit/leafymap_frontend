@@ -6,8 +6,6 @@ import { Partnership } from "@/types/partnerships";
 
 export const usePlacePartnerships = (
   placeId: string,
-  eventId?: string,
-  type: "place" | "event" = "place",
   queryParams: Record<string, string> = {}
 ) => {
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
@@ -17,16 +15,14 @@ export const usePlacePartnerships = (
     const fetchPartnerships = async () => {
       try {
         const searchParams = new URLSearchParams();
-        searchParams.append("type", type);
+        searchParams.append("type", "place");
         Object.entries(queryParams).forEach(([key, value]) => {
           searchParams.append(key, value);
         });
 
         const url = `${
           process.env.NEXT_PUBLIC_API_URL
-        }/api/partnerships/${placeId}${
-          eventId ? `/${eventId}` : ""
-        }?${searchParams.toString()}`;
+        }/api/partnerships/${placeId}?${searchParams.toString()}`;
 
         const response = await axios.get(url, {
           withCredentials: true,
@@ -51,7 +47,7 @@ export const usePlacePartnerships = (
     if (placeId) {
       withLoading(fetchPartnerships);
     }
-  }, [placeId, eventId, type, JSON.stringify(queryParams)]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placeId, JSON.stringify(queryParams)]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { partnerships, isLoading };
 };

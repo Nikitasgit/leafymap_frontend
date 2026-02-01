@@ -3,62 +3,49 @@
 import React from "react";
 import EventCard from "@/components/common/events/EventCard/EventCard";
 import Button from "@/components/common/buttons/Button/Button";
-import { PartnershipPopulated } from "@/types/partnerships";
+import { EventInvitationPopulated } from "@/types/eventInvitation";
 import { UserPopulated } from "@/types/user";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { useUserEventsPartnershipsByUserId } from "@/hooks/useUserEventsPartnershipsByUserId";
-import { usePartnershipActions } from "@/hooks/usePartnershipActions";
+import { useEventInvitationActions } from "@/hooks/useEventInvitationActions";
 import styles from "./InboxContainer.module.scss";
+import { EventPopulated } from "@/types/place/event";
 
-function isFullEvent(
-  event: PartnershipPopulated["event"]
-): event is NonNullable<PartnershipPopulated["event"]> & { _id: string } {
-  return !!event && typeof event === "object" && "_id" in event;
+export interface EventInvitationsSectionProps {
+  eventInvitations: EventInvitationPopulated[];
+  isLoading: boolean;
+  refetch: () => void;
 }
 
-export default function EventInvitationsSection() {
+export default function EventInvitationsSection({
+  eventInvitations,
+  isLoading,
+  refetch,
+}: EventInvitationsSectionProps) {
   const { user } = useCurrentUser();
-  const { partnerships, isLoading, refetch } =
-    useUserEventsPartnershipsByUserId(user?._id, {
-      asCollaborator: "true",
-      includeCancelledEvents: "false",
-      includePastEvents: "false",
-      onlyAccepted: "false",
-      onlyPending: "true",
-    });
   const {
-    acceptPartnership,
-    refusePartnership,
+    acceptEventInvitation,
+    refuseEventInvitation,
     isLoading: isUpdating,
-  } = usePartnershipActions(refetch);
+  } = useEventInvitationActions(refetch);
 
   if (!user) return null;
 
-  const pendingEventPartnerships = partnerships.filter(
-    (p: PartnershipPopulated) => p.status === "pending"
-  );
-
   if (isLoading) return null;
-  if (pendingEventPartnerships.length === 0) return null;
+  if (eventInvitations.length === 0) return null;
 
   return (
     <section className={styles.invitationSection}>
       <h2 className={styles.sectionTitle}>Invitations évènements</h2>
       <div className={styles.partnershipsList}>
-        {partnerships.map((partnership) => {
-          if (!isFullEvent(partnership.event)) return null;
-          const event = partnership.event;
-          const place = partnership.place;
-          const initiator = partnership.initiator;
+        {eventInvitations.map((invitation) => {
+          if (!invitation.event || !invitation.event._id) return null;
+          const event = invitation.event as EventPopulated;
+          const initiator = invitation.initiator;
           return (
-            <div key={partnership._id} className={styles.invitationCardWrapper}>
+            <div key={invitation._id} className={styles.invitationCardWrapper}>
               <EventCard
                 event={event}
-                place={
-                  typeof place === "object" && place && "_id" in place
-                    ? place
-                    : undefined
-                }
+                place={undefined}
                 user={initiator as UserPopulated | undefined}
                 clickable={!!event._id}
               />
@@ -66,7 +53,7 @@ export default function EventInvitationsSection() {
                 <Button
                   variant="primary"
                   size="small"
-                  onClick={() => acceptPartnership(partnership._id)}
+                  onClick={() => acceptEventInvitation(invitation._id)}
                   disabled={isUpdating}
                   fullWidth
                   ariaLabel="Accepter l'invitation"
@@ -77,7 +64,7 @@ export default function EventInvitationsSection() {
                   variant="outline"
                   fullWidth
                   size="small"
-                  onClick={() => refusePartnership(partnership._id)}
+                  onClick={() => refuseEventInvitation(invitation._id)}
                   disabled={isUpdating}
                   ariaLabel="Refuser l'invitation"
                 >

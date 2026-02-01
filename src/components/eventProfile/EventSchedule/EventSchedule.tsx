@@ -1,11 +1,12 @@
 "use client";
+
 import { Clock } from "lucide-react";
+import Image from "next/image";
 import styles from "./EventSchedule.module.scss";
 import { formatDateShort, sortPeriodsByStartDate } from "@/utils/dates";
-
 import { EventScheduleProps } from "./EventSchedule.types";
-import ParticipantMiniCard from "./ParticipantMiniCard";
 import { Collaborator } from "@/types/place/collaborators";
+import creatorDefaultsSvg from "@public/images/creator_default.svg";
 
 const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
   const sortedSchedule = sortPeriodsByStartDate(schedule);
@@ -55,7 +56,6 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
                           {timeSlot.startTime} à {timeSlot.endTime}
                         </p>
                       </div>
-
                       <p className={styles.timeSlotTitle}>- {timeSlot.title}</p>
                     </div>
                     <div className={styles.participantsList}>
@@ -66,10 +66,22 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
                             user !== undefined
                         )
                         .map((user) => (
-                          <ParticipantMiniCard
+                          <div
                             key={user._id}
-                            collaborator={user}
-                          />
+                            className={styles.participantCard}
+                            title={user.name}
+                          >
+                            <Image
+                              src={user.image || creatorDefaultsSvg}
+                              alt={user.name || ""}
+                              width={24}
+                              height={24}
+                              className={styles.participantImage}
+                            />
+                            <span className={styles.participantName}>
+                              {user.name || "Participant"}
+                            </span>
+                          </div>
                         ))}
                     </div>
                   </div>

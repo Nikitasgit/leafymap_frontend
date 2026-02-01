@@ -4,7 +4,7 @@ import { capitalizeFirstLetter } from "@/utils/functions";
 import { Place, PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
 import { useUserPlacesPartnershipsByUserId } from "@/hooks/useUserPlacesPartnershipsByUserId";
-import { useUserEventsPartnershipsByUserId } from "@/hooks/useUserEventsPartnershipsByUserId";
+import { useEventInvitationsByUserId } from "@/hooks/useEventInvitationsByUserId";
 import styles from "./PresentationTab.module.scss";
 import UsersListXScroll from "@/components/common/users/UsersListXScroll";
 import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
@@ -31,22 +31,18 @@ const PresentationTab = ({
       onlyAccepted: "true",
     });
 
-  const { partnerships: eventsPartnerships } =
-    useUserEventsPartnershipsByUserId(user._id, {
-      asCollaborator: "true",
-      includeCancelledEvents: "false",
-      includePastEvents: "false",
-      onlyAccepted: "true",
-    });
+  const { eventInvitations } = useEventInvitationsByUserId(user._id, {
+    asCollaborator: "true",
+    includeCancelledEvents: "false",
+    includePastEvents: "false",
+    onlyAccepted: "true",
+  });
 
   const { partnerships: placePartnerships } = usePlacePartnerships(
     place?._id || "",
-    undefined,
-    "place",
     { onlyAccepted: "true" }
   );
 
-  
   return (
     <>
       <div className={styles.descriptionRow}>
@@ -76,12 +72,12 @@ const PresentationTab = ({
         <MapPlaceCardSchedule
           schedule={place?.defaultSchedule}
           place={place as PlacePopulated | null}
-          user={user} 
+          user={user}
           isPlaceLoading={isPlaceLoading}
         />
       )}
       <MapCreatorCardPartnerships
-        eventPartnerships={eventsPartnerships}
+        eventInvitations={eventInvitations}
         placePartnerships={placesPartnerships}
         username={user.username || ""}
         onMapButtonClick={onMapButtonClick}

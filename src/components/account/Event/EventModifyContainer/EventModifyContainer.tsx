@@ -4,22 +4,19 @@ import { useEvent } from "@/hooks/useEvent";
 import { useParams } from "next/navigation";
 import React from "react";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
-import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
+import { useEventInvitations } from "@/hooks/useEventInvitations";
 import PageHeader from "@/components/common/PageHeader";
 import styles from "./EventModifyContainer.module.scss";
+import { Partnership } from "@/types/partnerships";
 
 const EventModifyContainer = () => {
   const params = useParams();
   const eventId = params.eventId as string;
-  const placeId = params.placeId as string;
   const { event, isLoading: eventLoading } = useEvent(eventId);
-  const { partnerships, isLoading: partnershipsLoading } = usePlacePartnerships(
-    placeId,
-    eventId,
-    "event"
-  );
+  const { eventInvitations, isLoading: invitationsLoading } =
+    useEventInvitations(eventId);
 
-  const loading = eventLoading || partnershipsLoading;
+  const loading = eventLoading || invitationsLoading;
 
   return (
     <div className={styles.EventModifyContainer}>
@@ -31,7 +28,7 @@ const EventModifyContainer = () => {
           <EventForm
             eventData={event}
             isUpdate={true}
-            partnershipsData={partnerships}
+            partnershipsData={eventInvitations as Partnership[]}
           />
         )}
       </section>

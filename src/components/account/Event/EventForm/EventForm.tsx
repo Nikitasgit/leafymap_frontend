@@ -11,7 +11,7 @@ import EventScheduleList from "../EventScheduleList";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/useToast";
 import { Partnership, PartnershipPopulated } from "@/types/partnerships";
-import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
+import { useSubmitEventInvitations } from "@/hooks/useSubmitEventInvitations";
 import { separateNewAndUpdatedArrayValues } from "@/utils/tempId";
 import { validateEventData } from "@/validations/eventValidations";
 import { useEventSchedule } from "@/hooks/useEventSchedule";
@@ -43,8 +43,8 @@ const EventForm = ({
   const placeId = params.placeId as string;
 
   const { submitEvent, isLoading: submitFormLoading } = useSubmitEvent();
-  const { submitPartnerships, isLoading: submitPartnershipsLoading } =
-    useSubmitPartnerships();
+  const { submitEventInvitations, isLoading: submitEventInvitationsLoading } =
+    useSubmitEventInvitations();
   const { showError, showSuccess } = useToast();
 
   const [partnerships, setPartnerships] =
@@ -86,7 +86,7 @@ const EventForm = ({
     }
   }, [hasAttemptedSubmit, validateFormData]);
 
-  const loading = submitPartnershipsLoading || submitFormLoading;
+  const loading = submitEventInvitationsLoading || submitFormLoading;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -105,14 +105,13 @@ const EventForm = ({
         );
         // send partnerships data to server if event is created
         if (eventId && partnerships.length > 0) {
-          // separate new and updated partnerships
           const { newValues, updatedValues } =
             separateNewAndUpdatedArrayValues(partnerships);
           if (newValues.length > 0) {
-            await submitPartnerships(newValues, false, placeId, eventId);
+            await submitEventInvitations(newValues, false, eventId);
           }
           if (updatedValues.length > 0) {
-            await submitPartnerships(updatedValues, true, placeId, eventId);
+            await submitEventInvitations(updatedValues, true, eventId);
           }
         }
       }

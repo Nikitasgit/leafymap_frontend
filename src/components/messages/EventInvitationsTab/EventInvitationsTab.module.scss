@@ -48,6 +48,16 @@
         gap: spacing(2);
       }
     }
+    .invitationCardWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: spacing(1);
+    }
+    .invitationCardActions {
+      display: flex;
+      gap: spacing(1);
+      flex-shrink: 0;
+    }
   }
 }
 

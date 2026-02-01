@@ -2,17 +2,19 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
-import { PartnershipPopulated } from "@/types/partnerships";
+import { EventInvitationPopulated } from "@/types/eventInvitation";
 
-export const useUserEventsPartnershipsByUserId = (
+export const useEventInvitationsByUserId = (
   userId?: string,
   queryParams: Record<string, string> = {}
 ) => {
-  const [partnerships, setPartnerships] = useState<PartnershipPopulated[]>([]);
+  const [eventInvitations, setEventInvitations] = useState<
+    EventInvitationPopulated[]
+  >([]);
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
 
-  const fetchPartnerships = async () => {
+  const fetchEventInvitations = async () => {
     const searchParams = new URLSearchParams();
     Object.entries(queryParams).forEach(([key, value]) => {
       searchParams.append(key, value);
@@ -20,15 +22,15 @@ export const useUserEventsPartnershipsByUserId = (
     try {
       const url = `${
         process.env.NEXT_PUBLIC_API_URL
-      }/api/partnerships/user/${userId}/events?${searchParams.toString()}`;
+      }/api/event-invitations/user/${userId}?${searchParams.toString()}`;
 
       const response = await axios.get(url, {
         withCredentials: true,
       });
       if (response.data && response.data.data) {
-        setPartnerships(response.data.data);
+        setEventInvitations(response.data.data);
       } else {
-        setPartnerships([]);
+        setEventInvitations([]);
         showError("Invalid response from server");
       }
     } catch (err) {
@@ -36,16 +38,20 @@ export const useUserEventsPartnershipsByUserId = (
         err instanceof Error
           ? err.message
           : "Erreur lors du chargement des invitations d'événements";
-      setPartnerships([]);
+      setEventInvitations([]);
       showError(errorMessage);
     }
   };
 
   useEffect(() => {
     if (userId) {
-      withLoading(fetchPartnerships);
+      withLoading(fetchEventInvitations);
     }
   }, [userId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return { partnerships, isLoading, refetch: fetchPartnerships };
+  return {
+    eventInvitations,
+    isLoading,
+    refetch: fetchEventInvitations,
+  };
 };
