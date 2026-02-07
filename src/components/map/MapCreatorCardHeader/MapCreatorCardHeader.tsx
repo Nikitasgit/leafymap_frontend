@@ -85,12 +85,11 @@ const MapCreatorCardHeader = ({
               {capitalizeFirstLetter(user.firstname || "")}{" "}
               {capitalizeFirstLetter(user.lastname || "")}
             </b>{" "}
-            {user.userCategories &&
-              user.userCategories[0]?.userCategoryType === "creation" && (
-                <CreatorCategoryBadge
-                  categoryName={user.userCategories[0].name || ""}
-                />
-              )}
+            {user.userCategory?.userCategoryType === "creation" && (
+              <CreatorCategoryBadge
+                categoryName={user.userCategory?.name || ""}
+              />
+            )}
           </span>
         </div>
         {(place || user.website) && (

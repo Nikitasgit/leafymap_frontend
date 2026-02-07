@@ -4,22 +4,15 @@ import PartnershipCard from "@/components/common/partnerships/PartnershipCard/Pa
 import LoadingSpinner from "../../loading/LoadingSpinner";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export interface UserItem {
+export interface UsersListXScrollUser {
   _id: string;
-  name?: string;
   username?: string;
-  image?:
-    | string
-    | {
-        urls?: {
-          thumbnail?: string;
-        };
-      };
-  category?: string;
+  image?: { urls?: { thumbnail?: string } };
+  userCategory?: { name: string };
 }
 
 export interface UsersListXScrollProps {
-  users: UserItem[];
+  users: UsersListXScrollUser[];
   title?: string | React.ReactNode;
   showTitle?: boolean;
   showCategory?: boolean;
@@ -192,29 +185,11 @@ const UsersListXScroll = ({
           {loading ? (
             <LoadingSpinner />
           ) : (
-            users.map((user) => {
-              // Convertir UserItem au format attendu par PartnershipCard
-              const imageUrl =
-                typeof user.image === "string"
-                  ? user.image
-                  : user.image?.urls?.thumbnail || "";
-
-              const cardUser = {
-                _id: user._id,
-                name: user.name || user.username || "Utilisateur",
-                image: imageUrl,
-                category: user.category || "",
-              };
-
-              return (
-                <div key={user._id} className={styles.cardWrapper}>
-                  <PartnershipCard
-                    user={cardUser}
-                    showCategory={showCategory}
-                  />
-                </div>
-              );
-            })
+            users.map((user) => (
+              <div key={user._id} className={styles.cardWrapper}>
+                <PartnershipCard user={user} showCategory={showCategory} />
+              </div>
+            ))
           )}
         </div>
       </div>

@@ -14,8 +14,8 @@ const GallerySection: React.FC<GallerySectionProps> = ({
   reference,
   referenceType,
   isUploading = false,
-  isOwner = false,
   onFilesSelected,
+  canHandleImages = false,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -44,7 +44,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
     event?: React.MouseEvent
   ) => {
     event?.stopPropagation();
-    if (!isOwner) return;
+    if (!canHandleImages) return;
     try {
       await deleteImages([imageId]);
       await refetch();
@@ -62,14 +62,14 @@ const GallerySection: React.FC<GallerySectionProps> = ({
 
   return (
     <section className={styles.gallerySection}>
-      {!images || (images.length === 0 && !isOwner) ? (
+      {!images || (images.length === 0 && !canHandleImages) ? (
         <EmptyState
           title="Aucune image dans la galerie"
           icon={<ImageIcon className={styles.icon} />}
         />
       ) : (
         <div className={styles.imagesList}>
-          {isOwner && (
+          {canHandleImages && (
             <ImageUploader
               onFilesSelected={handleFilesSelected}
               disabled={isLoading}
@@ -93,7 +93,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
                   width={150}
                   height={150}
                 />
-                {isOwner && (
+                {canHandleImages && (
                   <button
                     className={styles.deleteButton}
                     onClick={(e) => handleDeleteImage(image._id, e)}

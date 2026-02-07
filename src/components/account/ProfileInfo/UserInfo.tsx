@@ -59,9 +59,13 @@ const UserInfo = ({
           <CategorySelectorInput
             onUserChange={onUserChange}
             onPlaceChange={onPlaceChange}
-            value={user.userCategories[0] as string}
-            error={!!errors.userCategories}
-            errorMessage={errors.userCategories}
+            value={
+              typeof user.userCategory === "string"
+                ? user.userCategory
+                : user.userCategory?._id ?? ""
+            }
+            error={!!errors.userCategory}
+            errorMessage={errors.userCategory}
           />
         </div>
       </fieldset>

@@ -52,6 +52,13 @@ $scrollbar-width: 8px;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
+
+      .skeletonTitle {
+        flex: 1;
+        height: rem(24);
+        border-radius: rem(4);
+        max-width: 60%;
+      }
     }
 
     .modalContentBody {
@@ -96,6 +103,12 @@ $scrollbar-width: 8px;
 
   .content {
     @include flex(column, flex-start, stretch, spacing(1.5));
+  }
+
+  .skeletonContent {
+    @include flex(column, flex-start, stretch, spacing(1.5));
+    width: 100%;
+    padding: spacing(0.5) 0;
   }
 
   .actions {

@@ -3,17 +3,25 @@
 @use "@/styles/abstracts/mixins" as *;
 
 .card {
+  position: relative;
   @include flex(row, flex-start, center, spacing(1));
   padding: spacing(1);
   background-color: $white;
   border: none;
   border-radius: rem(8);
-  width: fit-content;
-  max-width: 100%;
+  width: 100%;
+  min-width: 0;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  .cardActions {
+    position: absolute;
+    top: spacing(0.25);
+    right: spacing(0.25);
+    z-index: 2;
+  }
 
   * {
     -webkit-user-select: none;

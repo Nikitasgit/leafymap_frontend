@@ -4,7 +4,6 @@ import {
   InitialCreatorData,
   InitialPlaceData,
 } from "../../CreateProfileStepper/CreateProfileStepper.types";
-import { Partnership } from "@/types/partnerships";
 
 export interface ProfileFormStepProps {
   place?: InitialPlaceData;
@@ -14,8 +13,6 @@ export interface ProfileFormStepProps {
   initialPlaceLocation?: Location | null;
   onPlaceChange: FormDataChangeHandler;
   onUserChange?: FormDataChangeHandler;
-  onPartnershipsChange?: (partnerships: Partnership[]) => void;
-  partnerships?: Partnership[];
   onSubmit: () => Promise<void>;
   onBack?: () => void;
   showPlaceForm?: boolean;

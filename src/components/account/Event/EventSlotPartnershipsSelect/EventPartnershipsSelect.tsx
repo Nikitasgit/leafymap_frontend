@@ -29,9 +29,11 @@ const EventPartnershipsSelect = ({
                   : "secondary"
               }
               onClick={() => onClick(partnership)}
-              ariaLabel={`Ajouter ${partnership.collaborator.name} à ce créneau`}
+              ariaLabel={`Ajouter ${
+                partnership.collaborator.username ?? "Utilisateur"
+              } à ce créneau`}
             >
-              {partnership.collaborator.name}{" "}
+              {partnership.collaborator.username ?? "Utilisateur"}{" "}
               <EventStatus status={partnership.status} />
             </Button>
           </li>

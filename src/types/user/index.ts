@@ -21,11 +21,11 @@ export interface User extends BaseEntity {
   interests?: string[];
   place?: Place;
   _id: string;
-  userCategories: string[] | UserCategory[];
+  userCategory?: string | UserCategory;
 }
 
 export interface UserPopulated extends User {
   place?: PlacePopulated;
   image?: Image;
-  userCategories: UserCategory[];
+  userCategory?: UserCategory;
 }

@@ -13,7 +13,6 @@ import {
 } from "./ProfileFormStep.types";
 import { UserContactForm } from "../../ContactForm";
 import { UserInfo } from "../../ProfileInfo";
-import PartnershipsForm from "@/components/account/Partnership/PartnershipsForm/PartnershipsForm";
 
 const ProfileFormStep = ({
   place,
@@ -21,8 +20,6 @@ const ProfileFormStep = ({
   initialPlaceLocation,
   onPlaceChange,
   onUserChange = () => {},
-  onPartnershipsChange = () => {},
-  partnerships = [],
   onSubmit,
   onBack = () => {},
   submitButtonText = "Créer mon profil",
@@ -89,12 +86,6 @@ const ProfileFormStep = ({
             errors={errors.place}
             showRadioYesOrNo={showPlaceRadioYesOrNo}
           />
-          {Boolean(place.active) && (
-            <PartnershipsForm
-              onChange={onPartnershipsChange}
-              partnerships={partnerships}
-            />
-          )}
         </>
       )}
       <UserContactForm

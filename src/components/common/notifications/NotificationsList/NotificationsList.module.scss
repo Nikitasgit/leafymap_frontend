@@ -1,0 +1,17 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  min-width: 280px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.empty {
+  padding: spacing(2);
+  text-align: center;
+  font-size: rem(14);
+  color: $grey-500;
+}

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { X } from "lucide-react";
+import Skeleton from "@mui/material/Skeleton";
 import Button from "@/components/common/buttons/Button/Button";
 import styles from "./BaseModal.module.scss";
-import LoadingSpinner from "../../loading/LoadingSpinner";
 
 interface BaseModalProps {
   isOpen: boolean;
@@ -35,11 +35,15 @@ const BaseModal: React.FC<BaseModalProps> = ({
   isContentLoading = false,
   withFooter = true,
 }) => {
+  const [showContent, setShowContent] = React.useState(false);
+  const CONTENT_DELAY_MS = 100;
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
+      setShowContent(false);
     }
     return () => {
       document.body.style.overflow = "unset";
@@ -91,12 +95,29 @@ const BaseModal: React.FC<BaseModalProps> = ({
     }
   };
 
+  useEffect(() => {
+    if (isContentLoading) {
+      setShowContent(false);
+    } else {
+      const t = setTimeout(() => setShowContent(true), CONTENT_DELAY_MS);
+      return () => clearTimeout(t);
+    }
+  }, [isContentLoading]);
   if (!isOpen) return null;
 
   const modalBody = (
     <>
       <div className={styles.modalContentBody}>
-        {isContentLoading ? <LoadingSpinner /> : children}
+        {!showContent ? (
+          <div className={styles.skeletonContent}>
+            <Skeleton variant="rounded" height={120} sx={{ width: "100%" }} />
+            <Skeleton variant="rounded" height={14} sx={{ width: "100%" }} />
+            <Skeleton variant="rounded" height={14} sx={{ width: "70%" }} />
+            <Skeleton variant="rounded" height={14} sx={{ width: "40%" }} />
+          </div>
+        ) : (
+          children
+        )}
       </div>
       {withFooter && (
         <div className={styles.modalFooter}>
@@ -129,7 +150,15 @@ const BaseModal: React.FC<BaseModalProps> = ({
     <div className={styles.modal} onClick={handleBackdropClick}>
       <div className={styles.modalContent}>
         <div className={styles.modalContentHeader}>
-          <h2 className={styles.title}>{title}</h2>{" "}
+          {!showContent ? (
+            <Skeleton
+              variant="rounded"
+              height={28}
+              sx={{ flex: 1, maxWidth: "60%" }}
+            />
+          ) : (
+            <h2 className={styles.title}>{title}</h2>
+          )}{" "}
           <button
             className={styles.closeButton}
             onClick={onClose}

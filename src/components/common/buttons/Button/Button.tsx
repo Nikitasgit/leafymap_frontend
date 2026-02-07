@@ -1,5 +1,6 @@
 import styles from "./Button.module.scss";
 import { ButtonProps } from "./Button.types";
+import NotificationBadge from "@/components/common/badges/NotificationBadge/NotificationBadge";
 
 const Button: React.FC<ButtonProps> = ({
   children,
@@ -13,6 +14,7 @@ const Button: React.FC<ButtonProps> = ({
   className,
   fullWidth = false,
   ariaLabel,
+  badge,
 }) => {
   return (
     <button
@@ -27,6 +29,9 @@ const Button: React.FC<ButtonProps> = ({
       {startIcon && <span className={styles.startIcon}>{startIcon}</span>}
       {children && children}
       {endIcon && <span className={styles.endIcon}>{endIcon}</span>}
+      {badge != null && badge > 0 && (
+        <NotificationBadge count={badge} absolutePosition />
+      )}
     </button>
   );
 };

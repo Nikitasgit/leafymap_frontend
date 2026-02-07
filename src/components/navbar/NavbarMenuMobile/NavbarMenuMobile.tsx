@@ -4,7 +4,6 @@ import Link from "next/link";
 import { LucideIcon, LogOut } from "lucide-react";
 import { User } from "@/types/user";
 import NavbarSkeleton from "../NavbarSkeleton";
-import NavbarNotificationBadge from "../../common/badges/NotificationBadge/NotificationBadge";
 import styles from "./NavbarMenuMobile.module.scss";
 
 interface NavItem {
@@ -23,7 +22,6 @@ interface NavbarMenuMobileProps {
   logout: () => Promise<void>;
   onClose: () => void;
   t: (key: string) => string;
-  unreadMessagesCount: number;
 }
 
 export default function NavbarMenuMobile({
@@ -35,7 +33,6 @@ export default function NavbarMenuMobile({
   logout,
   onClose,
   t,
-  unreadMessagesCount,
 }: NavbarMenuMobileProps) {
   if (!isOpen) return null;
 
@@ -65,7 +62,6 @@ export default function NavbarMenuMobile({
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
-          const isMessages = item.href === "/inbox";
           if (!item.display) return null;
           return (
             <Link
@@ -80,10 +76,7 @@ export default function NavbarMenuMobile({
                 <Icon className={styles.icon} aria-hidden="true" />
               </div>
               <div className={styles.labelContainer}>
-                <span>{item.label}</span>{" "}
-                {isMessages && (
-                  <NavbarNotificationBadge count={unreadMessagesCount} />
-                )}
+                <span>{item.label}</span>
               </div>
             </Link>
           );

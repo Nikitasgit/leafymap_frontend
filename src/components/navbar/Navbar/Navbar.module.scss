@@ -11,6 +11,17 @@
   position: relative;
   z-index: 10000000;
 
+  .leftSection {
+    flex-shrink: 0;
+  }
+
+  .navSection {
+    @include flex(row, flex-end, center, spacing(0.75));
+    flex: 1;
+    margin-left: spacing(1);
+    min-width: 0;
+  }
+
   .logo {
     @include flex(row, center, center, 0);
     .logoImage {

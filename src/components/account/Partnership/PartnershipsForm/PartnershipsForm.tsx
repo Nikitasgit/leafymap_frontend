@@ -34,9 +34,7 @@ const PartnershipsForm = ({
       _id: user._id,
       image: user.image?.urls.thumbnail,
       name: user.username,
-      categories: user.userCategories?.map((category) => ({
-        name: category.name,
-      })),
+      categories: user.userCategory ? [{ name: user.userCategory.name }] : [],
     }));
     return suggestions;
   };

@@ -3,11 +3,8 @@ import MapCreatorCardPartnerships from "@/components/map/MapCreatorCardPartnersh
 import { capitalizeFirstLetter } from "@/utils/functions";
 import { Place, PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
-import { useUserPlacesPartnershipsByUserId } from "@/hooks/useUserPlacesPartnershipsByUserId";
 import { useEventInvitationsByUserId } from "@/hooks/useEventInvitationsByUserId";
 import styles from "./PresentationTab.module.scss";
-import UsersListXScroll from "@/components/common/users/UsersListXScroll";
-import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
 
 export interface PresentationTabProps {
   place: Place | null;
@@ -25,12 +22,6 @@ const PresentationTab = ({
   user,
   onMapButtonClick,
 }: PresentationTabProps) => {
-  const { partnerships: placesPartnerships } =
-    useUserPlacesPartnershipsByUserId(user._id, {
-      asCollaborator: "true",
-      onlyAccepted: "true",
-    });
-
   const { eventInvitations } = useEventInvitationsByUserId(user._id, {
     asCollaborator: "true",
     includeCancelledEvents: "false",
@@ -38,36 +29,12 @@ const PresentationTab = ({
     onlyAccepted: "true",
   });
 
-  const { partnerships: placePartnerships } = usePlacePartnerships(
-    place?._id || "",
-    { onlyAccepted: "true" }
-  );
-
   return (
     <>
       <div className={styles.descriptionRow}>
         <p>{capitalizeFirstLetter(user.description || "")}</p>
       </div>
-      {place?._id && placePartnerships.length > 0 && (
-        <UsersListXScroll
-          users={placePartnerships.map((partnership: any) => {
-            const collaborator = partnership.collaborator;
-            return {
-              _id: collaborator._id,
-              name: collaborator.username,
-              image: collaborator.image?.urls?.thumbnail,
-              category: collaborator.userCategories?.[0]?.name,
-            };
-          })}
-          title={
-            <>
-              <b>{capitalizeFirstLetter(user.username || "")}</b> collabore avec
-              :
-            </>
-          }
-          showCategory={true}
-        />
-      )}
+
       {place?.defaultSchedule && (
         <MapPlaceCardSchedule
           schedule={place?.defaultSchedule}
@@ -78,7 +45,7 @@ const PresentationTab = ({
       )}
       <MapCreatorCardPartnerships
         eventInvitations={eventInvitations}
-        placePartnerships={placesPartnerships}
+        placePartnerships={[]}
         username={user.username || ""}
         onMapButtonClick={onMapButtonClick}
       />

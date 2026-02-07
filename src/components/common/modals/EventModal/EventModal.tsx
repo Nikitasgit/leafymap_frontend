@@ -10,6 +10,7 @@ import { UserPopulated } from "@/types/user";
 import styles from "./EventModal.module.scss";
 import EventSchedule from "@/components/eventProfile/EventSchedule";
 import { capitalizeFirstLetter } from "@/utils/functions";
+import { UsersListXScrollUser } from "../../users/UsersListXScroll/UsersListXScroll";
 
 export interface EventModalProps {
   isOpen: boolean;
@@ -30,16 +31,9 @@ const EventModal: React.FC<EventModalProps> = ({
 }) => {
   const { eventInvitations, isLoading: eventInvitationsLoading } =
     useEventInvitations(event._id, { onlyAccepted: "true" });
-
-  const users = eventInvitations
-    .filter((invitation) => invitation.collaborator)
-    .map((invitation) => ({
-      _id: invitation.collaborator!._id,
-      name: invitation.collaborator!.username,
-      image: invitation.collaborator!.image?.urls?.thumbnail,
-      category: invitation.collaborator!.userCategories?.[0]?.name,
-    }));
-
+  const participants = eventInvitations.map(
+    (invitation) => invitation.collaborator
+  );
   const handleClose = () => {
     onClose();
   };
@@ -69,9 +63,9 @@ const EventModal: React.FC<EventModalProps> = ({
           />
         </div>
 
-        {users.length > 0 && (
+        {participants.length > 0 && (
           <UsersListXScroll
-            users={users}
+            users={participants as UsersListXScrollUser[]}
             title="Participants"
             showCategory
             showChevrons
@@ -79,7 +73,7 @@ const EventModal: React.FC<EventModalProps> = ({
         )}
 
         {hasSchedule && (
-          <EventSchedule schedule={event.schedule} users={users} />
+          <EventSchedule schedule={event.schedule} users={participants} />
         )}
       </div>
     </BaseModal>

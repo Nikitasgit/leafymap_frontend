@@ -2,9 +2,9 @@ import { Period } from "@/types/place/schedule";
 
 export interface EventScheduleUser {
   _id: string;
-  name?: string;
-  image?: string;
-  category?: string;
+  username?: string;
+  image?: { urls?: { thumbnail?: string } };
+  userCategory?: { name: string };
 }
 
 export interface EventScheduleProps {

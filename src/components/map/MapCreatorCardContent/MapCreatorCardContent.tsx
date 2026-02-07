@@ -7,6 +7,7 @@ export interface MapCreatorCardContentProps {
   user: UserPopulated;
   isOwner: boolean;
   place: Place | null;
+  isPlaceLoading: boolean;
   onMapButtonClick: (placeItem: {
     location: { coordinates: number[] } | null;
     _id: string;
@@ -18,9 +19,11 @@ const MapCreatorCardContent = ({
   user,
   isOwner,
   place,
+  isPlaceLoading,
   onMapButtonClick,
   onPlaceRefetch,
 }: MapCreatorCardContentProps) => {
+  const canHandleImages = false;
   return (
     <div className={styles.content}>
       <CreatorTabs
@@ -29,6 +32,8 @@ const MapCreatorCardContent = ({
         onMapButtonClick={onMapButtonClick}
         onPlaceRefetch={onPlaceRefetch}
         isOwner={isOwner}
+        canHandleImages={canHandleImages}
+        isPlaceLoading={isPlaceLoading}
       />
     </div>
   );

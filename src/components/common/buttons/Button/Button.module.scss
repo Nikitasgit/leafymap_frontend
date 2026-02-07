@@ -3,6 +3,7 @@
 @use "@/styles/abstracts/functions" as *;
 
 .button {
+  position: relative;
   font-weight: 500;
   border: none;
   font-size: 15px;

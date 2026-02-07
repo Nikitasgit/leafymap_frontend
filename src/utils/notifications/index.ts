@@ -1,0 +1,1 @@
+export { translateNotificationAction } from "./translateNotificationAction";

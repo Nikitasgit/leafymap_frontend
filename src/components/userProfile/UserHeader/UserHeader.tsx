@@ -14,7 +14,8 @@ interface UserHeaderProps {
 }
 
 const UserHeader: React.FC<UserHeaderProps> = ({ user, onFollow }) => {
-  const place = user.place && typeof user.place === "object" ? user.place : null;
+  const place =
+    user.place && typeof user.place === "object" ? user.place : null;
   return (
     <header className={styles.header}>
       <BackButton />
@@ -32,7 +33,9 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user, onFollow }) => {
           <div className={styles.counters}>
             <SubscribersCounter followers={user.followers?.length || 0} />
           </div>
-          <CreatorCategoryBadge categoryName={user.userCategories[0].name} />
+          {user.userCategory && (
+            <CreatorCategoryBadge categoryName={user.userCategory.name} />
+          )}
           <Button variant="outline" size="small" onClick={onFollow}>
             Suivre
           </Button>

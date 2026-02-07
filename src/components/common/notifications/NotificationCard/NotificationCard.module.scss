@@ -1,0 +1,40 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.card {
+  @include flex(row, flex-start, center, spacing(0.75));
+  padding: spacing(0.75) spacing(1);
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: $grey-50;
+  }
+}
+
+.avatarWrap {
+  flex-shrink: 0;
+}
+
+.content {
+  min-width: 0;
+  flex: 1;
+}
+
+.name {
+  font-weight: 600;
+  font-size: rem(14);
+  color: $grey-800;
+  margin: 0 0 spacing(0.25) 0;
+}
+
+.message {
+  font-size: rem(13);
+  color: $grey-600;
+  margin: 0;
+}

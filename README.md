@@ -260,11 +260,6 @@ function MyComponent() {
 
 #### Partnerships
 
-- `usePartnershipByUserId()` : Partnerships d'un utilisateur
-- `usePlacePartnerships()` : Partnerships d'un lieu
-- `useSubmitPartnerships()` : Création de partnership (Organizer)
-- `usePartnershipActions()` : Accepter/refuser (Creator)
-
 #### Images
 
 - `useImages()` : Images (peut filtrer par type : gallery, profile, cover, other)

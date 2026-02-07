@@ -100,13 +100,20 @@ const MapFiltersBar = ({
               placeCategory: user.place.placeCategory,
             }
           : undefined,
-        categories: user.userCategories?.map((category) => ({
-          name: typeof category === "object" ? category.name : "",
-          userCategoryType:
-            typeof category === "object"
-              ? category.userCategoryType
-              : undefined,
-        })),
+        categories: user.userCategory
+          ? [
+              {
+                name:
+                  typeof user.userCategory === "object"
+                    ? user.userCategory.name
+                    : "",
+                userCategoryType:
+                  typeof user.userCategory === "object"
+                    ? user.userCategory.userCategoryType
+                    : undefined,
+              },
+            ]
+          : [],
       }));
 
       return suggestions;

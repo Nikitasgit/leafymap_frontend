@@ -24,7 +24,9 @@ export interface CreatorTabsProps {
   onPlaceRefetch?: () => void;
   isOwner?: boolean;
   isUploadingImages?: boolean;
+  isPlaceLoading?: boolean;
   onFilesSelected?: (files: File[]) => void;
+  canHandleImages?: boolean;
 }
 
 const CreatorTabs = ({
@@ -37,6 +39,8 @@ const CreatorTabs = ({
   isOwner = false,
   isUploadingImages = false,
   onFilesSelected,
+  isPlaceLoading = false,
+  canHandleImages = false,
 }: CreatorTabsProps) => {
   const [internalActiveTab, setInternalActiveTab] = useState("presentation");
   const { events, isLoading: isLoadingEvents } = usePlaceEvents(
@@ -81,6 +85,7 @@ const CreatorTabs = ({
         return (
           <PresentationTab
             place={place}
+            isPlaceLoading={isPlaceLoading}
             user={user}
             onMapButtonClick={onMapButtonClick || (async () => {})}
           />
@@ -99,6 +104,7 @@ const CreatorTabs = ({
           <ReviewsTab
             reference={place._id}
             referenceType="Place"
+            isOwner={isOwner}
             canReview={!isOwner}
             canReply={isOwner}
             onRatingUpdated={onPlaceRefetch}
@@ -109,7 +115,7 @@ const CreatorTabs = ({
           <GallerySection
             reference={user._id || null}
             referenceType="User"
-            isOwner={isOwner}
+            canHandleImages={canHandleImages}
             isUploading={isUploadingImages}
             onFilesSelected={onFilesSelected}
           />

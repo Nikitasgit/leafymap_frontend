@@ -4,7 +4,6 @@ import { useSearchParams } from "next/navigation";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useConversations } from "@/hooks/useConversations";
 import { useEventInvitationsByUserId } from "@/hooks/useEventInvitationsByUserId";
-import { useUserPlacesPartnershipsByUserId } from "@/hooks/useUserPlacesPartnershipsByUserId";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import ConversationsList from "@/components/messages/ConversationsList";
 import ConversationContainer from "@/components/messages/ConversationContainer";
@@ -28,13 +27,6 @@ export default function InboxContainer() {
     includePastEvents: "false",
     onlyPending: "true",
   });
-  const { partnerships: placePartnerships, isLoading: isLoadingPlaces } =
-    useUserPlacesPartnershipsByUserId(user?._id, {
-      asCollaborator: "true",
-      onlyAccepted: "false",
-      onlyPending: "true",
-    });
-
   const {
     conversations,
     isLoading: isLoadingConversations,
@@ -45,8 +37,8 @@ export default function InboxContainer() {
   const hasConversation = !!(conversationId && recipientId);
 
   const pendingEventCount = eventInvitations.length;
-  const pendingPlaceCount = placePartnerships.length;
-  const invitationsLoaded = !isLoadingEventInvitations && !isLoadingPlaces;
+  const pendingPlaceCount = 0;
+  const invitationsLoaded = !isLoadingEventInvitations;
   const hasAnyInvitations =
     isCreator &&
     invitationsLoaded &&

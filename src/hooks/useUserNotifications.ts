@@ -4,16 +4,19 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import {
   fetchUserNotifications,
   selectNotifications,
-  selectUnreadMessagesCount,
+  selectNotificationsList,
+  selectUnreadCount,
 } from "@/store/notificationSlice";
+import type { NotificationActionType } from "@/types/notifications";
 
 export const useUserNotifications = (options?: {
   autoFetch?: boolean;
   refetchInterval?: number;
 }) => {
   const dispatch = useAppDispatch();
-  const notifications = useAppSelector(selectNotifications);
-  const unreadMessagesCount = useAppSelector(selectUnreadMessagesCount);
+  const notificationsState = useAppSelector(selectNotifications);
+  const unreadCount = useAppSelector(selectUnreadCount);
+  const notifications = useAppSelector(selectNotificationsList);
 
   const fetchNotifications = useCallback(() => {
     dispatch(fetchUserNotifications());
@@ -49,11 +52,45 @@ export const useUserNotifications = (options?: {
     [fetchNotifications]
   );
 
+  const markNotificationsAsReadByAction = useCallback(
+    async (action: NotificationActionType) => {
+      try {
+        await axios.patch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/read`,
+          { action },
+          { withCredentials: true }
+        );
+        fetchNotifications();
+      } catch {}
+    },
+    [fetchNotifications]
+  );
+
+  const markPartnershipInvitationsAsRead = useCallback(
+    () => markNotificationsAsReadByAction("partnership_invitation"),
+    [markNotificationsAsReadByAction]
+  );
+
+  const markAllNotificationsAsRead = useCallback(async () => {
+    try {
+      await axios.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/read-all`,
+        {},
+        { withCredentials: true }
+      );
+      fetchNotifications();
+    } catch {}
+  }, [fetchNotifications]);
+
   return {
-    unreadMessagesCount,
-    isLoading: notifications.loading,
-    error: notifications.error,
+    notifications,
+    unreadCount,
+    isLoading: notificationsState.loading,
+    error: notificationsState.error,
     refetch: fetchNotifications,
     markConversationAsRead,
+    markNotificationsAsReadByAction,
+    markPartnershipInvitationsAsRead,
+    markAllNotificationsAsRead,
   };
 };

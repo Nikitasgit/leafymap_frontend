@@ -10,4 +10,5 @@ export interface ButtonProps {
   endIcon?: React.ReactNode;
   fullWidth?: boolean;
   ariaLabel?: string;
+  badge?: number;
 }

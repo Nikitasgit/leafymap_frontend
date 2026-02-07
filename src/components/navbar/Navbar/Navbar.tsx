@@ -7,8 +7,8 @@ import { Home, Map, MessageSquare, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useUserNotifications } from "@/hooks/useUserNotifications";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
+import NavbarNotifications from "../NavbarNotifications";
 import NavbarMenuDesktop from "../NavbarMenuDesktop";
 import NavbarMenuMobile from "../NavbarMenuMobile";
 import NavbarMobileMenuButton from "../NavbarMobileMenuButton";
@@ -19,10 +19,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const { t } = useTranslation("common");
   const { loading, user, logout } = useAuth();
-  const { unreadMessagesCount } = useUserNotifications({
-    autoFetch: !!user,
-    refetchInterval: 60000,
-  });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navbarRef = useRef<HTMLDivElement>(null);
 
@@ -54,25 +50,29 @@ export default function Navbar() {
       ref={navbarRef}
       aria-label="Navigation principale"
     >
-      <Link href="/" className={styles.logo}>
-        <Image
-          src={logo}
-          alt="SpotLight"
-          width={150}
-          height={40}
-          priority
-          className={styles.logoImage}
+      <div className={styles.leftSection}>
+        <Link href="/" className={styles.logo}>
+          <Image
+            src={logo}
+            alt="SpotLight"
+            width={150}
+            height={40}
+            priority
+            className={styles.logoImage}
+          />
+        </Link>
+      </div>
+      <div className={styles.navSection}>
+        {user && <NavbarNotifications onBellClick={closeMobileMenu} />}
+        <NavbarMenuDesktop
+          navItems={navItems}
+          pathname={pathname}
+          loading={loading}
+          user={user}
+          logout={logout}
+          t={t}
         />
-      </Link>
-      <NavbarMenuDesktop
-        navItems={navItems}
-        pathname={pathname}
-        loading={loading}
-        user={user}
-        logout={logout}
-        t={t}
-        unreadMessagesCount={unreadMessagesCount}
-      />
+      </div>
       <NavbarMobileMenuButton
         isOpen={isMobileMenuOpen}
         onToggle={toggleMobileMenu}
@@ -86,7 +86,6 @@ export default function Navbar() {
         logout={logout}
         onClose={closeMobileMenu}
         t={t}
-        unreadMessagesCount={unreadMessagesCount}
       />
     </nav>
   );

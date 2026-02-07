@@ -10,16 +10,11 @@ import {
 import { defaultSchedule } from "@/utils/createProfile";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import styles from "./UpdatePlaceContainer.module.scss";
-import { usePlacePartnerships } from "@/hooks/usePlacePartnerships";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
-import { Partnership } from "@/types/partnerships";
 import { useToast } from "@/hooks/useToast";
-import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
-import { separateNewAndUpdatedArrayValues } from "@/utils/tempId";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import Button from "@/components/common/buttons/Button";
 import PlaceForm from "@/components/account/Place/PlaceForm/PlaceForm";
-import PartnershipsForm from "@/components/account/Partnership/PartnershipsForm/PartnershipsForm";
 import { ValidationResult } from "@/validations/commonValidations";
 import { validateNewPlaceData } from "@/validations/placeValidations";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
@@ -46,14 +41,7 @@ const UpdatePlaceContainer = () => {
   const { user, isLoading: userLoading } = useCurrentUser();
   const { submitPlace, isLoading: submitPlaceLoading } = useSubmitPlace();
   const { place: placeData, isLoading: placeLoading } = usePlace(placeId);
-  const { partnerships: partnershipsData, isLoading: partnershipsLoading } =
-    usePlacePartnerships(placeId);
-  const { submitPartnerships, isLoading: submitPartnershipsLoading } =
-    useSubmitPartnerships();
   const [place, setPlace] = useState<InitialPlaceData | null>(null);
-  const [partnerships, setPartnerships] = useState<Partnership[]>(
-    partnershipsData || []
-  );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const { showError, showSuccess } = useToast();
@@ -90,16 +78,6 @@ const UpdatePlaceContainer = () => {
       if (placeData && place) {
         const id = placeData._id;
         await submitPlace(place, true, id);
-        if (partnerships.length > 0) {
-          const { newValues, updatedValues } =
-            separateNewAndUpdatedArrayValues(partnerships);
-          if (newValues.length > 0) {
-            await submitPartnerships(newValues, false, id);
-          }
-          if (updatedValues.length > 0) {
-            await submitPartnerships(updatedValues, true, id);
-          }
-        }
         showSuccess("Lieu modifié avec succès");
         router.push("/account");
       }
@@ -110,15 +88,9 @@ const UpdatePlaceContainer = () => {
 
   useEffect(() => {
     if (placeData) setPlace(initialPlaceData(placeData));
-    if (partnershipsData) setPartnerships(partnershipsData);
-  }, [placeData, partnershipsData]);
+  }, [placeData]);
 
-  const loading =
-    placeLoading ||
-    submitPlaceLoading ||
-    partnershipsLoading ||
-    submitPartnershipsLoading ||
-    userLoading;
+  const loading = placeLoading || submitPlaceLoading || userLoading;
 
   return (
     <div className={styles.pageContainer}>
@@ -135,10 +107,6 @@ const UpdatePlaceContainer = () => {
               onChange={onPlaceChange}
               errors={errors}
               showRadioYesOrNo={false}
-            />
-            <PartnershipsForm
-              onChange={setPartnerships}
-              partnerships={partnerships}
             />
             <div className={styles.buttonContainer}>
               <Button

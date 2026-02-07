@@ -65,24 +65,28 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
                           (user): user is EventScheduleProps["users"][0] =>
                             user !== undefined
                         )
-                        .map((user) => (
-                          <div
-                            key={user._id}
-                            className={styles.participantCard}
-                            title={user.name}
-                          >
-                            <Image
-                              src={user.image || creatorDefaultsSvg}
-                              alt={user.name || ""}
-                              width={24}
-                              height={24}
-                              className={styles.participantImage}
-                            />
-                            <span className={styles.participantName}>
-                              {user.name || "Participant"}
-                            </span>
-                          </div>
-                        ))}
+                        .map((user) => {
+                          const imageUrl = user.image?.urls?.thumbnail ?? "";
+                          const displayName = user.username ?? "Participant";
+                          return (
+                            <div
+                              key={user._id}
+                              className={styles.participantCard}
+                              title={displayName}
+                            >
+                              <Image
+                                src={imageUrl || creatorDefaultsSvg}
+                                alt={displayName}
+                                width={24}
+                                height={24}
+                                className={styles.participantImage}
+                              />
+                              <span className={styles.participantName}>
+                                {displayName}
+                              </span>
+                            </div>
+                          );
+                        })}
                     </div>
                   </div>
                 ))}

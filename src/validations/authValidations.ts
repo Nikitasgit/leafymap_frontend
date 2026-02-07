@@ -2,17 +2,23 @@ import { z } from "zod";
 import { emailSchema, ValidationResult } from "./commonValidations";
 import { RegisterFormData, LoginFormData } from "@/types/auth";
 
+const isDev = () => process.env.NODE_ENV === "development";
+
+const passwordSchema = z
+  .string()
+  .min(10, "Le mot de passe doit contenir au moins 10 caractères")
+  .max(100, "Le mot de passe ne peut pas dépasser 100 caractères")
+  .regex(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+    "Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre"
+  );
+
+const devPasswordSchema = z.string().min(1, "Le mot de passe est requis");
+
 export const registerSchema = z
   .object({
     email: emailSchema,
-    password: z
-      .string()
-      .min(10, "Le mot de passe doit contenir au moins 10 caractères")
-      .max(100, "Le mot de passe ne peut pas dépasser 100 caractères")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        "Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre"
-      ),
+    password: isDev() ? devPasswordSchema : passwordSchema,
     confirmPassword: z
       .string()
       .min(1, "La confirmation du mot de passe est requise"),

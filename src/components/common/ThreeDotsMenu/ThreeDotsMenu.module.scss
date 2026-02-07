@@ -1,0 +1,62 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: spacing(0.25);
+  background: none;
+  border: none;
+  border-radius: rem(4);
+  color: $grey-600;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $grey-100;
+    color: $grey-800;
+  }
+}
+
+.menu {
+  position: absolute;
+  top: 100%;
+  margin-top: spacing(0.25);
+  min-width: rem(140);
+  padding: spacing(0.5);
+  background: $white;
+  border: 1px solid $grey-200;
+  border-radius: rem(6);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+
+  &.alignRight {
+    right: 0;
+  }
+
+  &.alignLeft {
+    left: 0;
+  }
+}
+
+.menuItem {
+  display: block;
+  width: 100%;
+  padding: spacing(0.75) spacing(1);
+  text-align: left;
+  font-size: rem(14);
+  color: $grey-800;
+  background: none;
+  border: none;
+  border-radius: rem(4);
+  cursor: pointer;
+
+  &:hover {
+    background: $grey-100;
+  }
+}

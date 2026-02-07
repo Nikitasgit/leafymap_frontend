@@ -4,11 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/common/buttons/Button";
 import PlaceForm from "@/components/account/Place/PlaceForm";
-import PartnershipsForm from "../../Partnership/PartnershipsForm";
 import { useToast } from "@/hooks/useToast";
-import { useSubmitPartnerships } from "@/hooks/useSubmitPartnerships";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
-import { Partnership } from "@/types/partnerships";
 import { User } from "@/types/user";
 import { ValidationResult } from "@/validations/commonValidations";
 import { validateNewPlaceData } from "@/validations/placeValidations";
@@ -38,15 +35,12 @@ const CreatePlaceForm = () => {
   const router = useRouter();
   const { showError, showSuccess } = useToast();
   const { user, loading: userLoading } = useAuth();
-  const { submitPartnerships, isLoading: submitPartnershipsLoading } =
-    useSubmitPartnerships();
   const { submitPlace, isLoading: submitPlaceLoading } = useSubmitPlace();
   const [errors, setErrors] = useState<CreatePlaceContainerErrors>({
     place: {},
   });
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [place, setPlace] = useState<InitialPlaceData>(initialPlaceData(user));
-  const [partnerships, setPartnerships] = useState<Partnership[]>([]);
 
   const validateFormData = useCallback((): boolean => {
     let placeValidation: ValidationResult = {
@@ -73,10 +67,7 @@ const CreatePlaceForm = () => {
     setHasAttemptedSubmit(true);
     if (validateFormData()) {
       try {
-        const placeId = await submitPlace(place);
-        if (partnerships.length > 0 && placeId) {
-          await submitPartnerships(partnerships, false, placeId);
-        }
+        await submitPlace(place);
         showSuccess("Lieu créé avec succès");
         router.push("/account");
       } catch {
@@ -97,8 +88,7 @@ const CreatePlaceForm = () => {
     }
   }, [user]);
 
-  const loading =
-    userLoading || submitPartnershipsLoading || submitPlaceLoading;
+  const loading = userLoading || submitPlaceLoading;
 
   return (
     <div className={styles.pageContainer}>
@@ -111,10 +101,6 @@ const CreatePlaceForm = () => {
             username={user?.username || ""}
             onChange={onPlaceChange}
             errors={errors.place}
-          />
-          <PartnershipsForm
-            onChange={setPartnerships}
-            partnerships={partnerships}
           />
           <div className={styles.buttonContainer}>
             <Button

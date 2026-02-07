@@ -21,13 +21,13 @@ export interface EventInvitationPopulated {
     _id: string;
     username?: string;
     image?: Image;
-    userCategories?: UserCategory[];
+    userCategory?: UserCategory;
   };
   collaborator?: {
     _id: string;
     username?: string;
     image?: Image;
-    userCategories?: UserCategory[];
+    userCategory?: UserCategory;
   };
   status: "pending" | "accepted" | "refused" | "cancelled" | "completed";
   deleted?: boolean;

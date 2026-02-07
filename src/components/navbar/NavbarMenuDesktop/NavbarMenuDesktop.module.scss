@@ -4,8 +4,7 @@
 
 .container {
   @include flex(row, flex-end, center, spacing(1));
-  flex: 1;
-  margin-left: spacing(1);
+  flex-shrink: 0;
   display: none;
 
   .navLinks {

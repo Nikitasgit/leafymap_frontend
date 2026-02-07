@@ -82,6 +82,7 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
       />
       <MapCreatorCardContent
         place={place || null}
+        isPlaceLoading={isLoadingPlace}
         user={user}
         isOwner={isOwner}
         onMapButtonClick={handleMapButtonClick}

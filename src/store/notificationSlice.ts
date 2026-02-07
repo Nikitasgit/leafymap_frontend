@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { RootState } from "./index";
 import { signOut } from "./authSlice";
+import type { Notification } from "@/types/notifications";
 
 export const fetchUserNotifications = createAsyncThunk(
   "notifications/fetchUserNotifications",
@@ -13,7 +14,6 @@ export const fetchUserNotifications = createAsyncThunk(
           withCredentials: true,
         }
       );
-
       return response.data.data;
     } catch (error) {
       throw error;
@@ -22,14 +22,14 @@ export const fetchUserNotifications = createAsyncThunk(
 );
 
 type NotificationState = {
-  messages: number;
+  notifications: Notification[];
   loading: boolean;
   error: string | null;
   lastFetched: number | null;
 };
 
 const initialState: NotificationState = {
-  messages: 0,
+  notifications: [],
   loading: false,
   error: null,
   lastFetched: null,
@@ -40,7 +40,7 @@ const notificationSlice = createSlice({
   initialState,
   reducers: {
     resetNotifications: (state) => {
-      state.messages = 0;
+      state.notifications = [];
       state.error = null;
       state.lastFetched = null;
     },
@@ -53,7 +53,9 @@ const notificationSlice = createSlice({
       })
       .addCase(fetchUserNotifications.fulfilled, (state, action) => {
         state.loading = false;
-        state.messages = action.payload.messages;
+        state.notifications = Array.isArray(action.payload)
+          ? action.payload
+          : [];
         state.lastFetched = Date.now();
       })
       .addCase(fetchUserNotifications.rejected, (state, action) => {
@@ -61,7 +63,7 @@ const notificationSlice = createSlice({
         state.error = action.error.message || "Failed to fetch notifications";
       })
       .addCase(signOut.fulfilled, (state) => {
-        state.messages = 0;
+        state.notifications = [];
         state.error = null;
         state.lastFetched = null;
       });
@@ -73,5 +75,9 @@ export default notificationSlice.reducer;
 export const { resetNotifications } = notificationSlice.actions;
 
 export const selectNotifications = (state: RootState) => state.notifications;
-export const selectUnreadMessagesCount = (state: RootState) =>
-  state.notifications.messages;
+
+export const selectNotificationsList = (state: RootState): Notification[] =>
+  state.notifications.notifications;
+
+export const selectUnreadCount = (state: RootState): number =>
+  state.notifications.notifications.filter((n) => n.read !== true).length;

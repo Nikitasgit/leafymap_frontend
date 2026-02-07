@@ -1,18 +1,20 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Button from "@/components/common/buttons/Button";
-import { Edit, Eye } from "lucide-react";
+import { Edit, Eye, Users } from "lucide-react";
 import styles from "./AccountActions.module.scss";
 import { User } from "@/types/user";
 
 interface AccountActionsProps {
   user: User;
   isLoadingUser: boolean;
+  onOpenCollaborations?: () => void;
 }
 
 export default function AccountActions({
   user,
   isLoadingUser,
+  onOpenCollaborations,
 }: AccountActionsProps) {
   const router = useRouter();
   const { userType } = user || {};
@@ -27,9 +29,7 @@ export default function AccountActions({
         }
       : null;
 
-
-  const shouldShowAddPlace =
-    userType === "creator" && !user?.place;
+  const shouldShowAddPlace = userType === "creator" && !user?.place;
 
   return (
     <section className={styles.actions}>
@@ -54,6 +54,17 @@ export default function AccountActions({
           Voir mon profil public
         </Button>
       )}
+
+      <Button
+        disabled={isLoadingUser}
+        variant="secondary"
+        onClick={onOpenCollaborations}
+        fullWidth
+        endIcon={<Users size={16} />}
+        ariaLabel="Ouvrir les collaborations"
+      >
+        Collaborations
+      </Button>
 
       {buttonParameters && (
         <Button

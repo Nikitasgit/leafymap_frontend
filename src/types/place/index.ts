@@ -18,7 +18,7 @@ export interface Place extends BaseEntity, ContactInfo {
   active: boolean;
   rating: number;
   placeType: PlaceType[];
-  userCategories?: UserCategory[];
+  userCategory?: UserCategory;
   followers: string[];
 }
 

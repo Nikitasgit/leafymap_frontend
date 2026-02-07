@@ -1,53 +1,98 @@
 @use "@/styles/abstracts/variables" as *;
-@use "@/styles/abstracts/functions" as *;
 @use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
 
-.content {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: spacing(1);
-  @include respond-to(sm) {
-    padding: spacing(2);
-  }
-  @include respond-to(md) {
-    padding: spacing(3);
-  }
-  .section {
-    margin-bottom: spacing(2);
-    &:last-child {
-      margin-bottom: 0;
+.inviteContent {
+  width: 100%;
+  min-width: 0;
+  padding: 0 spacing(1);
+}
+
+.searchContainer {
+  padding: spacing(1.25);
+
+  .header {
+    margin-bottom: spacing(1);
+    padding-bottom: spacing(1);
+    border-bottom: 1px solid $grey-100;
+
+    .headerRow {
+      @include flex(row, space-between, center, spacing(0.5));
     }
-    @include respond-to(sm) {
-      margin-bottom: spacing(3);
-    }
-    @include respond-to(md) {
-      margin-bottom: spacing(4);
-    }
-    .sectionTitle {
-      font-size: rem(16);
+
+    .label {
+      @include flex(row, flex-start, center, spacing(0.5));
+      color: $grey-800;
+      font-size: rem(15);
       font-weight: 600;
-      color: $grey-700;
-      margin-bottom: spacing(1.5);
-      padding-bottom: spacing(0.75);
-      border-bottom: 1px solid $grey-200;
-      @include respond-to(sm) {
-        font-size: rem(18);
-        margin-bottom: spacing(2);
-        padding-bottom: spacing(1);
-      }
-      @include respond-to(md) {
-        font-size: rem(20);
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+
+      .icon {
+        flex-shrink: 0;
+        color: $primary-color;
       }
     }
-    .partnershipsList {
-      @include flex(column, flex-start, stretch, spacing(1));
-      @include respond-to(sm) {
-        gap: spacing(1.5);
-      }
-      @include respond-to(md) {
-        gap: spacing(2);
-      }
+
+    .info {
+      color: $grey-500;
+      font-size: rem(13);
+      line-height: 1.5;
+      margin: spacing(0.5) 0 0;
+      max-width: 100%;
+    }
+
+    .headerActions {
+      flex-shrink: 0;
     }
   }
 }
 
+.list {
+  margin-top: spacing(1.5);
+}
+
+.title {
+  font-size: rem(14);
+  font-weight: 600;
+  color: $grey-700;
+  margin: 0 0 spacing(0.75) 0;
+}
+
+.items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: spacing(1);
+}
+
+.item {
+  @include flex(row, flex-start, center, spacing(1));
+  flex-wrap: wrap;
+  padding: spacing(0.75);
+  background: $grey-50;
+  border-radius: rem(6);
+
+  > *:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &.selected {
+    outline: 2px solid $grey-400;
+    outline-offset: 2px;
+  }
+}
+
+.itemButton {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  border-radius: rem(4);
+}

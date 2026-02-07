@@ -42,8 +42,8 @@ const CategorySelectorInput = ({
     setIsOpen(false);
     onUserChange({
       target: {
-        name: "userCategories",
-        value: [userCategory._id],
+        name: "userCategory",
+        value: userCategory._id,
       },
     });
     onPlaceChange({
@@ -76,7 +76,7 @@ const CategorySelectorInput = ({
     <div className={styles.categoryInputWrapper} ref={ref}>
       {loading && <LoadingBar />}
       <TextField
-        name="userCategories"
+        name="userCategory"
         label={t("categorySelector.label")}
         readOnly
         fullWidth
