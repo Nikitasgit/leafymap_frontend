@@ -1,4 +1,6 @@
-@use "variables" as *;
+// Spacing (keep in sync with _variables.scss) – inlined so @use works when loaded from component modules
+$spacing-unit: 8px;
+
 @use "sass:math";
 
 @function spacing($multiplier) {
