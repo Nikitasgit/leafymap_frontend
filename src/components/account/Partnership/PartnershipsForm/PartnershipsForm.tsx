@@ -63,7 +63,7 @@ const PartnershipsForm = ({
         _id: generateTempId(),
         collaborator: {
           _id: suggestion._id,
-          name: suggestion.name || "",
+          username: suggestion.name || "",
           image: suggestion.image as string,
         },
         status: "pending",
@@ -91,7 +91,7 @@ const PartnershipsForm = ({
       )
     );
   };
-
+  console.log(partnerships);
   return (
     <fieldset className={styles.partnerships}>
       <legend className={styles.titleContainer}>

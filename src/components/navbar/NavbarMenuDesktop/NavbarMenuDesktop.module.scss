@@ -57,6 +57,12 @@
     flex-shrink: 0;
   }
 
+  .navBadge {
+    position: absolute;
+    top: rem(-3);
+    right: rem(-3);
+  }
+
   .authLinks {
     @include flex(row, center, center, spacing(0.5));
     color: $grey-500;

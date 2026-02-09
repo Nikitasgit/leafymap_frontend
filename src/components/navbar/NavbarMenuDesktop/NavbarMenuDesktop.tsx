@@ -4,6 +4,7 @@ import Link from "next/link";
 import { LucideIcon } from "lucide-react";
 import { User } from "@/types/user";
 import SignOutButton from "../../common/buttons/SignOutButton";
+import NotificationBadge from "../../common/badges/NotificationBadge";
 import NavbarSkeleton from "../NavbarSkeleton";
 import styles from "./NavbarMenuDesktop.module.scss";
 
@@ -12,6 +13,7 @@ interface NavItem {
   label: string;
   icon: LucideIcon;
   display: boolean;
+  badge?: number;
 }
 
 interface NavbarMenuDesktopProps {
@@ -56,6 +58,12 @@ export default function NavbarMenuDesktop({
                 <div className={styles.iconContainer}>
                   <Icon className={styles.navIcon} aria-hidden="true" />
                 </div>
+                {item.badge != null && (
+                  <NotificationBadge
+                    count={item.badge}
+                    className={styles.navBadge}
+                  />
+                )}
                 <span>{item.label}</span>
               </Link>
             </li>

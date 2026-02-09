@@ -71,6 +71,10 @@ export const useUserNotifications = (options?: {
     [markNotificationsAsReadByAction]
   );
 
+  const markEventInvitationsAsRead = useCallback(
+    () => markNotificationsAsReadByAction("event_invitation"),
+    [markNotificationsAsReadByAction]
+  );
   const markAllNotificationsAsRead = useCallback(async () => {
     try {
       await axios.patch(
@@ -91,6 +95,7 @@ export const useUserNotifications = (options?: {
     markConversationAsRead,
     markNotificationsAsReadByAction,
     markPartnershipInvitationsAsRead,
+    markEventInvitationsAsRead,
     markAllNotificationsAsRead,
   };
 };

@@ -12,7 +12,7 @@
   padding: spacing(1.25) spacing(1.25) 0;
 
   .header {
-    margin-bottom: spacing(1);
+   
     padding-bottom: spacing(1);
     border-bottom: 1px solid $grey-100;
 
@@ -40,9 +40,6 @@
   }
 }
 
-.list {
-  margin-top: 0;
-}
 
 .items {
   list-style: none;

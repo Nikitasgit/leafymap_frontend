@@ -41,7 +41,7 @@ const EventForm = ({
   const router = useRouter();
   const params = useParams();
   const placeId = params.placeId as string;
-
+  console.log(eventData);
   const { submitEvent, isLoading: submitFormLoading } = useSubmitEvent();
   const { submitEventInvitations, isLoading: submitEventInvitationsLoading } =
     useSubmitEventInvitations();

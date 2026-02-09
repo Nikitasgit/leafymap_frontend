@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { Handshake } from "lucide-react";
 import { Conversation } from "@/hooks/useConversations";
 import { useAuth } from "@/hooks/useAuth";
 import DisplayPublishingDate from "@/components/common/date/DisplayPublishingDate/DisplayPublishingDate";
@@ -32,29 +31,6 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
   const participantName = getDisplayName(otherParticipant);
   const avatarLetter = getAvatarLetter(otherParticipant);
   const lastMessageDate = conversation.lastMessage?.createdAt;
-
-  const getMessageContent = (): { text: string; isPartnership: boolean } => {
-    const lastMessage = conversation.lastMessage;
-    if (!lastMessage) return { text: "Aucun message", isPartnership: false };
-
-    if (lastMessage.partnership) {
-      const partnership =
-        typeof lastMessage.partnership === "object"
-          ? lastMessage.partnership
-          : null;
-
-      if (partnership?.type === "place") {
-        return { text: "Proposition de collaboration", isPartnership: true };
-      }
-    }
-
-    return {
-      text: lastMessage.content || "Aucun message",
-      isPartnership: false,
-    };
-  };
-
-  const messageContent = getMessageContent();
 
   return (
     <div
@@ -92,15 +68,12 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
           )}
         </div>
         <div className={styles.messagePreview}>
-          {messageContent.isPartnership && (
-            <Handshake size={16} className={styles.partnershipIcon} />
-          )}
           <span
             className={`${styles.messageText} ${
               conversation.unreadCount > 0 ? styles.unread : ""
             }`}
           >
-            {messageContent.text}
+            {conversation.lastMessage?.content || "Aucun message"}
           </span>
         </div>
       </div>

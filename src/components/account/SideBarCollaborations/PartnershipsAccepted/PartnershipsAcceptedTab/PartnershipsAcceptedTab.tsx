@@ -43,15 +43,6 @@ export default function PartnershipsAcceptedTab() {
     (p) => p.status === "accepted" && !p.deleted
   );
 
-  if (acceptedPartnerships.length === 0) {
-    return (
-      <EmptyState
-        title="Aucune collaboration"
-        description="Vous n'avez pas de collaborateurs pour le moment."
-      />
-    );
-  }
-
   return (
     <div className={styles.partnershipsAcceptedTab}>
       <div className={styles.headerSection}>
@@ -65,7 +56,13 @@ export default function PartnershipsAcceptedTab() {
           </p>
         </div>
       </div>
-      <div className={styles.list}>
+
+      {acceptedPartnerships.length === 0 ? (
+        <EmptyState
+          title="Aucune collaboration"
+          description="Vous n'avez pas de collaborateurs pour le moment."
+        />
+      ) : (
         <ul className={styles.items}>
           {acceptedPartnerships.map((partnership) => {
             const otherUser = getOtherUser(partnership, user._id);
@@ -86,7 +83,7 @@ export default function PartnershipsAcceptedTab() {
             );
           })}
         </ul>
-      </div>
+      )}
     </div>
   );
 }

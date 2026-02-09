@@ -23,6 +23,7 @@ export const fetchUserNotifications = createAsyncThunk(
 
 type NotificationState = {
   notifications: Notification[];
+  unreadConversations: number;
   loading: boolean;
   error: string | null;
   lastFetched: number | null;
@@ -30,6 +31,7 @@ type NotificationState = {
 
 const initialState: NotificationState = {
   notifications: [],
+  unreadConversations: 0,
   loading: false,
   error: null,
   lastFetched: null,
@@ -41,6 +43,7 @@ const notificationSlice = createSlice({
   reducers: {
     resetNotifications: (state) => {
       state.notifications = [];
+      state.unreadConversations = 0;
       state.error = null;
       state.lastFetched = null;
     },
@@ -53,9 +56,11 @@ const notificationSlice = createSlice({
       })
       .addCase(fetchUserNotifications.fulfilled, (state, action) => {
         state.loading = false;
-        state.notifications = Array.isArray(action.payload)
-          ? action.payload
+        const payload = action.payload;
+        state.notifications = Array.isArray(payload?.notifications)
+          ? payload.notifications
           : [];
+        state.unreadConversations = payload?.unreadConversations ?? 0;
         state.lastFetched = Date.now();
       })
       .addCase(fetchUserNotifications.rejected, (state, action) => {
@@ -64,6 +69,7 @@ const notificationSlice = createSlice({
       })
       .addCase(signOut.fulfilled, (state) => {
         state.notifications = [];
+        state.unreadConversations = 0;
         state.error = null;
         state.lastFetched = null;
       });
@@ -81,3 +87,6 @@ export const selectNotificationsList = (state: RootState): Notification[] =>
 
 export const selectUnreadCount = (state: RootState): number =>
   state.notifications.notifications.filter((n) => n.read !== true).length;
+
+export const selectUnreadConversations = (state: RootState): number =>
+  state.notifications.unreadConversations;

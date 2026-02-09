@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import { Home, Map, MessageSquare, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useRef, useState } from "react";
+import { useAppSelector } from "@/store";
+import { selectUnreadConversations } from "@/store/notificationSlice";
 import { useAuth } from "@/hooks/useAuth";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import NavbarNotifications from "../NavbarNotifications";
@@ -19,6 +21,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const { t } = useTranslation("common");
   const { loading, user, logout } = useAuth();
+  const unreadConversations = useAppSelector(selectUnreadConversations);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navbarRef = useRef<HTMLDivElement>(null);
 
@@ -30,6 +33,7 @@ export default function Navbar() {
       label: t("nav.messages"),
       icon: MessageSquare,
       display: !!user,
+      badge: unreadConversations > 0 ? unreadConversations : undefined,
     },
     { href: "/account", label: t("nav.account"), icon: User, display: !!user },
   ];

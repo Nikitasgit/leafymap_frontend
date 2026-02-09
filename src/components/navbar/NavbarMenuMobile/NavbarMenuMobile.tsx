@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { LucideIcon, LogOut } from "lucide-react";
 import { User } from "@/types/user";
+import NotificationBadge from "../../common/badges/NotificationBadge";
 import NavbarSkeleton from "../NavbarSkeleton";
 import styles from "./NavbarMenuMobile.module.scss";
 
@@ -11,6 +12,7 @@ interface NavItem {
   label: string;
   icon: LucideIcon;
   display: boolean;
+  badge?: number;
 }
 
 interface NavbarMenuMobileProps {
@@ -74,6 +76,12 @@ export default function NavbarMenuMobile({
             >
               <div className={styles.iconContainer}>
                 <Icon className={styles.icon} aria-hidden="true" />
+                {item.badge != null && (
+                  <NotificationBadge
+                    count={item.badge}
+                    absolutePosition
+                  />
+                )}
               </div>
               <div className={styles.labelContainer}>
                 <span>{item.label}</span>

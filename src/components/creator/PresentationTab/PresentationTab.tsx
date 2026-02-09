@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import MapPlaceCardSchedule from "@/components/map/MapPlaceCardSchedule";
 import MapCreatorCardPartnerships from "@/components/map/MapCreatorCardPartnerships";
 import { capitalizeFirstLetter } from "@/utils/functions";
@@ -5,6 +6,11 @@ import { Place, PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
 import { useEventInvitationsByUserId } from "@/hooks/useEventInvitationsByUserId";
 import styles from "./PresentationTab.module.scss";
+import { usePartnershipsAccepted } from "@/hooks/usePartnershipsAccepted";
+import UsersListXScroll, {
+  type UsersListXScrollUser,
+} from "@/components/common/users/UsersListXScroll";
+import { Partnership } from "@/types/partnerships";
 
 export interface PresentationTabProps {
   place: Place | null;
@@ -28,6 +34,25 @@ const PresentationTab = ({
     includePastEvents: "false",
     onlyAccepted: "true",
   });
+  const { partnerships, isLoading: isPartnershipsLoading } =
+    usePartnershipsAccepted(user._id);
+
+  const partnershipUsers = useMemo((): UsersListXScrollUser[] => {
+    const currentUserId = user._id;
+    return partnerships
+      .map((p: Partnership) => {
+        const isInitiatorCurrent =
+          p.initiator && p.initiator._id === currentUserId;
+        const other = isInitiatorCurrent ? p.collaborator : p.initiator ?? p.collaborator;
+        return {
+          _id: other._id,
+          username: other.username,
+          image: other.image,
+          userCategory: other.userCategory,
+        };
+      })
+      .filter((u) => u._id !== currentUserId);
+  }, [partnerships, user._id]);
 
   return (
     <>
@@ -43,9 +68,14 @@ const PresentationTab = ({
           isPlaceLoading={isPlaceLoading}
         />
       )}
+      <UsersListXScroll
+        users={partnershipUsers}
+        title="Collaborateurs"
+        showCategory
+        loading={isPartnershipsLoading}
+      />
       <MapCreatorCardPartnerships
         eventInvitations={eventInvitations}
-        placePartnerships={[]}
         username={user.username || ""}
         onMapButtonClick={onMapButtonClick}
       />

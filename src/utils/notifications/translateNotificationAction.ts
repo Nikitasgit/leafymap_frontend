@@ -12,6 +12,7 @@ export function translateNotificationAction(
     partnership_accepted: "Collaboration acceptée",
     event_invitation: "Invitation à un événement",
     event_accepted: "Invitation à un événement acceptée",
+    event_refused: "Invitation à un événement refusée",
     review: "Nouvel avis",
     other: "Notification",
   };

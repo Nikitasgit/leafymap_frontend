@@ -6,9 +6,12 @@ import ReviewCard from "../ReviewCard/ReviewCard";
 import { useReviews } from "@/hooks/useReviews";
 import { useAuth } from "@/hooks/useAuth";
 import { ReviewReferenceType, ReviewPopulated } from "@/types/review";
+import { UserPopulated } from "@/types/user";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import styles from "./ReviewsTab.module.scss";
+import useDeleteReview from "@/hooks/useDeleteReview";
+import useDeleteComment from "@/hooks/useDeleteComment";
 
 interface ReviewsTabProps {
   isOwner: boolean;
@@ -32,6 +35,8 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
     reference,
     referenceType,
   });
+  const { deleteReview, isLoading: isDeleting } = useDeleteReview();
+  const { deleteComment, isLoading: isDeletingComment } = useDeleteComment();
   const { user } = useAuth();
 
   const userReview = useMemo<ReviewPopulated | undefined>(() => {
@@ -99,6 +104,7 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
               <React.Fragment key={review._id}>
                 <ReviewCard
                   review={review}
+                  user={user as UserPopulated}
                   onReply={user && canReply ? handleReply : undefined}
                   onReviewUpdated={handleReviewSuccess}
                   onReviewDeleted={handleReviewSuccess}

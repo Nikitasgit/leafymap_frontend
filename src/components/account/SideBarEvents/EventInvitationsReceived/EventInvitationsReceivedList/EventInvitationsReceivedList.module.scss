@@ -1,0 +1,40 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.list {
+  margin-top: 0;
+}
+
+.items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: spacing(1);
+}
+
+.item {
+  @include flex(column, flex-start, stretch, spacing(0.75));
+  padding: spacing(0.75);
+  background: $grey-50;
+  border-radius: rem(6);
+
+  .eventCardWrapper {
+    min-width: 0;
+  }
+
+  .bottomRow {
+    @include flex(row, flex-start, center, spacing(1));
+    > *:first-child {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+}
+
+.actions {
+  @include flex(column, flex-start, stretch, spacing(0.5));
+  flex-shrink: 0;
+}

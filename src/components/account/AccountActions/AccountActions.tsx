@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Button from "@/components/common/buttons/Button";
-import { Edit, Eye, Users } from "lucide-react";
+import { Edit, Eye, Users, CalendarDays, Star } from "lucide-react";
 import styles from "./AccountActions.module.scss";
 import { User } from "@/types/user";
 
@@ -9,12 +9,16 @@ interface AccountActionsProps {
   user: User;
   isLoadingUser: boolean;
   onOpenCollaborations?: () => void;
+  onOpenEvents?: () => void;
+  onOpenReviews?: () => void;
 }
 
 export default function AccountActions({
   user,
   isLoadingUser,
   onOpenCollaborations,
+  onOpenEvents,
+  onOpenReviews,
 }: AccountActionsProps) {
   const router = useRouter();
   const { userType } = user || {};
@@ -64,6 +68,28 @@ export default function AccountActions({
         ariaLabel="Ouvrir les collaborations"
       >
         Collaborations
+      </Button>
+
+      <Button
+        disabled={isLoadingUser}
+        variant="secondary"
+        onClick={onOpenEvents}
+        fullWidth
+        endIcon={<CalendarDays size={16} />}
+        ariaLabel="Ouvrir mes évènements"
+      >
+        Mes évènements
+      </Button>
+
+      <Button
+        disabled={isLoadingUser}
+        variant="secondary"
+        onClick={onOpenReviews}
+        fullWidth
+        endIcon={<Star size={16} />}
+        ariaLabel="Ouvrir les avis"
+      >
+        Avis
       </Button>
 
       {buttonParameters && (

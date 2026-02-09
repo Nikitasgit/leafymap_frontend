@@ -1,4 +1,3 @@
-import EventProfileContainer from "@/components/eventProfile/EventProfileContainer";
 import { generateEventMetadata } from "@/lib/metadata";
 
 export async function generateMetadata({
@@ -13,7 +12,7 @@ export async function generateMetadata({
 }
 
 const EventPage = () => {
-  return <EventProfileContainer />;
+  return () => {};
 };
 
 export default EventPage;

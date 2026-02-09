@@ -2,19 +2,23 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Reply } from "lucide-react";
 import StarsDisplay from "@/components/common/stars/StarsDisplay/StarsDisplay";
-import { ReviewPopulated } from "@/types/review";
+import {
+  ReviewPopulated,
+  ReviewWithReferencePopulated,
+} from "@/types/review";
+import { UserPopulated } from "@/types/user";
 import { useComments } from "@/hooks/useComments";
 import CommentInput from "../CommentInput/CommentInput";
 import ReviewModal from "../ReviewModal/ReviewModal";
 import useDeleteReview from "@/hooks/useDeleteReview";
 import useDeleteComment from "@/hooks/useDeleteComment";
-import { useAuth } from "@/hooks/useAuth";
 import ActionButtons from "@/components/common/actions/ActionButtons";
 import styles from "./ReviewCard.module.scss";
 import DisplayPublishingDate from "@/components/common/date/DisplayPublishingDate/DisplayPublishingDate";
 
 interface ReviewCardProps {
-  review: ReviewPopulated;
+  review: ReviewPopulated | ReviewWithReferencePopulated;
+  user: UserPopulated;
   onReply?: (reviewId: string) => void;
   onReviewUpdated?: () => void;
   onReviewDeleted?: () => void;
@@ -22,10 +26,13 @@ interface ReviewCardProps {
 
 const ReviewCard: React.FC<ReviewCardProps> = ({
   review,
+  user,
   onReply,
   onReviewUpdated,
   onReviewDeleted,
 }) => {
+  const { deleteReview, isLoading: isDeletingReview } = useDeleteReview();
+  const { deleteComment, isLoading: isDeletingComment } = useDeleteComment();
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
@@ -33,9 +40,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     reference: review._id,
     referenceType: "Review",
   });
-  const { user } = useAuth();
-  const { deleteReview, isLoading: isDeleting } = useDeleteReview();
-  const { deleteComment, isLoading: isDeletingComment } = useDeleteComment();
+
   const author = typeof review.author === "object" ? review.author : null;
   const isAuthor = user && author && user._id === author._id;
 
@@ -150,7 +155,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                 {
                   type: "delete",
                   onClick: handleDelete,
-                  disabled: isDeleting,
+                  disabled: isDeletingReview,
                   ariaLabel: "Supprimer mon avis",
                 },
               ]}
@@ -278,9 +283,13 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
         <ReviewModal
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
-          reference={review.reference}
+          reference={
+            typeof review.reference === "object" && review.reference && "_id" in review.reference
+              ? review.reference._id
+              : (review.reference as string)
+          }
           referenceType={review.referenceType}
-          review={review}
+          review={review as ReviewPopulated}
           onSuccess={handleUpdateSuccess}
         />
       )}

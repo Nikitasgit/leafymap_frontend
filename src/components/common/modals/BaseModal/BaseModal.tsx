@@ -39,16 +39,25 @@ const BaseModal: React.FC<BaseModalProps> = ({
   const CONTENT_DELAY_MS = 100;
 
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      setShowContent(false);
+
+      if (!isContentLoading) {
+        timer = setTimeout(() => setShowContent(true), CONTENT_DELAY_MS);
+      }
     } else {
       document.body.style.overflow = "unset";
       setShowContent(false);
     }
+
     return () => {
       document.body.style.overflow = "unset";
+      if (timer) clearTimeout(timer);
     };
-  }, [isOpen]);
+  }, [isOpen, isContentLoading]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -95,14 +104,6 @@ const BaseModal: React.FC<BaseModalProps> = ({
     }
   };
 
-  useEffect(() => {
-    if (isContentLoading) {
-      setShowContent(false);
-    } else {
-      const t = setTimeout(() => setShowContent(true), CONTENT_DELAY_MS);
-      return () => clearTimeout(t);
-    }
-  }, [isContentLoading]);
   if (!isOpen) return null;
 
   const modalBody = (
