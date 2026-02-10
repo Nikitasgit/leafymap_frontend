@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Star } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useReviewsReceived } from "@/hooks/useReviewsReceived";
@@ -27,8 +26,7 @@ export default function ReviewsReceivedTab() {
             Avis reçus
           </p>
           <p className={styles.info}>
-            Les avis laissés par les utilisateurs sur votre lieu (vérifié via
-            votre compte).
+            Les avis laissés par les utilisateurs sur votre lieu.
           </p>
         </div>
       </div>

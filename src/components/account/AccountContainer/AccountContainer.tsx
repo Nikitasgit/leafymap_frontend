@@ -9,6 +9,7 @@ import {
   CalendarDays,
   Star,
   MessageSquare,
+  Leaf,
 } from "lucide-react";
 import AccountPlaceCard from "@/components/account/AccountPlaceCard/AccountPlaceCard";
 import AccountHeader from "@/components/account/AccountHeader";
@@ -28,6 +29,7 @@ import {
   ReviewsWrittenTab,
   ReviewsReceivedTab,
 } from "@/components/account/SideBarReviews";
+import { FollowersTab, FollowingTab } from "@/components/account/SideBarFollows";
 import styles from "./AccountContainer.module.scss";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
@@ -39,11 +41,13 @@ import {
   COLLABORATIONS_TAB_IDS,
   EVENTS_TAB_IDS,
   REVIEWS_TAB_IDS,
+  FOLLOWS_TAB_IDS,
   getAccountPathWithSidebar,
   type SidebarValue,
   type CollaborationsTabId,
   type EventsTabId,
   type ReviewsTabId,
+  type FollowsTabId,
 } from "@/utils/accountTabs";
 
 const COLLABORATIONS_TABS = [
@@ -97,6 +101,21 @@ const REVIEWS_TABS = [
   },
 ];
 
+const FOLLOWS_TABS = [
+  {
+    id: FOLLOWS_TAB_IDS.FOLLOWERS,
+    label: "Abonnés",
+    icon: Users,
+    content: <FollowersTab />,
+  },
+  {
+    id: FOLLOWS_TAB_IDS.FOLLOWING,
+    label: "Abonnements",
+    icon: Leaf,
+    content: <FollowingTab />,
+  },
+];
+
 function isValidCollaborationsTab(
   tab: string | null
 ): tab is CollaborationsTabId {
@@ -119,6 +138,13 @@ function isValidReviewsTab(tab: string | null): tab is ReviewsTabId {
   );
 }
 
+function isValidFollowsTab(tab: string | null): tab is FollowsTabId {
+  return (
+    tab !== null &&
+    Object.values(FOLLOWS_TAB_IDS).includes(tab as FollowsTabId)
+  );
+}
+
 export default function AccountContainer() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -134,7 +160,8 @@ export default function AccountContainer() {
   const isSideBarOpen =
     activeSidebar === SIDEBAR_VALUES.COLLABORATIONS ||
     activeSidebar === SIDEBAR_VALUES.EVENTS ||
-    activeSidebar === SIDEBAR_VALUES.REVIEWS;
+    activeSidebar === SIDEBAR_VALUES.REVIEWS ||
+    activeSidebar === SIDEBAR_VALUES.FOLLOWS;
 
   const { title, tabs, initialTabId } = useMemo(() => {
     if (activeSidebar === SIDEBAR_VALUES.COLLABORATIONS) {
@@ -164,6 +191,16 @@ export default function AccountContainer() {
       return {
         title: "Avis",
         tabs: REVIEWS_TABS,
+        initialTabId: tabId,
+      };
+    }
+    if (activeSidebar === SIDEBAR_VALUES.FOLLOWS) {
+      const tabId = isValidFollowsTab(activeTab)
+        ? activeTab
+        : FOLLOWS_TAB_IDS.FOLLOWERS;
+      return {
+        title: "Abonnements",
+        tabs: FOLLOWS_TABS,
         initialTabId: tabId,
       };
     }
@@ -199,6 +236,8 @@ export default function AccountContainer() {
         navigateSidebar(SIDEBAR_VALUES.EVENTS, tabId);
       } else if (activeSidebar === SIDEBAR_VALUES.REVIEWS) {
         navigateSidebar(SIDEBAR_VALUES.REVIEWS, tabId);
+      } else if (activeSidebar === SIDEBAR_VALUES.FOLLOWS) {
+        navigateSidebar(SIDEBAR_VALUES.FOLLOWS, tabId);
       }
     },
     [
@@ -239,6 +278,14 @@ export default function AccountContainer() {
     }
   }, [activeSidebar, handleCloseSideBar, navigateSidebar]);
 
+  const handleOpenFollows = useCallback(() => {
+    if (activeSidebar === SIDEBAR_VALUES.FOLLOWS) {
+      handleCloseSideBar();
+    } else {
+      navigateSidebar(SIDEBAR_VALUES.FOLLOWS, FOLLOWS_TAB_IDS.FOLLOWERS);
+    }
+  }, [activeSidebar, handleCloseSideBar, navigateSidebar]);
+
   if (isLoadingUser) {
     return <LoadingBar />;
   }
@@ -261,6 +308,7 @@ export default function AccountContainer() {
           onOpenCollaborations={handleOpenCollaborations}
           onOpenEvents={handleOpenEvents}
           onOpenReviews={handleOpenReviews}
+          onOpenFollows={handleOpenFollows}
         />
         {user?.place && typeof user.place === "object" && (
           <div>

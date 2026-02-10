@@ -14,6 +14,7 @@ export function translateNotificationAction(
     event_accepted: "Invitation à un événement acceptée",
     event_refused: "Invitation à un événement refusée",
     review: "Nouvel avis",
+    new_follower: "Nouvel abonné",
     other: "Notification",
   };
   return messages[action] ?? "Notification";

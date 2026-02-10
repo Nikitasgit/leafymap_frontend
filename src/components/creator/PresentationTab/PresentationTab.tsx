@@ -54,11 +54,36 @@ const PresentationTab = ({
       .filter((u) => u._id !== currentUserId);
   }, [partnerships, user._id]);
 
+  const websiteDisplayUrl = useMemo(() => {
+    const url = user.website?.trim();
+    if (!url) return null;
+    try {
+      const urlObj = new URL(url.startsWith("http") ? url : `https://${url}`);
+      return { href: urlObj.href, hostname: urlObj.hostname.replace(/^www\./, "") };
+    } catch {
+      return { href: url, hostname: url };
+    }
+  }, [user.website]);
+
   return (
     <>
       <div className={styles.descriptionRow}>
         <p>{capitalizeFirstLetter(user.description || "")}</p>
       </div>
+
+      {websiteDisplayUrl && (
+        <div className={styles.websiteRow}>
+          <span className={styles.websiteLabel}>Site web :</span>{" "}
+          <a
+            href={websiteDisplayUrl.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.websiteLink}
+          >
+            {websiteDisplayUrl.hostname}
+          </a>
+        </div>
+      )}
 
       {place?.defaultSchedule && (
         <MapPlaceCardSchedule

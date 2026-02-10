@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Button from "@/components/common/buttons/Button";
-import WebsiteButton from "@/components/common/buttons/WebsiteButton";
 import styles from "./CreatorHeader.module.scss";
 import { MapPin, MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -12,6 +11,9 @@ import placeDefaultSvg from "@public/images/place_default.svg";
 import StarsDisplay from "@/components/common/stars/StarsDisplay/StarsDisplay";
 import { Place } from "@/types/place";
 import { UserPopulated } from "@/types/user";
+import { FollowButton } from "@/components/common/follow/FollowButton";
+import { FollowingCount } from "@/components/common/follow/FollowingCount";
+import { useState, useEffect } from "react";
 
 export interface CreatorHeaderProps {
   place: Place | null;
@@ -29,6 +31,21 @@ const CreatorHeader = ({
   onMessageClick,
 }: CreatorHeaderProps) => {
   const router = useRouter();
+  const [followersCount, setFollowersCount] = useState<number>(
+    user.followers || 0
+  );
+
+  // Synchroniser le compteur avec les données utilisateur quand elles changent
+  useEffect(() => {
+    if (user.followers !== undefined) {
+      setFollowersCount(user.followers);
+    }
+  }, [user.followers]);
+
+  const handleFollowChange = (isFollowing: boolean) => {
+    // Mise à jour optimiste du compteur
+    setFollowersCount((prev) => (isFollowing ? prev + 1 : Math.max(0, prev - 1)));
+  };
   return (
     <div
       className={`${styles.headerWrapper} ${
@@ -55,18 +72,43 @@ const CreatorHeader = ({
       </button>
       <header className={styles.header}>
         <div className={styles.headerMain}>
-          <h2 className={styles.title}>
-            {capitalizeFirstLetter(user.username || "")}
-          </h2>
-          {place && (
+          <div className={styles.titleRow}>
+            <h2 className={styles.title}>
+              {capitalizeFirstLetter(user.username || "")}
+            </h2>
+            <FollowButton
+              userId={user._id}
+              onFollowChange={handleFollowChange}
+            />
+          </div>
+          {(place || followersCount > 0) && (
             <div className={styles.categoryRow}>
-              <PlaceCategoryBadge
-                categoryName={
-                  typeof place.placeCategory === "object"
-                    ? place.placeCategory.name || ""
-                    : ""
-                }
-              />
+              <div className={styles.categoryRowLeft}>
+                {place && (
+                  <PlaceCategoryBadge
+                    categoryName={
+                      typeof place.placeCategory === "object"
+                        ? place.placeCategory.name || ""
+                        : ""
+                    }
+                  />
+                )}
+              </div>
+              <div className={styles.ratingFollowersRow}>
+                {place?.rating != null &&
+                  typeof place.rating === "number" &&
+                  place.rating > 0 && (
+                    <div className={styles.ratingContainer}>
+                      <StarsDisplay rating={place.rating} size="small" />
+                      <span className={styles.ratingValue}>
+                        ({place.rating.toFixed(1)})
+                      </span>
+                    </div>
+                  )}
+                {followersCount > 0 && (
+                  <FollowingCount count={followersCount} userId={user._id} />
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -94,42 +136,27 @@ const CreatorHeader = ({
             )}
           </span>
         </div>
-        {(place || user.website || onMessageClick) && (
+        {(place || onMessageClick) && (
           <div className={styles.actionsWrapper}>
-            {place?.rating != null &&
-              typeof place.rating === "number" &&
-              place.rating > 0 && (
-                <div className={styles.ratingContainer}>
-                  <StarsDisplay rating={place.rating} size="small" />
-                  <span className={styles.ratingValue}>
-                    ({place.rating.toFixed(1)})
-                  </span>
-                </div>
-              )}
             <div className={styles.buttonGroup}>
               {onMessageClick && (
                 <Button
                   ariaLabel="Envoyer un message"
                   variant="secondary"
                   type="button"
+                  size="small"
                   onClick={() => onMessageClick(user)}
                   startIcon={<MessageSquare size={16} />}
                 >
-                  Envoyer un message
+                  Message
                 </Button>
-              )}
-              {user.website && (
-                <WebsiteButton
-                  website={user.website}
-                  variant="secondary"
-                  ariaLabel="Site web"
-                />
               )}
               {place && (
                 <Button
                   ariaLabel="Itinéraire"
                   variant="primary"
                   type="button"
+              size="small"
                   onClick={() =>
                     handleGetDirections(place.location?.coordinates || [])
                   }

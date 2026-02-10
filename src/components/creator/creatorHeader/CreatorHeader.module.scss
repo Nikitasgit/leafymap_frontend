@@ -52,6 +52,18 @@
   .headerMain {
     @include flex(column, flex-start, flex-start, spacing(0.5));
     width: 100%;
+    .titleRow {
+      @include flex(row, space-between, center, spacing(0.75));
+      width: 100%;
+      gap: spacing(0.75);
+      .title {
+        flex: 1;
+        min-width: 0;
+      }
+      > *:last-child {
+        flex-shrink: 0;
+      }
+    }
     .title {
       text-transform: capitalize;
       font-size: rem(18);
@@ -63,6 +75,20 @@
     .categoryRow {
       @include flex(row, space-between, center, spacing(0.5));
       width: 100%;
+    }
+    .categoryRowLeft {
+      @include flex(row, flex-start, center, spacing(0.5));
+    }
+    .ratingFollowersRow {
+      @include flex(row, flex-end, center, spacing(1.25));
+      .ratingContainer {
+        @include flex(row, flex-start, center, spacing(0.5));
+        .ratingValue {
+          font-size: rem(12);
+          color: $grey-600;
+          font-weight: 500;
+        }
+      }
     }
   }
   .addressRow {
@@ -83,7 +109,7 @@
     }
   }
   .ownerRow {
-    @include flex(row, flex-start, center, spacing(0.5));
+    @include flex(row, space-between, center, spacing(0.5));
     width: 100%;
     flex-wrap: wrap;
 
@@ -97,33 +123,13 @@
     }
   }
   .actionsWrapper {
-    @include flex(column, flex-start, flex-start, spacing(1));
+    @include flex(row, flex-start, center, spacing(1));
     width: 100%;
+    flex-wrap: wrap;
 
-    .ratingContainer {
-      @include flex(row, flex-start, center, spacing(0.5));
-      .ratingValue {
-        font-size: rem(12);
-        color: $grey-600;
-        font-weight: 500;
-      }
-    }
     .buttonGroup {
-      @include flex(row, flex-end, center, spacing(1));
-      width: 100%;
+      @include flex(row, flex-start, center, spacing(0.5));
       flex-wrap: wrap;
-      button {
-        padding: spacing(0.5) spacing(1.25);
-        font-size: rem(13);
-        border-radius: rem(6);
-        &.secondary {
-          border: none;
-          background: transparent;
-          &:hover {
-            background: transparent;
-          }
-        }
-      }
     }
   }
 }
@@ -147,12 +153,7 @@
     .actionsWrapper {
       gap: spacing(1.25);
 
-      .buttonGroup {
-        button {
-          padding: spacing(0.5) spacing(1.5);
-          font-size: rem(14);
-        }
-      }
+  
     }
   }
 }

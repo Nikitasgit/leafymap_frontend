@@ -17,7 +17,7 @@ export interface User extends BaseEntity {
   description: string;
   location?: LocationWithLabel;
   deleted?: boolean;
-  followers?: string[];
+  followers?: number;
   interests?: string[];
   place?: Place;
   _id: string;

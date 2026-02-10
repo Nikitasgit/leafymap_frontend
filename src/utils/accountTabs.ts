@@ -16,6 +16,7 @@ export const SIDEBAR_VALUES = {
   COLLABORATIONS: "collaborations",
   EVENTS: "events",
   REVIEWS: "reviews",
+  FOLLOWS: "follows",
 } as const;
 
 export type SidebarValue = (typeof SIDEBAR_VALUES)[keyof typeof SIDEBAR_VALUES];
@@ -46,6 +47,15 @@ export const REVIEWS_TAB_IDS = {
 
 export type ReviewsTabId =
   (typeof REVIEWS_TAB_IDS)[keyof typeof REVIEWS_TAB_IDS];
+
+/** Onglets de la sidebar Abonnements */
+export const FOLLOWS_TAB_IDS = {
+  FOLLOWERS: "followers",
+  FOLLOWING: "following",
+} as const;
+
+export type FollowsTabId =
+  (typeof FOLLOWS_TAB_IDS)[keyof typeof FOLLOWS_TAB_IDS];
 
 /**
  * Construit l’URL /account avec au plus les paramètres sidebar et tab.
@@ -89,6 +99,12 @@ export function getAccountReviewsPath(tabId?: ReviewsTabId): string {
   return `${ACCOUNT_PATH}?${SIDEBAR_PARAM}=${SIDEBAR_VALUES.REVIEWS}&${TAB_PARAM}=${tabId}`;
 }
 
+/** Lien vers la page compte avec la sidebar Abonnements ouverte */
+export function getAccountFollowsPath(tabId?: FollowsTabId): string {
+  if (!tabId) return ACCOUNT_PATH;
+  return `${ACCOUNT_PATH}?${SIDEBAR_PARAM}=${SIDEBAR_VALUES.FOLLOWS}&${TAB_PARAM}=${tabId}`;
+}
+
 export function getNotificationRedirectPath(
   notification: Notification
 ): string | null {
@@ -105,6 +121,12 @@ export function getNotificationRedirectPath(
     notification.referenceType === "Event"
   ) {
     return getAccountEventsPath(EVENTS_TAB_IDS.RECEIVED_INVITATIONS);
+  }
+  if (
+    notification.action === "new_follower" &&
+    notification.referenceType === "Follow"
+  ) {
+    return getAccountFollowsPath(FOLLOWS_TAB_IDS.FOLLOWERS);
   }
   return null;
 }

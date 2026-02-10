@@ -25,7 +25,7 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
     if (!user?.place) return null;
     return typeof user.place === "string" ? user.place : user.place._id;
   }, [user?.place]);
-
+console.log("user", user);
   const {
     place,
     isLoading: isLoadingPlace,

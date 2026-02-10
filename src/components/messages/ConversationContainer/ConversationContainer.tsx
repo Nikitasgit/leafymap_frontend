@@ -9,7 +9,7 @@ import { useUserNotifications } from "@/hooks/useUserNotifications";
 import MessagesList from "../MessagesList/MessagesList";
 import MessageInput from "../MessageInput/MessageInput";
 import { CreatorCard } from "@/components/userProfile/PlacesSection/CreatorCard";
-import { GuestCard } from "@/components/userProfile/PlacesSection/GuestCard";
+import { UserCard } from "@/components/userProfile/PlacesSection/UserCard";
 import { ConversationViewSkeleton } from "../skeletons";
 import { PlacePopulated } from "@/types/place";
 import BackButton from "@/components/common/buttons/BackButton";
@@ -104,7 +104,7 @@ const ConversationContainer: React.FC<ConversationContainerProps> = ({
                 place={otherParticipant.place as PlacePopulated}
               />
             ) : (
-              <GuestCard user={otherParticipant} />
+              <UserCard user={otherParticipant} />
             )}
           </div>
         )}
