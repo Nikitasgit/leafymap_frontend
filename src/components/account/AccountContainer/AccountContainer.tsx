@@ -10,6 +10,7 @@ import {
   Star,
   MessageSquare,
   Leaf,
+  Package,
 } from "lucide-react";
 import AccountPlaceCard from "@/components/account/AccountPlaceCard/AccountPlaceCard";
 import AccountHeader from "@/components/account/AccountHeader";
@@ -30,6 +31,7 @@ import {
   ReviewsReceivedTab,
 } from "@/components/account/SideBarReviews";
 import { FollowersTab, FollowingTab } from "@/components/account/SideBarFollows";
+import { MyProductsTab } from "@/components/account/SideBarProducts/MyProductsTab";
 import styles from "./AccountContainer.module.scss";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
@@ -42,12 +44,14 @@ import {
   EVENTS_TAB_IDS,
   REVIEWS_TAB_IDS,
   FOLLOWS_TAB_IDS,
+  PRODUCTS_TAB_IDS,
   getAccountPathWithSidebar,
   type SidebarValue,
   type CollaborationsTabId,
   type EventsTabId,
   type ReviewsTabId,
   type FollowsTabId,
+  type ProductsTabId,
 } from "@/utils/accountTabs";
 
 const COLLABORATIONS_TABS = [
@@ -116,6 +120,15 @@ const FOLLOWS_TABS = [
   },
 ];
 
+const PRODUCTS_TABS = [
+  {
+    id: PRODUCTS_TAB_IDS.MY_PRODUCTS,
+    label: "Mes produits",
+    icon: Package,
+    content: <MyProductsTab />,
+  },
+];
+
 function isValidCollaborationsTab(
   tab: string | null
 ): tab is CollaborationsTabId {
@@ -145,6 +158,13 @@ function isValidFollowsTab(tab: string | null): tab is FollowsTabId {
   );
 }
 
+function isValidProductsTab(tab: string | null): tab is ProductsTabId {
+  return (
+    tab !== null &&
+    Object.values(PRODUCTS_TAB_IDS).includes(tab as ProductsTabId)
+  );
+}
+
 export default function AccountContainer() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -161,7 +181,8 @@ export default function AccountContainer() {
     activeSidebar === SIDEBAR_VALUES.COLLABORATIONS ||
     activeSidebar === SIDEBAR_VALUES.EVENTS ||
     activeSidebar === SIDEBAR_VALUES.REVIEWS ||
-    activeSidebar === SIDEBAR_VALUES.FOLLOWS;
+    activeSidebar === SIDEBAR_VALUES.FOLLOWS ||
+    activeSidebar === SIDEBAR_VALUES.PRODUCTS;
 
   const { title, tabs, initialTabId } = useMemo(() => {
     if (activeSidebar === SIDEBAR_VALUES.COLLABORATIONS) {
@@ -204,6 +225,16 @@ export default function AccountContainer() {
         initialTabId: tabId,
       };
     }
+    if (activeSidebar === SIDEBAR_VALUES.PRODUCTS) {
+      const tabId = isValidProductsTab(activeTab)
+        ? activeTab
+        : PRODUCTS_TAB_IDS.MY_PRODUCTS;
+      return {
+        title: "Produits",
+        tabs: PRODUCTS_TABS,
+        initialTabId: tabId,
+      };
+    }
     return {
       title: "",
       tabs: COLLABORATIONS_TABS,
@@ -238,6 +269,8 @@ export default function AccountContainer() {
         navigateSidebar(SIDEBAR_VALUES.REVIEWS, tabId);
       } else if (activeSidebar === SIDEBAR_VALUES.FOLLOWS) {
         navigateSidebar(SIDEBAR_VALUES.FOLLOWS, tabId);
+      } else if (activeSidebar === SIDEBAR_VALUES.PRODUCTS) {
+        navigateSidebar(SIDEBAR_VALUES.PRODUCTS, tabId);
       }
     },
     [
@@ -286,6 +319,14 @@ export default function AccountContainer() {
     }
   }, [activeSidebar, handleCloseSideBar, navigateSidebar]);
 
+  const handleOpenProducts = useCallback(() => {
+    if (activeSidebar === SIDEBAR_VALUES.PRODUCTS) {
+      handleCloseSideBar();
+    } else {
+      navigateSidebar(SIDEBAR_VALUES.PRODUCTS, PRODUCTS_TAB_IDS.MY_PRODUCTS);
+    }
+  }, [activeSidebar, handleCloseSideBar, navigateSidebar]);
+
   if (isLoadingUser) {
     return <LoadingBar />;
   }
@@ -309,6 +350,7 @@ export default function AccountContainer() {
           onOpenEvents={handleOpenEvents}
           onOpenReviews={handleOpenReviews}
           onOpenFollows={handleOpenFollows}
+          onOpenProducts={handleOpenProducts}
         />
         {user?.place && typeof user.place === "object" && (
           <div>

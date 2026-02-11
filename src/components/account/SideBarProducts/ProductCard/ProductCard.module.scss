@@ -1,0 +1,44 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/functions" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.card {
+  position: relative;
+  @include flex(row, flex-start, center, spacing(1));
+  padding: spacing(1);
+  background-color: $grey-50;
+  border-radius: rem(6);
+  width: 100%;
+  min-width: 0;
+
+  .cardActions {
+    position: absolute;
+    top: spacing(0.25);
+    right: spacing(0.25);
+    z-index: 2;
+  }
+
+  .info {
+    @include flex(column, flex-start, flex-start, spacing(0.25));
+    flex: 1;
+    min-width: 0;
+
+    .name {
+      color: $grey-800;
+      font-weight: 600;
+      font-size: rem(14);
+      margin: 0;
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+
+    .categoryName {
+      color: $grey-500;
+      font-size: rem(13);
+      margin: 0;
+    }
+  }
+}

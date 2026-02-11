@@ -1,0 +1,25 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.actionsRow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  gap: spacing(0.5);
+  padding-bottom: spacing(1);
+}
+
+.actionItem {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.actionPlaceholder {
+  width: 100%;
+  min-width: rem(40);
+}

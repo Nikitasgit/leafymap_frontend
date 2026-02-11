@@ -22,6 +22,7 @@ export interface CreatorTabsProps {
     _id: string;
   }) => Promise<void>;
   onPlaceRefetch?: () => void;
+  onFollowChange?: (delta: number) => void;
   isOwner?: boolean;
   isUploadingImages?: boolean;
   isPlaceLoading?: boolean;
@@ -36,6 +37,7 @@ const CreatorTabs = ({
   onTabChange,
   onMapButtonClick,
   onPlaceRefetch,
+  onFollowChange,
   isOwner = false,
   isUploadingImages = false,
   onFilesSelected,
@@ -87,7 +89,9 @@ const CreatorTabs = ({
             place={place}
             isPlaceLoading={isPlaceLoading}
             user={user}
+            isOwner={isOwner}
             onMapButtonClick={onMapButtonClick || (async () => {})}
+            onFollowChange={onFollowChange}
           />
         );
       case "events":

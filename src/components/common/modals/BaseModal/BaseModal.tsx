@@ -36,25 +36,42 @@ const BaseModal: React.FC<BaseModalProps> = ({
   withFooter = true,
 }) => {
   const [showContent, setShowContent] = React.useState(false);
+  const scrollYRef = React.useRef(0);
   const CONTENT_DELAY_MS = 100;
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
 
     if (isOpen) {
+      scrollYRef.current = window.scrollY;
       document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollYRef.current}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
       setShowContent(false);
 
       if (!isContentLoading) {
         timer = setTimeout(() => setShowContent(true), CONTENT_DELAY_MS);
       }
     } else {
-      document.body.style.overflow = "unset";
+      const savedScrollY = scrollYRef.current;
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
       setShowContent(false);
+      window.scrollTo(0, savedScrollY);
     }
 
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      window.scrollTo(0, scrollYRef.current);
       if (timer) clearTimeout(timer);
     };
   }, [isOpen, isContentLoading]);

@@ -17,6 +17,9 @@ const UserProfileContainer = () => {
   const [activeTab, setActiveTab] = useState("presentation");
   const { user: currentUser } = useAuth();
   const { user, isLoading: isLoadingUser } = useUser(userId as string);
+  const [followersCount, setFollowersCount] = useState<number>(
+    () => user?.followers ?? 0
+  );
   const { submitImages, isLoading: isUploadingImages } = useSubmitImages();
 
   const placeId = useMemo(() => {
@@ -77,10 +80,19 @@ const UserProfileContainer = () => {
     router.replace(`?${newSearchParams.toString()}`, { scroll: false });
   };
 
-  const isOwner = (() => {
-    if (!currentUser || !place) return false;
-    return currentUser._id === user?._id;
-  })();
+  const isOwner = Boolean(
+    currentUser?._id && user?._id && currentUser._id === user._id
+  );
+
+  useEffect(() => {
+    if (user?.followers !== undefined) {
+      setFollowersCount(user.followers);
+    }
+  }, [user?.followers]);
+
+  const handleFollowChange = (delta: number) => {
+    setFollowersCount((prev) => Math.max(0, prev + delta));
+  };
 
   if (isLoading) return <LoadingBar />;
 
@@ -95,6 +107,7 @@ const UserProfileContainer = () => {
             user={user}
             isLoading={isLoading}
             variant="full"
+            followersCount={followersCount}
           />
         </div>
         <CreatorTabs
@@ -103,6 +116,7 @@ const UserProfileContainer = () => {
           activeTab={activeTab}
           onTabChange={handleTabClick}
           onPlaceRefetch={refetchPlace}
+          onFollowChange={handleFollowChange}
           isOwner={isOwner}
           isUploadingImages={isUploadingImages}
           onFilesSelected={handleFilesSelected}

@@ -74,5 +74,27 @@
     "today": "Today",
     "open": "Open",
     "closed": "Closed"
+  },
+  "productCategories": {
+    "chocolate": "Chocolate",
+    "honey": "Honey",
+    "jam": "Jam",
+    "bread": "Bread",
+    "cheese": "Cheese",
+    "olive_oil": "Olive oil",
+    "pastry": "Pastry",
+    "painting": "Painting",
+    "sculpture": "Sculpture",
+    "pottery": "Pottery",
+    "jewelry": "Jewelry",
+    "photography": "Photography",
+    "print": "Print",
+    "collage": "Collage",
+    "candle": "Candle",
+    "soap": "Soap",
+    "basket": "Basket",
+    "leather": "Leather",
+    "textile": "Textile",
+    "woodwork": "Woodwork"
   }
 }

@@ -80,5 +80,27 @@
     "today": "Aujourd'hui",
     "open": "Ouvert",
     "closed": "Fermé"
+  },
+  "productCategories": {
+    "chocolate": "Chocolat",
+    "honey": "Miel",
+    "jam": "Confiture",
+    "bread": "Pain",
+    "cheese": "Fromage",
+    "olive_oil": "Huile d'olive",
+    "pastry": "Pâtisserie",
+    "painting": "Peinture",
+    "sculpture": "Sculpture",
+    "pottery": "Poterie",
+    "jewelry": "Bijoux",
+    "photography": "Photographie",
+    "print": "Estampe",
+    "collage": "Collage",
+    "candle": "Bougie",
+    "soap": "Savon",
+    "basket": "Panier",
+    "leather": "Cuir",
+    "textile": "Textile",
+    "woodwork": "Menuiserie"
   }
 }

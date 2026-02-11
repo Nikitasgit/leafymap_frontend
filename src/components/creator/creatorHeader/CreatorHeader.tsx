@@ -1,9 +1,7 @@
 import Image from "next/image";
-import Button from "@/components/common/buttons/Button";
 import styles from "./CreatorHeader.module.scss";
-import { MapPin, MessageSquare } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { handleGetDirections } from "@/utils/mapNavigation";
 import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
 import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge/CreatorCategoryBadge";
 import { capitalizeFirstLetter } from "@/utils/functions";
@@ -11,7 +9,6 @@ import placeDefaultSvg from "@public/images/place_default.svg";
 import StarsDisplay from "@/components/common/stars/StarsDisplay/StarsDisplay";
 import { Place } from "@/types/place";
 import { UserPopulated } from "@/types/user";
-import { FollowButton } from "@/components/common/follow/FollowButton";
 import { FollowingCount } from "@/components/common/follow/FollowingCount";
 import { useState, useEffect } from "react";
 
@@ -20,7 +17,7 @@ export interface CreatorHeaderProps {
   user: UserPopulated;
   isLoading: boolean;
   variant?: "compact" | "full";
-  onMessageClick?: (user: UserPopulated) => void;
+  followersCount?: number;
 }
 
 const CreatorHeader = ({
@@ -28,24 +25,22 @@ const CreatorHeader = ({
   user,
   isLoading,
   variant = "compact",
-  onMessageClick,
+  followersCount: followersCountProp,
 }: CreatorHeaderProps) => {
   const router = useRouter();
-  const [followersCount, setFollowersCount] = useState<number>(
+  const [followersCountState, setFollowersCountState] = useState<number>(
     user.followers || 0
   );
 
-  // Synchroniser le compteur avec les données utilisateur quand elles changent
-  useEffect(() => {
-    if (user.followers !== undefined) {
-      setFollowersCount(user.followers);
-    }
-  }, [user.followers]);
+  const followersCount =
+    followersCountProp !== undefined ? followersCountProp : followersCountState;
 
-  const handleFollowChange = (isFollowing: boolean) => {
-    // Mise à jour optimiste du compteur
-    setFollowersCount((prev) => (isFollowing ? prev + 1 : Math.max(0, prev - 1)));
-  };
+  useEffect(() => {
+    if (followersCountProp === undefined && user.followers !== undefined) {
+      setFollowersCountState(user.followers);
+    }
+  }, [user.followers, followersCountProp]);
+
   return (
     <div
       className={`${styles.headerWrapper} ${
@@ -76,23 +71,20 @@ const CreatorHeader = ({
             <h2 className={styles.title}>
               {capitalizeFirstLetter(user.username || "")}
             </h2>
-            <FollowButton
-              userId={user._id}
-              onFollowChange={handleFollowChange}
-            />
+            {followersCount > 0 && (
+              <FollowingCount count={followersCount} userId={user._id} />
+            )}
           </div>
-          {(place || followersCount > 0) && (
+          {place && (
             <div className={styles.categoryRow}>
               <div className={styles.categoryRowLeft}>
-                {place && (
-                  <PlaceCategoryBadge
-                    categoryName={
-                      typeof place.placeCategory === "object"
-                        ? place.placeCategory.name || ""
-                        : ""
-                    }
-                  />
-                )}
+                <PlaceCategoryBadge
+                  categoryName={
+                    typeof place.placeCategory === "object"
+                      ? place.placeCategory.name || ""
+                      : ""
+                  }
+                />
               </div>
               <div className={styles.ratingFollowersRow}>
                 {place?.rating != null &&
@@ -105,9 +97,6 @@ const CreatorHeader = ({
                       </span>
                     </div>
                   )}
-                {followersCount > 0 && (
-                  <FollowingCount count={followersCount} userId={user._id} />
-                )}
               </div>
             </div>
           )}
@@ -136,37 +125,6 @@ const CreatorHeader = ({
             )}
           </span>
         </div>
-        {(place || onMessageClick) && (
-          <div className={styles.actionsWrapper}>
-            <div className={styles.buttonGroup}>
-              {onMessageClick && (
-                <Button
-                  ariaLabel="Envoyer un message"
-                  variant="secondary"
-                  type="button"
-                  size="small"
-                  onClick={() => onMessageClick(user)}
-                  startIcon={<MessageSquare size={16} />}
-                >
-                  Message
-                </Button>
-              )}
-              {place && (
-                <Button
-                  ariaLabel="Itinéraire"
-                  variant="primary"
-                  type="button"
-              size="small"
-                  onClick={() =>
-                    handleGetDirections(place.location?.coordinates || [])
-                  }
-                >
-                  Itinéraire
-                </Button>
-              )}
-            </div>
-          </div>
-        )}
       </header>
     </div>
   );

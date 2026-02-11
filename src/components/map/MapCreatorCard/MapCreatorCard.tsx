@@ -1,22 +1,18 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./MapCreatorCard.module.scss";
 import { useUser } from "@/hooks/useUser";
 import { usePlace } from "@/hooks/usePlace";
 import { useAuth } from "@/hooks/useAuth";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
-import { findConversationWithUser } from "@/lib/api/conversations";
 import { MapCreatorCardProps } from "./MapCreatorCard.types";
 import CreatorHeader from "@/components/creator/creatorHeader";
 import MapCreatorCardContent from "../MapCreatorCardContent";
 
 const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
-  const router = useRouter();
-  const params = useParams();
-  const locale = params.locale as string;
   const { user, isLoading: isLoadingUser } = useUser(userId);
+  const [followersCount, setFollowersCount] = useState<number>(0);
   const { user: currentUser } = useAuth();
   const isOwner = Boolean(
     currentUser?._id && currentUser._id.toString() === user?._id?.toString()
@@ -25,7 +21,7 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
     if (!user?.place) return null;
     return typeof user.place === "string" ? user.place : user.place._id;
   }, [user?.place]);
-console.log("user", user);
+
   const {
     place,
     isLoading: isLoadingPlace,
@@ -35,6 +31,16 @@ console.log("user", user);
   });
 
   const isLoading = isLoadingUser || isLoadingPlace;
+
+  useEffect(() => {
+    if (user?.followers !== undefined) {
+      setFollowersCount(user.followers);
+    }
+  }, [user?.followers]);
+
+  const handleFollowChange = (delta: number) => {
+    setFollowersCount((prev) => Math.max(0, prev + delta));
+  };
 
   useEffect(() => {
     if (mapRef.current && place) {
@@ -62,23 +68,12 @@ console.log("user", user);
     return null;
   }
 
-  const handleMessageClick = async (creatorUser: { _id: string }) => {
-    if (isOwner) return;
-    const conversationId = await findConversationWithUser(creatorUser._id);
-    router.push(
-      `/${locale}/inbox?conversationId=${conversationId || "new"}&recipientId=${
-        creatorUser._id
-      }`
-    );
-  };
-
   return (
     <article className={styles.placeCardMap}>
       <CreatorHeader
         place={place || null}
         user={user}
         isLoading={isLoading}
-        onMessageClick={!isOwner ? handleMessageClick : undefined}
       />
       <MapCreatorCardContent
         place={place || null}
@@ -87,6 +82,7 @@ console.log("user", user);
         isOwner={isOwner}
         onMapButtonClick={handleMapButtonClick}
         onPlaceRefetch={refetchPlace}
+        onFollowChange={handleFollowChange}
       />
     </article>
   );

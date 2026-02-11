@@ -11,11 +11,15 @@ import UsersListXScroll, {
   type UsersListXScrollUser,
 } from "@/components/common/users/UsersListXScroll";
 import { Partnership } from "@/types/partnerships";
+import { ProductCategoriesBadges } from "./ProductCategoriesBadges";
+import CreatorActionButtons from "@/components/creator/CreatorActionButtons";
 
 export interface PresentationTabProps {
   place: Place | null;
   isPlaceLoading: boolean;
   user: UserPopulated;
+  isOwner?: boolean;
+  onFollowChange?: (delta: number) => void;
   onMapButtonClick: (placeItem: {
     location: { coordinates: number[] } | null;
     _id: string;
@@ -26,6 +30,8 @@ const PresentationTab = ({
   place,
   isPlaceLoading = false,
   user,
+  isOwner = false,
+  onFollowChange,
   onMapButtonClick,
 }: PresentationTabProps) => {
   const { eventInvitations } = useEventInvitationsByUserId(user._id, {
@@ -67,7 +73,15 @@ const PresentationTab = ({
 
   return (
     <>
+      <CreatorActionButtons
+        user={user}
+        place={place}
+        isOwner={isOwner}
+        onFollowChange={onFollowChange}
+      />
+      <ProductCategoriesBadges userId={user._id} />
       <div className={styles.descriptionRow}>
+        <span className={styles.descriptionLabel}>Description&nbsp;:</span>
         <p>{capitalizeFirstLetter(user.description || "")}</p>
       </div>
 

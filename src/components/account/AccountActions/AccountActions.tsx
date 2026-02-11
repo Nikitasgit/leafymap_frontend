@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Button from "@/components/common/buttons/Button";
-import { Edit, Eye, Users, CalendarDays, Star, Leaf } from "lucide-react";
+import { Edit, Eye, Users, CalendarDays, Star, Leaf, Package } from "lucide-react";
 import styles from "./AccountActions.module.scss";
 import { User } from "@/types/user";
 
@@ -12,6 +12,7 @@ interface AccountActionsProps {
   onOpenEvents?: () => void;
   onOpenReviews?: () => void;
   onOpenFollows?: () => void;
+  onOpenProducts?: () => void;
 }
 
 export default function AccountActions({
@@ -21,6 +22,7 @@ export default function AccountActions({
   onOpenEvents,
   onOpenReviews,
   onOpenFollows,
+  onOpenProducts,
 }: AccountActionsProps) {
   const router = useRouter();
   const { userType } = user || {};
@@ -103,6 +105,17 @@ export default function AccountActions({
         ariaLabel="Ouvrir les abonnements"
       >
         Abonnements
+      </Button>
+
+      <Button
+        disabled={isLoadingUser}
+        variant="secondary"
+        onClick={onOpenProducts}
+        fullWidth
+        endIcon={<Package size={16} />}
+        ariaLabel="Ouvrir les produits"
+      >
+        Produits
       </Button>
 
       {buttonParameters && (

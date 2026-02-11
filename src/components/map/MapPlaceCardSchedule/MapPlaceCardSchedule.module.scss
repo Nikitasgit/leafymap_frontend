@@ -4,9 +4,7 @@
 
 .schedule {
   @include flex(column, flex-start, flex-start, spacing(0.5));
-  margin-top: spacing(0.5);
   width: 100%;
-  padding: spacing(1) 0;
   background-color: $white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba-color($grey-600, 0.1);
