@@ -19,11 +19,11 @@ export interface PresentationTabProps {
   isPlaceLoading: boolean;
   user: UserPopulated;
   isOwner?: boolean;
-  onFollowChange?: (delta: number) => void;
   onMapButtonClick: (placeItem: {
     location: { coordinates: number[] } | null;
     _id: string;
   }) => Promise<void>;
+  refetchUser: () => void;
 }
 
 const PresentationTab = ({
@@ -31,8 +31,8 @@ const PresentationTab = ({
   isPlaceLoading = false,
   user,
   isOwner = false,
-  onFollowChange,
   onMapButtonClick,
+  refetchUser,
 }: PresentationTabProps) => {
   const { eventInvitations } = useEventInvitationsByUserId(user._id, {
     asCollaborator: "true",
@@ -49,7 +49,9 @@ const PresentationTab = ({
       .map((p: Partnership) => {
         const isInitiatorCurrent =
           p.initiator && p.initiator._id === currentUserId;
-        const other = isInitiatorCurrent ? p.collaborator : p.initiator ?? p.collaborator;
+        const other = isInitiatorCurrent
+          ? p.collaborator
+          : (p.initiator ?? p.collaborator);
         return {
           _id: other._id,
           username: other.username,
@@ -65,7 +67,10 @@ const PresentationTab = ({
     if (!url) return null;
     try {
       const urlObj = new URL(url.startsWith("http") ? url : `https://${url}`);
-      return { href: urlObj.href, hostname: urlObj.hostname.replace(/^www\./, "") };
+      return {
+        href: urlObj.href,
+        hostname: urlObj.hostname.replace(/^www\./, ""),
+      };
     } catch {
       return { href: url, hostname: url };
     }
@@ -77,11 +82,11 @@ const PresentationTab = ({
         user={user}
         place={place}
         isOwner={isOwner}
-        onFollowChange={onFollowChange}
+        refetchUser={refetchUser}
       />
       <ProductCategoriesBadges userId={user._id} />
+      <span className={styles.descriptionLabel}>Description&nbsp;:</span>
       <div className={styles.descriptionRow}>
-        <span className={styles.descriptionLabel}>Description&nbsp;:</span>
         <p>{capitalizeFirstLetter(user.description || "")}</p>
       </div>
 

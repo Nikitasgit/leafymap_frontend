@@ -11,11 +11,14 @@ import CreatorHeader from "@/components/creator/creatorHeader";
 import MapCreatorCardContent from "../MapCreatorCardContent";
 
 const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
-  const { user, isLoading: isLoadingUser } = useUser(userId);
-  const [followersCount, setFollowersCount] = useState<number>(0);
+  const {
+    user,
+    isLoading: isLoadingUser,
+    refetch: refetchUser,
+  } = useUser(userId);
   const { user: currentUser } = useAuth();
   const isOwner = Boolean(
-    currentUser?._id && currentUser._id.toString() === user?._id?.toString()
+    currentUser?._id && currentUser._id.toString() === user?._id?.toString(),
   );
   const placeId = useMemo(() => {
     if (!user?.place) return null;
@@ -31,16 +34,6 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
   });
 
   const isLoading = isLoadingUser || isLoadingPlace;
-
-  useEffect(() => {
-    if (user?.followers !== undefined) {
-      setFollowersCount(user.followers);
-    }
-  }, [user?.followers]);
-
-  const handleFollowChange = (delta: number) => {
-    setFollowersCount((prev) => Math.max(0, prev + delta));
-  };
 
   useEffect(() => {
     if (mapRef.current && place) {
@@ -67,14 +60,10 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
   if (!user) {
     return null;
   }
-
+  console.log("user", user);
   return (
     <article className={styles.placeCardMap}>
-      <CreatorHeader
-        place={place || null}
-        user={user}
-        isLoading={isLoading}
-      />
+      <CreatorHeader place={place || null} user={user} isLoading={isLoading} />
       <MapCreatorCardContent
         place={place || null}
         isPlaceLoading={isLoadingPlace}
@@ -82,7 +71,7 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
         isOwner={isOwner}
         onMapButtonClick={handleMapButtonClick}
         onPlaceRefetch={refetchPlace}
-        onFollowChange={handleFollowChange}
+        refetchUser={refetchUser}
       />
     </article>
   );

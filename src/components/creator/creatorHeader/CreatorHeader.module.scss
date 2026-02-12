@@ -5,7 +5,7 @@
 .headerWrapper {
   width: 100%;
   @include flex(column, flex-start, flex-start, 0);
-  
+
   &.fullWidth {
     @include respond-to(md) {
       @include flex(row, flex-start, center, spacing(1));
@@ -25,7 +25,7 @@
   padding: 0;
   display: block;
   flex-shrink: 0;
-  
+
   img {
     width: 100%;
     object-fit: cover;
@@ -36,7 +36,7 @@
 .headerWrapper.fullWidth {
   .imageContainer {
     @include respond-to(md) {
-      width:150px;
+      width: 150px;
       height: 150px;
       border-radius: rem(8);
       margin: spacing(1.5);
@@ -138,7 +138,6 @@
   .header {
     gap: spacing(1);
     .headerMain {
-
       .title {
         font-size: rem(20);
       }
@@ -151,5 +150,3 @@
     }
   }
 }
-
-

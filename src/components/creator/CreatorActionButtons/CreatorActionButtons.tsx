@@ -1,69 +1,50 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { UserPlus, Route, MessageSquare, Share2, Bookmark } from "lucide-react";
 import RoundButton from "@/components/common/buttons/RoundButton";
+import ShareModal from "@/components/common/modals/ShareModal";
 import useFollow from "@/hooks/useFollow";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import useFollowStatus from "@/hooks/useFollowStatus";
+import { useAuth } from "@/hooks/useAuth";
 import { handleGetDirections } from "@/utils/mapNavigation";
 import { findConversationWithUser } from "@/lib/api/conversations";
 import { Place } from "@/types/place";
 import { UserPopulated } from "@/types/user";
-import axios from "axios";
 import styles from "./CreatorActionButtons.module.scss";
 
 export interface CreatorActionButtonsProps {
   user: UserPopulated;
   place: Place | null;
   isOwner: boolean;
-  onFollowChange?: (delta: number) => void;
+  refetchUser: () => void;
 }
 
 const CreatorActionButtons = ({
   user,
   place,
   isOwner,
-  onFollowChange,
+  refetchUser,
 }: CreatorActionButtonsProps) => {
   const router = useRouter();
   const params = useParams();
   const locale = params.locale as string;
-  const { user: currentUser } = useCurrentUser();
+  const { user: currentUser } = useAuth();
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { follow, unfollow, isLoading: isFollowLoading } = useFollow();
-  const [isFollowing, setIsFollowing] = useState(false);
-  const [followId, setFollowId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!currentUser?._id || !user._id || currentUser._id === user._id) return;
-    const checkFollowStatus = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/follows/check`,
-          {
-            params: {
-              follower: currentUser._id,
-              following: user._id,
-            },
-            withCredentials: true,
-          }
-        );
-        const followData = response.data.data.follow;
-        setIsFollowing(!!followData);
-        if (followData) setFollowId(followData._id);
-      } catch {
-        setIsFollowing(false);
-      }
-    };
-    checkFollowStatus();
-  }, [currentUser?._id, user._id]);
+  const { isFollowing, followId, setIsFollowing, setFollowId } =
+    useFollowStatus({
+      currentUserId: currentUser?._id,
+      targetUserId: user._id,
+    });
 
   const handleFollow = async () => {
     try {
       const result = await follow(user._id);
       setIsFollowing(true);
       setFollowId(result?._id || null);
-      onFollowChange?.(1);
+      refetchUser();
     } catch {
       // Error handled in hook
     }
@@ -75,7 +56,7 @@ const CreatorActionButtons = ({
       await unfollow(followId);
       setIsFollowing(false);
       setFollowId(null);
-      onFollowChange?.(-1);
+      refetchUser();
     } catch {
       // Error handled in hook
     }
@@ -85,7 +66,7 @@ const CreatorActionButtons = ({
     if (isOwner) return;
     const conversationId = await findConversationWithUser(user._id);
     router.push(
-      `/${locale}/inbox?conversationId=${conversationId || "new"}&recipientId=${user._id}`
+      `/${locale}/inbox?conversationId=${conversationId || "new"}&recipientId=${user._id}`,
     );
   };
 
@@ -94,6 +75,14 @@ const CreatorActionButtons = ({
       handleGetDirections(place.location.coordinates);
     }
   };
+
+  const shareTitle =
+    [user.firstname, user.lastname].filter(Boolean).join(" ") ||
+    user.username ||
+    "Profil créateur";
+  const shareText = place?.name ? `${shareTitle} - ${place.name}` : shareTitle;
+  const shareUrl =
+    typeof window !== "undefined" ? window.location.href : "";
 
   const showFollowButton = currentUser?._id && currentUser._id !== user._id;
   const showMessageButton = !isOwner && currentUser?._id;
@@ -116,19 +105,6 @@ const CreatorActionButtons = ({
         )}
       </div>
       <div className={styles.actionItem}>
-        {showDirectionsButton ? (
-          <RoundButton
-            icon={<Route size={18} />}
-            label="Itinéraire"
-            onClick={handleDirectionsClick}
-            variant="primary"
-            ariaLabel="Voir l'itinéraire"
-          />
-        ) : (
-          <div className={styles.actionPlaceholder} aria-hidden />
-        )}
-      </div>
-      <div className={styles.actionItem}>
         {showMessageButton ? (
           <RoundButton
             icon={<MessageSquare size={18} />}
@@ -142,10 +118,23 @@ const CreatorActionButtons = ({
         )}
       </div>
       <div className={styles.actionItem}>
+        {showDirectionsButton ? (
+          <RoundButton
+            icon={<Route size={18} />}
+            label="Itinéraire"
+            onClick={handleDirectionsClick}
+            variant="primary"
+            ariaLabel="Voir l'itinéraire"
+          />
+        ) : (
+          <div className={styles.actionPlaceholder} aria-hidden />
+        )}
+      </div>
+      <div className={styles.actionItem}>
         <RoundButton
           icon={<Share2 size={18} />}
           label="Partager"
-          onClick={() => {}}
+          onClick={() => setIsShareModalOpen(true)}
           variant="secondary"
           ariaLabel="Partager"
         />
@@ -159,6 +148,14 @@ const CreatorActionButtons = ({
           ariaLabel="Enregistrer"
         />
       </div>
+
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        title={shareTitle}
+        text={shareText}
+        url={shareUrl}
+      />
     </div>
   );
 };

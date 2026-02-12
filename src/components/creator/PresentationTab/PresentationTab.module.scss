@@ -2,18 +2,19 @@
 @use "@/styles/abstracts/mixins" as *;
 @use "@/styles/abstracts/functions" as *;
 
+.descriptionLabel {
+  display: block;
+  font-size: rem(13);
+  font-weight: 500;
+  color: $grey-700;
+  margin-bottom: spacing(0.25);
+}
+
 .descriptionRow {
   padding: spacing(0.5) spacing(1.5);
   background-color: $grey-50;
   border-radius: rem(8);
-
-  .descriptionLabel {
-    display: block;
-    font-size: rem(13);
-    font-weight: 500;
-    color: $grey-700;
-    margin-bottom: spacing(0.25);
-  }
+  margin-bottom: spacing(1);
 
   p {
     font-size: rem(13);

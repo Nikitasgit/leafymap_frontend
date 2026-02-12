@@ -17,11 +17,8 @@ const UserProfileContainer = () => {
   const [activeTab, setActiveTab] = useState("presentation");
   const { user: currentUser } = useAuth();
   const { user, isLoading: isLoadingUser } = useUser(userId as string);
-  const [followersCount, setFollowersCount] = useState<number>(
-    () => user?.followers ?? 0
-  );
   const { submitImages, isLoading: isUploadingImages } = useSubmitImages();
-
+  console.log(user);
   const placeId = useMemo(() => {
     if (!user?.place) return null;
     return typeof user.place === "string" ? user.place : user.place._id;
@@ -81,18 +78,8 @@ const UserProfileContainer = () => {
   };
 
   const isOwner = Boolean(
-    currentUser?._id && user?._id && currentUser._id === user._id
+    currentUser?._id && user?._id && currentUser._id === user._id,
   );
-
-  useEffect(() => {
-    if (user?.followers !== undefined) {
-      setFollowersCount(user.followers);
-    }
-  }, [user?.followers]);
-
-  const handleFollowChange = (delta: number) => {
-    setFollowersCount((prev) => Math.max(0, prev + delta));
-  };
 
   if (isLoading) return <LoadingBar />;
 
@@ -107,7 +94,7 @@ const UserProfileContainer = () => {
             user={user}
             isLoading={isLoading}
             variant="full"
-            followersCount={followersCount}
+            followersCount={user.followers}
           />
         </div>
         <CreatorTabs
@@ -116,7 +103,6 @@ const UserProfileContainer = () => {
           activeTab={activeTab}
           onTabChange={handleTabClick}
           onPlaceRefetch={refetchPlace}
-          onFollowChange={handleFollowChange}
           isOwner={isOwner}
           isUploadingImages={isUploadingImages}
           onFilesSelected={handleFilesSelected}

@@ -1,0 +1,66 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.body {
+  @include flex(column, flex-start, stretch, spacing(1.25));
+  width: 100%;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: rem(15);
+  font-weight: 700;
+  color: $grey-600;
+  line-height: 1.4;
+}
+
+.urlRow {
+  @include flex(row, stretch, stretch, 0);
+  gap: spacing(0.5);
+  border: 1px solid $grey-200;
+  border-radius: rem(10);
+  overflow: hidden;
+  background: $grey-50;
+}
+
+.urlInput {
+  flex: 1;
+  min-width: 0;
+  padding: spacing(0.75) spacing(1);
+  font-size: rem(13);
+  color: $grey-800;
+  background: transparent;
+  border: none;
+  outline: none;
+
+  &::placeholder {
+    color: $grey-400;
+  }
+}
+
+.whatsappButton {
+  @include flex(row, center, center, spacing(0.75));
+  width: 100%;
+  padding: spacing(0.875) spacing(1.5);
+  font-size: rem(14);
+  font-weight: 500;
+  color: $white;
+  text-decoration: none;
+  background: #25d366;
+  border: none;
+  border-radius: rem(10);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.05s ease;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.35);
+
+  &:hover {
+    background: #20bd5a;
+  }
+
+  &:active {
+    transform: scale(0.99);
+  }
+}

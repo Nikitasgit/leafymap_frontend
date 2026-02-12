@@ -8,12 +8,12 @@ export interface MapCreatorCardContentProps {
   isOwner: boolean;
   place: Place | null;
   isPlaceLoading: boolean;
+  onPlaceRefetch?: () => void;
+  refetchUser: () => void;
   onMapButtonClick: (placeItem: {
     location: { coordinates: number[] } | null;
     _id: string;
   }) => Promise<void>;
-  onPlaceRefetch?: () => void;
-  onFollowChange?: (delta: number) => void;
 }
 
 const MapCreatorCardContent = ({
@@ -23,7 +23,7 @@ const MapCreatorCardContent = ({
   isPlaceLoading,
   onMapButtonClick,
   onPlaceRefetch,
-  onFollowChange,
+  refetchUser,
 }: MapCreatorCardContentProps) => {
   const canHandleImages = false;
   return (
@@ -33,10 +33,10 @@ const MapCreatorCardContent = ({
         place={place}
         onMapButtonClick={onMapButtonClick}
         onPlaceRefetch={onPlaceRefetch}
-        onFollowChange={onFollowChange}
         isOwner={isOwner}
         canHandleImages={canHandleImages}
         isPlaceLoading={isPlaceLoading}
+        refetchUser={refetchUser}
       />
     </div>
   );

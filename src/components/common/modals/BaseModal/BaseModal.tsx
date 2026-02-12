@@ -8,6 +8,7 @@ interface BaseModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
+  titleIcon?: React.ReactNode;
   children: React.ReactNode;
   primaryButtonLabel: string;
   secondaryButtonLabel?: string;
@@ -18,12 +19,14 @@ interface BaseModalProps {
   isContentLoading?: boolean;
   primaryButtonType?: "button" | "submit";
   withFooter?: boolean;
+  withLoadingState?: boolean;
 }
 
 const BaseModal: React.FC<BaseModalProps> = ({
   isOpen,
   onClose,
   title,
+  titleIcon,
   children,
   primaryButtonLabel,
   secondaryButtonLabel = "Annuler",
@@ -34,10 +37,13 @@ const BaseModal: React.FC<BaseModalProps> = ({
   primaryButtonType = "submit",
   isContentLoading = false,
   withFooter = true,
+  withLoadingState = true,
 }) => {
   const [showContent, setShowContent] = React.useState(false);
   const scrollYRef = React.useRef(0);
   const CONTENT_DELAY_MS = 100;
+
+  const showSkeleton = withLoadingState && !showContent;
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
@@ -49,9 +55,9 @@ const BaseModal: React.FC<BaseModalProps> = ({
       document.body.style.top = `-${scrollYRef.current}px`;
       document.body.style.left = "0";
       document.body.style.right = "0";
-      setShowContent(false);
+      setShowContent(!withLoadingState);
 
-      if (!isContentLoading) {
+      if (withLoadingState && !isContentLoading) {
         timer = setTimeout(() => setShowContent(true), CONTENT_DELAY_MS);
       }
     } else {
@@ -74,7 +80,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
       window.scrollTo(0, scrollYRef.current);
       if (timer) clearTimeout(timer);
     };
-  }, [isOpen, isContentLoading]);
+  }, [isOpen, isContentLoading, withLoadingState]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -126,7 +132,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
   const modalBody = (
     <>
       <div className={styles.modalContentBody}>
-        {!showContent ? (
+        {showSkeleton ? (
           <div className={styles.skeletonContent}>
             <Skeleton variant="rounded" height={120} sx={{ width: "100%" }} />
             <Skeleton variant="rounded" height={14} sx={{ width: "100%" }} />
@@ -168,14 +174,19 @@ const BaseModal: React.FC<BaseModalProps> = ({
     <div className={styles.modal} onClick={handleBackdropClick}>
       <div className={styles.modalContent}>
         <div className={styles.modalContentHeader}>
-          {!showContent ? (
+          {showSkeleton ? (
             <Skeleton
               variant="rounded"
               height={28}
               sx={{ flex: 1, maxWidth: "60%" }}
             />
           ) : (
-            <h2 className={styles.title}>{title}</h2>
+            <div className={styles.titleRow}>
+              {titleIcon && (
+                <span className={styles.titleIcon}>{titleIcon}</span>
+              )}
+              <h2 className={styles.title}>{title}</h2>
+            </div>
           )}{" "}
           <button
             className={styles.closeButton}

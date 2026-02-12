@@ -22,12 +22,12 @@ export interface CreatorTabsProps {
     _id: string;
   }) => Promise<void>;
   onPlaceRefetch?: () => void;
-  onFollowChange?: (delta: number) => void;
   isOwner?: boolean;
   isUploadingImages?: boolean;
   isPlaceLoading?: boolean;
   onFilesSelected?: (files: File[]) => void;
   canHandleImages?: boolean;
+  refetchUser: () => void;
 }
 
 const CreatorTabs = ({
@@ -37,17 +37,17 @@ const CreatorTabs = ({
   onTabChange,
   onMapButtonClick,
   onPlaceRefetch,
-  onFollowChange,
   isOwner = false,
   isUploadingImages = false,
   onFilesSelected,
   isPlaceLoading = false,
   canHandleImages = false,
+  refetchUser,
 }: CreatorTabsProps) => {
   const [internalActiveTab, setInternalActiveTab] = useState("presentation");
   const { events, isLoading: isLoadingEvents } = usePlaceEvents(
     place?._id || null,
-    ACTIVE_LIFECYCLE_STATUSES
+    ACTIVE_LIFECYCLE_STATUSES,
   );
 
   const activeTab = controlledActiveTab ?? internalActiveTab;
@@ -91,7 +91,7 @@ const CreatorTabs = ({
             user={user}
             isOwner={isOwner}
             onMapButtonClick={onMapButtonClick || (async () => {})}
-            onFollowChange={onFollowChange}
+            refetchUser={refetchUser}
           />
         );
       case "events":

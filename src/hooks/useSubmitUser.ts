@@ -8,6 +8,7 @@ const useSubmitUser = () => {
   const { isLoading, withLoading } = useLoading();
 
   const submitUser = async (data: Partial<User>) => {
+
     return withLoading(async () => {
       await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, data, {
         headers: {

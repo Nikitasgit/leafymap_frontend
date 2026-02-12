@@ -17,7 +17,6 @@ export interface CreatorHeaderProps {
   user: UserPopulated;
   isLoading: boolean;
   variant?: "compact" | "full";
-  followersCount?: number;
 }
 
 const CreatorHeader = ({
@@ -25,22 +24,9 @@ const CreatorHeader = ({
   user,
   isLoading,
   variant = "compact",
-  followersCount: followersCountProp,
 }: CreatorHeaderProps) => {
   const router = useRouter();
-  const [followersCountState, setFollowersCountState] = useState<number>(
-    user.followers || 0
-  );
-
-  const followersCount =
-    followersCountProp !== undefined ? followersCountProp : followersCountState;
-
-  useEffect(() => {
-    if (followersCountProp === undefined && user.followers !== undefined) {
-      setFollowersCountState(user.followers);
-    }
-  }, [user.followers, followersCountProp]);
-
+  console.log("user", user);
   return (
     <div
       className={`${styles.headerWrapper} ${
@@ -71,9 +57,7 @@ const CreatorHeader = ({
             <h2 className={styles.title}>
               {capitalizeFirstLetter(user.username || "")}
             </h2>
-            {followersCount > 0 && (
-              <FollowingCount count={followersCount} userId={user._id} />
-            )}
+            <FollowingCount count={user.followers ?? 0} userId={user._id} />
           </div>
           {place && (
             <div className={styles.categoryRow}>

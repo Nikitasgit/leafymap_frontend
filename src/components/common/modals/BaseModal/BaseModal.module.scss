@@ -43,15 +43,26 @@ $scrollbar-width: 8px;
       z-index: 10;
       width: 100%;
       flex-shrink: 0;
+      .titleRow {
+        flex: 1;
+        min-width: 0;
+        @include flex(row, flex-start, center, spacing(0.75));
+      }
+
+      .titleIcon {
+        flex-shrink: 0;
+        color: $grey-700;
+        @include flex(row, center, center, 0);
+      }
+
       .title {
         font-size: rem(20);
         font-weight: 600;
         color: $grey-800;
-
-        flex: 1;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        margin: 0;
       }
 
       .skeletonTitle {
@@ -65,7 +76,7 @@ $scrollbar-width: 8px;
     .modalContentBody {
       padding-left: calc(#{spacing(0.2)} + #{$scrollbar-width});
       padding-top: spacing(0.5);
-      min-height: 300px;
+
       border-radius: 8px;
       @include flex(column, center, center, 0);
       > * {

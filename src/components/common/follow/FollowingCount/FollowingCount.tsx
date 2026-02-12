@@ -10,6 +10,7 @@ interface FollowingCountProps {
 }
 
 const FollowingCount: React.FC<FollowingCountProps> = ({ count }) => {
+  console.log("count", count);
   if (count <= 0) {
     return null;
   }
@@ -17,9 +18,7 @@ const FollowingCount: React.FC<FollowingCountProps> = ({ count }) => {
   return (
     <div className={styles.followingCount}>
       <span className={styles.count}>{count}</span>
-      <span className={styles.label}>
-        {count === 1 ? "abonné" : "abonnés"}
-      </span>
+      <span className={styles.label}>{count === 1 ? "abonné" : "abonnés"}</span>
       <Leaf size={14} className={styles.icon} aria-hidden="true" />
     </div>
   );
