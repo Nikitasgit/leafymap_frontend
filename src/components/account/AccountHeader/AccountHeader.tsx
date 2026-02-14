@@ -25,7 +25,6 @@ export default function AccountHeader({
   const { submitUser } = useSubmitUser();
   const handleImageUploaded = async (imageId: string | null) => {
     if (imageId) {
-      console.log("imageId", imageId);
       await submitUser({
         image: imageId,
       });

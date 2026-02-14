@@ -100,7 +100,7 @@ export const eventImageSchema = z
  */
 export const validateEmail = (email: string): string | null => {
   const result = emailSchema.safeParse(email);
-  return result.success ? null : result.error.errors[0].message;
+  return result.success ? null : result.error?.issues?.[0]?.message ?? null;
 };
 
 /**
@@ -110,7 +110,7 @@ export const validateEmail = (email: string): string | null => {
  */
 export const validatePhone = (phone: string): string | null => {
   const result = phoneSchema.safeParse(phone);
-  return result.success ? null : result.error.errors[0].message;
+  return result.success ? null : result.error?.issues?.[0]?.message ?? null;
 };
 
 /**
@@ -120,7 +120,7 @@ export const validatePhone = (phone: string): string | null => {
  */
 export const validateWebsite = (website: string): string | null => {
   const result = websiteSchema.safeParse(website);
-  return result.success ? null : result.error.errors[0].message;
+  return result.success ? null : result.error?.issues?.[0]?.message ?? null;
 };
 
 /**
@@ -130,5 +130,5 @@ export const validateWebsite = (website: string): string | null => {
  */
 export const validateName = (name: string): string | null => {
   const result = nameSchema.safeParse(name);
-  return result.success ? null : result.error.errors[0].message;
+  return result.success ? null : result.error?.issues?.[0]?.message ?? null;
 };

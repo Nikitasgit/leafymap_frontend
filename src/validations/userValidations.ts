@@ -41,8 +41,8 @@ export const validateNewUserData = (data: Partial<User>): ValidationResult => {
   if (data.userType === "creator") {
     result = newCreatorSchema.safeParse(data);
   }
-  if (result && !result.success) {
-    result.error.errors.forEach((err) => {
+  if (result && !result.success && result.error?.issues) {
+    result.error.issues.forEach((err) => {
       const field = err.path.join(".");
       errors[field] = err.message;
     });

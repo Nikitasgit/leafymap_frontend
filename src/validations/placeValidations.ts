@@ -40,8 +40,8 @@ export const validateNewPlaceData = (
   const errors: Record<string, string> = {};
   const placeSchema = newPlaceSchema;
   const result = placeSchema.safeParse(data);
-  if (!result.success) {
-    result.error.errors.forEach((err) => {
+  if (!result.success && result.error?.issues) {
+    result.error.issues.forEach((err) => {
       const field = err.path.join(".");
       errors[field] = err.message;
     });

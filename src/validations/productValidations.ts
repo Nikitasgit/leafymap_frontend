@@ -15,7 +15,7 @@ export const validateNewProductData = (
 ): ValidationResult => {
   const errors: Record<string, string> = {};
   const result = newProductSchema.safeParse(data);
-  if (!result.success) {
+  if (!result.success && result.error?.issues) {
     result.error.issues.forEach((issue) => {
       const field = issue.path.map(String).join(".");
       errors[field] = issue.message;
@@ -33,7 +33,7 @@ export const validateUpdateProductData = (
   const errors: Record<string, string> = {};
   const updateSchema = newProductSchema.partial();
   const result = updateSchema.safeParse(data);
-  if (!result.success) {
+  if (!result.success && result.error?.issues) {
     result.error.issues.forEach((issue) => {
       const field = issue.path.map(String).join(".");
       errors[field] = issue.message;

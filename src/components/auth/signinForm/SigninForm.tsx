@@ -83,6 +83,10 @@ export default function SigninForm() {
             errorMessage={errors.signin.password}
           />
 
+          <div className={styles.forgotPasswordLink}>
+            <Link href="/auth/forgot-password">Mot de passe oublié ?</Link>
+          </div>
+
           <Button
             type="submit"
             variant="primary"

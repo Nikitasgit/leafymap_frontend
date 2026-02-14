@@ -36,8 +36,8 @@ export const validateRegisterData = (
 ): ValidationResult => {
   const errors: Record<string, string> = {};
   const result = registerSchema.safeParse(data);
-  if (result && !result.success) {
-    result.error.errors.forEach((err) => {
+  if (result && !result.success && result.error?.issues) {
+    result.error.issues.forEach((err) => {
       const field = err.path.join(".");
       errors[field] = err.message;
     });
@@ -71,8 +71,71 @@ export const loginSchema = z.object({
 export const validateLoginData = (data: LoginFormData): ValidationResult => {
   const errors: Record<string, string> = {};
   const result = loginSchema.safeParse(data);
-  if (result && !result.success) {
-    result.error.errors.forEach((err) => {
+  if (result && !result.success && result.error?.issues) {
+    result.error.issues.forEach((err) => {
+      const field = err.path.join(".");
+      errors[field] = err.message;
+    });
+  }
+  return {
+    errors,
+    isValid: Object.keys(errors).length === 0,
+  };
+};
+
+export const requestPasswordResetSchema = z.object({
+  email: emailSchema,
+});
+
+export interface RequestPasswordResetFormData {
+  email: string;
+}
+
+export const validateRequestPasswordResetData = (
+  data: RequestPasswordResetFormData
+): ValidationResult => {
+  const errors: Record<string, string> = {};
+  const result = requestPasswordResetSchema.safeParse(data);
+  if (result && !result.success && result.error?.issues) {
+    result.error.issues.forEach((err) => {
+      const field = err.path.join(".");
+      errors[field] = err.message;
+    });
+  }
+  return {
+    errors,
+    isValid: Object.keys(errors).length === 0,
+  };
+};
+
+export const resetPasswordSchema = z
+  .object({
+    userId: z.string().min(1, "L'identifiant utilisateur est requis"),
+    token: z.string().min(1, "Le token est requis"),
+    newPassword: passwordSchema,
+    confirmPassword: z
+      .string()
+      .min(1, "La confirmation du mot de passe est requise"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Les mots de passe ne correspondent pas",
+    path: ["confirmPassword"],
+  });
+
+export interface ResetPasswordFormData {
+  userId: string;
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export const validateResetPasswordData = (
+  data: ResetPasswordFormData
+): ValidationResult => {
+  const errors: Record<string, string> = {};
+  const result = resetPasswordSchema.safeParse(data);
+  if (result && !result.success && result.error?.issues) {
+    result.error.issues.forEach((err) => {
       const field = err.path.join(".");
       errors[field] = err.message;
     });

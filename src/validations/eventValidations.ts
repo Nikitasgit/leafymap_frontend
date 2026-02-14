@@ -46,8 +46,8 @@ export const validateEventData = (data: initialEventData): ValidationResult => {
   const errors: Record<string, string> = {};
   const result = eventSchema.safeParse(data);
 
-  if (result && !result.success) {
-    result.error.errors.forEach((err) => {
+  if (result && !result.success && result.error?.issues) {
+    result.error.issues.forEach((err) => {
       const field = err.path.join(".");
       errors[field] = err.message;
     });
