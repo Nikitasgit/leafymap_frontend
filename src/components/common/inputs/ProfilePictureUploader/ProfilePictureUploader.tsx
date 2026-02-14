@@ -34,7 +34,7 @@ const ProfilePictureUploader = ({
   rounded = false,
 }: ProfilePictureUploaderProps): React.JSX.Element => {
   const [preview, setPreview] = useState<Pick<IImage, "_id" | "urls"> | null>(
-    initialImage || null
+    initialImage || null,
   );
 
   const { deleteImages, isLoading: isLoadingDeleteImages } = useDeleteImages();
@@ -98,8 +98,8 @@ const ProfilePictureUploader = ({
     type === "Place"
       ? placeDefaultsSvg
       : type === "User"
-      ? creatorDefaultsSvg
-      : eventDefaultsSvg;
+        ? creatorDefaultsSvg
+        : eventDefaultsSvg;
 
   useEffect(() => {
     setPreview(initialImage || null);
@@ -139,11 +139,7 @@ const ProfilePictureUploader = ({
           className={`${styles.placeholder} ${rounded ? styles.rounded : ""}`}
         >
           <div className={styles.uploadIcon}>
-            {isLoading ? (
-              <LoadingSpinner size={18}  />
-            ) : (
-              <Upload size={14} />
-            )}
+            {isLoading ? <LoadingSpinner size={18} /> : <Upload size={14} />}
           </div>
           <span className={styles.uploadText}>
             Ajouter une photo (max. 5MB)

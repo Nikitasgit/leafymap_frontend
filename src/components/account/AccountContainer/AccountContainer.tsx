@@ -30,7 +30,10 @@ import {
   ReviewsWrittenTab,
   ReviewsReceivedTab,
 } from "@/components/account/SideBarReviews";
-import { FollowersTab, FollowingTab } from "@/components/account/SideBarFollows";
+import {
+  FollowersTab,
+  FollowingTab,
+} from "@/components/account/SideBarFollows";
 import { MyProductsTab } from "@/components/account/SideBarProducts/MyProductsTab";
 import styles from "./AccountContainer.module.scss";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
@@ -130,7 +133,7 @@ const PRODUCTS_TABS = [
 ];
 
 function isValidCollaborationsTab(
-  tab: string | null
+  tab: string | null,
 ): tab is CollaborationsTabId {
   return (
     tab !== null &&
@@ -146,15 +149,13 @@ function isValidEventsTab(tab: string | null): tab is EventsTabId {
 
 function isValidReviewsTab(tab: string | null): tab is ReviewsTabId {
   return (
-    tab !== null &&
-    Object.values(REVIEWS_TAB_IDS).includes(tab as ReviewsTabId)
+    tab !== null && Object.values(REVIEWS_TAB_IDS).includes(tab as ReviewsTabId)
   );
 }
 
 function isValidFollowsTab(tab: string | null): tab is FollowsTabId {
   return (
-    tab !== null &&
-    Object.values(FOLLOWS_TAB_IDS).includes(tab as FollowsTabId)
+    tab !== null && Object.values(FOLLOWS_TAB_IDS).includes(tab as FollowsTabId)
   );
 }
 
@@ -246,7 +247,7 @@ export default function AccountContainer() {
     (sidebar: SidebarValue | null, tab: string | null) => {
       router.replace(getAccountPathWithSidebar(searchParams, sidebar, tab));
     },
-    [router, searchParams]
+    [router, searchParams],
   );
 
   const handleCloseSideBar = useCallback(() => {
@@ -278,7 +279,7 @@ export default function AccountContainer() {
       navigateSidebar,
       markPartnershipInvitationsAsRead,
       markEventInvitationsAsRead,
-    ]
+    ],
   );
 
   const handleOpenCollaborations = useCallback(() => {
@@ -287,7 +288,7 @@ export default function AccountContainer() {
     } else {
       navigateSidebar(
         SIDEBAR_VALUES.COLLABORATIONS,
-        COLLABORATIONS_TAB_IDS.COLLABORATORS
+        COLLABORATIONS_TAB_IDS.COLLABORATORS,
       );
     }
   }, [activeSidebar, handleCloseSideBar, navigateSidebar]);
@@ -298,7 +299,7 @@ export default function AccountContainer() {
     } else {
       navigateSidebar(
         SIDEBAR_VALUES.EVENTS,
-        EVENTS_TAB_IDS.RECEIVED_INVITATIONS
+        EVENTS_TAB_IDS.RECEIVED_INVITATIONS,
       );
     }
   }, [activeSidebar, handleCloseSideBar, navigateSidebar]);

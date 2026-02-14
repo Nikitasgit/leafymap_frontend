@@ -16,7 +16,7 @@ export const useCurrentUser = () => {
           `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`,
           {
             withCredentials: true,
-          }
+          },
         );
         setUser(response.data.data.user);
       } catch (err) {

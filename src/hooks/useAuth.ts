@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectAuth,
   signIn,
+  signInWithGoogle,
   signOut,
   fetchCurrentUser,
 } from "@/store/authSlice";
@@ -15,6 +16,7 @@ export interface AuthState {
   user: User | null;
   loading: boolean;
   login: (identifier: string, password: string) => Promise<void>;
+  loginWithGoogle: (idToken: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -45,6 +47,37 @@ export const useAuth = (): AuthState => {
     }
   };
 
+  const loginWithGoogle = async (idToken: string) => {
+    try {
+      const data = await dispatch(signInWithGoogle(idToken)).unwrap();
+      const user = data.user;
+      await dispatch(fetchCurrentUser()).unwrap();
+      if (data.mergedUnverifiedAccount) {
+        showSuccess(
+          "Nous avons détecté un compte email existant non vérifié et l'avons lié automatiquement à votre compte Google.",
+        );
+      } else {
+        showSuccess("Connexion réussie");
+      }
+      if (user?.acceptedCGU === false) {
+        router.push("/auth/accept-cgu");
+      } else {
+        router.push("/account");
+      }
+    } catch (error: unknown) {
+      if (
+        error &&
+        typeof error === "object" &&
+        "message" in error &&
+        typeof error.message === "string"
+      ) {
+        showError(error.message);
+      } else {
+        showError("Une erreur s'est produite avec la connexion Google");
+      }
+    }
+  };
+
   const logout = async () => {
     try {
       await dispatch(signOut()).unwrap();
@@ -58,6 +91,7 @@ export const useAuth = (): AuthState => {
     user,
     loading,
     login,
+    loginWithGoogle,
     logout,
   };
 };

@@ -7,15 +7,11 @@ export const metadata: Metadata = {
     "Réinitialisez votre mot de passe SpotLight en entrant votre nouveau mot de passe.",
 };
 
-export default function ResetPassword({
+export default async function ResetPassword({
   searchParams,
 }: {
-  searchParams: { id?: string; token?: string };
+  searchParams: Promise<{ token?: string }>;
 }) {
-  return (
-    <ResetPasswordForm
-      userId={searchParams.id}
-      token={searchParams.token}
-    />
-  );
+  const { token } = await searchParams;
+  return <ResetPasswordForm token={token} />;
 }

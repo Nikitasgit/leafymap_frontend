@@ -12,7 +12,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
   const sortedSchedule = sortPeriodsByStartDate(schedule);
 
   const getCollaborator = (
-    collaborator: Collaborator | string
+    collaborator: Collaborator | string,
   ): EventScheduleProps["users"][0] | undefined => {
     const collaboratorId =
       typeof collaborator === "string" ? collaborator : collaborator._id;
@@ -63,7 +63,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
                         .map((collaborator) => getCollaborator(collaborator))
                         .filter(
                           (user): user is EventScheduleProps["users"][0] =>
-                            user !== undefined
+                            user !== undefined,
                         )
                         .map((user) => {
                           const imageUrl = user.image?.urls?.thumbnail ?? "";

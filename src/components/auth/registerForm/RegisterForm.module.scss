@@ -44,6 +44,11 @@
       }
     }
 
+    .googleButton {
+      @include flex(row, center, center, 0);
+      margin: spacing(1.5) 0;
+    }
+
     .signinLink {
       text-align: center;
       margin-top: spacing(1.5);

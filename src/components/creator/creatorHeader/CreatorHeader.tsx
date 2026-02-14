@@ -43,7 +43,7 @@ const CreatorHeader = ({
       >
         {!isLoading && (
           <Image
-            src={user.image?.urls.medium || placeDefaultSvg}
+            src={user.image?.urls.medium ?? user.googlePictureUrl ?? placeDefaultSvg}
             alt={user.username || "Lieu"}
             fill
             sizes="(max-width: 768px) 100vw, 400px"

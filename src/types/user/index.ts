@@ -14,6 +14,7 @@ export interface User extends BaseEntity {
   phone: string;
   website: string;
   image?: string | Image;
+  googlePictureUrl?: string;
   description: string;
   location?: LocationWithLabel;
   deleted?: boolean;
@@ -22,6 +23,7 @@ export interface User extends BaseEntity {
   place?: Place;
   _id: string;
   userCategory?: string | UserCategory;
+  acceptedCGU?: boolean;
 }
 
 export interface UserPopulated extends User {

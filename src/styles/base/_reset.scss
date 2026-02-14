@@ -97,6 +97,11 @@ a {
   user-select: text;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 // limit the motion for accessibility
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {

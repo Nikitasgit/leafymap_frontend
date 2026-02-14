@@ -39,16 +39,12 @@ export const usePasswordReset = () => {
   );
 
   const resetPassword = useCallback(
-    async (
-      userId: string,
-      token: string,
-      newPassword: string
-    ): Promise<void> => {
+    async (token: string, newPassword: string): Promise<void> => {
       setLoading(true);
       try {
         await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/auth/reset-password`,
-          { userId, token, newPassword },
+          { token, newPassword },
           { withCredentials: true }
         );
 

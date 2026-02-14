@@ -1,0 +1,69 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.container {
+  min-height: calc(100vh - #{$navbar-height} - #{$footer-height});
+  min-height: calc(100svh - #{$navbar-height} - #{$footer-height});
+  @include flex(column, center, center, 0);
+  background-color: $grey-100;
+  padding: spacing(1);
+
+  .formContainer {
+    background: $white;
+    padding: spacing(2);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba($grey-600, 0.1);
+    width: 100%;
+    max-width: 100%;
+
+    h1 {
+      text-align: center;
+      margin-bottom: spacing(1);
+      color: $grey-500;
+      font-size: rem(24);
+    }
+
+    .description {
+      text-align: center;
+      color: $grey-500;
+      font-size: rem(14);
+      margin-bottom: spacing(2);
+    }
+
+    .successMessage {
+      text-align: center;
+      color: $grey-500;
+      font-size: rem(14);
+      margin-bottom: spacing(2);
+      padding: spacing(1);
+      background-color: $grey-50;
+      border-radius: 4px;
+    }
+
+    .form {
+      @include flex(column, flex-start, stretch, spacing(1.5));
+    }
+
+    .signinLink {
+      text-align: center;
+      margin-top: spacing(1.5);
+
+      a {
+        color: $primary-color;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  @include respond-to(sm) {
+    .formContainer {
+      max-width: 400px;
+      padding: spacing(3);
+    }
+  }
+}

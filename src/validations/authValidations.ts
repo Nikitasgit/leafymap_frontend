@@ -110,7 +110,6 @@ export const validateRequestPasswordResetData = (
 
 export const resetPasswordSchema = z
   .object({
-    userId: z.string().min(1, "L'identifiant utilisateur est requis"),
     token: z.string().min(1, "Le token est requis"),
     newPassword: passwordSchema,
     confirmPassword: z
@@ -123,7 +122,6 @@ export const resetPasswordSchema = z
   });
 
 export interface ResetPasswordFormData {
-  userId: string;
   token: string;
   newPassword: string;
   confirmPassword: string;

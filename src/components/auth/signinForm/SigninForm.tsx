@@ -2,13 +2,17 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import styles from "./SigninForm.module.scss";
 import Button from "@/components/common/buttons/Button";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/useToast";
 import { validateLoginData } from "@/validations/authValidations";
 import TextField from "@/components/common/inputs/TextField/TextField";
+
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
 export default function SigninForm() {
   const [identifier, setIdentifier] = useState("");
@@ -18,7 +22,8 @@ export default function SigninForm() {
   }>({ signin: {} });
   const { t } = useTranslation("subscription");
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
-  const { login, loading } = useAuth();
+  const { login, loginWithGoogle, loading } = useAuth();
+  const { showError } = useToast();
 
   const validateFormData = useCallback((): boolean => {
     const signinValidation = validateLoginData({
@@ -98,9 +103,32 @@ export default function SigninForm() {
           </Button>
         </form>
 
-        <div className={styles.divider}>
-          <span>{t("signin.divider")}</span>
-        </div>
+        {GOOGLE_CLIENT_ID && (
+          <>
+            <div className={styles.divider}>
+              <span>{t("signin.divider")}</span>
+            </div>
+            <div className={styles.googleButton}>
+              <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+                <GoogleLogin
+                  onSuccess={(res) => {
+                    if (res.credential) {
+                      loginWithGoogle(res.credential);
+                    }
+                  }}
+                  onError={() => {
+                    showError("Connexion Google annulée ou échouée");
+                  }}
+                  useOneTap={false}
+                  theme="outline"
+                  size="large"
+                  text="continue_with"
+                  locale="fr"
+                />
+              </GoogleOAuthProvider>
+            </div>
+          </>
+        )}
 
         <p className={styles.signupLink}>
           {t("signin.signupLink.text")}

@@ -7,7 +7,7 @@ import styles from "./Avatar.module.scss";
 const Avatar: React.FC<AvatarProps> = ({ user, size = 32, className }) => {
   const displayName = getDisplayName(user);
   const avatarLetter = getAvatarLetter(user);
-  const imageUrl = user?.image?.urls?.thumbnail;
+  const imageUrl = user?.image?.urls?.thumbnail ?? user?.googlePictureUrl;
 
   return (
     <div

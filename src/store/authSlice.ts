@@ -11,14 +11,14 @@ export const fetchCurrentUser = createAsyncThunk(
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`,
         {
           withCredentials: true,
-        }
+        },
       );
 
       return response.data.data.user;
     } catch (error) {
       throw error;
     }
-  }
+  },
 );
 
 export const signIn = createAsyncThunk(
@@ -31,7 +31,7 @@ export const signIn = createAsyncThunk(
       identifier: string;
       password: string;
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await axios.post(
@@ -40,7 +40,7 @@ export const signIn = createAsyncThunk(
           identifier,
           password,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       return response.data.data.user;
@@ -50,14 +50,33 @@ export const signIn = createAsyncThunk(
       }
       throw error;
     }
-  }
+  },
+);
+
+export const signInWithGoogle = createAsyncThunk(
+  "auth/signInWithGoogle",
+  async (idToken: string, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`,
+        { id_token: idToken },
+        { withCredentials: true },
+      );
+      return response.data.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data);
+      }
+      throw error;
+    }
+  },
 );
 
 export const signOut = createAsyncThunk("auth/signOut", async () => {
   await axios.post(
     `${process.env.NEXT_PUBLIC_API_URL}/api/auth/signout`,
     {},
-    { withCredentials: true }
+    { withCredentials: true },
   );
 });
 
@@ -104,6 +123,20 @@ const authSlice = createSlice({
     builder.addCase(signIn.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message || "Failed to sign in";
+    });
+
+    // Sign in with Google
+    builder.addCase(signInWithGoogle.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(signInWithGoogle.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user = action.payload.user;
+    });
+    builder.addCase(signInWithGoogle.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Failed to sign in with Google";
     });
 
     // Sign out

@@ -18,7 +18,7 @@ const PartnershipCard = ({
   const imageUrl =
     typeof user.image === "string"
       ? user.image
-      : user.image?.urls?.thumbnail ?? "";
+      : (user.image?.urls?.thumbnail ?? "");
 
   const displayName = user.username ?? "Utilisateur";
   const categoryName = user.userCategory?.name;

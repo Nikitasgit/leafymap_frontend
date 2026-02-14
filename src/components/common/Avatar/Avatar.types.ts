@@ -4,6 +4,7 @@ export interface AvatarUserInfo extends UserDisplayInfo {
   image?: {
     urls?: { thumbnail?: string };
   };
+  googlePictureUrl?: string;
 }
 
 export interface AvatarProps {

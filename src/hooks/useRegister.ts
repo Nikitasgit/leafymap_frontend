@@ -15,7 +15,7 @@ export interface RegisterState {
   hasAttemptedSubmit: boolean;
   handleInputChange: (
     field: keyof RegisterFormData,
-    value: string | boolean
+    value: string | boolean,
   ) => void;
   handleRegister: (e: React.FormEvent) => Promise<void>;
   validateFormData: () => boolean;
@@ -46,7 +46,7 @@ export const useRegister = (): RegisterState => {
       setFormData((prev) => ({ ...prev, [field]: value }));
       setErrors((prev) => ({ ...prev, [field]: "" }));
     },
-    []
+    [],
   );
 
   const validateFormData = useCallback((): boolean => {
@@ -76,10 +76,10 @@ export const useRegister = (): RegisterState => {
                 email: formData.email,
                 password: formData.password,
                 acceptedCGU: formData.acceptedCGU,
-              }
+              },
             );
             showSuccess(t("messages.success"));
-            router.push("/auth/signin");
+            router.push("/auth/check-email");
           } catch (err: unknown) {
             handleApiError(
               err,
@@ -89,7 +89,7 @@ export const useRegister = (): RegisterState => {
                   register: validationErrors,
                 }));
               },
-              false
+              false,
             );
           }
         });
@@ -105,7 +105,7 @@ export const useRegister = (): RegisterState => {
       validateFormData,
       withLoading,
       showSuccess,
-    ]
+    ],
   );
 
   return {

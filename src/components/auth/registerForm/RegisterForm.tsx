@@ -3,15 +3,22 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import styles from "./RegisterForm.module.scss";
 import Button from "@/components/common/buttons/Button";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
 import TextField from "@/components/common/inputs/TextField/TextField";
 import CGUCheckbox from "@/components/common/inputs/CguCheckbox";
 import { useRegister } from "@/hooks/useRegister";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/useToast";
+
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
 export default function RegisterForm() {
   const { t } = useTranslation("subscription");
+  const { loginWithGoogle, loading: authLoading } = useAuth();
+  const { showError } = useToast();
 
   const {
     formData,
@@ -31,7 +38,7 @@ export default function RegisterForm() {
 
   return (
     <div className={styles.container}>
-      {isLoading && <LoadingBar />}
+      {(isLoading || authLoading) && <LoadingBar />}
       <div className={styles.formContainer}>
         <h1>{t("title")}</h1>
         <form
@@ -49,7 +56,7 @@ export default function RegisterForm() {
             fullWidth
             value={formData.email}
             onChange={(e) => handleInputChange("email", e.target.value)}
-            disabled={isLoading}
+            disabled={isLoading || authLoading}
             error={!!errors.register.email}
             errorMessage={errors.register.email}
           />
@@ -63,7 +70,7 @@ export default function RegisterForm() {
             fullWidth
             value={formData.password}
             onChange={(e) => handleInputChange("password", e.target.value)}
-            disabled={isLoading}
+            disabled={isLoading || authLoading}
             error={!!errors.register.password}
             errorMessage={errors.register.password}
           />
@@ -79,7 +86,7 @@ export default function RegisterForm() {
             onChange={(e) =>
               handleInputChange("confirmPassword", e.target.value)
             }
-            disabled={isLoading}
+            disabled={isLoading || authLoading}
             error={!!errors.register.confirmPassword}
             errorMessage={errors.register.confirmPassword}
           />
@@ -87,7 +94,7 @@ export default function RegisterForm() {
           <CGUCheckbox
             checked={formData.acceptedCGU}
             onChange={(checked) => handleInputChange("acceptedCGU", checked)}
-            disabled={isLoading}
+            disabled={isLoading || authLoading}
             error={!!errors.register.acceptedCGU}
             errorMessage={errors.register.acceptedCGU}
           />
@@ -96,7 +103,7 @@ export default function RegisterForm() {
             type="submit"
             variant="primary"
             size="medium"
-            disabled={isLoading}
+            disabled={isLoading || authLoading}
           >
             {isLoading ? t("form.submitLoading") : t("form.submit")}
           </Button>
@@ -105,6 +112,27 @@ export default function RegisterForm() {
         <div className={styles.divider}>
           <span>{t("divider")}</span>
         </div>
+
+        {GOOGLE_CLIENT_ID && (
+          <div className={styles.googleButton}>
+            <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+              <GoogleLogin
+                onSuccess={(res) => {
+                  if (res.credential) {
+                    loginWithGoogle(res.credential);
+                  }
+                }}
+                onError={() => {
+                  showError("Inscription Google annulée ou échouée");
+                }}
+                useOneTap={false}
+                theme="outline"
+                size="large"
+                text="continue_with"
+              />
+            </GoogleOAuthProvider>
+          </div>
+        )}
 
         <p className={styles.signinLink}>
           {t("signinLink.text")}

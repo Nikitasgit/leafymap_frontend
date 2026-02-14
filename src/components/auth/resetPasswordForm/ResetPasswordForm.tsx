@@ -14,23 +14,18 @@ import {
 } from "@/validations/authValidations";
 
 interface ResetPasswordFormProps {
-  userId?: string;
   token?: string;
 }
 
 export default function ResetPasswordForm({
-  userId: userIdProp,
   token: tokenProp,
 }: ResetPasswordFormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const userIdFromUrl = searchParams.get("id");
   const tokenFromUrl = searchParams.get("token");
-  const userIdValue = userIdFromUrl ?? userIdProp ?? "";
   const tokenValue = tokenFromUrl ?? tokenProp ?? "";
 
   const [formData, setFormData] = useState<ResetPasswordFormData>({
-    userId: userIdValue,
     token: tokenValue,
     newPassword: "",
     confirmPassword: "",
@@ -40,20 +35,16 @@ export default function ResetPasswordForm({
   const { resetPassword, loading } = usePasswordReset();
 
   useEffect(() => {
-    if (userIdValue && tokenValue) {
-      setFormData((prev) => ({
-        ...prev,
-        userId: userIdValue,
-        token: tokenValue,
-      }));
+    if (tokenValue) {
+      setFormData((prev) => ({ ...prev, token: tokenValue }));
     }
-  }, [userIdValue, tokenValue]);
+  }, [tokenValue]);
 
   useEffect(() => {
-    if (!userIdValue || !tokenValue) {
+    if (!tokenValue) {
       router.push("/auth/forgot-password");
     }
-  }, [userIdValue, tokenValue, router]);
+  }, [tokenValue, router]);
 
   const validateFormData = useCallback((): boolean => {
     const validation = validateResetPasswordData(formData);
@@ -72,11 +63,7 @@ export default function ResetPasswordForm({
       return;
     }
     try {
-      await resetPassword(
-        formData.userId,
-        formData.token,
-        formData.newPassword
-      );
+      await resetPassword(formData.token, formData.newPassword);
     } catch (error) {
       // Error is handled by the hook
     }
@@ -88,7 +75,7 @@ export default function ResetPasswordForm({
     }
   }, [hasAttemptedSubmit, validateFormData]);
 
-  if (!userIdValue || !tokenValue) {
+  if (!tokenValue) {
     return null;
   }
 
