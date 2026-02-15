@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { UserPopulated } from "@/types/user";
 import { useLoading } from "./useLoading";
@@ -9,29 +9,29 @@ export const useCurrentUser = () => {
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
 
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`,
-          {
-            withCredentials: true,
-          },
-        );
-        setUser(response.data.data.user);
-      } catch (err) {
-        if (axios.isAxiosError(err) && err.response?.status === 401) {
-          setUser(null);
-          return;
-        }
-        const errorMessage = "Erreur lors du chargement de l'utilisateur";
+  const refetch = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`,
+        {
+          withCredentials: true,
+        },
+      );
+      setUser(response.data.data.user);
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
         setUser(null);
-        showError(errorMessage);
+        return;
       }
-    };
+      const errorMessage = "Erreur lors du chargement de l'utilisateur";
+      setUser(null);
+      showError(errorMessage);
+    }
+  }, []);
 
-    withLoading(fetchCurrentUser);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    withLoading(refetch);
+  }, [refetch]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return { user, isLoading };
+  return { user, isLoading, refetch };
 };

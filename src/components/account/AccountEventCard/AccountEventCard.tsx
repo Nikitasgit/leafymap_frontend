@@ -9,6 +9,8 @@ import { Image } from "@/types/image";
 import useSubmitEvent from "@/hooks/useSubmitEvent";
 import useDeleteEvent from "@/hooks/useDeleteEvent";
 import ActionButtons from "@/components/common/actions/ActionButtons";
+import { capitalizeFirstLetter } from "@/utils/functions";
+
 
 interface AccountEventCardProps {
   event: Event;
@@ -27,7 +29,7 @@ const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
           image: imageId,
         },
         true,
-        event._id
+        event._id,
       );
     }
   };
@@ -45,7 +47,7 @@ const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
 
       <div className={styles.content}>
         <div className={styles.titleContainer}>
-          <h4 className={styles.title}>{event.name}</h4>
+          <h4 className={styles.title}>{capitalizeFirstLetter(event.name)}</h4>
           <ActionButtons
             actions={[
               {
@@ -80,7 +82,9 @@ const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
             </div>
           </div>
         )}
-        <p className={styles.description}>{event.description}</p>
+        <p className={styles.description}>
+          {capitalizeFirstLetter(event.description)}
+        </p>
       </div>
     </div>
   );

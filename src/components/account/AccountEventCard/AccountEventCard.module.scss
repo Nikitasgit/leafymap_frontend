@@ -3,7 +3,7 @@
 @use "@/styles/abstracts/mixins" as *;
 
 .card {
-  @include flex(row, flex-start, center, spacing(0));
+  @include flex(row, flex-start, flex-start, spacing(0));
   border-bottom: 1px solid $grey-200;
   border-radius: 12px;
   .imageContainer {
@@ -14,16 +14,19 @@
     @include flex(column, flex-start, stretch, spacing(0));
     flex: 1;
     min-width: 0;
-    padding: 0 spacing(0.5);
+    padding: spacing(0.5);
     .titleContainer {
-      @include flex(column-reverse, space-between, center, spacing(0));
+      @include flex(row, space-between, center, spacing(0.5));
       width: 100%;
+      flex-shrink: 0;
+      min-height: 0;
       .title {
         color: $grey-700;
         font-weight: 600;
         margin: 0;
         font-size: rem(14);
-        align-self: flex-start;
+        flex: 1;
+        min-width: 0;
         display: -webkit-box;
         -webkit-line-clamp: 1;
         line-clamp: 1;
@@ -32,7 +35,8 @@
         text-overflow: ellipsis;
       }
       .actionButtons {
-        align-self: flex-end;
+        flex-shrink: 0;
+        align-self: center;
       }
     }
     .description {
@@ -52,7 +56,11 @@
         @include flex(row, flex-start, center, spacing(0.5));
         color: $grey-600;
         align-items: center;
+        width: 100%;
+
         .scheduleText {
+          flex: 1;
+          min-width: 0;
           font-size: rem(12);
           color: $grey-600;
           font-weight: 500;
@@ -64,6 +72,11 @@
           overflow: hidden;
           text-overflow: ellipsis;
         }
+
+        > *:last-child {
+          flex-shrink: 0;
+          margin-left: auto;
+        }
       }
       .scheduleItem:first-child svg {
         display: none;
@@ -73,11 +86,8 @@
   @include respond-to(sm) {
     .content {
       gap: spacing(0.5);
-      .titleContainer {
-        @include flex(row, space-between, center, spacing(0.5));
-        .title {
-          font-size: rem(16);
-        }
+      .titleContainer .title {
+        font-size: rem(16);
       }
       .scheduleInfo {
         .scheduleItem {

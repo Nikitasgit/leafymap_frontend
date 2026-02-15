@@ -4,6 +4,7 @@
 
 .actionButtons {
   @include flex(row, flex-end, center, spacing(0.75));
+  align-self: center;
 }
 
 .actionButton {

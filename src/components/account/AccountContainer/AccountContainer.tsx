@@ -6,6 +6,7 @@ import {
   Users,
   Inbox,
   UserPlus,
+  Calendar,
   CalendarDays,
   Star,
   MessageSquare,
@@ -25,6 +26,7 @@ import {
 import {
   EventInvitationsReceivedTab,
   EventParticipationsTab,
+  MyEventsTab,
 } from "@/components/account/SideBarEvents";
 import {
   ReviewsWrittenTab,
@@ -79,6 +81,12 @@ const COLLABORATIONS_TABS = [
 ];
 
 const EVENTS_TABS = [
+  {
+    id: EVENTS_TAB_IDS.MY_EVENTS,
+    label: "Mes évènements",
+    icon: Calendar,
+    content: <MyEventsTab />,
+  },
   {
     id: EVENTS_TAB_IDS.RECEIVED_INVITATIONS,
     label: "Invitations reçues",
@@ -169,7 +177,8 @@ function isValidProductsTab(tab: string | null): tab is ProductsTabId {
 export default function AccountContainer() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, isLoading: isLoadingUser } = useCurrentUser();
+  const { user, isLoading: isLoadingUser, refetch: refetchUser } =
+    useCurrentUser();
   const { markPartnershipInvitationsAsRead, markEventInvitationsAsRead } =
     useUserNotifications({
       autoFetch: !!user,
@@ -199,7 +208,7 @@ export default function AccountContainer() {
     if (activeSidebar === SIDEBAR_VALUES.EVENTS) {
       const tabId = isValidEventsTab(activeTab)
         ? activeTab
-        : EVENTS_TAB_IDS.RECEIVED_INVITATIONS;
+        : EVENTS_TAB_IDS.MY_EVENTS;
       return {
         title: "Mes évènements",
         tabs: EVENTS_TABS,
@@ -297,10 +306,7 @@ export default function AccountContainer() {
     if (activeSidebar === SIDEBAR_VALUES.EVENTS) {
       handleCloseSideBar();
     } else {
-      navigateSidebar(
-        SIDEBAR_VALUES.EVENTS,
-        EVENTS_TAB_IDS.RECEIVED_INVITATIONS,
-      );
+      navigateSidebar(SIDEBAR_VALUES.EVENTS, EVENTS_TAB_IDS.MY_EVENTS);
     }
   }, [activeSidebar, handleCloseSideBar, navigateSidebar]);
 
@@ -343,7 +349,11 @@ export default function AccountContainer() {
         tabs={tabs}
       />
       <div className={styles.accountContainer}>
-        <AccountHeader user={user!} isLoadingUser={isLoadingUser} />
+        <AccountHeader
+          user={user!}
+          isLoadingUser={isLoadingUser}
+          onUserUpdated={refetchUser}
+        />
         <AccountActions
           user={user!}
           isLoadingUser={isLoadingUser}

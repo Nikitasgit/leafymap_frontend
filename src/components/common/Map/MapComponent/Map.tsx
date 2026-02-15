@@ -136,7 +136,7 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
                     : place.placeCategory.name
                 }
                 placeName={
-                  typeof place === "object" && "user" in place
+                  typeof place === "object" && "user" in place && place.user != null
                     ? (place.user as User).username
                     : "name" in place && typeof place.name === "string"
                     ? place.name

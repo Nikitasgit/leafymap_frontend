@@ -34,6 +34,7 @@ export type CollaborationsTabId =
 
 /** Onglets de la sidebar Évènements */
 export const EVENTS_TAB_IDS = {
+  MY_EVENTS: "my-events",
   RECEIVED_INVITATIONS: "received-invitations",
   MY_PARTICIPATIONS: "my-participations",
 } as const;

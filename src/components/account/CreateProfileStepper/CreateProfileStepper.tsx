@@ -30,14 +30,9 @@ const initialUserData = (user: Partial<User> | null): InitialCreatorData => ({
 });
 
 const initialPlaceData = (user: Partial<User> | null): InitialPlaceData => ({
-  name: "",
-  description: "",
   location: null,
   defaultSchedule: defaultSchedule,
   placeCategory: "",
-  phone: user?.phone || "",
-  email: user?.email || "",
-  website: user?.website || "",
   placeType: [],
   active: true,
 });
@@ -51,7 +46,7 @@ const CreateProfileStepper = () => {
 
   const [place, setPlace] = useState<InitialPlaceData>(initialPlaceData(null));
   const [newUser, setNewUser] = useState<InitialCreatorData>(
-    initialUserData(null)
+    initialUserData(null),
   );
 
   useEffect(() => {
@@ -64,7 +59,7 @@ const CreateProfileStepper = () => {
   const handleSubmit = async () => {
     try {
       const user = await submitUser(newUser);
-
+      console.log("user", user);
       if (place.active === true && user) {
         await submitPlace(place);
       }

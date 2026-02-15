@@ -12,7 +12,11 @@ import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
 
 interface ProfilePictureUploaderProps {
   initialImage?: IImage;
-  onImageUploaded?: (imageUrl: string | null) => void;
+  googlePictureUrl?: string;
+  onImageUploaded?: (
+    imageUrl: string | null,
+    googlePictureUrl?: string | null,
+  ) => void;
   className?: string;
   size?: "small" | "medium" | "large";
   disabled?: boolean;
@@ -24,6 +28,7 @@ interface ProfilePictureUploaderProps {
 
 const ProfilePictureUploader = ({
   initialImage,
+  googlePictureUrl,
   onImageUploaded = () => {},
   className = "",
   size = "medium",
@@ -55,6 +60,7 @@ const ProfilePictureUploader = ({
         if (preview) {
           await deleteImages([preview._id]);
         }
+        console.log("response", response);
         onImageUploaded(response.images[0]._id);
         setPreview({
           _id: response.images[0]._id,
@@ -69,11 +75,18 @@ const ProfilePictureUploader = ({
   };
 
   const handleDeleteImage = async () => {
-    if (disabled || !isOwner || !preview) return;
+    if (disabled || !isOwner || (!preview && !googlePictureUrl)) return;
     try {
-      await deleteImages([preview._id]);
-      setPreview(null);
-      onImageUploaded(null);
+      if (preview) {
+        await deleteImages([preview._id]);
+        setPreview(null);
+        return;
+      }
+      if (googlePictureUrl) {
+        onImageUploaded(null, googlePictureUrl);
+      } else {
+        onImageUploaded(null);
+      }
     } catch (error) {
       console.error("Error deleting image:", error);
     }
@@ -111,11 +124,11 @@ const ProfilePictureUploader = ({
         styles.uploadArea
       } ${getSizeClass()} ${getOwnerClass()} ${className}`}
     >
-      {preview || !isOwner ? (
+      {(preview || !isOwner || googlePictureUrl) && !isLoading ? (
         <div className={styles.imageContainer}>
           <Image
             priority
-            src={preview?.urls?.thumbnail || defaultAvatar}
+            src={preview?.urls?.thumbnail || googlePictureUrl || defaultAvatar}
             alt="Photo de profil"
             width={size === "small" ? 65 : size === "large" ? 120 : 100}
             height={size === "small" ? 65 : size === "large" ? 120 : 100}
@@ -123,7 +136,7 @@ const ProfilePictureUploader = ({
               rounded ? styles.rounded : ""
             }`}
           />{" "}
-          {isOwner && preview && (
+          {isOwner && (preview || googlePictureUrl) && (
             <button
               onClick={handleDeleteImage}
               className={styles.deleteButton}

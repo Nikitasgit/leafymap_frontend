@@ -14,21 +14,33 @@ interface AccountHeaderProps {
     email: string;
     image?: string | Image;
     userCategory?: { name: string };
+    googlePictureUrl?: string;
   };
   isLoadingUser: boolean;
+  onUserUpdated?: () => void | Promise<void>;
 }
 
 export default function AccountHeader({
   user,
   isLoadingUser,
+  onUserUpdated,
 }: AccountHeaderProps) {
   const { submitUser } = useSubmitUser();
-  const handleImageUploaded = async (imageId: string | null) => {
+  const handleImageUploaded = async (
+    imageId: string | null,
+    googlePictureUrl?: string | null,
+  ) => {
     if (imageId) {
       await submitUser({
         image: imageId,
       });
     }
+    if (googlePictureUrl) {
+      await submitUser({
+        googlePictureUrl: "",
+      });
+    }
+    await onUserUpdated?.();
   };
 
   return (
@@ -45,6 +57,7 @@ export default function AccountHeader({
         <p className={styles.email}>{user.email}</p>
       </div>
       <ProfilePictureUploader
+        googlePictureUrl={user.googlePictureUrl}
         onImageUploaded={handleImageUploaded}
         type="User"
         reference={user._id}

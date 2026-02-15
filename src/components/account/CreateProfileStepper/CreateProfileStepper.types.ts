@@ -21,7 +21,7 @@ export type FormDataChangeHandler = (
             | boolean
             | null;
         };
-      }
+      },
 ) => void;
 
 export type onNextHandler = () => void;
@@ -29,16 +29,7 @@ export type onBackHandler = () => void;
 
 export type InitialPlaceData = Pick<
   Place,
-  | "name"
-  | "description"
-  | "location"
-  | "defaultSchedule"
-  | "placeCategory"
-  | "phone"
-  | "email"
-  | "website"
-  | "placeType"
-  | "active"
+  "location" | "defaultSchedule" | "placeCategory" | "placeType" | "active"
 >;
 
 export type InitialCreatorData = Pick<

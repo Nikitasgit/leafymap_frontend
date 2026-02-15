@@ -10,7 +10,6 @@ import StarsDisplay from "@/components/common/stars/StarsDisplay/StarsDisplay";
 import { Place } from "@/types/place";
 import { UserPopulated } from "@/types/user";
 import { FollowingCount } from "@/components/common/follow/FollowingCount";
-import { useState, useEffect } from "react";
 
 export interface CreatorHeaderProps {
   place: Place | null;
@@ -26,7 +25,7 @@ const CreatorHeader = ({
   variant = "compact",
 }: CreatorHeaderProps) => {
   const router = useRouter();
-  console.log("user", user);
+
   return (
     <div
       className={`${styles.headerWrapper} ${
@@ -43,7 +42,11 @@ const CreatorHeader = ({
       >
         {!isLoading && (
           <Image
-            src={user.image?.urls.medium ?? user.googlePictureUrl ?? placeDefaultSvg}
+            src={
+              user.image?.urls.medium ??
+              user.googlePictureUrl ??
+              placeDefaultSvg
+            }
             alt={user.username || "Lieu"}
             fill
             sizes="(max-width: 768px) 100vw, 400px"

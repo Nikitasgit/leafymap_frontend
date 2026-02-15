@@ -300,7 +300,6 @@ function MyComponent() {
 - `/[locale]/account/settings` : Paramètres du compte
 - `/[locale]/account/places/create` : Créer un lieu (Creator: 1 max, Organizer: 3 max)
 - `/[locale]/account/places/[placeId]` : Gérer un lieu (propriétaire uniquement)
-- `/[locale]/account/places/[placeId]/events` : Événements du lieu
 - `/[locale]/account/places/[placeId]/events/create` : Créer un événement
 - `/[locale]/account/places/[placeId]/events/[eventId]` : Modifier un événement
 - `/[locale]/messages` : Messagerie
