@@ -16,7 +16,7 @@ const UserProfileContainer = () => {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState("presentation");
   const { user: currentUser } = useAuth();
-  const { user, isLoading: isLoadingUser } = useUser(userId as string);
+  const { user, isLoading: isLoadingUser, refetch: refetchUser } = useUser(userId as string);
   const { submitImages, isLoading: isUploadingImages } = useSubmitImages();
   console.log(user);
   const placeId = useMemo(() => {
@@ -94,7 +94,6 @@ const UserProfileContainer = () => {
             user={user}
             isLoading={isLoading}
             variant="full"
-            followersCount={user.followers}
           />
         </div>
         <CreatorTabs
@@ -103,6 +102,7 @@ const UserProfileContainer = () => {
           activeTab={activeTab}
           onTabChange={handleTabClick}
           onPlaceRefetch={refetchPlace}
+          refetchUser={refetchUser}
           isOwner={isOwner}
           isUploadingImages={isUploadingImages}
           onFilesSelected={handleFilesSelected}

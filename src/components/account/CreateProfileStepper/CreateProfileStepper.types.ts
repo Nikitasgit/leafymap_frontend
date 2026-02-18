@@ -29,7 +29,7 @@ export type onBackHandler = () => void;
 
 export type InitialPlaceData = Pick<
   Place,
-  "location" | "defaultSchedule" | "placeCategory" | "placeType" | "active"
+  "name" | "description" | "location" | "defaultSchedule" | "placeCategory" | "placeType" | "active" | "phone" | "email" | "website"
 >;
 
 export type InitialCreatorData = Pick<

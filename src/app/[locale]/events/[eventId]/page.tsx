@@ -12,7 +12,7 @@ export async function generateMetadata({
 }
 
 const EventPage = () => {
-  return () => {};
+  return <div>Event Page</div>;
 };
 
 export default EventPage;

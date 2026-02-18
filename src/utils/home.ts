@@ -1,6 +1,8 @@
 import { UserType } from "@/types/user";
 
-export const getHeaderParameters = (userType: UserType | undefined) => {
+export const getHeaderParameters = (
+  userType: UserType | "organizer" | undefined
+) => {
   switch (userType) {
     case "guest":
       return {

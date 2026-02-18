@@ -31,9 +31,11 @@ const EventModal: React.FC<EventModalProps> = ({
 }) => {
   const { eventInvitations, isLoading: eventInvitationsLoading } =
     useEventInvitations(event._id, { onlyAccepted: "true" });
-  const participants = eventInvitations.map(
-    (invitation) => invitation.collaborator
-  );
+  const participants = eventInvitations
+    .map((invitation) => invitation.collaborator)
+    .filter((collaborator): collaborator is NonNullable<typeof collaborator> => 
+      collaborator !== undefined
+    );
   const handleClose = () => {
     onClose();
   };

@@ -26,7 +26,9 @@ export default function PartnershipMessage({
     (partnership as PartnershipPopulated).initiator?.username ||
     "Utilisateur";
 
-  const isPlace = partnership.type === "place" || !!partnership.place?.location;
+  const isPlace =
+    ("type" in partnership && partnership.type === "place") ||
+    !!partnership.place?.location;
 
   const fullPlace =
     (partnership as PartnershipPopulated).place &&

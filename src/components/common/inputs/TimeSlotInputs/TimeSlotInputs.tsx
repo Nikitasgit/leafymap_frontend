@@ -38,7 +38,7 @@ const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
       <div className={styles.timePickerWrapper}>
         <DatePicker
           selected={parseTimeString(slot.startTime)}
-          onChange={(time) => onTimeChange("startTime", time)}
+          onChange={(time: Date | null) => onTimeChange("startTime", time)}
           showTimeSelect
           showTimeSelectOnly
           timeIntervals={10}
@@ -62,7 +62,7 @@ const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
         <p className={styles.timeSeparator}>à</p>
         <DatePicker
           selected={parseTimeString(slot.endTime)}
-          onChange={(time) => onTimeChange("endTime", time)}
+          onChange={(time: Date | null) => onTimeChange("endTime", time)}
           showTimeSelect
           showTimeSelectOnly
           timeIntervals={10}

@@ -123,7 +123,6 @@ export default function SigninForm() {
                   theme="outline"
                   size="large"
                   text="continue_with"
-                  locale="fr"
                 />
               </GoogleOAuthProvider>
             </div>

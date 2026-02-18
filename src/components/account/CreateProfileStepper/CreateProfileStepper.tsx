@@ -30,11 +30,16 @@ const initialUserData = (user: Partial<User> | null): InitialCreatorData => ({
 });
 
 const initialPlaceData = (user: Partial<User> | null): InitialPlaceData => ({
+  name: "",
+  description: "",
   location: null,
   defaultSchedule: defaultSchedule,
   placeCategory: "",
   placeType: [],
   active: true,
+  phone: user?.phone || "",
+  email: user?.email || "",
+  website: user?.website || "",
 });
 
 const CreateProfileStepper = () => {

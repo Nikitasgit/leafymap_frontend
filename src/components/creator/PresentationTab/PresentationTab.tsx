@@ -52,10 +52,15 @@ const PresentationTab = ({
         const other = isInitiatorCurrent
           ? p.collaborator
           : (p.initiator ?? p.collaborator);
+        const image = typeof other.image === "string" 
+          ? { urls: { thumbnail: other.image } }
+          : other.image?.urls 
+            ? { urls: other.image.urls }
+            : undefined;
         return {
           _id: other._id,
           username: other.username,
-          image: other.image,
+          image,
           userCategory: other.userCategory,
         };
       })

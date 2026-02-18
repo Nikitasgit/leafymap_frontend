@@ -17,7 +17,7 @@ export interface Partnership {
   collaborator: {
     _id: string;
     username?: string;
-    image?: Image;
+    image?: Image | string;
     userCategory?: UserCategory;
   };
   status: "pending" | "accepted";
@@ -30,7 +30,7 @@ export interface PartnershipPopulated extends Partnership {
   collaborator: {
     _id: string;
     username?: string;
-    image?: Image;
+    image?: Image | string;
     userCategory?: UserCategory;
   };
 }

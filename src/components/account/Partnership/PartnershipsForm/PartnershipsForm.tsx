@@ -64,7 +64,7 @@ const PartnershipsForm = ({
         collaborator: {
           _id: suggestion._id,
           username: suggestion.name || "",
-          image: suggestion.image as string,
+          image: suggestion.image,
         },
         status: "pending",
         initiator: undefined,

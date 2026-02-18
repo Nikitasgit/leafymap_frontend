@@ -8,11 +8,11 @@ import { User } from "@/types/user";
 interface AccountActionsProps {
   user: User;
   isLoadingUser: boolean;
-  onOpenCollaborations?: () => void;
-  onOpenEvents?: () => void;
-  onOpenReviews?: () => void;
-  onOpenFollows?: () => void;
-  onOpenProducts?: () => void;
+  onOpenCollaborations: () => void;
+  onOpenEvents: () => void;
+  onOpenReviews: () => void;
+  onOpenFollows: () => void;
+  onOpenProducts: () => void;
 }
 
 export default function AccountActions({

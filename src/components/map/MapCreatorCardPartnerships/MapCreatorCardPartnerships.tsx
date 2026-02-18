@@ -69,7 +69,6 @@ const MapCreatorCardPartnerships = ({
                 onClick={() =>
                   handleEventClick(
                     event._id,
-                    undefined,
                     initiator as UserPopulated | undefined
                   )
                 }
