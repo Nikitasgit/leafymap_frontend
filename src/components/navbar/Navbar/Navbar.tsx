@@ -16,7 +16,7 @@ import NavbarMenuMobile from "../NavbarMenuMobile";
 import NavbarMobileMenuButton from "../NavbarMobileMenuButton";
 import { APP_NAME } from "@/utils/constants";
 import styles from "./Navbar.module.scss";
-import logo from "../../../../public/logo/logo.png";
+import logo from "../../../../public/logo/logo-leafy-map.svg";
 
 export default function Navbar() {
   const pathname = usePathname();
