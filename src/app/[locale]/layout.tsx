@@ -6,11 +6,11 @@ import Providers from "@/components/Providers";
 import { roboto } from "@/fonts/font";
 import Navbar from "@/components/navbar/Navbar";
 import type { Metadata } from "next";
+import { APP_NAME } from "@/utils/constants";
 
 export const metadata: Metadata = {
-  title: "SpotLight",
-  description:
-    "SpotLight - Découvrez les créateurs, artisans et lieux culturels où que vous soyez",
+  title: APP_NAME,
+  description: `${APP_NAME} - Découvrez les créateurs, artisans et lieux culturels où que vous soyez`,
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },

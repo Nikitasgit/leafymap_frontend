@@ -1,18 +1,14 @@
 import axios from "axios";
+import { APP_URL } from "@/utils/constants";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-const origin =
-  process.env.NODE_ENV === "production"
-    ? "https://spotlight-project.vercel.app"
-    : "http://localhost:3001";
 
 export const getUserById = async (userId: string) => {
   try {
     const url = `${API_URL}/api/users/${userId}`;
     const response = await axios.get(url, {
       headers: {
-        Origin: origin,
+        Origin: APP_URL,
         "Content-Type": "application/json",
       },
     });

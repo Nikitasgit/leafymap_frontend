@@ -1,12 +1,12 @@
 import BackButton from "@/components/common/buttons/BackButton";
+import { APP_NAME } from "@/utils/constants";
 import initTranslations from "../../../i18n";
 import styles from "./cgu.module.scss";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Conditions Générales d'Utilisation | SpotLight",
-  description:
-    "Consultez les conditions générales d'utilisation de SpotLight. Découvrez nos règles, votre responsabilité et vos droits en tant qu'utilisateur de la plateforme.",
+  title: `Conditions Générales d'Utilisation | ${APP_NAME}`,
+  description: `Consultez les conditions générales d'utilisation de ${APP_NAME}. Découvrez nos règles, votre responsabilité et vos droits en tant qu'utilisateur de la plateforme.`,
 };
 
 export default async function CGUPage({
@@ -32,7 +32,7 @@ export default async function CGUPage({
             <h2>1. Objet</h2>
             <p>
               Les présentes conditions générales d&apos;utilisation (CGU)
-              régissent l&apos;utilisation de la plateforme SpotLight. En
+              régissent l&apos;utilisation de la plateforme {APP_NAME}. En
               accédant et en utilisant notre service, vous acceptez d&apos;être
               lié par ces conditions.
             </p>
@@ -42,7 +42,7 @@ export default async function CGUPage({
             <h2>2. Définitions</h2>
             <ul>
               <li>
-                <strong>Plateforme :</strong> Le site web SpotLight
+                <strong>Plateforme :</strong> Le site web {APP_NAME}
               </li>
               <li>
                 <strong>Utilisateur :</strong> Toute personne accédant à la
@@ -84,7 +84,7 @@ export default async function CGUPage({
                 être effectuée par son titulaire.
               </li>
               <li>
-                SpotLight se réserve le droit de suspendre ou supprimer un
+                {APP_NAME} se réserve le droit de suspendre ou supprimer un
                 compte en cas de non-respect des présentes CGU.
               </li>
             </ul>
@@ -114,7 +114,7 @@ export default async function CGUPage({
             <p>
               Les utilisateurs restent propriétaires des contenus (textes,
               photos, vidéos) qu&apos;ils publient sur la plateforme. En
-              publiant un contenu, vous accordez à SpotLight une licence non
+              publiant un contenu, vous accordez à {APP_NAME} une licence non
               exclusive, gratuite et mondiale pour afficher, héberger et
               diffuser ce contenu dans le cadre de la plateforme.
             </p>
@@ -138,13 +138,13 @@ export default async function CGUPage({
           <section className={styles.section}>
             <h2>8. Responsabilité</h2>
             <p>
-              SpotLight agit uniquement comme intermédiaire et n&apos;intervient
+              {APP_NAME} agit uniquement comme intermédiaire et n&apos;intervient
               pas dans les partenariats, événements ou transactions entre
               utilisateurs. Chaque organisateur est seul responsable de la
               légalité et de la conformité des événements qu&apos;il publie.
             </p>
             <p>
-              SpotLight ne garantit pas la disponibilité ininterrompue du
+              {APP_NAME} ne garantit pas la disponibilité ininterrompue du
               service et ne saurait être tenu responsable en cas de panne
               technique, perte de données ou attaque informatique.
             </p>
@@ -163,7 +163,7 @@ export default async function CGUPage({
           <section className={styles.section}>
             <h2>10. Propriété intellectuelle</h2>
             <p>
-              Tous les contenus créés par SpotLight (textes, images, logos,
+              Tous les contenus créés par {APP_NAME} (textes, images, logos,
               design, code) sont protégés par le droit d&apos;auteur. Toute
               reproduction sans autorisation est interdite.
             </p>
@@ -181,7 +181,7 @@ export default async function CGUPage({
           <section className={styles.section}>
             <h2>12. Modification des CGU</h2>
             <p>
-              SpotLight se réserve le droit de modifier ces conditions à tout
+              {APP_NAME} se réserve le droit de modifier ces conditions à tout
               moment. Les modifications prendront effet dès leur publication sur
               la plateforme.
             </p>

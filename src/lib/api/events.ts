@@ -1,16 +1,12 @@
 import axios from "axios";
-
-const origin =
-  process.env.NODE_ENV === "production"
-    ? "https://spotlight-project.vercel.app"
-    : "http://localhost:3001";
+import { APP_URL } from "@/utils/constants";
 
 export const getEventById = async (eventId: string) => {
   try {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/api/events/${eventId}`;
     const response = await axios.get(url, {
       headers: {
-        Origin: origin,
+        Origin: APP_URL,
         "Content-Type": "application/json",
       },
     });

@@ -1,3 +1,11 @@
+// App constants
+export const APP_NAME = "Leafy Map";
+
+export const APP_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://locallyz.com"
+    : "http://localhost:3001";
+
 // Map constants
 
 export const DEFAULT_LOCATION = {

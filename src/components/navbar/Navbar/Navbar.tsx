@@ -14,6 +14,7 @@ import NavbarNotifications from "../NavbarNotifications";
 import NavbarMenuDesktop from "../NavbarMenuDesktop";
 import NavbarMenuMobile from "../NavbarMenuMobile";
 import NavbarMobileMenuButton from "../NavbarMobileMenuButton";
+import { APP_NAME } from "@/utils/constants";
 import styles from "./Navbar.module.scss";
 import logo from "../../../../public/logo/logo.png";
 
@@ -58,7 +59,7 @@ export default function Navbar() {
         <Link href="/" className={styles.logo}>
           <Image
             src={logo}
-            alt="SpotLight"
+            alt={APP_NAME}
             width={150}
             height={40}
             priority

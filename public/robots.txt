@@ -22,7 +22,7 @@ Allow: /users/
 Allow: /legal/
 
 # Sitemap
-Sitemap: https://spotlight-project.vercel.app/sitemap.xml
+Sitemap: https://leafymap/sitemap.xml
 
 # Crawl-delay to avoid server overload
 Crawl-delay: 1

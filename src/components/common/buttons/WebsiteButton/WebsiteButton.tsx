@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Button from "@/components/common/buttons/Button";
 import BaseModal from "@/components/common/modals/BaseModal/BaseModal";
+import { APP_NAME } from "@/utils/constants";
 import styles from "./WebsiteButton.module.scss";
 
 export interface WebsiteButtonProps {
@@ -58,14 +59,14 @@ const WebsiteButton = ({
       <BaseModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        title="Quitter Spotlight"
+        title={`Quitter ${APP_NAME}`}
         primaryButtonLabel="Continuer"
         secondaryButtonLabel="Annuler"
         onPrimaryAction={handleConfirm}
         primaryButtonType="button"
       >
         <p className={styles.modalMessage}>
-          Vous quittez Spotlight, vous allez être redirigé vers ce site :{" "}
+          Vous quittez {APP_NAME}, vous allez être redirigé vers ce site :{" "}
           <strong>{displayUrl}</strong>, souhaitez-vous continuer ?
         </p>
       </BaseModal>

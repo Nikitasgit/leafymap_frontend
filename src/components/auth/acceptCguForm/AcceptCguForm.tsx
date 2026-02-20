@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { APP_NAME } from "@/utils/constants";
 import styles from "./AcceptCguForm.module.scss";
 import Button from "@/components/common/buttons/Button";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
@@ -45,7 +46,7 @@ export default function AcceptCguForm() {
           <Link href="/legal/cgu" className={styles.link}>
             conditions générales d&apos;utilisation
           </Link>{" "}
-          de SpotLight.
+          de {APP_NAME}.
         </p>
         <Button
           type="button"

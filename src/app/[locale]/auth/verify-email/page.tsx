@@ -1,8 +1,9 @@
 import VerifyEmailHandler from "@/components/auth/verifyEmailHandler/VerifyEmailHandler";
+import { APP_NAME } from "@/utils/constants";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Vérification de l'email | SpotLight",
+  title: `Vérification de l'email | ${APP_NAME}`,
   description: "Vérifiez votre adresse email pour activer votre compte.",
 };
 

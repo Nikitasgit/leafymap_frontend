@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import Button from "@/components/common/buttons/Button";
 import { Edit, Eye, Users, CalendarDays, Star, Leaf, Package } from "lucide-react";
+import { APP_NAME } from "@/utils/constants";
 import styles from "./AccountActions.module.scss";
 import { User } from "@/types/user";
 
@@ -155,7 +156,7 @@ export default function AccountActions({
             (marché, boutique, espace culturel…)?
           </p>
           <p className={styles.infoText}>
-            Mettez en lumière votre activité et rejoignez SpotLight dès
+            Mettez en lumière votre activité et rejoignez {APP_NAME} dès
             aujourd&apos;hui.
           </p>
           <p className={styles.infoText}>

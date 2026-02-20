@@ -1,10 +1,8 @@
 import { MetadataRoute } from "next";
+import { APP_URL } from "@/utils/constants";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl =
-    process.env.NODE_ENV === "production"
-      ? "https://spotlight-project.vercel.app"
-      : "http://localhost:3001";
+  const baseUrl = APP_URL;
 
   return [
     {

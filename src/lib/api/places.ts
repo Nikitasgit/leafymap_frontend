@@ -1,9 +1,5 @@
 import axios from "axios";
-
-const origin =
-  process.env.NODE_ENV === "production"
-    ? "https://spotlight-project.vercel.app"
-    : "http://localhost:3001";
+import { APP_URL } from "@/utils/constants";
 
 export const getPlaceById = async (
   placeId: string,
@@ -15,7 +11,7 @@ export const getPlaceById = async (
     }/api/places/${placeId}?enrichSchedule=${enrichSchedule.toString()}`;
     const response = await axios.get(url, {
       headers: {
-        Origin: origin,
+        Origin: APP_URL,
         "Content-Type": "application/json",
       },
     });
