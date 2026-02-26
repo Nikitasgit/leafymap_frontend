@@ -2,7 +2,7 @@ import { APP_NAME } from "@/utils/constants";
 import { UserType } from "@/types/user";
 
 export const getHeaderParameters = (
-  userType: UserType | "organizer" | undefined
+  userType: UserType | "organizer" | undefined,
 ) => {
   switch (userType) {
     case "guest":
@@ -11,21 +11,12 @@ export const getHeaderParameters = (
         title:
           "Vous êtes créateur, artisan, producteur ou responsable d'un lieu  culturel ou commercial?",
         description: "Rejoignez notre communauté de passionnés!",
-        buttonTitle: "Créer mon profil",
-      };
-
-    case "organizer":
-      return {
-        route: "/account",
-        title: "Créez de nouveaux évènements!",
-        description:
-          "Créez de évènements pour attiser la curiosité de vos visiteurs!",
-        buttonTitle: "Créer un évènement",
+        buttonTitle: "Ajouter mon activité",
       };
 
     case "creator":
       return {
-        route: "/account",
+        route: "/account?sidebar=events&tab=my-events",
         title:
           "Créez de évènements pour attiser la curiosité de vos visiteurs!",
         description:

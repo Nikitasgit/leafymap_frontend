@@ -78,3 +78,27 @@ export const formatEventDateRange = (dateRange: {
 
   return `${firstDate} - ${latestDate}`;
 };
+
+/**
+ * Formats an event date range as "Du dd/MM/yy au dd/MM/yy" for suggestion cards.
+ */
+export const formatEventDateRangeCard = (dateRange: {
+  firstDate: Date | string;
+  latestDate: Date | string;
+}): string => {
+  if (!dateRange?.firstDate) return "";
+
+  const first = format(new Date(dateRange.firstDate), "dd/MM/yy", {
+    locale: fr,
+  });
+
+  if (!dateRange.latestDate || dateRange.latestDate === dateRange.firstDate) {
+    return `Du ${first}`;
+  }
+
+  const latest = format(new Date(dateRange.latestDate), "dd/MM/yy", {
+    locale: fr,
+  });
+
+  return `Du ${first} au ${latest}`;
+};

@@ -63,11 +63,11 @@
 
   &.chevronRight {
     left: auto;
-    right: 0;
+    right: spacing(0.5);
   }
 
   &:not(.chevronRight) {
-    left: 0;
+    left: spacing(0.5);
     right: auto;
   }
 }

@@ -1,39 +1,111 @@
 "use client";
-import { useFindPlaces } from "@/hooks/useFindPlaces";
-import { useEffect, useState } from "react";
+
+import { useFindUsers } from "@/hooks/useFindUsers";
+import { useEffect, useState, useRef } from "react";
 import styles from "./SuggestionsList.module.scss";
-import PlaceSuggestionCard from "../PlaceSuggestionCard";
+import UserSuggestionCard from "../UserSuggestionCard";
+import UserSuggestionCardSkeleton from "../UserSuggestionCard/UserSuggestionCardSkeleton";
 import EmptyState from "@/components/common/noResults/EmptyState";
-import { MapPin } from "lucide-react";
+import { User, ChevronLeft, ChevronRight } from "lucide-react";
+
+const CREATORS_LIMIT = 40;
+const SKELETON_COUNT = 6;
+const SCROLL_OFFSET = 220;
 
 const SuggestionsList = () => {
-  const { searchResults, isLoading, searchPlaces } = useFindPlaces();
+  const { users, isLoading, searchUsers } = useFindUsers();
   const [hasFetched, setHasFetched] = useState(false);
+  const [isScrollable, setIsScrollable] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    searchPlaces().finally(() => setHasFetched(true));
+    searchUsers({ userType: "creator" }, CREATORS_LIMIT).finally(() =>
+      setHasFetched(true)
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const checkScrollable = () => {
+    if (!scrollContainerRef.current) return;
+    const el = scrollContainerRef.current;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    const scrollable = scrollWidth > clientWidth;
+    setIsScrollable(scrollable);
+    setCanScrollLeft(scrollLeft > 1);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+  };
+
+  const scrollBy = (direction: "left" | "right") => {
+    if (!scrollContainerRef.current) return;
+    const delta = direction === "left" ? -SCROLL_OFFSET : SCROLL_OFFSET;
+    scrollContainerRef.current.scrollBy({ left: delta, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    checkScrollable();
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", checkScrollable);
+      const ro = new ResizeObserver(checkScrollable);
+      ro.observe(container);
+      return () => {
+        container.removeEventListener("scroll", checkScrollable);
+        ro.disconnect();
+      };
+    }
+  }, [users.length, hasFetched, isLoading]);
+
+  const showSkeletons = !hasFetched || isLoading;
+
   return (
     <section className={styles.suggestionsList}>
-      <h2>Les lieux à ne pas manquer</h2>
-      {hasFetched && searchResults.length === 0 ? (
+      <h2>Les créateurs à découvrir</h2>
+      {hasFetched && users.length === 0 ? (
         <EmptyState
-          title="Aucun lieu trouvé"
-          icon={<MapPin className={styles.icon} />}
+          title="Aucun créateur trouvé"
+          icon={<User className={styles.icon} />}
         />
       ) : (
         <div
-          className={
-            styles.suggestionsListGrid +
-            " " +
-            (!hasFetched || isLoading ? "skeleton" : "")
-          }
+          className={`${styles.gridWrapper} ${
+            canScrollLeft ? styles.hasGradientLeft : ""
+          } ${canScrollRight ? styles.hasGradientRight : ""}`}
         >
-          {searchResults.map((suggestion) => (
-            <PlaceSuggestionCard key={suggestion._id} place={suggestion} />
-          ))}
+          {isScrollable && canScrollLeft && (
+            <button
+              type="button"
+              className={styles.chevronButton}
+              onClick={() => scrollBy("left")}
+              aria-label="Défiler vers la gauche"
+            >
+              <ChevronLeft size={20} />
+            </button>
+          )}
+          {isScrollable && canScrollRight && (
+            <button
+              type="button"
+              className={`${styles.chevronButton} ${styles.chevronRight}`}
+              onClick={() => scrollBy("right")}
+              aria-label="Défiler vers la droite"
+            >
+              <ChevronRight size={20} />
+            </button>
+          )}
+          <div
+            ref={scrollContainerRef}
+            className={styles.suggestionsListGrid}
+            onScroll={checkScrollable}
+          >
+            {showSkeletons
+              ? Array.from({ length: SKELETON_COUNT }, (_, i) => (
+                  <UserSuggestionCardSkeleton key={`skeleton-${i}`} />
+                ))
+              : users.map((user) => (
+                  <UserSuggestionCard key={user._id} user={user} />
+                ))}
+          </div>
         </div>
       )}
     </section>

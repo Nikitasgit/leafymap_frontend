@@ -1,5 +1,6 @@
 import HomeHeader from "@/components/home/HomeHeader";
 import SuggestionsList from "@/components/home/SuggestionsList";
+import EventSuggestionsList from "@/components/home/EventSuggestionsList";
 import { APP_NAME } from "@/utils/constants";
 import { Metadata } from "next";
 
@@ -13,6 +14,7 @@ export default async function Home() {
     <>
       <HomeHeader />
       <SuggestionsList />
+      <EventSuggestionsList />
     </>
   );
 }
