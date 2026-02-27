@@ -60,7 +60,7 @@ const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
   if (!user) {
     return null;
   }
-  console.log("user", user);
+
   return (
     <article className={styles.placeCardMap}>
       <CreatorHeader place={place || null} user={user} isLoading={isLoading} />

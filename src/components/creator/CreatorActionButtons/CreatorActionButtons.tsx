@@ -64,6 +64,12 @@ const CreatorActionButtons = ({
 
   const handleMessageClick = async () => {
     if (isOwner) return;
+
+    if (!currentUser?._id) {
+      router.push(`/${locale}/auth/register`);
+      return;
+    }
+
     const conversationId = await findConversationWithUser(user._id);
     router.push(
       `/${locale}/inbox?conversationId=${conversationId || "new"}&recipientId=${user._id}`,
@@ -84,9 +90,22 @@ const CreatorActionButtons = ({
   const shareUrl =
     typeof window !== "undefined" ? window.location.href : "";
 
-  const showFollowButton = currentUser?._id && currentUser._id !== user._id;
-  const showMessageButton = !isOwner && currentUser?._id;
+  const showFollowButton = currentUser?._id !== user._id;
+  const showMessageButton = !isOwner;
   const showDirectionsButton = !!place?.location?.coordinates;
+
+  const handleFollowClick = () => {
+    if (!currentUser?._id) {
+      router.push(`/${locale}/auth/register`);
+      return;
+    }
+
+    if (isFollowing) {
+      void handleUnfollow();
+    } else {
+      void handleFollow();
+    }
+  };
 
   return (
     <div className={styles.actionsRow}>
@@ -95,7 +114,7 @@ const CreatorActionButtons = ({
           <RoundButton
             icon={<UserPlus size={18} />}
             label={isFollowing ? "Abonné" : "S'abonner"}
-            onClick={isFollowing ? handleUnfollow : handleFollow}
+            onClick={handleFollowClick}
             disabled={isFollowLoading}
             variant={isFollowing ? "primary" : "secondary"}
             ariaLabel={isFollowing ? "Ne plus suivre" : "S'abonner"}

@@ -7,17 +7,30 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 65svh;
+  height: 100svh;
   z-index: 99999;
   transition: transform 0.3s ease-in-out;
   background-color: $white;
   border-radius: rem(16) rem(16) 0 0;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
   overflow-x: hidden;
-  &.collapsed {
+
+  &[data-dragging="true"] {
+    transition: none;
+  }
+
+  &.state_collapsed {
     transform: translateY(calc(100% - 20px));
   }
+  &.state_default {
+    transform: translateY(35svh);
+  }
+  &.state_expanded {
+    transform: translateY(0);
+  }
+
   .collapseButton {
+    touch-action: none;
     position: absolute;
     z-index: 1000;
     top: 0;
@@ -83,8 +96,13 @@
     border-radius: 0;
     box-shadow: none;
     overflow-x: visible;
-    &.collapsed {
+
+    &.state_collapsed {
       transform: translateX(-100%);
+    }
+    &.state_default,
+    &.state_expanded {
+      transform: translateX(0);
     }
     .collapseButton {
       position: absolute;
