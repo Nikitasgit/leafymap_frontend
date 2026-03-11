@@ -7,3 +7,4 @@ export type MapCardContainerProps = {
   setFilters: (filters: MapFilters) => void;
   onResetFilters: () => void;
 };
+

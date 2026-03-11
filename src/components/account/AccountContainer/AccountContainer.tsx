@@ -1,9 +1,7 @@
 "use client";
 
-import AccountPlaceCard from "@/components/account/AccountPlaceCard/AccountPlaceCard";
 import AccountHeader from "@/components/account/AccountHeader";
 import AccountActions from "@/components/account/AccountActions";
-import TitleWithLine from "@/components/common/typography/TitleWithLine";
 import { SideBar } from "@/components/common/SideBar";
 import styles from "./AccountContainer.module.scss";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
@@ -38,18 +36,8 @@ export default function AccountContainer() {
         <AccountActions
           user={user!}
           isLoadingUser={isLoadingUser}
-          onOpenCollaborations={sidebar.onOpenCollaborations}
-          onOpenEvents={sidebar.onOpenEvents}
-          onOpenReviews={sidebar.onOpenReviews}
-          onOpenFollows={sidebar.onOpenFollows}
-          onOpenProducts={sidebar.onOpenProducts}
+          onToggleSidebar={sidebar.toggleSidebar}
         />
-        {user?.place && typeof user.place === "object" && (
-          <div>
-            <TitleWithLine>Votre lieu</TitleWithLine>
-            <AccountPlaceCard place={user.place} />
-          </div>
-        )}
       </div>
     </div>
   );

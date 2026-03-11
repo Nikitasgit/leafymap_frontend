@@ -1,36 +1,139 @@
 "use client";
 import { useRouter } from "next/navigation";
+import type { ReactNode } from "react";
 import Button from "@/components/common/buttons/Button";
-import { Edit, Eye, Users, CalendarDays, Star, Leaf, Package } from "lucide-react";
+import {
+  Edit,
+  Users,
+  CalendarDays,
+  Star,
+  Leaf,
+  Package,
+  MapPin,
+  Settings,
+  Image as ImageIcon,
+} from "lucide-react";
 import { APP_NAME } from "@/utils/constants";
 import styles from "./AccountActions.module.scss";
 import { User } from "@/types/user";
+import { SIDEBAR_VALUES, type SidebarValue } from "@/utils/accountTabs";
+
+interface AccountActionButtonProps {
+  label: string;
+  ariaLabel: string;
+  icon: ReactNode;
+  onClick: () => void;
+  disabled: boolean;
+  creatorOnly?: boolean;
+}
+
+function AccountActionButton({
+  label,
+  ariaLabel,
+  icon,
+  onClick,
+  disabled,
+}: AccountActionButtonProps) {
+  return (
+    <div className={styles.actionItem}>
+      <Button
+        disabled={disabled}
+        variant="secondary"
+        onClick={onClick}
+        fullWidth
+        startIcon={icon}
+        className={styles.actionButton}
+        ariaLabel={ariaLabel}
+      >
+        {label}
+      </Button>
+    </div>
+  );
+}
 
 interface AccountActionsProps {
   user: User;
   isLoadingUser: boolean;
-  onOpenCollaborations: () => void;
-  onOpenEvents: () => void;
-  onOpenReviews: () => void;
-  onOpenFollows: () => void;
-  onOpenProducts: () => void;
+  onToggleSidebar: (sidebar: SidebarValue) => void;
 }
 
 export default function AccountActions({
   user,
   isLoadingUser,
-  onOpenCollaborations,
-  onOpenEvents,
-  onOpenReviews,
-  onOpenFollows,
-  onOpenProducts,
+  onToggleSidebar,
 }: AccountActionsProps) {
   const router = useRouter();
   const { userType } = user || {};
 
+  const isCreator = userType === "creator";
+  const hasPlaceObject = !!(user?.place && typeof user.place === "object");
+
+  const primaryActions: AccountActionButtonProps[] = [
+    ...(isCreator && hasPlaceObject
+      ? [
+          {
+            label: "Lieu",
+            ariaLabel: "Gérer mon lieu",
+            icon: <MapPin size={16} />,
+            onClick: () =>
+              hasPlaceObject &&
+              router.push(`/account/places/${(user.place as any)._id}`),
+            disabled: isLoadingUser,
+            creatorOnly: true,
+          } as AccountActionButtonProps,
+        ]
+      : []),
+    {
+      label: "Images",
+      ariaLabel: "Gérer mes images",
+      icon: <ImageIcon size={16} />,
+      onClick: () => onToggleSidebar(SIDEBAR_VALUES.IMAGES),
+      disabled: isLoadingUser,
+      creatorOnly: true,
+    },
+    {
+      label: "Collaborations",
+      ariaLabel: "Ouvrir les collaborations",
+      icon: <Users size={16} />,
+      onClick: () => onToggleSidebar(SIDEBAR_VALUES.COLLABORATIONS),
+      disabled: isLoadingUser,
+      creatorOnly: true,
+    },
+    {
+      label: "Évènements",
+      ariaLabel: "Ouvrir les évènements",
+      icon: <CalendarDays size={16} />,
+      onClick: () => onToggleSidebar(SIDEBAR_VALUES.EVENTS),
+      disabled: isLoadingUser,
+      creatorOnly: true,
+    },
+    {
+      label: "Avis",
+      ariaLabel: "Ouvrir les avis",
+      icon: <Star size={16} />,
+      onClick: () => onToggleSidebar(SIDEBAR_VALUES.REVIEWS),
+      disabled: isLoadingUser,
+    },
+    {
+      label: "Abonnements",
+      ariaLabel: "Ouvrir les abonnements",
+      icon: <Leaf size={16} />,
+      onClick: () => onToggleSidebar(SIDEBAR_VALUES.FOLLOWS),
+      disabled: isLoadingUser,
+    },
+    {
+      label: "Produits",
+      ariaLabel: "Ouvrir les produits",
+      icon: <Package size={16} />,
+      onClick: () => onToggleSidebar(SIDEBAR_VALUES.PRODUCTS),
+      disabled: isLoadingUser,
+      creatorOnly: true,
+    },
+  ];
+
   const buttonParameters =
-    userType === "creator"
-      ? { route: "/account/update-creator", text: "Modifier mon profil" }
+    isCreator
+      ? { route: "/account/update-creator", text: "Profil créateur" }
       : userType === "guest"
       ? {
           route: "/account/create",
@@ -38,7 +141,7 @@ export default function AccountActions({
         }
       : null;
 
-  const shouldShowAddPlace = userType === "creator" && !user?.place;
+  const shouldShowAddPlace = isCreator && !user?.place;
 
   return (
     <section className={styles.actions}>
@@ -47,83 +150,17 @@ export default function AccountActions({
         variant="secondary"
         onClick={() => router.push("/account/settings")}
         fullWidth
+        startIcon={<Settings size={16} />}
         ariaLabel="Accéder aux paramètres du compte"
       >
         Paramètres du compte
-      </Button>
-      {userType === "creator" && (
-        <Button
-          disabled={isLoadingUser}
-          variant="secondary"
-          onClick={() => router.push(`/users/${user._id}`)}
-          fullWidth
-          endIcon={<Eye size={16} />}
-          ariaLabel="Voir mon profil public"
-        >
-          Voir mon profil public
-        </Button>
-      )}
-
-      <Button
-        disabled={isLoadingUser}
-        variant="secondary"
-        onClick={onOpenCollaborations}
-        fullWidth
-        endIcon={<Users size={16} />}
-        ariaLabel="Ouvrir les collaborations"
-      >
-        Collaborations
-      </Button>
-
-      <Button
-        disabled={isLoadingUser}
-        variant="secondary"
-        onClick={onOpenEvents}
-        fullWidth
-        endIcon={<CalendarDays size={16} />}
-        ariaLabel="Ouvrir mes évènements"
-      >
-        Mes évènements
-      </Button>
-
-      <Button
-        disabled={isLoadingUser}
-        variant="secondary"
-        onClick={onOpenReviews}
-        fullWidth
-        endIcon={<Star size={16} />}
-        ariaLabel="Ouvrir les avis"
-      >
-        Avis
-      </Button>
-
-      <Button
-        disabled={isLoadingUser}
-        variant="secondary"
-        onClick={onOpenFollows}
-        fullWidth
-        endIcon={<Leaf size={16} />}
-        ariaLabel="Ouvrir les abonnements"
-      >
-        Abonnements
-      </Button>
-
-      <Button
-        disabled={isLoadingUser}
-        variant="secondary"
-        onClick={onOpenProducts}
-        fullWidth
-        endIcon={<Package size={16} />}
-        ariaLabel="Ouvrir les produits"
-      >
-        Produits
       </Button>
 
       {buttonParameters && (
         <Button
           disabled={isLoadingUser}
           variant="outline"
-          endIcon={<Edit size={16} />}
+          startIcon={<Edit size={16} />}
           onClick={() => {
             router.push(buttonParameters.route);
           }}
@@ -133,6 +170,25 @@ export default function AccountActions({
           {buttonParameters.text}
         </Button>
       )}
+
+      <div className={styles.actionsGrid}>
+        {primaryActions.map((action, index) => {
+          if (action.creatorOnly && !isCreator) {
+            return null;
+          }
+
+          return (
+            <AccountActionButton
+              key={`${action.label}-${index}`}
+              label={action.label}
+              ariaLabel={action.ariaLabel}
+              icon={action.icon}
+              onClick={action.onClick}
+              disabled={action.disabled}
+            />
+          );
+        })}
+      </div>
 
       {shouldShowAddPlace && (
         <Button

@@ -1,7 +1,7 @@
 import { Place } from "@/types/place";
 import { useRouter } from "next/navigation";
 import { MapPin, Calendar, Plus } from "lucide-react";
-import { getAccountEventsPath, EVENTS_TAB_IDS } from "@/utils/accountTabs";
+import { getAccountSidebarPath, SIDEBAR_VALUES, EVENTS_TAB_IDS } from "@/utils/accountTabs";
 import styles from "./AccountPlaceCard.module.scss";
 import ActionButtons from "@/components/common/actions/ActionButtons";
 import useDeletePlace from "@/hooks/useDeletePlace";
@@ -59,7 +59,7 @@ const AccountPlaceCard = ({ place }: { place: Place }) => {
           <Button
             variant="secondary"
             size="small"
-            onClick={() => router.push(getAccountEventsPath(EVENTS_TAB_IDS.MY_EVENTS))}
+            onClick={() => router.push(getAccountSidebarPath(SIDEBAR_VALUES.EVENTS, EVENTS_TAB_IDS.MY_EVENTS))}
             endIcon={<Calendar size={16} />}
             ariaLabel="Voir les événements"
           >

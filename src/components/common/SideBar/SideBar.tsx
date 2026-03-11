@@ -14,6 +14,7 @@ export interface SideBarTab {
   icon?: LucideIcon;
   content: React.ReactNode;
   badge?: number;
+  display?: "all" | "creatorOnly" | "nonCreatorOnly";
 }
 
 export interface SideBarProps {

@@ -10,6 +10,7 @@ import {
   MessageSquare,
   Leaf,
   Package,
+  Image as ImageIcon,
 } from "lucide-react";
 import {
   PartnershipsReceivedTab,
@@ -38,15 +39,27 @@ import {
   REVIEWS_TAB_IDS,
   FOLLOWS_TAB_IDS,
   PRODUCTS_TAB_IDS,
+  IMAGES_TAB_IDS,
   type SidebarValue,
-  type CollaborationsTabId,
-  type EventsTabId,
-  type ReviewsTabId,
-  type FollowsTabId,
-  type ProductsTabId,
 } from "@/utils/accountTabs";
+import AccountGalleryTab from "@/components/account/SideBarImages/AccountGalleryTab";
 
-export const COLLABORATIONS_TABS: SideBarTab[] = [
+type ExtendedSideBarTab = SideBarTab & {
+  display?: "all" | "creatorOnly" | "nonCreatorOnly";
+};
+
+const filterTabsForUser = (
+  tabs: ExtendedSideBarTab[],
+  isCreator: boolean
+): SideBarTab[] =>
+  tabs.filter((tab) => {
+    if (!tab.display || tab.display === "all") return true;
+    if (tab.display === "creatorOnly") return isCreator;
+    if (tab.display === "nonCreatorOnly") return !isCreator;
+    return true;
+  });
+
+export const COLLABORATIONS_TABS: ExtendedSideBarTab[] = [
   {
     id: COLLABORATIONS_TAB_IDS.COLLABORATORS,
     label: "Mes collaborateurs",
@@ -67,7 +80,7 @@ export const COLLABORATIONS_TABS: SideBarTab[] = [
   },
 ];
 
-export const EVENTS_TABS: SideBarTab[] = [
+export const EVENTS_TABS: ExtendedSideBarTab[] = [
   {
     id: EVENTS_TAB_IDS.MY_EVENTS,
     label: "Mes évènements",
@@ -88,7 +101,7 @@ export const EVENTS_TABS: SideBarTab[] = [
   },
 ];
 
-export const REVIEWS_TABS: SideBarTab[] = [
+export const REVIEWS_TABS: ExtendedSideBarTab[] = [
   {
     id: REVIEWS_TAB_IDS.WRITTEN,
     label: "Avis rédigés",
@@ -100,15 +113,17 @@ export const REVIEWS_TABS: SideBarTab[] = [
     label: "Avis reçus",
     icon: Star,
     content: <ReviewsReceivedTab />,
+    display: "creatorOnly",
   },
 ];
 
-export const FOLLOWS_TABS: SideBarTab[] = [
+export const FOLLOWS_TABS: ExtendedSideBarTab[] = [
   {
     id: FOLLOWS_TAB_IDS.FOLLOWERS,
     label: "Abonnés",
     icon: Users,
     content: <FollowersTab />,
+    display: "creatorOnly",
   },
   {
     id: FOLLOWS_TAB_IDS.FOLLOWING,
@@ -118,7 +133,7 @@ export const FOLLOWS_TABS: SideBarTab[] = [
   },
 ];
 
-export const PRODUCTS_TABS: SideBarTab[] = [
+export const PRODUCTS_TABS: ExtendedSideBarTab[] = [
   {
     id: PRODUCTS_TAB_IDS.MY_PRODUCTS,
     label: "Mes produits",
@@ -127,39 +142,56 @@ export const PRODUCTS_TABS: SideBarTab[] = [
   },
 ];
 
-export function isValidCollaborationsTab(
-  tab: string | null
-): tab is CollaborationsTabId {
-  return (
-    tab !== null &&
-    Object.values(COLLABORATIONS_TAB_IDS).includes(tab as CollaborationsTabId)
-  );
+export const IMAGES_TABS: ExtendedSideBarTab[] = [
+  {
+    id: IMAGES_TAB_IDS.GALLERY,
+    label: "Images",
+    icon: ImageIcon,
+    content: <AccountGalleryTab />,
+    display: "creatorOnly",
+  },
+];
+
+interface SidebarConfig {
+  title: string;
+  tabs: ExtendedSideBarTab[];
+  defaultTab: string;
+  defaultTabCreator?: string;
 }
 
-export function isValidEventsTab(tab: string | null): tab is EventsTabId {
-  return (
-    tab !== null && Object.values(EVENTS_TAB_IDS).includes(tab as EventsTabId)
-  );
-}
-
-export function isValidReviewsTab(tab: string | null): tab is ReviewsTabId {
-  return (
-    tab !== null && Object.values(REVIEWS_TAB_IDS).includes(tab as ReviewsTabId)
-  );
-}
-
-export function isValidFollowsTab(tab: string | null): tab is FollowsTabId {
-  return (
-    tab !== null && Object.values(FOLLOWS_TAB_IDS).includes(tab as FollowsTabId)
-  );
-}
-
-export function isValidProductsTab(tab: string | null): tab is ProductsTabId {
-  return (
-    tab !== null &&
-    Object.values(PRODUCTS_TAB_IDS).includes(tab as ProductsTabId)
-  );
-}
+export const SIDEBAR_REGISTRY: Record<SidebarValue, SidebarConfig> = {
+  [SIDEBAR_VALUES.COLLABORATIONS]: {
+    title: "Collaborations",
+    tabs: COLLABORATIONS_TABS,
+    defaultTab: COLLABORATIONS_TAB_IDS.COLLABORATORS,
+  },
+  [SIDEBAR_VALUES.EVENTS]: {
+    title: "Mes évènements",
+    tabs: EVENTS_TABS,
+    defaultTab: EVENTS_TAB_IDS.MY_EVENTS,
+  },
+  [SIDEBAR_VALUES.REVIEWS]: {
+    title: "Avis",
+    tabs: REVIEWS_TABS,
+    defaultTab: REVIEWS_TAB_IDS.WRITTEN,
+  },
+  [SIDEBAR_VALUES.FOLLOWS]: {
+    title: "Abonnements",
+    tabs: FOLLOWS_TABS,
+    defaultTab: FOLLOWS_TAB_IDS.FOLLOWING,
+    defaultTabCreator: FOLLOWS_TAB_IDS.FOLLOWERS,
+  },
+  [SIDEBAR_VALUES.PRODUCTS]: {
+    title: "Produits",
+    tabs: PRODUCTS_TABS,
+    defaultTab: PRODUCTS_TAB_IDS.MY_PRODUCTS,
+  },
+  [SIDEBAR_VALUES.IMAGES]: {
+    title: "Images",
+    tabs: IMAGES_TABS,
+    defaultTab: IMAGES_TAB_IDS.GALLERY,
+  },
+};
 
 export interface SidebarState {
   title: string;
@@ -169,61 +201,22 @@ export interface SidebarState {
 
 export function getSidebarState(
   activeSidebar: SidebarValue | null,
-  activeTab: string | null
+  activeTab: string | null,
+  options?: { isCreator?: boolean }
 ): SidebarState {
-  if (activeSidebar === SIDEBAR_VALUES.COLLABORATIONS) {
-    const tabId = isValidCollaborationsTab(activeTab)
+  const config = activeSidebar ? SIDEBAR_REGISTRY[activeSidebar] : null;
+  if (!config) return { title: "", tabs: [], initialTabId: "" };
+
+  const isCreator = options?.isCreator ?? false;
+  const tabs = filterTabsForUser(config.tabs, isCreator);
+  const defaultTab =
+    isCreator && config.defaultTabCreator
+      ? config.defaultTabCreator
+      : config.defaultTab;
+  const initialTabId =
+    activeTab && tabs.some((t) => t.id === activeTab)
       ? activeTab
-      : COLLABORATIONS_TAB_IDS.COLLABORATORS;
-    return {
-      title: "Collaborations",
-      tabs: COLLABORATIONS_TABS,
-      initialTabId: tabId,
-    };
-  }
-  if (activeSidebar === SIDEBAR_VALUES.EVENTS) {
-    const tabId = isValidEventsTab(activeTab)
-      ? activeTab
-      : EVENTS_TAB_IDS.MY_EVENTS;
-    return {
-      title: "Mes évènements",
-      tabs: EVENTS_TABS,
-      initialTabId: tabId,
-    };
-  }
-  if (activeSidebar === SIDEBAR_VALUES.REVIEWS) {
-    const tabId = isValidReviewsTab(activeTab)
-      ? activeTab
-      : REVIEWS_TAB_IDS.WRITTEN;
-    return {
-      title: "Avis",
-      tabs: REVIEWS_TABS,
-      initialTabId: tabId,
-    };
-  }
-  if (activeSidebar === SIDEBAR_VALUES.FOLLOWS) {
-    const tabId = isValidFollowsTab(activeTab)
-      ? activeTab
-      : FOLLOWS_TAB_IDS.FOLLOWERS;
-    return {
-      title: "Abonnements",
-      tabs: FOLLOWS_TABS,
-      initialTabId: tabId,
-    };
-  }
-  if (activeSidebar === SIDEBAR_VALUES.PRODUCTS) {
-    const tabId = isValidProductsTab(activeTab)
-      ? activeTab
-      : PRODUCTS_TAB_IDS.MY_PRODUCTS;
-    return {
-      title: "Produits",
-      tabs: PRODUCTS_TABS,
-      initialTabId: tabId,
-    };
-  }
-  return {
-    title: "",
-    tabs: COLLABORATIONS_TABS,
-    initialTabId: COLLABORATIONS_TAB_IDS.COLLABORATORS,
-  };
+      : (tabs[0]?.id ?? defaultTab);
+
+  return { title: config.title, tabs, initialTabId };
 }

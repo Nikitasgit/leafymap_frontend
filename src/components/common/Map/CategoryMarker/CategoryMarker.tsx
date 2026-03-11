@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Marker } from "react-map-gl/mapbox";
 import PlaceCategoryIcon from "@/components/common/icons/PlaceCategoryIcon/PlaceCategoryIcon";
+import { getPlaceCategoryConfig } from "@/components/common/icons/PlaceCategoryIcon/PlaceCategoryIcon.config";
 import styles from "./CategoryMarker.module.scss";
 import { CategoryMarkerProps } from "./CategoryMarker.types";
 import { capitalizeFirstLetter } from "@/utils/functions";
@@ -19,6 +20,7 @@ const CategoryMarker: React.FC<CategoryMarkerProps> = ({
   const isZoomHighEnough = zoom >= 10;
   const shouldShowLabel =
     isZoomHighEnough && (isZoomedIn || isHovered || isSelected);
+  const categoryConfig = getPlaceCategoryConfig(categoryName);
 
   return (
     <Marker
@@ -31,6 +33,12 @@ const CategoryMarker: React.FC<CategoryMarkerProps> = ({
     >
       <button
         className={styles.marker}
+        style={
+          {
+            "--marker-color": categoryConfig.color,
+            "--marker-shadow": `${categoryConfig.color}4D`,
+          } as React.CSSProperties
+        }
         onMouseEnter={() => !isZoomedIn && setIsHovered(true)}
         onMouseLeave={() => !isZoomedIn && setIsHovered(false)}
         type="button"
@@ -44,6 +52,7 @@ const CategoryMarker: React.FC<CategoryMarkerProps> = ({
             categoryName={categoryName}
             size="small"
             variant={isSelected ? "secondary" : "primary"}
+            colorByCategory
             className={`${styles.markerIcon} ${
               isSelected ? styles.selectedIcon : ""
             }`}

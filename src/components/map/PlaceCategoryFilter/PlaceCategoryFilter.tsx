@@ -44,6 +44,7 @@ const PlaceCategoryFilter: React.FC<PlaceCategoryFilterProps> = ({
                 <PlaceCategoryIcon
                   categoryName={category.name}
                   variant={isSelected ? "primary" : "grey"}
+                  colorByCategory
                 />
                 <span
                   className={

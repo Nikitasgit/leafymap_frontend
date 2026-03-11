@@ -30,6 +30,39 @@
   box-shadow: none;
 }
 
+@media (max-width: 830px) {
+  .sideBar {
+    position: fixed;
+    top: $navbar-height;
+    bottom: $footer-height;
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    z-index: 100;
+    border-right: none;
+    box-shadow: 0 0 20px rgba(15, 23, 42, 0.15);
+    transform: translateX(100%);
+    transition:
+      transform 0.3s ease-in-out,
+      box-shadow 0.3s ease-in-out;
+  }
+
+  .sideBar.open {
+    transform: translateX(0);
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .sideBar.closed {
+    transform: translateX(100%);
+    max-width: 100%;
+    min-width: 0;
+    box-shadow: none;
+  }
+}
+
 .header {
   flex-shrink: 0;
   @include flex(row, space-between, center, spacing(1));

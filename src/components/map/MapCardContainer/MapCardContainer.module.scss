@@ -29,6 +29,10 @@
     transform: translateY($navbar-height);
   }
 
+  &[data-creator-loading="true"] .collapseButton {
+    display: none;
+  }
+
   .collapseButton {
     touch-action: none;
     position: absolute;

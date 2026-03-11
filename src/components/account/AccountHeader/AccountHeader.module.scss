@@ -8,10 +8,31 @@
   .userInfo {
     align-items: center;
     text-align: center;
+    .usernameRow {
+      @include flex(row, flex-start, center, spacing(0.75));
+    }
     .username {
       font-size: rem(20);
       font-weight: 600;
       color: $grey-600;
+    }
+    .publicProfileButton {
+      border: none;
+      background: transparent;
+      padding: spacing(0.25);
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: $grey-500;
+
+      &:hover,
+      &:focus-visible {
+        color: $grey-700;
+        background-color: rgba(15, 23, 42, 0.04);
+        outline: none;
+      }
     }
     .creatorName {
       font-size: rem(16);

@@ -18,6 +18,7 @@ export const SIDEBAR_VALUES = {
   REVIEWS: "reviews",
   FOLLOWS: "follows",
   PRODUCTS: "products",
+  IMAGES: "images",
 } as const;
 
 export type SidebarValue = (typeof SIDEBAR_VALUES)[keyof typeof SIDEBAR_VALUES];
@@ -67,6 +68,14 @@ export const PRODUCTS_TAB_IDS = {
 export type ProductsTabId =
   (typeof PRODUCTS_TAB_IDS)[keyof typeof PRODUCTS_TAB_IDS];
 
+/** Onglets de la sidebar Images */
+export const IMAGES_TAB_IDS = {
+  GALLERY: "gallery",
+} as const;
+
+export type ImagesTabId =
+  (typeof IMAGES_TAB_IDS)[keyof typeof IMAGES_TAB_IDS];
+
 /**
  * Construit l’URL /account avec au plus les paramètres sidebar et tab.
  * Une seule sidebar peut être ouverte : sidebar=collaborations ou sidebar=events.
@@ -89,36 +98,13 @@ export function getAccountPathWithSidebar(
   return query ? `${ACCOUNT_PATH}?${query}` : ACCOUNT_PATH;
 }
 
-/** Lien vers la page compte avec la sidebar Collaborations ouverte (ex: notifications) */
-export function getAccountCollaborationsPath(
-  tabId?: CollaborationsTabId
+/** Lien vers la page compte avec une sidebar ouverte */
+export function getAccountSidebarPath(
+  sidebar: SidebarValue,
+  tabId?: string
 ): string {
   if (!tabId) return ACCOUNT_PATH;
-  return `${ACCOUNT_PATH}?${SIDEBAR_PARAM}=${SIDEBAR_VALUES.COLLABORATIONS}&${TAB_PARAM}=${tabId}`;
-}
-
-/** Lien vers la page compte avec la sidebar Évènements ouverte (ex: notifications) */
-export function getAccountEventsPath(tabId?: EventsTabId): string {
-  if (!tabId) return ACCOUNT_PATH;
-  return `${ACCOUNT_PATH}?${SIDEBAR_PARAM}=${SIDEBAR_VALUES.EVENTS}&${TAB_PARAM}=${tabId}`;
-}
-
-/** Lien vers la page compte avec la sidebar Avis ouverte */
-export function getAccountReviewsPath(tabId?: ReviewsTabId): string {
-  if (!tabId) return ACCOUNT_PATH;
-  return `${ACCOUNT_PATH}?${SIDEBAR_PARAM}=${SIDEBAR_VALUES.REVIEWS}&${TAB_PARAM}=${tabId}`;
-}
-
-/** Lien vers la page compte avec la sidebar Abonnements ouverte */
-export function getAccountFollowsPath(tabId?: FollowsTabId): string {
-  if (!tabId) return ACCOUNT_PATH;
-  return `${ACCOUNT_PATH}?${SIDEBAR_PARAM}=${SIDEBAR_VALUES.FOLLOWS}&${TAB_PARAM}=${tabId}`;
-}
-
-/** Lien vers la page compte avec la sidebar Produits ouverte */
-export function getAccountProductsPath(tabId?: ProductsTabId): string {
-  if (!tabId) return ACCOUNT_PATH;
-  return `${ACCOUNT_PATH}?${SIDEBAR_PARAM}=${SIDEBAR_VALUES.PRODUCTS}&${TAB_PARAM}=${tabId}`;
+  return `${ACCOUNT_PATH}?${SIDEBAR_PARAM}=${sidebar}&${TAB_PARAM}=${tabId}`;
 }
 
 export function getNotificationRedirectPath(
@@ -128,7 +114,8 @@ export function getNotificationRedirectPath(
     notification.action === "partnership_invitation" &&
     notification.referenceType === "Partnership"
   ) {
-    return getAccountCollaborationsPath(
+    return getAccountSidebarPath(
+      SIDEBAR_VALUES.COLLABORATIONS,
       COLLABORATIONS_TAB_IDS.RECEIVED_INVITATIONS
     );
   }
@@ -136,13 +123,19 @@ export function getNotificationRedirectPath(
     notification.action === "event_invitation" &&
     notification.referenceType === "Event"
   ) {
-    return getAccountEventsPath(EVENTS_TAB_IDS.RECEIVED_INVITATIONS);
+    return getAccountSidebarPath(
+      SIDEBAR_VALUES.EVENTS,
+      EVENTS_TAB_IDS.RECEIVED_INVITATIONS
+    );
   }
   if (
     notification.action === "new_follower" &&
     notification.referenceType === "Follow"
   ) {
-    return getAccountFollowsPath(FOLLOWS_TAB_IDS.FOLLOWERS);
+    return getAccountSidebarPath(
+      SIDEBAR_VALUES.FOLLOWS,
+      FOLLOWS_TAB_IDS.FOLLOWERS
+    );
   }
   return null;
 }

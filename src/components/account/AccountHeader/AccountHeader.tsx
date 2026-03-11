@@ -1,5 +1,7 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation";
+import { Eye } from "lucide-react";
 import { Image } from "@/types/image";
 import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader";
 import { capitalizeFirstLetter } from "@/utils/functions";
@@ -25,6 +27,7 @@ export default function AccountHeader({
   isLoadingUser,
   onUserUpdated,
 }: AccountHeaderProps) {
+  const router = useRouter();
   const { submitUser } = useSubmitUser();
   const handleImageUploaded = async (
     imageId: string | null,
@@ -46,9 +49,19 @@ export default function AccountHeader({
   return (
     <header className={styles.header}>
       <div className={styles.userInfo}>
-        <h1 className={styles.username}>
-          {capitalizeFirstLetter(user.username)}
-        </h1>
+        <div className={styles.usernameRow}>
+          <h1 className={styles.username}>
+            {capitalizeFirstLetter(user.username)}
+          </h1>
+          <button
+            type="button"
+            className={styles.publicProfileButton}
+            aria-label="Voir mon profil public"
+            onClick={() => router.push(`/users/${user._id}`)}
+          >
+            <Eye size={18} />
+          </button>
+        </div>
         {user.userCategory && (
           <div className={styles.creatorInfoContainer}>
             <CreatorCategoryBadge categoryName={user.userCategory.name} />

@@ -6,7 +6,7 @@ import NewDatesEventForm from "../EventNewDatesSelector/EventNewDatesSelector";
 import Button from "@/components/common/buttons/Button";
 import useSubmitEvent from "@/hooks/useSubmitEvent";
 import { useParams, useRouter } from "next/navigation";
-import { getAccountEventsPath, EVENTS_TAB_IDS } from "@/utils/accountTabs";
+import { getAccountSidebarPath, SIDEBAR_VALUES, EVENTS_TAB_IDS } from "@/utils/accountTabs";
 import styles from "./EventForm.module.scss";
 import EventScheduleList from "../EventScheduleList";
 import { format } from "date-fns";
@@ -121,7 +121,7 @@ const EventForm = ({
           ? "Évènement modifié avec succès"
           : "Évènement créé avec succès"
       );
-      router.push(getAccountEventsPath(EVENTS_TAB_IDS.MY_EVENTS));
+      router.push(getAccountSidebarPath(SIDEBAR_VALUES.EVENTS, EVENTS_TAB_IDS.MY_EVENTS));
     } catch {
       showError(
         isUpdate

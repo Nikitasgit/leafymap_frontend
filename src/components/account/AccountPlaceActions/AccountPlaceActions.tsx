@@ -3,7 +3,7 @@ import Button from "@/components/common/buttons/Button";
 import { Place } from "@/types/place";
 import { useRouter } from "next/navigation";
 import { Edit3, Trash2, Calendar, Plus } from "lucide-react";
-import { getAccountEventsPath, EVENTS_TAB_IDS } from "@/utils/accountTabs";
+import { getAccountSidebarPath, SIDEBAR_VALUES, EVENTS_TAB_IDS } from "@/utils/accountTabs";
 import styles from "./AccountPlaceActions.module.scss";
 import useDeletePlace from "@/hooks/useDeletePlace";
 
@@ -49,7 +49,7 @@ export default function AccountPlaceActions({
       </Button>
       <Button
         variant="secondary"
-        onClick={() => router.push(getAccountEventsPath(EVENTS_TAB_IDS.MY_EVENTS))}
+        onClick={() => router.push(getAccountSidebarPath(SIDEBAR_VALUES.EVENTS, EVENTS_TAB_IDS.MY_EVENTS))}
         fullWidth
         endIcon={<Calendar size={16} />}
         ariaLabel="Voir les événements"

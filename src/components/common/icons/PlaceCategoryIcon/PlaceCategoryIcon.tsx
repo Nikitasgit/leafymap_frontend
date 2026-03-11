@@ -1,16 +1,5 @@
 import React from "react";
-import {
-  MapPin,
-  ShoppingBag,
-  Palette,
-  Image as ImageIcon,
-  Hammer,
-  Sprout,
-  Store,
-  Calendar,
-  Users,
-  LucideIcon,
-} from "lucide-react";
+import { getPlaceCategoryConfig } from "./PlaceCategoryIcon.config";
 import styles from "./PlaceCategoryIcon.module.scss";
 
 interface PlaceCategoryIconProps {
@@ -19,6 +8,7 @@ interface PlaceCategoryIconProps {
   variant?: "primary" | "secondary" | "success" | "error" | "grey";
   hoverable?: boolean;
   className?: string;
+  colorByCategory?: boolean;
 }
 
 const PlaceCategoryIcon: React.FC<PlaceCategoryIconProps> = ({
@@ -27,60 +17,25 @@ const PlaceCategoryIcon: React.FC<PlaceCategoryIconProps> = ({
   variant = "primary",
   hoverable = false,
   className = "",
+  colorByCategory = false,
 }) => {
-  
-  const getCategoryIcon = (name: string): LucideIcon => {
-    const lowerName = name.toLowerCase();
-
-    if (lowerName.includes("food market")) {
-      return ShoppingBag;
-    }
-
-    if (lowerName.includes("craft fair")) {
-      return Palette;
-    }
-
-    if (lowerName.includes("gallery")) {
-      return ImageIcon;
-    }
-
-    if (lowerName.includes("workshop")) {
-      return Hammer;
-    }
-
-    if (lowerName.includes("farm")) {
-      return Sprout;
-    }
-
-    if (lowerName.includes("boutique")) {
-      return Store;
-    }
-
-    if (lowerName.includes("cooperative store")) {
-      return Users;
-    }
-
-    if (lowerName.includes("festival")) {
-      return Calendar;
-    }
-
-    return MapPin;
-  };
-
-  const IconComponent = getCategoryIcon(categoryName);
+  const config = getPlaceCategoryConfig(categoryName);
+  const IconComponent = config.icon;
 
   const iconClasses = [
     styles.placeCategoryIcon,
     styles[size],
-    styles[variant],
+    !colorByCategory && styles[variant],
     hoverable && styles.hoverable,
     className,
   ]
     .filter(Boolean)
     .join(" ");
 
+  const style = colorByCategory ? { color: config.color } : undefined;
+
   return (
-    <span className={iconClasses}>
+    <span className={iconClasses} style={style}>
       <IconComponent />
     </span>
   );

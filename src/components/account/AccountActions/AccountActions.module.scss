@@ -3,7 +3,68 @@
 @use "@/styles/abstracts/variables" as *;
 
 .actions {
-  @include flex(column, flex-start, stretch, spacing(1));
+  @include flex(column, flex-start, stretch, spacing(0.75));
+}
+
+.actionsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: spacing(0.75);
+  margin-top: spacing(0.75);
+}
+
+.actionItem {
+  flex: 0 0 calc(50% - spacing(0.5));
+
+  :global(button) {
+    width: 100%;
+    min-height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.15s ease;
+  }
+
+  :global(button:hover),
+  :global(button:focus-visible) {
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+  }
+}
+
+.actionButton {
+  font-size: 0.8rem; // ~12.8px on base 16px
+  font-weight: 500;
+
+  :global(svg) {
+    color: #0f172a;
+  }
+}
+
+@include respond-to(sm) {
+  .actions {
+    @include flex(column, flex-start, stretch, spacing(1));
+  }
+
+  .actionsGrid {
+    gap: spacing(1);
+    margin-top: spacing(1);
+  }
+
+  .actionItem {
+    :global(button) {
+      min-height: 4.5rem;
+    }
+  }
+
+  .actionButton {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 340px) {
+  .actionItem {
+    flex: 0 0 100%;
+  }
 }
 
 .infoCard {

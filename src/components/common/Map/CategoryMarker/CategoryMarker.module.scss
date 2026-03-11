@@ -18,25 +18,29 @@
     .markerIconContainer {
       @include flex(row, center, center, 0);
       background-color: $white;
-      border: 2px solid $primary-color;
+      border: 2px solid var(--marker-color, $primary-color);
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       position: relative;
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       border-radius: 50% 50% 50% 0;
       transform: rotate(-45deg);
+      overflow: hidden;
       &.selected {
-        border: 3px solid $primary-color;
-        box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+        border-width: 3px;
+        border-color: var(--marker-color, $primary-color);
+        box-shadow: 0 3px 8px var(--marker-shadow, rgba($primary-color, 0.3));
       }
       .markerIcon {
-        color: $primary-color;
-        background-color: $white;
-        font-size: rem(14);
+        color: var(--marker-color, $primary-color);
+        font-size: rem(10);
         transform: rotate(45deg);
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         &.selectedIcon {
-          color: $primary-color;
-          font-size: rem(16);
+          font-size: rem(12);
         }
       }
     }
@@ -59,7 +63,7 @@
       text-overflow: ellipsis;
       color: $grey-700;
       &.selected {
-        border: 1px solid $primary-color;
+        border: 1px solid var(--marker-color, $primary-color);
         font-weight: 600;
       }
     }
@@ -67,12 +71,12 @@
   @include respond-to(sm) {
     .marker {
       .markerIconContainer {
-        width: 28px;
-        height: 28px;
+        width: 22px;
+        height: 22px;
         .markerIcon {
           font-size: rem(16);
           &.selectedIcon {
-            font-size: rem(18);
+            font-size: rem(12);
           }
         }
       }
@@ -86,12 +90,12 @@
   @include respond-to(md) {
     .marker {
       .markerIconContainer {
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
         .markerIcon {
-          font-size: rem(18);
+          font-size: rem(14);
           &.selectedIcon {
-            font-size: rem(20);
+            font-size: rem(16);
           }
         }
       }
