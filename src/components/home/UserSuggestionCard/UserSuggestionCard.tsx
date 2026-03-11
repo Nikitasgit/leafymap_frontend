@@ -10,7 +10,6 @@ import { getDisplayName } from "@/utils/userDisplay";
 
 const UserSuggestionCard = ({ user }: { user: UserPopulated }) => {
   const router = useRouter();
-
   const handleRedirect = () => {
     router.push(`/users/${user._id}`);
   };
@@ -27,7 +26,11 @@ const UserSuggestionCard = ({ user }: { user: UserPopulated }) => {
     >
       <div className={styles.imageContainer}>
         <Image
-          src={user.image?.urls?.medium || creatorDefaultSvg}
+          src={
+            user.image?.urls?.medium ||
+            user.googlePictureUrl ||
+            creatorDefaultSvg
+          }
           alt={getDisplayName(user)}
           fill
           sizes="(min-width: 768px) 220px, (min-width: 576px) 200px, 160px"

@@ -63,7 +63,7 @@
     overflow-x: auto;
     min-height: 200px;
     overflow-y: hidden;
-    padding-bottom: spacing(1);
+    padding-bottom: 0;
     scroll-behavior: smooth;
 
     > * {
@@ -83,7 +83,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    bottom: spacing(1);
+    bottom: 0;
     width: 40px;
     background: linear-gradient(
       to right,
@@ -99,7 +99,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    bottom: spacing(1);
+    bottom: 0;
     width: 40px;
     background: linear-gradient(
       to left,

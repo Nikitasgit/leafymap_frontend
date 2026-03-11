@@ -47,6 +47,13 @@
     border-radius: rem(12);
     width: 100%;
     position: relative;
+    min-width: 0;
+
+    .searchInputWrapper {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+    }
 
     .searchDropdownWrapper {
       position: relative;

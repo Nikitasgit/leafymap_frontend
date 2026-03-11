@@ -27,7 +27,7 @@ const PlaceSuggestionCard = ({ place }: { place: PlacePopulated }) => {
     >
       <div className={styles.imageContainer}>
         <Image
-          src={place.image?.urls?.medium || placeDefaultsSvg}
+          src={place.image?.urls?.medium ||  placeDefaultsSvg}
           alt={place.name || "Place suggestion image"}
           fill
           sizes="(min-width: 768px) 300px, (min-width: 576px) 280px, 220px"

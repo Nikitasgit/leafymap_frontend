@@ -89,10 +89,10 @@ const MapFiltersBar = ({
     query: string
   ): Promise<(CreatorSearchResult | LocationSearchResult)[]> => {
     if (searchType.label === "Membres") {
-      const creators = await searchUsers({ username: query });
+      const creators = await searchUsers({ username: query }, 10);
       const suggestions: CreatorSearchResult[] = creators.map((user) => ({
         _id: user._id,
-        image: user.image?.urls.thumbnail || "",
+        image: user.image?.urls?.thumbnail || user.googlePictureUrl || "",
         name: user.username || "",
         place: user.place?.location
           ? {
@@ -245,13 +245,15 @@ const MapFiltersBar = ({
             </ul>
           )}
         </div>
-        <SearchInput
-          withIcons
-          limit={10}
-          onSelect={handleSelectSuggestion}
-          fetchSuggestions={handleSearch}
-          placeholder={searchType.placeholder}
-        />
+        <div className={styles.searchInputWrapper}>
+          <SearchInput
+            withIcons
+            limit={10}
+            onSelect={handleSelectSuggestion}
+            fetchSuggestions={handleSearch}
+            placeholder={searchType.placeholder}
+          />
+        </div>
       </div>
     </div>
   );
