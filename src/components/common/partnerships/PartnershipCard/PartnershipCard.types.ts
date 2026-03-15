@@ -2,6 +2,7 @@ export interface PartnershipCardUser {
   _id: string;
   username?: string;
   image?: string | { urls?: { thumbnail?: string } };
+  googlePictureUrl?: string;
   userCategory?: { name: string };
 }
 
