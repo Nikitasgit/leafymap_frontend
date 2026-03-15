@@ -113,7 +113,7 @@ const SearchInput = <T extends SearchSuggestion>({
             >
               {withIcons && !("coordinates" in sug) && (
                 <Image
-                  src={sug.image || sug.googlePictureUrl || creatorDefaultsSvg}
+                  src={sug.image || (sug as SearchSuggestion).googlePictureUrl || creatorDefaultsSvg}
                   alt={sug.name || "Créateur"}
                   width={32}
                   height={32}

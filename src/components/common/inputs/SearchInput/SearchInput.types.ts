@@ -12,6 +12,7 @@ export interface SearchSuggestion {
   _id: string;
   name: string;
   image?: string;
+  googlePictureUrl?: string;
   location?: { label: string };
   categories?: {
     name: string;
