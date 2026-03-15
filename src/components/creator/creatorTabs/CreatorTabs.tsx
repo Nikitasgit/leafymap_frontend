@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import TabsContainer from "@/components/common/tabs/TabsContainer/TabsContainer";
 import Tab from "@/components/common/tabs/Tab/Tab";
 import { FileText, Star, Image as ImageIcon, Calendar } from "lucide-react";
@@ -52,19 +52,6 @@ const CreatorTabs = ({
 
   const activeTab = controlledActiveTab ?? internalActiveTab;
   const setActiveTab = onTabChange ?? setInternalActiveTab;
-  useEffect(() => {
-    if (!place && (activeTab === "reviews" || activeTab === "events")) {
-      setActiveTab("presentation");
-    }
-    if (
-      activeTab === "events" &&
-      !isLoadingEvents &&
-      events.length === 0 &&
-      place
-    ) {
-      setActiveTab("presentation");
-    }
-  }, [place, activeTab, events.length, isLoadingEvents, setActiveTab]);
 
   const shouldShowEventsTab = place && !isLoadingEvents && events.length > 0;
 

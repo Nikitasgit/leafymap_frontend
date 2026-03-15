@@ -3,7 +3,6 @@ import { Calendar, Clock, MapPin } from "lucide-react";
 import EventStatus from "../EventStatus/EventStatus";
 import DateRange from "@/components/common/dateRange";
 import styles from "./EventCard.module.scss";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { EventCardProps } from "./EventCard.types";
 import eventDefaultsSvg from "@public/images/event_default.svg";
@@ -14,25 +13,8 @@ const EventCard: React.FC<EventCardProps> = ({
   user,
   clickable = true,
 }) => {
-  const router = useRouter();
-
-  const handleCardClick = () => {
-    if (clickable) {
-      router.push(`/events/${event._id}`);
-    }
-  };
-
-  const Component = clickable ? "a" : "div";
-  const componentProps = clickable
-    ? {
-        onClick: handleCardClick,
-        role: "link" as const,
-        tabIndex: 0,
-      }
-    : {};
-
   return (
-    <Component className={styles.eventCard} {...componentProps}>
+    <div className={styles.eventCard}>
       <div className={styles.imageContainer}>
         <Image
           src={event.image?.urls?.thumbnail || eventDefaultsSvg}
@@ -81,7 +63,7 @@ const EventCard: React.FC<EventCardProps> = ({
           </div>
         </div>
       </div>
-    </Component>
+    </div>
   );
 };
 

@@ -32,7 +32,10 @@ const PartnershipsForm = ({
     const users = await searchUsers(searchParams);
     const suggestions = users.map((user) => ({
       _id: user._id,
-      image: user.image?.urls.thumbnail,
+      image:
+        (typeof user.image === "object"
+          ? user.image?.urls?.thumbnail
+          : user.image) || user.googlePictureUrl,
       name: user.username,
       categories: user.userCategory ? [{ name: user.userCategory.name }] : [],
     }));

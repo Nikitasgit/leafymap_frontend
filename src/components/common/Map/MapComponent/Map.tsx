@@ -131,9 +131,11 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
                 longitude={place.location.coordinates[0]}
                 latitude={place.location.coordinates[1]}
                 categoryName={
-                  typeof place.placeCategory === "string"
-                    ? place.placeCategory
-                    : place.placeCategory.name
+                  place.placeCategory == null
+                    ? ""
+                    : typeof place.placeCategory === "string"
+                      ? place.placeCategory
+                      : place.placeCategory?.name ?? ""
                 }
                 placeName={
                   typeof place === "object" && "user" in place && place.user != null

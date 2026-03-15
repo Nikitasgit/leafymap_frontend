@@ -38,7 +38,7 @@ const UsersListXScroll = ({
   const [isScrollable, setIsScrollable] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const isMouseDownRef = useRef(false);
-
+  console.log(users);
   const checkScrollable = () => {
     if (!scrollContainerRef.current) return;
     const el = scrollContainerRef.current;
@@ -176,10 +176,10 @@ const UsersListXScroll = ({
             cursor: showChevrons
               ? "default"
               : isScrollable
-              ? isDragging
-                ? "grabbing"
-                : "grab"
-              : "default",
+                ? isDragging
+                  ? "grabbing"
+                  : "grab"
+                : "default",
           }}
         >
           {loading ? (

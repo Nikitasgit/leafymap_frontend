@@ -7,7 +7,7 @@ import TextField from "../TextField/TextField";
 import { SearchInputProps, SearchSuggestion } from "./SearchInput.types";
 import CreatorCategoryBadge from "../../users/CreatorCategoryBadge";
 import PlaceCategoryBadge from "../../places/placeCategoryBadge/PlaceCategoryBadge";
-import creatorDefaultsSvg from "@public/images/creator_default.svg";
+import creatorDefaultsSvg from "@public/images/creator_default.png";
 import { MapPin } from "lucide-react";
 
 const SearchInput = <T extends SearchSuggestion>({
@@ -40,7 +40,7 @@ const SearchInput = <T extends SearchSuggestion>({
         setSuggestions([]);
       }
     },
-    [fetchSuggestionsProps, limit]
+    [fetchSuggestionsProps, limit],
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,7 +113,7 @@ const SearchInput = <T extends SearchSuggestion>({
             >
               {withIcons && !("coordinates" in sug) && (
                 <Image
-                  src={sug.image || creatorDefaultsSvg}
+                  src={sug.image || sug.googlePictureUrl || creatorDefaultsSvg}
                   alt={sug.name || "Créateur"}
                   width={32}
                   height={32}

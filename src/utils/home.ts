@@ -1,9 +1,7 @@
 import { APP_NAME } from "@/utils/constants";
 import { UserType } from "@/types/user";
 
-export const getHeaderParameters = (
-  userType: UserType | "organizer" | undefined,
-) => {
+export const getHeaderParameters = (userType: UserType | undefined) => {
   switch (userType) {
     case "guest":
       return {
@@ -21,14 +19,14 @@ export const getHeaderParameters = (
           "Créez de évènements pour attiser la curiosité de vos visiteurs!",
         description:
           "En tant que créateur, créez de nouveaux évènements et invitez d'autres créateurs à participer!",
-        buttonTitle: "Créer mon compte",
+        buttonTitle: "Créer un évènement",
       };
     default:
       return {
         route: "/auth/register",
         title: `Créer vous un compte pour accèder à toutes les fonctionnalités de ${APP_NAME}!`,
         description: `${APP_NAME} est la plateforme de mise en relation entre créateurs, artisans, responsables de lieux et passionnés d'art et de culture.`,
-        buttonTitle: "Créer mon compte",
+        buttonTitle: "Créer un compte",
       };
   }
 };

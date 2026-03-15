@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 import ThreeDotsMenu from "@/components/common/ThreeDotsMenu";
 import styles from "./PartnershipCard.module.scss";
-import creatorDefaultsSvg from "@public/images/creator_default.svg";
+import creatorDefaultsSvg from "@public/images/creator_default.png";
 import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge";
 import type { PartnershipCardProps } from "./PartnershipCard.types";
 
@@ -39,7 +39,7 @@ const PartnershipCard = ({
       )}
       <div className={styles.imageContainer}>
         <Image
-          src={imageUrl || creatorDefaultsSvg}
+          src={imageUrl || user.googlePictureUrl || creatorDefaultsSvg}
           alt={displayName || "Créateur"}
           width={60}
           height={60}

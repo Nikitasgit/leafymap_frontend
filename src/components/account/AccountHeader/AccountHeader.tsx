@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Eye } from "lucide-react";
 import { Image } from "@/types/image";
 import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader";
 import { capitalizeFirstLetter } from "@/utils/functions";
@@ -53,14 +52,6 @@ export default function AccountHeader({
           <h1 className={styles.username}>
             {capitalizeFirstLetter(user.username)}
           </h1>
-          <button
-            type="button"
-            className={styles.publicProfileButton}
-            aria-label="Voir mon profil public"
-            onClick={() => router.push(`/users/${user._id}`)}
-          >
-            <Eye size={18} />
-          </button>
         </div>
         {user.userCategory && (
           <div className={styles.creatorInfoContainer}>

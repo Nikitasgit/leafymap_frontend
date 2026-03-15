@@ -18,7 +18,7 @@
 
   :global(button) {
     width: 100%;
-    min-height: 4rem;
+    min-height: 3.25rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -52,7 +52,7 @@
 
   .actionItem {
     :global(button) {
-      min-height: 4.5rem;
+      min-height: 3.5rem;
     }
   }
 

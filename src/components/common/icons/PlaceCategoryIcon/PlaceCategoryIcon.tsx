@@ -9,6 +9,8 @@ interface PlaceCategoryIconProps {
   hoverable?: boolean;
   className?: string;
   colorByCategory?: boolean;
+  /** When set, overrides color from category or variant */
+  iconColor?: string;
 }
 
 const PlaceCategoryIcon: React.FC<PlaceCategoryIconProps> = ({
@@ -18,6 +20,7 @@ const PlaceCategoryIcon: React.FC<PlaceCategoryIconProps> = ({
   hoverable = false,
   className = "",
   colorByCategory = false,
+  iconColor,
 }) => {
   const config = getPlaceCategoryConfig(categoryName);
   const IconComponent = config.icon;
@@ -25,14 +28,18 @@ const PlaceCategoryIcon: React.FC<PlaceCategoryIconProps> = ({
   const iconClasses = [
     styles.placeCategoryIcon,
     styles[size],
-    !colorByCategory && styles[variant],
+    !colorByCategory && !iconColor && styles[variant],
     hoverable && styles.hoverable,
     className,
   ]
     .filter(Boolean)
     .join(" ");
 
-  const style = colorByCategory ? { color: config.color } : undefined;
+  const style = iconColor
+    ? { color: iconColor }
+    : colorByCategory
+    ? { color: config.color }
+    : undefined;
 
   return (
     <span className={iconClasses} style={style}>

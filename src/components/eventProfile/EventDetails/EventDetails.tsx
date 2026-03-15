@@ -1,0 +1,73 @@
+"use client";
+
+import React from "react";
+import EventCard from "@/components/common/events/EventCard/EventCard";
+import UsersListXScroll, {
+  UsersListXScrollUser,
+} from "@/components/common/users/UsersListXScroll/UsersListXScroll";
+import EventSchedule from "@/components/eventProfile/EventSchedule";
+import { useEventInvitations } from "@/hooks/useEventInvitations";
+import { EventPopulated } from "@/types/place/event";
+import { PlacePopulated } from "@/types/place";
+import { UserPopulated } from "@/types/user";
+import styles from "./EventDetails.module.scss";
+import CreatorCard from "@/components/userProfile/PlacesSection/CreatorCard/CreatorCard";
+
+export interface EventDetailsProps {
+  event: EventPopulated;
+  place?: PlacePopulated;
+  user?: UserPopulated;
+  isContentLoading?: boolean;
+}
+
+const EventDetails: React.FC<EventDetailsProps> = ({
+  event,
+  place,
+  user,
+  isContentLoading = false,
+}) => {
+  const { eventInvitations, isLoading: eventInvitationsLoading } =
+    useEventInvitations(event._id, { onlyAccepted: "true" });
+
+  const participants = eventInvitations
+    .map((invitation) => invitation.collaborator)
+    .filter(
+      (collaborator): collaborator is NonNullable<typeof collaborator> =>
+        collaborator !== undefined,
+    );
+  const hasSchedule =
+    event.schedule &&
+    Array.isArray(event.schedule) &&
+    event.schedule.length > 0;
+
+  return (
+    <div className={styles.eventDetailsContent}>
+      <div className={styles.eventCardContainer}>
+        <EventCard event={event} place={place} user={user} clickable={false} />
+      </div>
+
+      {participants.length > 0 && (
+        <UsersListXScroll
+          users={participants as UsersListXScrollUser[]}
+          title="Participants"
+          showCategory
+          showChevrons
+          loading={eventInvitationsLoading || isContentLoading}
+        />
+      )}
+
+      {user && place && (
+        <section className={styles.organizerSection}>
+          <h3 className={styles.sectionTitle}>Organisé par</h3>
+          <CreatorCard user={user} place={place} actions={[]} />
+        </section>
+      )}
+
+      {hasSchedule && (
+        <EventSchedule schedule={event.schedule} users={participants} />
+      )}
+    </div>
+  );
+};
+
+export default EventDetails;

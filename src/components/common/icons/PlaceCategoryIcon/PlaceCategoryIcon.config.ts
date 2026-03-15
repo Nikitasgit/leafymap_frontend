@@ -18,6 +18,7 @@ import {
   Hand,
   Wheat,
   Sparkles,
+  House,
 } from "lucide-react";
 
 export interface PlaceCategoryConfig {
@@ -38,8 +39,7 @@ export const PLACE_CATEGORY_CONFIG: Record<string, PlaceCategoryConfig> = {
   market: { icon: ShoppingBag, color: "#16A085" },
   gallery: { icon: LayoutGrid, color: "#8E44AD" },
   artist_studio: { icon: Paintbrush, color: "#9B59B6" },
-  craft_workshop: { icon: Hammer, color: "#795548" },
-  workshop: { icon: Layers, color: "#607D8B" },
+  workshop: { icon: House, color: "#607D8B" },
   tasting_room: { icon: Wine, color: "#C0392B" },
   artisan_market: { icon: Hand, color: "#D35400" },
   farmers_market: { icon: Wheat, color: "#27AE60" },
@@ -53,9 +53,8 @@ export const DEFAULT_CONFIG: PlaceCategoryConfig = {
 };
 
 export function getPlaceCategoryConfig(
-  categoryName: string | undefined
+  categoryName: string | undefined,
 ): PlaceCategoryConfig {
-  const normalizedKey =
-    categoryName?.toLowerCase().replace(/\s+/g, "_") ?? "";
+  const normalizedKey = categoryName?.toLowerCase().replace(/\s+/g, "_") ?? "";
   return PLACE_CATEGORY_CONFIG[normalizedKey] ?? DEFAULT_CONFIG;
 }

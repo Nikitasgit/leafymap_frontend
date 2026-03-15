@@ -1,16 +1,12 @@
 "use client";
 import React from "react";
 import BaseModal from "@/components/common/modals/BaseModal/BaseModal";
-import EventCard from "@/components/common/events/EventCard/EventCard";
-import UsersListXScroll from "@/components/common/users/UsersListXScroll";
-import { useEventInvitations } from "@/hooks/useEventInvitations";
 import { EventPopulated } from "@/types/place/event";
 import { PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
 import styles from "./EventModal.module.scss";
-import EventSchedule from "@/components/eventProfile/EventSchedule";
 import { capitalizeFirstLetter } from "@/utils/functions";
-import { UsersListXScrollUser } from "../../users/UsersListXScroll/UsersListXScroll";
+import EventDetails from "@/components/eventProfile/EventDetails/EventDetails";
 
 export interface EventModalProps {
   isOpen: boolean;
@@ -29,21 +25,9 @@ const EventModal: React.FC<EventModalProps> = ({
   user,
   isContentLoading = false,
 }) => {
-  const { eventInvitations, isLoading: eventInvitationsLoading } =
-    useEventInvitations(event._id, { onlyAccepted: "true" });
-  const participants = eventInvitations
-    .map((invitation) => invitation.collaborator)
-    .filter((collaborator): collaborator is NonNullable<typeof collaborator> => 
-      collaborator !== undefined
-    );
   const handleClose = () => {
     onClose();
   };
-
-  const hasSchedule =
-    event.schedule &&
-    Array.isArray(event.schedule) &&
-    event.schedule.length > 0;
 
   return (
     <BaseModal
@@ -53,30 +37,15 @@ const EventModal: React.FC<EventModalProps> = ({
       primaryButtonLabel="Fermer"
       onPrimaryAction={handleClose}
       withFooter={false}
-      isContentLoading={eventInvitationsLoading || isContentLoading}
+      isContentLoading={isContentLoading}
     >
       <div className={styles.eventModalContent}>
-        <div className={styles.eventCardContainer}>
-          <EventCard
-            event={event}
-            place={place}
-            user={user}
-            clickable={false}
-          />
-        </div>
-
-        {participants.length > 0 && (
-          <UsersListXScroll
-            users={participants as UsersListXScrollUser[]}
-            title="Participants"
-            showCategory
-            showChevrons
-          />
-        )}
-
-        {hasSchedule && (
-          <EventSchedule schedule={event.schedule} users={participants} />
-        )}
+        <EventDetails
+          event={event}
+          place={place}
+          user={user}
+          isContentLoading={isContentLoading}
+        />
       </div>
     </BaseModal>
   );

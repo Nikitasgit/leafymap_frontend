@@ -1,0 +1,21 @@
+.eventDetailsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.eventCardContainer {
+  width: 100%;
+}
+
+.organizerSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 600;
+}
+

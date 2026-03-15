@@ -41,7 +41,7 @@
   .bottomRow {
     @include flex(column, flex-start, stretch, spacing(0.75));
     .titleRow {
-      @include flex(row, flex-start, center, spacing(0.75));
+      @include flex(row, center, center, spacing(0.75));
       .icon {
         color: $grey-500;
         display: none;
@@ -91,6 +91,7 @@
     .bottomRow {
       gap: spacing(1);
       .titleRow {
+        justify-content: flex-start;
         gap: spacing(1);
         .icon {
           display: block;

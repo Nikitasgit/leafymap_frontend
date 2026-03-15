@@ -7,7 +7,7 @@ import Image from "next/image";
 import SubscribersCounter from "@/components/common/counters/SubscribersCounter/SubscribersCounter";
 import ActionButtons from "@/components/common/actions/ActionButtons";
 import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
-import creatorDefaultsSvg from "@public/images/creator_default.svg";
+import creatorDefaultsSvg from "@public/images/creator_default.png";
 import { getDisplayName } from "@/utils/userDisplay";
 
 const CreatorCard: React.FC<CreatorCardProps> = ({ user, place, actions }) => {
@@ -27,7 +27,11 @@ const CreatorCard: React.FC<CreatorCardProps> = ({ user, place, actions }) => {
     >
       <div className={styles.imageContainer}>
         <Image
-          src={user?.image?.urls?.thumbnail || creatorDefaultsSvg}
+          src={
+            user?.image?.urls?.thumbnail ||
+            user?.googlePictureUrl ||
+            creatorDefaultsSvg
+          }
           alt={displayName}
           fill
           className={styles.cardImage}

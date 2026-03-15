@@ -5,7 +5,7 @@ import Image from "next/image";
 import Button from "@/components/common/buttons/Button";
 import EventStatus from "@/components/common/events/EventStatus";
 import EmptyState from "@/components/common/noResults/EmptyState";
-import creatorDefaultsSvg from "@public/images/creator_default.svg";
+import creatorDefaultsSvg from "@public/images/creator_default.png";
 
 interface PartnershipsFormListProps {
   partnerships: Partnership[];
@@ -17,7 +17,7 @@ const PartnershipsFormList = ({
   onDelete,
 }: PartnershipsFormListProps) => {
   const filteredPartnerships = partnerships.filter(
-    (partnership) => !partnership.deleted
+    (partnership) => !partnership.deleted,
   );
 
   return (
@@ -26,18 +26,22 @@ const PartnershipsFormList = ({
         <div className={styles.list}>
           {filteredPartnerships.map((partnership) => {
             const id = partnership._id;
+            const collaborator = partnership.collaborator as Partnership["collaborator"] & {
+              googlePictureUrl?: string;
+            };
             return (
               <div key={id} className={styles.item}>
                 <div className={styles.itemInfo}>
                   <div className={styles.itemInfoLeft}>
                     <Image
                       src={
-                        typeof partnership.collaborator?.image === "object"
-                          ? partnership.collaborator.image?.urls?.thumbnail
-                          : partnership.collaborator?.image ||
+                        typeof collaborator?.image === "object"
+                          ? collaborator.image?.urls?.thumbnail
+                          : collaborator?.image ||
+                            collaborator?.googlePictureUrl ||
                             creatorDefaultsSvg
                       }
-                      alt={partnership.collaborator.username || ""}
+                      alt={collaborator.username || ""}
                       width={32}
                       height={32}
                       className={styles.itemImage}

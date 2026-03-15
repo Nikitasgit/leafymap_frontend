@@ -1,5 +1,4 @@
 import { Event } from "@/types/place/event";
-import { useRouter } from "next/navigation";
 import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader";
 import EventStatus from "@/components/common/events/EventStatus";
 import { Calendar } from "lucide-react";
@@ -10,7 +9,7 @@ import useSubmitEvent from "@/hooks/useSubmitEvent";
 import useDeleteEvent from "@/hooks/useDeleteEvent";
 import ActionButtons from "@/components/common/actions/ActionButtons";
 import { capitalizeFirstLetter } from "@/utils/functions";
-
+import { useRouter } from "next/navigation";
 
 interface AccountEventCardProps {
   event: Event;
@@ -18,9 +17,9 @@ interface AccountEventCardProps {
 }
 
 const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
-  const router = useRouter();
   const { submitEvent } = useSubmitEvent();
   const { deleteEvent, isLoading: isDeletingEvent } = useDeleteEvent();
+  const router = useRouter();
 
   const handleImageUploaded = async (imageId: string | null) => {
     if (imageId && typeof imageId === "string") {
@@ -50,11 +49,6 @@ const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
           <h4 className={styles.title}>{capitalizeFirstLetter(event.name)}</h4>
           <ActionButtons
             actions={[
-              {
-                type: "view",
-                onClick: () => router.push(`/events/${event._id}`),
-                ariaLabel: "Voir l'événement",
-              },
               {
                 type: "delete",
                 onClick: () => deleteEvent(event._id),

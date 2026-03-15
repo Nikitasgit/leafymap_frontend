@@ -18,6 +18,7 @@ export interface Partnership {
     _id: string;
     username?: string;
     image?: Image | string;
+    googlePictureUrl?: string;
     userCategory?: UserCategory;
   };
   status: "pending" | "accepted";
@@ -31,6 +32,7 @@ export interface PartnershipPopulated extends Partnership {
     _id: string;
     username?: string;
     image?: Image | string;
+    googlePictureUrl?: string;
     userCategory?: UserCategory;
   };
 }

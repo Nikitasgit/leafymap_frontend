@@ -38,13 +38,12 @@ const PlaceCategoryFilter: React.FC<PlaceCategoryFilterProps> = ({
                 onClick={() => onCategoryClick(category._id)}
                 aria-pressed={isSelected}
                 aria-label={`${t(
-                  `placeCategories.${category.name.toLowerCase()}`
+                  `placeCategories.${category.name.toLowerCase()}`,
                 )}${isSelected ? " - sélectionné" : ""}`}
               >
                 <PlaceCategoryIcon
                   categoryName={category.name}
                   variant={isSelected ? "primary" : "grey"}
-                  colorByCategory
                 />
                 <span
                   className={

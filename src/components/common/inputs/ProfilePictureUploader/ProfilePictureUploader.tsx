@@ -6,7 +6,7 @@ import useSubmitImages from "@/hooks/useSubmitImages";
 import useDeleteImages from "@/hooks/useDeleteImages";
 import { Image as IImage } from "@/types/image";
 import placeDefaultsSvg from "@public/images/place_default.svg";
-import creatorDefaultsSvg from "@public/images/creator_default.svg";
+import creatorDefaultsSvg from "@public/images/creator_default.png";
 import eventDefaultsSvg from "@public/images/event_default.svg";
 import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
 
@@ -60,7 +60,6 @@ const ProfilePictureUploader = ({
         if (preview) {
           await deleteImages([preview._id]);
         }
-        console.log("response", response);
         onImageUploaded(response.images[0]._id);
         setPreview({
           _id: response.images[0]._id,

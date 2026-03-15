@@ -57,7 +57,7 @@ const UserProfileContainer = () => {
     const tabFromUrl = searchParams.get("tab");
     const availableTabs = ["presentation", "images"];
     if (place) {
-      availableTabs.push("reviews");
+      availableTabs.push("reviews", "events");
     }
     if (tabFromUrl && availableTabs.includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);

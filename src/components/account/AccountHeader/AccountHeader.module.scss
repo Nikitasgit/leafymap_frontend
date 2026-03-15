@@ -9,7 +9,7 @@
     align-items: center;
     text-align: center;
     .usernameRow {
-      @include flex(row, flex-start, center, spacing(0.75));
+      @include flex(row, center, center, spacing(0.75));
     }
     .username {
       font-size: rem(20);
@@ -56,6 +56,9 @@
       gap: spacing(1);
       text-align: left;
       align-items: flex-start;
+      .usernameRow {
+        justify-content: flex-start;
+      }
       .username {
         font-size: rem(22);
       }

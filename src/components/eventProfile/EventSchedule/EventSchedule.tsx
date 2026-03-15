@@ -6,7 +6,7 @@ import styles from "./EventSchedule.module.scss";
 import { formatDateShort, sortPeriodsByStartDate } from "@/utils/dates";
 import { EventScheduleProps } from "./EventSchedule.types";
 import { Collaborator } from "@/types/place/collaborators";
-import creatorDefaultsSvg from "@public/images/creator_default.svg";
+import creatorDefaultsSvg from "@public/images/creator_default.png";
 
 const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
   const sortedSchedule = sortPeriodsByStartDate(schedule);

@@ -51,8 +51,7 @@ const CategoryMarker: React.FC<CategoryMarkerProps> = ({
           <PlaceCategoryIcon
             categoryName={categoryName}
             size="small"
-            variant={isSelected ? "secondary" : "primary"}
-            colorByCategory
+            iconColor="#ffffff"
             className={`${styles.markerIcon} ${
               isSelected ? styles.selectedIcon : ""
             }`}
