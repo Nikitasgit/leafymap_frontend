@@ -6,4 +6,5 @@ export interface MapFiltersCardProps {
   onApplyFilters?: (filters: MapFilters) => void;
   onClose?: () => void;
   filters: MapFilters;
+  isMobile?: boolean;
 }

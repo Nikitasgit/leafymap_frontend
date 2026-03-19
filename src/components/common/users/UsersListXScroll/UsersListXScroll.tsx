@@ -38,7 +38,7 @@ const UsersListXScroll = ({
   const [isScrollable, setIsScrollable] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const isMouseDownRef = useRef(false);
-  console.log(users);
+
   const checkScrollable = () => {
     if (!scrollContainerRef.current) return;
     const el = scrollContainerRef.current;

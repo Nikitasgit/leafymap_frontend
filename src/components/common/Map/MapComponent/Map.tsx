@@ -19,7 +19,7 @@ import { ExtendedMapRef } from "@/types/map";
 import { DEFAULT_LOCATION } from "@/utils/constants";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { MapComponentProps } from "./Map.types";
-import { User } from "@/types/user";
+import { getPlaceCategoryName, getPlaceDisplayName } from "@/utils/place";
 
 const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
   (
@@ -34,6 +34,8 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
       setLoading,
       selectedPlaceId,
       onMapReady,
+      isFavoritesMode = false,
+      externalPlaces,
     },
     ref
   ) => {
@@ -53,13 +55,12 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
       places: filteredPlaces,
       fetchPlacesInView,
       isLoading,
-    } = usePlacesInView({
-      filters,
-    });
+    } = usePlacesInView({ filters });
 
-    const filteredMarkersWithUserMarker = userMarker
-      ? [...filteredPlaces, userMarker]
-      : filteredPlaces;
+    const placesToShow =
+      isFavoritesMode && Array.isArray(externalPlaces)
+        ? externalPlaces
+        : filteredPlaces;
 
     useImperativeHandle(
       ref,
@@ -74,18 +75,12 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
     );
 
     useEffect(() => {
-      if (setLoading) {
-        setLoading(isLoading);
-      }
+      if (setLoading) setLoading(isLoading);
     }, [isLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
       if (latitude && longitude && isMapReady) {
-        setViewState({
-          latitude,
-          longitude,
-          zoom: DEFAULT_LOCATION.zoom,
-        });
+        setViewState({ latitude, longitude, zoom: DEFAULT_LOCATION.zoom });
       }
     }, [latitude, longitude, isMapReady]);
 
@@ -97,7 +92,7 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
           {...viewState}
           onMove={(e) => setViewState(e.viewState)}
           onMoveEnd={(e) => {
-            if (withPlacesInView) {
+            if (withPlacesInView && !isFavoritesMode) {
               fetchPlacesInView(e.target.getBounds());
             }
           }}
@@ -111,55 +106,51 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
           }}
           style={{ width, height }}
           onLoad={(e) => {
-            if (withPlacesInView) {
+            if (withPlacesInView && !isFavoritesMode) {
               fetchPlacesInView(e.target.getBounds());
             }
             setIsMapReady(true);
-            if (typeof onMapReady === "function") {
-              onMapReady();
-            }
+            if (typeof onMapReady === "function") onMapReady();
           }}
           mapStyle="mapbox://styles/mapbox/streets-v9"
         >
           <NavigationControl />
           <GeolocateControl />
 
-          {filteredMarkersWithUserMarker?.map((place, index) =>
+          {placesToShow?.map((place) =>
             place && place.location ? (
               <CategoryMarker
-                key={index}
+                key={place._id}
                 longitude={place.location.coordinates[0]}
                 latitude={place.location.coordinates[1]}
-                categoryName={
-                  place.placeCategory == null
-                    ? ""
-                    : typeof place.placeCategory === "string"
-                      ? place.placeCategory
-                      : place.placeCategory?.name ?? ""
-                }
-                placeName={
-                  typeof place === "object" && "user" in place && place.user != null
-                    ? (place.user as User).username
-                    : "name" in place && typeof place.name === "string"
-                    ? place.name
-                    : ""
-                }
+                categoryName={getPlaceCategoryName(place.placeCategory)}
+                placeName={getPlaceDisplayName(place)}
                 zoom={viewState.zoom}
                 isSelected={place._id === internalSelectedPlaceId}
                 onClick={() => {
                   setInternalSelectedPlaceId(place._id);
-                  if (onMarkerClick) {
-                    const userId =
-                      typeof place === "object" && "user" in place
-                        ? (place.user as User)?._id
-                        : undefined;
-                    if (userId) {
-                      onMarkerClick(userId);
-                    }
+                  const userId =
+                    place.user && typeof place.user === "object"
+                      ? (place.user as { _id: string })._id
+                      : undefined;
+                  if (userId && onMarkerClick) {
+                    onMarkerClick(userId);
                   }
                 }}
               />
             ) : null
+          )}
+
+          {userMarker && userMarker.location && (
+            <CategoryMarker
+              key={userMarker._id}
+              longitude={userMarker.location.coordinates[0]}
+              latitude={userMarker.location.coordinates[1]}
+              categoryName={userMarker.placeCategory.name}
+              placeName={userMarker.name}
+              zoom={viewState.zoom}
+              isSelected={userMarker._id === internalSelectedPlaceId}
+            />
           )}
         </Map>
       </div>

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import axios from "axios";
 import { Place } from "@/types/place";
 import { MapFilters } from "@/types/map";
@@ -8,16 +8,15 @@ interface UsePlacesInViewProps {
   filters?: MapFilters;
 }
 
+const DEBOUNCE_MS = 300;
+
 export const usePlacesInView = ({ filters }: UsePlacesInViewProps = {}) => {
   const [places, setPlaces] = useState<Place[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  /**
-   * Fetches places within the visible map bounds.
-   * Used to dynamically load places as the user pans/zooms the map.
-   */
-  const fetchPlacesInView = useCallback(
+  const fetchPlacesInViewImmediate = useCallback(
     async (
       bounds: mapboxgl.LngLatBounds | null,
       mapRef?: React.RefObject<MapRef>
@@ -39,7 +38,6 @@ export const usePlacesInView = ({ filters }: UsePlacesInViewProps = {}) => {
       setIsLoading(true);
       setError(null);
 
-      // Extract northeast and southwest corners for bounding box query
       const ne = currentBounds.getNorthEast().toArray();
       const sw = currentBounds.getSouthWest().toArray();
 
@@ -56,17 +54,32 @@ export const usePlacesInView = ({ filters }: UsePlacesInViewProps = {}) => {
         );
         setPlaces(response.data.data);
       } catch (err) {
-        setError(
+        const fetchError =
           err instanceof Error
             ? err
-            : new Error("Failed to fetch places in view")
-        );
+            : new Error("Failed to fetch places in view");
+        setError(fetchError);
         console.error("Failed to fetch places in view:", err);
       } finally {
         setIsLoading(false);
       }
     },
     [filters]
+  );
+
+  const fetchPlacesInView = useCallback(
+    (
+      bounds: mapboxgl.LngLatBounds | null,
+      mapRef?: React.RefObject<MapRef>
+    ) => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+      debounceTimer.current = setTimeout(() => {
+        fetchPlacesInViewImmediate(bounds, mapRef);
+      }, DEBOUNCE_MS);
+    },
+    [fetchPlacesInViewImmediate]
   );
 
   return {

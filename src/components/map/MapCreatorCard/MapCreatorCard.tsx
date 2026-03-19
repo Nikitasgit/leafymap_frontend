@@ -1,77 +1,80 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./MapCreatorCard.module.scss";
-import { useUser } from "@/hooks/useUser";
-import { usePlace } from "@/hooks/usePlace";
 import { useAuth } from "@/hooks/useAuth";
 import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
 import { MapCreatorCardProps } from "./MapCreatorCard.types";
 import CreatorHeader from "@/components/creator/creatorHeader";
 import MapCreatorCardContent from "../MapCreatorCardContent";
+import { useCreatorData } from "@/hooks/useCreatorData";
+import { isSameId } from "@/utils/id";
 
-const MapCreatorCard = ({ userId, mapRef }: MapCreatorCardProps) => {
-  const {
-    user,
-    isLoading: isLoadingUser,
-    refetch: refetchUser,
-  } = useUser(userId);
+const MapCreatorCard = ({
+  userId,
+  mapRef,
+  skipFetchPlacesInView = false,
+  onLoadingChange,
+}: MapCreatorCardProps) => {
+  const { user, place, isLoading, refetch } = useCreatorData(userId);
   const { user: currentUser } = useAuth();
-  const isOwner = Boolean(
-    currentUser?._id && currentUser._id.toString() === user?._id?.toString(),
-  );
-  const placeId = useMemo(() => {
-    if (!user?.place) return null;
-    return typeof user.place === "string" ? user.place : user.place._id;
-  }, [user?.place]);
+  const isOwner = isSameId(currentUser?._id, user?._id);
 
-  const {
-    place,
-    isLoading: isLoadingPlace,
-    refetch: refetchPlace,
-  } = usePlace(placeId, {
-    scheduleWithEvents: true,
-  });
+  // Track which place we've already navigated to so we don't flyTo twice
+  // when place is refetched (e.g. after an edit).
+  const navigatedPlaceIdRef = useRef<string | null>(null);
 
-  const isLoading = isLoadingUser || isLoadingPlace;
-
+  // Reset navigation ref when the card opens for a different user.
   useEffect(() => {
-    if (mapRef.current && place) {
-      navigateToPlaceOnMap({
-        mapRef,
-        placeId: place._id,
-        coordinates: place.location?.coordinates || [],
-      });
-    }
-  }, [mapRef, place]);
+    navigatedPlaceIdRef.current = null;
+  }, [userId]);
+
+  // Fly to the place once when the data first loads or when userId changes.
+  useEffect(() => {
+    if (!place || !mapRef.current) return;
+    if (navigatedPlaceIdRef.current === place._id) return;
+    navigatedPlaceIdRef.current = place._id;
+    navigateToPlaceOnMap({
+      mapRef,
+      placeId: place._id,
+      coordinates: place.location?.coordinates || [],
+      skipFetchPlacesInView,
+    });
+  }, [mapRef, place, skipFetchPlacesInView]);
+
+  // Notify parent of loading state changes (e.g. to hide the collapse button).
+  useEffect(() => {
+    onLoadingChange?.(isLoading);
+  }, [isLoading, onLoadingChange]);
 
   const handleMapButtonClick = async (placeItem: {
     location: { coordinates: number[] } | null;
     _id: string;
   }): Promise<void> => {
     if (!placeItem.location) return;
+    // Reset ref so the next navigateToPlaceOnMap call goes through.
+    navigatedPlaceIdRef.current = null;
     await navigateToPlaceOnMap({
       mapRef,
       placeId: placeItem._id,
       coordinates: placeItem.location.coordinates,
+      skipFetchPlacesInView,
     });
   };
 
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
   return (
     <article className={styles.placeCardMap}>
       <CreatorHeader place={place || null} user={user} isLoading={isLoading} />
       <MapCreatorCardContent
         place={place || null}
-        isPlaceLoading={isLoadingPlace}
+        isPlaceLoading={isLoading}
         user={user}
         isOwner={isOwner}
         onMapButtonClick={handleMapButtonClick}
-        onPlaceRefetch={refetchPlace}
-        refetchUser={refetchUser}
+        onPlaceRefetch={refetch}
+        refetchUser={refetch}
       />
     </article>
   );

@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import appReducer from "./appSlice";
 import authReducer from "./authSlice";
 import notificationReducer from "./notificationSlice";
+import favoritesReducer from "./favoritesSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     app: appReducer,
     auth: authReducer,
     notifications: notificationReducer,
+    favorites: favoritesReducer,
   },
 });
 

@@ -1,6 +1,5 @@
 import { ExtendedMapRef } from "@/types/map";
 import { applyPixelOffsetToLocation } from "@/utils/map";
-import mapboxgl from "mapbox-gl";
 
 interface MapNavigationParams {
   mapRef: React.RefObject<ExtendedMapRef | null> | undefined;
@@ -11,6 +10,7 @@ interface MapNavigationParams {
   zoom?: number;
   duration?: number;
   boundsOffset?: number;
+  skipFetchPlacesInView?: boolean;
 }
 
 /**
@@ -29,6 +29,7 @@ export const navigateToPlaceOnMap = async ({
   zoom = 15,
   duration = 800,
   boundsOffset = 0.01,
+  skipFetchPlacesInView = false,
 }: MapNavigationParams): Promise<void> => {
   if (!mapRef?.current) {
     console.warn("Map reference is not available");
@@ -57,18 +58,8 @@ export const navigateToPlaceOnMap = async ({
   const mapInstance = mapRef.current;
   mapInstance.setSelectedPlaceId(placeId);
 
-  // Create a small bounding box around the target location
-  const bounds = new mapboxgl.LngLatBounds();
-  bounds.extend([
-    offsetLocation.longitude - boundsOffset,
-    offsetLocation.latitude - boundsOffset,
-  ]);
-  bounds.extend([
-    offsetLocation.longitude + boundsOffset,
-    offsetLocation.latitude + boundsOffset,
-  ]);
-
-  await mapInstance.fetchPlacesInView(bounds);
+  // Ne pas appeler fetchPlacesInView ici : onMoveEnd du Map fera le fetch après le flyTo,
+  // évitant un double chargement (skeleton / loading plusieurs fois).
 
   mapRef.current.flyTo({
     center: [offsetLocation.longitude, offsetLocation.latitude],

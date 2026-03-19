@@ -1,3 +1,5 @@
+import { MapFilters, ExtendedMapRef } from "@/types/map";
+
 export type CreatorSearchResult = {
   _id: string;
   name: string;
@@ -20,17 +22,18 @@ export type SearchResult = {
 };
 
 export type SearchType = {
+  key: "membres" | "lieux";
   label: string;
   placeholder: string;
 };
-
-import { MapFilters, ExtendedMapRef } from "@/types/map";
 
 export type MapFiltersBarProps = {
   mapRef: React.RefObject<ExtendedMapRef | null>;
   loading: boolean;
   filters: MapFilters;
-  setFilters: (filters: MapFilters) => void;
   handleSelect: (item: SearchResult) => void;
   selectedItem: SearchResult;
+  isFavoritesMode: boolean;
+  onFavoritesModeToggle: () => void;
+  onExitFavoritesMode: () => void;
 };

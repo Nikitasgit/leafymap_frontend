@@ -10,7 +10,6 @@ interface FollowingCountProps {
 }
 
 const FollowingCount: React.FC<FollowingCountProps> = ({ count }) => {
-  console.log("count", count);
   if (count <= 0) {
     return null;
   }

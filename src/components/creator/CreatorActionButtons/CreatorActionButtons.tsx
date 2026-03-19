@@ -12,6 +12,12 @@ import { handleGetDirections } from "@/utils/mapNavigation";
 import { findConversationWithUser } from "@/lib/api/conversations";
 import { Place } from "@/types/place";
 import { UserPopulated } from "@/types/user";
+import { useAppDispatch, useAppSelector } from "@/store";
+import {
+  addFavorite,
+  removeFavorite,
+  selectIsPlaceFavorited,
+} from "@/store/favoritesSlice";
 import styles from "./CreatorActionButtons.module.scss";
 
 export interface CreatorActionButtonsProps {
@@ -38,6 +44,13 @@ const CreatorActionButtons = ({
       currentUserId: currentUser?._id,
       targetUserId: user._id,
     });
+  const dispatch = useAppDispatch();
+  const isPlaceFavorited = useAppSelector(
+    selectIsPlaceFavorited(place?._id)
+  );
+  const isFavoritesLoading = useAppSelector(
+    (state) => state.favorites.loading
+  );
 
   const handleFollow = async () => {
     try {
@@ -87,8 +100,7 @@ const CreatorActionButtons = ({
     user.username ||
     "Profil créateur";
   const shareText = place?.name ? `${shareTitle} - ${place.name}` : shareTitle;
-  const shareUrl =
-    typeof window !== "undefined" ? window.location.href : "";
+  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
   const showFollowButton = currentUser?._id !== user._id;
   const showMessageButton = !isOwner;
@@ -104,6 +116,23 @@ const CreatorActionButtons = ({
       void handleUnfollow();
     } else {
       void handleFollow();
+    }
+  };
+
+  const handleSaveClick = () => {
+    if (!currentUser?._id) {
+      router.push(`/${locale}/auth/register`);
+      return;
+    }
+    if (!place?._id) return;
+    if (isPlaceFavorited) {
+      void dispatch(
+        removeFavorite({ referenceId: place._id, referenceType: "Place" })
+      );
+    } else {
+      void dispatch(
+        addFavorite({ referenceId: place._id, referenceType: "Place" })
+      );
     }
   };
 
@@ -161,10 +190,11 @@ const CreatorActionButtons = ({
       <div className={styles.actionItem}>
         <RoundButton
           icon={<Bookmark size={18} />}
-          label="Enregistrer"
-          onClick={() => {}}
-          variant="secondary"
-          ariaLabel="Enregistrer"
+          label={isPlaceFavorited ? "Enregistré" : "Enregistrer"}
+          onClick={handleSaveClick}
+          disabled={isFavoritesLoading || !place?._id}
+          variant={isPlaceFavorited ? "primary" : "secondary"}
+          ariaLabel={isPlaceFavorited ? "Retirer des favoris" : "Enregistrer"}
         />
       </div>
 

@@ -5,7 +5,7 @@
 .categoryFilter {
   border: none;
   padding: 0;
-  margin: 0 0 spacing(1.5) 0;
+  margin: 0;
   .header {
     @include flex(row, flex-start, center, spacing(0.5));
     margin-bottom: spacing(1);
@@ -16,61 +16,11 @@
       margin: 0;
     }
   }
-  .categoriesList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    @include flex(row, flex-start, center, spacing(0.75));
-    flex-wrap: wrap;
-    li {
-      .categoryItem {
-        @include flex(row, center, center, spacing(0.5));
-        padding: spacing(0.5) spacing(1);
-        border-radius: rem(6);
-        cursor: pointer;
-        border: 1px solid $grey-200;
-        background: $white;
-        font-size: rem(13);
-        font-weight: 500;
-        transition: all 0.2s ease;
-        &.selected {
-          border-color: $primary-color;
-          background-color: rgba($primary-color, 0.1);
-        }
-        &:hover {
-          border-color: $grey-300;
-          background-color: $grey-50;
-          &.selected {
-            border-color: $primary-color;
-            background-color: rgba($primary-color, 0.15);
-          }
-        }
-        .selectedText {
-          color: $primary-color;
-        }
-        .unselectedText {
-          color: $grey-500;
-        }
-      }
-    }
-  }
   @include respond-to(sm) {
-    margin-bottom: spacing(2);
     .header {
       gap: spacing(0.75);
-      margin-bottom: spacing(1.5);
       .title {
         font-size: rem(15);
-      }
-    }
-    .categoriesList {
-      gap: spacing(1);
-      li {
-        .categoryItem {
-          padding: spacing(0.75) spacing(1.25);
-          border-radius: rem(8);
-          font-size: rem(14);
-        }
       }
     }
   }

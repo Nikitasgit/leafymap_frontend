@@ -10,6 +10,10 @@ import {
   fetchUserNotifications,
   selectNotifications,
 } from "@/store/notificationSlice";
+import {
+  fetchFavoritesByType,
+  selectFavorites,
+} from "@/store/favoritesSlice";
 import type { AppDispatch } from "@/store";
 
 export default function AppInitializer() {
@@ -18,6 +22,7 @@ export default function AppInitializer() {
   const userCategories = useSelector(selectUserCategories);
   const placeCategories = useSelector(selectPlaceCategories);
   const { lastFetched } = useSelector(selectNotifications);
+  const { lastFetchedByType } = useSelector(selectFavorites);
 
   useEffect(() => {
     if (!user) {
@@ -36,6 +41,12 @@ export default function AppInitializer() {
       dispatch(fetchUserNotifications());
     }
   }, [dispatch, user, lastFetched]);
+
+  useEffect(() => {
+    if (user && !lastFetchedByType.places) {
+      dispatch(fetchFavoritesByType("Place"));
+    }
+  }, [dispatch, user, lastFetchedByType.places]);
 
   return null;
 }

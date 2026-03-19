@@ -2,206 +2,142 @@
 
 import { SearchInput } from "@/components/common/inputs/SearchInput";
 import styles from "./MapFiltersBar.module.scss";
-import { ChevronDown, Filter } from "lucide-react";
-import { useRef, useState, useEffect } from "react";
+import { ChevronDown, Filter, Bookmark } from "lucide-react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useFindUsers } from "@/hooks/useFindUsers";
 import Button from "@/components/common/buttons/Button";
 import { fetchLocationSuggestions } from "@/utils/map";
-import {
+import type {
   CreatorSearchResult,
   LocationSearchResult,
   SearchType,
   MapFiltersBarProps,
 } from "./MapFiltersBar.types";
 
-const searchTypes: SearchType[] = [
-  { label: "Membres", placeholder: "Rechercher un membre" },
-  { label: "Lieux", placeholder: "Rechercher un lieu (ex: Paris)" },
+const SEARCH_TYPES: SearchType[] = [
+  { key: "membres", label: "Membres", placeholder: "Rechercher un membre" },
+  { key: "lieux", label: "Lieux", placeholder: "Rechercher un lieu (ex: Paris)" },
 ];
 
 const MapFiltersBar = ({
   mapRef,
   loading: loadingProps,
   filters,
-  setFilters,
   handleSelect,
   selectedItem,
+  isFavoritesMode,
+  onFavoritesModeToggle,
+  onExitFavoritesMode,
 }: MapFiltersBarProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [searchType, setSearchType] = useState<SearchType>(searchTypes[0]);
+  const [searchType, setSearchType] = useState<SearchType>(SEARCH_TYPES[0]);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { searchUsers, isLoading: isLoadingUsers } = useFindUsers();
   useOnClickOutside(dropdownRef, () => setIsDropdownOpen(false));
 
-  const types = [
-    {
-      key: "all",
-      label: "Tous",
-      value: "all",
-    },
-    {
-      key: "food",
-      label: `Producteurs`,
-      value: "food",
-    },
-    {
-      key: "art",
-      label: `Art et artisanat`,
-      value: "art-craft",
-    },
-  ];
+  const handleDropdownToggle = useCallback(() => {
+    setIsDropdownOpen((prev) => !prev);
+  }, []);
 
-  const handleTypeSelect = (type: { value: string }) => {
-    if (selectedItem.type !== "filters") {
-      handleSelect({
-        id: "",
-        type: null,
-      });
-    }
-    setFilters({
-      ...filters,
-      placeType: type.value,
-    });
-  };
-
-  const handleDropdownToggle = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const handleSearchTypeSelect = (type: SearchType) => {
+  const handleSearchTypeSelect = useCallback((type: SearchType) => {
     setSearchType(type);
     setIsDropdownOpen(false);
-  };
+  }, []);
 
-  const handleFilterToggle = () => {
+  const handleFilterToggle = useCallback(() => {
     if (selectedItem.type === "filters") {
       handleSelect({ id: "", type: null });
     } else {
+      onExitFavoritesMode();
       handleSelect({ id: "", type: "filters" });
     }
-  };
-  /**
-   * Search handler that switches between user and location search
-   * based on the selected search type.
-   */
-  const handleSearch = async (
-    query: string
-  ): Promise<(CreatorSearchResult | LocationSearchResult)[]> => {
-    if (searchType.label === "Membres") {
-      const creators = await searchUsers({ username: query }, 10);
-      const suggestions: CreatorSearchResult[] = creators.map((user) => ({
-        _id: user._id,
-        image: user.image?.urls?.thumbnail || user.googlePictureUrl || "",
-        name: user.username || "",
-        place: user.place?.location
-          ? {
-              label: user.place.location.label,
-              placeCategory: user.place.placeCategory,
-            }
-          : undefined,
-        categories: user.userCategory
-          ? [
-              {
-                name:
-                  typeof user.userCategory === "object"
-                    ? user.userCategory.name
-                    : "",
-                userCategoryType:
-                  typeof user.userCategory === "object"
-                    ? user.userCategory.userCategoryType
-                    : undefined,
-              },
-            ]
-          : [],
-      }));
+  }, [handleSelect, onExitFavoritesMode, selectedItem.type]);
 
-      return suggestions;
-    } else {
-      if (query.length < 2) {
-        return [];
+  const handleSearch = useCallback(
+    async (
+      query: string
+    ): Promise<(CreatorSearchResult | LocationSearchResult)[]> => {
+      if (searchType.key === "membres") {
+        const creators = await searchUsers({ username: query }, 10);
+        return creators.map((user) => ({
+          _id: user._id,
+          image: user.image?.urls?.thumbnail || user.googlePictureUrl || "",
+          name: user.username || "",
+          place: user.place?.location
+            ? {
+                label: user.place.location.label,
+                placeCategory: user.place.placeCategory,
+              }
+            : undefined,
+          categories: user.userCategory
+            ? [
+                {
+                  name:
+                    typeof user.userCategory === "object"
+                      ? user.userCategory.name
+                      : "",
+                  userCategoryType:
+                    typeof user.userCategory === "object"
+                      ? user.userCategory.userCategoryType
+                      : undefined,
+                },
+              ]
+            : [],
+        }));
       }
+
+      if (query.length < 2) return [];
+
       try {
         const locations = await fetchLocationSuggestions(query);
-        const suggestions: LocationSearchResult[] = locations.map(
-          (location) => ({
-            _id:
-              location.id ||
-              `location-${location.coordinates[0]}-${location.coordinates[1]}`,
-            name: location.label,
-            coordinates: location.coordinates,
-          })
-        );
-        return suggestions;
+        return locations.map((location) => ({
+          _id:
+            location.id ||
+            `location-${location.coordinates[0]}-${location.coordinates[1]}`,
+          name: location.label,
+          coordinates: location.coordinates,
+        }));
       } catch (error) {
         console.error("Error fetching location suggestions:", error);
         return [];
       }
-    }
-  };
+    },
+    [searchType.key, searchUsers]
+  );
 
-  const handleSelectSuggestion = (
-    item: CreatorSearchResult | LocationSearchResult
-  ) => {
-    if (searchType.label === "Membres") {
-      // Pour les membres, ouvrir la MapCreatorCard
-      handleSelect({
-        id: item._id,
-        type: "creator",
-      });
-    } else {
-      if (
-        "coordinates" in item &&
-        item.coordinates &&
-        mapRef.current?.isReady
-      ) {
+  const handleSelectSuggestion = useCallback(
+    (item: CreatorSearchResult | LocationSearchResult) => {
+      if (searchType.key === "membres") {
+        handleSelect({ id: item._id, type: "creator" });
+        return;
+      }
+
+      if ("coordinates" in item && item.coordinates && mapRef.current?.isReady) {
         const [longitude, latitude] = item.coordinates;
         handleSelect({ id: "", type: null });
         mapRef.current.setSelectedPlaceId(null);
-        mapRef.current.flyTo({
-          center: [longitude, latitude],
-          zoom: 12,
-          duration: 1000,
-        });
-
-        if (mapRef.current) {
-          mapRef.current.fetchPlacesInView(null);
-        }
+        mapRef.current.flyTo({ center: [longitude, latitude], zoom: 12, duration: 1000 });
+        mapRef.current.fetchPlacesInView(null);
       }
-    }
-  };
+    },
+    [handleSelect, mapRef, searchType.key]
+  );
 
   useEffect(() => {
-    if (mapRef.current && mapRef.current.isReady) {
-      mapRef.current.fetchPlacesInView(null);
+    if (isFavoritesMode) return;
+    if (!mapRef.current?.isReady) return;
+    mapRef.current.fetchPlacesInView(null);
+    if (selectedItem?.type !== "creator") {
       mapRef.current.setSelectedPlaceId(null);
     }
-  }, [filters, mapRef]);
+  }, [filters, mapRef, isFavoritesMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loading = isLoadingUsers || loadingProps;
 
   return (
     <div className={styles.filtersBar}>
       <div className={styles.topRow}>
-        <div
-          className={styles.categories}
-          role="group"
-          aria-label="Filtres par catégorie"
-        >
-          {types.map((type) => (
-            <button
-              key={type.key}
-              type="button"
-              className={`${styles.category} ${
-                type.value === filters.placeType ? styles.active : ""
-              }`}
-              onClick={() => handleTypeSelect(type)}
-              aria-pressed={type.value === filters.placeType}
-            >
-              {type.label}
-            </button>
-          ))}
-        </div>
         <Button
           variant="secondary"
           size="small"
@@ -212,6 +148,20 @@ const MapFiltersBar = ({
           ariaLabel="Filtres"
         >
           Filtres
+        </Button>
+        <Button
+          variant={isFavoritesMode ? "primary" : "outline"}
+          size="small"
+          type="button"
+          onClick={onFavoritesModeToggle}
+          startIcon={<Bookmark size={17} />}
+          ariaLabel={
+            isFavoritesMode
+              ? "Désactiver les lieux enregistrés"
+              : "Afficher les lieux enregistrés"
+          }
+        >
+          Enregistrés
         </Button>
       </div>
       <div className={styles.search}>
@@ -229,14 +179,14 @@ const MapFiltersBar = ({
           </button>
           {isDropdownOpen && (
             <ul className={styles.dropdownMenu} role="listbox">
-              {searchTypes.map((type) => (
-                <li key={type.label} role="presentation">
+              {SEARCH_TYPES.map((type) => (
+                <li key={type.key} role="presentation">
                   <button
                     type="button"
                     className={styles.dropdownItem}
                     onClick={() => handleSearchTypeSelect(type)}
                     role="option"
-                    aria-selected={searchType.label === type.label}
+                    aria-selected={searchType.key === type.key}
                   >
                     {type.label}
                   </button>

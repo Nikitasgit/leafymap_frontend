@@ -9,6 +9,7 @@ import placeDefaultSvg from "@public/images/place_default.svg";
 import StarsDisplay from "@/components/common/stars/StarsDisplay/StarsDisplay";
 import { Place } from "@/types/place";
 import { UserPopulated } from "@/types/user";
+import { getPlaceCategoryName } from "@/utils/place";
 import { FollowingCount } from "@/components/common/follow/FollowingCount";
 
 export interface CreatorHeaderProps {
@@ -43,8 +44,8 @@ const CreatorHeader = ({
         {!isLoading && (
           <Image
             src={
-              user.image?.urls.medium ??
-              user.googlePictureUrl ??
+              user.image?.urls.medium ||
+              user.googlePictureUrl ||
               placeDefaultSvg
             }
             alt={user.username || "Lieu"}
@@ -66,11 +67,7 @@ const CreatorHeader = ({
             <div className={styles.categoryRow}>
               <div className={styles.categoryRowLeft}>
                 <PlaceCategoryBadge
-                  categoryName={
-                    typeof place.placeCategory === "object"
-                      ? place.placeCategory.name || ""
-                      : ""
-                  }
+                  categoryName={getPlaceCategoryName(place.placeCategory)}
                 />
               </div>
               <div className={styles.ratingFollowersRow}>

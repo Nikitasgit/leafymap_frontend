@@ -1,31 +1,26 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import MapCreatorCard from "../MapCreatorCard";
-import MapFiltersCard from "../MapFiltersCard";
 import styles from "./MapCardContainer.module.scss";
 import { MapCardContainerProps } from "./MapCardContainer.types";
-import { useUser } from "@/hooks/useUser";
 
 type DrawerState = "collapsed" | "default" | "expanded";
 
-const NAVBAR_HEIGHT_PX = 60;
+const COLLAPSED_HEIGHT_PX = 40;
+const SNAP_COLLAPSED = 0.2;
+const SNAP_EXPANDED = 0.55;
 
 const MapCardContainer = ({
   selectedItem,
   mapRef,
-  filters,
-  setFilters,
-  onResetFilters,
+  isFavoritesMode = false,
 }: MapCardContainerProps) => {
   const [drawerState, setDrawerState] = useState<DrawerState>("default");
-  const [dragTranslateY, setDragTranslateY] = useState<number | null>(null);
+  const [dragHeight, setDragHeight] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isCreatorLoading, setIsCreatorLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const { isLoading: isCreatorLoading } = useUser(
-    selectedItem?.type === "creator" ? selectedItem.id : undefined,
-  );
   const touchStartY = useRef(0);
-  const touchStartTranslateY = useRef(0);
+  const touchStartHeight = useRef(0);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
@@ -38,83 +33,73 @@ const MapCardContainer = ({
   const isCollapsed = drawerState === "collapsed";
 
   const toggleCollapse = useCallback(() => {
-    setDrawerState((prev) =>
-      prev === "collapsed"
-        ? "default"
-        : prev === "expanded"
-          ? "default"
-          : "collapsed",
-    );
+    setDrawerState((prev) => (prev === "collapsed" ? "default" : "collapsed"));
   }, []);
 
   useEffect(() => {
     setDrawerState("default");
   }, [selectedItem]);
 
-  const getSnapState = useCallback(
-    (translateY: number, height: number): DrawerState => {
-      const expandedThreshold = NAVBAR_HEIGHT_PX;
-      const collapsedThreshold = height - 20;
-      const defaultThreshold = height * 0.35;
-      const toExpanded = Math.abs(translateY - expandedThreshold);
-      const toDefault = Math.abs(translateY - defaultThreshold);
-      const toCollapsed = Math.abs(translateY - collapsedThreshold);
-      if (toExpanded <= toDefault && toExpanded <= toCollapsed)
-        return "expanded";
-      if (toDefault <= toCollapsed) return "default";
-      return "collapsed";
+  const getContainerHeight = useCallback(() => {
+    return containerRef.current?.parentElement?.getBoundingClientRect().height ?? window.innerHeight;
+  }, []);
+
+  const getHeightForState = useCallback(
+    (state: DrawerState): number => {
+      const total = getContainerHeight();
+      switch (state) {
+        case "collapsed":
+          return COLLAPSED_HEIGHT_PX;
+        case "default":
+          return total * 0.65;
+        case "expanded":
+          return total;
+      }
     },
-    [],
+    [getContainerHeight]
+  );
+
+  const snapToState = useCallback(
+    (height: number): DrawerState => {
+      const total = getContainerHeight();
+      const ratio = height / total;
+      if (ratio < SNAP_COLLAPSED) return "collapsed";
+      if (ratio < SNAP_EXPANDED) return "default";
+      return "expanded";
+    },
+    [getContainerHeight]
   );
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
-      const container = containerRef.current;
-      if (!container) return;
-      const height = container.getBoundingClientRect().height;
-      const baseY =
-        drawerState === "expanded"
-          ? NAVBAR_HEIGHT_PX
-          : drawerState === "default"
-            ? height * 0.35
-            : height - 20;
       touchStartY.current = e.touches[0].clientY;
-      touchStartTranslateY.current = dragTranslateY ?? baseY;
+      touchStartHeight.current = dragHeight ?? getHeightForState(drawerState);
     },
-    [drawerState, dragTranslateY],
+    [drawerState, dragHeight, getHeightForState]
   );
 
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    const container = containerRef.current;
-    if (!container) return;
-    e.preventDefault();
-    const height = container.getBoundingClientRect().height;
-    const deltaY = e.touches[0].clientY - touchStartY.current;
-    let nextY = touchStartTranslateY.current + deltaY;
-    nextY = Math.max(NAVBAR_HEIGHT_PX, Math.min(height - 20, nextY));
-    setDragTranslateY(nextY);
-  }, []);
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      e.preventDefault();
+      const total = getContainerHeight();
+      const deltaY = touchStartY.current - e.touches[0].clientY;
+      const nextHeight = Math.max(
+        COLLAPSED_HEIGHT_PX,
+        Math.min(total, touchStartHeight.current + deltaY)
+      );
+      setDragHeight(nextHeight);
+    },
+    [getContainerHeight]
+  );
 
   const handleTouchEnd = useCallback(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    const height = container.getBoundingClientRect().height;
-    const currentY =
-      dragTranslateY ??
-      (drawerState === "expanded"
-        ? NAVBAR_HEIGHT_PX
-        : drawerState === "default"
-          ? height * 0.35
-          : height - 20);
-    setDrawerState(getSnapState(currentY, height));
-    setDragTranslateY(null);
-  }, [dragTranslateY, drawerState, getSnapState]);
+    const currentHeight = dragHeight ?? getHeightForState(drawerState);
+    setDrawerState(snapToState(currentHeight));
+    setDragHeight(null);
+  }, [dragHeight, drawerState, getHeightForState, snapToState]);
 
-  const isDragging = dragTranslateY !== null;
-  const mobileTransform =
-    isMobile && isDragging && dragTranslateY !== null
-      ? `translateY(${dragTranslateY}px)`
-      : undefined;
+  const isDragging = dragHeight !== null;
+  const mobileHeight = isMobile && isDragging ? `${dragHeight}px` : undefined;
 
   return (
     <div
@@ -122,10 +107,8 @@ const MapCardContainer = ({
       className={`${styles.cardMapContainer} ${styles[`state_${drawerState}`]}`}
       data-state={drawerState}
       data-dragging={isDragging}
-      data-creator-loading={
-        selectedItem?.type === "creator" && isCreatorLoading ? "true" : undefined
-      }
-      style={mobileTransform ? { transform: mobileTransform } : undefined}
+      data-creator-loading={isCreatorLoading ? "true" : undefined}
+      style={mobileHeight ? { height: mobileHeight } : undefined}
     >
       <button
         className={styles.collapseButton}
@@ -151,17 +134,12 @@ const MapCardContainer = ({
         aria-label="Informations de la sélection"
         aria-hidden={isCollapsed}
       >
-        {selectedItem.type === "creator" && (
-          <MapCreatorCard userId={selectedItem.id} mapRef={mapRef} />
-        )}
-        {selectedItem.type === "filters" && (
-          <MapFiltersCard
-            filters={filters}
-            onFiltersChange={setFilters}
-            onResetFilters={onResetFilters}
-            onClose={() => setDrawerState("collapsed")}
-          />
-        )}
+        <MapCreatorCard
+          userId={selectedItem.id}
+          mapRef={mapRef}
+          skipFetchPlacesInView={isFavoritesMode}
+          onLoadingChange={setIsCreatorLoading}
+        />
       </aside>
     </div>
   );

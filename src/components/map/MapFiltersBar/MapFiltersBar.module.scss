@@ -9,38 +9,15 @@
   width: 100%;
   border-top: 1px solid $grey-200;
   .topRow {
-    @include flex(row, space-between, center, spacing(1));
+    @include flex(row, flex-start, center, spacing(0.5));
     width: 100%;
-    .categories {
-      @include flex(row, flex-start, center, spacing(0));
-      overflow-x: auto;
-
-      scrollbar-width: none;
-      &::-webkit-scrollbar {
-        display: none;
-      }
-      .category {
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: rem(13);
-        color: $grey-500;
-        white-space: nowrap;
-        padding: spacing(0.5) spacing(1);
-        border-radius: rem(6);
-        font-weight: 500;
-        &.active {
-          color: $primary-color;
-          background: rgba($primary-color, 0.1);
-        }
-      }
-    }
     button {
       span {
         display: none;
       }
     }
   }
+
   .search {
     @include flex(row, flex-start, center, 0);
     border: 1px solid $grey-200;
@@ -108,14 +85,7 @@
   @include respond-to(sm) {
     padding: spacing(1.5);
     .topRow {
-      gap: spacing(1.5);
-      .categories {
-        gap: spacing(1);
-        .category {
-          font-size: rem(14);
-          padding: spacing(0.5) spacing(1.25);
-        }
-      }
+      gap: spacing(1);
       button {
         span {
           display: flex;
@@ -150,7 +120,7 @@
   @include respond-to(md) {
     @include flex(row, space-between, center, spacing(1.5));
     .topRow {
-      justify-content: flex-start;
+      gap: spacing(1);
     }
     .search {
       .searchDropdownWrapper {

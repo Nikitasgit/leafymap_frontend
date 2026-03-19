@@ -4,6 +4,7 @@
 
 .filtersCardMap {
   .header {
+    @include flex(row, space-between, center, spacing(1));
     padding: spacing(1) spacing(1.5);
     border-bottom: 1px solid $grey-200;
     .title {
@@ -12,11 +13,66 @@
       color: $grey-700;
       margin: 0;
     }
+    .closeBtn {
+      @include flex(row, center, center, 0);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: $grey-400;
+      padding: spacing(0.25);
+      border-radius: rem(4);
+      transition: $transition-default;
+      &:hover {
+        color: $grey-700;
+        background-color: $grey-100;
+      }
+    }
   }
   .content {
     padding: spacing(1.5);
     @include flex(column, flex-start, stretch, spacing(1.5));
   }
+
+  .section {
+    @include flex(column, flex-start, stretch, spacing(0.75));
+  }
+
+  .sectionLabel {
+    @include flex(row, flex-start, center, spacing(0.5));
+    margin: 0;
+    color: $grey-500;
+    font-size: rem(13);
+    font-weight: 600;
+  }
+
+  .ratingButtons {
+    @include flex(row, flex-start, center, spacing(0.5));
+  }
+
+  .ratingBtn {
+    padding: spacing(0.4) spacing(1);
+    border-radius: rem(6);
+    border: 1px solid $grey-200;
+    background: $white;
+    font-size: rem(12);
+    font-weight: 500;
+    color: $grey-500;
+    cursor: pointer;
+    transition: $transition-default;
+
+    &:hover {
+      border-color: $grey-300;
+      background-color: $grey-50;
+    }
+
+    &.active {
+      border-color: $primary-color;
+      background-color: rgba($primary-color, 0.1);
+      color: $primary-color;
+      font-weight: 600;
+    }
+  }
+
   @include respond-to(sm) {
     .header {
       padding: spacing(1.5) spacing(2);
@@ -27,6 +83,9 @@
     .content {
       padding: spacing(2);
       gap: spacing(2);
+    }
+    .sectionLabel {
+      font-size: rem(14);
     }
   }
 }
