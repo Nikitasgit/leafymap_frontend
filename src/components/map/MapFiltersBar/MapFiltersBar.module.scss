@@ -16,6 +16,20 @@
         display: none;
       }
     }
+    .filtersBtnWrapper {
+      position: relative;
+      .filtersDot {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: $primary-color;
+        border: 1.5px solid $white;
+        pointer-events: none;
+      }
+    }
   }
 
   .search {

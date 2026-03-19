@@ -3,7 +3,7 @@
 import { SearchInput } from "@/components/common/inputs/SearchInput";
 import styles from "./MapFiltersBar.module.scss";
 import { ChevronDown, Filter, Bookmark } from "lucide-react";
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useFindUsers } from "@/hooks/useFindUsers";
 import Button from "@/components/common/buttons/Button";
@@ -135,20 +135,35 @@ const MapFiltersBar = ({
 
   const loading = isLoadingUsers || loadingProps;
 
+  const hasActiveFilters = useMemo(
+    () =>
+      filters.placeTypes.length > 0 ||
+      filters.placeCategories.length > 0 ||
+      filters.minRating != null ||
+      (filters.userCategoryIds?.length ?? 0) > 0 ||
+      (filters.productCategoryIds?.length ?? 0) > 0,
+    [filters]
+  );
+
   return (
     <div className={styles.filtersBar}>
       <div className={styles.topRow}>
-        <Button
-          variant="secondary"
-          size="small"
-          type="button"
-          onClick={handleFilterToggle}
-          disabled={loading}
-          startIcon={<Filter size={17} />}
-          ariaLabel="Filtres"
-        >
-          Filtres
-        </Button>
+        <div className={styles.filtersBtnWrapper}>
+          <Button
+            variant="secondary"
+            size="small"
+            type="button"
+            onClick={handleFilterToggle}
+            disabled={loading}
+            startIcon={<Filter size={17} />}
+            ariaLabel="Filtres"
+          >
+            Filtres
+          </Button>
+          {hasActiveFilters && (
+            <span className={styles.filtersDot} aria-label="Filtres actifs" />
+          )}
+        </div>
         <Button
           variant={isFavoritesMode ? "primary" : "outline"}
           size="small"

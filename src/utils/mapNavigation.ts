@@ -43,12 +43,16 @@ export const navigateToPlaceOnMap = async ({
 
   const [longitude, latitude] = coordinates;
 
-  // Detect if mobile (screen width < 768px for md breakpoint)
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
-  // Apply offset only on desktop to accommodate the side card
+  // On desktop: shift right to account for the 400px side card
+  // On mobile: shift up to keep the marker above the bottom sheet (65% of viewport)
   const offsetLocation = isMobile
-    ? { latitude, longitude }
+    ? applyPixelOffsetToLocation(
+        { latitude, longitude },
+        0,
+        window.innerHeight * 0.08
+      )
     : applyPixelOffsetToLocation(
         { latitude, longitude },
         pixelOffsetX,
