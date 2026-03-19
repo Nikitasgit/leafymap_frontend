@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import MapFiltersCard from "../MapFiltersCard";
 import styles from "./MapFiltersPanel.module.scss";
 import { MapFiltersPanelProps } from "./MapFiltersPanel.types";
@@ -10,6 +10,15 @@ const MapFiltersPanel = ({
   onClose,
 }: MapFiltersPanelProps) => {
   const [isClosing, setIsClosing] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    setIsMobile(mq.matches);
+    const handler = () => setIsMobile(mq.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   const handleClose = useCallback(() => {
     setIsClosing(true);
@@ -29,6 +38,7 @@ const MapFiltersPanel = ({
         onFiltersChange={setFilters}
         onResetFilters={onResetFilters}
         onClose={handleClose}
+        isMobile={isMobile}
       />
     </div>
   );
