@@ -5,74 +5,72 @@
 .wrapper {
   width: 100%;
 
-  :global {
-    .MuiAutocomplete-root {
-      .MuiInputLabel-root {
-        font-size: rem(13);
-        color: $grey-500;
-
-        &.Mui-focused {
-          color: $primary-color;
-        }
-      }
-
-      .MuiOutlinedInput-root {
-        font-size: rem(13);
-        border-radius: rem(8);
-        background-color: $white;
-
-        &:hover .MuiOutlinedInput-notchedOutline {
-          border-color: $grey-300;
-        }
-
-        &.Mui-focused .MuiOutlinedInput-notchedOutline {
-          border-color: $primary-color;
-        }
-      }
-
-      .MuiChip-root {
-        font-size: rem(11);
-        height: rem(22);
-        background-color: rgba($primary-color, 0.1);
-        color: $primary-color;
-        border: 1px solid rgba($primary-color, 0.25);
-
-        .MuiChip-deleteIcon {
-          color: $primary-color;
-          font-size: rem(14);
-
-          &:hover {
-            color: darken($primary-color, 10%);
-          }
-        }
-      }
-
-      .MuiAutocomplete-tag {
-        margin: rem(2);
-      }
-    }
-
-    .MuiListSubheader-root {
-      font-size: rem(11);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: $grey-400;
-      line-height: rem(28);
-      background-color: $grey-50;
-    }
-
-    .MuiAutocomplete-option {
+  :global(.MuiAutocomplete-root) {
+    :global(.MuiInputLabel-root) {
       font-size: rem(13);
-      padding: spacing(0.5) spacing(1.5) !important;
+      color: $grey-500;
 
-      &[aria-selected="true"] {
-        background-color: rgba($primary-color, 0.08) !important;
+      &:global(.Mui-focused) {
+        color: $primary-color;
+      }
+    }
+
+    :global(.MuiOutlinedInput-root) {
+      font-size: rem(13);
+      border-radius: rem(8);
+      background-color: $white;
+
+      &:hover :global(.MuiOutlinedInput-notchedOutline) {
+        border-color: $grey-300;
       }
 
-      &:hover {
-        background-color: $grey-100 !important;
+      &:global(.Mui-focused) :global(.MuiOutlinedInput-notchedOutline) {
+        border-color: $primary-color;
       }
+    }
+
+    :global(.MuiChip-root) {
+      font-size: rem(11);
+      height: rem(22);
+      background-color: rgba($primary-color, 0.1);
+      color: $primary-color;
+      border: 1px solid rgba($primary-color, 0.25);
+
+      :global(.MuiChip-deleteIcon) {
+        color: $primary-color;
+        font-size: rem(14);
+
+        &:hover {
+          color: darken($primary-color, 10%);
+        }
+      }
+    }
+
+    :global(.MuiAutocomplete-tag) {
+      margin: rem(2);
+    }
+  }
+
+  :global(.MuiListSubheader-root) {
+    font-size: rem(11);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $grey-400;
+    line-height: rem(28);
+    background-color: $grey-50;
+  }
+
+  :global(.MuiAutocomplete-option) {
+    font-size: rem(13);
+    padding: spacing(0.5) spacing(1.5) !important;
+
+    &[aria-selected="true"] {
+      background-color: rgba($primary-color, 0.08) !important;
+    }
+
+    &:hover {
+      background-color: $grey-100 !important;
     }
   }
 }
