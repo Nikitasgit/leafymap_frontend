@@ -15,4 +15,5 @@ export interface UserInfoProps {
   onUserChange: FormDataChangeHandler;
   errors?: Record<string, string>;
   onPlaceChange: FormDataChangeHandler;
+  showLegalName?: boolean;
 }

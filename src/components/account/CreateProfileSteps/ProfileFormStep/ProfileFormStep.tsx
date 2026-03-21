@@ -26,6 +26,7 @@ const ProfileFormStep = ({
   firstStep = false,
   showPlaceForm = true,
   showPlaceRadioYesOrNo = false,
+  hideUserLegalName = false,
 }: ProfileFormStepProps) => {
   const { showError } = useToast();
 
@@ -75,6 +76,7 @@ const ProfileFormStep = ({
         onUserChange={onUserChange}
         onPlaceChange={onPlaceChange}
         errors={errors.user}
+        showLegalName={!hideUserLegalName}
       />
       {showPlaceForm && place && (
         <>

@@ -10,6 +10,7 @@ import {
   useState,
   useEffect,
   useRef,
+  useCallback,
   forwardRef,
   useImperativeHandle,
 } from "react";
@@ -17,9 +18,18 @@ import { usePlacesInView } from "@/hooks/usePlacesInView";
 import CategoryMarker from "../CategoryMarker/CategoryMarker";
 import { ExtendedMapRef } from "@/types/map";
 import { DEFAULT_LOCATION } from "@/utils/constants";
-import { useGeolocation } from "@/hooks/useGeolocation";
-import { MapComponentProps } from "./Map.types";
+import { MapComponentProps, MapViewState } from "./Map.types";
+import type { GeolocateControl as GeolocateControlInstance } from "mapbox-gl";
 import { getPlaceCategoryName, getPlaceDisplayName } from "@/utils/place";
+
+/** Delay so GeolocateControl is fully on the map before trigger. */
+const GEOLOCATE_TRIGGER_MS = 500;
+
+const GEO_OPTIONS: PositionOptions = {
+  enableHighAccuracy: true,
+  timeout: 10000,
+  maximumAge: 60000,
+};
 
 const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
   (
@@ -36,20 +46,40 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
       onMapReady,
       isFavoritesMode = false,
       externalPlaces,
+      viewState: controlledViewState,
+      onViewStateChange,
+      activateGeolocationOnMount = false,
+      followUserLocationWhenGeolocating = true,
     },
     ref
   ) => {
     const mapRef = useRef<MapRef>(null);
-    const { latitude, longitude } = useGeolocation();
+    const geolocateRef = useRef<GeolocateControlInstance | null>(null);
+    const geolocateTriggeredRef = useRef(false);
     const [isMapReady, setIsMapReady] = useState(false);
     const [internalSelectedPlaceId, setInternalSelectedPlaceId] = useState<
       string | null
     >(selectedPlaceId || null);
-    const [viewState, setViewState] = useState({
+
+    // Uncontrolled fallback (used by PlaceForm and other simple consumers)
+    const [internalViewState, setInternalViewState] = useState<MapViewState>({
       latitude: DEFAULT_LOCATION.latitude,
       longitude: DEFAULT_LOCATION.longitude,
       zoom: DEFAULT_LOCATION.zoom,
     });
+
+    const isControlled = controlledViewState !== undefined && onViewStateChange !== undefined;
+    const viewState = isControlled ? controlledViewState : internalViewState;
+    const setViewState = useCallback(
+      (vs: MapViewState) => {
+        if (isControlled) {
+          onViewStateChange!(vs);
+        } else {
+          setInternalViewState(vs);
+        }
+      },
+      [isControlled, onViewStateChange]
+    );
 
     const {
       places: filteredPlaces,
@@ -65,11 +95,11 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
     useImperativeHandle(
       ref,
       () => ({
-        ...mapRef.current!,
+        ...(mapRef.current ?? ({} as MapRef)),
         fetchPlacesInView: (bounds: mapboxgl.LngLatBounds | null) =>
           fetchPlacesInView(bounds, mapRef as React.RefObject<MapRef>),
         setSelectedPlaceId: setInternalSelectedPlaceId,
-        isReady: isMapReady,
+        isReady: Boolean(mapRef.current && isMapReady),
       }),
       [isMapReady, fetchPlacesInView]
     );
@@ -78,11 +108,17 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
       if (setLoading) setLoading(isLoading);
     }, [isLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
+    // Start GeolocateControl once: with trackUserLocation + followUserLocation false,
+    // Mapbox only draws the dot without moving the camera (see mapbox-gl _onSuccess).
     useEffect(() => {
-      if (latitude && longitude && isMapReady) {
-        setViewState({ latitude, longitude, zoom: DEFAULT_LOCATION.zoom });
-      }
-    }, [latitude, longitude, isMapReady]);
+      if (!isMapReady || !activateGeolocationOnMount || geolocateTriggeredRef.current)
+        return;
+      geolocateTriggeredRef.current = true;
+      const timeoutId = window.setTimeout(() => {
+        geolocateRef.current?.trigger();
+      }, GEOLOCATE_TRIGGER_MS);
+      return () => window.clearTimeout(timeoutId);
+    }, [isMapReady, activateGeolocationOnMount]);
 
     return (
       <div style={{ position: "relative", width, height }}>
@@ -115,7 +151,18 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
           mapStyle="mapbox://styles/mapbox/streets-v9"
         >
           <NavigationControl />
-          <GeolocateControl />
+          <GeolocateControl
+            ref={geolocateRef}
+            showUserLocation
+            showAccuracyCircle
+            trackUserLocation={activateGeolocationOnMount}
+            followUserLocation={
+              activateGeolocationOnMount
+                ? followUserLocationWhenGeolocating
+                : true
+            }
+            positionOptions={GEO_OPTIONS}
+          />
 
           {placesToShow?.map((place) =>
             place && place.location ? (

@@ -25,6 +25,10 @@
       @include flex(column, flex-start, stretch, spacing(1.5));
     }
 
+    .formAfterGoogle {
+      margin-top: spacing(1.5);
+    }
+
     .divider {
       @include flex(row, center, center, 0);
       text-align: center;
@@ -44,9 +48,37 @@
       }
     }
 
+    .googlePrimary {
+      @include flex(column, center, stretch, spacing(0.75));
+      margin-bottom: 0;
+    }
+
+    .recommendedLabel {
+      margin: 0;
+      text-align: center;
+      font-size: rem(12);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: $primary-color;
+    }
+
+    .emailToggle {
+      margin-bottom: spacing(0.5);
+    }
+
+    // GSI rend un iframe à largeur fixe : on étire le wrapper et l’iframe.
     .googleButton {
-      @include flex(row, center, center, 0);
-      margin: spacing(1.5) 0;
+      width: 100%;
+
+      > div {
+        width: 100% !important;
+      }
+
+      iframe {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
     }
 
     .signinLink {

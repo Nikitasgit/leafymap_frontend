@@ -6,7 +6,7 @@ const useDeletePlace = () => {
   const { isLoading, withLoading } = useLoading();
   const { showError, showSuccess } = useToast();
 
-  const deletePlace = async (placeId: string) => {
+  const performDeletePlace = async (placeId: string) => {
     try {
       await withLoading(() =>
         axios.delete(
@@ -45,21 +45,25 @@ const useDeletePlace = () => {
 
   const deletePlaceWithConfirmation = async (placeId: string) => {
     const confirmed = window.confirm(
-      "Êtes-vous sûr de vouloir supprimer ce lieu ? Cette action supprimera également tous les événements associés."
+      "Êtes-vous sûr de vouloir supprimer ce lieu ? Cette action supprimera également tous les événements, avis et commentaires associés."
     );
 
     if (confirmed) {
       const doubleConfirmed = window.confirm(
-        "Cette action est définitive. Tous les événements de ce lieu seront supprimés. Confirmez-vous la suppression ?"
+        "Cette action est définitive. Les événements, avis et commentaires liés à ce lieu seront supprimés. Confirmez-vous la suppression ?"
       );
 
       if (doubleConfirmed) {
-        await withLoading(() => deletePlace(placeId));
+        await performDeletePlace(placeId);
       }
     }
   };
 
-  return { deletePlace: deletePlaceWithConfirmation, isLoading };
+  return {
+    deletePlace: deletePlaceWithConfirmation,
+    performDeletePlace,
+    isLoading,
+  };
 };
 
 export default useDeletePlace;

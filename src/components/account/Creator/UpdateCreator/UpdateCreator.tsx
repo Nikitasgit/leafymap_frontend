@@ -86,6 +86,7 @@ const UpdateCreator = () => {
             onSubmit={handleSubmit}
             submitButtonText="Enregistrer"
             showPlaceForm={false}
+            hideUserLegalName
           />
         )}
       </section>

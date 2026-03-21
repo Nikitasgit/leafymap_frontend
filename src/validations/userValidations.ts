@@ -52,3 +52,29 @@ export const validateNewUserData = (data: Partial<User>): ValidationResult => {
     isValid: Object.keys(errors).length === 0,
   };
 };
+
+/** Prénom / nom seuls (champs optionnels si vides). */
+export const validateLegalNameFields = (data: {
+  firstname?: string;
+  lastname?: string;
+}): ValidationResult => {
+  const errors: Record<string, string> = {};
+  const fn = data.firstname?.trim() ?? "";
+  const ln = data.lastname?.trim() ?? "";
+  if (fn) {
+    const r = firstnameSchema.safeParse(fn);
+    if (!r.success && r.error.issues[0]) {
+      errors.firstname = r.error.issues[0].message;
+    }
+  }
+  if (ln) {
+    const r = lastnameSchema.safeParse(ln);
+    if (!r.success && r.error.issues[0]) {
+      errors.lastname = r.error.issues[0].message;
+    }
+  }
+  return {
+    errors,
+    isValid: Object.keys(errors).length === 0,
+  };
+};

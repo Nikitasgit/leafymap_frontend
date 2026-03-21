@@ -8,10 +8,13 @@ type DrawerState = "collapsed" | "default" | "expanded";
 const COLLAPSED_HEIGHT_PX = 40;
 const SNAP_COLLAPSED = 0.2;
 const SNAP_EXPANDED = 0.55;
+/** Doit rester aligné avec `transition` dans MapCardContainer.module.scss (0.3s + marge). */
+const CLOSE_TRANSITION_FALLBACK_MS = 400;
 
 const MapCardContainer = ({
   selectedItem,
   mapRef,
+  onClose,
   isFavoritesMode = false,
 }: MapCardContainerProps) => {
   const [drawerState, setDrawerState] = useState<DrawerState>("default");
@@ -21,6 +24,26 @@ const MapCardContainer = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef(0);
   const touchStartHeight = useRef(0);
+  const touchDraggedRef = useRef(false);
+  const isAnimatingCloseRef = useRef(false);
+  const closeFallbackTimerRef = useRef<number | null>(null);
+
+  const clearCloseFallback = useCallback(() => {
+    const id = closeFallbackTimerRef.current;
+    if (id !== null) {
+      window.clearTimeout(id);
+      closeFallbackTimerRef.current = null;
+    }
+  }, []);
+
+  const finishCloseAfterAnimation = useCallback(() => {
+    if (!isAnimatingCloseRef.current) {
+      return;
+    }
+    isAnimatingCloseRef.current = false;
+    clearCloseFallback();
+    onClose();
+  }, [clearCloseFallback, onClose]);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
@@ -32,13 +55,18 @@ const MapCardContainer = ({
 
   const isCollapsed = drawerState === "collapsed";
 
-  const toggleCollapse = useCallback(() => {
-    setDrawerState((prev) => (prev === "collapsed" ? "default" : "collapsed"));
-  }, []);
-
   useEffect(() => {
+    isAnimatingCloseRef.current = false;
+    clearCloseFallback();
     setDrawerState("default");
-  }, [selectedItem]);
+  }, [selectedItem, clearCloseFallback]);
+
+  useEffect(
+    () => () => {
+      clearCloseFallback();
+    },
+    [clearCloseFallback]
+  );
 
   const getContainerHeight = useCallback(() => {
     return containerRef.current?.parentElement?.getBoundingClientRect().height ?? window.innerHeight;
@@ -72,6 +100,7 @@ const MapCardContainer = ({
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
+      touchDraggedRef.current = false;
       touchStartY.current = e.touches[0].clientY;
       touchStartHeight.current = dragHeight ?? getHeightForState(drawerState);
     },
@@ -80,6 +109,12 @@ const MapCardContainer = ({
 
   const handleTouchMove = useCallback(
     (e: React.TouchEvent) => {
+      const deltaFromStart = Math.abs(
+        touchStartY.current - e.touches[0].clientY
+      );
+      if (deltaFromStart > 8) {
+        touchDraggedRef.current = true;
+      }
       e.preventDefault();
       const total = getContainerHeight();
       const deltaY = touchStartY.current - e.touches[0].clientY;
@@ -98,6 +133,48 @@ const MapCardContainer = ({
     setDragHeight(null);
   }, [dragHeight, drawerState, getHeightForState, snapToState]);
 
+  const handleTransitionEnd = useCallback(
+    (e: React.TransitionEvent<HTMLDivElement>) => {
+      if (!isAnimatingCloseRef.current) {
+        return;
+      }
+      if (e.target !== e.currentTarget) {
+        return;
+      }
+      if (e.propertyName !== "height" && e.propertyName !== "transform") {
+        return;
+      }
+      finishCloseAfterAnimation();
+    },
+    [finishCloseAfterAnimation]
+  );
+
+  const handleHandleClick = useCallback(() => {
+    if (touchDraggedRef.current) {
+      touchDraggedRef.current = false;
+      return;
+    }
+    if (isAnimatingCloseRef.current) {
+      return;
+    }
+    if (drawerState === "collapsed") {
+      onClose();
+      return;
+    }
+    isAnimatingCloseRef.current = true;
+    setDrawerState("collapsed");
+    clearCloseFallback();
+    closeFallbackTimerRef.current = window.setTimeout(() => {
+      closeFallbackTimerRef.current = null;
+      finishCloseAfterAnimation();
+    }, CLOSE_TRANSITION_FALLBACK_MS);
+  }, [
+    clearCloseFallback,
+    drawerState,
+    finishCloseAfterAnimation,
+    onClose,
+  ]);
+
   const isDragging = dragHeight !== null;
   const mobileHeight = isMobile && isDragging ? `${dragHeight}px` : undefined;
 
@@ -109,22 +186,20 @@ const MapCardContainer = ({
       data-dragging={isDragging}
       data-creator-loading={isCreatorLoading ? "true" : undefined}
       style={mobileHeight ? { height: mobileHeight } : undefined}
+      onTransitionEnd={handleTransitionEnd}
     >
       <button
         className={styles.collapseButton}
-        onClick={toggleCollapse}
+        onClick={handleHandleClick}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchEnd}
-        aria-label={
-          isCollapsed ? "Ouvrir les informations" : "Fermer les informations"
-        }
-        aria-expanded={!isCollapsed}
+        aria-label="Fermer la fiche créateur"
         type="button"
       >
         <span className={styles.desktopText} aria-hidden="true">
-          {isCollapsed ? "›" : "‹"}
+          ‹
         </span>
       </button>
       <aside

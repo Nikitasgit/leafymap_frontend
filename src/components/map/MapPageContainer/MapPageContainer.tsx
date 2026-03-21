@@ -17,6 +17,7 @@ import type { Place } from "@/types/place";
 import type { LngLatBoundsLike } from "mapbox-gl";
 import { SearchResult } from "./MapPageContainer.types";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useMapViewState } from "@/hooks/useMapViewState";
 
 const defaultFilters: MapFilters = {
   placeTypes: [],
@@ -32,6 +33,12 @@ const MapPageContainer = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const {
+    viewState,
+    onViewStateChange,
+    shouldFollowUserOnGeolocate,
+    isResolvingPosition,
+  } = useMapViewState();
 
   const initialCreatorId = searchParams.get("creator");
   const [selectedItem, setSelectedItem] = useState<{
@@ -111,6 +118,11 @@ const MapPageContainer = () => {
     setSelectedItem({ id: "", type: null });
   }, []);
 
+  const handleCloseCreatorCard = useCallback(() => {
+    mapRef.current?.setSelectedPlaceId(null);
+    setSelectedItem({ id: "", type: null });
+  }, []);
+
   const handleSelect = (item: SearchResult) => {
     setSelectedItem({ id: item.id, type: item.type });
     if (item.type === "creator") {
@@ -175,17 +187,23 @@ const MapPageContainer = () => {
         onExitFavoritesMode={exitFavoritesMode}
       />
       <div className={styles.mapContainer}>
-        <MapComponent
-          ref={mapRef}
-          withPlacesInView
-          filters={filters}
-          setLoading={setLoading}
-          onMarkerClick={handleMarkerClick}
-          height="100%"
-          width="100%"
-          isFavoritesMode={isFavoritesMode}
-          externalPlaces={isFavoritesMode ? favoritesPlaces : undefined}
-        />
+        {!isResolvingPosition && (
+          <MapComponent
+            ref={mapRef}
+            withPlacesInView
+            filters={filters}
+            setLoading={setLoading}
+            onMarkerClick={handleMarkerClick}
+            height="100%"
+            width="100%"
+            isFavoritesMode={isFavoritesMode}
+            externalPlaces={isFavoritesMode ? favoritesPlaces : undefined}
+            viewState={viewState}
+            onViewStateChange={onViewStateChange}
+            activateGeolocationOnMount
+            followUserLocationWhenGeolocating={shouldFollowUserOnGeolocate}
+          />
+        )}
         {selectedItem.type === "filters" && (
           <MapFiltersPanel
             filters={filters}
@@ -198,6 +216,7 @@ const MapPageContainer = () => {
           <MapCardContainer
             selectedItem={selectedItem}
             mapRef={mapRef}
+            onClose={handleCloseCreatorCard}
             isFavoritesMode={isFavoritesMode}
           />
         )}

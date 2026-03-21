@@ -17,6 +17,7 @@ export interface ProfileFormStepProps {
   onBack?: () => void;
   showPlaceForm?: boolean;
   showPlaceRadioYesOrNo?: boolean;
+  hideUserLegalName?: boolean;
 }
 
 export interface ProfileFormStepErrors {

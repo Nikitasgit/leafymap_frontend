@@ -1,5 +1,9 @@
 {
   "title": "Register",
+  "recommended": "Recommended:",
+  "registerWithEmail": "Sign up with email",
+  "hideEmailForm": "Hide email form",
+  "googleButtonLoading": "Loading Google button",
   "signin": {
     "title": "Sign In",
     "form": {

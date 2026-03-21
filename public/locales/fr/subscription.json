@@ -1,5 +1,9 @@
 {
   "title": "S'inscrire",
+  "recommended": "Recommandé :",
+  "registerWithEmail": "S'inscrire avec une adresse e-mail",
+  "hideEmailForm": "Masquer le formulaire e-mail",
+  "googleButtonLoading": "Chargement du bouton Google",
   "signin": {
     "title": "Se connecter",
     "form": {

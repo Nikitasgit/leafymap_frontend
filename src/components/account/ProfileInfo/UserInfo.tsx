@@ -8,30 +8,35 @@ const UserInfo = ({
   onUserChange,
   onPlaceChange,
   errors = {},
+  showLegalName = true,
 }: UserInfoProps) => {
   return (
     <div className={styles.container}>
       <fieldset className={styles.section}>
         <legend className={styles.title}>Informations</legend>
         <div className={styles.infosContainer}>
-          <TextField
-            fullWidth
-            label={"Prénom"}
-            name="firstname"
-            value={user.firstname || ""}
-            onChange={onUserChange}
-            error={!!errors.firstname}
-            errorMessage={errors.firstname}
-          />
-          <TextField
-            fullWidth
-            label={"Nom"}
-            name="lastname"
-            value={user.lastname || ""}
-            onChange={onUserChange}
-            error={!!errors.lastname}
-            errorMessage={errors.lastname}
-          />
+          {showLegalName && (
+            <>
+              <TextField
+                fullWidth
+                label={"Prénom"}
+                name="firstname"
+                value={user.firstname || ""}
+                onChange={onUserChange}
+                error={!!errors.firstname}
+                errorMessage={errors.firstname}
+              />
+              <TextField
+                fullWidth
+                label={"Nom"}
+                name="lastname"
+                value={user.lastname || ""}
+                onChange={onUserChange}
+                error={!!errors.lastname}
+                errorMessage={errors.lastname}
+              />
+            </>
+          )}
           <TextField
             fullWidth
             label={"Nom de votre activité"}
