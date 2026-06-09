@@ -2,39 +2,40 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { getHeaderParameters } from "@/utils/home";
+import { getHeaderCtaKey, getHeaderRoute } from "@/utils/home";
 import styles from "./HomeHeader.module.scss";
 
 const HomeHeader = () => {
+  const { t } = useTranslation("marketing");
   const { user, isLoading } = useCurrentUser();
-  const headerParameters = getHeaderParameters(user?.userType);
+  const ctaKey = getHeaderCtaKey(user?.userType);
+  const route = getHeaderRoute(user?.userType);
 
   return (
     <header className={styles.header}>
       <div className={styles.headerFirstRow}>
-        <h2 className={styles.subtitle}>
-          Pour les amateurs de produits locaux, d&apos;artisanat et d&apos;art
-        </h2>
+        <h2 className={styles.subtitle}>{t("home.subtitle")}</h2>
       </div>
 
       <div className={styles.headerGrid}>
         <Link
-          href={headerParameters.route}
+          href={route}
           className={styles.cardLeft}
-          aria-label={headerParameters.buttonTitle}
+          aria-label={t(`home.cta.${ctaKey}.buttonTitle`)}
         >
           <div className={styles.cardLeftContent}>
             {!isLoading ? (
               <>
                 <h3 className={styles.cardLeftTitle}>
-                  {headerParameters.title}
+                  {t(`home.cta.${ctaKey}.title`)}
                 </h3>
                 <p className={styles.cardLeftDescription}>
-                  {headerParameters.description}
+                  {t(`home.cta.${ctaKey}.description`)}
                 </p>
                 <span className={styles.cardLeftButton}>
-                  {headerParameters.buttonTitle}
+                  {t(`home.cta.${ctaKey}.buttonTitle`)}
                 </span>
               </>
             ) : (
@@ -56,14 +57,14 @@ const HomeHeader = () => {
         <Link
           href="/map"
           className={styles.cardRight}
-          aria-label="Explorer la carte des producteurs"
+          aria-label={t("home.mapCardAriaLabel")}
         >
           <div className={styles.cardRightGradient} />
           <div className={styles.cardRightContent}>
-            <h3 className={styles.cardRightTitle}>
-              Trouvez les producteurs près de chez vous !
-            </h3>
-            <p className={styles.cardRightSubtitle}>Explorer la carte</p>
+            <h3 className={styles.cardRightTitle}>{t("home.mapCardTitle")}</h3>
+            <p className={styles.cardRightSubtitle}>
+              {t("home.mapCardSubtitle")}
+            </p>
           </div>
         </Link>
       </div>

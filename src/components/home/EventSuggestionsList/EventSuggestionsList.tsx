@@ -2,6 +2,7 @@
 
 import { useEventsSuggestions } from "@/hooks/useEventsSuggestions";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./EventSuggestionsList.module.scss";
 import EventSuggestionCard from "../EventSuggestionCard";
 import EventSuggestionCardSkeleton from "../EventSuggestionCard/EventSuggestionCardSkeleton";
@@ -12,6 +13,7 @@ const SKELETON_COUNT = 5;
 const SCROLL_OFFSET = 220;
 
 const EventSuggestionsList = () => {
+  const { t } = useTranslation("marketing");
   const { events, isLoading, hasFetched } = useEventsSuggestions();
   const [isScrollable, setIsScrollable] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -52,10 +54,10 @@ const EventSuggestionsList = () => {
 
   return (
     <section className={styles.eventSuggestionsList}>
-      <h2>Les évènements à ne pas manquer !</h2>
+      <h2>{t("home.eventsSectionTitle")}</h2>
       {hasFetched && events.length === 0 ? (
         <EmptyState
-          title="Aucun évènement pour le moment"
+          title={t("home.eventsEmptyTitle")}
           icon={<Calendar className={styles.icon} />}
         />
       ) : (
@@ -69,7 +71,7 @@ const EventSuggestionsList = () => {
               type="button"
               className={styles.chevronButton}
               onClick={() => scrollBy("left")}
-              aria-label="Défiler vers la gauche"
+              aria-label={t("home.scrollLeft")}
             >
               <ChevronLeft size={20} />
             </button>
@@ -79,7 +81,7 @@ const EventSuggestionsList = () => {
               type="button"
               className={`${styles.chevronButton} ${styles.chevronRight}`}
               onClick={() => scrollBy("right")}
-              aria-label="Défiler vers la droite"
+              aria-label={t("home.scrollRight")}
             >
               <ChevronRight size={20} />
             </button>

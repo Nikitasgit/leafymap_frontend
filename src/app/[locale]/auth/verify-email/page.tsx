@@ -1,17 +1,15 @@
-import VerifyEmailHandler from "@/components/auth/verifyEmailHandler/VerifyEmailHandler";
-import { APP_NAME } from "@/utils/constants";
-import { Metadata } from "next";
+import VerifyEmailHandler from "@/components/auth/verifyEmailHandler";
+import { getPageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: `Vérification de l'email | ${APP_NAME}`,
-  description: "Vérifiez votre adresse email pour activer votre compte.",
-};
-
-export default async function VerifyEmailPage({
-  searchParams,
+export async function generateMetadata({
+  params,
 }: {
-  searchParams: Promise<{ token?: string }>;
+  params: Promise<{ locale: string }>;
 }) {
-  const { token } = await searchParams;
-  return <VerifyEmailHandler token={token} />;
+  const { locale } = await params;
+  return getPageMetadata("verifyEmail", locale);
+}
+
+export default function VerifyEmail() {
+  return <VerifyEmailHandler />;
 }

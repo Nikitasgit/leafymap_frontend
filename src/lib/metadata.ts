@@ -3,121 +3,122 @@ import { APP_NAME } from "@/utils/constants";
 import { Metadata } from "next";
 import { getUserById } from "./api/users";
 import { getEventById } from "./api/events";
+import initTranslations from "@/app/i18n";
+import { i18nConfig } from "@/i18nConfig";
 
-export async function generateUserMetadata(userId: string): Promise<Metadata> {
+function resolveLocale(locale?: string): string {
+  if (locale && i18nConfig.locales.includes(locale)) {
+    return locale;
+  }
+  return i18nConfig.defaultLocale;
+}
+
+function withAppName(value: string): string {
+  return value.replace(/\{\{appName\}\}/g, APP_NAME);
+}
+
+async function getMarketingT(locale?: string) {
+  const resolvedLocale = resolveLocale(locale);
+  const { t } = await initTranslations(resolvedLocale, ["marketing"]);
+  return { t, locale: resolvedLocale };
+}
+
+function buildShareMetadata(
+  title: string,
+  description: string,
+  locale: string,
+  type: "profile" | "website" = "website"
+): Metadata {
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      siteName: APP_NAME,
+      locale,
+      type,
+    },
+    twitter: {
+      card: type === "website" ? "summary_large_image" : "summary",
+      title,
+      description,
+    },
+  };
+}
+
+export async function generateUserMetadata(
+  userId: string,
+  locale?: string
+): Promise<Metadata> {
+  const { t, locale: resolvedLocale } = await getMarketingT(locale);
+
   try {
     const userData = await getUserById(userId);
     if (typeof userData === "string" || !userData) {
-      return {
-        title: `Utilisateur | ${APP_NAME}`,
-        description: `Découvrez le profil de cet utilisateur sur ${APP_NAME}`,
-        openGraph: {
-          title: `Utilisateur | ${APP_NAME}`,
-          description: `Découvrez le profil de cet utilisateur sur ${APP_NAME}`,
-          siteName: APP_NAME,
-        },
-        twitter: {
-          card: "summary",
-          title: `Utilisateur | ${APP_NAME}`,
-          description: `Découvrez le profil de cet utilisateur sur ${APP_NAME}`,
-        },
-      };
+      const title = withAppName(t("meta.userFallbackTitle"));
+      const description = withAppName(t("meta.userFallbackDescription"));
+      return buildShareMetadata(title, description, resolvedLocale, "profile");
     }
 
-    const username = capitalizeFirstLetter(userData.username) || "Utilisateur";
+    const username = capitalizeFirstLetter(userData.username) || "Organisateur";
+    const title = withAppName(
+      t("meta.userTitle", { username })
+    );
+    const description = withAppName(
+      t("meta.userDescription", {
+        username,
+        description: userData.description || "",
+      })
+    );
 
-    return {
-      title: `${capitalizeFirstLetter(username)} | ${APP_NAME}`,
-      description: `Découvrez le profil de ${username} sur ${APP_NAME}. ${userData.description}`,
-      openGraph: {
-        title: `${capitalizeFirstLetter(username)} | ${APP_NAME}`,
-        description: `Découvrez le profil de ${username} sur ${APP_NAME}. ${userData.description}`,
-        siteName: APP_NAME,
-        type: "profile",
-      },
-      twitter: {
-        card: "summary",
-        title: `${capitalizeFirstLetter(username)} | ${APP_NAME}`,
-        description: `Découvrez le profil de ${username} sur ${APP_NAME}. ${userData.description}`,
-      },
-    };
+    return buildShareMetadata(title, description, resolvedLocale, "profile");
   } catch {
-    return {
-      title: `Utilisateur | ${APP_NAME}`,
-      description: `Découvrez le profil de cet utilisateur sur ${APP_NAME}`,
-      openGraph: {
-        title: `Utilisateur | ${APP_NAME}`,
-        description: `Découvrez le profil de cet utilisateur sur ${APP_NAME}`,
-        siteName: APP_NAME,
-      },
-      twitter: {
-        card: "summary",
-        title: `Utilisateur | ${APP_NAME}`,
-        description: `Découvrez le profil de cet utilisateur sur ${APP_NAME}`,
-      },
-    };
+    const title = withAppName(t("meta.userFallbackTitle"));
+    const description = withAppName(t("meta.userFallbackDescription"));
+    return buildShareMetadata(title, description, resolvedLocale, "profile");
   }
 }
 
 export async function generateEventMetadata(
-  eventId: string
+  eventId: string,
+  locale?: string
 ): Promise<Metadata> {
+  const { t, locale: resolvedLocale } = await getMarketingT(locale);
+
   try {
     const eventData = await getEventById(eventId);
     if (typeof eventData === "string" || !eventData) {
-      return {
-        title: `Événement | ${APP_NAME}`,
-        description: `Découvrez cet événement sur ${APP_NAME}`,
-        openGraph: {
-          title: `Événement | ${APP_NAME}`,
-          description: `Découvrez cet événement sur ${APP_NAME}`,
-          siteName: APP_NAME,
-        },
-        twitter: {
-          card: "summary",
-          title: `Événement | ${APP_NAME}`,
-          description: `Découvrez cet événement sur ${APP_NAME}`,
-        },
-      };
+      const title = withAppName(t("meta.eventFallbackTitle"));
+      const description = withAppName(t("meta.eventFallbackDescription"));
+      return buildShareMetadata(title, description, resolvedLocale);
     }
 
     const eventName = capitalizeFirstLetter(eventData.name) || "Événement";
     const eventDescription =
       capitalizeFirstLetter(eventData.description) ||
-      `Découvrez cet événement unique sur ${APP_NAME}`;
+      withAppName(t("meta.eventDescriptionFallback"));
     const placeName = eventData.place?.name
-      ? ` à ${capitalizeFirstLetter(eventData.place.name)}`
+      ? withAppName(
+          t("meta.eventPlaceSuffix", {
+            placeName: capitalizeFirstLetter(eventData.place.name),
+          })
+        )
       : "";
 
-    return {
-      title: `${eventName} | ${APP_NAME}`,
-      description: `Découvrez cet événement sur ${APP_NAME}${placeName}. ${eventDescription}`,
-      openGraph: {
-        title: `${eventName} | ${APP_NAME}`,
-        description: `Découvrez cet événement sur ${APP_NAME}${placeName}. ${eventDescription}`,
-        siteName: APP_NAME,
-        type: "website",
-      },
-      twitter: {
-        card: "summary_large_image",
-        title: `${eventName} | ${APP_NAME}`,
-        description: `Découvrez cet événement sur ${APP_NAME}${placeName}. ${eventDescription}`,
-      },
-    };
+    const title = withAppName(t("meta.eventTitle", { eventName }));
+    const description = withAppName(
+      t("meta.eventDescription", {
+        eventName,
+        placeName,
+        description: eventDescription,
+      })
+    );
+
+    return buildShareMetadata(title, description, resolvedLocale);
   } catch {
-    return {
-      title: `Événement | ${APP_NAME}`,
-      description: `Découvrez cet événement sur ${APP_NAME}`,
-      openGraph: {
-        title: `Événement | ${APP_NAME}`,
-        description: `Découvrez cet événement sur ${APP_NAME}`,
-        siteName: APP_NAME,
-      },
-      twitter: {
-        card: "summary",
-        title: `Événement | ${APP_NAME}`,
-        description: `Découvrez cet événement sur ${APP_NAME}`,
-      },
-    };
+    const title = withAppName(t("meta.eventFallbackTitle"));
+    const description = withAppName(t("meta.eventFallbackDescription"));
+    return buildShareMetadata(title, description, resolvedLocale);
   }
 }

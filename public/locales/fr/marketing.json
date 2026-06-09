@@ -1,0 +1,141 @@
+{
+  "meta": {
+    "defaultDescription": "{{appName}} permet de découvrir les événements locaux autour de soi, sur une carte interactive.",
+    "homeTitle": "{{appName}} - Découvrez les événements locaux autour de vous",
+    "homeDescription": "{{appName}} est la plateforme pour découvrir les événements locaux près de chez vous. Explorez une carte interactive, trouvez des sorties à faire et suivez les organisateurs près de vous.",
+    "mapTitle": "Carte des événements locaux | {{appName}}",
+    "mapDescription": "Explorez la carte interactive de {{appName}} pour découvrir les événements locaux près de chez vous. Filtrez par date, lieu ou catégorie.",
+    "manifestName": "{{appName}} - Découvrez les événements locaux",
+    "manifestShortName": "Leafy Map",
+    "userFallbackTitle": "Organisateur | {{appName}}",
+    "userFallbackDescription": "Découvrez les événements organisés par cet hôte sur {{appName}}",
+    "userTitle": "{{username}} | {{appName}}",
+    "userDescription": "Découvrez les événements de {{username}} sur {{appName}}. {{description}}",
+    "eventFallbackTitle": "Événement | {{appName}}",
+    "eventFallbackDescription": "Découvrez cet événement local sur {{appName}}",
+    "eventTitle": "{{eventName}} | {{appName}}",
+    "eventDescription": "Découvrez {{eventName}}{{placeName}} sur {{appName}}. {{description}}",
+    "eventDescriptionFallback": "Un événement local à découvrir sur {{appName}}",
+    "eventPlaceSuffix": " à {{placeName}}"
+  },
+  "pages": {
+    "signin": {
+      "title": "Connexion | {{appName}}",
+      "description": "Connectez-vous à {{appName}} pour découvrir les événements locaux, gérer vos sorties et publier vos propres événements."
+    },
+    "register": {
+      "title": "Inscription | {{appName}}",
+      "description": "Rejoignez {{appName}} pour découvrir les événements locaux autour de vous et publier vos propres événements."
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié | {{appName}}",
+      "description": "Réinitialisez votre mot de passe {{appName}}. Entrez votre adresse email pour recevoir un lien de réinitialisation."
+    },
+    "resetPassword": {
+      "title": "Réinitialiser le mot de passe | {{appName}}",
+      "description": "Réinitialisez votre mot de passe {{appName}} en entrant votre nouveau mot de passe."
+    },
+    "verifyEmail": {
+      "title": "Vérification de l'email | {{appName}}",
+      "description": "Vérifiez votre adresse email pour activer votre compte {{appName}}."
+    },
+    "acceptCgu": {
+      "title": "Accepter les CGU | {{appName}}",
+      "description": "Acceptez les conditions générales d'utilisation pour finaliser votre inscription sur {{appName}}."
+    },
+    "resendVerification": {
+      "title": "Renvoyer le lien de vérification | {{appName}}",
+      "description": "Demandez un nouveau lien de vérification pour activer votre compte {{appName}}."
+    },
+    "checkEmail": {
+      "title": "Consultez votre email | {{appName}}",
+      "description": "Consultez votre boîte mail pour finaliser votre inscription sur {{appName}}."
+    },
+    "account": {
+      "title": "Mon compte | {{appName}}",
+      "description": "Gérez votre profil {{appName}}, vos événements, lieux et paramètres."
+    },
+    "accountCreate": {
+      "title": "Rejoignez {{appName}} | Publiez et découvrez des événements locaux",
+      "description": "Créez votre profil sur {{appName}} pour publier des événements locaux et toucher de nouveaux visiteurs."
+    },
+    "accountSettings": {
+      "title": "Paramètres du compte | {{appName}}",
+      "description": "Modifiez vos paramètres de compte, préférences de notification et informations personnelles sur {{appName}}."
+    },
+    "accountUpdateCreator": {
+      "title": "Modifier votre profil | {{appName}}",
+      "description": "Mettez à jour votre profil organisateur et les informations de votre lieu sur {{appName}}."
+    },
+    "accountPlaceCreate": {
+      "title": "Créer un lieu | {{appName}}",
+      "description": "Ajoutez votre lieu sur {{appName}} pour y publier des événements locaux et les rendre visibles sur la carte."
+    },
+    "accountPlaceUpdate": {
+      "title": "Modifier votre lieu | {{appName}}",
+      "description": "Modifiez les informations de votre lieu et mettez à jour vos événements sur {{appName}}."
+    },
+    "accountEventCreate": {
+      "title": "Créer un événement | {{appName}}",
+      "description": "Publiez un événement local sur {{appName}} et attirez des visiteurs près de chez vous."
+    },
+    "accountEventUpdate": {
+      "title": "Modifier un événement | {{appName}}",
+      "description": "Mettez à jour les informations de votre événement sur {{appName}} : description, horaires et visuels."
+    },
+    "inbox": {
+      "title": "Messages | {{appName}}",
+      "description": "Échangez avec les organisateurs sur {{appName}} pour coordonner vos événements et collaborations."
+    },
+    "cgu": {
+      "title": "Conditions Générales d'Utilisation | {{appName}}",
+      "description": "Consultez les conditions générales d'utilisation de {{appName}}, plateforme de découverte d'événements locaux."
+    }
+  },
+  "home": {
+    "subtitle": "Découvrez ce qui se passe près de chez vous",
+    "mapCardTitle": "Explorez les événements locaux sur la carte",
+    "mapCardSubtitle": "Explorer la carte",
+    "mapCardAriaLabel": "Explorer la carte des événements locaux",
+    "eventsSectionTitle": "Événements près de chez vous",
+    "eventsEmptyTitle": "Aucun événement pour le moment",
+    "hostsSectionTitle": "Organisateurs et lieux à suivre",
+    "hostsEmptyTitle": "Aucun organisateur trouvé",
+    "scrollLeft": "Défiler vers la gauche",
+    "scrollRight": "Défiler vers la droite",
+    "cta": {
+      "guest": {
+        "title": "Vous organisez des événements ou gérez un lieu ?",
+        "description": "Publiez vos événements locaux et touchez de nouveaux visiteurs.",
+        "buttonTitle": "Publier un événement"
+      },
+      "creator": {
+        "title": "Créez des événements pour attirer des visiteurs !",
+        "description": "Programmez vos prochains événements et invitez d'autres organisateurs à participer.",
+        "buttonTitle": "Créer un événement"
+      },
+      "loggedOut": {
+        "title": "Créez un compte pour accéder à toutes les fonctionnalités de {{appName}}",
+        "description": "{{appName}} vous aide à découvrir les événements locaux autour de vous.",
+        "buttonTitle": "Créer un compte"
+      }
+    }
+  },
+  "account": {
+    "editProfile": "Modifier mon profil",
+    "addActivity": "Publier un événement",
+    "guestInfoLine1": "Organisateur, responsable de lieu ou hôte d'événements ?",
+    "guestInfoLine2": "Publiez vos événements locaux et rejoignez {{appName}} dès aujourd'hui.",
+    "guestInfoLine3": "Cliquez sur « Publier un événement » pour créer votre profil.",
+    "userTypeTitle": "Choisissez le type d'utilisateur qui vous correspond le mieux.",
+    "userTypeLegend": "Type d'utilisateur",
+    "userTypeCreator": "Un organisateur ou hôte d'événements qui souhaite publier et promouvoir ses événements locaux.",
+    "userTypeOrganizer": "Un responsable de lieu (marché, boutique, espace culturel…) qui accueille des événements.",
+    "shareHostProfile": "Profil organisateur"
+  },
+  "footer": {
+    "copyright": "© 2025 {{appName}}. Tous droits réservés.",
+    "cgu": "Conditions Générales d'Utilisation",
+    "support": "Support:"
+  }
+}

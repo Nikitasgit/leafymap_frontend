@@ -1,19 +1,17 @@
 import { UpdateCreator } from "@/components/account/Creator/UpdateCreator";
-import ProtectedRoute from "@/components/common/ProtectedRoute";
-import { APP_NAME } from "@/utils/constants";
-import { Metadata } from "next";
+import { getPageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: `Modifier votre profil créateur | ${APP_NAME}`,
-  description: `Mettez à jour vos informations de profil créateur, vos catégories d'activité et les détails de votre lieu sur ${APP_NAME}.`,
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return getPageMetadata("accountUpdateCreator", locale);
+}
+
+const UpdateCreatorPage = () => {
+  return <UpdateCreator />;
 };
 
-const ModifyCreator = () => {
-  return (
-    <ProtectedRoute allowedUserTypes={["creator"]} redirectTo="/account">
-      <UpdateCreator />
-    </ProtectedRoute>
-  );
-};
-
-export default ModifyCreator;
+export default UpdateCreatorPage;

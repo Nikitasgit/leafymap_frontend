@@ -1,4 +1,7 @@
+"use client";
+
 import Button from "@/components/common/buttons/Button";
+import { useTranslation } from "react-i18next";
 import {
   FormDataChangeHandler,
   onNextHandler,
@@ -19,6 +22,7 @@ const UserTypeStep = ({
   onNext,
   loading,
 }: UserTypeStepProps) => {
+  const { t } = useTranslation("marketing");
   const { showError } = useToast();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,12 +39,10 @@ const UserTypeStep = ({
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>
-        Choisissez le type d&apos;utilisateur qui vous correspond le mieux.
-      </h1>
+      <h1 className={styles.title}>{t("account.userTypeTitle")}</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
         <fieldset className={styles.radioGroup}>
-          <legend className={styles.legend}>Type d&apos;utilisateur</legend>
+          <legend className={styles.legend}>{t("account.userTypeLegend")}</legend>
           <label
             className={`${styles.radioOption} ${
               userType === "creator" ? styles.selected : ""
@@ -57,8 +59,7 @@ const UserTypeStep = ({
               className={styles.radioInput}
             />
             <span className={styles.radioLabel}>
-              Un <b>créateur, artisan ou un agriculteur</b> qui souhaite donner
-              de la visibilité à son activité.
+              {t("account.userTypeCreator")}
             </span>
           </label>
 
@@ -78,8 +79,7 @@ const UserTypeStep = ({
               className={styles.radioInput}
             />
             <span className={styles.radioLabel}>
-              Un <b>organisateur</b> (marché, boutique, exposition, etc.) qui
-              souhaite donner de la visibilité à son lieu.
+              {t("account.userTypeOrganizer")}
             </span>
           </label>
         </fieldset>

@@ -10,6 +10,7 @@ import { createInstance } from "i18next";
 import { initReactI18next } from "react-i18next/initReactI18next";
 import resourcesToBackend from "i18next-resources-to-backend";
 import { i18nConfig } from "@/i18nConfig";
+import { APP_NAME } from "@/utils/constants";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -33,8 +34,12 @@ export default function Providers({ children, locale = "fr" }: ProvidersProps) {
       supportedLngs: i18nConfig.locales,
       defaultNS: "common",
       fallbackNS: "common",
-      ns: ["common", "subscription"],
+      ns: ["common", "subscription", "marketing"],
       preload: i18nConfig.locales,
+      interpolation: {
+        escapeValue: false,
+        defaultVariables: { appName: APP_NAME },
+      },
     });
 
     return instance;

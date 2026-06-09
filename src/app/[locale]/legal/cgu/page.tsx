@@ -2,12 +2,16 @@ import BackButton from "@/components/common/buttons/BackButton";
 import { APP_NAME } from "@/utils/constants";
 import initTranslations from "../../../i18n";
 import styles from "./cgu.module.scss";
-import { Metadata } from "next";
+import { getPageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: `Conditions Générales d'Utilisation | ${APP_NAME}`,
-  description: `Consultez les conditions générales d'utilisation de ${APP_NAME}. Découvrez nos règles, votre responsabilité et vos droits en tant qu'utilisateur de la plateforme.`,
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return getPageMetadata("cgu", locale);
+}
 
 export default async function CGUPage({
   params,

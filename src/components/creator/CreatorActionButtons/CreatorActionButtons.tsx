@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { UserPlus, Route, MessageSquare, Share2, Bookmark } from "lucide-react";
 import RoundButton from "@/components/common/buttons/RoundButton";
 import ShareModal from "@/components/common/modals/ShareModal";
@@ -36,6 +37,7 @@ const CreatorActionButtons = ({
   const router = useRouter();
   const params = useParams();
   const locale = params.locale as string;
+  const { t } = useTranslation("marketing");
   const { user: currentUser } = useAuth();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { follow, unfollow, isLoading: isFollowLoading } = useFollow();
@@ -98,7 +100,7 @@ const CreatorActionButtons = ({
   const shareTitle =
     [user.firstname, user.lastname].filter(Boolean).join(" ") ||
     user.username ||
-    "Profil créateur";
+    t("account.shareHostProfile");
   const shareText = place?.name ? `${shareTitle} - ${place.name}` : shareTitle;
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 

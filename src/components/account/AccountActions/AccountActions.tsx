@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import Button from "@/components/common/buttons/Button";
 import {
   Edit,
@@ -13,7 +14,6 @@ import {
   Settings,
   Image as ImageIcon,
 } from "lucide-react";
-import { APP_NAME } from "@/utils/constants";
 import styles from "./AccountActions.module.scss";
 import { User } from "@/types/user";
 import { SIDEBAR_VALUES, type SidebarValue } from "@/utils/accountTabs";
@@ -63,6 +63,7 @@ export default function AccountActions({
   onToggleSidebar,
 }: AccountActionsProps) {
   const router = useRouter();
+  const { t } = useTranslation("marketing");
   const { userType } = user || {};
 
   const isCreator = userType === "creator";
@@ -133,11 +134,11 @@ export default function AccountActions({
 
   const buttonParameters =
     isCreator
-      ? { route: "/account/update-creator", text: "Profil créateur" }
+      ? { route: "/account/update-creator", text: t("account.editProfile") }
       : userType === "guest"
       ? {
           route: "/account/create",
-          text: "Ajouter mon activité",
+          text: t("account.addActivity"),
         }
       : null;
 
@@ -207,17 +208,9 @@ export default function AccountActions({
 
       {userType === "guest" && (
         <div className={styles.infoCard}>
-          <p className={styles.infoText}>
-            ✨ Artisan, artiste, producteur local ou responsable de lieu
-            (marché, boutique, espace culturel…)?
-          </p>
-          <p className={styles.infoText}>
-            Mettez en lumière votre activité et rejoignez {APP_NAME} dès
-            aujourd&apos;hui.
-          </p>
-          <p className={styles.infoText}>
-            👉 Cliquez sur «Ajouter mon activité » pour créer votre profil !
-          </p>
+          <p className={styles.infoText}>{t("account.guestInfoLine1")}</p>
+          <p className={styles.infoText}>{t("account.guestInfoLine2")}</p>
+          <p className={styles.infoText}>{t("account.guestInfoLine3")}</p>
         </div>
       )}
     </section>

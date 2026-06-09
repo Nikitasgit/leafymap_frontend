@@ -7,23 +7,24 @@ import { capitalizeFirstLetter } from "@/utils/functions";
 export async function generateMetadata({
   params,
 }: {
-  params: {
+  params: Promise<{
+    locale: string;
     eventId: string;
-  };
+  }>;
 }) {
-  const { eventId } = params;
-  return generateEventMetadata(eventId);
+  const { locale, eventId } = await params;
+  return generateEventMetadata(eventId, locale);
 }
 
 interface EventPageProps {
-  params: {
+  params: Promise<{
     locale: string;
     eventId: string;
-  };
+  }>;
 }
 
 const EventPage = async ({ params }: EventPageProps) => {
-  const { eventId } = params;
+  const { eventId } = await params;
 
   const eventData = await getEventById(eventId);
 

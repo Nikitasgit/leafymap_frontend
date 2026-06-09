@@ -36,7 +36,22 @@
     "artisan_market": "Marché d'artisans",
     "farmers_market": "Marché de producteurs",
     "showroom": "Showroom",
-    "cultural_fair": "Foire culturelle"
+    "cultural_fair": "Foire culturelle",
+    "comedy_club": "Comedy club",
+    "bar_restaurant": "Bar & restaurant",
+    "bar": "Bar",
+    "hotel": "Hôtel",
+    "restaurant": "Restaurant",
+    "music_venue": "Salle de concert",
+    "theater": "Théâtre",
+    "museum": "Musée",
+    "cinema": "Cinéma",
+    "nightclub": "Boîte de nuit",
+    "brewery": "Brasserie",
+    "conference_center": "Centre de conférences",
+    "community_center": "Centre communautaire",
+    "rooftop": "Rooftop",
+    "pop_up_space": "Espace éphémère"
   },
   "creatorCategories": {
     "painter": "Peintre",

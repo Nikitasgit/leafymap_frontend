@@ -1,13 +1,15 @@
 import ResendVerificationForm from "@/components/auth/resendVerificationForm";
-import { APP_NAME } from "@/utils/constants";
-import { Metadata } from "next";
+import { getPageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: `Renvoyer le lien de vérification | ${APP_NAME}`,
-  description:
-    "Entrez votre email pour recevoir un nouveau lien de vérification.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return getPageMetadata("resendVerification", locale);
+}
 
-export default function ResendVerificationPage() {
+export default function ResendVerification() {
   return <ResendVerificationForm />;
 }

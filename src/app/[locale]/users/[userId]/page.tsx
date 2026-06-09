@@ -5,11 +5,12 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{
+    locale: string;
     userId: string;
   }>;
 }) {
-  const { userId } = await params;
-  return generateUserMetadata(userId);
+  const { locale, userId } = await params;
+  return generateUserMetadata(userId, locale);
 }
 
 const UserPage = () => {

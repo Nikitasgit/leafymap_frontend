@@ -1,11 +1,14 @@
 import MapPageContainer from "@/components/map/MapPageContainer";
-import { APP_NAME } from "@/utils/constants";
-import { Metadata } from "next";
+import { getMapMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: `Carte interactive - Lieux et événements artisanaux et culturels | ${APP_NAME}`,
-  description: `Explorez la carte interactive de ${APP_NAME} pour découvrir des lieux, événements et créateurs près de chez vous. Filtrez par activité, localisation ou catégorie et trouvez l'inspiration.`,
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return getMapMetadata(locale);
+}
 
 const MapPage = () => {
   return <MapPageContainer />;

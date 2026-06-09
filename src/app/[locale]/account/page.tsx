@@ -1,20 +1,17 @@
 import AccountContainer from "@/components/account/AccountContainer";
-import ProtectedRoute from "@/components/common/ProtectedRoute";
-import { APP_NAME } from "@/utils/constants";
-import { Metadata } from "next";
+import { getPageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: `Mon compte | ${APP_NAME}`,
-  description: `Gérez votre profil ${APP_NAME}, vos lieux, événements et paramètres. Personnalisez votre expérience et restez connecté avec la communauté des créateurs et organisateurs.`,
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return getPageMetadata("account", locale);
+}
+
+const AccountPage = () => {
+  return <AccountContainer />;
 };
 
-export default function AccountPage() {
-  return (
-    <ProtectedRoute
-      allowedUserTypes={["guest", "creator", "organizer"]}
-      redirectTo="/"
-    >
-      <AccountContainer />
-    </ProtectedRoute>
-  );
-}
+export default AccountPage;

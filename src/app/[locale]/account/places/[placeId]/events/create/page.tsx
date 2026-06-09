@@ -1,11 +1,14 @@
 import EventCreateContainer from "@/components/account/Event/EventCreateContainer";
-import { APP_NAME } from "@/utils/constants";
-import { Metadata } from "next";
+import { getPageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: `Créer un événement | ${APP_NAME}`,
-  description: `Organisez un événement sur ${APP_NAME} et attirez des visiteurs. Invitez des créateurs, programmez des activités et donnez de la visibilité à votre lieu culturel ou artisanal.`,
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return getPageMetadata("accountEventCreate", locale);
+}
 
 const CreateEventPage = () => {
   return <EventCreateContainer />;

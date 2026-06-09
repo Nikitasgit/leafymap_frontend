@@ -1,17 +1,15 @@
 import ResetPasswordForm from "@/components/auth/resetPasswordForm";
-import { APP_NAME } from "@/utils/constants";
-import { Metadata } from "next";
+import { getPageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: `Réinitialiser le mot de passe | ${APP_NAME}`,
-  description: `Réinitialisez votre mot de passe ${APP_NAME} en entrant votre nouveau mot de passe.`,
-};
-
-export default async function ResetPassword({
-  searchParams,
+export async function generateMetadata({
+  params,
 }: {
-  searchParams: Promise<{ token?: string }>;
+  params: Promise<{ locale: string }>;
 }) {
-  const { token } = await searchParams;
-  return <ResetPasswordForm token={token} />;
+  const { locale } = await params;
+  return getPageMetadata("resetPassword", locale);
+}
+
+export default function ResetPassword() {
+  return <ResetPasswordForm />;
 }

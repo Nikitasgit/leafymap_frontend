@@ -2,6 +2,7 @@
 
 import { useFindUsers } from "@/hooks/useFindUsers";
 import { useEffect, useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./SuggestionsList.module.scss";
 import UserSuggestionCard from "../UserSuggestionCard";
 import UserSuggestionCardSkeleton from "../UserSuggestionCard/UserSuggestionCardSkeleton";
@@ -13,6 +14,7 @@ const SKELETON_COUNT = 6;
 const SCROLL_OFFSET = 220;
 
 const SuggestionsList = () => {
+  const { t } = useTranslation("marketing");
   const { users, isLoading, searchUsers } = useFindUsers();
   const [hasFetched, setHasFetched] = useState(false);
   const [isScrollable, setIsScrollable] = useState(false);
@@ -61,10 +63,10 @@ const SuggestionsList = () => {
 
   return (
     <section className={styles.suggestionsList}>
-      <h2>Les créateurs à découvrir</h2>
+      <h2>{t("home.hostsSectionTitle")}</h2>
       {hasFetched && users.length === 0 ? (
         <EmptyState
-          title="Aucun créateur trouvé"
+          title={t("home.hostsEmptyTitle")}
           icon={<User className={styles.icon} />}
         />
       ) : (
@@ -78,7 +80,7 @@ const SuggestionsList = () => {
               type="button"
               className={styles.chevronButton}
               onClick={() => scrollBy("left")}
-              aria-label="Défiler vers la gauche"
+              aria-label={t("home.scrollLeft")}
             >
               <ChevronLeft size={20} />
             </button>
@@ -88,7 +90,7 @@ const SuggestionsList = () => {
               type="button"
               className={`${styles.chevronButton} ${styles.chevronRight}`}
               onClick={() => scrollBy("right")}
-              aria-label="Défiler vers la droite"
+              aria-label={t("home.scrollRight")}
             >
               <ChevronRight size={20} />
             </button>

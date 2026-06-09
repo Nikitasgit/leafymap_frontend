@@ -1,18 +1,17 @@
 import CreateProfileStepper from "@/components/account/CreateProfileStepper";
-import ProtectedRoute from "@/components/common/ProtectedRoute";
-import { APP_NAME } from "@/utils/constants";
-import { Metadata } from "next";
+import { getPageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: `Rejoignez ${APP_NAME} | Donnez de la visibilité à vos créations et événements`,
-  description: `Rejoignez ${APP_NAME} et créez votre profil en quelques étapes. Artisans, artistes et organisateurs de lieux culturels : valorisez votre activité et touchez de nouveaux publics.`,
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return getPageMetadata("accountCreate", locale);
+}
+
+const CreateAccount = () => {
+  return <CreateProfileStepper />;
 };
 
-const CreateProfilePage = () => {
-  return (
-    <ProtectedRoute allowedUserTypes={["guest"]} redirectTo="/account">
-      <CreateProfileStepper />
-    </ProtectedRoute>
-  );
-};
-export default CreateProfilePage;
+export default CreateAccount;

@@ -36,7 +36,22 @@
     "artisan_market": "Artisan Market",
     "farmers_market": "Farmers Market",
     "showroom": "Showroom",
-    "cultural_fair": "Cultural Fair"
+    "cultural_fair": "Cultural Fair",
+    "comedy_club": "Comedy club",
+    "bar_restaurant": "Bar & restaurant",
+    "bar": "Bar",
+    "hotel": "Hotel",
+    "restaurant": "Restaurant",
+    "music_venue": "Music venue",
+    "theater": "Theater",
+    "museum": "Museum",
+    "cinema": "Cinema",
+    "nightclub": "Nightclub",
+    "brewery": "Brewery",
+    "conference_center": "Conference center",
+    "community_center": "Community center",
+    "rooftop": "Rooftop",
+    "pop_up_space": "Pop-up space"
   },
   "creatorCategories": {
     "painter": "Painter",

@@ -1,12 +1,15 @@
-import SigninForm from "@/components/auth/signinForm";
-import { APP_NAME } from "@/utils/constants";
-import { Metadata } from "next";
+import SignInForm from "@/components/auth/signinForm";
+import { getPageMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: `Connexion | ${APP_NAME}`,
-  description: `Connectez-vous à votre compte ${APP_NAME} pour accéder à votre tableau de bord, gérer vos lieux et événements, et entrer en contact avec la communauté.`,
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return getPageMetadata("signin", locale);
+}
 
 export default function SignIn() {
-  return <SigninForm />;
+  return <SignInForm />;
 }

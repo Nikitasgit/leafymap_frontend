@@ -6,35 +6,16 @@ import Providers from "@/components/Providers";
 import { roboto } from "@/fonts/font";
 import Navbar from "@/components/navbar/Navbar";
 import type { Metadata } from "next";
-import { APP_NAME } from "@/utils/constants";
+import { getDefaultMetadata } from "@/lib/pageMetadata";
 
-export const metadata: Metadata = {
-  title: APP_NAME,
-  description: `${APP_NAME} - Découvrez les créateurs, artisans et lieux culturels où que vous soyez`,
-  icons: {
-    icon: [
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon.ico", sizes: "any" },
-    ],
-    apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
-    other: [
-      {
-        url: "/android-chrome-192x192.png",
-        sizes: "192x192",
-        type: "image/png",
-      },
-      {
-        url: "/android-chrome-512x512.png",
-        sizes: "512x512",
-        type: "image/png",
-      },
-    ],
-  },
-  manifest: "/site.webmanifest",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return getDefaultMetadata(locale);
+}
 
 export default async function RootLayout({
   children,

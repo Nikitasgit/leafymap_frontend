@@ -1,4 +1,6 @@
-# Documentation Frontend - Innovastay
+# Documentation Frontend - Leafy Map
+
+Application web de **découverte d'événements locaux** : carte interactive, agenda, profils d'organisateurs et gestion d'événements.
 
 ## 📑 Table des matières
 
@@ -76,6 +78,7 @@ innovastay-frontend/
 │   ├── locales/               # Fichiers de traduction
 │   │   ├── fr/
 │   │   │   ├── common.json
+│   │   │   ├── marketing.json
 │   │   │   └── subscription.json
 │   │   └── en/
 │   └── images/                # Images statiques
@@ -129,7 +132,7 @@ export const i18nConfig = {
 #### 3. Initialisation (`app/i18n.ts`)
 
 - **Chargement dynamique** : Traductions importées à la demande
-- **Namespaces** : `common`, `subscription`
+- **Namespaces** : `common`, `subscription`, `marketing`
 - **Fallback** : Français si traduction manquante
 
 #### 4. Provider (`components/Providers.tsx`)

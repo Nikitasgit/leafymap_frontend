@@ -1,0 +1,141 @@
+{
+  "meta": {
+    "defaultDescription": "{{appName}} helps you discover local events around you on an interactive map.",
+    "homeTitle": "{{appName}} - Discover local events around you",
+    "homeDescription": "{{appName}} is the platform to discover local events near you. Explore an interactive map, find things to do, and follow organizers in your area.",
+    "mapTitle": "Local events map | {{appName}}",
+    "mapDescription": "Explore {{appName}}'s interactive map to discover local events near you. Filter by date, venue, or category.",
+    "manifestName": "{{appName}} - Discover local events",
+    "manifestShortName": "Leafy Map",
+    "userFallbackTitle": "Organizer | {{appName}}",
+    "userFallbackDescription": "Discover events hosted by this organizer on {{appName}}",
+    "userTitle": "{{username}} | {{appName}}",
+    "userDescription": "Discover events from {{username}} on {{appName}}. {{description}}",
+    "eventFallbackTitle": "Event | {{appName}}",
+    "eventFallbackDescription": "Discover this local event on {{appName}}",
+    "eventTitle": "{{eventName}} | {{appName}}",
+    "eventDescription": "Discover {{eventName}}{{placeName}} on {{appName}}. {{description}}",
+    "eventDescriptionFallback": "A local event to discover on {{appName}}",
+    "eventPlaceSuffix": " at {{placeName}}"
+  },
+  "pages": {
+    "signin": {
+      "title": "Sign in | {{appName}}",
+      "description": "Sign in to {{appName}} to discover local events, manage your outings, and publish your own events."
+    },
+    "register": {
+      "title": "Sign up | {{appName}}",
+      "description": "Join {{appName}} to discover local events around you and publish your own events."
+    },
+    "forgotPassword": {
+      "title": "Forgot password | {{appName}}",
+      "description": "Reset your {{appName}} password. Enter your email address to receive a reset link."
+    },
+    "resetPassword": {
+      "title": "Reset password | {{appName}}",
+      "description": "Reset your {{appName}} password by entering your new password."
+    },
+    "verifyEmail": {
+      "title": "Email verification | {{appName}}",
+      "description": "Verify your email address to activate your {{appName}} account."
+    },
+    "acceptCgu": {
+      "title": "Accept Terms of Use | {{appName}}",
+      "description": "Accept the terms of use to complete your registration on {{appName}}."
+    },
+    "resendVerification": {
+      "title": "Resend verification link | {{appName}}",
+      "description": "Request a new verification link to activate your {{appName}} account."
+    },
+    "checkEmail": {
+      "title": "Check your email | {{appName}}",
+      "description": "Check your inbox to complete your registration on {{appName}}."
+    },
+    "account": {
+      "title": "My account | {{appName}}",
+      "description": "Manage your {{appName}} profile, events, venues, and settings."
+    },
+    "accountCreate": {
+      "title": "Join {{appName}} | Publish and discover local events",
+      "description": "Create your profile on {{appName}} to publish local events and reach new visitors."
+    },
+    "accountSettings": {
+      "title": "Account settings | {{appName}}",
+      "description": "Update your account settings, notification preferences, and personal information on {{appName}}."
+    },
+    "accountUpdateCreator": {
+      "title": "Edit your profile | {{appName}}",
+      "description": "Update your organizer profile and venue information on {{appName}}."
+    },
+    "accountPlaceCreate": {
+      "title": "Create a venue | {{appName}}",
+      "description": "Add your venue on {{appName}} to publish local events and make them visible on the map."
+    },
+    "accountPlaceUpdate": {
+      "title": "Edit your venue | {{appName}}",
+      "description": "Update your venue information and events on {{appName}}."
+    },
+    "accountEventCreate": {
+      "title": "Create an event | {{appName}}",
+      "description": "Publish a local event on {{appName}} and attract visitors near you."
+    },
+    "accountEventUpdate": {
+      "title": "Edit an event | {{appName}}",
+      "description": "Update your event details on {{appName}}: description, schedule, and visuals."
+    },
+    "inbox": {
+      "title": "Messages | {{appName}}",
+      "description": "Chat with organizers on {{appName}} to coordinate events and collaborations."
+    },
+    "cgu": {
+      "title": "Terms of Use | {{appName}}",
+      "description": "Read the terms of use for {{appName}}, a local events discovery platform."
+    }
+  },
+  "home": {
+    "subtitle": "Discover what's happening near you",
+    "mapCardTitle": "Explore local events on the map",
+    "mapCardSubtitle": "Explore the map",
+    "mapCardAriaLabel": "Explore the local events map",
+    "eventsSectionTitle": "Events near you",
+    "eventsEmptyTitle": "No events at the moment",
+    "hostsSectionTitle": "Organizers and venues to follow",
+    "hostsEmptyTitle": "No organizers found",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right",
+    "cta": {
+      "guest": {
+        "title": "Do you organize events or manage a venue?",
+        "description": "Publish your local events and reach new visitors.",
+        "buttonTitle": "Publish an event"
+      },
+      "creator": {
+        "title": "Create events to attract visitors!",
+        "description": "Schedule your upcoming events and invite other organizers to join.",
+        "buttonTitle": "Create an event"
+      },
+      "loggedOut": {
+        "title": "Create an account to access all {{appName}} features",
+        "description": "{{appName}} helps you discover local events around you.",
+        "buttonTitle": "Create an account"
+      }
+    }
+  },
+  "account": {
+    "editProfile": "Edit my profile",
+    "addActivity": "Publish an event",
+    "guestInfoLine1": "Event organizer, venue manager, or event host?",
+    "guestInfoLine2": "Publish your local events and join {{appName}} today.",
+    "guestInfoLine3": "Click « Publish an event » to create your profile.",
+    "userTypeTitle": "Choose the user type that best describes you.",
+    "userTypeLegend": "User type",
+    "userTypeCreator": "An event organizer or host who wants to publish and promote local events.",
+    "userTypeOrganizer": "A venue manager (market, shop, cultural space…) who hosts events.",
+    "shareHostProfile": "Organizer profile"
+  },
+  "footer": {
+    "copyright": "© 2025 {{appName}}. All rights reserved.",
+    "cgu": "Terms of Use",
+    "support": "Support:"
+  }
+}

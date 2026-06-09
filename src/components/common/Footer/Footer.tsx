@@ -1,19 +1,23 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
-import { APP_NAME } from "@/utils/constants";
+import { useTranslation } from "react-i18next";
 import styles from "./Footer.module.scss";
 
 const Footer: React.FC = () => {
+  const { t } = useTranslation("marketing");
+
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
         <div className={styles.content}>
-          <p className={styles.text}>© 2025 {APP_NAME}. Tous droits réservés.</p>
+          <p className={styles.text}>{t("footer.copyright")}</p>
           <Link href="/legal/cgu" className={styles.link}>
-            Conditions Générales d&apos;Utilisation
+            {t("footer.cgu")}
           </Link>
           <p className={styles.text}>
-            Support:{" "}
+            {t("footer.support")}{" "}
             <a href="mailto:victorleman1@gmail.com" className={styles.link}>
               victorleman1@gmail.com
             </a>
