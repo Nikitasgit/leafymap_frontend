@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useParams } from "next/navigation";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { isTempId } from "@/utils/tempId";
@@ -7,8 +6,6 @@ import { parseDateToUTC } from "@/utils/dates";
 import { Event } from "@/types/place/event";
 
 const useSubmitEvent = () => {
-  const params = useParams();
-  const placeId = params.placeId as string;
   const { isLoading, withLoading } = useLoading();
   const { showError } = useToast();
 
@@ -18,8 +15,8 @@ const useSubmitEvent = () => {
     eventId?: string
   ) => {
     try {
-      if (isUpdate && !placeId && !eventId) {
-        throw new Error("Place ID or event ID is required for update");
+      if (isUpdate && !eventId) {
+        throw new Error("Event ID is required for update");
       }
       const payload = {
         ...event,
@@ -42,7 +39,7 @@ const useSubmitEvent = () => {
       const method = isUpdate ? "put" : "post";
       const url = isUpdate
         ? `${process.env.NEXT_PUBLIC_API_URL}/api/events/${eventId}`
-        : `${process.env.NEXT_PUBLIC_API_URL}/api/events/place/${placeId}`;
+        : `${process.env.NEXT_PUBLIC_API_URL}/api/events`;
       const response = await withLoading(() =>
         axios[method](url, payload, {
           headers: {

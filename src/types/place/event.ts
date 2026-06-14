@@ -1,8 +1,10 @@
-import { Place } from ".";
-import { BaseEntity } from "../common";
-import { Image } from "../image";
-import { Partnership } from "../partnerships";
-import { Period } from "./schedule";
+import type { Place } from ".";
+import type { BaseEntity, Location } from "../common";
+import type { Image } from "../image";
+import type { Partnership } from "../partnerships";
+import type { Period } from "./schedule";
+import type { User } from "../user";
+import type { EventCategory } from "../categories";
 
 export interface EventDateRange {
   firstDate: Date | string;
@@ -12,6 +14,7 @@ export interface EventDateRange {
 export interface Event extends BaseEntity {
   name: string;
   description: string;
+  eventCategory: string | EventCategory;
   image: string | Image;
   schedule: Period[];
   partnerships: Partnership[];
@@ -19,7 +22,10 @@ export interface Event extends BaseEntity {
   lifecycleStatus: "upcoming" | "ongoing" | "completed" | "unvalid";
   dateRange: EventDateRange;
   rating: number;
-  place: Place;
+  user?: string | User;
+  place?: Place | string | null;
+  location?: Location | null;
+  online?: boolean;
 }
 
 export interface EventPopulated extends Event {

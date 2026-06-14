@@ -1,14 +1,12 @@
 import { BaseEntity } from "../common";
-import { PlaceType } from "../place/placeCaterories";
 
 export interface UserCategory extends BaseEntity {
   _id: string;
   name: string;
-  category: Category;
-  userCategoryType: "creation" | "organization";
+  type: CategoryType;
 }
 
-export interface Category extends BaseEntity {
+export interface CategoryType extends BaseEntity {
   _id: string;
   name: string;
 }
@@ -16,6 +14,10 @@ export interface Category extends BaseEntity {
 export interface PlaceCategory extends BaseEntity {
   _id: string;
   name: string;
-  description: string;
-  types?: PlaceType[];
+  types?: Array<CategoryType | string>;
+}
+
+export interface EventCategory extends BaseEntity {
+  _id: string;
+  name: string;
 }

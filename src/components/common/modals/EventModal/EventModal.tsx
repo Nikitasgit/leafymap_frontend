@@ -25,6 +25,15 @@ const EventModal: React.FC<EventModalProps> = ({
   user,
   isContentLoading = false,
 }) => {
+  const eventPlace =
+    typeof event.place === "object" && event.place
+      ? (event.place as PlacePopulated)
+      : undefined;
+  const eventUser =
+    typeof event.user === "object" && event.user
+      ? (event.user as UserPopulated)
+      : undefined;
+
   const handleClose = () => {
     onClose();
   };
@@ -42,8 +51,8 @@ const EventModal: React.FC<EventModalProps> = ({
       <div className={styles.eventModalContent}>
         <EventDetails
           event={event}
-          place={place}
-          user={user}
+          place={place ?? eventPlace}
+          user={user ?? eventUser}
           isContentLoading={isContentLoading}
         />
       </div>

@@ -125,7 +125,7 @@ const SearchInput = <T extends SearchSuggestion>({
                   <span className={styles.suggestionName}>{sug.name}</span>
                   {sug.categories &&
                     sug.categories.length > 0 &&
-                    sug.categories[0]?.userCategoryType === "creation" && (
+                    sug.categories[0]?.type?.name !== "organization" && (
                       <CreatorCategoryBadge
                         categoryName={sug.categories[0].name}
                       />

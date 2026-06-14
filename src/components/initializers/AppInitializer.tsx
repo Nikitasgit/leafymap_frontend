@@ -2,8 +2,11 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchCategories,
+  selectCategoryTypes,
   selectUserCategories,
   selectPlaceCategories,
+  selectProductCategories,
+  selectEventCategories,
 } from "@/store/appSlice";
 import { fetchCurrentUser, selectAuth } from "@/store/authSlice";
 import {
@@ -19,8 +22,11 @@ import type { AppDispatch } from "@/store";
 export default function AppInitializer() {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector(selectAuth);
+  const categoryTypes = useSelector(selectCategoryTypes);
   const userCategories = useSelector(selectUserCategories);
   const placeCategories = useSelector(selectPlaceCategories);
+  const productCategories = useSelector(selectProductCategories);
+  const eventCategories = useSelector(selectEventCategories);
   const { lastFetched } = useSelector(selectNotifications);
   const { lastFetchedByType } = useSelector(selectFavorites);
 
@@ -31,10 +37,23 @@ export default function AppInitializer() {
   }, [dispatch, user]);
 
   useEffect(() => {
-    if (!userCategories?.length || !placeCategories?.length) {
+    if (
+      !categoryTypes?.length ||
+      !userCategories?.length ||
+      !placeCategories?.length ||
+      !productCategories?.length ||
+      !eventCategories?.length
+    ) {
       dispatch(fetchCategories());
     }
-  }, [dispatch, userCategories, placeCategories]);
+  }, [
+    dispatch,
+    categoryTypes,
+    userCategories,
+    placeCategories,
+    productCategories,
+    eventCategories,
+  ]);
 
   useEffect(() => {
     if (user && !lastFetched) {

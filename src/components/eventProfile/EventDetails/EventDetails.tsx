@@ -56,10 +56,14 @@ const EventDetails: React.FC<EventDetailsProps> = ({
         />
       )}
 
-      {user && place && (
+      {user && (
         <section className={styles.organizerSection}>
           <h3 className={styles.sectionTitle}>Organisé par</h3>
-          <CreatorCard user={user} place={place} actions={[]} />
+          {place ? (
+            <CreatorCard user={user} place={place} actions={[]} />
+          ) : (
+            <p className={styles.organizerName}>{user.username}</p>
+          )}
         </section>
       )}
 

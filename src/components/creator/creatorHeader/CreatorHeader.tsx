@@ -102,7 +102,8 @@ const CreatorHeader = ({
               {capitalizeFirstLetter(user.firstname || "")}{" "}
               {capitalizeFirstLetter(user.lastname || "")}
             </b>{" "}
-            {user.userCategory?.userCategoryType === "creation" && (
+            {user.userCategory &&
+              user.userCategory.type?.name !== "organization" && (
               <CreatorCategoryBadge
                 categoryName={user.userCategory?.name || ""}
               />

@@ -16,7 +16,9 @@ export interface SearchSuggestion {
   location?: { label: string };
   categories?: {
     name: string;
-    userCategoryType?: "creation" | "organization";
+    type?: {
+      name: string;
+    };
   }[];
   place?: {
     label: string;

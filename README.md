@@ -217,7 +217,7 @@ function MyComponent() {
 
 ##### Creator (Créateur/Artisan)
 
-- ✅ Créer **1 seul lieu** maximum
+- ✅ Créer **1 seul lieu** maximum (limite globale : 1 lieu par utilisateur)
 - ✅ Créer des événements sur son lieu
 - ✅ **Accepter/refuser** les demandes de partnership
 - ❌ Créer des partnerships
@@ -225,11 +225,10 @@ function MyComponent() {
 
 ##### Organizer (Organisateur)
 
-- ✅ Créer **jusqu'à 3 lieux**
+- ✅ Créer **1 seul lieu** maximum (limite globale : 1 lieu par utilisateur)
 - ✅ Créer des événements
 - ✅ **Envoyer** des demandes de partnership
 - ❌ Modifier le statut des partnerships
-- ✅ Gérer plusieurs lieux simultanément
 
 ### 2. Gestion d'état global (Redux)
 
@@ -301,7 +300,7 @@ function MyComponent() {
 - `/[locale]/account/create` : Créer un profil Creator/Organizer (Guest uniquement)
 - `/[locale]/account/update-creator` : Modifier profil Creator
 - `/[locale]/account/settings` : Paramètres du compte
-- `/[locale]/account/places/create` : Créer un lieu (Creator: 1 max, Organizer: 3 max)
+- `/[locale]/account/places/create` : Créer un lieu (1 max par utilisateur)
 - `/[locale]/account/places/[placeId]` : Gérer un lieu (propriétaire uniquement)
 - `/[locale]/account/places/[placeId]/events/create` : Créer un événement
 - `/[locale]/account/places/[placeId]/events/[eventId]` : Modifier un événement

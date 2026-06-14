@@ -18,6 +18,12 @@
     "art": "Art",
     "craft": "Artisanat"
   },
+  "categoryTypes": {
+    "food": "Alimentaire",
+    "art": "Art",
+    "craft": "Artisanat",
+    "organization": "Organisations"
+  },
   "placeCategories": {
     "cultural_center": "Centre culturel",
     "street_stand": "Stand de rue",
@@ -134,6 +140,18 @@
     "pending": "En attente",
     "accepted": "Accepté",
     "refused": "Refusé"
+  },
+  "eventCategories": {
+    "workshop": "Atelier",
+    "exhibition": "Exposition",
+    "market": "Marché",
+    "tasting": "Dégustation",
+    "concert": "Concert",
+    "festival": "Festival",
+    "conference": "Conférence",
+    "performance": "Performance",
+    "meetup": "Rencontre",
+    "online_event": "Évènement en ligne"
   },
   "defaultSchedule": {
     "day": {

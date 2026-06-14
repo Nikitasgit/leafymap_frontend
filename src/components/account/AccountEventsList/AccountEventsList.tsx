@@ -6,8 +6,8 @@ import EmptyState from "@/components/common/noResults/EmptyState";
 
 interface EventsListProps {
   events: Event[];
-  placeId: string;
-  placeName: string;
+  placeId?: string;
+  placeName?: string;
 }
 
 const EventsList: React.FC<EventsListProps> = ({
@@ -18,7 +18,13 @@ const EventsList: React.FC<EventsListProps> = ({
   return (
     <section className={styles.content}>
       <h2 className={styles.placeName}>
-        Les événements de <span>{placeName}</span> :
+        {placeName ? (
+          <>
+            Les événements de <span>{placeName}</span> :
+          </>
+        ) : (
+          "Mes événements :"
+        )}
       </h2>
       {events.length === 0 ? (
         <EmptyState

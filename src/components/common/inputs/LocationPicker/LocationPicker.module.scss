@@ -1,0 +1,21 @@
+.locationPicker {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mapSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mapTitle {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.mapContainer {
+  border-radius: 12px;
+  overflow: hidden;
+}

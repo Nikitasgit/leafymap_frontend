@@ -44,6 +44,15 @@ const EventsTab = ({ username, place, user, events }: EventsTabProps) => {
         </h3>
         <div className={styles.eventsList}>
           {events.map((event) => {
+            const eventPlace =
+              typeof event.place === "object" && event.place
+                ? (event.place as PlacePopulated)
+                : undefined;
+            const eventUser =
+              typeof event.user === "object" && event.user
+                ? (event.user as UserPopulated)
+                : undefined;
+
             return (
               <div
                 key={event._id}
@@ -52,8 +61,8 @@ const EventsTab = ({ username, place, user, events }: EventsTabProps) => {
               >
                 <EventCard
                   event={event}
-                  place={place}
-                  user={user}
+                  place={eventPlace ?? place}
+                  user={eventUser ?? user}
                   clickable={false}
                 />
               </div>
@@ -67,8 +76,16 @@ const EventsTab = ({ username, place, user, events }: EventsTabProps) => {
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           event={selectedEvent}
-          place={place}
-          user={user}
+          place={
+            typeof selectedEvent.place === "object" && selectedEvent.place
+              ? (selectedEvent.place as PlacePopulated)
+              : place
+          }
+          user={
+            typeof selectedEvent.user === "object" && selectedEvent.user
+              ? (selectedEvent.user as UserPopulated)
+              : user
+          }
         />
       )}
     </>

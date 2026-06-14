@@ -4,40 +4,20 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { Calendar, Plus } from "lucide-react";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { usePlaceEvents } from "@/hooks/usePlaceEvents";
+import { useUserEvents } from "@/hooks/useUserEvents";
 import EventsList from "@/components/account/AccountEventsList";
 import Button from "@/components/common/buttons/Button";
-import EmptyState from "@/components/common/noResults/EmptyState";
 import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
-import { capitalizeFirstLetter } from "@/utils/functions";
 import styles from "./MyEventsTab.module.scss";
 
 export default function MyEventsTab() {
   const router = useRouter();
   const { user, isLoading: isLoadingUser } = useCurrentUser();
-  const place =
-    user?.place && typeof user.place === "object" ? user.place : null;
-  const { events, isLoading: eventsLoading } = usePlaceEvents(place?._id ?? null);
+  const { events, isLoading: eventsLoading } = useUserEvents(user?._id ?? null);
 
-  if (isLoadingUser || (place && eventsLoading)) {
+  if (isLoadingUser || eventsLoading) {
     return <LoadingBar />;
   }
-
-  if (!place) {
-    return (
-      <div className={styles.content}>
-        <EmptyState
-          title="Aucun lieu"
-          description="Créez d'abord un lieu pour gérer des événements."
-        />
-      </div>
-    );
-  }
-
-  const placeName =
-    capitalizeFirstLetter(
-      (place as { name?: string }).name ?? events?.[0]?.place?.name
-    ) || "votre lieu";
 
   return (
     <div className={styles.content}>
@@ -48,15 +28,13 @@ export default function MyEventsTab() {
             Mes évènements
           </p>
           <p className={styles.info}>
-            Gérez les événements de votre lieu. Créez-en de nouveaux ou
-            modifiez les existants.
+            Gérez vos événements. Créez-en de nouveaux, avec un lieu, une
+            adresse dédiée ou en ligne.
           </p>
         </div>
       </div>
       <Button
-        onClick={() =>
-          router.push(`/account/places/${place._id}/events/create`)
-        }
+        onClick={() => router.push("/account/events/create")}
         variant="outline"
         endIcon={<Plus size={16} />}
         className={styles.addEventButton}
@@ -65,11 +43,7 @@ export default function MyEventsTab() {
       >
         Créer un évènement
       </Button>
-      <EventsList
-        events={events || []}
-        placeId={place._id}
-        placeName={placeName}
-      />
+      <EventsList events={events || []} />
     </div>
   );
 }

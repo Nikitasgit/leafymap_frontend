@@ -98,10 +98,18 @@ export async function generateEventMetadata(
     const eventDescription =
       capitalizeFirstLetter(eventData.description) ||
       withAppName(t("meta.eventDescriptionFallback"));
-    const placeName = eventData.place?.name
+    const eventPlace =
+      typeof eventData.place === "object" && eventData.place
+        ? eventData.place
+        : null;
+    const placeLabel =
+      eventData.online
+        ? "en ligne"
+        : eventData.location?.label || eventPlace?.location?.label;
+    const placeName = placeLabel
       ? withAppName(
           t("meta.eventPlaceSuffix", {
-            placeName: capitalizeFirstLetter(eventData.place.name),
+            placeName: capitalizeFirstLetter(placeLabel),
           })
         )
       : "";

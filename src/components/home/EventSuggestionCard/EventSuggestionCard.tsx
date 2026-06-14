@@ -22,9 +22,7 @@ const EventSuggestionCard = ({ event }: { event: EventPopulated }) => {
   const user = (event as unknown as { user?: UserPopulated }).user;
 
   const locationLabel =
-    place && place.location && place.location.label
-      ? place.location.label
-      : null;
+    event.online ? "En ligne" : event.location?.label || place?.location?.label;
 
   return (
     <>

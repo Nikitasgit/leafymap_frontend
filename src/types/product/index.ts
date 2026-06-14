@@ -1,6 +1,6 @@
 import { BaseEntity } from "../common";
 
-export interface CategoryRef {
+export interface CategoryTypeRef {
   _id: string;
   name: string;
 }
@@ -8,7 +8,7 @@ export interface CategoryRef {
 export interface ProductCategory {
   _id: string;
   name: string;
-  category: string | CategoryRef;
+  type: string | CategoryTypeRef;
 }
 
 export interface Product extends BaseEntity {
@@ -17,6 +17,6 @@ export interface Product extends BaseEntity {
 }
 
 export interface ProductPopulated extends BaseEntity {
-  productCategory: ProductCategory & { category: CategoryRef };
+  productCategory: ProductCategory & { type: CategoryTypeRef };
   user: string;
 }

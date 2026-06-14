@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./CategorySelectorInput.module.scss";
 import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
-import { PlaceCategory } from "@/types/categories";
+import { CategoryType, PlaceCategory } from "@/types/categories";
 import { PlaceType } from "@/types/place/placeCaterories";
 import TextField from "../../common/inputs/TextField/TextField";
 import { useApp } from "@/hooks/useApp";
@@ -29,6 +29,9 @@ const PlaceCategorySelectorInput = ({
   const { showError } = useToast();
   const { t } = useTranslation("subscription");
   const ref = useRef<HTMLDivElement>(null);
+  const getTypeName = (type: CategoryType | string) =>
+    typeof type === "string" ? type : type.name;
+
   const getFilteredCategories = () => {
     if (selectedTypes.length === 0) {
       return placeCategories;
@@ -37,7 +40,9 @@ const PlaceCategorySelectorInput = ({
       const categoryTypes = category.types || [];
       return (
         categoryTypes.length > 0 &&
-        categoryTypes.some((type: PlaceType) => selectedTypes.includes(type))
+        categoryTypes.some((type) =>
+          selectedTypes.includes(getTypeName(type) as PlaceType)
+        )
       );
     });
 
@@ -56,7 +61,9 @@ const PlaceCategorySelectorInput = ({
       const categoryTypes = currentCategory.types || [];
       return (
         categoryTypes.length > 0 &&
-        categoryTypes.some((type: PlaceType) => selectedTypes.includes(type))
+        categoryTypes.some((type) =>
+          selectedTypes.includes(getTypeName(type) as PlaceType)
+        )
       );
     };
 

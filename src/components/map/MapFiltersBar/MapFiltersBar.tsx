@@ -77,9 +77,9 @@ const MapFiltersBar = ({
                     typeof user.userCategory === "object"
                       ? user.userCategory.name
                       : "",
-                  userCategoryType:
+                  type:
                     typeof user.userCategory === "object"
-                      ? user.userCategory.userCategoryType
+                      ? user.userCategory.type
                       : undefined,
                 },
               ]

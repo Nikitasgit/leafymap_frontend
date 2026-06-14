@@ -49,7 +49,7 @@ const CategorySelectorInput = ({
     onPlaceChange({
       target: {
         name: "placeType",
-        value: [userCategory.category.name],
+        value: [userCategory.type.name],
       },
     });
   };

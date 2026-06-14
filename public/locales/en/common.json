@@ -18,6 +18,12 @@
     "art": "Art",
     "craft": "Craft"
   },
+  "categoryTypes": {
+    "food": "Food",
+    "art": "Art",
+    "craft": "Craft",
+    "organization": "Organizations"
+  },
   "placeCategories": {
     "cultural_center": "Cultural Center",
     "street_stand": "Street Stand",
@@ -129,6 +135,18 @@
     "pending": "Pending",
     "accepted": "Accepted",
     "refused": "Refused"
+  },
+  "eventCategories": {
+    "workshop": "Workshop",
+    "exhibition": "Exhibition",
+    "market": "Market",
+    "tasting": "Tasting",
+    "concert": "Concert",
+    "festival": "Festival",
+    "conference": "Conference",
+    "performance": "Performance",
+    "meetup": "Meetup",
+    "online_event": "Online event"
   },
   "defaultSchedule": {
     "day": {

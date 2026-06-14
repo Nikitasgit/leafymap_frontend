@@ -32,10 +32,10 @@ export default function MyProductsTab() {
   const atLimit = products.length >= MAX_PRODUCTS_PER_USER;
 
   const getCategoryGroupName = (option: ProductCategory): string => {
-    const cat = option.category;
-    if (!cat || typeof cat !== "object") return "";
-    const name = (cat as { name?: string }).name ?? "";
-    return name ? t(`placeTypes.${name}`, name) : "";
+    const type = option.type;
+    if (!type || typeof type !== "object") return "";
+    const name = (type as { name?: string }).name ?? "";
+    return name ? t(`categoryTypes.${name}`, t(`placeTypes.${name}`, name)) : "";
   };
 
   const options = useMemo(

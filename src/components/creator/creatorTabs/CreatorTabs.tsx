@@ -4,7 +4,7 @@ import Tab from "@/components/common/tabs/Tab/Tab";
 import { FileText, Star, Image as ImageIcon, Calendar } from "lucide-react";
 import { Place, PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
-import { usePlaceEvents } from "@/hooks/usePlaceEvents";
+import { useUserEvents } from "@/hooks/useUserEvents";
 import { ACTIVE_LIFECYCLE_STATUSES } from "@/utils/constants";
 import PresentationTab from "@/components/creator/PresentationTab";
 import EventsTab from "@/components/common/events/EventsTab";
@@ -45,25 +45,25 @@ const CreatorTabs = ({
   refetchUser,
 }: CreatorTabsProps) => {
   const [internalActiveTab, setInternalActiveTab] = useState("presentation");
-  const { events, isLoading: isLoadingEvents } = usePlaceEvents(
-    place?._id || null,
+  const { events, isLoading: isLoadingEvents } = useUserEvents(
+    user._id || null,
     ACTIVE_LIFECYCLE_STATUSES,
   );
 
   const activeTab = controlledActiveTab ?? internalActiveTab;
   const setActiveTab = onTabChange ?? setInternalActiveTab;
 
-  const shouldShowEventsTab = place && !isLoadingEvents && events.length > 0;
+  const shouldShowEventsTab = !isLoadingEvents && events.length > 0;
 
   const tabs = [
     { id: "presentation", label: "Présentation", icon: FileText },
     ...(place
       ? [
           { id: "reviews", label: "Avis", icon: Star },
-          ...(shouldShowEventsTab
-            ? [{ id: "events", label: "Événements", icon: Calendar }]
-            : []),
         ]
+      : []),
+    ...(shouldShowEventsTab
+      ? [{ id: "events", label: "Événements", icon: Calendar }]
       : []),
     { id: "images", label: "Images", icon: ImageIcon },
   ];
@@ -82,10 +82,10 @@ const CreatorTabs = ({
           />
         );
       case "events":
-        return place?._id && user.username ? (
+        return user.username ? (
           <EventsTab
             username={user.username}
-            place={place as PlacePopulated}
+            place={place ? (place as PlacePopulated) : undefined}
             user={user}
             events={events}
           />

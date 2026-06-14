@@ -36,7 +36,7 @@ export default function PartnershipsSentTab() {
         ? [
             {
               name: u.userCategory.name,
-              userCategoryType: u.userCategory.userCategoryType,
+              type: u.userCategory.type,
             },
           ]
         : [],

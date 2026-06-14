@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 
 interface AccountEventCardProps {
   event: Event;
-  placeId: string;
+  placeId?: string;
 }
 
 const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
@@ -58,7 +58,11 @@ const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
               {
                 type: "edit",
                 onClick: () =>
-                  router.push(`/account/places/${placeId}/events/${event._id}`),
+                  router.push(
+                    placeId
+                      ? `/account/places/${placeId}/events/${event._id}`
+                      : `/account/events/${event._id}`,
+                  ),
                 ariaLabel: "Modifier l'événement",
               },
             ]}

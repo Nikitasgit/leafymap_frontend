@@ -6,6 +6,8 @@ import styles from "./EventCard.module.scss";
 import Image from "next/image";
 import { EventCardProps } from "./EventCard.types";
 import eventDefaultsSvg from "@public/images/event_default.svg";
+import { PlacePopulated } from "@/types/place";
+import { UserPopulated } from "@/types/user";
 
 const EventCard: React.FC<EventCardProps> = ({
   event,
@@ -13,6 +15,20 @@ const EventCard: React.FC<EventCardProps> = ({
   user,
   clickable = true,
 }) => {
+  const eventPlace =
+    typeof event.place === "object" && event.place
+      ? (event.place as PlacePopulated)
+      : undefined;
+  const displayPlace = place ?? eventPlace;
+  const eventUser =
+    typeof event.user === "object" && event.user
+      ? (event.user as UserPopulated)
+      : undefined;
+  const displayUser = user ?? eventUser;
+  const locationLabel = event.online
+    ? "En ligne"
+    : event.location?.label || displayPlace?.location?.label;
+
   return (
     <div className={styles.eventCard}>
       <div className={styles.imageContainer}>
@@ -47,16 +63,16 @@ const EventCard: React.FC<EventCardProps> = ({
                 </p>
               </div>
             )}
-            {place && (
+            {locationLabel && (
               <div className={styles.locationInfo}>
                 <MapPin size={14} className={styles.detailIcon} />
                 <div className={styles.locationDetails}>
-                  <p className={styles.locationName}>{user?.username}</p>
-                  {place.location && place.location.label && (
-                    <p className={styles.locationAddress}>
-                      {place.location.label}
+                  {displayUser?.username && (
+                    <p className={styles.locationName}>
+                      {displayUser.username}
                     </p>
                   )}
+                  <p className={styles.locationAddress}>{locationLabel}</p>
                 </div>
               </div>
             )}

@@ -33,15 +33,19 @@ const EventPage = async ({ params }: EventPageProps) => {
   }
 
   const title = capitalizeFirstLetter(eventData.name);
+  const place =
+    typeof eventData.place === "object" && eventData.place
+      ? eventData.place
+      : undefined;
+  const user =
+    typeof eventData.user === "object" && eventData.user
+      ? eventData.user
+      : undefined;
 
   return (
     <main className="container">
       <h1>{title}</h1>
-      <EventDetails
-        event={eventData}
-        place={eventData.place}
-        user={eventData.user}
-      />
+      <EventDetails event={eventData} place={place} user={user} />
     </main>
   );
 };

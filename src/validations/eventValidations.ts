@@ -12,10 +12,22 @@ export const eventNameSchema = z
     "Le nom ne peut contenir que des lettres, chiffres, espaces et le caractère '"
   );
 
-const eventSchema = z.object({
+const locationSchema = z.object({
+  id: z.string().optional(),
+  label: z.string(),
+  coordinates: z.tuple([z.number(), z.number()]),
+  type: z.literal("Point"),
+});
+
+const eventSchema = z
+  .object({
   name: eventNameSchema,
   description: descriptionSchema,
+  eventCategory: z.string().min(1, "La catégorie est requise"),
   image: z.string().optional(),
+  place: z.string().optional().nullable(),
+  location: locationSchema.optional().nullable(),
+  online: z.boolean().optional(),
   schedule: z
     .array(
       z.object({
@@ -40,7 +52,18 @@ const eventSchema = z.object({
       })
     )
     .min(1, "Le programme doit contenir au moins une date"),
-});
+})
+  .superRefine((data, ctx) => {
+    if (data.online) return;
+
+    if (!data.place && !data.location) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["location"],
+        message: "Un lieu ou une adresse est requis pour un évènement présentiel",
+      });
+    }
+  });
 
 export const validateEventData = (data: initialEventData): ValidationResult => {
   const errors: Record<string, string> = {};

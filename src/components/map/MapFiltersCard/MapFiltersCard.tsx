@@ -44,17 +44,20 @@ const MapFiltersCard = ({
       userCategories
         .slice()
         .sort((a, b) => {
-          if (a.userCategoryType !== b.userCategoryType)
-            return a.userCategoryType.localeCompare(b.userCategoryType);
+          const typeA = a.type?.name ?? "";
+          const typeB = b.type?.name ?? "";
+          if (typeA !== typeB) return typeA.localeCompare(typeB);
           return a.name.localeCompare(b.name);
         })
         .map((cat) => ({
           _id: cat._id,
           label: t(`creatorCategories.${cat.name}`, cat.name),
-          group:
-            cat.userCategoryType === "creation"
-              ? t("userCategoryTypes.creation", "Créateurs")
-              : t("userCategoryTypes.organization", "Organisations"),
+          group: cat.type?.name
+            ? t(
+                `categoryTypes.${cat.type.name}`,
+                t(`placeTypes.${cat.type.name}`, cat.type.name)
+              )
+            : "",
         })),
     [userCategories, t]
   );
@@ -65,8 +68,8 @@ const MapFiltersCard = ({
         .slice()
         .sort((a, b) => {
           const nameOf = (c: typeof a) =>
-            c.category && typeof c.category === "object"
-              ? ((c.category as { name?: string }).name ?? "")
+            c.type && typeof c.type === "object"
+              ? ((c.type as { name?: string }).name ?? "")
               : "";
           const ga = nameOf(a);
           const gb = nameOf(b);
@@ -75,13 +78,15 @@ const MapFiltersCard = ({
         })
         .map((cat) => {
           const rawGroup =
-            cat.category && typeof cat.category === "object"
-              ? ((cat.category as { name?: string }).name ?? "")
+            cat.type && typeof cat.type === "object"
+              ? ((cat.type as { name?: string }).name ?? "")
               : "";
           return {
             _id: cat._id,
             label: t(`productCategories.${cat.name}`, cat.name),
-            group: rawGroup ? t(`placeTypes.${rawGroup}`, rawGroup) : "",
+            group: rawGroup
+              ? t(`categoryTypes.${rawGroup}`, t(`placeTypes.${rawGroup}`, rawGroup))
+              : "",
           };
         }),
     [productCategories, t]

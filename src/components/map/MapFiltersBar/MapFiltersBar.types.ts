@@ -6,7 +6,9 @@ export type CreatorSearchResult = {
   image: string;
   categories?: {
     name: string;
-    userCategoryType?: "creation" | "organization";
+    type?: {
+      name: string;
+    };
   }[];
 };
 

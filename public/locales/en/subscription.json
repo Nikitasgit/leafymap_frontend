@@ -58,6 +58,10 @@
     "placeholder": "Select a place type",
     "searchPlaceholder": "Search for a place..."
   },
+  "eventCategorySelector": {
+    "label": "Event type",
+    "placeholder": "Select an event type"
+  },
   "divider": "OR",
   "signinLink": {
     "text": "Already have an account?",
