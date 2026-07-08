@@ -81,18 +81,10 @@
       }
     }
 
-    // GSI rend un iframe à largeur fixe : on étire le wrapper et l’iframe.
+    // GSI rend un iframe à largeur fixe : on centre le bouton dans le conteneur.
     .googleButton {
+      @include flex(row, center, center, 0);
       width: 100%;
-
-      > div {
-        width: 100% !important;
-      }
-
-      iframe {
-        width: 100% !important;
-        max-width: 100% !important;
-      }
     }
 
     .signinLink {
