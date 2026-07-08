@@ -64,7 +64,6 @@ const CreateProfileStepper = () => {
   const handleSubmit = async () => {
     try {
       const user = await submitUser(newUser);
-      console.log("user", user);
       if (place.active === true && user) {
         await submitPlace(place);
       }

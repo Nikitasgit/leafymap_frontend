@@ -18,7 +18,6 @@ const UserProfileContainer = () => {
   const { user: currentUser } = useAuth();
   const { user, isLoading: isLoadingUser, refetch: refetchUser } = useUser(userId as string);
   const { submitImages, isLoading: isUploadingImages } = useSubmitImages();
-  console.log(user);
   const placeId = useMemo(() => {
     if (!user?.place) return null;
     return typeof user.place === "string" ? user.place : user.place._id;

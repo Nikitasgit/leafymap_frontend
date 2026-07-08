@@ -23,12 +23,10 @@ export const useSocket = () => {
     });
 
     socket.on("connect", () => {
-      console.log("Connected to Socket.io server");
       setIsConnected(true);
     });
 
     socket.on("disconnect", () => {
-      console.log("Disconnected from Socket.io server");
       setIsConnected(false);
     });
 

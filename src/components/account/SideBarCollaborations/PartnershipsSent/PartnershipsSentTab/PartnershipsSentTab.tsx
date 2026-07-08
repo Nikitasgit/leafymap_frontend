@@ -48,7 +48,6 @@ export default function PartnershipsSentTab() {
   };
 
   const handleCancel = (partnershipId: string) => {
-    console.log("handleCancel", partnershipId);
     cancelPartnershipInvitation(partnershipId);
   };
 

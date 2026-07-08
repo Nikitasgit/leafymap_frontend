@@ -94,7 +94,6 @@ const PartnershipsForm = ({
       )
     );
   };
-  console.log(partnerships);
   return (
     <fieldset className={styles.partnerships}>
       <legend className={styles.titleContainer}>
