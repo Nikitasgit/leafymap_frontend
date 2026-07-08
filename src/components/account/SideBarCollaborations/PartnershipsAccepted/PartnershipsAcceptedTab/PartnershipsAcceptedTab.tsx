@@ -5,7 +5,7 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { usePartnershipsAccepted } from "@/hooks/usePartnershipsAccepted";
 import useDeletePartnership from "@/hooks/useDeletePartnership";
 import PartnershipCard from "@/components/common/partnerships/PartnershipCard";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import { Users } from "lucide-react";
 import { Partnership } from "@/types/partnerships";

@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import Message, { Message as MessageType } from "../Message/Message";
+import Message, { Message as MessageType } from "../Message";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import { MessageSquare } from "lucide-react";
 import styles from "./MessagesList.module.scss";

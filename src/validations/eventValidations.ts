@@ -28,6 +28,9 @@ const eventSchema = z
   place: z.string().optional().nullable(),
   location: locationSchema.optional().nullable(),
   online: z.boolean().optional(),
+  isBookable: z.boolean().optional(),
+  capacity: z.string().optional(),
+  maxSeatsPerBooking: z.string().optional(),
   schedule: z
     .array(
       z.object({
@@ -54,13 +57,48 @@ const eventSchema = z
     .min(1, "Le programme doit contenir au moins une date"),
 })
   .superRefine((data, ctx) => {
-    if (data.online) return;
+    if (!data.online) {
+      if (!data.place && !data.location) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["location"],
+          message: "Un lieu ou une adresse est requis pour un évènement présentiel",
+        });
+      }
+    }
 
-    if (!data.place && !data.location) {
+    if (!data.isBookable) return;
+
+    const capacity =
+      data.capacity && data.capacity.trim() !== ""
+        ? Number(data.capacity)
+        : null;
+    const maxSeatsPerBooking = Number(data.maxSeatsPerBooking);
+
+    if (data.capacity && (!Number.isInteger(capacity) || (capacity as number) < 1)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        path: ["location"],
-        message: "Un lieu ou une adresse est requis pour un évènement présentiel",
+        path: ["capacity"],
+        message: "La capacité doit être un nombre entier supérieur à 0",
+      });
+    }
+
+    if (!Number.isInteger(maxSeatsPerBooking) || maxSeatsPerBooking < 1) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["maxSeatsPerBooking"],
+        message: "Le nombre de places par réservation doit être supérieur à 0",
+      });
+    } else if (
+      capacity !== null &&
+      Number.isInteger(capacity) &&
+      maxSeatsPerBooking > capacity
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["maxSeatsPerBooking"],
+        message:
+          "Le nombre de places par réservation ne peut pas dépasser la capacité totale",
       });
     }
   });

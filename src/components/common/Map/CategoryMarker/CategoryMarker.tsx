@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Marker } from "react-map-gl/mapbox";
-import PlaceCategoryIcon from "@/components/common/icons/PlaceCategoryIcon/PlaceCategoryIcon";
+import PlaceCategoryIcon from "@/components/common/icons/PlaceCategoryIcon";
 import { getPlaceCategoryConfig } from "@/components/common/icons/PlaceCategoryIcon/PlaceCategoryIcon.config";
 import styles from "./CategoryMarker.module.scss";
 import { CategoryMarkerProps } from "./CategoryMarker.types";

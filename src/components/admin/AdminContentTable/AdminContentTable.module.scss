@@ -1,0 +1,39 @@
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.header,
+.row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 140px;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.85rem;
+  border-radius: 10px;
+}
+
+.header {
+  font-weight: 700;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.row {
+  border: 1px solid var(--color-border, #e5e7eb);
+  background: var(--color-background, #fff);
+}
+
+.empty {
+  color: var(--color-text-secondary, #6b7280);
+}
+
+@media (max-width: 768px) {
+  .header {
+    display: none;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+}

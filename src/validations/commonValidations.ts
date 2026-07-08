@@ -71,15 +71,3 @@ export const lastnameSchema = z
     "Le nom ne peut contenir que des lettres, espaces, tirets et apostrophes",
   )
   .optional();
-
-export const addressSchema = z.object({
-  number: z
-    .string()
-    .min(
-      1,
-      "Le numéro est requis, veuillez indiquer zéro si vous n'avez pas de numéro",
-    ),
-  street: z.string().min(2, "La rue doit contenir au moins 2 caractères"),
-  code: z.string().min(5, "Le code postal doit contenir au moins 5 caractères"),
-  extra: z.string().optional(),
-});

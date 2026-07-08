@@ -1,13 +1,13 @@
 import React, { useState, useMemo } from "react";
 import { Star } from "lucide-react";
-import Button from "@/components/common/buttons/Button/Button";
-import ReviewModal from "../ReviewModal/ReviewModal";
-import ReviewCard from "../ReviewCard/ReviewCard";
+import Button from "@/components/common/buttons/Button";
+import ReviewModal from "../ReviewModal";
+import ReviewCard from "../ReviewCard";
 import { useReviews } from "@/hooks/useReviews";
 import { useAuth } from "@/hooks/useAuth";
 import { ReviewReferenceType, ReviewPopulated } from "@/types/review";
 import { UserPopulated } from "@/types/user";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import styles from "./ReviewsTab.module.scss";
 import useDeleteReview from "@/hooks/useDeleteReview";

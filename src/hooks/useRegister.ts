@@ -33,6 +33,7 @@ export const useRegister = (): RegisterState => {
     password: "",
     confirmPassword: "",
     acceptedCGU: false,
+    emailNotifications: false,
   });
 
   const [errors, setErrors] = useState<{
@@ -76,6 +77,7 @@ export const useRegister = (): RegisterState => {
                 email: formData.email,
                 password: formData.password,
                 acceptedCGU: formData.acceptedCGU,
+                emailNotifications: formData.emailNotifications,
               },
             );
             showSuccess(t("messages.success"));

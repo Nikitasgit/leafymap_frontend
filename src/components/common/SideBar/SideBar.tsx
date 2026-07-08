@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { X, LucideIcon } from "lucide-react";
 import Button from "@/components/common/buttons/Button";
-import NotificationBadge from "@/components/common/badges/NotificationBadge/NotificationBadge";
+import NotificationBadge from "@/components/common/badges/NotificationBadge";
 import styles from "./SideBar.module.scss";
 
 const SIDEBAR_ANIMATION_DURATION_MS = 300;

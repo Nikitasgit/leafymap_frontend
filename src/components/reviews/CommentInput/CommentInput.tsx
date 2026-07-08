@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Button from "@/components/common/buttons/Button/Button";
-import TextField from "@/components/common/inputs/TextField/TextField";
+import Button from "@/components/common/buttons/Button";
+import TextField from "@/components/common/inputs/TextField";
 import useSubmitComment from "@/hooks/useSubmitComment";
 import useUpdateComment from "@/hooks/useUpdateComment";
 import { CommentReferenceType, CommentPopulated } from "@/types/comment";

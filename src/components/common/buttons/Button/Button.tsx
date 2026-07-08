@@ -1,6 +1,6 @@
 import styles from "./Button.module.scss";
 import { ButtonProps } from "./Button.types";
-import NotificationBadge from "@/components/common/badges/NotificationBadge/NotificationBadge";
+import NotificationBadge from "@/components/common/badges/NotificationBadge";
 
 const Button: React.FC<ButtonProps> = ({
   children,

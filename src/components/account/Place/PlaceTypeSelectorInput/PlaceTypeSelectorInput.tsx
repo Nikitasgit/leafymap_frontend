@@ -1,87 +1,59 @@
-import React, { useState, useEffect } from "react";
-import { PlaceType } from "@/types/place/placeCaterories";
-import styles from "./PlaceTypeSelectorInput.module.scss";
+"use client";
+
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { useApp } from "@/hooks/useApp";
 import { PlaceTypeSelectorInputProps } from "./PlaceTypeSelectorInput.types";
+import styles from "./PlaceTypeSelectorInput.module.scss";
 
 const PlaceTypeSelectorInput: React.FC<PlaceTypeSelectorInputProps> = ({
-  value = [],
+  value,
   onChange,
-  error,
+  error = false,
 }) => {
-  const [selectedTypes, setSelectedTypes] = useState<PlaceType[]>(value);
+  const { t } = useTranslation("subscription");
+  const { categoryTypes } = useApp();
 
-  const placeTypes: { value: PlaceType; label: string; icon: string }[] = [
-    { value: "food", label: "Alimentation", icon: "🍽️" },
-    { value: "art", label: "Art", icon: "🎨" },
-    { value: "craft", label: "Artisanat", icon: "🔨" },
-  ];
+  const placeCategoryTypes = categoryTypes.filter(
+    (type) => type.name !== "organization",
+  );
 
-  useEffect(() => {
-    setSelectedTypes(value);
-  }, [value]);
+  const handleToggle = (typeId: string) => {
+    const isSelected = value.includes(typeId);
+    const nextValue = isSelected
+      ? value.filter((id) => id !== typeId)
+      : [...value, typeId];
 
-  const handleTypeToggle = (type: PlaceType) => {
-    const newSelectedTypes = selectedTypes.includes(type)
-      ? selectedTypes.filter((t) => t !== type)
-      : [...selectedTypes, type];
-
-    setSelectedTypes(newSelectedTypes);
     onChange({
       target: {
         name: "placeType",
-        value: newSelectedTypes,
+        value: nextValue,
       },
     });
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent, type: PlaceType) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      handleTypeToggle(type);
-    }
-  };
-
   return (
     <div className={styles.container}>
-      <label className={styles.label}>
-        Sélectionner un ou plusieurs types correspondant à votre activité{" "}
-        <span>*</span>
-      </label>
+      <label className={styles.label}>{t("placeTypeSelector.label")}</label>
       <div className={styles.optionsContainer}>
-        {placeTypes.map((type) => (
-          <button
-            key={type.value}
-            type="button"
-            role="checkbox"
-            aria-checked={selectedTypes.includes(type.value)}
-            aria-label={`${type.label} - ${
-              selectedTypes.includes(type.value)
-                ? "sélectionné"
-                : "non sélectionné"
-            }`}
-            aria-describedby={error ? "place-type-error" : undefined}
-            className={`${styles.option} ${
-              selectedTypes.includes(type.value) ? styles.selected : ""
-            } ${error ? styles.error : ""}`}
-            onClick={() => handleTypeToggle(type.value)}
-            onKeyDown={(e) => handleKeyDown(e, type.value)}
-          >
-            <span className={styles.icon}>{type.icon}</span>
-            <span className={styles.label}>{type.label}</span>
-            {selectedTypes.includes(type.value) && (
-              <span className={styles.checkmark}>✓</span>
-            )}
-          </button>
-        ))}
-      </div>
+        {placeCategoryTypes.map((type) => {
+          const isSelected = value.includes(type._id);
+          const label = t(`placeTypes.${type.name}`, {
+            defaultValue: type.name,
+          });
 
-      <div
-        id="place-type-error"
-        className={`${styles.selectedInfo} ${error ? styles.errorMessage : ""}`}
-        role={error ? "alert" : undefined}
-      >
-        Veuillez sélectionner au moins un type: {selectedTypes.length}{" "}
-        {selectedTypes.length > 1 ? "sélectionnés" : "sélectionné"}
+          return (
+            <button
+              key={type._id}
+              type="button"
+              className={`${styles.option} ${isSelected ? styles.selected : ""} ${error ? styles.error : ""}`}
+              onClick={() => handleToggle(type._id)}
+            >
+              <span className={styles.label}>{label}</span>
+              {isSelected && <span className={styles.checkmark}>✓</span>}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ export interface CGUCheckboxProps {
   className?: string;
 }
 
-export const CGUCheckbox: React.FC<CGUCheckboxProps> = ({
+const CGUCheckbox: React.FC<CGUCheckboxProps> = ({
   checked,
   onChange,
   disabled = false,

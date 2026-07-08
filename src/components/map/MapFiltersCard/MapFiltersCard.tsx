@@ -17,12 +17,6 @@ const RATING_OPTIONS: { label: string; value: number | null }[] = [
   { label: "4.5★+", value: 4.5 },
 ];
 
-const PLACE_TYPE_OPTIONS = [
-  { value: "food", labelKey: "placeTypes.food", fallback: "Alimentaire" },
-  { value: "art", labelKey: "placeTypes.art", fallback: "Art" },
-  { value: "craft", labelKey: "placeTypes.craft", fallback: "Artisanat" },
-];
-
 const MapFiltersCard = ({
   onFiltersChange,
   onApplyFilters,
@@ -33,7 +27,19 @@ const MapFiltersCard = ({
 }: MapFiltersCardProps) => {
   const [localFilters, setLocalFilters] = useState<MapFilters>(filters);
   const { t } = useTranslation("common");
-  const { userCategories, productCategories } = useApp();
+  const { userCategories, productCategories, categoryTypes } = useApp();
+
+  const placeTypeOptions = useMemo(
+    () =>
+      categoryTypes
+        .filter((type) => type.name !== "organization")
+        .map((type) => ({
+          value: type._id,
+          labelKey: `placeTypes.${type.name}`,
+          fallback: type.name,
+        })),
+    [categoryTypes],
+  );
 
   useEffect(() => {
     setLocalFilters(filters);
@@ -168,7 +174,7 @@ const MapFiltersCard = ({
             <span>Types de lieux</span>
           </p>
           <div className={styles.ratingButtons}>
-            {PLACE_TYPE_OPTIONS.map((opt) => (
+            {placeTypeOptions.map((opt) => (
               <button
                 key={opt.value}
                 type="button"

@@ -25,6 +25,7 @@ export const registerSchema = z
     acceptedCGU: z.boolean().refine((val) => val === true, {
       message: "Vous devez accepter les Conditions Générales d'Utilisation",
     }),
+    emailNotifications: z.boolean(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Les mots de passe ne correspondent pas",

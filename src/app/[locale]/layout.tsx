@@ -1,7 +1,7 @@
 import "@/styles/main.scss";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import ConditionalFooter from "@/components/common/Footer/ConditionalFooter";
+import ConditionalFooter from "@/components/common/Footer";
 import Providers from "@/components/Providers";
 import { roboto } from "@/fonts/font";
 import Navbar from "@/components/navbar/Navbar";

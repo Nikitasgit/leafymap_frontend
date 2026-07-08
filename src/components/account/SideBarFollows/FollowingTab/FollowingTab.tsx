@@ -5,7 +5,7 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import useFollowingUsers from "@/hooks/useFollowingUsers";
 import useFollow from "@/hooks/useFollow";
 import PartnershipCard from "@/components/common/partnerships/PartnershipCard";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import { Users } from "lucide-react";
 import styles from "./FollowingTab.module.scss";

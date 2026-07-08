@@ -11,7 +11,7 @@ import { useUserProducts } from "@/hooks/useUserProducts";
 import { useApp } from "@/hooks/useApp";
 import useSubmitProduct from "@/hooks/useSubmitProduct";
 import { useToast } from "@/hooks/useToast";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import { Product, ProductCategory } from "@/types/product";
 import styles from "./MyProductsTab.module.scss";
 

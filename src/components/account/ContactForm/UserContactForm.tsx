@@ -1,4 +1,4 @@
-import TextField from "@/components/common/inputs/TextField/TextField";
+import TextField from "@/components/common/inputs/TextField";
 import styles from "./ContactForm.module.scss";
 import { UserContactFormProps } from "./ContactForm.types";
 

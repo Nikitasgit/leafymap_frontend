@@ -3,10 +3,10 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import useOnClickOutside from "../../../../hooks/useOnClickOutside";
 import styles from "./SearchInput.module.scss";
-import TextField from "../TextField/TextField";
+import TextField from "../TextField";
 import { SearchInputProps, SearchSuggestion } from "./SearchInput.types";
 import CreatorCategoryBadge from "../../users/CreatorCategoryBadge";
-import PlaceCategoryBadge from "../../places/placeCategoryBadge/PlaceCategoryBadge";
+import PlaceCategoryBadge from "../../places/placeCategoryBadge";
 import creatorDefaultsSvg from "@public/images/creator_default.png";
 import { MapPin } from "lucide-react";
 

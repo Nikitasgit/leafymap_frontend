@@ -4,7 +4,7 @@ import { capitalizeFirstLetter } from "@/utils/functions";
 import EventCard from "@/components/common/events/EventCard";
 import { EventInvitationPopulated } from "@/types/eventInvitation";
 import { UserPopulated } from "@/types/user";
-import EventModal from "@/components/common/modals/EventModal/EventModal";
+import EventModal from "@/components/common/modals/EventModal";
 import { useEvent } from "@/hooks/useEvent";
 import { EventPopulated } from "@/types/place/event";
 import { PlacePopulated } from "@/types/place";

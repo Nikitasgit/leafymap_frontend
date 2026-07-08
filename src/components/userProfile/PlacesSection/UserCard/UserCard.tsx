@@ -4,7 +4,7 @@ import styles from "./UserCard.module.scss";
 import { useRouter } from "next/navigation";
 import { Avatar } from "@/components/common/Avatar";
 import { getDisplayName } from "@/utils/userDisplay";
-import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge/CreatorCategoryBadge";
+import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge";
 
 const UserCard: React.FC<UserCardProps> = ({ user }) => {
   const router = useRouter();

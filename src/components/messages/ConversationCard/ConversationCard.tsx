@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { Conversation } from "@/hooks/useConversations";
 import { useAuth } from "@/hooks/useAuth";
-import DisplayPublishingDate from "@/components/common/date/DisplayPublishingDate/DisplayPublishingDate";
+import DisplayPublishingDate from "@/components/common/date/DisplayPublishingDate";
 import { getDisplayName, getAvatarLetter } from "@/utils/userDisplay";
 import styles from "./ConversationCard.module.scss";
 import NotificationBadge from "@/components/common/badges/NotificationBadge";

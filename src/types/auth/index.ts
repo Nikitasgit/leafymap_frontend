@@ -3,6 +3,7 @@ export interface RegisterFormData {
   password: string;
   confirmPassword: string;
   acceptedCGU: boolean;
+  emailNotifications: boolean;
 }
 
 export interface LoginFormData {

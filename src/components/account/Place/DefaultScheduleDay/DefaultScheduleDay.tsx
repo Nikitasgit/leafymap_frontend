@@ -1,5 +1,5 @@
 import { TimeSlot } from "@/types/place/schedule";
-import TimeSlotInputs from "../../../common/inputs/TimeSlotInputs/TimeSlotInputs";
+import TimeSlotInputs from "../../../common/inputs/TimeSlotInputs";
 import { Edit3, PlusCircle } from "lucide-react";
 
 import Button from "../../../common/buttons/Button";

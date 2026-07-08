@@ -4,9 +4,9 @@ import React from "react";
 import { MessageSquare } from "lucide-react";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useReviewsWritten } from "@/hooks/useReviewsWritten";
-import ReviewCard from "@/components/reviews/ReviewCard/ReviewCard";
+import ReviewCard from "@/components/reviews/ReviewCard";
 import CreatorCardWithAddress from "@/components/common/CreatorCardWithAddress";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import type {
   ReviewWithReferencePopulated,

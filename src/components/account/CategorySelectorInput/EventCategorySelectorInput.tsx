@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EventCategory } from "@/types/categories";
-import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
+import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper";
 import { useApp } from "@/hooks/useApp";
 import { useToast } from "@/hooks/useToast";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
-import LoadingBar from "../../common/loading/LoadingBar/LoadingBar";
-import TextField from "../../common/inputs/TextField/TextField";
+import LoadingBar from "../../common/loading/LoadingBar";
+import TextField from "../../common/inputs/TextField";
 import styles from "./CategorySelectorInput.module.scss";
 
 const EventCategorySelectorInput = ({

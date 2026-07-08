@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { useRouter } from "next/navigation";
 import { Image } from "@/types/image";
 import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader";
 import { capitalizeFirstLetter } from "@/utils/functions";
@@ -11,7 +10,7 @@ import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge
 interface AccountHeaderProps {
   user: {
     _id: string;
-    username: string;
+    username?: string;
     email: string;
     image?: string | Image;
     userCategory?: { name: string };
@@ -26,8 +25,11 @@ export default function AccountHeader({
   isLoadingUser,
   onUserUpdated,
 }: AccountHeaderProps) {
-  const router = useRouter();
   const { submitUser } = useSubmitUser();
+  const displayName =
+    user.username?.trim() ||
+    user.email.split("@")[0] ||
+    "Mon compte";
   const handleImageUploaded = async (
     imageId: string | null,
     googlePictureUrl?: string | null,
@@ -50,7 +52,7 @@ export default function AccountHeader({
       <div className={styles.userInfo}>
         <div className={styles.usernameRow}>
           <h1 className={styles.username}>
-            {capitalizeFirstLetter(user.username)}
+            {capitalizeFirstLetter(displayName)}
           </h1>
         </div>
         {user.userCategory && (

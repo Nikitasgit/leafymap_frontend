@@ -1,4 +1,4 @@
-import AcceptCguForm from "@/components/auth/acceptCguForm/AcceptCguForm";
+import AccountConsentForm from "@/components/auth/accountConsentForm/AccountConsentForm";
 import { getPageMetadata } from "@/lib/pageMetadata";
 
 export async function generateMetadata({
@@ -11,5 +11,5 @@ export async function generateMetadata({
 }
 
 export default function AcceptCguPage() {
-  return <AcceptCguForm />;
+  return <AccountConsentForm />;
 }

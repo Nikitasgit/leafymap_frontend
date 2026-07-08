@@ -5,7 +5,7 @@ import Link from "next/link";
 import axios from "axios";
 import styles from "./VerifyEmailHandler.module.scss";
 import Button from "@/components/common/buttons/Button";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useToast } from "@/hooks/useToast";
 
 /** Tokens for which verification has already been started (avoids duplicate calls in Strict Mode). */

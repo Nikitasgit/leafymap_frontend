@@ -26,6 +26,11 @@ export interface Event extends BaseEntity {
   place?: Place | string | null;
   location?: Location | null;
   online?: boolean;
+  isBookable?: boolean;
+  capacity?: number | null;
+  maxSeatsPerBooking?: number;
+  bookedSeats?: number;
+  remainingSeats?: number | null;
 }
 
 export interface EventPopulated extends Event {

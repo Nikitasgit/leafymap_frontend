@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Image as ImageIcon } from "lucide-react";
-import GallerySection from "@/components/userProfile/GallerySection/GallerySection";
+import GallerySection from "@/components/userProfile/GallerySection";
 import useSubmitImages from "@/hooks/useSubmitImages";
 import { useAuth } from "@/hooks/useAuth";
 import styles from "./AccountGalleryTab.module.scss";

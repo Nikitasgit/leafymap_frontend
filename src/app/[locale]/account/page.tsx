@@ -1,4 +1,5 @@
 import AccountContainer from "@/components/account/AccountContainer";
+import ProtectedRoute from "@/components/common/ProtectedRoute";
 import { getPageMetadata } from "@/lib/pageMetadata";
 
 export async function generateMetadata({
@@ -11,7 +12,11 @@ export async function generateMetadata({
 }
 
 const AccountPage = () => {
-  return <AccountContainer />;
+  return (
+    <ProtectedRoute>
+      <AccountContainer />
+    </ProtectedRoute>
+  );
 };
 
 export default AccountPage;

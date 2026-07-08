@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Reply } from "lucide-react";
-import StarsDisplay from "@/components/common/stars/StarsDisplay/StarsDisplay";
+import StarsDisplay from "@/components/common/stars/StarsDisplay";
 import {
   ReviewPopulated,
   ReviewWithReferencePopulated,
 } from "@/types/review";
 import { UserPopulated } from "@/types/user";
 import { useComments } from "@/hooks/useComments";
-import CommentInput from "../CommentInput/CommentInput";
-import ReviewModal from "../ReviewModal/ReviewModal";
+import CommentInput from "../CommentInput";
+import ReviewModal from "../ReviewModal";
 import useDeleteReview from "@/hooks/useDeleteReview";
 import useDeleteComment from "@/hooks/useDeleteComment";
 import ActionButtons from "@/components/common/actions/ActionButtons";
 import styles from "./ReviewCard.module.scss";
-import DisplayPublishingDate from "@/components/common/date/DisplayPublishingDate/DisplayPublishingDate";
+import DisplayPublishingDate from "@/components/common/date/DisplayPublishingDate";
 
 interface ReviewCardProps {
   review: ReviewPopulated | ReviewWithReferencePopulated;

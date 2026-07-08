@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useConversations } from "@/hooks/useConversations";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import ConversationsList from "@/components/messages/ConversationsList";
 import ConversationContainer from "@/components/messages/ConversationContainer";
 import styles from "./InboxContainer.module.scss";

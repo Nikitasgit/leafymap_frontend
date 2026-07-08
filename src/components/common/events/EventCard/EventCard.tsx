@@ -1,6 +1,6 @@
 import React from "react";
 import { Calendar, Clock, MapPin } from "lucide-react";
-import EventStatus from "../EventStatus/EventStatus";
+import EventStatus from "../EventStatus";
 import DateRange from "@/components/common/dateRange";
 import styles from "./EventCard.module.scss";
 import Image from "next/image";

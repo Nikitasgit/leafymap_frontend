@@ -24,13 +24,24 @@ export type FormDataChangeHandler = (
       },
 ) => void;
 
-export type onNextHandler = () => void;
-export type onBackHandler = () => void;
-
-export type InitialPlaceData = Pick<
-  Place,
-  "name" | "description" | "location" | "defaultSchedule" | "placeCategory" | "placeType" | "active" | "phone" | "email" | "website"
->;
+export type InitialPlaceData = Omit<
+  Pick<
+    Place,
+    | "name"
+    | "description"
+    | "location"
+    | "defaultSchedule"
+    | "placeCategory"
+    | "placeType"
+    | "active"
+    | "phone"
+    | "email"
+    | "website"
+  >,
+  "placeType"
+> & {
+  placeType: string[];
+};
 
 export type InitialCreatorData = Pick<
   User,

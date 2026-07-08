@@ -4,6 +4,11 @@ import { Place, PlacePopulated } from "../place";
 import { UserCategory } from "../categories";
 
 export type UserType = "creator" | "guest";
+export type UserRole = "user" | "admin";
+
+export interface UserPreferences {
+  emailNotifications?: boolean;
+}
 
 export interface User extends BaseEntity {
   email: string;
@@ -11,6 +16,7 @@ export interface User extends BaseEntity {
   firstname?: string;
   lastname?: string;
   userType: UserType;
+  role?: UserRole;
   phone: string;
   website: string;
   image?: string | Image;
@@ -24,6 +30,12 @@ export interface User extends BaseEntity {
   _id: string;
   userCategory?: string | UserCategory;
   acceptedCGU?: boolean;
+  bannedAt?: string;
+  banReason?: string;
+  banDuration?: number;
+  banExpiresAt?: string;
+  lastLogin?: string;
+  preferences?: UserPreferences;
 }
 
 export interface UserPopulated extends User {

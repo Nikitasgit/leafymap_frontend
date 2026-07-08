@@ -3,7 +3,7 @@ import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { useSocket } from "./useSocket";
 import axios from "axios";
-import { Message } from "@/components/messages/Message/Message";
+import { Message } from "@/components/messages/Message";
 
 export const useConversationMessages = (
   conversationId: string | null,

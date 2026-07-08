@@ -11,6 +11,9 @@ export interface initialEventData {
   place?: string | null;
   location?: Location | null;
   online: boolean;
+  isBookable: boolean;
+  capacity: string;
+  maxSeatsPerBooking: string;
 }
 
 export interface EventFormProps {

@@ -4,9 +4,9 @@ import { CreatorCardProps } from "./CreatorCard.types";
 import styles from "./CreatorCard.module.scss";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import SubscribersCounter from "@/components/common/counters/SubscribersCounter/SubscribersCounter";
+import SubscribersCounter from "@/components/common/counters/SubscribersCounter";
 import ActionButtons from "@/components/common/actions/ActionButtons";
-import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge/PlaceCategoryBadge";
+import PlaceCategoryBadge from "@/components/common/places/placeCategoryBadge";
 import creatorDefaultsSvg from "@public/images/creator_default.png";
 import { getDisplayName } from "@/utils/userDisplay";
 

@@ -1,5 +1,5 @@
 "use client";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useUser } from "@/hooks/useUser";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import React, { useState, useEffect, useMemo } from "react";

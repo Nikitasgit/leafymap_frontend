@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Share2 } from "lucide-react";
-import BaseModal from "@/components/common/modals/BaseModal/BaseModal";
+import BaseModal from "@/components/common/modals/BaseModal";
 import { WhatsAppIcon } from "@/assets/svg";
 import { useToast } from "@/hooks/useToast";
 import styles from "./ShareModal.module.scss";

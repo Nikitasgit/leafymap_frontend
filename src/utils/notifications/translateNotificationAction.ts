@@ -13,6 +13,7 @@ export function translateNotificationAction(
     event_invitation: "Invitation à un événement",
     event_accepted: "Invitation à un événement acceptée",
     event_refused: "Invitation à un événement refusée",
+    event_booking_cancelled: "Réservation annulée ou modifiée",
     review: "Nouvel avis",
     new_follower: "Nouvel abonné",
     other: "Notification",

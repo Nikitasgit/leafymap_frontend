@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import { generateEventMetadata } from "@/lib/metadata";
 import { getEventById } from "@/lib/api/events";
-import EventDetails from "@/components/eventProfile/EventDetails/EventDetails";
+import EventDetails from "@/components/eventProfile/EventDetails";
+import EventBookingWidget from "@/components/eventProfile/EventBookingWidget";
 import { capitalizeFirstLetter } from "@/utils/functions";
+import styles from "./EventPage.module.scss";
 
 export async function generateMetadata({
   params,
@@ -43,9 +45,10 @@ const EventPage = async ({ params }: EventPageProps) => {
       : undefined;
 
   return (
-    <main className="container">
+    <main className={styles.container}>
       <h1>{title}</h1>
       <EventDetails event={eventData} place={place} user={user} />
+      {eventData.isBookable && <EventBookingWidget event={eventData} />}
     </main>
   );
 };

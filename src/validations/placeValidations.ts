@@ -2,16 +2,6 @@ import { Place } from "@/types/place";
 import { z } from "zod";
 import { ValidationResult } from "./commonValidations";
 
-export const placeNameSchema = z
-  .string()
-  .min(1, "Le nom est requis")
-  .min(4, "Le nom doit contenir au moins 4 caractères")
-  .max(40, "Le nom ne peut pas dépasser 40 caractères")
-  .regex(
-    /^[a-zA-ZÀ-ÿ0-9\s']+$/,
-    "Le nom ne peut contenir que des lettres, chiffres, espaces et le caractère '"
-  );
-
 export const placeCategorySchema = z
   .string()
   .min(1, "La catégorie du lieu est requise");
@@ -24,7 +14,7 @@ export const locationSchema = z.object({
 });
 
 export const placeTypeSchema = z
-  .array(z.enum(["art", "food", "craft"]))
+  .array(z.string().min(1, "Le type de lieu est requis"))
   .min(1, "Le type de lieu est requis");
 
 const newPlaceSchema = z.object({

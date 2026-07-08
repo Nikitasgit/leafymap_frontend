@@ -1,6 +1,6 @@
 import styles from "./UsersListXScroll.module.scss";
 import { useRef, useState, MouseEvent, useEffect } from "react";
-import PartnershipCard from "@/components/common/partnerships/PartnershipCard/PartnershipCard";
+import PartnershipCard from "@/components/common/partnerships/PartnershipCard";
 import LoadingSpinner from "../../loading/LoadingSpinner";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 

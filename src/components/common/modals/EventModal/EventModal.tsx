@@ -1,12 +1,15 @@
 "use client";
 import React from "react";
-import BaseModal from "@/components/common/modals/BaseModal/BaseModal";
+import { useRouter } from "next/navigation";
+import { CalendarDays, Ticket } from "lucide-react";
+import BaseModal from "@/components/common/modals/BaseModal";
+import Button from "@/components/common/buttons/Button";
 import { EventPopulated } from "@/types/place/event";
 import { PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
 import styles from "./EventModal.module.scss";
 import { capitalizeFirstLetter } from "@/utils/functions";
-import EventDetails from "@/components/eventProfile/EventDetails/EventDetails";
+import EventDetails from "@/components/eventProfile/EventDetails";
 
 export interface EventModalProps {
   isOpen: boolean;
@@ -25,6 +28,7 @@ const EventModal: React.FC<EventModalProps> = ({
   user,
   isContentLoading = false,
 }) => {
+  const router = useRouter();
   const eventPlace =
     typeof event.place === "object" && event.place
       ? (event.place as PlacePopulated)
@@ -38,11 +42,20 @@ const EventModal: React.FC<EventModalProps> = ({
     onClose();
   };
 
+  const goToEventPage = () => {
+    router.push(`/events/${event._id}`);
+  };
+
   return (
     <BaseModal
       isOpen={isOpen}
       onClose={handleClose}
       title={capitalizeFirstLetter(event.name)}
+      titleIcon={
+        <span className={styles.titleIconBadge}>
+          <CalendarDays size={18} />
+        </span>
+      }
       primaryButtonLabel="Fermer"
       onPrimaryAction={handleClose}
       withFooter={false}
@@ -55,6 +68,29 @@ const EventModal: React.FC<EventModalProps> = ({
           user={user ?? eventUser}
           isContentLoading={isContentLoading}
         />
+        <div className={styles.actionsRow}>
+          <Button
+            type="button"
+            variant="outline"
+            fullWidth
+            onClick={goToEventPage}
+            ariaLabel="Voir plus de détails sur l'évènement"
+          >
+            Voir plus
+          </Button>
+          {event.isBookable && event.lifecycleStatus === "upcoming" && (
+            <Button
+              type="button"
+              variant="primary"
+              fullWidth
+              startIcon={<Ticket size={16} />}
+              onClick={goToEventPage}
+              ariaLabel="Réserver une place pour cet évènement"
+            >
+              Réserver
+            </Button>
+          )}
+        </div>
       </div>
     </BaseModal>
   );

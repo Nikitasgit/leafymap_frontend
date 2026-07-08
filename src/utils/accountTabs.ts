@@ -15,6 +15,7 @@ export const TAB_PARAM = "tab";
 export const SIDEBAR_VALUES = {
   COLLABORATIONS: "collaborations",
   EVENTS: "events",
+  BOOKINGS: "bookings",
   REVIEWS: "reviews",
   FOLLOWS: "follows",
   PRODUCTS: "products",
@@ -30,9 +31,6 @@ export const COLLABORATIONS_TAB_IDS = {
   INVITE: "invite",
 } as const;
 
-export type CollaborationsTabId =
-  (typeof COLLABORATIONS_TAB_IDS)[keyof typeof COLLABORATIONS_TAB_IDS];
-
 /** Onglets de la sidebar Évènements */
 export const EVENTS_TAB_IDS = {
   MY_EVENTS: "my-events",
@@ -40,7 +38,10 @@ export const EVENTS_TAB_IDS = {
   MY_PARTICIPATIONS: "my-participations",
 } as const;
 
-export type EventsTabId = (typeof EVENTS_TAB_IDS)[keyof typeof EVENTS_TAB_IDS];
+/** Onglets de la sidebar Réservations */
+export const BOOKINGS_TAB_IDS = {
+  MY_BOOKINGS: "my-bookings",
+} as const;
 
 /** Onglets de la sidebar Avis */
 export const REVIEWS_TAB_IDS = {
@@ -48,33 +49,21 @@ export const REVIEWS_TAB_IDS = {
   RECEIVED: "received",
 } as const;
 
-export type ReviewsTabId =
-  (typeof REVIEWS_TAB_IDS)[keyof typeof REVIEWS_TAB_IDS];
-
 /** Onglets de la sidebar Abonnements */
 export const FOLLOWS_TAB_IDS = {
   FOLLOWERS: "followers",
   FOLLOWING: "following",
 } as const;
 
-export type FollowsTabId =
-  (typeof FOLLOWS_TAB_IDS)[keyof typeof FOLLOWS_TAB_IDS];
-
 /** Onglets de la sidebar Produits */
 export const PRODUCTS_TAB_IDS = {
   MY_PRODUCTS: "my-products",
 } as const;
 
-export type ProductsTabId =
-  (typeof PRODUCTS_TAB_IDS)[keyof typeof PRODUCTS_TAB_IDS];
-
 /** Onglets de la sidebar Images */
 export const IMAGES_TAB_IDS = {
   GALLERY: "gallery",
 } as const;
-
-export type ImagesTabId =
-  (typeof IMAGES_TAB_IDS)[keyof typeof IMAGES_TAB_IDS];
 
 /**
  * Construit l’URL /account avec au plus les paramètres sidebar et tab.
@@ -126,6 +115,15 @@ export function getNotificationRedirectPath(
     return getAccountSidebarPath(
       SIDEBAR_VALUES.EVENTS,
       EVENTS_TAB_IDS.RECEIVED_INVITATIONS
+    );
+  }
+  if (
+    notification.action === "event_booking_cancelled" &&
+    notification.referenceType === "Event"
+  ) {
+    return getAccountSidebarPath(
+      SIDEBAR_VALUES.BOOKINGS,
+      BOOKINGS_TAB_IDS.MY_BOOKINGS
     );
   }
   if (

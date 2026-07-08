@@ -1,9 +1,8 @@
 import { BaseEntity, ContactInfo, Location } from "../common";
-import { PlaceCategory, UserCategory } from "../categories";
+import { CategoryType, PlaceCategory, UserCategory } from "../categories";
 import { User, UserPopulated } from "../user";
 import { Image } from "../image";
 import { DefaultSchedule } from "./schedule";
-import { PlaceType } from "./placeCaterories";
 
 export interface Place extends BaseEntity, ContactInfo {
   name: string;
@@ -17,7 +16,7 @@ export interface Place extends BaseEntity, ContactInfo {
   image?: string | Image;
   active: boolean;
   rating: number;
-  placeType: PlaceType[];
+  placeType: string[] | Partial<CategoryType>[];
   userCategory?: UserCategory;
   followers: string[];
 }

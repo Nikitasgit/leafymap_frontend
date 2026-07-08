@@ -1,14 +1,7 @@
 import {
   FormDataChangeHandler,
-  InitialPlaceData,
   InitialCreatorData,
-} from "../CreateProfileStepper/CreateProfileStepper.types";
-
-export interface PlaceInfoProps {
-  place: InitialPlaceData;
-  onPlaceChange: FormDataChangeHandler;
-  errors?: Record<string, string>;
-}
+} from "../CreateProfileStepper";
 
 export interface UserInfoProps {
   user: InitialCreatorData;

@@ -1,5 +1,3 @@
-import { BaseEntity } from "../common";
-
 export interface FollowUser {
   _id: string;
   followId?: string;
@@ -16,13 +14,4 @@ export interface FollowUser {
     };
   };
   userType: "creator" | "guest";
-}
-
-export interface Follow extends BaseEntity {
-  follower: string;
-  following: string;
-}
-
-export interface CreateFollowInput {
-  followingId: string;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import EventCard from "@/components/common/events/EventCard/EventCard";
+import EventCard from "@/components/common/events/EventCard";
 import PartnershipCard from "@/components/common/partnerships/PartnershipCard";
 import Button from "@/components/common/buttons/Button";
 import { EventInvitationPopulated } from "@/types/eventInvitation";

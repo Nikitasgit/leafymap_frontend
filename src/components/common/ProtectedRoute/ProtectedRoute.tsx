@@ -3,12 +3,14 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
+import { UserRole } from "@/types/user";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
   redirectTo?: string;
   allowedUserTypes?: string[];
+  allowedRoles?: UserRole[];
   fallback?: React.ReactNode;
 }
 
@@ -16,6 +18,7 @@ const ProtectedRoute = ({
   children,
   redirectTo = "/auth/signin",
   allowedUserTypes,
+  allowedRoles,
   fallback = <LoadingBar />,
 }: ProtectedRouteProps) => {
   const { user, isLoading } = useCurrentUser();
@@ -31,8 +34,12 @@ const ProtectedRoute = ({
         router.push(redirectTo);
         return;
       }
+      if (allowedRoles && !allowedRoles.includes(user.role || "user")) {
+        router.push(redirectTo);
+        return;
+      }
     }
-  }, [user, isLoading, router, redirectTo, allowedUserTypes]);
+  }, [user, isLoading, router, redirectTo, allowedUserTypes, allowedRoles]);
 
   if (isLoading) {
     return <>{fallback}</>;
@@ -40,7 +47,8 @@ const ProtectedRoute = ({
 
   if (
     !user ||
-    (allowedUserTypes && !allowedUserTypes.includes(user.userType))
+    (allowedUserTypes && !allowedUserTypes.includes(user.userType)) ||
+    (allowedRoles && !allowedRoles.includes(user.role || "user"))
   ) {
     return null;
   }

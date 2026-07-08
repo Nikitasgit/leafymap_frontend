@@ -4,10 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 import { MapPin, Trash2 } from "lucide-react";
 import PageHeader from "@/components/common/PageHeader";
 import Button from "@/components/common/buttons/Button";
-import TextField from "@/components/common/inputs/TextField/TextField";
-import InfoIcon from "@/components/common/Tooltip/Tooltip";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
-import BaseModal from "@/components/common/modals/BaseModal/BaseModal";
+import TextField from "@/components/common/inputs/TextField";
+import InfoIcon from "@/components/common/Tooltip";
+import LoadingBar from "@/components/common/loading/LoadingBar";
+import BaseModal from "@/components/common/modals/BaseModal";
 import infoStyles from "@/components/account/ProfileInfo/Info.module.scss";
 import type { FormDataChangeHandler } from "@/components/account/CreateProfileStepper";
 import { useDeleteAccount } from "@/hooks/useDeleteAccount";
@@ -35,12 +35,14 @@ const AccountSettingsContainer = () => {
     isLoading: userLoading,
     refetch,
   } = useCurrentUser();
-  const { submitUser, isLoading: submitUserLoading } = useUpdateUser();
+  const { submitUser } = useUpdateUser();
   const { showSuccess, showError } = useToast();
 
   const [user, setUser] = useState<AccountSettingsProfile | null>(null);
   const [userErrors, setUserErrors] = useState<Record<string, string>>({});
   const [isDeletePlaceModalOpen, setIsDeletePlaceModalOpen] = useState(false);
+  const [isSavingEmailNotifications, setIsSavingEmailNotifications] =
+    useState(false);
 
   useEffect(() => {
     if (sessionUser) {
@@ -56,8 +58,53 @@ const AccountSettingsContainer = () => {
     setUser((prev) => (prev ? { ...prev, [name]: value } : prev));
   }, []);
 
-  const handleSaveProfile = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleEmailNotificationsChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { checked } = e.target;
+      const previousValue = user?.preferences.emailNotifications ?? false;
+      setUser((prev) =>
+        prev
+          ? {
+              ...prev,
+              preferences: {
+                ...prev.preferences,
+                emailNotifications: checked,
+              },
+            }
+          : prev
+      );
+      setIsSavingEmailNotifications(true);
+      try {
+        const result = await submitUser({
+          preferences: { emailNotifications: checked },
+        });
+        if (result === true) {
+          showSuccess("Préférence enregistrée");
+          await refetch();
+        } else {
+          throw new Error("Preference update failed");
+        }
+      } catch {
+        setUser((prev) =>
+          prev
+            ? {
+                ...prev,
+                preferences: {
+                  ...prev.preferences,
+                  emailNotifications: previousValue,
+                },
+              }
+            : prev
+        );
+        showError("Impossible d'enregistrer la préférence");
+      } finally {
+        setIsSavingEmailNotifications(false);
+      }
+    },
+    [refetch, showError, showSuccess, submitUser, user]
+  );
+
+  const handleSaveProfile = useCallback(async () => {
     if (!user) return;
 
     const { errors, isValid } = validateLegalNameFields(user);
@@ -67,12 +114,29 @@ const AccountSettingsContainer = () => {
       return;
     }
 
-    const result = await submitUser(user);
+    const normalizedCurrentFirstname = user.firstname?.trim().toLowerCase() ?? "";
+    const normalizedCurrentLastname = user.lastname?.trim().toLowerCase() ?? "";
+    const normalizedSessionFirstname =
+      sessionUser?.firstname?.trim().toLowerCase() ?? "";
+    const normalizedSessionLastname =
+      sessionUser?.lastname?.trim().toLowerCase() ?? "";
+
+    if (
+      normalizedCurrentFirstname === normalizedSessionFirstname &&
+      normalizedCurrentLastname === normalizedSessionLastname
+    ) {
+      return;
+    }
+
+    const result = await submitUser({
+      firstname: user.firstname,
+      lastname: user.lastname,
+    });
     if (result === true) {
       showSuccess("Informations enregistrées");
       await refetch();
     }
-  };
+  }, [refetch, sessionUser, showError, showSuccess, submitUser, user]);
 
   const isUserFormLoading = userLoading || !sessionUser || !user;
 
@@ -97,11 +161,7 @@ const AccountSettingsContainer = () => {
         {isUserFormLoading ? (
           <LoadingBar />
         ) : (
-          <form
-            className={styles.informationsForm}
-            onSubmit={handleSaveProfile}
-            noValidate
-          >
+          <div className={styles.informationsForm}>
             <div className={infoStyles.container}>
               <fieldset className={infoStyles.section}>
                 <legend className={infoStyles.title}>Informations</legend>
@@ -112,6 +172,7 @@ const AccountSettingsContainer = () => {
                     name="firstname"
                     value={capitalizeFirstLetter(user.firstname)}
                     onChange={handleUserChange}
+                    onBlur={handleSaveProfile}
                     error={!!userErrors.firstname}
                     errorMessage={userErrors.firstname}
                   />
@@ -121,24 +182,36 @@ const AccountSettingsContainer = () => {
                     name="lastname"
                     value={capitalizeFirstLetter(user.lastname)}
                     onChange={handleUserChange}
+                    onBlur={handleSaveProfile}
                     error={!!userErrors.lastname}
                     errorMessage={userErrors.lastname}
                   />
                 </div>
               </fieldset>
+              <fieldset className={infoStyles.section}>
+                <legend className={infoStyles.title}>Notifications</legend>
+                <label className={styles.notificationPreference}>
+                  <input
+                    type="checkbox"
+                    checked={user.preferences.emailNotifications}
+                    onChange={handleEmailNotificationsChange}
+                    disabled={isSavingEmailNotifications}
+                    className={styles.notificationCheckbox}
+                  />
+                  <span className={styles.notificationText}>
+                    <span className={styles.notificationTitle}>
+                      Recevoir les notifications par e-mail
+                    </span>
+                    <span className={styles.notificationDescription}>
+                      Vous recevrez un e-mail lorsqu'une notification importante
+                      est créée pour votre compte.
+                      {isSavingEmailNotifications && " Enregistrement..."}
+                    </span>
+                  </span>
+                </label>
+              </fieldset>
             </div>
-            <div className={styles.namesButtonRow}>
-              <Button
-                size="large"
-                type="submit"
-                fullWidth
-                disabled={submitUserLoading}
-                ariaLabel="Enregistrer les informations du profil"
-              >
-                {submitUserLoading ? "Enregistrement..." : "Enregistrer"}
-              </Button>
-            </div>
-          </form>
+          </div>
         )}
         <section
           className={styles.settingsContainer}

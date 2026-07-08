@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import Button from "@/components/common/buttons/Button";
-import PlaceForm from "@/components/account/Place/PlaceForm/PlaceForm";
+import PlaceForm from "@/components/account/Place/PlaceForm";
 import { useToast } from "@/hooks/useToast";
 import { ValidationResult } from "@/validations/commonValidations";
 import { validateNewPlaceData } from "@/validations/placeValidations";

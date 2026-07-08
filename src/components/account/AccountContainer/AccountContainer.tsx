@@ -4,7 +4,7 @@ import AccountHeader from "@/components/account/AccountHeader";
 import AccountActions from "@/components/account/AccountActions";
 import { SideBar } from "@/components/common/SideBar";
 import styles from "./AccountContainer.module.scss";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useAccountSidebar } from "@/hooks/useAccountSidebar";
 
@@ -13,7 +13,7 @@ export default function AccountContainer() {
     useCurrentUser();
   const sidebar = useAccountSidebar(user);
 
-  if (isLoadingUser) {
+  if (isLoadingUser || !user) {
     return <LoadingBar />;
   }
 
@@ -29,12 +29,12 @@ export default function AccountContainer() {
       />
       <div className={styles.accountContainer}>
         <AccountHeader
-          user={user!}
+          user={user}
           isLoadingUser={isLoadingUser}
           onUserUpdated={refetchUser}
         />
         <AccountActions
-          user={user!}
+          user={user}
           isLoadingUser={isLoadingUser}
           onToggleSidebar={sidebar.toggleSidebar}
         />

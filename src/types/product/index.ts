@@ -15,8 +15,3 @@ export interface Product extends BaseEntity {
   productCategory: string | ProductCategory;
   user: string;
 }
-
-export interface ProductPopulated extends BaseEntity {
-  productCategory: ProductCategory & { type: CategoryTypeRef };
-  user: string;
-}

@@ -23,10 +23,6 @@ export interface MapCoordinates {
   zoom?: number;
 }
 
-export interface MapMarker extends MapCoordinates {
-  draggable?: boolean;
-}
-
 export interface LocationWithLabel {
   id: string;
   label: string;

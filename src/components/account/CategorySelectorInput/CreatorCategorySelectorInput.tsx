@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./CategorySelectorInput.module.scss";
 import { useApp } from "@/hooks/useApp";
-import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
+import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper";
 import { UserCategory } from "@/types/categories";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useToast } from "@/hooks/useToast";
-import LoadingBar from "../../common/loading/LoadingBar/LoadingBar";
-import TextField from "../../common/inputs/TextField/TextField";
+import LoadingBar from "../../common/loading/LoadingBar";
+import TextField from "../../common/inputs/TextField";
 import { useTranslation } from "react-i18next";
 
 const CategorySelectorInput = ({
@@ -49,7 +49,11 @@ const CategorySelectorInput = ({
     onPlaceChange({
       target: {
         name: "placeType",
-        value: [userCategory.type.name],
+        value: [
+          typeof userCategory.type === "object"
+            ? userCategory.type._id
+            : userCategory.type,
+        ],
       },
     });
   };

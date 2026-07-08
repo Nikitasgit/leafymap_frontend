@@ -1,17 +1,17 @@
 "use client";
 
 import React from "react";
-import EventCard from "@/components/common/events/EventCard/EventCard";
+import EventCard from "@/components/common/events/EventCard";
 import UsersListXScroll, {
   UsersListXScrollUser,
-} from "@/components/common/users/UsersListXScroll/UsersListXScroll";
+} from "@/components/common/users/UsersListXScroll";
 import EventSchedule from "@/components/eventProfile/EventSchedule";
 import { useEventInvitations } from "@/hooks/useEventInvitations";
 import { EventPopulated } from "@/types/place/event";
 import { PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
 import styles from "./EventDetails.module.scss";
-import CreatorCard from "@/components/userProfile/PlacesSection/CreatorCard/CreatorCard";
+import { CreatorCard } from "@/components/userProfile/PlacesSection/CreatorCard";
 
 export interface EventDetailsProps {
   event: EventPopulated;

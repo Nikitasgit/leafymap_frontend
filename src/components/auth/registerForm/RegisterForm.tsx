@@ -7,8 +7,8 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { RegisterFormGoogleLogin } from "./RegisterFormGoogleLogin";
 import styles from "./RegisterForm.module.scss";
 import Button from "@/components/common/buttons/Button";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
-import TextField from "@/components/common/inputs/TextField/TextField";
+import LoadingBar from "@/components/common/loading/LoadingBar";
+import TextField from "@/components/common/inputs/TextField";
 import CGUCheckbox from "@/components/common/inputs/CguCheckbox";
 import { useRegister } from "@/hooks/useRegister";
 import { useAuth } from "@/hooks/useAuth";
@@ -115,6 +115,21 @@ export default function RegisterForm() {
         error={!!errors.register.acceptedCGU}
         errorMessage={errors.register.acceptedCGU}
       />
+
+      <label className={styles.emailNotificationsCheckbox}>
+        <input
+          type="checkbox"
+          checked={formData.emailNotifications}
+          onChange={(e) =>
+            handleInputChange("emailNotifications", e.target.checked)
+          }
+          disabled={isLoading || authLoading}
+        />
+        <span>
+          Je souhaite recevoir les notifications importantes par e-mail
+          (messages, invitations, abonnés).
+        </span>
+      </label>
 
       <Button
         type="submit"

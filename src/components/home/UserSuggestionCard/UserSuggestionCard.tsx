@@ -2,7 +2,7 @@ import { UserPopulated } from "@/types/user";
 import React from "react";
 import styles from "./UserSuggestionCard.module.scss";
 import Image from "next/image";
-import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge/CreatorCategoryBadge";
+import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge";
 import { MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import creatorDefaultSvg from "@public/images/creator_default.png";

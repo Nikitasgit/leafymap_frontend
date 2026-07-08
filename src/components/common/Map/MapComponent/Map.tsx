@@ -15,7 +15,7 @@ import {
   useImperativeHandle,
 } from "react";
 import { usePlacesInView } from "@/hooks/usePlacesInView";
-import CategoryMarker from "../CategoryMarker/CategoryMarker";
+import CategoryMarker from "../CategoryMarker";
 import { ExtendedMapRef } from "@/types/map";
 import { DEFAULT_LOCATION } from "@/utils/constants";
 import { MapComponentProps, MapViewState } from "./Map.types";

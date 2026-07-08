@@ -1,0 +1,37 @@
+.row {
+  display: grid;
+  grid-template-columns: 2fr repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 12px;
+  background: var(--color-background, #fff);
+  text-align: left;
+  cursor: pointer;
+}
+
+.row:hover {
+  border-color: var(--color-primary, #2f7d32);
+}
+
+.row span {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.row small {
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.warning {
+  color: #b45309;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}

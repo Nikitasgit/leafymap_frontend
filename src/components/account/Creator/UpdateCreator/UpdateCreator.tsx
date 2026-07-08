@@ -8,7 +8,7 @@ import {
 } from "@/components/account/CreateProfileStepper";
 import ActivityFormStep from "@/components/account/CreateProfileSteps/ProfileFormStep";
 import useUpdateUser from "@/hooks/useSubmitUser";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useToast } from "@/hooks/useToast";
 import PageHeader from "@/components/common/PageHeader";
 import styles from "./UpdateCreator.module.scss";

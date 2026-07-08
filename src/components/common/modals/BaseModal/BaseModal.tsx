@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { X } from "lucide-react";
 import Skeleton from "@mui/material/Skeleton";
-import Button from "@/components/common/buttons/Button/Button";
+import Button from "@/components/common/buttons/Button";
 import styles from "./BaseModal.module.scss";
 
 interface BaseModalProps {

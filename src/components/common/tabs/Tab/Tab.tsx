@@ -3,7 +3,7 @@
 import React from "react";
 import { LucideIcon } from "lucide-react";
 import styles from "./Tab.module.scss";
-import { useTabsContainerContext } from "../TabsContainer/TabsContainer";
+import { useTabsContainerContext } from "../TabsContainer";
 
 interface TabProps {
   id: string;

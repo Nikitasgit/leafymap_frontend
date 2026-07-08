@@ -13,6 +13,7 @@ import {
   MapPin,
   Settings,
   Image as ImageIcon,
+  Ticket,
 } from "lucide-react";
 import styles from "./AccountActions.module.scss";
 import { User } from "@/types/user";
@@ -107,6 +108,13 @@ export default function AccountActions({
       onClick: () => onToggleSidebar(SIDEBAR_VALUES.EVENTS),
       disabled: isLoadingUser,
       creatorOnly: true,
+    },
+    {
+      label: "Réservations",
+      ariaLabel: "Ouvrir mes réservations",
+      icon: <Ticket size={16} />,
+      onClick: () => onToggleSidebar(SIDEBAR_VALUES.BOOKINGS),
+      disabled: isLoadingUser,
     },
     {
       label: "Avis",

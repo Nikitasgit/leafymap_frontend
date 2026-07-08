@@ -5,8 +5,8 @@ import Link from "next/link";
 import axios from "axios";
 import styles from "./ResendVerificationForm.module.scss";
 import Button from "@/components/common/buttons/Button";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
-import TextField from "@/components/common/inputs/TextField/TextField";
+import LoadingBar from "@/components/common/loading/LoadingBar";
+import TextField from "@/components/common/inputs/TextField";
 import { useToast } from "@/hooks/useToast";
 import { validateRequestPasswordResetData } from "@/validations/authValidations";
 

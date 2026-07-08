@@ -5,12 +5,12 @@ import Link from "next/link";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import styles from "./SigninForm.module.scss";
 import Button from "@/components/common/buttons/Button";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/useToast";
 import { validateLoginData } from "@/validations/authValidations";
-import TextField from "@/components/common/inputs/TextField/TextField";
+import TextField from "@/components/common/inputs/TextField";
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 

@@ -6,7 +6,7 @@ import styles from "./MapPlaceCardSchedule.module.scss";
 import { MapPlaceCardScheduleProps } from "./MapPlaceCardSchedule.types";
 import Button from "@/components/common/buttons/Button";
 import EventSmallCard from "@/components/common/events/EventSmallCard";
-import EventModal from "@/components/common/modals/EventModal/EventModal";
+import EventModal from "@/components/common/modals/EventModal";
 import { useEvent } from "@/hooks/useEvent";
 import { EventPopulated } from "@/types/place/event";
 

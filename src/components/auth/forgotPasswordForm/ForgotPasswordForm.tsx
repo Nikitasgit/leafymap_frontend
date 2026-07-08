@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./ForgotPasswordForm.module.scss";
 import Button from "@/components/common/buttons/Button";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
-import TextField from "@/components/common/inputs/TextField/TextField";
+import LoadingBar from "@/components/common/loading/LoadingBar";
+import TextField from "@/components/common/inputs/TextField";
 import { usePasswordReset } from "@/hooks/usePasswordReset";
 import {
   validateRequestPasswordResetData,

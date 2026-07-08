@@ -9,7 +9,11 @@ export const ACCOUNT_SETTINGS_PROFILE_KEYS = [
 export type AccountSettingsProfile = Pick<
   User,
   (typeof ACCOUNT_SETTINGS_PROFILE_KEYS)[number]
->;
+> & {
+  preferences: {
+    emailNotifications: boolean;
+  };
+};
 
 export function isAccountSettingsProfileKey(
   key: string,
@@ -23,5 +27,8 @@ export function accountSettingsProfileFromUser(
   return {
     firstname: u.firstname ?? "",
     lastname: u.lastname ?? "",
+    preferences: {
+      emailNotifications: u.preferences?.emailNotifications ?? false,
+    },
   };
 }

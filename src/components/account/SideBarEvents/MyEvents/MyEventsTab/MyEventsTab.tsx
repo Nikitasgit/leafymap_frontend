@@ -7,7 +7,7 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useUserEvents } from "@/hooks/useUserEvents";
 import EventsList from "@/components/account/AccountEventsList";
 import Button from "@/components/common/buttons/Button";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import styles from "./MyEventsTab.module.scss";
 
 export default function MyEventsTab() {

@@ -1,12 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./CategorySelectorInput.module.scss";
-import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
+import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper";
 import { CategoryType, PlaceCategory } from "@/types/categories";
-import { PlaceType } from "@/types/place/placeCaterories";
-import TextField from "../../common/inputs/TextField/TextField";
+import TextField from "../../common/inputs/TextField";
 import { useApp } from "@/hooks/useApp";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
-import LoadingBar from "../../common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "../../common/loading/LoadingBar";
 import { useToast } from "@/hooks/useToast";
 import { useTranslation } from "react-i18next";
 
@@ -19,7 +18,7 @@ const PlaceCategorySelectorInput = ({
 }: {
   value: string;
   onChange: FormDataChangeHandler;
-  selectedTypes?: PlaceType[];
+  selectedTypes?: string[];
   error?: boolean;
   errorMessage?: string;
 }) => {
@@ -29,8 +28,8 @@ const PlaceCategorySelectorInput = ({
   const { showError } = useToast();
   const { t } = useTranslation("subscription");
   const ref = useRef<HTMLDivElement>(null);
-  const getTypeName = (type: CategoryType | string) =>
-    typeof type === "string" ? type : type.name;
+  const getTypeId = (type: CategoryType | string) =>
+    typeof type === "string" ? type : type._id;
 
   const getFilteredCategories = () => {
     if (selectedTypes.length === 0) {
@@ -41,7 +40,7 @@ const PlaceCategorySelectorInput = ({
       return (
         categoryTypes.length > 0 &&
         categoryTypes.some((type) =>
-          selectedTypes.includes(getTypeName(type) as PlaceType)
+          selectedTypes.includes(getTypeId(type)),
         )
       );
     });
@@ -62,7 +61,7 @@ const PlaceCategorySelectorInput = ({
       return (
         categoryTypes.length > 0 &&
         categoryTypes.some((type) =>
-          selectedTypes.includes(getTypeName(type) as PlaceType)
+          selectedTypes.includes(getTypeId(type)),
         )
       );
     };

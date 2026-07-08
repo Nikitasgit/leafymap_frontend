@@ -29,10 +29,10 @@ export const useAuth = (): AuthState => {
 
   const login = async (identifier: string, password: string) => {
     try {
-      await dispatch(signIn({ identifier, password })).unwrap();
+      const user = await dispatch(signIn({ identifier, password })).unwrap();
       await dispatch(fetchCurrentUser()).unwrap();
       showSuccess("Connexion réussie");
-      router.push("/account");
+      router.push(user?.role === "admin" ? "/admin/users" : "/account");
     } catch (error: unknown) {
       if (
         error &&
@@ -61,6 +61,8 @@ export const useAuth = (): AuthState => {
       }
       if (user?.acceptedCGU === false) {
         router.push("/auth/accept-cgu");
+      } else if (user?.role === "admin") {
+        router.push("/admin/users");
       } else {
         router.push("/account");
       }

@@ -27,6 +27,3 @@ export interface SearchSuggestion {
     };
   };
 }
-
-export type SearchInputGeneric<T extends SearchSuggestion> =
-  SearchInputProps<T>;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Eye, Edit3, Trash2, LucideIcon } from "lucide-react";
-import Tooltip from "@/components/common/Tooltip/Tooltip";
+import Tooltip from "@/components/common/Tooltip";
 import styles from "./ActionButtons.module.scss";
 import { ActionType, ActionButtonsProps } from "./ActionButtons.types";
 

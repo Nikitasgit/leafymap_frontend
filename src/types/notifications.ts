@@ -15,6 +15,7 @@ export type NotificationActionType =
   | "event_invitation"
   | "event_accepted"
   | "event_refused"
+  | "event_booking_cancelled"
   | "review"
   | "new_follower"
   | "other";
@@ -27,6 +28,7 @@ export interface NotificationSender {
   image?: {
     urls?: ImageUrls;
   };
+  googlePictureUrl?: string;
 }
 
 export interface Notification {
@@ -40,12 +42,3 @@ export interface Notification {
   updatedAt: string;
   sender?: NotificationSender;
 }
-
-export interface NotificationGroup {
-  count: number;
-  notifications: Notification[];
-}
-
-export type NotificationsByType = Partial<
-  Record<NotificationReferenceType, NotificationGroup>
->;

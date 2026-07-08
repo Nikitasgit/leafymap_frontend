@@ -1,12 +1,16 @@
 "use client";
-import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
-import TextField from "@/components/common/inputs/TextField/TextField";
-import { useState, useEffect, useCallback } from "react";
-import NewDatesEventForm from "../EventNewDatesSelector/EventNewDatesSelector";
+import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper";
+import TextField from "@/components/common/inputs/TextField";
+import { useState, useEffect, useCallback, useRef } from "react";
+import NewDatesEventForm from "../EventNewDatesSelector";
 import Button from "@/components/common/buttons/Button";
 import useSubmitEvent from "@/hooks/useSubmitEvent";
 import { useRouter } from "next/navigation";
-import { getAccountSidebarPath, SIDEBAR_VALUES, EVENTS_TAB_IDS } from "@/utils/accountTabs";
+import {
+  getAccountSidebarPath,
+  SIDEBAR_VALUES,
+  EVENTS_TAB_IDS,
+} from "@/utils/accountTabs";
 import styles from "./EventForm.module.scss";
 import EventScheduleList from "../EventScheduleList";
 import { format } from "date-fns";
@@ -22,17 +26,18 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import LocationPicker from "@/components/common/inputs/LocationPicker";
 import type { Event } from "@/types/place/event";
 import { EventCategorySelectorInput } from "../../CategorySelectorInput";
+import RadioYesOrNo from "@/components/common/inputs/RadioYesOrNo";
 
 type LocationMode = "place" | "address" | "online";
 
-const getEventPlaceId = (event: Event | initialEventData | null): string | null => {
+const getEventPlaceId = (
+  event: Event | initialEventData | null
+): string | null => {
   if (!event?.place) return null;
   return typeof event.place === "string" ? event.place : event.place._id;
 };
 
-const getEventCategoryId = (
-  event: Event | initialEventData | null
-): string => {
+const getEventCategoryId = (event: Event | initialEventData | null): string => {
   if (!event?.eventCategory) return "";
   return typeof event.eventCategory === "string"
     ? event.eventCategory
@@ -48,6 +53,15 @@ const initialEventData = (
   place: getEventPlaceId(event),
   location: event?.location || null,
   online: event?.online || false,
+  isBookable: event?.isBookable || false,
+  capacity:
+    event && "capacity" in event && event.capacity
+      ? String(event.capacity)
+      : "",
+  maxSeatsPerBooking:
+    event && "maxSeatsPerBooking" in event && event.maxSeatsPerBooking
+      ? String(event.maxSeatsPerBooking)
+      : "1",
   schedule:
     event?.schedule.map((period) => ({
       ...period,
@@ -78,9 +92,16 @@ const EventForm = ({
     initialEventData(eventData)
   );
   const [locationMode, setLocationMode] = useState<LocationMode>(
-    eventData?.online ? "online" : eventData?.location ? "address" : eventData?.place ? "place" : "address"
+    eventData?.online
+      ? "online"
+      : eventData?.location
+      ? "address"
+      : eventData?.place
+      ? "place"
+      : "address"
   );
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+  const hasInitializedLocationMode = useRef(!!eventData);
   const [errors, setErrors] = useState<{
     event: Record<string, string>;
   }>({ event: {} });
@@ -91,6 +112,16 @@ const EventForm = ({
   const onEventChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
     setEvent((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleIsBookableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isBookable = e.target.value === "yes";
+    setEvent((prev) => ({
+      ...prev,
+      isBookable,
+      maxSeatsPerBooking: isBookable ? prev.maxSeatsPerBooking || "1" : "1",
+      capacity: isBookable ? prev.capacity : "",
+    }));
   };
 
   const validateFormData = useCallback((): boolean => {
@@ -118,7 +149,13 @@ const EventForm = ({
   }, [event.place, isUpdate, locationMode, userPlace]);
 
   useEffect(() => {
-    if (!isUpdate && userPlace && !event.place && !event.location && !event.online) {
+    if (
+      !isUpdate &&
+      userPlace &&
+      !event.place &&
+      !event.location &&
+      !event.online
+    ) {
       setLocationMode("place");
       setEvent((prev) => ({ ...prev, place: userPlace._id }));
     }
@@ -162,8 +199,17 @@ const EventForm = ({
       }
       if (event) {
         // send event data to server
+        const { isBookable, capacity, maxSeatsPerBooking, ...rest } = event;
+        const eventPayload = {
+          ...rest,
+          isBookable,
+          capacity: isBookable && capacity ? Number(capacity) : null,
+          maxSeatsPerBooking: isBookable
+            ? Number(maxSeatsPerBooking) || 1
+            : 1,
+        };
         const { _id: eventId } = await submitEvent(
-          event,
+          eventPayload,
           isUpdate,
           eventData?._id
         );
@@ -184,7 +230,9 @@ const EventForm = ({
           ? "Évènement modifié avec succès"
           : "Évènement créé avec succès"
       );
-      router.push(getAccountSidebarPath(SIDEBAR_VALUES.EVENTS, EVENTS_TAB_IDS.MY_EVENTS));
+      router.push(
+        getAccountSidebarPath(SIDEBAR_VALUES.EVENTS, EVENTS_TAB_IDS.MY_EVENTS)
+      );
     } catch {
       showError(
         isUpdate
@@ -249,7 +297,9 @@ const EventForm = ({
               />
               <span>
                 Utiliser mon lieu
-                {userPlace.location?.label ? ` (${userPlace.location.label})` : ""}
+                {userPlace.location?.label
+                  ? ` (${userPlace.location.label})`
+                  : ""}
               </span>
             </label>
           )}
@@ -283,6 +333,39 @@ const EventForm = ({
             error={errors.event.location}
             markerName={event.name || "Évènement"}
           />
+        )}
+      </fieldset>
+      <fieldset className={styles.bookingSection}>
+        <legend className={styles.locationTitle}>Réservations</legend>
+        <RadioYesOrNo
+          label="Les participants peuvent-ils réserver une place pour cet évènement ?"
+          name="isBookable"
+          value={event.isBookable ? "yes" : "no"}
+          onChange={handleIsBookableChange}
+        />
+        {event.isBookable && (
+          <div className={styles.bookingFields}>
+            <TextField
+              type="number"
+              label="Nombre de places total"
+              placeholder="Laisser vide pour un nombre illimité"
+              name="capacity"
+              value={event.capacity}
+              onChange={onEventChange}
+              error={!!errors.event.capacity}
+              errorMessage={errors.event.capacity}
+            />
+            <TextField
+              type="number"
+              label="Nombre de places réservables par utilisateur"
+              required
+              name="maxSeatsPerBooking"
+              value={event.maxSeatsPerBooking}
+              onChange={onEventChange}
+              error={!!errors.event.maxSeatsPerBooking}
+              errorMessage={errors.event.maxSeatsPerBooking}
+            />
+          </div>
         )}
       </fieldset>
       <NewDatesEventForm onChange={onEventChange} data={event} />

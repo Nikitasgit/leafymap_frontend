@@ -1,0 +1,17 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/functions" as *;
+
+.container {
+  width: 100%;
+  max-width: rem(1000);
+  margin: 0 auto;
+  padding: spacing(1);
+  display: flex;
+  flex-direction: column;
+  gap: spacing(1.5);
+
+  @include respond-to(md) {
+    padding: spacing(3) spacing(1.5);
+  }
+}

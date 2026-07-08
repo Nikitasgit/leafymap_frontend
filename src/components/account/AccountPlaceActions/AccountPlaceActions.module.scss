@@ -1,9 +1,0 @@
-@use "@/styles/abstracts/mixins" as *;
-@use "@/styles/abstracts/functions" as *;
-@use "@/styles/abstracts/variables" as *;
-
-.actions {
-  margin-top: spacing(1.5);
-  @include flex(column, flex-start, stretch, spacing(1));
-}
-

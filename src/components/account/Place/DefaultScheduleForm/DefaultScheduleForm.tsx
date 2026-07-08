@@ -1,4 +1,4 @@
-import DayInput from "../DefaultScheduleDay/DefaultScheduleDay";
+import DayInput from "../DefaultScheduleDay";
 import styles from "./DefaultScheduleForm.module.scss";
 import { DaySchedule, WeekDay } from "@/types/place/schedule";
 import { DefaultScheduleFormProps } from "./DefaultScheduleForm.types";

@@ -1,5 +1,5 @@
 import React from "react";
-import DisplayPublishingDate from "@/components/common/date/DisplayPublishingDate/DisplayPublishingDate";
+import DisplayPublishingDate from "@/components/common/date/DisplayPublishingDate";
 import PartnershipMessage from "@/components/messages/PartnershipMessage";
 import type { MessagePartnership } from "@/components/messages/PartnershipMessage";
 import { Avatar } from "@/components/common/Avatar";

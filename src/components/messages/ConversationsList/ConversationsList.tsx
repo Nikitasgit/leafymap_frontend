@@ -1,6 +1,6 @@
 import React from "react";
 import { Conversation } from "@/hooks/useConversations";
-import ConversationCard from "../ConversationCard/ConversationCard";
+import ConversationCard from "../ConversationCard";
 import { ConversationCardSkeleton } from "../skeletons";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import { MessageSquare } from "lucide-react";

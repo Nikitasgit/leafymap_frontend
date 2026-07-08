@@ -6,6 +6,7 @@ type TextfieldProps = {
   name: string;
   value: string;
   onFocus?: () => void;
+  onBlur?: () => void;
   onClick?: () => void;
   onKeyDown?: (
     event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -34,6 +35,7 @@ const TextField: React.FC<TextfieldProps> = ({
   value,
   onChange,
   onFocus,
+  onBlur,
   onClick,
   onKeyDown,
   type = "text",
@@ -74,6 +76,7 @@ const TextField: React.FC<TextfieldProps> = ({
             placeholder={placeholder}
             onChange={onChange}
             onFocus={onFocus}
+            onBlur={onBlur}
             onClick={onClick}
             onKeyDown={onKeyDown}
             rows={rows}
@@ -105,6 +108,7 @@ const TextField: React.FC<TextfieldProps> = ({
           onChange={onChange}
           required={required}
           onFocus={onFocus}
+          onBlur={onBlur}
           onClick={onClick}
           onKeyDown={onKeyDown}
           maxLength={maxLength}

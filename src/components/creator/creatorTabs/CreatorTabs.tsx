@@ -1,6 +1,6 @@
 import { useState } from "react";
-import TabsContainer from "@/components/common/tabs/TabsContainer/TabsContainer";
-import Tab from "@/components/common/tabs/Tab/Tab";
+import TabsContainer from "@/components/common/tabs/TabsContainer";
+import Tab from "@/components/common/tabs/Tab";
 import { FileText, Star, Image as ImageIcon, Calendar } from "lucide-react";
 import { Place, PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
@@ -8,8 +8,8 @@ import { useUserEvents } from "@/hooks/useUserEvents";
 import { ACTIVE_LIFECYCLE_STATUSES } from "@/utils/constants";
 import PresentationTab from "@/components/creator/PresentationTab";
 import EventsTab from "@/components/common/events/EventsTab";
-import ReviewsTab from "@/components/reviews/ReviewsTab/ReviewsTab";
-import GallerySection from "@/components/userProfile/GallerySection/GallerySection";
+import ReviewsTab from "@/components/reviews/ReviewsTab";
+import GallerySection from "@/components/userProfile/GallerySection";
 import styles from "./CreatorTabs.module.scss";
 
 export interface CreatorTabsProps {

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import ProfileFormStep from "../CreateProfileSteps/ProfileFormStep/ProfileFormStep";
+import ProfileFormStep from "../CreateProfileSteps/ProfileFormStep";
 import {
   FormDataChangeHandler,
   InitialCreatorData,
@@ -14,7 +14,7 @@ import { User } from "@/types/user";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
 import PageHeader from "@/components/common/PageHeader";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import ProtectedRoute from "@/components/common/ProtectedRoute";
 import { useAuth } from "@/hooks/useAuth";
 

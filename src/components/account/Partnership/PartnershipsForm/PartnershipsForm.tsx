@@ -1,7 +1,7 @@
 "use client";
 import { Collaborator } from "@/types/place/collaborators";
 import styles from "./PartnershipsForm.module.scss";
-import Tooltip from "@/components/common/Tooltip/Tooltip";
+import Tooltip from "@/components/common/Tooltip";
 import { Users } from "lucide-react";
 import { generateTempId, isTempId } from "@/utils/tempId";
 import { Partnership } from "@/types/partnerships";

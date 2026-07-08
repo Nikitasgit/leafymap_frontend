@@ -7,7 +7,7 @@ import { useEventInvitationsByUserId } from "@/hooks/useEventInvitationsByUserId
 import { useEventInvitationActions } from "@/hooks/useEventInvitationActions";
 import EventInvitationsReceivedList from "../EventInvitationsReceivedList";
 import EmptyState from "@/components/common/noResults/EmptyState";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import styles from "./EventInvitationsReceivedTab.module.scss";
 
 export default function EventInvitationsReceivedTab() {

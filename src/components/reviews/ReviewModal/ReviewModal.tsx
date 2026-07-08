@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import StarsReview from "@/components/common/stars/StarsReview/StarsReview";
-import BaseModal from "@/components/common/modals/BaseModal/BaseModal";
-import TextField from "@/components/common/inputs/TextField/TextField";
+import StarsReview from "@/components/common/stars/StarsReview";
+import BaseModal from "@/components/common/modals/BaseModal";
+import TextField from "@/components/common/inputs/TextField";
 import useSubmitReview from "@/hooks/useSubmitReview";
 import useUpdateReview from "@/hooks/useUpdateReview";
 import styles from "./ReviewModal.module.scss";

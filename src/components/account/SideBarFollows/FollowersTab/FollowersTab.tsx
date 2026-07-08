@@ -7,7 +7,7 @@ import { UserCard } from "@/components/userProfile/PlacesSection/UserCard";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import { Users } from "lucide-react";
 import styles from "./FollowersTab.module.scss";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 
 const FollowersTab: React.FC = () => {
   const { user } = useCurrentUser();

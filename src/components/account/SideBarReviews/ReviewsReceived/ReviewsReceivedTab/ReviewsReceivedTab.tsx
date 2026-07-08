@@ -3,8 +3,8 @@
 import { Star } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useReviewsReceived } from "@/hooks/useReviewsReceived";
-import ReviewCard from "@/components/reviews/ReviewCard/ReviewCard";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import ReviewCard from "@/components/reviews/ReviewCard";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import styles from "./ReviewsReceivedTab.module.scss";
 import { UserPopulated } from "@/types/user";

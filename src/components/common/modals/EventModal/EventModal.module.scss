@@ -2,11 +2,34 @@
 @use "@/styles/abstracts/mixins" as *;
 @use "@/styles/abstracts/functions" as *;
 
+.titleIconBadge {
+  @include flex(row, center, center, 0);
+  width: rem(34);
+  height: rem(34);
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: rgba($primary-color, 0.12);
+  color: $primary-color;
+}
+
 .eventModalContent {
-  @include flex(column, flex-start, stretch, spacing(0.5));
+  @include flex(column, flex-start, stretch, spacing(1));
+  padding: spacing(0.75);
+  border-radius: rem(12);
+  background: linear-gradient(
+    160deg,
+    rgba($primary-color, 0.06),
+    rgba($primary-color, 0) 60%
+  );
 
   .eventCardContainer {
     width: 100%;
     margin-bottom: spacing(0.25);
   }
+}
+
+.actionsRow {
+  @include flex(row, stretch, center, spacing(0.75));
+  padding-top: spacing(0.75);
+  border-top: 1px solid $grey-100;
 }

@@ -3,7 +3,7 @@ import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useToast } from "@/hooks/useToast";
 import { fetchLocationSuggestions } from "@/utils/map";
 import styles from "./AddressInput.module.scss";
-import TextField from "../TextField/TextField";
+import TextField from "../TextField";
 import { AddressInputProps } from "./AddressInput.types";
 import { Location } from "@/types/common";
 

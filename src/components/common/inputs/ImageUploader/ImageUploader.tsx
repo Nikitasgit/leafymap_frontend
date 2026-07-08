@@ -1,6 +1,6 @@
 import React from "react";
 import { Plus } from "lucide-react";
-import LoadingSpinner from "@/components/common/loading/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
 import styles from "./ImageUploader.module.scss";
 
 interface ImageUploaderProps {

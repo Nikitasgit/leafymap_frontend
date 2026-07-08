@@ -6,6 +6,7 @@ import {
   UserPlus,
   Calendar,
   CalendarDays,
+  Ticket,
   Star,
   MessageSquare,
   Leaf,
@@ -21,6 +22,7 @@ import {
   EventInvitationsReceivedTab,
   EventParticipationsTab,
   MyEventsTab,
+  MyEventBookingsTab,
 } from "@/components/account/SideBarEvents";
 import {
   ReviewsWrittenTab,
@@ -31,11 +33,12 @@ import {
   FollowingTab,
 } from "@/components/account/SideBarFollows";
 import { MyProductsTab } from "@/components/account/SideBarProducts/MyProductsTab";
-import type { SideBarTab } from "@/components/common/SideBar/SideBar";
+import type { SideBarTab } from "@/components/common/SideBar";
 import {
   SIDEBAR_VALUES,
   COLLABORATIONS_TAB_IDS,
   EVENTS_TAB_IDS,
+  BOOKINGS_TAB_IDS,
   REVIEWS_TAB_IDS,
   FOLLOWS_TAB_IDS,
   PRODUCTS_TAB_IDS,
@@ -98,6 +101,15 @@ export const EVENTS_TABS: ExtendedSideBarTab[] = [
     label: "Mes participations",
     icon: CalendarDays,
     content: <EventParticipationsTab />,
+  },
+];
+
+export const BOOKINGS_TABS: ExtendedSideBarTab[] = [
+  {
+    id: BOOKINGS_TAB_IDS.MY_BOOKINGS,
+    label: "Mes réservations",
+    icon: Ticket,
+    content: <MyEventBookingsTab />,
   },
 ];
 
@@ -169,6 +181,11 @@ export const SIDEBAR_REGISTRY: Record<SidebarValue, SidebarConfig> = {
     title: "Mes évènements",
     tabs: EVENTS_TABS,
     defaultTab: EVENTS_TAB_IDS.MY_EVENTS,
+  },
+  [SIDEBAR_VALUES.BOOKINGS]: {
+    title: "Réservations",
+    tabs: BOOKINGS_TABS,
+    defaultTab: BOOKINGS_TAB_IDS.MY_BOOKINGS,
   },
   [SIDEBAR_VALUES.REVIEWS]: {
     title: "Avis",

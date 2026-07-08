@@ -52,6 +52,34 @@
     }
   }
 
+  .notificationPreference {
+    @include flex(row, flex-start, flex-start, spacing(1));
+    cursor: pointer;
+    color: $grey-700;
+  }
+
+  .notificationCheckbox {
+    margin-top: rem(3);
+    accent-color: $primary-color;
+    cursor: pointer;
+  }
+
+  .notificationText {
+    @include flex(column, flex-start, stretch, spacing(0.25));
+  }
+
+  .notificationTitle {
+    color: $grey-800;
+    font-size: rem(14);
+    font-weight: 500;
+  }
+
+  .notificationDescription {
+    color: $grey-600;
+    font-size: rem(13);
+    line-height: 1.4;
+  }
+
   .settingsContainer {
     margin-top: spacing(2);
 

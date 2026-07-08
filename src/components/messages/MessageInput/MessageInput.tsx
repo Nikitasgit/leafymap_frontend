@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import TextField from "@/components/common/inputs/TextField/TextField";
+import TextField from "@/components/common/inputs/TextField";
 import { Send } from "lucide-react";
 import { useSendMessage } from "@/hooks/useSendMessage";
 import styles from "./MessageInput.module.scss";

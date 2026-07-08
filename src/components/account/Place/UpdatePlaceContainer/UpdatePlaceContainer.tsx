@@ -6,20 +6,44 @@ import { usePlace } from "@/hooks/usePlace";
 import {
   FormDataChangeHandler,
   InitialPlaceData,
-} from "@/components/account/CreateProfileStepper/CreateProfileStepper.types";
+} from "@/components/account/CreateProfileStepper";
 import { defaultSchedule } from "@/utils/createProfile";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import styles from "./UpdatePlaceContainer.module.scss";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
 import { useToast } from "@/hooks/useToast";
-import PageHeader from "@/components/common/PageHeader/PageHeader";
+import PageHeader from "@/components/common/PageHeader";
 import Button from "@/components/common/buttons/Button";
-import PlaceForm from "@/components/account/Place/PlaceForm/PlaceForm";
+import PlaceForm from "@/components/account/Place/PlaceForm";
 import { ValidationResult } from "@/validations/commonValidations";
 import { validateNewPlaceData } from "@/validations/placeValidations";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { CategoryType } from "@/types/categories";
 
-const initialPlaceData = (place: InitialPlaceData): InitialPlaceData => ({
+const normalizePlaceTypes = (
+  placeType: string[] | Partial<CategoryType>[] | undefined,
+): string[] => {
+  if (!placeType?.length) return [];
+  return placeType.map((type) =>
+    typeof type === "string" ? type : (type as CategoryType)._id,
+  );
+};
+
+const initialPlaceData = (
+  place: Pick<
+    InitialPlaceData,
+    | "name"
+    | "description"
+    | "location"
+    | "defaultSchedule"
+    | "placeCategory"
+    | "phone"
+    | "email"
+    | "website"
+  > & {
+    placeType?: string[] | Partial<CategoryType>[];
+  },
+): InitialPlaceData => ({
   name: place?.name || "",
   description: place?.description || "",
   location: place?.location || null,
@@ -31,7 +55,7 @@ const initialPlaceData = (place: InitialPlaceData): InitialPlaceData => ({
   phone: place?.phone || "",
   email: place?.email || "",
   website: place?.website || "",
-  placeType: place?.placeType || [],
+  placeType: normalizePlaceTypes(place?.placeType),
   active: true,
 });
 

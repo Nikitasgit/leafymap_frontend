@@ -11,7 +11,8 @@ export const useEventInvitationActions = (onUpdate?: () => void) => {
       _id: string;
       status?: "pending" | "accepted" | "refused" | "cancelled" | "completed";
       deleted?: boolean;
-    }>
+    }>,
+    successMessage = "Invitation mise à jour"
   ) => {
     try {
       await withLoading(() =>
@@ -27,7 +28,7 @@ export const useEventInvitationActions = (onUpdate?: () => void) => {
         )
       );
 
-      showSuccess("Invitation mise à jour");
+      showSuccess(successMessage);
       onUpdate?.();
     } catch (error) {
       console.error("Error updating event invitations:", error);
@@ -47,10 +48,18 @@ export const useEventInvitationActions = (onUpdate?: () => void) => {
     ]);
   };
 
+  const cancelEventInvitation = async (eventInvitationId: string) => {
+    await updateEventInvitations(
+      [{ _id: eventInvitationId, status: "cancelled" }],
+      "Participation annulée"
+    );
+  };
+
   return {
     isLoading,
     updateEventInvitations,
     acceptEventInvitation,
     refuseEventInvitation,
+    cancelEventInvitation,
   };
 };

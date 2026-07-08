@@ -7,7 +7,7 @@ import { usePartnershipsReceived } from "@/hooks/usePartnershipsReceived";
 import { usePartnershipInvitationActions } from "@/hooks/usePartnershipInvitationActions";
 import PartnershipsReceivedList from "../PartnershipsReceivedList";
 import EmptyState from "@/components/common/noResults/EmptyState";
-import LoadingBar from "@/components/common/loading/LoadingBar/LoadingBar";
+import LoadingBar from "@/components/common/loading/LoadingBar";
 import styles from "./PartnershipsReceivedTab.module.scss";
 
 export default function PartnershipsReceivedTab() {
