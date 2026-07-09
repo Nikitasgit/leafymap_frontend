@@ -1,4 +1,5 @@
 import SignInForm from "@/components/auth/signinForm";
+import GuestOnlyRoute from "@/components/common/GuestOnlyRoute";
 import { getPageMetadata } from "@/lib/pageMetadata";
 
 export async function generateMetadata({
@@ -11,5 +12,9 @@ export async function generateMetadata({
 }
 
 export default function SignIn() {
-  return <SignInForm />;
+  return (
+    <GuestOnlyRoute>
+      <SignInForm />
+    </GuestOnlyRoute>
+  );
 }

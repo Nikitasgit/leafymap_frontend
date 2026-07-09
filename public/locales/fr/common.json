@@ -1,6 +1,22 @@
 {
   "hello": "Bonjour",
   "welcome": "Bienvenue sur mon site !",
+  "actions": {
+    "back": "Retour",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "send": "Envoyer",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "close": "Fermer",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "seeMore": "Voir plus",
+    "search": "Rechercher",
+    "view": "Voir"
+  },
   "filters": "Filtres",
   "dates": "Dates",
   "categories": "Catégories",
@@ -201,5 +217,102 @@
     "spices": "Épices",
     "tea": "Thé",
     "coffee": "Café"
+  },
+  "addressInput": {
+    "label": "Adresse",
+    "placeholder": "Rechercher une adresse...",
+    "searchError": "Erreur lors de la recherche d'adresse. Veuillez réessayer."
+  },
+  "datesSelector": {
+    "singleDay": "Un jour",
+    "singleDayAriaLabel": "Un jour",
+    "period": "Période",
+    "periodAriaLabel": "Période",
+    "selectPeriodPlaceholder": "Sélectionner la période",
+    "selectDatePlaceholder": "Sélectionner la date",
+    "timeCaption": "Heure"
+  },
+  "timeSlotInputs": {
+    "startTimePlaceholder": "Heure de début *",
+    "endTimePlaceholder": "Heure de fin *",
+    "separator": "à",
+    "removeSlotAriaLabel": "Supprimer ce créneau horaire"
+  },
+  "locationPicker": {
+    "defaultMarkerName": "Évènement",
+    "mapTitle": "Cliquez sur la carte pour positionner l'évènement"
+  },
+  "searchInput": {
+    "defaultPlaceholder": "Rechercher...",
+    "creatorAlt": "Créateur"
+  },
+  "cguCheckbox": {
+    "label": "J'accepte les <link>Conditions Générales d'Utilisation</link>",
+    "cguLinkAriaLabel": "Lire les Conditions Générales d'Utilisation"
+  },
+  "radioYesOrNo": {
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "eventModal": {
+    "seeMoreAriaLabel": "Voir plus de détails sur l'évènement",
+    "bookAriaLabel": "Réserver une place pour cet évènement",
+    "book": "Réserver"
+  },
+  "shareModal": {
+    "title": "Partager",
+    "copyLink": "Copier le lien",
+    "linkCopied": "Lien copié dans le presse-papiers",
+    "copyFailed": "Impossible de copier le lien",
+    "shareUrlAriaLabel": "Lien à partager",
+    "whatsappAriaLabel": "Partager sur WhatsApp",
+    "whatsappButton": "Partager sur WhatsApp"
+  },
+  "galleryImageModal": {
+    "previousAriaLabel": "Image précédente",
+    "nextAriaLabel": "Image suivante",
+    "imageAlt": "Image {{index}}"
+  },
+  "baseModal": {
+    "closeAriaLabel": "Fermer la modale",
+    "loading": "Chargement..."
+  },
+  "starsReview": {
+    "ariaLabel": "Notation",
+    "starAriaLabel_one": "{{count}} étoile",
+    "starAriaLabel_other": "{{count}} étoiles"
+  },
+  "starsDisplay": {
+    "ariaLabel": "{{rating}} sur 5 étoiles"
+  },
+  "partnershipCard": {
+    "defaultUser": "Utilisateur",
+    "creatorAlt": "Créateur",
+    "openMenuAriaLabel": "Ouvrir le menu",
+    "viewProfileAriaLabel": "Voir le profil de {{name}}"
+  },
+  "threeDotsMenu": {
+    "openMenuAriaLabel": "Ouvrir le menu"
+  },
+  "creatorCardWithAddress": {
+    "defaultUser": "Utilisateur"
+  },
+  "followingCount": {
+    "follower_one": "abonné",
+    "follower_other": "abonnés"
+  },
+  "usersListXScroll": {
+    "scrollLeftAriaLabel": "Défiler vers la gauche",
+    "scrollRightAriaLabel": "Défiler vers la droite"
+  },
+  "loadingSpinner": {
+    "ariaLabel": "Chargement en cours"
+  },
+  "navbar": {
+    "mainNavAriaLabel": "Navigation principale",
+    "notificationsAriaLabel": "Notifications",
+    "openMenuAriaLabel": "Ouvrir le menu",
+    "closeMenuAriaLabel": "Fermer le menu",
+    "languageSwitcherAriaLabel": "Changer de langue"
   }
 }

@@ -1,4 +1,4 @@
-import { MapFilters } from "@/types/map";
+import { MapDisplayMode, MapFilters } from "@/types/map";
 import type { Place } from "@/types/place";
 
 export type MapViewState = {
@@ -15,9 +15,17 @@ export interface MapComponentProps {
   withPlacesInView?: boolean;
   setLoading?: (loading: boolean) => void;
   onMarkerClick?: (placeId: string) => void;
+  onEventMarkerClick?: (
+    creatorId: string,
+    eventId: string,
+    coordinates: number[]
+  ) => void;
   onMapClick?: (coords: { longitude: number; latitude: number }) => void;
+  onMapDragStart?: () => void;
   onMapReady?: () => void;
   selectedPlaceId?: string;
+  selectedEventId?: string | null;
+  displayMode?: MapDisplayMode;
   userMarker?: {
     location: { coordinates: number[] };
     placeCategory: { name: string };

@@ -1,36 +1,35 @@
 import { useCallback } from "react";
-import axios from "axios";
+import { apiClient, isAxiosError } from "@/lib/api/client";
 import { useToast } from "./useToast";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export const useSendPartnership = (onSuccess?: () => void) => {
   const { showSuccess, showError, showInfo } = useToast();
+  const { t } = useTranslation("account");
 
   const sendPartnership = useCallback(
     async (collaboratorId: string) => {
       try {
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/partnerships`,
+        await apiClient.post(
+          `/api/partnerships`,
           {
             partnership: {
               collaborator: { _id: collaboratorId },
             },
           },
           {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
+            headers: { "Content-Type": "application/json" }
           }
         );
-        showSuccess("Invitation envoyée");
+        showSuccess(t("useSendPartnership.sendSuccess"));
         onSuccess?.();
       } catch (err) {
-        const message =
-          axios.isAxiosError(err) && err.response?.data?.message
-            ? String(err.response.data.message)
-            : err instanceof Error
-            ? err.message
-            : "Erreur lors de l'envoi de l'invitation";
+        const message = getErrorMessage(
+          err, t, t("useSendPartnership.sendError"),
+        );
         const isAlreadySent =
-          axios.isAxiosError(err) && err.response?.status === 409;
+          isAxiosError(err) && err.response?.status === 409;
         if (isAlreadySent) {
           showInfo(message);
         } else {
@@ -38,7 +37,7 @@ export const useSendPartnership = (onSuccess?: () => void) => {
         }
       }
     },
-    [showSuccess, showError, showInfo, onSuccess]
+    [showSuccess, showError, showInfo, onSuccess, t]
   );
 
   return { sendPartnership };

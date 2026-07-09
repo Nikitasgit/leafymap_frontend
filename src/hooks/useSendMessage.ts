@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
-import axios from "axios";
+import { useTranslation } from "react-i18next";
+import { apiClient } from "@/lib/api/client";
 import { useToast } from "./useToast";
 
 interface SendMessageParams {
@@ -20,6 +21,7 @@ interface UseSendMessageReturn {
 export const useSendMessage = (
   onMessageSent?: (result: SendMessageResult) => void
 ): UseSendMessageReturn => {
+  const { t } = useTranslation("messages");
   const [isSending, setIsSending] = useState(false);
   const { showError, showSuccess } = useToast();
 
@@ -35,33 +37,32 @@ export const useSendMessage = (
       setIsSending(true);
 
       try {
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/messages`,
+        const response = await apiClient.post(
+          `/api/messages`,
           {
             recipientId,
             content: content.trim(),
           },
           {
-            withCredentials: true,
           }
         );
 
         const result = response.data?.data as SendMessageResult;
-        showSuccess("Message envoyé");
+        showSuccess(t("useSendMessage.success"));
         onMessageSent?.(result);
         return result;
       } catch (err) {
         const errorMessage =
           err instanceof Error
             ? err.message
-            : "Erreur lors de l'envoi du message";
+            : t("useSendMessage.error");
         showError(errorMessage);
         throw err;
       } finally {
         setIsSending(false);
       }
     },
-    [isSending, onMessageSent, showError, showSuccess]
+    [isSending, onMessageSent, showError, showSuccess, t]
   );
 
   return { sendMessage, isSending };

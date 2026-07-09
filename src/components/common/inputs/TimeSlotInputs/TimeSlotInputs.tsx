@@ -1,14 +1,19 @@
+"use client";
+
 import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from "react-datepicker";
 import { fr } from "date-fns/locale/fr";
+import { enUS } from "date-fns/locale/en-US";
+import { useTranslation } from "react-i18next";
 import { EventTimeSlot, TimeSlot } from "@/types/place/schedule";
 import styles from "./TimeSlotInputs.module.scss";
 import { XCircle } from "lucide-react";
 import Button from "../../buttons/Button";
 
 registerLocale("fr", fr);
+registerLocale("en", enUS);
 
 interface TimeSlotInputsProps {
   slot: TimeSlot | EventTimeSlot;
@@ -25,6 +30,9 @@ const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
   getExcludedTimes = () => [],
   canRemove = true,
 }) => {
+  const { t, i18n } = useTranslation("common");
+  const dateLocale = i18n.language === "fr" ? "fr" : "en";
+
   const parseTimeString = (timeString: string): Date | null => {
     if (!timeString) return null;
     const [hours, minutes] = timeString.split(":").map(Number);
@@ -42,10 +50,10 @@ const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
           showTimeSelect
           showTimeSelectOnly
           timeIntervals={10}
-          timeCaption="Heure"
+          timeCaption={t("datesSelector.timeCaption")}
           dateFormat="HH:mm"
-          placeholderText="Heure de début *"
-          locale="fr"
+          placeholderText={t("timeSlotInputs.startTimePlaceholder")}
+          locale={dateLocale}
           className={styles.timePicker}
           excludeTimes={getExcludedTimes(true)}
           onKeyDown={(e) => e.preventDefault()}
@@ -59,17 +67,17 @@ const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
             strategy: "fixed",
           }}
         />
-        <p className={styles.timeSeparator}>à</p>
+        <p className={styles.timeSeparator}>{t("timeSlotInputs.separator")}</p>
         <DatePicker
           selected={parseTimeString(slot.endTime)}
           onChange={(time: Date | null) => onTimeChange("endTime", time)}
           showTimeSelect
           showTimeSelectOnly
           timeIntervals={10}
-          timeCaption="Heure"
+          timeCaption={t("datesSelector.timeCaption")}
           dateFormat="HH:mm"
-          placeholderText="Heure de fin *"
-          locale="fr"
+          placeholderText={t("timeSlotInputs.endTimePlaceholder")}
+          locale={dateLocale}
           minTime={
             slot.startTime
               ? parseTimeString(slot.startTime)!
@@ -89,7 +97,7 @@ const TimeSlotInputs: React.FC<TimeSlotInputsProps> = ({
           onClick={onRemove}
           variant="simple"
           size="small"
-          ariaLabel="Supprimer ce créneau horaire"
+          ariaLabel={t("timeSlotInputs.removeSlotAriaLabel")}
         >
           <XCircle size={20} />
         </Button>

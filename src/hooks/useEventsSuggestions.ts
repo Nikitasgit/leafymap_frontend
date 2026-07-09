@@ -1,8 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { EventPopulated } from "@/types/place/event";
 import { useToast } from "./useToast";
 import { useLoading } from "./useLoading";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 const EVENTS_SUGGESTIONS_LIMIT = 30;
 
@@ -11,6 +13,7 @@ export const useEventsSuggestions = () => {
   const [hasFetched, setHasFetched] = useState(false);
   const { isLoading, withLoading } = useLoading();
   const { showError } = useToast();
+  const { t } = useTranslation("events");
 
   const fetchEvents = useCallback(async (): Promise<EventPopulated[]> => {
     return withLoading(async () => {
@@ -20,25 +23,23 @@ export const useEventsSuggestions = () => {
           sortBy: "createdAt",
           order: "desc",
         });
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/events?${params.toString()}`
+        const res = await apiClient.get(
+          `/api/events?${params.toString()}`
         );
         const data = res.data?.data ?? [];
         setEvents(data);
         return data;
       } catch (err) {
-        const message =
-          err instanceof Error
-            ? err.message
-            : "Erreur lors du chargement des événements";
-        showError(message);
+        showError(
+          getErrorMessage(err, t, t("eventsSuggestions.loadError"))
+        );
         setEvents([]);
         return [];
       } finally {
         setHasFetched(true);
       }
     });
-  }, [withLoading, showError]);
+  }, [withLoading, showError, t]);
 
   useEffect(() => {
     fetchEvents();

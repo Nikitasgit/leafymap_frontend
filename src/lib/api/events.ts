@@ -1,10 +1,11 @@
-import axios from "axios";
 import { APP_URL } from "@/utils/constants";
+import { apiClient } from "@/lib/api/client";
+import type { Event } from "@/types/place/event";
 
 export const getEventById = async (eventId: string) => {
   try {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/events/${eventId}`;
-    const response = await axios.get(url, {
+    const url = `/api/events/${eventId}`;
+    const response = await apiClient.get(url, {
       headers: {
         Origin: APP_URL,
         "Content-Type": "application/json",
@@ -22,4 +23,21 @@ export const getEventById = async (eventId: string) => {
         : "Erreur lors du chargement de l'événement";
     return errorMessage;
   }
+};
+
+export const searchEvents = async (search: string, limit = 10): Promise<Event[]> => {
+  const response = await apiClient.get(`/api/events`, {
+    params: {
+      search,
+      limit,
+      sortBy: "dateRange.firstDate",
+      order: "asc",
+    },
+    headers: {
+      Origin: APP_URL,
+      "Content-Type": "application/json",
+    },
+  });
+
+  return Array.isArray(response.data?.data) ? response.data.data : [];
 };

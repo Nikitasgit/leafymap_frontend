@@ -1,126 +1,144 @@
 import { z } from "zod";
-import { emailSchema, ValidationResult } from "./commonValidations";
+import type { TFunction } from "i18next";
+import {
+  createEmailSchema,
+  ValidationResult,
+} from "./commonValidations";
 import { RegisterFormData, LoginFormData } from "@/types/auth";
 
 const isDev = () => process.env.NODE_ENV === "development";
 
-const passwordSchema = z
-  .string()
-  .min(10, "Le mot de passe doit contenir au moins 10 caractères")
-  .max(100, "Le mot de passe ne peut pas dépasser 100 caractères")
-  .regex(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-    "Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre"
-  );
+export const createPasswordSchema = (t: TFunction<"validation">) =>
+  z
+    .string()
+    .min(10, t("auth.password.minLength"))
+    .max(100, t("auth.password.maxLength"))
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+      t("auth.password.complexity"),
+    );
 
-const devPasswordSchema = z.string().min(1, "Le mot de passe est requis");
+export const createDevPasswordSchema = (t: TFunction<"validation">) =>
+  z.string().min(1, t("auth.password.required"));
 
-export const registerSchema = z
-  .object({
-    email: emailSchema,
-    password: isDev() ? devPasswordSchema : passwordSchema,
-    confirmPassword: z
-      .string()
-      .min(1, "La confirmation du mot de passe est requise"),
-    acceptedCGU: z.boolean().refine((val) => val === true, {
-      message: "Vous devez accepter les Conditions Générales d'Utilisation",
-    }),
-    emailNotifications: z.boolean(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Les mots de passe ne correspondent pas",
-    path: ["confirmPassword"],
+export const createRegisterSchema = (t: TFunction<"validation">) => {
+  const passwordSchema = isDev()
+    ? createDevPasswordSchema(t)
+    : createPasswordSchema(t);
+
+  return z
+    .object({
+      email: createEmailSchema(t),
+      password: passwordSchema,
+      confirmPassword: z
+        .string()
+        .min(1, t("auth.passwordConfirm.required")),
+      acceptedCGU: z.boolean().refine((val) => val === true, {
+        message: t("auth.cgu.required"),
+      }),
+      emailNotifications: z.boolean(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("auth.passwordConfirm.mismatch"),
+      path: ["confirmPassword"],
+    });
+};
+
+export const createValidateRegisterData =
+  (t: TFunction<"validation">) =>
+  (data: RegisterFormData): ValidationResult => {
+    const errors: Record<string, string> = {};
+    const result = createRegisterSchema(t).safeParse(data);
+    if (result && !result.success && result.error?.issues) {
+      result.error.issues.forEach((err) => {
+        const field = err.path.join(".");
+        errors[field] = err.message;
+      });
+    }
+    return {
+      errors,
+      isValid: Object.keys(errors).length === 0,
+    };
+  };
+
+export const createIdentifierSchema = (t: TFunction<"validation">) =>
+  z
+    .string()
+    .min(1, t("auth.identifier.required"))
+    .refine(
+      (val) => {
+        const emailResult = createEmailSchema(t).safeParse(val);
+        if (emailResult.success) return true;
+        const usernameRegex = /^[a-zA-Z0-9_-]{3,30}$/;
+        return usernameRegex.test(val);
+      },
+      {
+        message: t("auth.identifier.invalid"),
+      },
+    );
+
+export const createLoginSchema = (t: TFunction<"validation">) =>
+  z.object({
+    identifier: createIdentifierSchema(t),
+    password: z.string().min(1, t("auth.password.required")),
   });
 
-export const validateRegisterData = (
-  data: RegisterFormData
-): ValidationResult => {
-  const errors: Record<string, string> = {};
-  const result = registerSchema.safeParse(data);
-  if (result && !result.success && result.error?.issues) {
-    result.error.issues.forEach((err) => {
-      const field = err.path.join(".");
-      errors[field] = err.message;
-    });
-  }
-  return {
-    errors,
-    isValid: Object.keys(errors).length === 0,
-  };
-};
-
-const identifierSchema = z
-  .string()
-  .min(1, "L'identifiant est requis")
-  .refine(
-    (val) => {
-      const emailResult = emailSchema.safeParse(val);
-      if (emailResult.success) return true;
-
-      const usernameRegex = /^[a-zA-Z0-9_-]{3,30}$/;
-      return usernameRegex.test(val);
-    },
-    {
-      message:
-        "L'identifiant doit être un email valide ou un nom d'utilisateur valide (3-30 caractères, lettres, chiffres, tirets et underscores uniquement)",
+export const createValidateLoginData =
+  (t: TFunction<"validation">) =>
+  (data: LoginFormData): ValidationResult => {
+    const errors: Record<string, string> = {};
+    const result = createLoginSchema(t).safeParse(data);
+    if (result && !result.success && result.error?.issues) {
+      result.error.issues.forEach((err) => {
+        const field = err.path.join(".");
+        errors[field] = err.message;
+      });
     }
-  );
-export const loginSchema = z.object({
-  identifier: identifierSchema,
-  password: z.string().min(1, "Le mot de passe est requis"),
-});
-export const validateLoginData = (data: LoginFormData): ValidationResult => {
-  const errors: Record<string, string> = {};
-  const result = loginSchema.safeParse(data);
-  if (result && !result.success && result.error?.issues) {
-    result.error.issues.forEach((err) => {
-      const field = err.path.join(".");
-      errors[field] = err.message;
-    });
-  }
-  return {
-    errors,
-    isValid: Object.keys(errors).length === 0,
+    return {
+      errors,
+      isValid: Object.keys(errors).length === 0,
+    };
   };
-};
 
-export const requestPasswordResetSchema = z.object({
-  email: emailSchema,
-});
+export const createRequestPasswordResetSchema = (t: TFunction<"validation">) =>
+  z.object({
+    email: createEmailSchema(t),
+  });
 
 export interface RequestPasswordResetFormData {
   email: string;
 }
 
-export const validateRequestPasswordResetData = (
-  data: RequestPasswordResetFormData
-): ValidationResult => {
-  const errors: Record<string, string> = {};
-  const result = requestPasswordResetSchema.safeParse(data);
-  if (result && !result.success && result.error?.issues) {
-    result.error.issues.forEach((err) => {
-      const field = err.path.join(".");
-      errors[field] = err.message;
-    });
-  }
-  return {
-    errors,
-    isValid: Object.keys(errors).length === 0,
+export const createValidateRequestPasswordResetData =
+  (t: TFunction<"validation">) =>
+  (data: RequestPasswordResetFormData): ValidationResult => {
+    const errors: Record<string, string> = {};
+    const result = createRequestPasswordResetSchema(t).safeParse(data);
+    if (result && !result.success && result.error?.issues) {
+      result.error.issues.forEach((err) => {
+        const field = err.path.join(".");
+        errors[field] = err.message;
+      });
+    }
+    return {
+      errors,
+      isValid: Object.keys(errors).length === 0,
+    };
   };
-};
 
-export const resetPasswordSchema = z
-  .object({
-    token: z.string().min(1, "Le token est requis"),
-    newPassword: passwordSchema,
-    confirmPassword: z
-      .string()
-      .min(1, "La confirmation du mot de passe est requise"),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Les mots de passe ne correspondent pas",
-    path: ["confirmPassword"],
-  });
+export const createResetPasswordSchema = (t: TFunction<"validation">) =>
+  z
+    .object({
+      token: z.string().min(1, t("auth.token.required")),
+      newPassword: createPasswordSchema(t),
+      confirmPassword: z
+        .string()
+        .min(1, t("auth.passwordConfirm.required")),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: t("auth.passwordConfirm.mismatch"),
+      path: ["confirmPassword"],
+    });
 
 export interface ResetPasswordFormData {
   token: string;
@@ -128,19 +146,30 @@ export interface ResetPasswordFormData {
   confirmPassword: string;
 }
 
-export const validateResetPasswordData = (
-  data: ResetPasswordFormData
-): ValidationResult => {
-  const errors: Record<string, string> = {};
-  const result = resetPasswordSchema.safeParse(data);
-  if (result && !result.success && result.error?.issues) {
-    result.error.issues.forEach((err) => {
-      const field = err.path.join(".");
-      errors[field] = err.message;
-    });
-  }
-  return {
-    errors,
-    isValid: Object.keys(errors).length === 0,
+export const createValidateResetPasswordData =
+  (t: TFunction<"validation">) =>
+  (data: ResetPasswordFormData): ValidationResult => {
+    const errors: Record<string, string> = {};
+    const result = createResetPasswordSchema(t).safeParse(data);
+    if (result && !result.success && result.error?.issues) {
+      result.error.issues.forEach((err) => {
+        const field = err.path.join(".");
+        errors[field] = err.message;
+      });
+    }
+    return {
+      errors,
+      isValid: Object.keys(errors).length === 0,
+    };
   };
-};
+
+// Convenience aliases used by form components with useMemo
+export const loginSchema = createLoginSchema;
+export const registerSchema = createRegisterSchema;
+export const requestPasswordResetSchema = createRequestPasswordResetSchema;
+export const resetPasswordSchema = createResetPasswordSchema;
+export const validateRegisterData = createValidateRegisterData;
+export const validateLoginData = createValidateLoginData;
+export const validateRequestPasswordResetData =
+  createValidateRequestPasswordResetData;
+export const validateResetPasswordData = createValidateResetPasswordData;

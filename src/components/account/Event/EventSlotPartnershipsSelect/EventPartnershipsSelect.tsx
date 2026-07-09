@@ -1,6 +1,9 @@
+"use client";
+
 import Button from "@/components/common/buttons/Button";
 import { Partnership } from "@/types/partnerships";
 import { Collaborator } from "@/types/place/collaborators";
+import { useTranslation } from "react-i18next";
 import styles from "./EventPartnershipsSelect.module.scss";
 import EventStatus from "@/components/common/events/EventStatus";
 
@@ -13,43 +16,51 @@ const EventPartnershipsSelect = ({
   selectedPartnerships: Collaborator[];
   onClick: (partnership: Partnership) => void;
 }) => {
+  const { t } = useTranslation("events");
+
+  const emptyMessage =
+    partnerships.length === 0
+      ? t("eventPartnershipsSelect.noParticipantsHint")
+      : selectedPartnerships.length === 0
+      ? t("eventPartnershipsSelect.noParticipantsOnSlot")
+      : t("eventPartnershipsSelect.participantsAdded", {
+          count: selectedPartnerships.length,
+        });
+
   return (
     <div className={styles.partnershipsSelectContainer}>
-      <h4 className={styles.title}>Participants sur ce créneau:</h4>
+      <h4 className={styles.title}>{t("eventPartnershipsSelect.title")}</h4>
       <ul className={styles.partnershipsSelect}>
-        {partnerships.map((partnership) => (
-          <li key={partnership._id}>
-            <Button
-              className={styles.partnershipButton}
-              variant={
-                selectedPartnerships.some(
-                  (p) => p._id === partnership.collaborator._id
-                )
-                  ? "outline"
-                  : "secondary"
-              }
-              onClick={() => onClick(partnership)}
-              ariaLabel={`Ajouter ${
-                partnership.collaborator.username ?? "Utilisateur"
-              } à ce créneau`}
-            >
-              {partnership.collaborator.username ?? "Utilisateur"}{" "}
-              <EventStatus status={partnership.status} />
-            </Button>
-          </li>
-        ))}
+        {partnerships.map((partnership) => {
+          const username =
+            partnership.collaborator.username ??
+            t("eventPartnershipsSelect.defaultUser");
+          return (
+            <li key={partnership._id}>
+              <Button
+                className={styles.partnershipButton}
+                variant={
+                  selectedPartnerships.some(
+                    (p) => p._id === partnership.collaborator._id
+                  )
+                    ? "outline"
+                    : "secondary"
+                }
+                onClick={() => onClick(partnership)}
+                ariaLabel={t("eventPartnershipsSelect.addParticipantAriaLabel", {
+                  username,
+                })}
+              >
+                {username}{" "}
+                <EventStatus
+                  status={partnership.status}
+                />
+              </Button>
+            </li>
+          );
+        })}
       </ul>
-      <p className={styles.emptyMessage}>
-        {partnerships.length === 0
-          ? "Pour ajouter des participants à ce créneau, vous devez d'abord les ajouter à la liste des participants de l'évènement."
-          : selectedPartnerships.length === 0
-          ? "Aucun participant n'a été ajouté à ce créneau."
-          : `${selectedPartnerships.length} participant${
-              selectedPartnerships.length > 1 ? "s" : ""
-            } ajouté${
-              selectedPartnerships.length > 1 ? "s" : ""
-            } à ce créneau.`}
-      </p>
+      <p className={styles.emptyMessage}>{emptyMessage}</p>
     </div>
   );
 };

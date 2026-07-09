@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import AddressInput from "@/components/common/inputs/AddressInput";
 import MapComponent from "@/components/common/Map/MapComponent";
 import { useGeolocation } from "@/hooks/useGeolocation";
@@ -21,8 +22,10 @@ const LocationPicker = ({
   location,
   onChange,
   error,
-  markerName = "Évènement",
+  markerName,
 }: LocationPickerProps) => {
+  const { t } = useTranslation("common");
+  const resolvedMarkerName = markerName ?? t("locationPicker.defaultMarkerName");
   const mapRef = useRef<ExtendedMapRef | null>(null);
   const { latitude, longitude } = useGeolocation();
   const [mapReady, setMapReady] = useState(false);
@@ -36,10 +39,10 @@ const LocationPicker = ({
     return {
       location: { coordinates },
       placeCategory: { name: "event" },
-      name: markerName,
+      name: resolvedMarkerName,
       _id: "event-location-marker",
     };
-  }, [latitude, location?.coordinates, longitude, markerName]);
+  }, [latitude, location?.coordinates, longitude, resolvedMarkerName]);
 
   const handleMapClick = async (coordinates: {
     latitude: number;
@@ -83,9 +86,7 @@ const LocationPicker = ({
       />
 
       <div className={styles.mapSection}>
-        <p className={styles.mapTitle}>
-          Cliquez sur la carte pour positionner l’évènement
-        </p>
+        <p className={styles.mapTitle}>{t("locationPicker.mapTitle")}</p>
         <div className={styles.mapContainer}>
           <MapComponent
             height="200px"

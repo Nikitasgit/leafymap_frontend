@@ -1,14 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
-import { Minus, Plus } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import EventCard from "@/components/common/events/EventCard";
 import Button from "@/components/common/buttons/Button";
 import BaseModal from "@/components/common/modals/BaseModal";
+import SeatsStepper from "@/components/eventProfile/SeatsStepper";
 import { MyEventBooking } from "@/types/eventBooking";
 import { EventPopulated } from "@/types/place/event";
 import { useUpdateEventBooking } from "@/hooks/useUpdateEventBooking";
 import { useCancelEventBooking } from "@/hooks/useCancelEventBooking";
+import { useBookingLimits } from "@/hooks/useBookingLimits";
 import styles from "./MyEventBookingsList.module.scss";
 
 interface MyEventBookingsListProps {
@@ -61,121 +63,158 @@ export default function MyEventBookingsList({
           const event = booking.event as unknown as EventPopulated;
           const maxSeats = event.maxSeatsPerBooking || 1;
           const remainingSeats = event.remainingSeats ?? null;
-          const maxEditable =
-            remainingSeats === null
-              ? maxSeats
-              : Math.max(
-                  booking.seats,
-                  Math.min(maxSeats, remainingSeats + booking.seats)
-                );
           const isEditing = editingId === booking._id;
-          const hasEventStarted = event.lifecycleStatus !== "upcoming";
 
           return (
-            <li key={booking._id} className={styles.item}>
-              <EventCard event={event} clickable={!!event._id} />
-              <div className={styles.bottomRow}>
-                <p className={styles.seatsInfo}>
-                  {booking.seats} place{booking.seats > 1 ? "s" : ""}{" "}
-                  réservée{booking.seats > 1 ? "s" : ""}
-                </p>
-                {hasEventStarted ? (
-                  <p className={styles.lockedInfo}>
-                    Cet évènement a déjà commencé ou est terminé, la
-                    réservation ne peut plus être modifiée ni annulée.
-                  </p>
-                ) : isEditing ? (
-                  <div className={styles.editRow}>
-                    <div className={styles.seatsStepper}>
-                      <button
-                        type="button"
-                        className={styles.stepperButton}
-                        onClick={() =>
-                          setEditSeats((prev) => Math.max(1, prev - 1))
-                        }
-                        disabled={isUpdating || editSeats <= 1}
-                        aria-label="Retirer une place"
-                      >
-                        <Minus size={16} />
-                      </button>
-                      <span className={styles.seatsValue}>{editSeats}</span>
-                      <button
-                        type="button"
-                        className={styles.stepperButton}
-                        onClick={() =>
-                          setEditSeats((prev) =>
-                            Math.min(maxEditable, prev + 1)
-                          )
-                        }
-                        disabled={isUpdating || editSeats >= maxEditable}
-                        aria-label="Ajouter une place"
-                      >
-                        <Plus size={16} />
-                      </button>
-                    </div>
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      size="small"
-                      onClick={() => setEditingId(null)}
-                      disabled={isUpdating}
-                    >
-                      Annuler
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="primary"
-                      size="small"
-                      onClick={() => handleSave(booking)}
-                      disabled={isUpdating}
-                    >
-                      Enregistrer
-                    </Button>
-                  </div>
-                ) : (
-                  <div className={styles.actions}>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="small"
-                      onClick={() => startEditing(booking)}
-                      ariaLabel="Modifier la réservation"
-                    >
-                      Modifier
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="danger"
-                      size="small"
-                      onClick={() => setCancellingId(booking._id)}
-                      ariaLabel="Annuler la réservation"
-                    >
-                      Annuler
-                    </Button>
-                  </div>
-                )}
-              </div>
-
-              <BaseModal
-                isOpen={cancellingId === booking._id}
-                onClose={() => setCancellingId(null)}
-                title="Annuler la réservation ?"
-                primaryButtonLabel="Annuler ma réservation"
-                secondaryButtonLabel="Retour"
-                onPrimaryAction={() => handleCancel(booking._id)}
-                primaryButtonType="button"
-                isSubmitLoading={isCancelling}
-                withLoadingState={false}
-              >
-                <p>
-                  Votre réservation pour « {event.name} » sera définitivement
-                  annulée.
-                </p>
-              </BaseModal>
-            </li>
+            <BookingListItem
+              key={booking._id}
+              booking={booking}
+              event={event}
+              maxSeats={maxSeats}
+              remainingSeats={remainingSeats}
+              isEditing={isEditing}
+              editSeats={editSeats}
+              isUpdating={isUpdating}
+              isCancelling={isCancelling}
+              cancellingId={cancellingId}
+              onStartEditing={() => startEditing(booking)}
+              onEditSeatsChange={setEditSeats}
+              onCancelEditing={() => setEditingId(null)}
+              onSave={() => handleSave(booking)}
+              onOpenCancelModal={() => setCancellingId(booking._id)}
+              onCloseCancelModal={() => setCancellingId(null)}
+              onConfirmCancel={() => handleCancel(booking._id)}
+            />
           );
         })}
       </ul>
     </div>
+  );
+}
+
+interface BookingListItemProps {
+  booking: MyEventBooking;
+  event: EventPopulated;
+  maxSeats: number;
+  remainingSeats: number | null;
+  isEditing: boolean;
+  editSeats: number;
+  isUpdating: boolean;
+  isCancelling: boolean;
+  cancellingId: string | null;
+  onStartEditing: () => void;
+  onEditSeatsChange: (value: number) => void;
+  onCancelEditing: () => void;
+  onSave: () => void;
+  onOpenCancelModal: () => void;
+  onCloseCancelModal: () => void;
+  onConfirmCancel: () => void;
+}
+
+function BookingListItem({
+  booking,
+  event,
+  maxSeats,
+  remainingSeats,
+  isEditing,
+  editSeats,
+  isUpdating,
+  isCancelling,
+  cancellingId,
+  onStartEditing,
+  onEditSeatsChange,
+  onCancelEditing,
+  onSave,
+  onOpenCancelModal,
+  onCloseCancelModal,
+  onConfirmCancel,
+}: BookingListItemProps) {
+  const { t } = useTranslation("events");
+  const { maxEditable, canEdit, lockedMessage } = useBookingLimits({
+    maxSeatsPerBooking: maxSeats,
+    remainingSeats,
+    currentBookingSeats: booking.seats,
+    lifecycleStatus: event.lifecycleStatus,
+  });
+
+  return (
+    <li className={styles.item}>
+      <EventCard event={event} clickable={!!event._id} />
+      <div className={styles.bottomRow}>
+        <p className={styles.seatsInfo}>
+          {t("myEventBookingsList.seatsBooked", { count: booking.seats })}
+        </p>
+        {!canEdit ? (
+          <p className={styles.lockedInfo}>{lockedMessage}</p>
+        ) : isEditing ? (
+          <div className={styles.editRow}>
+            <SeatsStepper
+              value={editSeats}
+              min={1}
+              max={maxEditable}
+              onChange={onEditSeatsChange}
+              disabled={isUpdating}
+            />
+            <Button
+              type="button"
+              variant="secondary"
+              size="small"
+              onClick={onCancelEditing}
+              disabled={isUpdating}
+            >
+              {t("common:actions.cancel")}
+            </Button>
+            <Button
+              type="button"
+              variant="primary"
+              size="small"
+              onClick={onSave}
+              disabled={isUpdating}
+            >
+              {t("common:actions.save")}
+            </Button>
+          </div>
+        ) : (
+          <div className={styles.actions}>
+            <Button
+              type="button"
+              variant="outline"
+              size="small"
+              onClick={onStartEditing}
+              ariaLabel={t("myEventBookingsList.editBookingAriaLabel")}
+            >
+              {t("common:actions.edit")}
+            </Button>
+            <Button
+              type="button"
+              variant="danger"
+              size="small"
+              onClick={onOpenCancelModal}
+              ariaLabel={t("myEventBookingsList.cancelBookingAriaLabel")}
+            >
+              {t("common:actions.cancel")}
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <BaseModal
+        isOpen={cancellingId === booking._id}
+        onClose={onCloseCancelModal}
+        title={t("myEventBookingsList.cancelModalTitle")}
+        primaryButtonLabel={t("myEventBookingsList.cancelModalPrimary")}
+        secondaryButtonLabel={t("common:actions.back")}
+        onPrimaryAction={onConfirmCancel}
+        primaryButtonType="button"
+        isSubmitLoading={isCancelling}
+        withLoadingState={false}
+      >
+        <p>
+          {t("myEventBookingsList.cancelModalBody", {
+            eventName: event.name,
+          })}
+        </p>
+      </BaseModal>
+    </li>
   );
 }

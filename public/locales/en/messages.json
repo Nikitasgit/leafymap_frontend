@@ -1,0 +1,30 @@
+{
+  "messagesList": {
+    "emptyTitle": "No messages",
+    "emptyDescription": "Start the conversation by sending a message"
+  },
+  "messageInput": {
+    "placeholder": "Write a message..."
+  },
+  "message": {
+    "emptyContent": "Empty message"
+  },
+  "inboxContainer": {
+    "sectionTitle": "Conversations"
+  },
+  "conversationsList": {
+    "emptyTitle": "No conversations",
+    "emptyDescription": "You don't have any conversations yet"
+  },
+  "conversationCard": {
+    "noMessage": "No message"
+  },
+  "partnershipMessage": {
+    "defaultUser": "User",
+    "invitation": "<strong>{{senderName}}</strong> would like to add you as a collaborator to their place"
+  },
+  "useSendMessage": {
+    "success": "Message sent",
+    "error": "Error sending message"
+  }
+}

@@ -1,54 +1,37 @@
 "use client";
 
-import axios from "axios";
 import { useLoading } from "./useLoading";
+import { apiClient } from "@/lib/api/client";
 import { useToast } from "./useToast";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export const useDeleteAccount = () => {
   const { isLoading: isLoadingDeleteAccount, withLoading } = useLoading(false);
   const { showSuccess, showError } = useToast();
+  const { t } = useTranslation("account");
   const isLoading = isLoadingDeleteAccount;
+
   const deleteAccount = async () => {
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
-        withCredentials: true,
+      await apiClient.delete(`/api/users`, {
       });
-      showSuccess("Compte supprimé avec succès");
+      showSuccess(t("useDeleteAccount.success"));
       window.location.reload();
     } catch (err: unknown) {
       console.error("Error deleting account:", err);
-      let errorMessage = "Erreur lors de la suppression du compte";
-
-      if (err && typeof err === "object") {
-        if (
-          "response" in err &&
-          err.response &&
-          typeof err.response === "object" &&
-          "data" in err.response
-        ) {
-          const responseData = err.response.data as { message?: string };
-          if (responseData?.message) {
-            errorMessage = responseData.message;
-          }
-        } else if ("message" in err && typeof err.message === "string") {
-          errorMessage = err.message;
-        }
-      }
-
-      showError(errorMessage);
+      showError(
+        getErrorMessage(err, t, t("useDeleteAccount.errorFallback")),
+      );
     } finally {
     }
   };
 
   const deleteAccountWithConfirmation = async () => {
-    const confirmed = window.confirm(
-      "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et supprimera toutes vos données."
-    );
+    const confirmed = window.confirm(t("useDeleteAccount.confirmFirst"));
 
     if (confirmed) {
-      const doubleConfirmed = window.confirm(
-        "Cette action est définitive. Toutes vos données (lieux, événements, partenariats) seront supprimées. Confirmez-vous la suppression ?"
-      );
+      const doubleConfirmed = window.confirm(t("useDeleteAccount.confirmSecond"));
       if (doubleConfirmed) {
         await withLoading(deleteAccount);
       }

@@ -44,6 +44,18 @@
       flex: 1;
       min-width: 0;
       position: relative;
+
+      :global(.MuiTextField-root) {
+        margin: 0;
+      }
+
+      :global(.MuiOutlinedInput-notchedOutline) {
+        border: none;
+      }
+
+      :global(.MuiOutlinedInput-root) {
+        padding-right: spacing(0.5);
+      }
     }
 
     .searchDropdownWrapper {

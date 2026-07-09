@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { Product } from "@/types/product";
@@ -18,9 +18,9 @@ export const useUserProducts = (userId?: string) => {
     }
     try {
       const params = new URLSearchParams({ userId });
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products?${params.toString()}`,
-        { withCredentials: true }
+      const response = await apiClient.get(
+        `/api/products?${params.toString()}`,
+        {}
       );
       const data = response.data?.data ?? [];
       setProducts(Array.isArray(data) ? data : []);

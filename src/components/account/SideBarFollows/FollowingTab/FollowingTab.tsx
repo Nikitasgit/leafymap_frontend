@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import useFollowingUsers from "@/hooks/useFollowingUsers";
 import useFollow from "@/hooks/useFollow";
@@ -12,6 +13,7 @@ import styles from "./FollowingTab.module.scss";
 import { FollowUser } from "@/types/follow";
 
 const FollowingTab: React.FC = () => {
+  const { t } = useTranslation("account");
   const { user } = useCurrentUser();
   const { following, isLoading, refetch } = useFollowingUsers(user?._id);
   const { unfollow } = useFollow();
@@ -47,7 +49,7 @@ const FollowingTab: React.FC = () => {
                   user.followId
                     ? [
                         {
-                          label: "Ne plus suivre",
+                          label: t("followingTab.unfollow"),
                           onClick: () => handleUnfollow(user.followId!),
                         },
                       ]
@@ -59,7 +61,7 @@ const FollowingTab: React.FC = () => {
         </ul>
       ) : (
         <EmptyState
-          title="Aucun abonnement pour le moment"
+          title={t("followingTab.emptyTitle")}
           icon={<Users className={styles.icon} />}
         />
       )}

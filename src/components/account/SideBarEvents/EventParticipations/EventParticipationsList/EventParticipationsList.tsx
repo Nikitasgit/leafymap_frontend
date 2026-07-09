@@ -1,11 +1,13 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import EventCard from "@/components/common/events/EventCard";
 import Button from "@/components/common/buttons/Button";
 import { EventInvitationPopulated } from "@/types/eventInvitation";
 import { EventPopulated } from "@/types/place/event";
 import { UserPopulated } from "@/types/user";
+import { useBookingLimits } from "@/hooks/useBookingLimits";
 import styles from "./EventParticipationsList.module.scss";
 
 interface EventParticipationsListProps {
@@ -36,39 +38,69 @@ export default function EventParticipationsList({
           if (!invitation.event || !invitation.event._id) return null;
           const event = invitation.event as unknown as EventPopulated;
           const initiator = invitation.initiator as UserPopulated | undefined;
-          const hasEventStarted = event.lifecycleStatus !== "upcoming";
 
           return (
-            <li key={invitation._id} className={styles.item}>
-              <EventCard
-                event={event}
-                place={undefined}
-                user={initiator}
-                clickable={!!event._id}
-              />
-              {hasEventStarted ? (
-                <p className={styles.helperText}>
-                  Cet évènement a déjà commencé ou est terminé, votre
-                  participation ne peut plus être annulée.
-                </p>
-              ) : (
-                <div className={styles.actions}>
-                  <Button
-                    type="button"
-                    variant="danger"
-                    size="small"
-                    onClick={() => onCancel?.(invitation._id)}
-                    disabled={isUpdating}
-                    ariaLabel="Annuler ma participation"
-                  >
-                    Annuler ma participation
-                  </Button>
-                </div>
-              )}
-            </li>
+            <ParticipationListItem
+              key={invitation._id}
+              invitationId={invitation._id}
+              event={event}
+              initiator={initiator}
+              isUpdating={isUpdating}
+              onCancel={onCancel}
+            />
           );
         })}
       </ul>
     </div>
+  );
+}
+
+interface ParticipationListItemProps {
+  invitationId: string;
+  event: EventPopulated;
+  initiator?: UserPopulated;
+  isUpdating: boolean;
+  onCancel?: (eventInvitationId: string) => void;
+}
+
+function ParticipationListItem({
+  invitationId,
+  event,
+  initiator,
+  isUpdating,
+  onCancel,
+}: ParticipationListItemProps) {
+  const { t } = useTranslation("events");
+  const { canEdit, lockedParticipationMessage } = useBookingLimits({
+    maxSeatsPerBooking: event.maxSeatsPerBooking || 1,
+    remainingSeats: event.remainingSeats ?? null,
+    lifecycleStatus: event.lifecycleStatus,
+  });
+
+  return (
+    <li className={styles.item}>
+      <EventCard
+        event={event}
+        place={undefined}
+        user={initiator}
+        clickable={!!event._id}
+      />
+      {!canEdit ? (
+        <p className={styles.helperText}>{lockedParticipationMessage}</p>
+      ) : (
+        <div className={styles.actions}>
+          <Button
+            type="button"
+            variant="danger"
+            size="small"
+            onClick={() => onCancel?.(invitationId)}
+            disabled={isUpdating}
+            ariaLabel={t("eventParticipationsList.cancelParticipationAriaLabel")}
+          >
+            {t("eventParticipationsList.cancelParticipation")}
+          </Button>
+        </div>
+      )}
+    </li>
   );
 }

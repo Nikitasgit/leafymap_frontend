@@ -10,6 +10,7 @@ import { useAppSelector } from "@/store";
 import { selectUnreadConversations } from "@/store/notificationSlice";
 import { useAuth } from "@/hooks/useAuth";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
+import NavbarLanguageSwitcher from "../NavbarLanguageSwitcher";
 import NavbarNotifications from "../NavbarNotifications";
 import NavbarMenuDesktop from "../NavbarMenuDesktop";
 import NavbarMenuMobile from "../NavbarMenuMobile";
@@ -53,7 +54,7 @@ export default function Navbar() {
     <nav
       className={styles.navbar}
       ref={navbarRef}
-      aria-label="Navigation principale"
+      aria-label={t("navbar.mainNavAriaLabel")}
     >
       <div className={styles.leftSection}>
         <Link href="/" className={styles.logo}>
@@ -68,6 +69,7 @@ export default function Navbar() {
         </Link>
       </div>
       <div className={styles.navSection}>
+        <NavbarLanguageSwitcher />
         {user && <NavbarNotifications onBellClick={closeMobileMenu} />}
         <NavbarMenuDesktop
           navItems={navItems}

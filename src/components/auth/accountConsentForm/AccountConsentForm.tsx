@@ -4,17 +4,19 @@ import { useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { APP_NAME } from "@/utils/constants";
 import styles from "./AccountConsentForm.module.scss";
 import Button from "@/components/common/buttons/Button";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useToast } from "@/hooks/useToast";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export default function AccountConsentForm() {
   const [loading, setLoading] = useState(false);
   const [emailNotifications, setEmailNotifications] = useState(false);
   const { showSuccess, showError } = useToast();
   const router = useRouter();
+  const { t } = useTranslation("auth");
 
   const handleAccept = async () => {
     setLoading(true);
@@ -22,16 +24,12 @@ export default function AccountConsentForm() {
       await axios.patch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/accept-cgu`,
         { emailNotifications },
-        { withCredentials: true }
+        { withCredentials: true },
       );
-      showSuccess("Préférences enregistrées");
+      showSuccess(t("accountConsentForm.preferencesSaved"));
       router.push("/account");
     } catch (error) {
-      showError(
-        axios.isAxiosError(error) && error.response?.data?.message
-          ? String(error.response.data.message)
-          : "Une erreur s'est produite"
-      );
+      showError(getErrorMessage(error, t));
     } finally {
       setLoading(false);
     }
@@ -41,13 +39,13 @@ export default function AccountConsentForm() {
     <div className={styles.container}>
       {loading && <LoadingBar />}
       <div className={styles.formContainer}>
-        <h1>Finaliser votre compte</h1>
+        <h1>{t("accountConsentForm.title")}</h1>
         <p className={styles.description}>
-          Pour continuer, veuillez accepter les{" "}
+          {t("accountConsentForm.descriptionPrefix")}
           <Link href="/legal/cgu" className={styles.link}>
-            conditions générales d&apos;utilisation
-          </Link>{" "}
-          de {APP_NAME}.
+            {t("accountConsentForm.cguLink")}
+          </Link>
+          {t("accountConsentForm.descriptionSuffix")}
         </p>
         <label className={styles.emailNotificationsCheckbox}>
           <input
@@ -56,10 +54,7 @@ export default function AccountConsentForm() {
             onChange={(e) => setEmailNotifications(e.target.checked)}
             disabled={loading}
           />
-          <span>
-            Je souhaite recevoir les notifications importantes par e-mail
-            (messages, invitations, abonnés).
-          </span>
+          <span>{t("accountConsentForm.emailNotifications")}</span>
         </label>
         <Button
           type="button"
@@ -69,7 +64,7 @@ export default function AccountConsentForm() {
           disabled={loading}
           fullWidth
         >
-          J&apos;accepte et je continue
+          {t("accountConsentForm.acceptButton")}
         </Button>
       </div>
     </div>

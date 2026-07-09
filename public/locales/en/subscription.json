@@ -46,12 +46,19 @@
       "placeholder": "Confirm your password"
     },
     "submit": "Register",
-    "submitLoading": "Registering..."
+    "submitLoading": "Registering...",
+    "ariaLabel": "Registration form"
   },
+  "emailNotificationsLabel": "I want to receive important email notifications (messages, invitations, followers).",
   "categorySelector": {
-    "label": "Activity",
-    "placeholder": "Select an activity",
-    "searchPlaceholder": "Search for an activity..."
+    "label": "Your role",
+    "placeholder": "Select a role",
+    "searchPlaceholder": "Search for a role..."
+  },
+  "placeTypeSelector": {
+    "label": "Place type",
+    "placeholder": "Select a place type",
+    "searchPlaceholder": "Search for a place type..."
   },
   "placeCategorySelector": {
     "label": "Place Type",

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import TabsContainer from "@/components/common/tabs/TabsContainer";
 import Tab from "@/components/common/tabs/Tab";
 import { FileText, Star, Image as ImageIcon, Calendar } from "lucide-react";
@@ -44,6 +45,7 @@ const CreatorTabs = ({
   canHandleImages = false,
   refetchUser,
 }: CreatorTabsProps) => {
+  const { t } = useTranslation("profile");
   const [internalActiveTab, setInternalActiveTab] = useState("presentation");
   const { events, isLoading: isLoadingEvents } = useUserEvents(
     user._id || null,
@@ -56,16 +58,16 @@ const CreatorTabs = ({
   const shouldShowEventsTab = !isLoadingEvents && events.length > 0;
 
   const tabs = [
-    { id: "presentation", label: "Présentation", icon: FileText },
+    { id: "presentation", label: t("creatorTabs.presentation"), icon: FileText },
     ...(place
       ? [
-          { id: "reviews", label: "Avis", icon: Star },
+          { id: "reviews", label: t("creatorTabs.reviews"), icon: Star },
         ]
       : []),
     ...(shouldShowEventsTab
-      ? [{ id: "events", label: "Événements", icon: Calendar }]
+      ? [{ id: "events", label: t("creatorTabs.events"), icon: Calendar }]
       : []),
-    { id: "images", label: "Images", icon: ImageIcon },
+    { id: "images", label: t("creatorTabs.images"), icon: ImageIcon },
   ];
 
   const renderTabContent = () => {

@@ -1,17 +1,21 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { Minus, Plus, Ticket } from "lucide-react";
+import { Ticket } from "lucide-react";
+import { Trans, useTranslation } from "react-i18next";
 import Button from "@/components/common/buttons/Button";
 import BaseModal from "@/components/common/modals/BaseModal";
 import LoadingSpinner from "@/components/common/loading/LoadingSpinner";
+import SeatsStepper from "@/components/eventProfile/SeatsStepper";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useMyBookingForEvent } from "@/hooks/useMyBookingForEvent";
 import { useCreateEventBooking } from "@/hooks/useCreateEventBooking";
 import { useUpdateEventBooking } from "@/hooks/useUpdateEventBooking";
 import { useCancelEventBooking } from "@/hooks/useCancelEventBooking";
+import { useBookingLimits } from "@/hooks/useBookingLimits";
+import { getEventCreatorId } from "@/lib/api/normalizers/resolveRef";
 import { EventPopulated } from "@/types/place/event";
 import styles from "./EventBookingWidget.module.scss";
 
@@ -19,39 +23,8 @@ export interface EventBookingWidgetProps {
   event: EventPopulated;
 }
 
-const SeatsStepper: React.FC<{
-  value: number;
-  min: number;
-  max: number;
-  onChange: (value: number) => void;
-  disabled?: boolean;
-}> = ({ value, min, max, onChange, disabled = false }) => {
-  return (
-    <div className={styles.seatsStepper}>
-      <button
-        type="button"
-        className={styles.stepperButton}
-        onClick={() => onChange(Math.max(min, value - 1))}
-        disabled={disabled || value <= min}
-        aria-label="Retirer une place"
-      >
-        <Minus size={16} />
-      </button>
-      <span className={styles.seatsValue}>{value}</span>
-      <button
-        type="button"
-        className={styles.stepperButton}
-        onClick={() => onChange(Math.min(max, value + 1))}
-        disabled={disabled || value >= max}
-        aria-label="Ajouter une place"
-      >
-        <Plus size={16} />
-      </button>
-    </div>
-  );
-};
-
 const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
+  const { t } = useTranslation("events");
   const { user, isLoading: isUserLoading } = useCurrentUser();
   const isAuthenticated = !!user;
   const {
@@ -67,43 +40,42 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
     useCancelEventBooking();
 
   const [remainingSeats, setRemainingSeats] = useState(
-    event.remainingSeats ?? null
+    event.remainingSeats ?? null,
   );
   const [seats, setSeats] = useState(1);
   const [editSeats, setEditSeats] = useState<number | null>(null);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
-  const eventOwnerId =
-    typeof event.user === "object" && event.user ? event.user._id : event.user;
+  const eventOwnerId = getEventCreatorId(event);
   const isOrganizer = !!user && eventOwnerId === user._id;
   const maxSeatsPerBooking = event.maxSeatsPerBooking || 1;
-  const isFull = remainingSeats !== null && remainingSeats <= 0;
-  const hasEventStarted = event.lifecycleStatus !== "upcoming";
 
-  const maxSelectable = useMemo(() => {
-    if (remainingSeats === null) return maxSeatsPerBooking;
-    return Math.max(1, Math.min(maxSeatsPerBooking, remainingSeats));
-  }, [remainingSeats, maxSeatsPerBooking]);
-
-  const maxEditable = useMemo(() => {
-    if (remainingSeats === null || !booking) return maxSeatsPerBooking;
-    return Math.max(
-      booking.seats,
-      Math.min(maxSeatsPerBooking, remainingSeats + booking.seats)
-    );
-  }, [remainingSeats, maxSeatsPerBooking, booking]);
+  const {
+    maxSelectable,
+    maxEditable,
+    canEdit,
+    isFull,
+    lockedMessage,
+    closedMessage,
+    fullMessage,
+  } = useBookingLimits({
+    maxSeatsPerBooking,
+    remainingSeats,
+    currentBookingSeats: booking?.seats,
+    lifecycleStatus: event.lifecycleStatus,
+  });
 
   const refreshRemainingSeats = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/events/${event._id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/events/${event._id}`,
       );
       const updatedEvent = response.data?.data;
       if (updatedEvent && typeof updatedEvent.remainingSeats !== "undefined") {
         setRemainingSeats(updatedEvent.remainingSeats);
       }
     } catch {
-      // Garder la valeur affichée précédemment en cas d'échec du rafraîchissement.
+      // Keep the previously displayed value if refresh fails.
     }
   };
 
@@ -130,16 +102,15 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
   if (isOrganizer) {
     return (
       <section className={styles.bookingWidget}>
-        <h3 className={styles.sectionTitle}>Réservations</h3>
+        <h3 className={styles.sectionTitle}>{t("eventBookingWidget.title")}</h3>
         <p className={styles.helperText}>
-          Vous êtes l&apos;organisateur de cet évènement. Retrouvez la liste
-          des réservations dans la page de modification de l&apos;évènement.
+          {t("eventBookingWidget.organizerHelper")}
         </p>
         <Link
           href={`/account/events/${event._id}`}
           className={styles.manageLink}
         >
-          Gérer les réservations
+          {t("eventBookingWidget.manageBookings")}
         </Link>
       </section>
     );
@@ -156,12 +127,12 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
   if (!isAuthenticated) {
     return (
       <section className={styles.bookingWidget}>
-        <h3 className={styles.sectionTitle}>Réservations</h3>
+        <h3 className={styles.sectionTitle}>{t("eventBookingWidget.title")}</h3>
         <p className={styles.helperText}>
-          Connectez-vous pour réserver votre place à cet évènement.
+          {t("eventBookingWidget.loginHelper")}
         </p>
         <Link href="/auth/signin" className={styles.manageLink}>
-          Se connecter
+          {t("common:nav.signin")}
         </Link>
       </section>
     );
@@ -169,24 +140,22 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
 
   return (
     <section className={styles.bookingWidget}>
-      <h3 className={styles.sectionTitle}>Réservations</h3>
+      <h3 className={styles.sectionTitle}>{t("eventBookingWidget.title")}</h3>
 
       {isBookingLoading ? (
         <LoadingSpinner size={24} />
       ) : booking ? (
         <div className={styles.bookingSummary}>
           <p className={styles.helperText}>
-            Vous avez réservé{" "}
-            <strong>
-              {booking.seats} place{booking.seats > 1 ? "s" : ""}
-            </strong>{" "}
-            pour cet évènement.
+            <Trans
+              i18nKey="eventBookingWidget.bookedSeats"
+              ns="events"
+              count={booking.seats}
+              components={{ strong: <strong /> }}
+            />
           </p>
-          {hasEventStarted ? (
-            <p className={styles.helperText}>
-              Cet évènement a déjà commencé ou est terminé, votre réservation
-              ne peut plus être modifiée ni annulée.
-            </p>
+          {!canEdit ? (
+            <p className={styles.helperText}>{lockedMessage}</p>
           ) : editSeats === null ? (
             <div className={styles.actionsRow}>
               <Button
@@ -195,7 +164,7 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
                 size="small"
                 onClick={() => setEditSeats(booking.seats)}
               >
-                Modifier
+                {t("common:actions.edit")}
               </Button>
               <Button
                 type="button"
@@ -203,7 +172,7 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
                 size="small"
                 onClick={() => setIsCancelModalOpen(true)}
               >
-                Annuler ma réservation
+                {t("eventBookingWidget.cancelBooking")}
               </Button>
             </div>
           ) : (
@@ -223,7 +192,7 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
                   onClick={() => setEditSeats(null)}
                   disabled={isUpdating}
                 >
-                  Annuler
+                  {t("common:actions.cancel")}
                 </Button>
                 <Button
                   type="button"
@@ -232,29 +201,27 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
                   onClick={handleUpdateBooking}
                   disabled={isUpdating || editSeats === booking.seats}
                 >
-                  Enregistrer
+                  {t("common:actions.save")}
                 </Button>
               </div>
             </div>
           )}
         </div>
-      ) : hasEventStarted ? (
-        <p className={styles.helperText}>
-          Cet évènement a déjà commencé ou est terminé, les réservations sont
-          fermées.
-        </p>
+      ) : !canEdit ? (
+        <p className={styles.helperText}>{closedMessage}</p>
       ) : isFull ? (
-        <p className={styles.helperText}>
-          Cet évènement est complet, il ne reste plus de places disponibles.
-        </p>
+        <p className={styles.helperText}>{fullMessage}</p>
       ) : (
         <div className={styles.bookingForm}>
           <p className={styles.helperText}>
             {remainingSeats !== null
-              ? `${remainingSeats} place(s) restante(s).`
-              : "Places illimitées."}{" "}
-            Vous pouvez réserver jusqu&apos;à {maxSeatsPerBooking} place
-            {maxSeatsPerBooking > 1 ? "s" : ""}.
+              ? t("eventBookingWidget.remainingSeats", {
+                  count: remainingSeats,
+                })
+              : t("eventBookingWidget.unlimitedSeats")}{" "}
+            {t("eventBookingWidget.maxSeats", {
+              count: maxSeatsPerBooking,
+            })}
           </p>
           <div className={styles.actionsRow}>
             <SeatsStepper
@@ -271,7 +238,7 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
               onClick={handleCreateBooking}
               disabled={isCreating}
             >
-              Réserver
+              {t("eventBookingWidget.book")}
             </Button>
           </div>
         </div>
@@ -280,17 +247,15 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
       <BaseModal
         isOpen={isCancelModalOpen}
         onClose={() => setIsCancelModalOpen(false)}
-        title="Annuler la réservation ?"
-        primaryButtonLabel="Annuler ma réservation"
-        secondaryButtonLabel="Retour"
+        title={t("eventBookingWidget.cancelModalTitle")}
+        primaryButtonLabel={t("eventBookingWidget.cancelBooking")}
+        secondaryButtonLabel={t("common:actions.back")}
         onPrimaryAction={handleCancelBooking}
         primaryButtonType="button"
         isSubmitLoading={isCancelling}
         withLoadingState={false}
       >
-        <p>
-          Votre réservation pour cet évènement sera définitivement annulée.
-        </p>
+        <p>{t("eventBookingWidget.cancelModalBody")}</p>
       </BaseModal>
     </section>
   );

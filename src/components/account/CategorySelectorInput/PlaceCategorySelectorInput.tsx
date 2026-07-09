@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./CategorySelectorInput.module.scss";
 import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper";
-import { CategoryType, PlaceCategory } from "@/types/categories";
+import { PlaceCategory } from "@/types/categories";
 import TextField from "../../common/inputs/TextField";
 import { useApp } from "@/hooks/useApp";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
@@ -12,13 +12,11 @@ import { useTranslation } from "react-i18next";
 const PlaceCategorySelectorInput = ({
   value,
   onChange,
-  selectedTypes = [],
   error = false,
   errorMessage = "",
 }: {
   value: string;
   onChange: FormDataChangeHandler;
-  selectedTypes?: string[];
   error?: boolean;
   errorMessage?: string;
 }) => {
@@ -28,54 +26,6 @@ const PlaceCategorySelectorInput = ({
   const { showError } = useToast();
   const { t } = useTranslation("subscription");
   const ref = useRef<HTMLDivElement>(null);
-  const getTypeId = (type: CategoryType | string) =>
-    typeof type === "string" ? type : type._id;
-
-  const getFilteredCategories = () => {
-    if (selectedTypes.length === 0) {
-      return placeCategories;
-    }
-    const filtered = placeCategories.filter((category) => {
-      const categoryTypes = category.types || [];
-      return (
-        categoryTypes.length > 0 &&
-        categoryTypes.some((type) =>
-          selectedTypes.includes(getTypeId(type)),
-        )
-      );
-    });
-
-    return filtered;
-  };
-
-  useEffect(() => {
-    const isCurrentCategoryCompatible = () => {
-      if (!value || selectedTypes.length === 0) {
-        return true;
-      }
-      const currentCategory = placeCategories.find((cat) => cat._id === value);
-      if (!currentCategory) {
-        return false;
-      }
-      const categoryTypes = currentCategory.types || [];
-      return (
-        categoryTypes.length > 0 &&
-        categoryTypes.some((type) =>
-          selectedTypes.includes(getTypeId(type)),
-        )
-      );
-    };
-
-    if (value && !isCurrentCategoryCompatible()) {
-      setInputValue("");
-      onChange({
-        target: {
-          name: "placeCategory",
-          value: "",
-        },
-      });
-    }
-  }, [selectedTypes, value, onChange, placeCategories]);
 
   const handleClickOutside = () => {
     setIsOpen(false);
@@ -93,8 +43,6 @@ const PlaceCategorySelectorInput = ({
       },
     });
   };
-
-  const filteredCategories = getFilteredCategories();
 
   useEffect(() => {
     if (value) {
@@ -131,7 +79,7 @@ const PlaceCategorySelectorInput = ({
       {isOpen && (
         <div className={styles.dropdown} role="listbox">
           <ul className={styles.list}>
-            {filteredCategories.map((cat) => (
+            {placeCategories.map((cat) => (
               <li key={cat._id}>
                 <button
                   type="button"

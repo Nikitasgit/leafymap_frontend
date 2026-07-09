@@ -1,10 +1,10 @@
-import axios, { AxiosError } from "axios";
+import { apiClient } from "@/lib/api/client";
 import { useLoading } from "./useLoading";
-import { useToast } from "./useToast";
+import useHandleApiErrors from "./useHandleApiErrors";
 
 const useSubmitImages = () => {
   const { isLoading, withLoading } = useLoading();
-  const { showError } = useToast();
+  const { handleApiError } = useHandleApiErrors();
 
   interface SubmitImagesParams {
     files: File[];
@@ -39,7 +39,7 @@ const useSubmitImages = () => {
   }
 
   const submitImages = async (
-    params: SubmitImagesParams
+    params: SubmitImagesParams,
   ): Promise<UploadImagesResponse | undefined> => {
     try {
       const formData = new FormData();
@@ -51,23 +51,16 @@ const useSubmitImages = () => {
       formData.append("type", params.type);
 
       const response = await withLoading(() =>
-        axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/images`, formData, {
+        apiClient.post("/api/images", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-          withCredentials: true,
-        })
+        }),
       );
 
       return response.data.data;
     } catch (err: unknown) {
-      if (err instanceof AxiosError && err.response?.data.message) {
-        showError(err.response.data.message);
-      } else {
-        showError(
-          "Une erreur inattendue s'est produite lors de l'upload des images"
-        );
-      }
+      handleApiError(err);
     }
   };
 

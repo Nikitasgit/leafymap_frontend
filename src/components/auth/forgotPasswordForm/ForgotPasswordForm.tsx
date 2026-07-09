@@ -1,62 +1,51 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import styles from "./ForgotPasswordForm.module.scss";
 import Button from "@/components/common/buttons/Button";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import TextField from "@/components/common/inputs/TextField";
 import { usePasswordReset } from "@/hooks/usePasswordReset";
-import {
-  validateRequestPasswordResetData,
-  RequestPasswordResetFormData,
-} from "@/validations/authValidations";
+import { requestPasswordResetSchema } from "@/validations/authValidations";
+import { useValidatedForm } from "@/hooks/useValidatedForm";
+import { useTranslation } from "react-i18next";
+import { validationT } from "@/utils/i18n/validationT";
 
 export default function ForgotPasswordForm() {
-  const [email, setEmail] = useState("");
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { requestPasswordReset, loading } = usePasswordReset();
+  const { t } = useTranslation("auth");
+  const schema = useMemo(
+    () => requestPasswordResetSchema(validationT(t)),
+    [t],
+  );
 
-  const validateFormData = useCallback((): boolean => {
-    const validation = validateRequestPasswordResetData({ email });
-    setErrors(validation.errors);
-    return validation.isValid;
-  }, [email]);
+  const { values, errors, setField, handleSubmit } = useValidatedForm(
+    schema,
+    { email: "" },
+  );
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setHasAttemptedSubmit(true);
-    if (!validateFormData()) {
-      return;
-    }
+  const onSubmit = handleSubmit(async ({ email }) => {
     try {
       await requestPasswordReset(email);
       setIsSubmitted(true);
-    } catch (error) {
+    } catch {
       // Error is handled by the hook
     }
-  };
-
-  useEffect(() => {
-    if (hasAttemptedSubmit) {
-      validateFormData();
-    }
-  }, [hasAttemptedSubmit, validateFormData]);
+  });
 
   if (isSubmitted) {
     return (
       <div className={styles.container}>
         <div className={styles.formContainer}>
-          <h1>Email envoyé</h1>
+          <h1>{t("forgotPasswordForm.emailSentTitle")}</h1>
           <p className={styles.successMessage}>
-            Si cet email existe dans notre système, un lien de réinitialisation
-            vous a été envoyé. Veuillez vérifier votre boîte de réception.
+            {t("forgotPasswordForm.successMessage")}
           </p>
           <Link href="/auth/signin">
             <Button variant="primary" size="medium" fullWidth>
-              Retour à la connexion
+              {t("forgotPasswordForm.backToSignin")}
             </Button>
           </Link>
         </div>
@@ -69,21 +58,20 @@ export default function ForgotPasswordForm() {
       {loading && <LoadingBar />}
 
       <div className={styles.formContainer}>
-        <h1>Mot de passe oublié</h1>
+        <h1>{t("forgotPasswordForm.title")}</h1>
         <p className={styles.description}>
-          Entrez votre adresse email et nous vous enverrons un lien pour
-          réinitialiser votre mot de passe.
+          {t("forgotPasswordForm.description")}
         </p>
 
-        <form onSubmit={handleSubmit} className={styles.form} noValidate>
+        <form onSubmit={onSubmit} className={styles.form} noValidate>
           <TextField
-            label="Email"
+            label={t("forgotPasswordForm.emailLabel")}
             name="email"
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={values.email}
+            onChange={(e) => setField("email", e.target.value)}
             required
-            placeholder="votre@email.com"
+            placeholder={t("forgotPasswordForm.emailPlaceholder")}
             disabled={loading}
             error={!!errors.email}
             fullWidth
@@ -94,21 +82,23 @@ export default function ForgotPasswordForm() {
             type="submit"
             variant="primary"
             size="medium"
-            ariaLabel="Envoyer le lien de réinitialisation"
+            ariaLabel={t("forgotPasswordForm.sendResetLinkAriaLabel")}
             disabled={loading}
             fullWidth
           >
-            {loading ? "Envoi en cours..." : "Envoyer le lien"}
+            {loading
+              ? t("forgotPasswordForm.sendResetLinkLoading")
+              : t("forgotPasswordForm.sendResetLink")}
           </Button>
         </form>
 
         <div className={styles.divider}>
-          <span>ou</span>
+          <span>{t("forgotPasswordForm.divider")}</span>
         </div>
 
         <p className={styles.signinLink}>
-          Vous vous souvenez de votre mot de passe ?{" "}
-          <Link href="/auth/signin">Se connecter</Link>
+          {t("forgotPasswordForm.rememberPassword")}{" "}
+          <Link href="/auth/signin">{t("common:nav.signin")}</Link>
         </p>
       </div>
     </div>

@@ -1,12 +1,11 @@
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 
 export const findConversationWithUser = async (
   otherUserId: string
 ): Promise<string | null> => {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/messages/conversation/with/${otherUserId}`,
-      { withCredentials: true }
+    const response = await apiClient.get(
+      `/api/messages/conversation/with/${otherUserId}`,
     );
 
     return response.data?.data?.conversationId || null;

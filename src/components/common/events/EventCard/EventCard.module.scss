@@ -71,6 +71,7 @@
         padding-top: spacing(0.75);
         border-top: 1px solid $grey-100;
         .dateInfo,
+        .categoryInfo,
         .locationInfo {
           @include flex(row, flex-start, flex-start, spacing(0.5));
           .detailIcon {
@@ -137,6 +138,7 @@
           gap: spacing(1);
           padding-top: spacing(1);
           .dateInfo,
+          .categoryInfo,
           .locationInfo {
             gap: spacing(0.75);
             .detailText {

@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 import { Conversation } from "@/hooks/useConversations";
 import { useAuth } from "@/hooks/useAuth";
 import DisplayPublishingDate from "@/components/common/date/DisplayPublishingDate";
@@ -15,6 +18,7 @@ interface ConversationCardProps {
 const ConversationCard: React.FC<ConversationCardProps> = ({
   conversation,
 }) => {
+  const { t } = useTranslation("messages");
   const { user } = useAuth();
   const router = useRouter();
   const params = useParams();
@@ -73,7 +77,7 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
               conversation.unreadCount > 0 ? styles.unread : ""
             }`}
           >
-            {conversation.lastMessage?.content || "Aucun message"}
+            {conversation.lastMessage?.content || t("conversationCard.noMessage")}
           </span>
         </div>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Avatar } from "@/components/common/Avatar";
 import { getDisplayName } from "@/utils/userDisplay";
 import { translateNotificationAction } from "@/utils/notifications";
@@ -13,16 +14,17 @@ export default function NotificationCard({
   notification,
   onClick,
 }: NotificationCardProps) {
+  const { t } = useTranslation("notifications");
   const sender = notification.sender;
   const displayName = getDisplayName(sender ?? undefined);
-  const message = translateNotificationAction(notification.action);
+  const message = translateNotificationAction(notification.action, t);
 
   return (
     <button
       type="button"
       className={styles.card}
       onClick={onClick}
-      aria-label={`${displayName}: ${message}`}
+      aria-label={t("notificationCard.ariaLabel", { displayName, message })}
     >
       <div className={styles.avatarWrap}>
         <Avatar user={sender ?? null} size={AVATAR_SIZE} />

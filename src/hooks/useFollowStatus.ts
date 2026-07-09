@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 
 interface UseFollowStatusParams {
   currentUserId: string | undefined;
@@ -21,14 +21,13 @@ const useFollowStatus = ({ currentUserId, targetUserId }: UseFollowStatusParams)
       return;
     }
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/follows/check`,
+      const response = await apiClient.get(
+        `/api/follows/check`,
         {
           params: {
             follower: currentUserId,
             following: targetUserId,
-          },
-          withCredentials: true,
+          }
         }
       );
       const followData = response.data.data?.follow as FollowData | undefined;

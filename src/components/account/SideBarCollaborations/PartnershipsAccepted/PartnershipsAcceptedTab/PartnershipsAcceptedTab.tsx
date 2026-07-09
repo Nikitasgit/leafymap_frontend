@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { usePartnershipsAccepted } from "@/hooks/usePartnershipsAccepted";
 import useDeletePartnership from "@/hooks/useDeletePartnership";
@@ -23,6 +24,7 @@ function getOtherUser(partnership: Partnership, currentUserId: string) {
 }
 
 export default function PartnershipsAcceptedTab() {
+  const { t } = useTranslation("account");
   const { user, isLoading: isLoadingUser } = useCurrentUser();
   const {
     partnerships,
@@ -49,18 +51,16 @@ export default function PartnershipsAcceptedTab() {
         <div className={styles.header}>
           <p className={styles.label}>
             <Users size={20} className={styles.icon} />
-            Mes collaborateurs
+            {t("partnershipsAcceptedTab.label")}
           </p>
-          <p className={styles.info}>
-            Liste des personnes avec qui vous collaborez.
-          </p>
+          <p className={styles.info}>{t("partnershipsAcceptedTab.info")}</p>
         </div>
       </div>
 
       {acceptedPartnerships.length === 0 ? (
         <EmptyState
-          title="Aucune collaboration"
-          description="Vous n'avez pas de collaborateurs pour le moment."
+          title={t("partnershipsAcceptedTab.emptyTitle")}
+          description={t("partnershipsAcceptedTab.emptyDescription")}
         />
       ) : (
         <ul className={styles.items}>
@@ -74,7 +74,7 @@ export default function PartnershipsAcceptedTab() {
                   showCategory
                   actions={[
                     {
-                      label: "Supprimer",
+                      label: t("common:actions.delete"),
                       onClick: () => deletePartnership(partnership._id),
                     },
                   ]}

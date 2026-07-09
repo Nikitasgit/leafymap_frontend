@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { format } from "date-fns";
 import { EventTimeSlot, Period } from "@/types/place/schedule";
 import type { initialEventData } from "@/components/account/Event/EventForm/EventForm.types";
+import { useTranslation } from "react-i18next";
 
 interface UseEventScheduleProps {
   setEvent: React.Dispatch<React.SetStateAction<initialEventData>>;
@@ -11,7 +12,7 @@ interface UseEventScheduleReturn {
   onUpdatePeriod: (
     periodId: string,
     startDate: Date,
-    endDate: Date | null
+    endDate: Date | null,
   ) => void;
   onDeletePeriod: (periodId: string) => void;
   onUpdateTimeSlot: (periodId: string, timeSlot: EventTimeSlot) => void;
@@ -21,6 +22,8 @@ interface UseEventScheduleReturn {
 export const useEventSchedule = ({
   setEvent,
 }: UseEventScheduleProps): UseEventScheduleReturn => {
+  const { t } = useTranslation("events");
+
   const onUpdatePeriod = useCallback(
     (periodId: string, startDate: Date, endDate: Date | null) => {
       setEvent((prev: initialEventData) => ({
@@ -32,33 +35,27 @@ export const useEventSchedule = ({
                 startDate: format(startDate, "dd-MM-yyyy"),
                 endDate: endDate ? format(endDate, "dd-MM-yyyy") : "",
               }
-            : period
+            : period,
         ),
       }));
     },
-    [setEvent]
+    [setEvent],
   );
 
   const onDeletePeriod = useCallback(
     (periodId: string) => {
-      if (
-        confirm("Tous les créneaux de cette période seront également supprimés")
-      ) {
+      if (confirm(t("useEventSchedule.deletePeriodConfirm"))) {
         setEvent((prev: initialEventData) => ({
           ...prev,
           schedule: prev.schedule.filter(
-            (period: Period) => period._id !== periodId
+            (period: Period) => period._id !== periodId,
           ),
         }));
       }
     },
-    [setEvent]
+    [setEvent, t],
   );
 
-  /**
-   * Updates or adds a time slot within a period.
-   * If the slot ID exists, it's updated; otherwise, it's added as a new slot.
-   */
   const onUpdateTimeSlot = useCallback(
     (periodId: string, timeSlot: EventTimeSlot) => {
       setEvent((prev: initialEventData) => ({
@@ -68,23 +65,23 @@ export const useEventSchedule = ({
             ? {
                 ...period,
                 timeSlots: period.timeSlots.some(
-                  (slot: EventTimeSlot) => slot._id === timeSlot._id
+                  (slot: EventTimeSlot) => slot._id === timeSlot._id,
                 )
                   ? period.timeSlots.map((slot: EventTimeSlot) =>
-                      slot._id === timeSlot._id ? timeSlot : slot
+                      slot._id === timeSlot._id ? timeSlot : slot,
                     )
                   : [...period.timeSlots, timeSlot],
               }
-            : period
+            : period,
         ),
       }));
     },
-    [setEvent]
+    [setEvent],
   );
 
   const onDeleteTimeSlot = useCallback(
     (periodId: string, timeSlotId: string) => {
-      if (confirm("Voulez-vous vraiment supprimer ce créneau ?")) {
+      if (confirm(t("useEventSchedule.deleteTimeSlotConfirm"))) {
         setEvent((prev: initialEventData) => ({
           ...prev,
           schedule: prev.schedule.map((period: Period) =>
@@ -92,15 +89,15 @@ export const useEventSchedule = ({
               ? {
                   ...period,
                   timeSlots: period.timeSlots.filter(
-                    (slot: EventTimeSlot) => slot._id !== timeSlotId
+                    (slot: EventTimeSlot) => slot._id !== timeSlotId,
                   ),
                 }
-              : period
+              : period,
           ),
         }));
       }
     },
-    [setEvent]
+    [setEvent, t],
   );
 
   return {

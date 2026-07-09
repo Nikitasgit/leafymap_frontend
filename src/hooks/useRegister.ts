@@ -1,12 +1,13 @@
 import { useCallback, useState } from "react";
+import { apiClient } from "@/lib/api/client";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useToast } from "./useToast";
 import useHandleApiErrors from "./useHandleApiErrors";
 import { useLoading } from "./useLoading";
 import { validateRegisterData } from "@/validations/authValidations";
 import { RegisterFormData } from "@/types/auth";
+import { validationT } from "@/utils/i18n/validationT";
 
 export interface RegisterState {
   formData: RegisterFormData;
@@ -51,13 +52,13 @@ export const useRegister = (): RegisterState => {
   );
 
   const validateFormData = useCallback((): boolean => {
-    const registerValidation = validateRegisterData(formData);
+    const registerValidation = validateRegisterData(validationT(t))(formData);
     setErrors((prev) => ({
       ...prev,
       register: registerValidation.errors,
     }));
     return registerValidation.isValid;
-  }, [formData]);
+  }, [formData, t]);
 
   const handleRegister = useCallback(
     async (e: React.FormEvent) => {
@@ -71,8 +72,8 @@ export const useRegister = (): RegisterState => {
       try {
         await withLoading(async () => {
           try {
-            await axios.post(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+            await apiClient.post(
+              `/api/auth/register`,
               {
                 email: formData.email,
                 password: formData.password,

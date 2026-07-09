@@ -1,7 +1,5 @@
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { User } from "@/types/user";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export type AdminResource =
   | "events"
@@ -27,53 +25,51 @@ export interface AdminContentItem {
 
 export type AdminUserContent = Record<AdminResource, AdminContentItem[]>;
 
-const request = axios.create({
-  baseURL: `${API_URL}/api/admin`,
-  withCredentials: true,
-});
-
 export const searchAdminUsers = async (email: string) => {
-  const response = await request.get<{ data: { users: User[] } }>("/users", {
-    params: { email },
-  });
+  const response = await apiClient.get<{ data: { users: User[] } }>(
+    "/api/admin/users",
+    {
+      params: { email },
+    },
+  );
   return response.data.data.users;
 };
 
 export const getAdminUser = async (userId: string) => {
-  const response = await request.get<{ data: { user: User } }>(
-    `/users/${userId}`
+  const response = await apiClient.get<{ data: { user: User } }>(
+    `/api/admin/users/${userId}`,
   );
   return response.data.data.user;
 };
 
 export const getAdminUserContent = async (userId: string) => {
-  const response = await request.get<{ data: { content: AdminUserContent } }>(
-    `/users/${userId}/content`
+  const response = await apiClient.get<{ data: { content: AdminUserContent } }>(
+    `/api/admin/users/${userId}/content`,
   );
   return response.data.data.content;
 };
 
 export const banAdminUser = async (
   userId: string,
-  payload: { reason: string; duration?: number }
-) => request.patch(`/users/${userId}/ban`, payload);
+  payload: { reason: string; duration?: number },
+) => apiClient.patch(`/api/admin/users/${userId}/ban`, payload);
 
 export const unbanAdminUser = async (userId: string) =>
-  request.patch(`/users/${userId}/unban`);
+  apiClient.patch(`/api/admin/users/${userId}/unban`);
 
 export const softDeleteAdminUser = async (userId: string) =>
-  request.patch(`/users/${userId}/delete`);
+  apiClient.patch(`/api/admin/users/${userId}/delete`);
 
 export const restoreAdminUser = async (userId: string) =>
-  request.patch(`/users/${userId}/restore`);
+  apiClient.patch(`/api/admin/users/${userId}/restore`);
 
 export const softDeleteAdminResource = async (
   resource: AdminResource,
   resourceId: string,
-  reason?: string
-) => request.patch(`/${resource}/${resourceId}/delete`, { reason });
+  reason?: string,
+) => apiClient.patch(`/api/admin/${resource}/${resourceId}/delete`, { reason });
 
 export const restoreAdminResource = async (
   resource: AdminResource,
-  resourceId: string
-) => request.patch(`/${resource}/${resourceId}/restore`);
+  resourceId: string,
+) => apiClient.patch(`/api/admin/${resource}/${resourceId}/restore`);

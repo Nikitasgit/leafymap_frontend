@@ -15,7 +15,7 @@ const DefaultScheduleDay = ({
   onChange,
 }: DefaultScheduleDayProps) => {
   const { showError } = useToast();
-  const { t } = useTranslation();
+  const { t } = useTranslation("account");
   const handleToggleOpen = () => {
     onChange({ ...schedule, open: !schedule.open });
   };
@@ -31,9 +31,7 @@ const DefaultScheduleDay = ({
     };
 
     if (hasIncompleteSlots()) {
-      showError(
-        "Veuillez compléter tous les créneaux existants avant d'en ajouter un nouveau"
-      );
+      showError(t("defaultScheduleDay.incompleteSlotsError"));
       return;
     }
 
@@ -87,17 +85,19 @@ const DefaultScheduleDay = ({
     <div className={styles.dayInput}>
       <div className={styles.dayHeader}>
         <span className={styles.dayName}>
-          {t(`defaultSchedule.day.${day}`)}
+          {t(`common:defaultSchedule.day.${day}`)}
         </span>
         <div className={styles.statusContainer}>
           <span className={statusTextClass}>
-            {schedule?.open ? "Ouvert" : "Fermé"}
+            {schedule?.open
+              ? t("common:defaultSchedule.open")
+              : t("common:defaultSchedule.closed")}
           </span>
           <Button
             onClick={handleToggleOpen}
             variant="simple"
             size="small"
-            ariaLabel="Modifier l'état"
+            ariaLabel={t("defaultScheduleDay.editStatusAriaLabel")}
           >
             <Edit3 size={16} />
           </Button>
@@ -125,14 +125,14 @@ const DefaultScheduleDay = ({
           <Button
             fullWidth
             disabled={!schedule.open}
-            ariaLabel="Ajouter un créneau"
+            ariaLabel={t("defaultScheduleDay.addSlotAriaLabel")}
             aria-disabled={!schedule.open}
             onClick={handleAddTimeSlot}
             variant="secondary"
             size="small"
             startIcon={<PlusCircle size={16} />}
           >
-            Ajouter un créneau
+            {t("defaultScheduleDay.addSlot")}
           </Button>
         </div>
       )}

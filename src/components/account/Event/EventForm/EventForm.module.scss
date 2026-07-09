@@ -1,3 +1,9 @@
+@use "@/styles/abstracts/functions" as *;
+
+.eventCategory {
+  margin-top: spacing(1.5);
+}
+
 .buttonContainer {
   display: flex;
   gap: 10px;

@@ -18,6 +18,10 @@
       @include flex(column, flex-start, stretch, spacing(1));
       padding-bottom: spacing(2);
       border-bottom: 1px solid $grey-200;
+
+      .roleSelector {
+        margin-top: spacing(1.5);
+      }
     }
   }
   @include respond-to(md) {

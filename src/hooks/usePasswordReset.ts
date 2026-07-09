@@ -1,70 +1,57 @@
 import { useState, useCallback } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { useToast } from "./useToast";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export const usePasswordReset = () => {
   const [loading, setLoading] = useState(false);
   const { showSuccess, showError } = useToast();
   const router = useRouter();
+  const { t } = useTranslation("auth");
 
   const requestPasswordReset = useCallback(
     async (email: string): Promise<void> => {
       setLoading(true);
       try {
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/forgot-password`,
-          { email },
-          { withCredentials: true }
-        );
+        await apiClient.post(`/api/auth/forgot-password`, { email }, {});
 
-        showSuccess(
-          "Si cet email existe dans notre système, un lien de réinitialisation vous a été envoyé."
-        );
+        showSuccess(t("usePasswordReset.requestSuccess"));
       } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-          const message =
-            error.response.data?.message ||
-            "Erreur lors de la demande de réinitialisation";
-          showError(message);
-        } else {
-          showError("Une erreur inattendue s'est produite");
-        }
+        showError(
+          getErrorMessage(error, t, t("usePasswordReset.requestErrorFallback")),
+        );
         throw error;
       } finally {
         setLoading(false);
       }
     },
-    [showSuccess, showError]
+    [showSuccess, showError, t],
   );
 
   const resetPassword = useCallback(
     async (token: string, newPassword: string): Promise<void> => {
       setLoading(true);
       try {
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/reset-password`,
+        await apiClient.post(
+          `/api/auth/reset-password`,
           { token, newPassword },
-          { withCredentials: true }
+          {},
         );
 
-        showSuccess("Votre mot de passe a été réinitialisé avec succès.");
+        showSuccess(t("usePasswordReset.resetSuccess"));
         router.push("/auth/signin");
       } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-          const message =
-            error.response.data?.message ||
-            "Erreur lors de la réinitialisation du mot de passe";
-          showError(message);
-        } else {
-          showError("Une erreur inattendue s'est produite");
-        }
+        showError(
+          getErrorMessage(error, t, t("usePasswordReset.resetErrorFallback")),
+        );
         throw error;
       } finally {
         setLoading(false);
       }
     },
-    [showSuccess, showError, router]
+    [showSuccess, showError, router, t],
   );
 
   return {

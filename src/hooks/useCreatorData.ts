@@ -1,21 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { UserPopulated } from "@/types/user";
 import { PlacePopulated } from "@/types/place";
 import { useToast } from "./useToast";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-const getPlaceId = (user: UserPopulated): string | null => {
-  if (!user.place) return null;
-  return typeof user.place === "string" ? user.place : user.place._id;
-};
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export const useCreatorData = (userId?: string) => {
   const [user, setUser] = useState<UserPopulated | null>(null);
   const [place, setPlace] = useState<PlacePopulated | null>(null);
   const [isLoading, setIsLoading] = useState(!!userId);
   const { showError } = useToast();
+  const { t } = useTranslation("account");
 
   const fetchAll = useCallback(async () => {
     if (!userId) {
@@ -27,30 +23,21 @@ export const useCreatorData = (userId?: string) => {
 
     setIsLoading(true);
     try {
-      const userRes = await axios.get(`${API_URL}/api/users/${userId}`);
-      const fetchedUser: UserPopulated = userRes.data.data.user;
-      setUser(fetchedUser);
-      setPlace(null);
-
-      const placeId = getPlaceId(fetchedUser);
-      if (placeId) {
-        const placeRes = await axios.get(
-          `${API_URL}/api/places/${placeId}?scheduleWithEvents=true`
-        );
-        setPlace(placeRes.data.data);
-      }
+      const response = await apiClient.get(`/api/users/${userId}/profile`);
+      const profile: { user: UserPopulated; place: PlacePopulated | null } =
+        response.data.data;
+      setUser(profile.user);
+      setPlace(profile.place);
     } catch (err) {
-      const message =
-        err instanceof Error
-          ? err.message
-          : "Erreur lors du chargement du profil";
-      showError(message);
+      showError(
+        getErrorMessage(err, t, t("useCreatorData.loadError")),
+      );
       setUser(null);
       setPlace(null);
     } finally {
       setIsLoading(false);
     }
-  }, [userId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [userId, showError, t]);
 
   useEffect(() => {
     fetchAll();

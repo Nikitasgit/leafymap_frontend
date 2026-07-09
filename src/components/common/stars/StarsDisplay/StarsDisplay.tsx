@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Star } from "lucide-react";
 import styles from "./StarsDisplay.module.scss";
 
@@ -11,6 +14,7 @@ const StarsDisplay: React.FC<StarsDisplayProps> = ({
   rating,
   size = "medium",
 }) => {
+  const { t } = useTranslation("common");
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 >= 0.5;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
@@ -19,7 +23,7 @@ const StarsDisplay: React.FC<StarsDisplayProps> = ({
     <div
       className={`${styles.starsContainer} ${styles[size]}`}
       role="img"
-      aria-label={`${rating} sur 5 étoiles`}
+      aria-label={t("starsDisplay.ariaLabel", { rating })}
     >
       {Array.from({ length: fullStars }).map((_, index) => (
         <Star

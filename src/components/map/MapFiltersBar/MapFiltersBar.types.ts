@@ -1,4 +1,4 @@
-import { MapFilters, ExtendedMapRef } from "@/types/map";
+import { MapDisplayMode, MapFilters, ExtendedMapRef } from "@/types/map";
 
 export type CreatorSearchResult = {
   _id: string;
@@ -18,13 +18,27 @@ export type LocationSearchResult = {
   coordinates?: number[];
 };
 
+export type EventSearchResult = {
+  _id: string;
+  name: string;
+  image?: string;
+  creatorId: string;
+  eventId: string;
+  coordinates?: number[];
+  location?: { label: string };
+  categories?: {
+    name: string;
+  }[];
+};
+
 export type SearchResult = {
   id: string;
   type: "creator" | "filters" | null;
+  eventId?: string | null;
 };
 
 export type SearchType = {
-  key: "membres" | "lieux";
+  key: "evenements" | "membres" | "lieux";
   label: string;
   placeholder: string;
 };
@@ -35,6 +49,8 @@ export type MapFiltersBarProps = {
   filters: MapFilters;
   handleSelect: (item: SearchResult) => void;
   selectedItem: SearchResult;
+  displayMode: MapDisplayMode;
+  onDisplayModeChange: (mode: MapDisplayMode) => void;
   isFavoritesMode: boolean;
   onFavoritesModeToggle: () => void;
   onExitFavoritesMode: () => void;

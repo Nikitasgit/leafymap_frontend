@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useEffect, useLayoutEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import Message, { Message as MessageType } from "../Message";
 import EmptyState from "@/components/common/noResults/EmptyState";
@@ -10,6 +13,7 @@ interface MessagesListProps {
 }
 
 const MessagesList: React.FC<MessagesListProps> = ({ messages }) => {
+  const { t } = useTranslation("messages");
   const { user } = useAuth();
   const currentUserId = user?._id;
   const messagesListRef = useRef<HTMLDivElement>(null);
@@ -68,8 +72,8 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages }) => {
     return (
       <div className={styles.messagesList} ref={messagesListRef}>
         <EmptyState
-          title="Aucun message"
-          description="Commencez la conversation en envoyant un message"
+          title={t("messagesList.emptyTitle")}
+          description={t("messagesList.emptyDescription")}
           icon={<MessageSquare className={styles.icon} />}
         />
       </div>

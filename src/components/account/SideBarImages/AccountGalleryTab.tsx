@@ -2,12 +2,14 @@
 
 import React from "react";
 import { Image as ImageIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import GallerySection from "@/components/userProfile/GallerySection";
 import useSubmitImages from "@/hooks/useSubmitImages";
 import { useAuth } from "@/hooks/useAuth";
 import styles from "./AccountGalleryTab.module.scss";
 
 export default function AccountGalleryTab() {
+  const { t } = useTranslation("account");
   const { user } = useAuth();
   const { submitImages, isLoading: isUploading } = useSubmitImages();
 
@@ -31,11 +33,9 @@ export default function AccountGalleryTab() {
         <div className={styles.header}>
           <p className={styles.label}>
             <ImageIcon size={20} className={styles.icon} />
-            Galerie
+            {t("accountGalleryTab.label")}
           </p>
-          <p className={styles.info}>
-            Gérez les images de votre profil créateur.
-          </p>
+          <p className={styles.info}>{t("accountGalleryTab.info")}</p>
         </div>
       </div>
 

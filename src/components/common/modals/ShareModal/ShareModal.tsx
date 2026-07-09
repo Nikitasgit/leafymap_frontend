@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Share2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import BaseModal from "@/components/common/modals/BaseModal";
 import { WhatsAppIcon } from "@/assets/svg";
 import { useToast } from "@/hooks/useToast";
@@ -22,6 +23,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
   text,
   url,
 }) => {
+  const { t } = useTranslation("common");
   const { showSuccess } = useToast();
 
   const whatsAppShareUrl =
@@ -32,9 +34,9 @@ const ShareModal: React.FC<ShareModalProps> = ({
     if (!url) return;
     try {
       await navigator.clipboard.writeText(url);
-      showSuccess("Lien copié dans le presse-papiers");
+      showSuccess(t("shareModal.linkCopied"));
     } catch {
-      showSuccess("Impossible de copier le lien");
+      showSuccess(t("shareModal.copyFailed"));
     }
   };
 
@@ -47,10 +49,10 @@ const ShareModal: React.FC<ShareModalProps> = ({
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      title="Partager"
+      title={t("shareModal.title")}
       titleIcon={<Share2 size={22} />}
-      primaryButtonLabel="Copier le lien"
-      secondaryButtonLabel="Fermer"
+      primaryButtonLabel={t("shareModal.copyLink")}
+      secondaryButtonLabel={t("actions.close")}
       onPrimaryAction={handlePrimaryAction}
       onSecondaryAction={onClose}
       primaryButtonType="button"
@@ -66,7 +68,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
             readOnly
             value={url}
             className={styles.urlInput}
-            aria-label="Lien à partager"
+            aria-label={t("shareModal.shareUrlAriaLabel")}
           />
         </div>
 
@@ -76,10 +78,10 @@ const ShareModal: React.FC<ShareModalProps> = ({
             target="_blank"
             rel="noopener noreferrer"
             className={styles.whatsappButton}
-            aria-label="Partager sur WhatsApp"
+            aria-label={t("shareModal.whatsappAriaLabel")}
           >
             <WhatsAppIcon size={20} />
-            <span>Partager sur WhatsApp</span>
+            <span>{t("shareModal.whatsappButton")}</span>
           </a>
         )}
       </div>

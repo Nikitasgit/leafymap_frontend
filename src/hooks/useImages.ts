@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { Image } from "@/types/image";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export const useImages = (
   reference: string | null,
@@ -12,32 +14,30 @@ export const useImages = (
   const [images, setImages] = useState<Image[]>([]);
   const { isLoading, withLoading, stopLoading } = useLoading(true);
   const { showError } = useToast();
+  const { t } = useTranslation("account");
 
   const fetchImages = async () => {
     try {
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/api/images/?reference=${reference}&referenceType=${referenceType}`;
+      let url = `/api/images/?reference=${reference}&referenceType=${referenceType}`;
 
       if (type) {
         url += `&type=${type}`;
       }
 
-      const response = await axios.get(url, {
-        withCredentials: true,
+      const response = await apiClient.get(url, {
       });
 
       if (response.data && response.data.data && response.data.data.images) {
         setImages(response.data.data.images);
       } else {
         setImages([]);
-        showError("Invalid response from server");
+        showError(t("useImages.invalidResponse"));
       }
     } catch (err) {
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : "Erreur lors du chargement des images";
+      showError(
+        getErrorMessage(err, t, t("useImages.loadError")),
+      );
       setImages([]);
-      showError(errorMessage);
     }
   };
 

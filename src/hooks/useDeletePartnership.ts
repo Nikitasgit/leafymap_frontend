@@ -1,10 +1,13 @@
-import axios from "axios";
 import { useLoading } from "./useLoading";
+import { apiClient } from "@/lib/api/client";
 import { useToast } from "./useToast";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 const useDeletePartnership = (onDelete?: () => void) => {
   const { isLoading, withLoading } = useLoading();
   const { showError, showSuccess } = useToast();
+  const { t } = useTranslation("account");
 
   const deletePartnership = async (
     partnershipId: string,
@@ -12,28 +15,24 @@ const useDeletePartnership = (onDelete?: () => void) => {
   ) => {
     try {
       await withLoading(() =>
-        axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/partnerships/${partnershipId}`,
+        apiClient.delete(
+          `/api/partnerships/${partnershipId}`,
           {
             headers: {
               "Content-Type": "application/json",
-            },
-            withCredentials: true,
+            }
           }
         )
       );
-      showSuccess(successMessage ?? "Collaboration supprimée");
+      showSuccess(successMessage ?? t("useDeletePartnership.deleteSuccess"));
       onDelete?.();
       return true;
     } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response?.data) {
-        showError(
-          (err.response.data as { message?: string }).message ||
-            "Erreur lors de la suppression"
-        );
-      } else {
-        showError("Erreur lors de la suppression de la collaboration");
-      }
+      showError(
+        getErrorMessage(
+          err, t, t("useDeletePartnership.deleteCollaborationError"),
+        ),
+      );
       throw err;
     }
   };

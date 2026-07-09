@@ -1,9 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import Button from "../Button";
 
 function SignOutButton({ logout }: { logout: () => Promise<void> }) {
+  const { t } = useTranslation("common");
   const router = useRouter();
 
   const handleSignOut = async () => {
@@ -17,7 +19,7 @@ function SignOutButton({ logout }: { logout: () => Promise<void> }) {
 
   return (
     <Button variant="secondary" onClick={handleSignOut}>
-      Se déconnecter
+      {t("nav.signout")}
     </Button>
   );
 }

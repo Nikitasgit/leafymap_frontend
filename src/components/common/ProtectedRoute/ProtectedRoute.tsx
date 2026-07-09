@@ -2,9 +2,11 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useAuth } from "@/hooks/useAuth";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { UserRole } from "@/types/user";
+
+const ACCEPT_CGU_PATH = "/auth/accept-cgu";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -21,13 +23,17 @@ const ProtectedRoute = ({
   allowedRoles,
   fallback = <LoadingBar />,
 }: ProtectedRouteProps) => {
-  const { user, isLoading } = useCurrentUser();
+  const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!loading) {
       if (!user) {
         router.push(redirectTo);
+        return;
+      }
+      if (user.acceptedCGU === false) {
+        router.push(ACCEPT_CGU_PATH);
         return;
       }
       if (allowedUserTypes && !allowedUserTypes.includes(user.userType)) {
@@ -39,14 +45,15 @@ const ProtectedRoute = ({
         return;
       }
     }
-  }, [user, isLoading, router, redirectTo, allowedUserTypes, allowedRoles]);
+  }, [user, loading, router, redirectTo, allowedUserTypes, allowedRoles]);
 
-  if (isLoading) {
+  if (loading) {
     return <>{fallback}</>;
   }
 
   if (
     !user ||
+    user.acceptedCGU === false ||
     (allowedUserTypes && !allowedUserTypes.includes(user.userType)) ||
     (allowedRoles && !allowedRoles.includes(user.role || "user"))
   ) {

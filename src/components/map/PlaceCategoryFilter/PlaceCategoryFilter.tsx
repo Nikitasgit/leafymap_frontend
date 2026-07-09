@@ -13,15 +13,15 @@ const PlaceCategoryFilter: React.FC<PlaceCategoryFilterProps> = ({
   onCategoryChange,
 }) => {
   const placeCategories = useAppSelector(selectPlaceCategories);
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("map");
 
   const options: MultiSelectOption[] = useMemo(
     () =>
       placeCategories.map((cat) => ({
         _id: cat._id,
-        label: t(`placeCategories.${cat.name.toLowerCase()}`, cat.name),
+        label: t(`common:placeCategories.${cat.name.toLowerCase()}`, cat.name),
       })),
-    [placeCategories, t]
+    [placeCategories]
   );
 
   const value = useMemo(
@@ -37,14 +37,14 @@ const PlaceCategoryFilter: React.FC<PlaceCategoryFilterProps> = ({
     <fieldset className={styles.categoryFilter}>
       <legend className={styles.header}>
         <Tag size={16} aria-hidden="true" />
-        <span className={styles.title}>{t("categories")}</span>
+        <span className={styles.title}>{t("common:categories")}</span>
       </legend>
       <MultiSelectFilter
         options={options}
         value={value}
         onChange={handleChange}
-        label={t("categories")}
-        placeholder={t("placeCategories.placeholder", "Sélectionner...")}
+        label={t("common:categories")}
+        placeholder={t("placeCategoryFilter.placeholder")}
       />
     </fieldset>
   );

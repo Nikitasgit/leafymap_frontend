@@ -1,56 +1,41 @@
-import axios from "axios";
 import { useLoading } from "./useLoading";
+import { apiClient } from "@/lib/api/client";
 import { useToast } from "./useToast";
+import useHandleApiErrors from "./useHandleApiErrors";
+import { useTranslation } from "react-i18next";
 
 const useDeleteEvent = () => {
   const { isLoading, withLoading } = useLoading();
-  const { showError, showSuccess } = useToast();
+  const { showSuccess } = useToast();
+  const { handleApiError } = useHandleApiErrors();
+  const { t } = useTranslation("events");
 
   const deleteEvent = async (eventId: string) => {
     try {
       await withLoading(() =>
-        axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/events/${eventId}`,
+        apiClient.delete(
+          `/api/events/${eventId}`,
           {
             headers: {
               "Content-Type": "application/json",
-            },
-            withCredentials: true,
+            }
           }
         )
       );
 
-      showSuccess("Événement supprimé avec succès");
+      showSuccess(t("deleteEvent.success"));
       window.location.reload();
     } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response?.data) {
-        if (err.response.data.data) {
-          Object.values(err.response.data.data).forEach((error: unknown) => {
-            if (Array.isArray(error)) {
-              error.forEach((e: string) => {
-                showError(e);
-              });
-            } else if (typeof error === "string") {
-              showError(error);
-            }
-          });
-        } else {
-          showError(err.response.data.message);
-        }
-      } else {
-        showError("Une erreur inattendue s'est produite");
-      }
+      handleApiError(err, undefined, true);
     }
   };
 
   const deleteEventWithConfirmation = async (eventId: string) => {
-    const confirmed = window.confirm(
-      "Êtes-vous sûr de vouloir supprimer cet événement ? Cette action est définitive."
-    );
+    const confirmed = window.confirm(t("deleteEvent.confirmMessage"));
 
     if (confirmed) {
       const doubleConfirmed = window.confirm(
-        "Cette action est définitive. Confirmez-vous la suppression de l'événement ?"
+        t("deleteEvent.doubleConfirmMessage")
       );
 
       if (doubleConfirmed) {

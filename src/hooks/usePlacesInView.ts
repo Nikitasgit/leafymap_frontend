@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { Place } from "@/types/place";
 import { MapFilters } from "@/types/map";
 import { MapRef } from "react-map-gl/mapbox";
@@ -42,8 +42,8 @@ export const usePlacesInView = ({ filters }: UsePlacesInViewProps = {}) => {
       const sw = currentBounds.getSouthWest().toArray();
 
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places/in-view`,
+        const response = await apiClient.get(
+          `/api/places/in-view`,
           {
             params: {
               ne: JSON.stringify(ne),

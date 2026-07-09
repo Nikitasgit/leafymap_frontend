@@ -23,6 +23,8 @@ export default function RegisterForm() {
 
   const hasGoogleAuth = Boolean(GOOGLE_CLIENT_ID);
   const [showEmailForm, setShowEmailForm] = useState(!hasGoogleAuth);
+  const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
+  const isAuthSubmitting = authLoading || isGoogleSubmitting;
 
   const {
     formData,
@@ -40,17 +42,29 @@ export default function RegisterForm() {
     }
   }, [hasAttemptedSubmit, validateFormData]);
 
+  const handleGoogleLogin = async (credential: string) => {
+    if (isAuthSubmitting) {
+      return;
+    }
+
+    setIsGoogleSubmitting(true);
+    await loginWithGoogle(credential);
+    setIsGoogleSubmitting(false);
+  };
+
   const googleBlock = hasGoogleAuth && (
     <div className={styles.googlePrimary}>
       <p className={styles.recommendedLabel}>{t("recommended")}</p>
       <div className={styles.googleButton}>
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID!}>
           <RegisterFormGoogleLogin
-            loginWithGoogle={loginWithGoogle}
+            loginWithGoogle={handleGoogleLogin}
             onGoogleFlowError={() => {
-              showError("Inscription Google annulée ou échouée");
+              showError(t("auth:registerForm.googleError"));
             }}
             loadingAriaLabel={t("googleButtonLoading")}
+            disabled={isAuthSubmitting}
+            disabledLabel={t("form.submitLoading")}
           />
         </GoogleOAuthProvider>
       </div>
@@ -62,7 +76,7 @@ export default function RegisterForm() {
       onSubmit={handleRegister}
       className={`${styles.form} ${hasGoogleAuth ? styles.formAfterGoogle : ""}`}
       noValidate
-      aria-label="Formulaire d'inscription"
+      aria-label={t("form.ariaLabel")}
     >
       <TextField
         label={t("form.email.label")}
@@ -73,7 +87,7 @@ export default function RegisterForm() {
         fullWidth
         value={formData.email}
         onChange={(e) => handleInputChange("email", e.target.value)}
-        disabled={isLoading || authLoading}
+        disabled={isLoading || isAuthSubmitting}
         error={!!errors.register.email}
         errorMessage={errors.register.email}
       />
@@ -87,7 +101,7 @@ export default function RegisterForm() {
         fullWidth
         value={formData.password}
         onChange={(e) => handleInputChange("password", e.target.value)}
-        disabled={isLoading || authLoading}
+        disabled={isLoading || isAuthSubmitting}
         error={!!errors.register.password}
         errorMessage={errors.register.password}
       />
@@ -103,7 +117,7 @@ export default function RegisterForm() {
         onChange={(e) =>
           handleInputChange("confirmPassword", e.target.value)
         }
-        disabled={isLoading || authLoading}
+        disabled={isLoading || isAuthSubmitting}
         error={!!errors.register.confirmPassword}
         errorMessage={errors.register.confirmPassword}
       />
@@ -111,7 +125,7 @@ export default function RegisterForm() {
       <CGUCheckbox
         checked={formData.acceptedCGU}
         onChange={(checked) => handleInputChange("acceptedCGU", checked)}
-        disabled={isLoading || authLoading}
+        disabled={isLoading || isAuthSubmitting}
         error={!!errors.register.acceptedCGU}
         errorMessage={errors.register.acceptedCGU}
       />
@@ -123,28 +137,27 @@ export default function RegisterForm() {
           onChange={(e) =>
             handleInputChange("emailNotifications", e.target.checked)
           }
-          disabled={isLoading || authLoading}
+          disabled={isLoading || isAuthSubmitting}
         />
-        <span>
-          Je souhaite recevoir les notifications importantes par e-mail
-          (messages, invitations, abonnés).
-        </span>
+        <span>{t("emailNotificationsLabel")}</span>
       </label>
 
       <Button
         type="submit"
         variant="primary"
         size="medium"
-        disabled={isLoading || authLoading}
+        disabled={isLoading || isAuthSubmitting}
       >
-        {isLoading ? t("form.submitLoading") : t("form.submit")}
+        {isLoading || isAuthSubmitting
+          ? t("form.submitLoading")
+          : t("form.submit")}
       </Button>
     </form>
   );
 
   return (
     <div className={styles.container}>
-      {(isLoading || authLoading) && <LoadingBar />}
+      {(isLoading || isAuthSubmitting) && <LoadingBar />}
       <div className={styles.formContainer}>
         <h1>{t("title")}</h1>
 
@@ -164,7 +177,7 @@ export default function RegisterForm() {
             fullWidth
             className={styles.emailToggle}
             onClick={() => setShowEmailForm((open) => !open)}
-            disabled={isLoading || authLoading}
+            disabled={isLoading || isAuthSubmitting}
             aria-expanded={showEmailForm}
           >
             {showEmailForm ? t("hideEmailForm") : t("registerWithEmail")}

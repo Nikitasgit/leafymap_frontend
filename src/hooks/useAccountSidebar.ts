@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useUserNotifications } from "@/hooks/useUserNotifications";
 import {
@@ -42,14 +43,15 @@ export function useAccountSidebar(
   const activeTab = searchParams.get(TAB_PARAM);
 
   const isCreator = user?.userType === "creator";
+  const { t } = useTranslation("account");
 
   const sidebarValues = Object.values(SIDEBAR_VALUES) as string[];
   const isSideBarOpen =
     activeSidebar != null && sidebarValues.includes(activeSidebar);
 
   const { title, tabs, initialTabId } = useMemo(
-    () => getSidebarState(activeSidebar, activeTab, { isCreator }),
-    [activeSidebar, activeTab, isCreator]
+    () => getSidebarState(activeSidebar, activeTab, { isCreator, t }),
+    [activeSidebar, activeTab, isCreator, t]
   );
 
   const navigateSidebar = useCallback(

@@ -1,0 +1,65 @@
+{
+  "mapFiltersBar": {
+    "activeFiltersAriaLabel": "Active filters",
+    "events": "Events",
+    "showEventsAriaLabel": "Show events",
+    "places": "Places",
+    "showPlacesAriaLabel": "Show places",
+    "saved": "Saved",
+    "showSavedPlacesAriaLabel": "Show saved places",
+    "disableSavedPlacesAriaLabel": "Hide saved places",
+    "selectSearchTypeAriaLabel": "Select search type",
+    "searchTypes": {
+      "events": {
+        "label": "Events",
+        "placeholder": "Search for an event"
+      },
+      "members": {
+        "label": "Members",
+        "placeholder": "Search for a member"
+      },
+      "places": {
+        "label": "Places",
+        "placeholder": "Search for a place (e.g. Paris)"
+      }
+    }
+  },
+  "mapCardContainer": {
+    "closeCreatorCardAriaLabel": "Close creator card",
+    "selectionInfoAriaLabel": "Selection information"
+  },
+  "mapCreatorCardPartnerships": {
+    "participatesInEvents": "<bold>{{username}}</bold> is participating in these events ({{count}}):"
+  },
+  "mapFiltersCard": {
+    "closeFiltersAriaLabel": "Close filters",
+    "eventCategories": "Event categories",
+    "startDate": "Start",
+    "endDate": "End",
+    "placeTypes": "Place types",
+    "minRating": "Minimum rating",
+    "ratingAll": "All",
+    "creatorType": "Creator type",
+    "productsOffered": "Products offered",
+    "selectPlaceholder": "Select...",
+    "resetFilters": "Reset filters",
+    "resetFiltersAriaLabel": "Reset filters",
+    "applyFilters": "Apply filters",
+    "applyFiltersAriaLabel": "Apply filters"
+  },
+  "mapPlaceCardSchedule": {
+    "showEventsAriaLabel": "Show events",
+    "events": "Events",
+    "showScheduleAriaLabel": "Show opening hours"
+  },
+  "placeCategoryFilter": {
+    "placeholder": "Select..."
+  },
+  "useGeolocation": {
+    "notSupported": "Geolocation is not supported by this browser",
+    "genericError": "Geolocation error",
+    "permissionDenied": "Geolocation permission denied",
+    "positionUnavailable": "Position unavailable",
+    "timeout": "Request timed out"
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import TextField from "@/components/common/inputs/TextField";
 import { Send } from "lucide-react";
 import { useSendMessage } from "@/hooks/useSendMessage";
@@ -15,6 +16,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   recipientId,
   onMessageSent,
 }) => {
+  const { t } = useTranslation("messages");
   const [message, setMessage] = useState("");
   const { sendMessage, isSending } = useSendMessage(onMessageSent);
 
@@ -56,7 +58,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Écrivez un message..."
+          placeholder={t("messageInput.placeholder")}
           multiline
           rows={3}
           maxLength={1000}
@@ -67,7 +69,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           onClick={handleSend}
           disabled={!message.trim() || isSending}
           className={styles.sendButton}
-          aria-label="Envoyer le message"
+          aria-label={t("common:actions.send")}
         >
           <Send size={20} />
         </button>

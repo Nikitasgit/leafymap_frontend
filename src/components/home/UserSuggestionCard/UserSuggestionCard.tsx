@@ -1,5 +1,6 @@
 import { UserPopulated } from "@/types/user";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./UserSuggestionCard.module.scss";
 import Image from "next/image";
 import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge";
@@ -9,6 +10,7 @@ import creatorDefaultSvg from "@public/images/creator_default.png";
 import { getDisplayName } from "@/utils/userDisplay";
 
 const UserSuggestionCard = ({ user }: { user: UserPopulated }) => {
+  const { t } = useTranslation("profile");
   const router = useRouter();
   const handleRedirect = () => {
     router.push(`/users/${user._id}`);
@@ -47,7 +49,7 @@ const UserSuggestionCard = ({ user }: { user: UserPopulated }) => {
           </div>
         )}
         <p className={styles.description}>
-          {user.description || "Aucune description disponible"}
+          {user.description || t("userSuggestionCard.noDescription")}
         </p>
         {user.userCategory?.name && (
           <CreatorCategoryBadge categoryName={user.userCategory.name} />

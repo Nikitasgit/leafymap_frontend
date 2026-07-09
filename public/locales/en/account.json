@@ -1,0 +1,149 @@
+{
+  "accountSettingsContainer": {
+    "subtitle": "Manage your account settings",
+    "title": "Account settings",
+    "informationsSection": "Information",
+    "firstnameLabel": "First name",
+    "lastnameLabel": "Last name",
+    "notificationsSection": "Notifications",
+    "emailNotificationsTitle": "Receive email notifications",
+    "emailNotificationsDescription": "You will receive an email when an important notification is created for your account.",
+    "saving": " Saving...",
+    "preferenceSaved": "Preference saved",
+    "preferenceSaveError": "Unable to save preference",
+    "formValidationError": "Please fix the form errors",
+    "profileSaved": "Information saved",
+    "sensitiveActionsAriaLabel": "Sensitive account actions",
+    "deletePlaceTitle": "Delete my place",
+    "deletePlaceTooltip": "Deleting your place is permanent: events, place photos, reviews of the place and its events, and comments associated with those reviews will be deleted.",
+    "deletePlaceDescription": "Remove your place from the map and delete all related data (events, reviews, comments).",
+    "deletePlaceButton": "Delete place",
+    "deletePlaceAriaLabel": "Delete my place and all associated data",
+    "deleteAccountTitle": "Delete my account",
+    "deleteAccountTooltip": "Deleting your account will permanently delete: your places, events, partnerships, reviews and comments, and your user profile. This action is irreversible and cannot be undone.",
+    "deleteAccountDescription": "Permanent deletion of your account and all your data. This action is irreversible.",
+    "deleteAccountAriaLabel": "Permanently delete my account and all my data",
+    "deleting": "Deleting...",
+    "deletePlaceModalTitle": "Delete this place?",
+    "deletePlaceModalPrimary": "Delete permanently",
+    "deletePlaceModalBody": "This action is irreversible. Your place, its images, all its events, reviews (place and events), and associated comments will be deleted."
+  },
+  "accountSidebarConfig": {
+    "tabs": {
+      "collaborators": "My collaborators",
+      "receivedInvitations": "Received invitations",
+      "invite": "Invite",
+      "myEvents": "My events",
+      "myParticipations": "My participations",
+      "myBookings": "My bookings",
+      "reviewsWritten": "Reviews written",
+      "reviewsReceived": "Reviews received",
+      "followers": "Followers",
+      "following": "Following",
+      "myProducts": "My products",
+      "gallery": "Images"
+    },
+    "titles": {
+      "collaborations": "Collaborations",
+      "events": "My events",
+      "bookings": "Bookings",
+      "reviews": "Reviews",
+      "follows": "Following",
+      "products": "Products",
+      "images": "Images"
+    }
+  },
+  "partnershipsSentTab": {
+    "label": "Invite a collaborator",
+    "info": "Search for a user to send them a collaboration invitation.",
+    "searchPlaceholder": "Search for a user..."
+  },
+  "partnershipsReceivedTab": {
+    "label": "Received invitations",
+    "info": "Accept or decline collaboration requests sent to you.",
+    "emptyTitle": "No invitations received",
+    "emptyDescription": "Pending invitations will appear here."
+  },
+  "partnershipsAcceptedTab": {
+    "label": "My collaborators",
+    "info": "List of people you collaborate with.",
+    "emptyTitle": "No collaborations",
+    "emptyDescription": "You don't have any collaborators yet."
+  },
+  "partnershipsSentList": {
+    "emptyTitle": "No invitations sent",
+    "title": "Sent invitations",
+    "cancelInvitation": "Cancel invitation",
+    "cancelInvitationAriaLabel": "Cancel invitation"
+  },
+  "partnershipsReceivedList": {
+    "accept": "Accept",
+    "refuse": "Decline",
+    "acceptAriaLabel": "Accept invitation",
+    "refuseAriaLabel": "Decline invitation",
+    "fallbackUsername": "User"
+  },
+  "followingTab": {
+    "unfollow": "Unfollow",
+    "emptyTitle": "No following yet"
+  },
+  "followersTab": {
+    "emptyTitle": "No followers yet"
+  },
+  "reviewsReceivedTab": {
+    "title": "Reviews received",
+    "description": "Reviews left by users on your place.",
+    "emptyTitle": "No reviews received",
+    "emptyMessage": "Your place hasn't received any reviews yet, or you don't have a place associated with your account."
+  },
+  "reviewsWrittenTab": {
+    "title": "Reviews written",
+    "description": "Reviews you have written about places or events.",
+    "emptyTitle": "No reviews written",
+    "emptyMessage": "You haven't written any reviews yet.",
+    "placeFallback": "Place"
+  },
+  "accountGalleryTab": {
+    "label": "Gallery",
+    "info": "Manage your creator profile images."
+  },
+  "userInfo": {
+    "informationsSection": "Information",
+    "firstnameLabel": "First name",
+    "lastnameLabel": "Last name",
+    "activityNameLabel": "Your activity name",
+    "descriptionLabel": "Description"
+  },
+  "userContactForm": {
+    "contactSection": "Contact",
+    "phoneLabel": "Phone",
+    "phonePlaceholder": "Enter your phone number",
+    "websiteLabel": "Website",
+    "websitePlaceholder": "Enter your website URL"
+  },
+  "useDeleteAccount": {
+    "success": "Account deleted successfully",
+    "confirmFirst": "Are you sure you want to delete your account? This action is irreversible and will delete all your data.",
+    "confirmSecond": "This action is permanent. All your data (places, events, partnerships) will be deleted. Do you confirm deletion?",
+    "errorFallback": "Error deleting account"
+  },
+  "useFindUsers": {
+    "searchErrorFallback": "Error searching for users"
+  },
+  "useFollowingUsers": {
+    "loadErrorFallback": "Error loading following"
+  },
+  "useFollowers": {
+    "loadErrorFallback": "Error loading followers"
+  },
+  "useFollow": {
+    "followSuccess": "Successfully followed",
+    "unfollowSuccess": "Successfully unfollowed"
+  },
+  "useReviewsWritten": {
+    "loadError": "Error loading written reviews"
+  },
+  "useReviewsReceived": {
+    "loadError": "Error loading received reviews"
+  }
+}

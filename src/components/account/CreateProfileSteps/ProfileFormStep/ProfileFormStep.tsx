@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/useToast";
 import { ValidationResult } from "@/validations/commonValidations";
 import { validateNewPlaceData } from "@/validations/placeValidations";
 import { validateNewUserData } from "@/validations/userValidations";
+import { useTranslation } from "react-i18next";
 import styles from "./ProfileFormStep.module.scss";
 import {
   ProfileFormStepErrors,
@@ -13,6 +14,7 @@ import {
 } from "./ProfileFormStep.types";
 import { UserContactForm } from "../../ContactForm";
 import { UserInfo } from "../../ProfileInfo";
+import { validationT } from "@/utils/i18n/validationT";
 
 const ProfileFormStep = ({
   place,
@@ -22,13 +24,14 @@ const ProfileFormStep = ({
   onUserChange = () => {},
   onSubmit,
   onBack = () => {},
-  submitButtonText = "Créer mon profil",
+  submitButtonText,
   firstStep = false,
   showPlaceForm = true,
   showPlaceRadioYesOrNo = false,
   hideUserLegalName = false,
 }: ProfileFormStepProps) => {
   const { showError } = useToast();
+  const { t } = useTranslation("account");
 
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [errors, setErrors] = useState<ProfileFormStepErrors>({
@@ -36,13 +39,13 @@ const ProfileFormStep = ({
     user: {},
   });
   const validateFormData = useCallback((): boolean => {
-    const userValidation = validateNewUserData(user);
+    const userValidation = validateNewUserData(validationT(t))(user);
     let placeValidation: ValidationResult = {
       errors: {},
       isValid: true,
     };
     if (place && place.active) {
-      placeValidation = validateNewPlaceData(place);
+      placeValidation = validateNewPlaceData(validationT(t))(place);
     }
     setErrors((prev) => ({
       ...prev,
@@ -50,7 +53,7 @@ const ProfileFormStep = ({
       place: placeValidation.errors,
     }));
     return userValidation.isValid && placeValidation.isValid;
-  }, [place, user]);
+  }, [place, user, t]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +62,7 @@ const ProfileFormStep = ({
     if (validateFormData()) {
       await onSubmit();
     } else {
-      showError("Veuillez corriger les erreurs du formulaire");
+      showError(t("profileFormStep.validationError"));
     }
   };
 
@@ -74,7 +77,6 @@ const ProfileFormStep = ({
       <UserInfo
         user={user}
         onUserChange={onUserChange}
-        onPlaceChange={onPlaceChange}
         errors={errors.user}
         showLegalName={!hideUserLegalName}
       />
@@ -104,18 +106,18 @@ const ProfileFormStep = ({
             type="button"
             onClick={onBack}
             fullWidth
-            ariaLabel="Précédent"
+            ariaLabel={t("profileFormStep.previousAriaLabel")}
           >
-            Précédent
+            {t("common:actions.previous")}
           </Button>
         )}
         <Button
           size="large"
           fullWidth
           type="submit"
-          ariaLabel={submitButtonText}
+          ariaLabel={submitButtonText ?? t("profileFormStep.submitButton")}
         >
-          {submitButtonText}
+          {submitButtonText ?? t("profileFormStep.submitButton")}
         </Button>
       </div>
     </form>

@@ -24,24 +24,18 @@ export type FormDataChangeHandler = (
       },
 ) => void;
 
-export type InitialPlaceData = Omit<
-  Pick<
-    Place,
-    | "name"
-    | "description"
-    | "location"
-    | "defaultSchedule"
-    | "placeCategory"
-    | "placeType"
-    | "active"
-    | "phone"
-    | "email"
-    | "website"
-  >,
-  "placeType"
-> & {
-  placeType: string[];
-};
+export type InitialPlaceData = Pick<
+  Place,
+  | "name"
+  | "description"
+  | "location"
+  | "defaultSchedule"
+  | "placeCategory"
+  | "active"
+  | "phone"
+  | "email"
+  | "website"
+>;
 
 export type InitialCreatorData = Pick<
   User,

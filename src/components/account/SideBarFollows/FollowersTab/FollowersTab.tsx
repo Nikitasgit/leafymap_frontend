@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import useFollowers from "@/hooks/useFollowers";
 import { UserCard } from "@/components/userProfile/PlacesSection/UserCard";
@@ -10,6 +11,7 @@ import styles from "./FollowersTab.module.scss";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 
 const FollowersTab: React.FC = () => {
+  const { t } = useTranslation("account");
   const { user } = useCurrentUser();
   const { followers, isLoading } = useFollowers(user?._id);
 
@@ -41,7 +43,7 @@ const FollowersTab: React.FC = () => {
         </div>
       ) : (
         <EmptyState
-          title="Aucun abonné pour le moment"
+          title={t("followersTab.emptyTitle")}
           icon={<Users className={styles.icon} />}
         />
       )}

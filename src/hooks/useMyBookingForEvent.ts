@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { useLoading } from "./useLoading";
 import { EventBooking } from "@/types/eventBooking";
 
@@ -12,9 +12,9 @@ export const useMyBookingForEvent = (
 
   const fetchBooking = useCallback(async () => {
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/event-bookings/event/${eventId}/me`,
-        { withCredentials: true }
+      const response = await apiClient.get(
+        `/api/event-bookings/event/${eventId}/me`,
+        {}
       );
       setBooking(response.data?.data ?? null);
     } catch {

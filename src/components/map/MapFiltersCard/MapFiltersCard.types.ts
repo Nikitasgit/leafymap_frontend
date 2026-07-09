@@ -1,4 +1,4 @@
-import { MapFilters } from "@/types/map";
+import { MapDisplayMode, MapFilters } from "@/types/map";
 
 export interface MapFiltersCardProps {
   onResetFilters?: () => void;
@@ -6,5 +6,6 @@ export interface MapFiltersCardProps {
   onApplyFilters?: (filters: MapFilters) => void;
   onClose?: () => void;
   filters: MapFilters;
+  displayMode: MapDisplayMode;
   isMobile?: boolean;
 }

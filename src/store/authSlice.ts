@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { apiClient, isAxiosError } from "@/lib/api/client";
 import type { RootState } from "./index";
 import { User } from "@/types/user";
 
@@ -7,12 +7,7 @@ export const fetchCurrentUser = createAsyncThunk(
   "auth/fetchCurrentUser",
   async () => {
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`,
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await apiClient.get("/api/auth/me");
 
       return response.data.data.user;
     } catch (error) {
@@ -34,18 +29,14 @@ export const signIn = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/signin`,
-        {
-          identifier,
-          password,
-        },
-        { withCredentials: true },
-      );
+      const response = await apiClient.post("/api/auth/signin", {
+        identifier,
+        password,
+      });
 
       return response.data.data.user;
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
+      if (isAxiosError(error) && error.response) {
         return rejectWithValue(error.response.data);
       }
       throw error;
@@ -57,14 +48,12 @@ export const signInWithGoogle = createAsyncThunk(
   "auth/signInWithGoogle",
   async (idToken: string, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`,
-        { id_token: idToken },
-        { withCredentials: true },
-      );
+      const response = await apiClient.post("/api/auth/google", {
+        id_token: idToken,
+      });
       return response.data.data;
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
+      if (isAxiosError(error) && error.response) {
         return rejectWithValue(error.response.data);
       }
       throw error;
@@ -73,11 +62,7 @@ export const signInWithGoogle = createAsyncThunk(
 );
 
 export const signOut = createAsyncThunk("auth/signOut", async () => {
-  await axios.post(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/auth/signout`,
-    {},
-    { withCredentials: true },
-  );
+  await apiClient.post("/api/auth/signout");
 });
 
 type AuthState = {
@@ -86,9 +71,25 @@ type AuthState = {
   error: string | null;
 };
 
+const getRejectionMessage = (
+  payload: unknown,
+  errorMessage: string | undefined,
+  fallback: string,
+): string => {
+  if (
+    payload &&
+    typeof payload === "object" &&
+    "message" in payload &&
+    typeof payload.message === "string"
+  ) {
+    return payload.message;
+  }
+  return errorMessage || fallback;
+};
+
 const initialState: AuthState = {
   user: null,
-  loading: false,
+  loading: true,
   error: null,
 };
 
@@ -122,7 +123,11 @@ const authSlice = createSlice({
     });
     builder.addCase(signIn.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message || "Failed to sign in";
+      state.error = getRejectionMessage(
+        action.payload,
+        action.error.message,
+        "Failed to sign in",
+      );
     });
 
     // Sign in with Google
@@ -136,7 +141,11 @@ const authSlice = createSlice({
     });
     builder.addCase(signInWithGoogle.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message || "Failed to sign in with Google";
+      state.error = getRejectionMessage(
+        action.payload,
+        action.error.message,
+        "Failed to sign in with Google",
+      );
     });
 
     // Sign out

@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Star } from "lucide-react";
 import Button from "@/components/common/buttons/Button";
 import ReviewModal from "../ReviewModal";
@@ -30,6 +31,7 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
   canReply = false,
   onRatingUpdated,
 }) => {
+  const { t } = useTranslation("reviews");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { reviews, isLoading, refetch } = useReviews({
     reference,
@@ -70,7 +72,7 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
   return (
     <div className={styles.reviewsTab}>
       <div className={styles.header}>
-        <h3>Avis ({reviews.length})</h3>
+        <h3>{t("reviewsTab.title", { count: reviews.length })}</h3>
         {user && canReview && !isOwner && (
           <Button
             variant="primary"
@@ -78,18 +80,18 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
             onClick={() => setIsModalOpen(true)}
             startIcon={<Star size={16} />}
           >
-            {userReview ? "Modifier mon avis" : "Rédiger un avis"}
+            {userReview ? t("reviewsTab.editReview") : t("reviewsTab.writeReview")}
           </Button>
         )}
       </div>
 
       {reviews.length === 0 ? (
         <EmptyState
-          title="Aucun avis pour le moment"
+          title={t("reviewsTab.emptyTitle")}
           description={
             user && canReview
-              ? "Soyez le premier à laisser un avis !"
-              : "Il n'y a pas encore d'avis sur cet élément."
+              ? t("reviewsTab.emptyDescriptionCanReview")
+              : t("reviewsTab.emptyDescriptionNoReview")
           }
           icon={<Star className={styles.emptyIcon} />}
         />

@@ -1,0 +1,40 @@
+{
+  "gallerySection": {
+    "emptyTitle": "No images in the gallery",
+    "deleteImage": "Delete image",
+    "imageAlt": "Image {{index}}"
+  },
+  "userCard": {
+    "creatorBadge": "Creator",
+    "visitProfile": "Visit profile"
+  },
+  "creatorTabs": {
+    "presentation": "Presentation",
+    "reviews": "Reviews",
+    "events": "Events",
+    "images": "Images"
+  },
+  "creatorActionButtons": {
+    "subscribed": "Subscribed",
+    "subscribe": "Subscribe",
+    "unsubscribe": "Unsubscribe",
+    "messages": "Messages",
+    "sendMessage": "Send a message",
+    "directions": "Directions",
+    "viewDirections": "View directions",
+    "share": "Share",
+    "saved": "Saved",
+    "save": "Save",
+    "removeFromFavorites": "Remove from favorites"
+  },
+  "userSuggestionCard": {
+    "noDescription": "No description available"
+  },
+  "eventSuggestionCard": {
+    "online": "Online"
+  },
+  "creatorHeader": {
+    "viewProfileAriaLabel": "View {{username}}'s profile",
+    "defaultUsername": "the user"
+  }
+}

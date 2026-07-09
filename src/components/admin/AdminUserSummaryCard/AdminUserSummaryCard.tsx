@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Button from "@/components/common/buttons/Button";
 import { User } from "@/types/user";
 import styles from "./AdminUserSummaryCard.module.scss";
@@ -20,6 +21,7 @@ const AdminUserSummaryCard = ({
   onDelete: () => Promise<void>;
   onRestore: () => Promise<void>;
 }) => {
+  const { t } = useTranslation("admin");
   const [reason, setReason] = useState(user.banReason || "");
   const [durationDays, setDurationDays] = useState("7");
   const isBanned = Boolean(
@@ -30,16 +32,19 @@ const AdminUserSummaryCard = ({
   const handleBan = () => {
     const days = Number(durationDays);
     const duration = Number.isFinite(days) && days > 0 ? days * DAY : undefined;
-    return onBan(reason || "Non-respect des règles", duration);
+    return onBan(reason || t("adminUserSummaryCard.defaultBanReason"), duration);
   };
 
   return (
     <section className={styles.card}>
       <div>
         <h2>{user.email}</h2>
-        <p>{user.username || "Aucun username"}</p>
+        <p>{user.username || t("adminUserSummaryCard.noUsername")}</p>
         <p>
-          Role: {user.role || "user"} · Type: {user.userType}
+          {t("adminUserSummaryCard.roleType", {
+            role: user.role || "user",
+            userType: user.userType,
+          })}
         </p>
       </div>
 
@@ -47,31 +52,31 @@ const AdminUserSummaryCard = ({
         <input
           value={reason}
           onChange={(event) => setReason(event.target.value)}
-          placeholder="Raison du ban"
+          placeholder={t("adminUserSummaryCard.banReasonPlaceholder")}
         />
         <input
           value={durationDays}
           onChange={(event) => setDurationDays(event.target.value)}
-          placeholder="Durée en jours"
+          placeholder={t("adminUserSummaryCard.durationDaysPlaceholder")}
           type="number"
           min="1"
         />
         {isBanned ? (
           <Button variant="secondary" onClick={onUnban}>
-            Débannir
+            {t("adminUserSummaryCard.unban")}
           </Button>
         ) : (
           <Button variant="secondary" onClick={handleBan}>
-            Bannir
+            {t("adminUserSummaryCard.ban")}
           </Button>
         )}
         {user.deleted ? (
           <Button variant="secondary" onClick={onRestore}>
-            Restaurer
+            {t("adminUserSummaryCard.restore")}
           </Button>
         ) : (
           <Button variant="danger" onClick={onDelete}>
-            Masquer
+            {t("adminUserSummaryCard.hide")}
           </Button>
         )}
       </div>

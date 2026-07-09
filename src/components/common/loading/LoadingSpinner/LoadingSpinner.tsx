@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./LoadingSpinner.module.scss";
 
 interface LoadingSpinnerProps {
@@ -12,6 +15,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   color,
   className = "",
 }) => {
+  const { t } = useTranslation("common");
   const spinnerStyle: React.CSSProperties = {
     width: `${size}px`,
     height: `${size}px`,
@@ -24,7 +28,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     <div
       className={`${styles.loadingSpinner} ${className}`}
       style={spinnerStyle}
-      aria-label="Chargement en cours"
+      aria-label={t("loadingSpinner.ariaLabel")}
       role="status"
     />
   );

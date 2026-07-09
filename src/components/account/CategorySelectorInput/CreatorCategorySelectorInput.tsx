@@ -1,119 +1,78 @@
-import { useState, useRef, useEffect } from "react";
-import styles from "./CategorySelectorInput.module.scss";
+import { useEffect, useMemo } from "react";
 import { useApp } from "@/hooks/useApp";
 import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper";
-import { UserCategory } from "@/types/categories";
-import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useToast } from "@/hooks/useToast";
 import LoadingBar from "../../common/loading/LoadingBar";
-import TextField from "../../common/inputs/TextField";
+import SearchableSelect, {
+  SelectOption,
+} from "../../common/inputs/SearchableSelect";
 import { useTranslation } from "react-i18next";
 
 const CategorySelectorInput = ({
   onUserChange,
-  onPlaceChange,
   value,
   error = false,
   errorMessage = "",
 }: {
   onUserChange: FormDataChangeHandler;
-  onPlaceChange: FormDataChangeHandler;
   value: string;
   error?: boolean;
   errorMessage?: string;
 }) => {
   const { userCategories, loading, error: appError } = useApp();
-  const [inputValue, setInputValue] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation("subscription");
 
   const { showError } = useToast();
 
-  const ref = useRef<HTMLDivElement>(null);
+  const options = useMemo<SelectOption[]>(
+    () =>
+      userCategories.map((userCategory) => ({
+        _id: userCategory._id,
+        label: t(`common:creatorCategories.${userCategory.name}`, {
+          defaultValue: userCategory.name,
+        }),
+      })),
+    [t, userCategories],
+  );
 
-  const handleClickOutside = () => {
-    setIsOpen(false);
-  };
+  const selectedOption =
+    options.find((option) => option._id === value) ?? null;
 
-  useOnClickOutside(ref, handleClickOutside);
+  const handleSelect = (selected: SelectOption | null) => {
+    const userCategory = selected
+      ? userCategories.find((category) => category._id === selected._id)
+      : null;
 
-  const handleSelect = (userCategory: UserCategory) => {
-    setInputValue(userCategory.name);
-    setIsOpen(false);
     onUserChange({
       target: {
         name: "userCategory",
-        value: userCategory._id,
-      },
-    });
-    onPlaceChange({
-      target: {
-        name: "placeType",
-        value: [
-          typeof userCategory.type === "object"
-            ? userCategory.type._id
-            : userCategory.type,
-        ],
+        value: userCategory?._id ?? "",
       },
     });
   };
 
   useEffect(() => {
-    if (value) {
-      const categoryId = value;
-      if (categoryId) {
-        const userCategory = userCategories.find(
-          (cat) => cat._id === categoryId
-        );
-        if (userCategory) {
-          setInputValue(userCategory.name);
-        }
-      }
+    if (appError) {
+      showError(appError);
     }
-  }, [value, userCategories]);
-
-  if (appError) {
-    showError(appError);
-  }
+  }, [appError, showError]);
 
   return (
-    <div className={styles.categoryInputWrapper} ref={ref}>
+    <>
       {loading && <LoadingBar />}
-      <TextField
+      <SearchableSelect
         name="userCategory"
         label={t("categorySelector.label")}
-        readOnly
-        fullWidth
         required
-        onChange={(e) => setInputValue(e.target.value)}
-        value={t(`creatorCategories.${inputValue}`, {
-          defaultValue: inputValue,
-        })}
-        onClick={() => setIsOpen(true)}
-        placeholder={t("categorySelector.placeholder")}
+        options={options}
+        value={selectedOption}
+        onChange={handleSelect}
+        loading={loading}
+        placeholder={t("categorySelector.searchPlaceholder")}
         error={error}
         errorMessage={errorMessage}
       />
-      {isOpen && (
-        <div className={styles.dropdown} role="listbox">
-          <ul className={styles.list}>
-            {userCategories.map((sub) => (
-              <li key={sub._id}>
-                <button
-                  type="button"
-                  className={styles.item}
-                  onClick={() => handleSelect(sub)}
-                  role="option"
-                  aria-selected={value === sub._id}
-                >
-                  {t(`creatorCategories.${sub.name}`)}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 

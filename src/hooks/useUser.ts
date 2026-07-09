@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { apiClient } from "@/lib/api/client";
 import { UserPopulated } from "@/types/user";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
-import axios from "axios";
 
 export const useUser = (userId?: string) => {
   const [user, setUser] = useState<UserPopulated | null>(null);
@@ -17,8 +17,8 @@ export const useUser = (userId?: string) => {
   const fetchUser = useCallback(async () => {
     if (!userId) return;
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}`;
-      const response = await axios.get(url);
+      const url = `/api/users/${userId}`;
+      const response = await apiClient.get(url);
       setUser(response.data.data.user);
     } catch (err) {
       const errorMessage =

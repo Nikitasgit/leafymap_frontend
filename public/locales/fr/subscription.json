@@ -46,12 +46,19 @@
       "placeholder": "Confirmez votre mot de passe"
     },
     "submit": "S'inscrire",
-    "submitLoading": "Inscription en cours..."
+    "submitLoading": "Inscription en cours...",
+    "ariaLabel": "Formulaire d'inscription"
   },
+  "emailNotificationsLabel": "Je souhaite recevoir les notifications importantes par e-mail (messages, invitations, abonnés).",
   "categorySelector": {
-    "label": "Activité",
-    "placeholder": "Sélectionne une activité",
-    "searchPlaceholder": "Rechercher une activité..."
+    "label": "Votre rôle",
+    "placeholder": "Sélectionne un rôle",
+    "searchPlaceholder": "Rechercher un rôle..."
+  },
+  "placeTypeSelector": {
+    "label": "Type de lieu",
+    "placeholder": "Sélectionne un type de lieu",
+    "searchPlaceholder": "Rechercher un type de lieu..."
   },
   "placeCategorySelector": {
     "label": "Type de lieu",

@@ -46,15 +46,17 @@ import {
   type SidebarValue,
 } from "@/utils/accountTabs";
 import AccountGalleryTab from "@/components/account/SideBarImages/AccountGalleryTab";
+import type { TFunction } from "i18next";
 
-type ExtendedSideBarTab = SideBarTab & {
+type ExtendedSideBarTab = Omit<SideBarTab, "label"> & {
+  labelKey: string;
   display?: "all" | "creatorOnly" | "nonCreatorOnly";
 };
 
 const filterTabsForUser = (
   tabs: ExtendedSideBarTab[],
-  isCreator: boolean
-): SideBarTab[] =>
+  isCreator: boolean,
+): ExtendedSideBarTab[] =>
   tabs.filter((tab) => {
     if (!tab.display || tab.display === "all") return true;
     if (tab.display === "creatorOnly") return isCreator;
@@ -65,19 +67,19 @@ const filterTabsForUser = (
 export const COLLABORATIONS_TABS: ExtendedSideBarTab[] = [
   {
     id: COLLABORATIONS_TAB_IDS.COLLABORATORS,
-    label: "Mes collaborateurs",
+    labelKey: "accountSidebarConfig.tabs.collaborators",
     icon: Users,
     content: <PartnershipsAcceptedTab />,
   },
   {
     id: COLLABORATIONS_TAB_IDS.RECEIVED_INVITATIONS,
-    label: "Invitations reçues",
+    labelKey: "accountSidebarConfig.tabs.receivedInvitations",
     icon: Inbox,
     content: <PartnershipsReceivedTab />,
   },
   {
     id: COLLABORATIONS_TAB_IDS.INVITE,
-    label: "Inviter",
+    labelKey: "accountSidebarConfig.tabs.invite",
     icon: UserPlus,
     content: <PartnershipsSentTab />,
   },
@@ -86,19 +88,19 @@ export const COLLABORATIONS_TABS: ExtendedSideBarTab[] = [
 export const EVENTS_TABS: ExtendedSideBarTab[] = [
   {
     id: EVENTS_TAB_IDS.MY_EVENTS,
-    label: "Mes évènements",
+    labelKey: "accountSidebarConfig.tabs.myEvents",
     icon: Calendar,
     content: <MyEventsTab />,
   },
   {
     id: EVENTS_TAB_IDS.RECEIVED_INVITATIONS,
-    label: "Invitations reçues",
+    labelKey: "accountSidebarConfig.tabs.receivedInvitations",
     icon: Inbox,
     content: <EventInvitationsReceivedTab />,
   },
   {
     id: EVENTS_TAB_IDS.MY_PARTICIPATIONS,
-    label: "Mes participations",
+    labelKey: "accountSidebarConfig.tabs.myParticipations",
     icon: CalendarDays,
     content: <EventParticipationsTab />,
   },
@@ -107,7 +109,7 @@ export const EVENTS_TABS: ExtendedSideBarTab[] = [
 export const BOOKINGS_TABS: ExtendedSideBarTab[] = [
   {
     id: BOOKINGS_TAB_IDS.MY_BOOKINGS,
-    label: "Mes réservations",
+    labelKey: "accountSidebarConfig.tabs.myBookings",
     icon: Ticket,
     content: <MyEventBookingsTab />,
   },
@@ -116,13 +118,13 @@ export const BOOKINGS_TABS: ExtendedSideBarTab[] = [
 export const REVIEWS_TABS: ExtendedSideBarTab[] = [
   {
     id: REVIEWS_TAB_IDS.WRITTEN,
-    label: "Avis rédigés",
+    labelKey: "accountSidebarConfig.tabs.reviewsWritten",
     icon: MessageSquare,
     content: <ReviewsWrittenTab />,
   },
   {
     id: REVIEWS_TAB_IDS.RECEIVED,
-    label: "Avis reçus",
+    labelKey: "accountSidebarConfig.tabs.reviewsReceived",
     icon: Star,
     content: <ReviewsReceivedTab />,
     display: "creatorOnly",
@@ -132,14 +134,14 @@ export const REVIEWS_TABS: ExtendedSideBarTab[] = [
 export const FOLLOWS_TABS: ExtendedSideBarTab[] = [
   {
     id: FOLLOWS_TAB_IDS.FOLLOWERS,
-    label: "Abonnés",
+    labelKey: "accountSidebarConfig.tabs.followers",
     icon: Users,
     content: <FollowersTab />,
     display: "creatorOnly",
   },
   {
     id: FOLLOWS_TAB_IDS.FOLLOWING,
-    label: "Abonnements",
+    labelKey: "accountSidebarConfig.tabs.following",
     icon: Leaf,
     content: <FollowingTab />,
   },
@@ -148,7 +150,7 @@ export const FOLLOWS_TABS: ExtendedSideBarTab[] = [
 export const PRODUCTS_TABS: ExtendedSideBarTab[] = [
   {
     id: PRODUCTS_TAB_IDS.MY_PRODUCTS,
-    label: "Mes produits",
+    labelKey: "accountSidebarConfig.tabs.myProducts",
     icon: Package,
     content: <MyProductsTab />,
   },
@@ -157,7 +159,7 @@ export const PRODUCTS_TABS: ExtendedSideBarTab[] = [
 export const IMAGES_TABS: ExtendedSideBarTab[] = [
   {
     id: IMAGES_TAB_IDS.GALLERY,
-    label: "Images",
+    labelKey: "accountSidebarConfig.tabs.gallery",
     icon: ImageIcon,
     content: <AccountGalleryTab />,
     display: "creatorOnly",
@@ -165,7 +167,7 @@ export const IMAGES_TABS: ExtendedSideBarTab[] = [
 ];
 
 interface SidebarConfig {
-  title: string;
+  titleKey: string;
   tabs: ExtendedSideBarTab[];
   defaultTab: string;
   defaultTabCreator?: string;
@@ -173,38 +175,38 @@ interface SidebarConfig {
 
 export const SIDEBAR_REGISTRY: Record<SidebarValue, SidebarConfig> = {
   [SIDEBAR_VALUES.COLLABORATIONS]: {
-    title: "Collaborations",
+    titleKey: "accountSidebarConfig.titles.collaborations",
     tabs: COLLABORATIONS_TABS,
     defaultTab: COLLABORATIONS_TAB_IDS.COLLABORATORS,
   },
   [SIDEBAR_VALUES.EVENTS]: {
-    title: "Mes évènements",
+    titleKey: "accountSidebarConfig.titles.events",
     tabs: EVENTS_TABS,
     defaultTab: EVENTS_TAB_IDS.MY_EVENTS,
   },
   [SIDEBAR_VALUES.BOOKINGS]: {
-    title: "Réservations",
+    titleKey: "accountSidebarConfig.titles.bookings",
     tabs: BOOKINGS_TABS,
     defaultTab: BOOKINGS_TAB_IDS.MY_BOOKINGS,
   },
   [SIDEBAR_VALUES.REVIEWS]: {
-    title: "Avis",
+    titleKey: "accountSidebarConfig.titles.reviews",
     tabs: REVIEWS_TABS,
     defaultTab: REVIEWS_TAB_IDS.WRITTEN,
   },
   [SIDEBAR_VALUES.FOLLOWS]: {
-    title: "Abonnements",
+    titleKey: "accountSidebarConfig.titles.follows",
     tabs: FOLLOWS_TABS,
     defaultTab: FOLLOWS_TAB_IDS.FOLLOWING,
     defaultTabCreator: FOLLOWS_TAB_IDS.FOLLOWERS,
   },
   [SIDEBAR_VALUES.PRODUCTS]: {
-    title: "Produits",
+    titleKey: "accountSidebarConfig.titles.products",
     tabs: PRODUCTS_TABS,
     defaultTab: PRODUCTS_TAB_IDS.MY_PRODUCTS,
   },
   [SIDEBAR_VALUES.IMAGES]: {
-    title: "Images",
+    titleKey: "accountSidebarConfig.titles.images",
     tabs: IMAGES_TABS,
     defaultTab: IMAGES_TAB_IDS.GALLERY,
   },
@@ -219,21 +221,25 @@ export interface SidebarState {
 export function getSidebarState(
   activeSidebar: SidebarValue | null,
   activeTab: string | null,
-  options?: { isCreator?: boolean }
+  options?: { isCreator?: boolean; t?: TFunction<"account"> },
 ): SidebarState {
   const config = activeSidebar ? SIDEBAR_REGISTRY[activeSidebar] : null;
-  if (!config) return { title: "", tabs: [], initialTabId: "" };
+  if (!config || !options?.t) return { title: "", tabs: [], initialTabId: "" };
 
-  const isCreator = options?.isCreator ?? false;
-  const tabs = filterTabsForUser(config.tabs, isCreator);
+  const { t, isCreator = false } = options;
+  const filteredTabs = filterTabsForUser(config.tabs, isCreator);
+  const tabs: SideBarTab[] = filteredTabs.map(({ labelKey, ...tab }) => ({
+    ...tab,
+    label: t(labelKey),
+  }));
   const defaultTab =
     isCreator && config.defaultTabCreator
       ? config.defaultTabCreator
       : config.defaultTab;
   const initialTabId =
-    activeTab && tabs.some((t) => t.id === activeTab)
+    activeTab && tabs.some((tabItem) => tabItem.id === activeTab)
       ? activeTab
       : (tabs[0]?.id ?? defaultTab);
 
-  return { title: config.title, tabs, initialTabId };
+  return { title: t(config.titleKey), tabs, initialTabId };
 }

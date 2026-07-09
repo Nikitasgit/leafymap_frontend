@@ -1,0 +1,65 @@
+{
+  "mapFiltersBar": {
+    "activeFiltersAriaLabel": "Filtres actifs",
+    "events": "Événements",
+    "showEventsAriaLabel": "Afficher les événements",
+    "places": "Lieux",
+    "showPlacesAriaLabel": "Afficher les lieux",
+    "saved": "Enregistrés",
+    "showSavedPlacesAriaLabel": "Afficher les lieux enregistrés",
+    "disableSavedPlacesAriaLabel": "Désactiver les lieux enregistrés",
+    "selectSearchTypeAriaLabel": "Sélectionner le type de recherche",
+    "searchTypes": {
+      "events": {
+        "label": "Événements",
+        "placeholder": "Rechercher un événement"
+      },
+      "members": {
+        "label": "Membres",
+        "placeholder": "Rechercher un membre"
+      },
+      "places": {
+        "label": "Lieux",
+        "placeholder": "Rechercher un lieu (ex: Paris)"
+      }
+    }
+  },
+  "mapCardContainer": {
+    "closeCreatorCardAriaLabel": "Fermer la fiche créateur",
+    "selectionInfoAriaLabel": "Informations de la sélection"
+  },
+  "mapCreatorCardPartnerships": {
+    "participatesInEvents": "<bold>{{username}}</bold> participe à ces événements ({{count}}) :"
+  },
+  "mapFiltersCard": {
+    "closeFiltersAriaLabel": "Fermer les filtres",
+    "eventCategories": "Catégories d'événements",
+    "startDate": "Début",
+    "endDate": "Fin",
+    "placeTypes": "Types de lieux",
+    "minRating": "Note minimale",
+    "ratingAll": "Tous",
+    "creatorType": "Type de créateur",
+    "productsOffered": "Produits proposés",
+    "selectPlaceholder": "Sélectionner...",
+    "resetFilters": "Réinitialiser les filtres",
+    "resetFiltersAriaLabel": "Réinitialiser les filtres",
+    "applyFilters": "Appliquer les filtres",
+    "applyFiltersAriaLabel": "Appliquer les filtres"
+  },
+  "mapPlaceCardSchedule": {
+    "showEventsAriaLabel": "Afficher les événements",
+    "events": "Événements",
+    "showScheduleAriaLabel": "Afficher les horaires"
+  },
+  "placeCategoryFilter": {
+    "placeholder": "Sélectionner..."
+  },
+  "useGeolocation": {
+    "notSupported": "La géolocalisation n'est pas supportée par ce navigateur",
+    "genericError": "Erreur de géolocalisation",
+    "permissionDenied": "Permission de géolocalisation refusée",
+    "positionUnavailable": "Position non disponible",
+    "timeout": "Délai d'attente dépassé"
+  }
+}

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import { Reply } from "lucide-react";
 import StarsDisplay from "@/components/common/stars/StarsDisplay";
@@ -31,6 +32,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   onReviewUpdated,
   onReviewDeleted,
 }) => {
+  const { t } = useTranslation("reviews");
   const { deleteReview, isLoading: isDeletingReview } = useDeleteReview();
   const { deleteComment, isLoading: isDeletingComment } = useDeleteComment();
   const [showReplyInput, setShowReplyInput] = useState(false);
@@ -53,7 +55,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   const hasUserReplied = !!userComment;
 
   const getDisplayName = (user: typeof author): string => {
-    if (!user) return "Utilisateur";
+    if (!user) return t("reviewCard.defaultUser");
 
     if (user.username) {
       return user.username;
@@ -63,7 +65,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
       return `${user.firstname} ${user.lastname}`;
     }
 
-    return user.username || "Utilisateur";
+    return user.username || t("reviewCard.defaultUser");
   };
 
   const handleReplySuccess = () => {
@@ -91,9 +93,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
 
   const handleDelete = async () => {
     if (
-      !confirm(
-        "Êtes-vous sûr de vouloir supprimer cet avis ? Cette action est irréversible."
-      )
+      !confirm(t("reviewCard.deleteConfirm"))
     ) {
       return;
     }
@@ -118,7 +118,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           {author?.image ? (
             <Image
               src={author?.image.urls?.thumbnail}
-              alt={author?.username || "Utilisateur"}
+              alt={author?.username || t("reviewCard.defaultUser")}
               width={40}
               height={40}
               className={styles.avatar}
@@ -150,13 +150,13 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                 {
                   type: "edit",
                   onClick: handleEdit,
-                  ariaLabel: "Modifier mon avis",
+                  ariaLabel: t("reviewCard.editReviewAria"),
                 },
                 {
                   type: "delete",
                   onClick: handleDelete,
                   disabled: isDeletingReview,
-                  ariaLabel: "Supprimer mon avis",
+                  ariaLabel: t("reviewCard.deleteReviewAria"),
                 },
               ]}
               iconSize={16}
@@ -177,10 +177,10 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           <button
             className={styles.replyButton}
             onClick={() => setShowReplyInput(!showReplyInput)}
-            aria-label="Répondre à cet avis"
+            aria-label={t("reviewCard.replyAria")}
           >
             <Reply size={16} />
-            <span>Répondre</span>
+            <span>{t("reviewCard.reply")}</span>
           </button>
 
           {showReplyInput && (
@@ -215,7 +215,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                     {commentAuthorImage ? (
                       <Image
                         src={commentAuthorImage}
-                        alt={commentAuthor?.username || "Utilisateur"}
+                        alt={commentAuthor?.username || t("reviewCard.defaultUser")}
                         width={32}
                         height={32}
                         className={styles.commentAvatar}
@@ -246,13 +246,13 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                               {
                                 type: "edit",
                                 onClick: () => handleEditComment(comment._id),
-                                ariaLabel: "Modifier mon commentaire",
+                                ariaLabel: t("reviewCard.editCommentAria"),
                               },
                               {
                                 type: "delete",
                                 onClick: () => handleDeleteComment(comment._id),
                                 disabled: isDeletingComment,
-                                ariaLabel: "Supprimer mon commentaire",
+                                ariaLabel: t("reviewCard.deleteCommentAria"),
                               },
                             ]}
                             iconSize={14}
@@ -270,7 +270,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                     comment={comment}
                     onSuccess={handleReplySuccess}
                     onCancel={() => setEditingCommentId(null)}
-                    placeholder="Modifiez votre commentaire..."
+                    placeholder={t("reviewCard.editCommentPlaceholder")}
                   />
                 )}
               </div>

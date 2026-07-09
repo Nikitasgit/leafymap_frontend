@@ -1,13 +1,13 @@
-import axios from "axios";
 import { useLoading } from "./useLoading";
-import { useToast } from "./useToast";
+import { apiClient } from "@/lib/api/client";
+import useHandleApiErrors from "./useHandleApiErrors";
 import { isTempId } from "@/utils/tempId";
 import { parseDateToUTC } from "@/utils/dates";
 import { Event } from "@/types/place/event";
 
 const useSubmitEvent = () => {
   const { isLoading, withLoading } = useLoading();
-  const { showError } = useToast();
+  const { handleApiError } = useHandleApiErrors();
 
   const submitEvent = async (
     event: Partial<Event>,
@@ -38,35 +38,18 @@ const useSubmitEvent = () => {
       };
       const method = isUpdate ? "put" : "post";
       const url = isUpdate
-        ? `${process.env.NEXT_PUBLIC_API_URL}/api/events/${eventId}`
-        : `${process.env.NEXT_PUBLIC_API_URL}/api/events`;
+        ? `/api/events/${eventId}`
+        : `/api/events`;
       const response = await withLoading(() =>
-        axios[method](url, payload, {
+        apiClient[method](url, payload, {
           headers: {
             "Content-Type": "application/json",
-          },
-          withCredentials: true,
+          }
         })
       );
       return response.data.data;
     } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response?.data) {
-        if (err.response.data.data) {
-          Object.values(err.response.data.data).forEach((error: unknown) => {
-            if (Array.isArray(error)) {
-              error.forEach((e: string) => {
-                showError(e);
-              });
-            } else if (typeof error === "string") {
-              showError(error);
-            }
-          });
-        } else {
-          showError(err.response.data.message);
-        }
-      } else {
-        showError("Une erreur inattendue s'est produite");
-      }
+      handleApiError(err, undefined, true);
       throw err;
     }
   };

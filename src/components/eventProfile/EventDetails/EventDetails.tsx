@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import EventCard from "@/components/common/events/EventCard";
 import UsersListXScroll, {
   UsersListXScrollUser,
@@ -26,6 +27,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   user,
   isContentLoading = false,
 }) => {
+  const { t } = useTranslation("events");
   const { eventInvitations, isLoading: eventInvitationsLoading } =
     useEventInvitations(event._id, { onlyAccepted: "true" });
 
@@ -49,7 +51,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
       {participants.length > 0 && (
         <UsersListXScroll
           users={participants as UsersListXScrollUser[]}
-          title="Participants"
+          title={t("eventDetails.participants")}
           showCategory
           showChevrons
           loading={eventInvitationsLoading || isContentLoading}
@@ -58,7 +60,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
 
       {user && (
         <section className={styles.organizerSection}>
-          <h3 className={styles.sectionTitle}>Organisé par</h3>
+          <h3 className={styles.sectionTitle}>{t("eventDetails.organizedBy")}</h3>
           {place ? (
             <CreatorCard user={user} place={place} actions={[]} />
           ) : (

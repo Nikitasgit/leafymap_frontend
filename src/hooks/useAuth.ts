@@ -4,16 +4,17 @@ import {
   signIn,
   signInWithGoogle,
   signOut,
-  fetchCurrentUser,
 } from "@/store/authSlice";
-import { User } from "@/types/user";
 import { useToast } from "./useToast";
 import useHandleApiErrors from "./useHandleApiErrors";
 import { AppDispatch } from "@/store";
 import { useRouter } from "next/navigation";
+import { getAuthenticatedRedirectPath } from "@/utils/auth";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export interface AuthState {
-  user: User | null;
+  user: ReturnType<typeof selectAuth>["user"];
   loading: boolean;
   login: (identifier: string, password: string) => Promise<void>;
   loginWithGoogle: (idToken: string) => Promise<void>;
@@ -26,57 +27,33 @@ export const useAuth = (): AuthState => {
   const { handleApiError } = useHandleApiErrors();
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
+  const { t } = useTranslation("auth");
 
   const login = async (identifier: string, password: string) => {
     try {
-      const user = await dispatch(signIn({ identifier, password })).unwrap();
-      await dispatch(fetchCurrentUser()).unwrap();
-      showSuccess("Connexion réussie");
-      router.push(user?.role === "admin" ? "/admin/users" : "/account");
+      const signedInUser = await dispatch(
+        signIn({ identifier, password }),
+      ).unwrap();
+      showSuccess(t("useAuth.loginSuccess"));
+      router.push(getAuthenticatedRedirectPath(signedInUser));
     } catch (error: unknown) {
-      if (
-        error &&
-        typeof error === "object" &&
-        "message" in error &&
-        typeof error.message === "string"
-      ) {
-        showError(error.message);
-      } else {
-        showError("Une erreur inattendue s'est produite");
-      }
+      showError(getErrorMessage(error, t));
     }
   };
 
   const loginWithGoogle = async (idToken: string) => {
     try {
       const data = await dispatch(signInWithGoogle(idToken)).unwrap();
-      const user = data.user;
-      await dispatch(fetchCurrentUser()).unwrap();
       if (data.mergedUnverifiedAccount) {
-        showSuccess(
-          "Nous avons détecté un compte email existant non vérifié et l'avons lié automatiquement à votre compte Google.",
-        );
+        showSuccess(t("useAuth.googleMergedAccount"));
       } else {
-        showSuccess("Connexion réussie");
+        showSuccess(t("useAuth.loginSuccess"));
       }
-      if (user?.acceptedCGU === false) {
-        router.push("/auth/accept-cgu");
-      } else if (user?.role === "admin") {
-        router.push("/admin/users");
-      } else {
-        router.push("/account");
-      }
+      router.push(getAuthenticatedRedirectPath(data.user));
     } catch (error: unknown) {
-      if (
-        error &&
-        typeof error === "object" &&
-        "message" in error &&
-        typeof error.message === "string"
-      ) {
-        showError(error.message);
-      } else {
-        showError("Une erreur s'est produite avec la connexion Google");
-      }
+      showError(
+        getErrorMessage(error, t, t("useAuth.googleLoginError")),
+      );
     }
   };
 

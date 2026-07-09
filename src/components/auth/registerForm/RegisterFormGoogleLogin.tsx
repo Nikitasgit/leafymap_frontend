@@ -3,13 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "@mui/material/Skeleton";
 import { GoogleLogin, useGoogleOAuth } from "@react-oauth/google";
+import Button from "@/components/common/buttons/Button";
 
 const GOOGLE_BUTTON_HEIGHT_PX = 40;
 
 type RegisterFormGoogleLoginProps = {
-  loginWithGoogle: (credential: string) => void;
+  loginWithGoogle: (credential: string) => void | Promise<void>;
   onGoogleFlowError: () => void;
   loadingAriaLabel: string;
+  disabled?: boolean;
+  disabledLabel?: string;
 };
 
 /** À utiliser uniquement à l’intérieur de `GoogleOAuthProvider`. */
@@ -17,6 +20,8 @@ export function RegisterFormGoogleLogin({
   loginWithGoogle,
   onGoogleFlowError,
   loadingAriaLabel,
+  disabled = false,
+  disabledLabel = loadingAriaLabel,
 }: RegisterFormGoogleLoginProps) {
   const { scriptLoadedSuccessfully } = useGoogleOAuth();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -55,6 +60,17 @@ export function RegisterFormGoogleLogin({
             sx={{ width: "100%" }}
           />
         </div>
+      ) : disabled ? (
+        <Button
+          type="button"
+          variant="secondary"
+          size="medium"
+          fullWidth
+          disabled
+          ariaLabel={disabledLabel}
+        >
+          {disabledLabel}
+        </Button>
       ) : (
         <GoogleLogin
           onSuccess={(res) => {

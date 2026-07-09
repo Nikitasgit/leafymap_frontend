@@ -1,6 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useConversations } from "@/hooks/useConversations";
 import LoadingBar from "@/components/common/loading/LoadingBar";
@@ -9,6 +10,7 @@ import ConversationContainer from "@/components/messages/ConversationContainer";
 import styles from "./InboxContainer.module.scss";
 
 export default function InboxContainer() {
+  const { t } = useTranslation("messages");
   const searchParams = useSearchParams();
   const { user, isLoading: isLoadingUser } = useCurrentUser();
   const conversationId = searchParams.get("conversationId");
@@ -39,7 +41,7 @@ export default function InboxContainer() {
           }`}
         >
           <div className={styles.conversationsListColumn}>
-            <h2 className={styles.sectionTitle}>Conversations</h2>
+            <h2 className={styles.sectionTitle}>{t("inboxContainer.sectionTitle")}</h2>
             <div className={styles.conversationsListWrapper}>
               <ConversationsList
                 conversations={conversations}

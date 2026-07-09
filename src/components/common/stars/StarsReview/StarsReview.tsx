@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Star } from "lucide-react";
 import styles from "./StarsReview.module.scss";
 
@@ -13,6 +16,7 @@ const StarsReview: React.FC<StarsReviewProps> = ({
   onRatingChange,
   size = "medium",
 }) => {
+  const { t } = useTranslation("common");
   const [hoveredRating, setHoveredRating] = useState<number | null>(null);
 
   const displayRating = hoveredRating ?? rating;
@@ -33,7 +37,7 @@ const StarsReview: React.FC<StarsReviewProps> = ({
     <div
       className={`${styles.starsContainer} ${styles[size]}`}
       role="radiogroup"
-      aria-label="Notation"
+      aria-label={t("starsReview.ariaLabel")}
       onMouseLeave={handleMouseLeave}
     >
       {[1, 2, 3, 4, 5].map((starNumber) => (
@@ -43,7 +47,7 @@ const StarsReview: React.FC<StarsReviewProps> = ({
           className={styles.starButton}
           onClick={() => handleStarClick(starNumber)}
           onMouseEnter={() => handleMouseEnter(starNumber)}
-          aria-label={`${starNumber} étoile${starNumber > 1 ? "s" : ""}`}
+          aria-label={t("starsReview.starAriaLabel", { count: starNumber })}
         >
           <Star
             className={styles.star}

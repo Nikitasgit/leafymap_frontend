@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Trans } from "react-i18next";
 import styles from "./MapCreatorCardPartnerships.module.scss";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import EventCard from "@/components/common/events/EventCard";
@@ -55,8 +56,15 @@ const MapCreatorCardPartnerships = ({
       {eventInvitations.length > 0 && (
         <section className={styles.section}>
           <h3 className={styles.sectionTitle}>
-            <b> {capitalizeFirstLetter(username)} </b> participe à ces
-            événements ({eventInvitations.length}):
+            <Trans
+              i18nKey="mapCreatorCardPartnerships.participatesInEvents"
+              ns="map"
+              values={{
+                username: capitalizeFirstLetter(username),
+                count: eventInvitations.length,
+              }}
+              components={{ bold: <b /> }}
+            />
           </h3>
           {eventInvitations.map((invitation) => {
             const event = invitation.event;

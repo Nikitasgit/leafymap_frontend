@@ -1,4 +1,5 @@
 import React from "react";
+import MuiTextField from "@mui/material/TextField";
 import styles from "./TextField.module.scss";
 
 type TextfieldProps = {
@@ -9,10 +10,10 @@ type TextfieldProps = {
   onBlur?: () => void;
   onClick?: () => void;
   onKeyDown?: (
-    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
   onChange: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
   placeholder?: string;
   error?: boolean;
@@ -27,6 +28,7 @@ type TextfieldProps = {
   maxLength?: number;
   readOnly?: boolean;
   className?: string;
+  size?: "small" | "medium";
 };
 
 const TextField: React.FC<TextfieldProps> = ({
@@ -51,76 +53,60 @@ const TextField: React.FC<TextfieldProps> = ({
   showCharCount = false,
   maxLength,
   className,
+  size = "medium",
 }) => {
   const charCount = value.length;
-  const isOverLimit = maxLength && charCount > maxLength;
+  const isOverLimit = maxLength !== undefined && charCount > maxLength;
+
+  const field = (
+    <MuiTextField
+      id={name}
+      name={name}
+      label={label}
+      value={value}
+      onChange={onChange}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      placeholder={placeholder}
+      type={multiline ? undefined : type}
+      multiline={multiline}
+      minRows={multiline ? rows : undefined}
+      required={required}
+      disabled={disabled}
+      error={error}
+      helperText={error && errorMessage ? errorMessage : undefined}
+      fullWidth={fullWidth}
+      size={size}
+      className={multiline && showCharCount ? styles.withCharCount : undefined}
+      slotProps={{
+        htmlInput: {
+          readOnly,
+          maxLength,
+          onClick,
+          onKeyDown,
+        },
+      }}
+    />
+  );
 
   return (
-    <div className={`${styles.container} ${className}`}>
-      {label && (
-        <label className={styles.label} htmlFor={name}>
-          {label}{" "}
-          {required ? (
-            <span aria-hidden="true">*</span>
-          ) : (
-            <span className={styles.srOnly}>(optionnel)</span>
-          )}
-        </label>
-      )}
-      {multiline ? (
+    <div
+      className={`${styles.container} ${fullWidth ? styles.fullWidth : ""} ${className ?? ""}`}
+    >
+      {multiline && showCharCount ? (
         <div className={styles.textareaWrapper}>
-          <textarea
-            id={name}
-            name={name}
-            value={value}
-            placeholder={placeholder}
-            onChange={onChange}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            onClick={onClick}
-            onKeyDown={onKeyDown}
-            rows={rows}
-            maxLength={maxLength}
-            className={`${error ? styles.error : ""} ${
-              fullWidth ? styles.fullWidth : ""
+          {field}
+          <div
+            className={`${styles.charCount} ${
+              isOverLimit ? styles.overLimit : ""
             }`}
-          />
-          {showCharCount && (
-            <div
-              className={`${styles.charCount} ${
-                isOverLimit ? styles.overLimit : ""
-              }`}
-            >
-              {charCount}
-              {maxLength && ` / ${maxLength}`}
-            </div>
-          )}
+          >
+            {charCount}
+            {maxLength !== undefined && ` / ${maxLength}`}
+          </div>
         </div>
       ) : (
-        <input
-          id={name}
-          name={name}
-          readOnly={readOnly}
-          disabled={disabled}
-          type={type}
-          value={value}
-          placeholder={placeholder}
-          onChange={onChange}
-          required={required}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          onClick={onClick}
-          onKeyDown={onKeyDown}
-          maxLength={maxLength}
-          className={`${error ? styles.error : ""} ${
-            fullWidth ? styles.fullWidth : ""
-          }`}
-        />
-      )}
-      {error && errorMessage && (
-        <div className={styles.errorMessage} role="alert" aria-live="assertive">
-          {errorMessage}
-        </div>
+        field
       )}
     </div>
   );

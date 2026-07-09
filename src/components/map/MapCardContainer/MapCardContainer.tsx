@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import MapCreatorCard from "../MapCreatorCard";
 import styles from "./MapCardContainer.module.scss";
 import { MapCardContainerProps } from "./MapCardContainer.types";
@@ -17,6 +18,7 @@ const MapCardContainer = ({
   onClose,
   isFavoritesMode = false,
 }: MapCardContainerProps) => {
+  const { t } = useTranslation("map");
   const [drawerState, setDrawerState] = useState<DrawerState>("default");
   const [dragHeight, setDragHeight] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -195,7 +197,7 @@ const MapCardContainer = ({
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchEnd}
-        aria-label="Fermer la fiche créateur"
+        aria-label={t("mapCardContainer.closeCreatorCardAriaLabel")}
         type="button"
       >
         <span className={styles.desktopText} aria-hidden="true">
@@ -206,11 +208,12 @@ const MapCardContainer = ({
         className={styles.cardContent}
         role="region"
         aria-live="polite"
-        aria-label="Informations de la sélection"
+        aria-label={t("mapCardContainer.selectionInfoAriaLabel")}
         aria-hidden={isCollapsed}
       >
         <MapCreatorCard
           userId={selectedItem.id}
+          initialEventId={selectedItem.eventId}
           mapRef={mapRef}
           skipFetchPlacesInView={isFavoritesMode}
           onLoadingChange={setIsCreatorLoading}

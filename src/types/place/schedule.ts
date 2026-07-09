@@ -2,18 +2,18 @@ import { Collaborator } from "./collaborators";
 
 export type DefaultSchedule = Record<WeekDay, DaySchedule>;
 
-export interface DaySchedule {
-  open: boolean;
-  timeSlots: TimeSlot[];
-  events?: Event[];
-}
-
 import { Image } from "../image";
 
-export interface Event {
+export interface ScheduleEventPreview {
   id: string;
   name: string;
   image?: Image | null;
+}
+
+export interface DaySchedule {
+  open: boolean;
+  timeSlots: TimeSlot[];
+  events?: ScheduleEventPreview[];
 }
 
 export interface TimeSlot {

@@ -1,11 +1,14 @@
-import axios from "axios";
 import { useLoading } from "./useLoading";
+import { apiClient } from "@/lib/api/client";
 import { useToast } from "./useToast";
 import { Partnership } from "@/types/partnerships";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export const useSubmitEventInvitations = (onUpdate?: () => void) => {
   const { isLoading, withLoading } = useLoading();
   const { showError } = useToast();
+  const { t } = useTranslation("events");
 
   const submitEventInvitations = async (
     eventInvitations: Partnership[],
@@ -29,34 +32,30 @@ export const useSubmitEventInvitations = (onUpdate?: () => void) => {
       const method = isUpdate ? "put" : "post";
       await withLoading(() =>
         isUpdate
-          ? axios[method](
-              `${process.env.NEXT_PUBLIC_API_URL}/api/event-invitations`,
+          ? apiClient[method](
+              `/api/event-invitations`,
               { eventInvitations: filteredEventInvitations },
               {
                 headers: {
                   "Content-Type": "application/json",
-                },
-                withCredentials: true,
+                }
               }
             )
-          : axios[method](
-              `${process.env.NEXT_PUBLIC_API_URL}/api/event-invitations/event/${eventId}`,
+          : apiClient[method](
+              `/api/event-invitations/event/${eventId}`,
               { eventInvitations: filteredEventInvitations },
               {
                 headers: {
                   "Content-Type": "application/json",
-                },
-                withCredentials: true,
+                }
               }
             )
       );
       onUpdate?.();
     } catch (err) {
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : "Erreur lors de la mise à jour des invitations d'événement";
-      showError(errorMessage);
+      showError(
+        getErrorMessage(err, t, t("submitEventInvitations.updateError"))
+      );
     }
   };
 

@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { apiClient, isAxiosError } from "@/lib/api/client";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { useSocket } from "./useSocket";
-import axios from "axios";
 import { Message } from "@/components/messages/Message";
 
 export const useConversationMessages = (
@@ -26,10 +26,9 @@ export const useConversationMessages = (
     }
 
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/messages/conversation/${conversationId}`,
+      const response = await apiClient.get(
+        `/api/messages/conversation/${conversationId}`,
         {
-          withCredentials: true,
         }
       );
 
@@ -49,7 +48,7 @@ export const useConversationMessages = (
           ? err.message
           : "Erreur lors du chargement des messages";
       setMessages([]);
-      if (axios.isAxiosError(err) && err.response?.status !== 401) {
+      if (isAxiosError(err) && err.response?.status !== 401) {
         showErrorRef.current(errorMessage);
       }
     }

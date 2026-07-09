@@ -1,6 +1,22 @@
 {
   "hello": "Hello",
   "welcome": "Welcome to my website!",
+  "actions": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "send": "Send",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "close": "Close",
+    "next": "Next",
+    "previous": "Previous",
+    "seeMore": "See more",
+    "search": "Search",
+    "view": "View"
+  },
   "filters": "Filters",
   "dates": "Dates",
   "categories": "Categories",
@@ -127,6 +143,11 @@
     "food_collective": "Food collective",
     "food_organizer": "Food organizer"
   },
+  "partnershipStatus": {
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "refused": "Declined"
+  },
   "eventStatus": {
     "upcoming": "Upcoming",
     "ongoing": "Ongoing",
@@ -196,5 +217,102 @@
     "spices": "Spices",
     "tea": "Tea",
     "coffee": "Coffee"
+  },
+  "addressInput": {
+    "label": "Address",
+    "placeholder": "Search for an address...",
+    "searchError": "Error searching for address. Please try again."
+  },
+  "datesSelector": {
+    "singleDay": "Single day",
+    "singleDayAriaLabel": "Single day",
+    "period": "Period",
+    "periodAriaLabel": "Period",
+    "selectPeriodPlaceholder": "Select period",
+    "selectDatePlaceholder": "Select date",
+    "timeCaption": "Time"
+  },
+  "timeSlotInputs": {
+    "startTimePlaceholder": "Start time *",
+    "endTimePlaceholder": "End time *",
+    "separator": "to",
+    "removeSlotAriaLabel": "Remove this time slot"
+  },
+  "locationPicker": {
+    "defaultMarkerName": "Event",
+    "mapTitle": "Click on the map to position the event"
+  },
+  "searchInput": {
+    "defaultPlaceholder": "Search...",
+    "creatorAlt": "Creator"
+  },
+  "cguCheckbox": {
+    "label": "I accept the <link>Terms of Use</link>",
+    "cguLinkAriaLabel": "Read the Terms of Use"
+  },
+  "radioYesOrNo": {
+    "yes": "Yes",
+    "no": "No"
+  },
+  "eventModal": {
+    "seeMoreAriaLabel": "See more details about the event",
+    "bookAriaLabel": "Book a spot for this event",
+    "book": "Book"
+  },
+  "shareModal": {
+    "title": "Share",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied to clipboard",
+    "copyFailed": "Unable to copy link",
+    "shareUrlAriaLabel": "Link to share",
+    "whatsappAriaLabel": "Share on WhatsApp",
+    "whatsappButton": "Share on WhatsApp"
+  },
+  "galleryImageModal": {
+    "previousAriaLabel": "Previous image",
+    "nextAriaLabel": "Next image",
+    "imageAlt": "Image {{index}}"
+  },
+  "baseModal": {
+    "closeAriaLabel": "Close modal",
+    "loading": "Loading..."
+  },
+  "starsReview": {
+    "ariaLabel": "Rating",
+    "starAriaLabel_one": "{{count}} star",
+    "starAriaLabel_other": "{{count}} stars"
+  },
+  "starsDisplay": {
+    "ariaLabel": "{{rating}} out of 5 stars"
+  },
+  "partnershipCard": {
+    "defaultUser": "User",
+    "creatorAlt": "Creator",
+    "openMenuAriaLabel": "Open menu",
+    "viewProfileAriaLabel": "View {{name}}'s profile"
+  },
+  "threeDotsMenu": {
+    "openMenuAriaLabel": "Open menu"
+  },
+  "creatorCardWithAddress": {
+    "defaultUser": "User"
+  },
+  "followingCount": {
+    "follower_one": "follower",
+    "follower_other": "followers"
+  },
+  "usersListXScroll": {
+    "scrollLeftAriaLabel": "Scroll left",
+    "scrollRightAriaLabel": "Scroll right"
+  },
+  "loadingSpinner": {
+    "ariaLabel": "Loading"
+  },
+  "navbar": {
+    "mainNavAriaLabel": "Main navigation",
+    "notificationsAriaLabel": "Notifications",
+    "openMenuAriaLabel": "Open menu",
+    "closeMenuAriaLabel": "Close menu",
+    "languageSwitcherAriaLabel": "Change language"
   }
 }

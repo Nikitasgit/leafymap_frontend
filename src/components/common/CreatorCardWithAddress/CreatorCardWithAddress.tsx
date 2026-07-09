@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 import { MapPin } from "lucide-react";
 import styles from "./CreatorCardWithAddress.module.scss";
 
@@ -21,7 +22,8 @@ const CreatorCardWithAddress: React.FC<CreatorCardWithAddressProps> = ({
   address,
   className,
 }) => {
-  const displayName = username || "Utilisateur";
+  const { t } = useTranslation("common");
+  const displayName = username || t("creatorCardWithAddress.defaultUser");
 
   return (
     <div className={`${styles.card} ${className ?? ""}`}>

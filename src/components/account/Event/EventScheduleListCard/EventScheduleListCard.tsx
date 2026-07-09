@@ -1,8 +1,11 @@
+"use client";
+
 import { EventTimeSlot, Period } from "@/types/place/schedule";
 import styles from "./EventScheduleListCard.module.scss";
 import { Plus, Trash2 } from "lucide-react";
 import Button from "@/components/common/buttons/Button";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import DatesSelector from "@/components/common/inputs/DatesSelector";
 import { parseDateStringToDate } from "@/utils/dates";
 import NewEventSlot from "@/components/account/Event/EventEditTimeSlot";
@@ -29,6 +32,7 @@ const EventScheduleListCard = ({
     endDate: Date | null
   ) => void;
 }) => {
+  const { t } = useTranslation("events");
   const [isPeriod, setIsPeriod] = useState(!!period.endDate);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isAddTimeSlot, setIsAddTimeSlot] = useState(false);
@@ -69,14 +73,16 @@ const EventScheduleListCard = ({
           <div className={styles.dateItem}>
             <p className={styles.dateLabel}>
               {period.endDate !== period.startDate && period.endDate
-                ? "Du"
-                : "Le"}
+                ? t("eventScheduleListCard.dateFrom")
+                : t("eventScheduleListCard.dateOn")}
             </p>
             <p className={styles.dateValue}>{period.startDate}</p>
           </div>
           {period.endDate !== period.startDate && period.endDate !== "" && (
             <div className={styles.dateItem}>
-              <p className={styles.dateLabel}>Au</p>
+              <p className={styles.dateLabel}>
+                {t("eventScheduleListCard.dateTo")}
+              </p>
               <p className={styles.dateValue}>{period.endDate}</p>
             </div>
           )}
@@ -87,19 +93,19 @@ const EventScheduleListCard = ({
             onClick={() => setIsAddTimeSlot(true)}
             variant="secondary"
             size="small"
-            ariaLabel="Ajouter un créneau"
+            ariaLabel={t("eventScheduleListCard.addSlotAriaLabel")}
             endIcon={<Plus size={14} />}
           >
-            Ajouter un créneau
+            {t("eventScheduleListCard.addSlot")}
           </Button>
           <Button
             type="button"
             onClick={() => setIsEditMode(true)}
             variant="secondary"
             size="small"
-            ariaLabel="Modifier la période"
+            ariaLabel={t("eventScheduleListCard.editPeriodAriaLabel")}
           >
-            Modifier
+            {t("common:actions.edit")}
           </Button>
           <Button
             type="button"
@@ -107,7 +113,7 @@ const EventScheduleListCard = ({
             onClick={() => onDeletePeriod(period._id)}
             variant="simple"
             size="small"
-            ariaLabel="Supprimer la période"
+            ariaLabel={t("eventScheduleListCard.deletePeriodAriaLabel")}
           >
             <Trash2 size={14} />
           </Button>
@@ -127,9 +133,9 @@ const EventScheduleListCard = ({
             onClick={handleSaveDates}
             size="small"
             fullWidth
-            ariaLabel="Enregistrer les dates"
+            ariaLabel={t("eventScheduleListCard.saveDatesAriaLabel")}
           >
-            Enregistrer
+            {t("common:actions.save")}
           </Button>
         </div>
       )}
@@ -162,7 +168,7 @@ const EventScheduleListCard = ({
           )}
         </div>
       ) : (
-        <EmptyState title="Aucun créneau" />
+        <EmptyState title={t("eventScheduleListCard.emptyTitle")} />
       )}
     </div>
   );

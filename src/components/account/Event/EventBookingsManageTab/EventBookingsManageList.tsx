@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Minus, Plus } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import PartnershipCard from "@/components/common/partnerships/PartnershipCard";
 import Button from "@/components/common/buttons/Button";
 import BaseModal from "@/components/common/modals/BaseModal";
@@ -23,6 +24,7 @@ export default function EventBookingsManageList({
   hasEventStarted = false,
   onChange,
 }: EventBookingsManageListProps) {
+  const { t } = useTranslation("events");
   const { updateEventBooking, isLoading: isUpdating } =
     useUpdateEventBooking();
   const { cancelEventBooking, isLoading: isCancelling } =
@@ -61,13 +63,13 @@ export default function EventBookingsManageList({
             <PartnershipCard user={booking.user} />
             <div className={styles.bottomRow}>
               <p className={styles.seatsInfo}>
-                {booking.seats} place{booking.seats > 1 ? "s" : ""} réservée
-                {booking.seats > 1 ? "s" : ""}
+                {t("eventBookingsManageList.seatsBooked", {
+                  count: booking.seats,
+                })}
               </p>
               {hasEventStarted ? (
                 <p className={styles.lockedInfo}>
-                  Cet évènement a déjà commencé ou est terminé, cette
-                  réservation ne peut plus être modifiée ni annulée.
+                  {t("eventBookingsManageList.lockedMessage")}
                 </p>
               ) : isEditing ? (
                 <div className={styles.editRow}>
@@ -79,7 +81,7 @@ export default function EventBookingsManageList({
                         setEditSeats((prev) => Math.max(1, prev - 1))
                       }
                       disabled={isUpdating || editSeats <= 1}
-                      aria-label="Retirer une place"
+                      aria-label={t("seatsStepper.removeSeat")}
                     >
                       <Minus size={16} />
                     </button>
@@ -93,7 +95,7 @@ export default function EventBookingsManageList({
                         )
                       }
                       disabled={isUpdating || editSeats >= maxSeatsPerBooking}
-                      aria-label="Ajouter une place"
+                      aria-label={t("seatsStepper.addSeat")}
                     >
                       <Plus size={16} />
                     </button>
@@ -105,7 +107,7 @@ export default function EventBookingsManageList({
                     onClick={() => setEditingId(null)}
                     disabled={isUpdating}
                   >
-                    Annuler
+                    {t("common:actions.cancel")}
                   </Button>
                   <Button
                     type="button"
@@ -114,7 +116,7 @@ export default function EventBookingsManageList({
                     onClick={() => handleSave(booking)}
                     disabled={isUpdating}
                   >
-                    Enregistrer
+                    {t("common:actions.save")}
                   </Button>
                 </div>
               ) : (
@@ -124,18 +126,20 @@ export default function EventBookingsManageList({
                     variant="outline"
                     size="small"
                     onClick={() => startEditing(booking)}
-                    ariaLabel="Modifier les places réservées"
+                    ariaLabel={t("eventBookingsManageList.editSeatsAriaLabel")}
                   >
-                    Modifier les places
+                    {t("eventBookingsManageList.editSeats")}
                   </Button>
                   <Button
                     type="button"
                     variant="danger"
                     size="small"
                     onClick={() => setCancellingId(booking._id)}
-                    ariaLabel="Annuler la réservation"
+                    ariaLabel={t(
+                      "eventBookingsManageList.cancelBookingAriaLabel"
+                    )}
                   >
-                    Annuler
+                    {t("common:actions.cancel")}
                   </Button>
                 </div>
               )}
@@ -144,17 +148,20 @@ export default function EventBookingsManageList({
             <BaseModal
               isOpen={cancellingId === booking._id}
               onClose={() => setCancellingId(null)}
-              title="Annuler cette réservation ?"
-              primaryButtonLabel="Annuler la réservation"
-              secondaryButtonLabel="Retour"
+              title={t("eventBookingsManageList.cancelModalTitle")}
+              primaryButtonLabel={t("eventBookingsManageList.cancelModalPrimary")}
+              secondaryButtonLabel={t("common:actions.back")}
               onPrimaryAction={() => handleCancel(booking._id)}
               primaryButtonType="button"
               isSubmitLoading={isCancelling}
               withLoadingState={false}
             >
               <p>
-                {booking.user.username ?? "Cet utilisateur"} sera notifié de
-                l&apos;annulation de sa réservation.
+                {t("eventBookingsManageList.cancelModalBody", {
+                  username:
+                    booking.user.username ??
+                    t("eventBookingsManageList.defaultUser"),
+                })}
               </p>
             </BaseModal>
           </li>

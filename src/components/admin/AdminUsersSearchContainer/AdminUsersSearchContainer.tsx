@@ -1,14 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import PageHeader from "@/components/common/PageHeader";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useAdminUserSearch } from "@/hooks/useAdminUsers";
+import TextField from "@/components/common/inputs/TextField";
 import AdminUserRow from "../AdminUserRow/AdminUserRow";
 import styles from "./AdminUsersSearchContainer.module.scss";
 
 const AdminUsersSearchContainer = () => {
+  const { t } = useTranslation("admin");
   const [email, setEmail] = useState("");
   const { users, isLoading } = useAdminUserSearch(email);
   const hasSearch = email.trim().length > 0;
@@ -16,26 +19,28 @@ const AdminUsersSearchContainer = () => {
   return (
     <main className={styles.container}>
       <PageHeader
-        title="Administration utilisateurs"
-        subtitle="Rechercher un compte par email et gérer son contenu."
+        title={t("adminUsersSearchContainer.title")}
+        subtitle={t("adminUsersSearchContainer.subtitle")}
       />
 
-      <input
+      <TextField
+        name="adminUserSearch"
         className={styles.searchInput}
         value={email}
         onChange={(event) => setEmail(event.target.value)}
-        placeholder="Rechercher par email"
-        type="search"
+        placeholder={t("adminUsersSearchContainer.searchPlaceholder")}
+        type="email"
+        fullWidth
       />
 
       {isLoading && <LoadingBar />}
 
       <section className={styles.results}>
         {!hasSearch && (
-          <EmptyState title="Saisissez un email pour lancer une recherche" />
+          <EmptyState title={t("adminUsersSearchContainer.emptySearchTitle")} />
         )}
         {hasSearch && !isLoading && users.length === 0 && (
-          <EmptyState title="Aucun utilisateur trouvé" />
+          <EmptyState title={t("adminUsersSearchContainer.noUsersFoundTitle")} />
         )}
         {users.map((user) => (
           <AdminUserRow key={user._id} user={user} />

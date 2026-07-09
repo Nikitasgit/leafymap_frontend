@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { EventTimeSlot, Period } from "@/types/place/schedule";
 import styles from "./EventScheduleList.module.scss";
 import EventScheduleListCard from "../EventScheduleListCard";
@@ -29,12 +32,14 @@ const EventScheduleList: React.FC<EventScheduleListProps> = ({
   onDeleteTimeSlot,
   errors = {},
 }) => {
+  const { t } = useTranslation("events");
+
   return (
     <>
       {schedule.length === 0 ? (
         <EmptyState
           isError={!!errors.schedule}
-          title={errors.schedule || "Aucune date programmée"}
+          title={errors.schedule || t("eventScheduleList.emptyTitle")}
         />
       ) : (
         <section className={styles.eventScheduleList}>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { PlacePopulated } from "@/types/place";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
@@ -27,11 +27,11 @@ export const usePlace = (
         params.append("scheduleWithEvents", "true");
       }
       const queryString = params.toString();
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}${
+      const url = `/api/places/${placeId}${
         queryString ? `?${queryString}` : ""
       }`;
 
-      const response = await axios.get(url);
+      const response = await apiClient.get(url);
 
       if (response.data && response.data.data) {
         setPlace(response.data.data);

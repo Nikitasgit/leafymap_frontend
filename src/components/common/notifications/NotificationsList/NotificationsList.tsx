@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import NotificationCard from "../NotificationCard";
 import type { NotificationsListProps } from "./NotificationsList.types";
 import styles from "./NotificationsList.module.scss";
@@ -9,8 +10,10 @@ export default function NotificationsList({
   notifications,
   onNotificationClick,
 }: NotificationsListProps) {
+  const { t } = useTranslation("notifications");
+
   if (!notifications.length) {
-    return <div className={styles.empty}>Aucune notification</div>;
+    return <div className={styles.empty}>{t("notificationsList.empty")}</div>;
   }
 
   return (

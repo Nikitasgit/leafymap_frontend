@@ -6,6 +6,7 @@ import Button from "@/components/common/buttons/Button";
 import EventStatus from "@/components/common/events/EventStatus";
 import EmptyState from "@/components/common/noResults/EmptyState";
 import creatorDefaultsSvg from "@public/images/creator_default.png";
+import { useTranslation } from "react-i18next";
 
 interface PartnershipsFormListProps {
   partnerships: Partnership[];
@@ -16,6 +17,7 @@ const PartnershipsFormList = ({
   partnerships,
   onDelete,
 }: PartnershipsFormListProps) => {
+  const { t } = useTranslation("account");
   const filteredPartnerships = partnerships.filter(
     (partnership) => !partnership.deleted,
   );
@@ -66,7 +68,7 @@ const PartnershipsFormList = ({
           })}
         </div>
       ) : (
-        <EmptyState title="Aucun partenaire ajouté" />
+        <EmptyState title={t("partnershipsFormList.emptyTitle")} />
       )}
     </>
   );

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { CalendarCheck } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { useEventInvitationsByUserId } from "@/hooks/useEventInvitationsByUserId";
 import { useEventInvitationActions } from "@/hooks/useEventInvitationActions";
@@ -12,6 +13,7 @@ import LoadingBar from "@/components/common/loading/LoadingBar";
 import styles from "./EventParticipationsTab.module.scss";
 
 export default function EventParticipationsTab() {
+  const { t } = useTranslation("events");
   const { user } = useAuth();
   const { eventInvitations, isLoading, refetch } = useEventInvitationsByUserId(
     user?._id,
@@ -44,17 +46,15 @@ export default function EventParticipationsTab() {
         <div className={styles.header}>
           <p className={styles.label}>
             <CalendarCheck size={20} className={styles.icon} />
-            Mes participations
+            {t("eventParticipationsTab.title")}
           </p>
-          <p className={styles.info}>
-            Les évènements auxquels vous participez en tant que collaborateur.
-          </p>
+          <p className={styles.info}>{t("eventParticipationsTab.description")}</p>
         </div>
       </div>
       {eventInvitations.length === 0 ? (
         <EmptyState
-          title="Aucune participation"
-          description="Vous ne participez à aucun évènement pour le moment."
+          title={t("eventParticipationsTab.emptyTitle")}
+          description={t("eventParticipationsTab.emptyDescription")}
           icon={<CalendarCheck className={styles.emptyIcon} />}
         />
       ) : (
@@ -69,18 +69,15 @@ export default function EventParticipationsTab() {
       <BaseModal
         isOpen={cancellingInvitationId !== null}
         onClose={() => setCancellingInvitationId(null)}
-        title="Annuler votre participation ?"
-        primaryButtonLabel="Annuler ma participation"
-        secondaryButtonLabel="Retour"
+        title={t("eventParticipationsTab.cancelModalTitle")}
+        primaryButtonLabel={t("eventParticipationsTab.cancelModalPrimary")}
+        secondaryButtonLabel={t("common:actions.back")}
         onPrimaryAction={handleCancel}
         primaryButtonType="button"
         isSubmitLoading={isCancelling}
         withLoadingState={false}
       >
-        <p>
-          Vous ne participerez plus à cet évènement. L&apos;organisateur en
-          sera informé.
-        </p>
+        <p>{t("eventParticipationsTab.cancelModalBody")}</p>
       </BaseModal>
     </div>
   );

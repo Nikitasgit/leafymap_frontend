@@ -1,11 +1,11 @@
-import axios from "axios";
 import { APP_URL } from "@/utils/constants";
+import { apiClient } from "@/lib/api/client";
 import type { Place } from "@/types/place";
 
 export const getPlacesByIds = async (ids: string[]): Promise<Place[]> => {
   if (ids.length === 0) return [];
-  const response = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/places/in-view`,
+  const response = await apiClient.get(
+    `/api/places/in-view`,
     {
       params: { ids: ids.join(",") },
       headers: {

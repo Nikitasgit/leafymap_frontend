@@ -1,44 +1,29 @@
-import axios from "axios";
 import { useLoading } from "./useLoading";
-import { useToast } from "./useToast";
+import { apiClient } from "@/lib/api/client";
+import useHandleApiErrors from "./useHandleApiErrors";
 
 const useDeleteImages = () => {
   const { isLoading, withLoading } = useLoading();
-  const { showError } = useToast();
+  const { handleApiError } = useHandleApiErrors();
 
   const deleteImages = async (images: string[]): Promise<void> => {
     try {
       await withLoading(() =>
-        axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/images`, {
+        apiClient.delete("/api/images", {
           data: {
             images,
           },
           headers: {
             "Content-Type": "application/json",
           },
-          withCredentials: true,
-        })
+        }),
       );
     } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response?.data) {
-        if (err.response.data.data) {
-          Object.values(err.response.data.data).forEach((error: unknown) => {
-            if (Array.isArray(error)) {
-              error.forEach((e: string) => {
-                showError(e);
-              });
-            } else if (typeof error === "string") {
-              showError(error);
-            }
-          });
-        } else {
-          showError(err.response.data.message);
-        }
-      } else {
-        showError(
-          "Une erreur inattendue s'est produite lors de la suppression des images"
-        );
-      }
+      handleApiError(
+        err,
+        undefined,
+        true,
+      );
     }
   };
 

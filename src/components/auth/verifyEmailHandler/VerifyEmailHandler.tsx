@@ -7,6 +7,8 @@ import styles from "./VerifyEmailHandler.module.scss";
 import Button from "@/components/common/buttons/Button";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useToast } from "@/hooks/useToast";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 /** Tokens for which verification has already been started (avoids duplicate calls in Strict Mode). */
 const verificationStarted = new Set<string>();
@@ -17,6 +19,7 @@ interface VerifyEmailHandlerProps {
 
 export default function VerifyEmailHandler({ token }: VerifyEmailHandlerProps) {
   const { showError } = useToast();
+  const { t } = useTranslation("auth");
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading",
   );
@@ -39,22 +42,22 @@ export default function VerifyEmailHandler({ token }: VerifyEmailHandlerProps) {
       } catch (error) {
         verificationStarted.delete(token);
         setStatus("error");
-        if (axios.isAxiosError(error) && error.response?.data?.message) {
-          showError(String(error.response.data.message));
-        } else {
-          showError("Lien invalide ou expiré.");
-        }
+        showError(
+          getErrorMessage(error, t, t("verifyEmailHandler.invalidLinkToast")),
+        );
       }
     };
     verify();
-  }, [token, showError]);
+  }, [token, showError, t]);
 
   if (status === "loading") {
     return (
       <div className={styles.container}>
         <LoadingBar />
         <div className={styles.formContainer}>
-          <p className={styles.description}>Vérification en cours...</p>
+          <p className={styles.description}>
+            {t("verifyEmailHandler.verifying")}
+          </p>
         </div>
       </div>
     );
@@ -64,14 +67,13 @@ export default function VerifyEmailHandler({ token }: VerifyEmailHandlerProps) {
     return (
       <div className={styles.container}>
         <div className={styles.formContainer}>
-          <h1>Compte activé</h1>
+          <h1>{t("verifyEmailHandler.successTitle")}</h1>
           <p className={styles.description}>
-            Votre adresse email a été vérifiée. Votre compte est activé, vous
-            pouvez vous connecter.
+            {t("verifyEmailHandler.successDescription")}
           </p>
           <Link href="/auth/signin">
             <Button variant="primary" size="medium" fullWidth>
-              Se connecter
+              {t("common:nav.signin")}
             </Button>
           </Link>
         </div>
@@ -83,20 +85,18 @@ export default function VerifyEmailHandler({ token }: VerifyEmailHandlerProps) {
     return (
       <div className={styles.container}>
         <div className={styles.formContainer}>
-          <h1>Lien invalide ou expiré</h1>
+          <h1>{t("verifyEmailHandler.errorTitle")}</h1>
           <p className={styles.description}>
-            Ce lien de vérification n&apos;est plus valable. Vous pouvez
-            demander un nouveau lien ou vous connecter si votre compte est déjà
-            activé.
+            {t("verifyEmailHandler.errorDescription")}
           </p>
           <Link href="/auth/signin">
             <Button variant="primary" size="medium" fullWidth>
-              Aller à la connexion
+              {t("verifyEmailHandler.goToSignin")}
             </Button>
           </Link>
           <p className={styles.resendLink}>
             <Link href="/auth/resend-verification">
-              Renvoyer un lien de vérification
+              {t("verifyEmailHandler.resendLink")}
             </Link>
           </p>
         </div>

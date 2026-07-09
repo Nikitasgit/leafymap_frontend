@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
-import { Calendar, Clock, MapPin } from "lucide-react";
+import { Calendar, Clock, MapPin, Tag } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import EventStatus from "../EventStatus";
 import DateRange from "@/components/common/dateRange";
 import styles from "./EventCard.module.scss";
@@ -8,6 +11,7 @@ import { EventCardProps } from "./EventCard.types";
 import eventDefaultsSvg from "@public/images/event_default.svg";
 import { PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
+import { getEventLocationLabel } from "@/lib/api/normalizers/resolveRef";
 
 const EventCard: React.FC<EventCardProps> = ({
   event,
@@ -15,6 +19,7 @@ const EventCard: React.FC<EventCardProps> = ({
   user,
   clickable = true,
 }) => {
+  const { t } = useTranslation("events");
   const eventPlace =
     typeof event.place === "object" && event.place
       ? (event.place as PlacePopulated)
@@ -26,8 +31,14 @@ const EventCard: React.FC<EventCardProps> = ({
       : undefined;
   const displayUser = user ?? eventUser;
   const locationLabel = event.online
-    ? "En ligne"
-    : event.location?.label || displayPlace?.location?.label;
+    ? t("eventCard.online")
+    : getEventLocationLabel(event) || displayPlace?.location?.label;
+  const eventCategoryName =
+    typeof event.eventCategory === "object"
+      ? t(`common:eventCategories.${event.eventCategory.name}`, {
+          defaultValue: event.eventCategory.name,
+        })
+      : "";
 
   return (
     <div className={styles.eventCard}>
@@ -55,6 +66,12 @@ const EventCard: React.FC<EventCardProps> = ({
           )}
 
           <div className={styles.eventDetails}>
+            {eventCategoryName && (
+              <div className={styles.categoryInfo}>
+                <Tag size={14} className={styles.detailIcon} />
+                <p className={styles.detailText}>{eventCategoryName}</p>
+              </div>
+            )}
             {event.dateRange?.firstDate && (
               <div className={styles.dateInfo}>
                 <Clock size={14} className={styles.detailIcon} />

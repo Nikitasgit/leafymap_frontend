@@ -11,6 +11,8 @@ import { initReactI18next } from "react-i18next/initReactI18next";
 import resourcesToBackend from "i18next-resources-to-backend";
 import { i18nConfig } from "@/i18nConfig";
 import { APP_NAME } from "@/utils/constants";
+import { ThemeProvider } from "@mui/material/styles";
+import { muiTheme } from "@/styles/muiTheme";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -34,7 +36,22 @@ export default function Providers({ children, locale = "fr" }: ProvidersProps) {
       supportedLngs: i18nConfig.locales,
       defaultNS: "common",
       fallbackNS: "common",
-      ns: ["common", "subscription", "marketing"],
+      ns: [
+        "common",
+        "subscription",
+        "marketing",
+        "errors",
+        "validation",
+        "events",
+        "auth",
+        "messages",
+        "notifications",
+        "map",
+        "account",
+        "profile",
+        "reviews",
+        "admin",
+      ],
       preload: i18nConfig.locales,
       interpolation: {
         escapeValue: false,
@@ -47,32 +64,34 @@ export default function Providers({ children, locale = "fr" }: ProvidersProps) {
 
   return (
     <Provider store={store}>
-      <I18nextProvider i18n={i18nInstance}>
-        <AppInitializer />
-        {children}
-        <Toaster
-          position="bottom-right"
-          richColors
-          closeButton
-          duration={3000}
-          theme="light"
-          expand={false}
-          className="custom-toaster"
-          toastOptions={{
-            style: {
-              background: "#ffffff",
-              color: "#3a3a3a",
-              border: "1px solid #e1e1e1",
-              borderRadius: "8px",
-              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-              fontSize: "14px",
-              fontWeight: "500",
-              padding: "12px 16px",
-              maxWidth: "320px",
-            },
-          }}
-        />
-      </I18nextProvider>
+      <ThemeProvider theme={muiTheme}>
+        <I18nextProvider i18n={i18nInstance}>
+          <AppInitializer />
+          {children}
+          <Toaster
+            position="bottom-right"
+            richColors
+            closeButton
+            duration={3000}
+            theme="light"
+            expand={false}
+            className="custom-toaster"
+            toastOptions={{
+              style: {
+                background: "#ffffff",
+                color: "#3a3a3a",
+                border: "1px solid #e1e1e1",
+                borderRadius: "8px",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+                fontSize: "14px",
+                fontWeight: "500",
+                padding: "12px 16px",
+                maxWidth: "320px",
+              },
+            }}
+          />
+        </I18nextProvider>
+      </ThemeProvider>
     </Provider>
   );
 }

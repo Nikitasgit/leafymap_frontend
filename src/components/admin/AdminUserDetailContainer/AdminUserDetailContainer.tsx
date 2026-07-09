@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
 import PageHeader from "@/components/common/PageHeader";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import EmptyState from "@/components/common/noResults/EmptyState";
@@ -9,11 +10,13 @@ import {
   useAdminUserActions,
   useAdminUserDetail,
 } from "@/hooks/useAdminUsers";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 import AdminUserSummaryCard from "../AdminUserSummaryCard/AdminUserSummaryCard";
 import AdminUserTabs from "../AdminUserTabs/AdminUserTabs";
 import styles from "./AdminUserDetailContainer.module.scss";
 
 const AdminUserDetailContainer = ({ userId }: { userId: string }) => {
+  const { t } = useTranslation("admin");
   const { user, content, isLoading, refetch } = useAdminUserDetail(userId);
   const { showError, showSuccess } = useToast();
   const userActions = useAdminUserActions(userId, refetch);
@@ -24,21 +27,23 @@ const AdminUserDetailContainer = ({ userId }: { userId: string }) => {
       await action();
       showSuccess(message);
     } catch (error) {
-      showError("Action impossible");
+      showError(
+        getErrorMessage(error, t, t("adminUserDetailContainer.actionFailed")),
+      );
     }
   };
 
   if (isLoading) return <LoadingBar />;
 
   if (!user || !content) {
-    return <EmptyState title="Utilisateur introuvable" isError />;
+    return <EmptyState title={t("adminUserDetailContainer.userNotFound")} isError />;
   }
 
   return (
     <main className={styles.container}>
       <PageHeader
         title={user.email}
-        subtitle="Gestion du compte et de son contenu"
+        subtitle={t("adminUserDetailContainer.subtitle")}
         showBackButton
         path="/admin/users"
       />
@@ -46,20 +51,41 @@ const AdminUserDetailContainer = ({ userId }: { userId: string }) => {
       <AdminUserSummaryCard
         user={user}
         onBan={(reason, duration) =>
-          withFeedback(() => userActions.ban(reason, duration), "Utilisateur banni")
+          withFeedback(
+            () => userActions.ban(reason, duration),
+            t("adminUserDetailContainer.userBanned"),
+          )
         }
-        onUnban={() => withFeedback(userActions.unban, "Utilisateur débanni")}
-        onDelete={() => withFeedback(userActions.softDeleteUser, "Utilisateur masqué")}
-        onRestore={() => withFeedback(userActions.restoreUser, "Utilisateur restauré")}
+        onUnban={() =>
+          withFeedback(userActions.unban, t("adminUserDetailContainer.userUnbanned"))
+        }
+        onDelete={() =>
+          withFeedback(
+            userActions.softDeleteUser,
+            t("adminUserDetailContainer.userHidden"),
+          )
+        }
+        onRestore={() =>
+          withFeedback(
+            userActions.restoreUser,
+            t("adminUserDetailContainer.userRestored"),
+          )
+        }
       />
 
       <AdminUserTabs
         content={content}
         onDelete={(resource, id) =>
-          withFeedback(() => resourceActions.softDelete(resource, id), "Contenu supprimé")
+          withFeedback(
+            () => resourceActions.softDelete(resource, id),
+            t("adminUserDetailContainer.contentDeleted"),
+          )
         }
         onRestore={(resource, id) =>
-          withFeedback(() => resourceActions.restore(resource, id), "Contenu restauré")
+          withFeedback(
+            () => resourceActions.restore(resource, id),
+            t("adminUserDetailContainer.contentRestored"),
+          )
         }
       />
     </main>

@@ -1,18 +1,23 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { User } from "@/types/user";
 import styles from "./AdminUserRow.module.scss";
 
-const formatDate = (date?: string) =>
-  date ? new Date(date).toLocaleDateString("fr-FR") : "Jamais";
-
 const AdminUserRow = ({ user }: { user: User }) => {
+  const { t, i18n } = useTranslation("admin");
   const router = useRouter();
+  const dateLocale = i18n.language === "fr" ? "fr-FR" : "en-US";
   const isBanned = Boolean(
     user.bannedAt &&
       (!user.banExpiresAt || new Date(user.banExpiresAt) > new Date())
   );
+
+  const formatDate = (date?: string) =>
+    date
+      ? new Date(date).toLocaleDateString(dateLocale)
+      : t("adminUserRow.never");
 
   return (
     <button
@@ -21,12 +26,16 @@ const AdminUserRow = ({ user }: { user: User }) => {
     >
       <span>
         <strong>{user.email}</strong>
-        <small>{user.username || "Aucun username"}</small>
+        <small>{user.username || t("adminUserRow.noUsername")}</small>
       </span>
       <span>{user.userType}</span>
       <span>{user.role || "user"}</span>
       <span className={isBanned ? styles.warning : ""}>
-        {isBanned ? "Banni" : user.deleted ? "Masqué" : "Actif"}
+        {isBanned
+          ? t("adminUserRow.statusBanned")
+          : user.deleted
+            ? t("adminUserRow.statusHidden")
+            : t("adminUserRow.statusActive")}
       </span>
       <span>{formatDate(user.lastLogin)}</span>
     </button>

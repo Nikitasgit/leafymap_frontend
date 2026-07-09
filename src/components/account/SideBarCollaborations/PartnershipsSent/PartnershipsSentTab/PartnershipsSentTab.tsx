@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Users } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { SearchInput } from "@/components/common/inputs/SearchInput";
 import { useFindUsers } from "@/hooks/useFindUsers";
 import { useAuth } from "@/hooks/useAuth";
@@ -12,6 +13,7 @@ import styles from "./PartnershipsSentTab.module.scss";
 import { usePartnershipInvitationActions } from "@/hooks/usePartnershipInvitationActions";
 
 export default function PartnershipsSentTab() {
+  const { t } = useTranslation("account");
   const { searchUsers } = useFindUsers();
   const { user } = useAuth();
   const { partnerships, isLoading, refetch } = usePartnershipsSent(user?._id, {
@@ -57,16 +59,13 @@ export default function PartnershipsSentTab() {
         <div className={styles.header}>
           <p className={styles.label}>
             <Users size={20} className={styles.icon} />
-            Inviter un collaborateur
+            {t("partnershipsSentTab.label")}
           </p>
-          <p className={styles.info}>
-            Recherchez un utilisateur pour lui envoyer une invitation de
-            collaboration.
-          </p>
+          <p className={styles.info}>{t("partnershipsSentTab.info")}</p>
         </div>
         <div className={styles.searchInputContainer}>
           <SearchInput
-            placeholder="Rechercher un utilisateur..."
+            placeholder={t("partnershipsSentTab.searchPlaceholder")}
             onSelect={handleSelect}
             fetchSuggestions={fetchSuggestions}
             withIcons

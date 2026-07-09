@@ -1,22 +1,9 @@
+import type { TFunction } from "i18next";
 import type { NotificationActionType } from "@/types/notifications";
 
-/**
- * Retourne un message en français pour une action de notification.
- */
 export function translateNotificationAction(
-  action: NotificationActionType
+  action: NotificationActionType,
+  t: TFunction<"notifications">
 ): string {
-  const messages: Record<NotificationActionType, string> = {
-    message: "Nouveau message",
-    partnership_invitation: "Demande de collaboration",
-    partnership_accepted: "Collaboration acceptée",
-    event_invitation: "Invitation à un événement",
-    event_accepted: "Invitation à un événement acceptée",
-    event_refused: "Invitation à un événement refusée",
-    event_booking_cancelled: "Réservation annulée ou modifiée",
-    review: "Nouvel avis",
-    new_follower: "Nouvel abonné",
-    other: "Notification",
-  };
-  return messages[action] ?? "Notification";
+  return t(`actions.${action}`, { defaultValue: t("actions.other") });
 }

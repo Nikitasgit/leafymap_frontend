@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { UserCardProps } from "./UserCard.types";
 import styles from "./UserCard.module.scss";
 import { useRouter } from "next/navigation";
@@ -7,6 +8,7 @@ import { getDisplayName } from "@/utils/userDisplay";
 import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge";
 
 const UserCard: React.FC<UserCardProps> = ({ user }) => {
+  const { t } = useTranslation("profile");
   const router = useRouter();
   const displayName = getDisplayName(user);
   const isCreator = user.userType === "creator";
@@ -29,10 +31,10 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
         <div className={styles.nameRow}>
           <h3 className={styles.displayName}>{displayName}</h3>
           {isCreator && (
-            <span className={styles.creatorBadge}>Créateur</span>
+            <span className={styles.creatorBadge}>{t("userCard.creatorBadge")}</span>
           )}
         </div>
-        <span className={styles.subtitle}>Visiter le profil</span>
+        <span className={styles.subtitle}>{t("userCard.visitProfile")}</span>
       </div>
     </a>
   );

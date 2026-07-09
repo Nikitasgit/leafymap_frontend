@@ -10,6 +10,7 @@ import { useFindUsers } from "@/hooks/useFindUsers";
 import { useAuth } from "@/hooks/useAuth";
 import PartnershipsFormList from "../PartnershipsFormList";
 import { SearchInput } from "@/components/common/inputs/SearchInput";
+import { useTranslation } from "react-i18next";
 
 const PartnershipsForm = ({
   onChange,
@@ -21,6 +22,8 @@ const PartnershipsForm = ({
   const { searchUsers } = useFindUsers();
   const { showError } = useToast();
   const { user } = useAuth();
+  const { t } = useTranslation("account");
+
   const fetchSuggestions = async (query: string) => {
     const searchParams: Record<string, string | string[]> = {
       username: query,
@@ -58,7 +61,7 @@ const PartnershipsForm = ({
           )
         );
       } else {
-        showError("Ce collaborateur est déjà ajouté");
+        showError(t("partnershipsForm.alreadyAddedError"));
         return;
       }
     } else {
@@ -97,9 +100,9 @@ const PartnershipsForm = ({
   return (
     <fieldset className={styles.partnerships}>
       <legend className={styles.titleContainer}>
-        <span className={styles.title}>Partenaires</span>
+        <span className={styles.title}>{t("partnershipsForm.title")}</span>
         <Tooltip
-          tooltip="Ajoutez des artistes ou créez un profil provisoire pour des créateurs ou producteurs qui apparaîtront sur votre profil comme des partenaires de votre lieu."
+          tooltip={t("partnershipsForm.tooltip")}
           place="top-right"
           maxWidth={300}
         />
@@ -111,19 +114,18 @@ const PartnershipsForm = ({
               size={20}
               style={{ marginRight: "8px", verticalAlign: "middle" }}
             />
-            Ajouter un partenaire
+            {t("partnershipsForm.addPartnerLabel")}
           </p>
           <p className={styles.info}>
-            Vous pouvez rechercher des profils de partenaires enregistrés sur
-            notre plateforme.
+            {t("partnershipsForm.addPartnerInfo")}
           </p>
         </div>
         <div className={styles.searchInputContainer}>
           <SearchInput
-            label="Ajouter un partenaire"
+            label={t("partnershipsForm.searchLabel")}
             onSelect={handleSelect}
             fetchSuggestions={fetchSuggestions}
-            placeholder="Ajouter un partenaire..."
+            placeholder={t("partnershipsForm.searchPlaceholder")}
             withIcons
           />
         </div>

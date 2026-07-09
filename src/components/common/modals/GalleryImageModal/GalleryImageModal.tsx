@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import styles from "./GalleryImageModal.module.scss";
@@ -11,6 +14,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
   currentIndex,
   onNavigate,
 }) => {
+  const { t } = useTranslation("common");
   const currentImage = images[currentIndex];
 
   useEffect(() => {
@@ -76,7 +80,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
               <button
                 className={`${styles.navButton} ${styles.prevButton}`}
                 onClick={handlePrevious}
-                aria-label="Image précédente"
+                aria-label={t("galleryImageModal.previousAriaLabel")}
               >
                 <ChevronLeft size={24} />
               </button>
@@ -86,7 +90,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
               <button
                 className={`${styles.navButton} ${styles.nextButton}`}
                 onClick={handleNext}
-                aria-label="Image suivante"
+                aria-label={t("galleryImageModal.nextAriaLabel")}
               >
                 <ChevronRight size={24} />
               </button>
@@ -95,7 +99,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
         )}
           <Image
             src={currentImage.urls?.medium || ""}
-            alt={`Image ${currentIndex + 1}`}
+            alt={t("galleryImageModal.imageAlt", { index: currentIndex + 1 })}
             className={styles.modalImage}
             width={800}
             height={600}

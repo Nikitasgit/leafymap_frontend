@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { initialEventData } from "../EventForm/EventForm.types";
 import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper";
 import Button from "@/components/common/buttons/Button";
@@ -20,6 +23,7 @@ const EventNewDatesSelector = ({
   onChange: FormDataChangeHandler;
   data: initialEventData;
 }) => {
+  const { t } = useTranslation("events");
   const { showError } = useToast();
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -27,12 +31,12 @@ const EventNewDatesSelector = ({
   const handleSaveDates = () => {
     if (isPeriod) {
       if (!startDate || !endDate) {
-        showError("Veuillez sélectionner une période");
+        showError(t("eventNewDatesSelector.selectPeriodError"));
         return;
       }
     } else {
       if (!startDate) {
-        showError("Veuillez sélectionner une date");
+        showError(t("eventNewDatesSelector.selectDateError"));
         return;
       }
     }
@@ -58,26 +62,32 @@ const EventNewDatesSelector = ({
     setEndDate(endDate);
   };
 
+  const addButtonLabel =
+    isPeriod && startDate && endDate
+      ? t("eventNewDatesSelector.addThisPeriod")
+      : isPeriod && !startDate && !endDate
+      ? t("eventNewDatesSelector.addPeriod")
+      : !isPeriod && startDate
+      ? t("eventNewDatesSelector.addThisDate")
+      : t("eventNewDatesSelector.addDate");
+
   return (
     <fieldset className={styles.scheduleEventForm}>
-      <legend className={styles.title}>Dates et horaires</legend>
+      <legend className={styles.title}>{t("eventNewDatesSelector.title")}</legend>
       <div className={styles.periodContainer}>
         <DatesSelector
-          title="Ajouter des dates"
+          title={t("eventNewDatesSelector.addDatesTitle")}
           startDate={startDate || null}
           endDate={endDate || null}
           onDateChange={handleDateChange}
           isPeriod={isPeriod}
           setIsPeriod={setIsPeriod}
         />
-        <Button onClick={handleSaveDates} ariaLabel="Ajouter les dates">
-          {isPeriod && startDate && endDate
-            ? "Ajouter cette période"
-            : isPeriod && !startDate && !endDate
-            ? "Ajouter une période"
-            : !isPeriod && startDate
-            ? "Ajouter cette date"
-            : "Ajouter une date"}
+        <Button
+          onClick={handleSaveDates}
+          ariaLabel={t("eventNewDatesSelector.addDatesAriaLabel")}
+        >
+          {addButtonLabel}
         </Button>
       </div>
     </fieldset>

@@ -56,7 +56,6 @@ select {
 
 input,
 textarea {
-  @include flex(row, space-between, center, 0);
   padding: spacing(0.75);
   border: 1px solid $grey-200;
   border-radius: 8px;
@@ -77,11 +76,17 @@ textarea {
     border-color: #e0e0e0;
   }
 }
+
+input {
+  @include flex(row, space-between, center, 0);
+}
 fieldset {
   border: none;
   padding: 0;
 }
 textarea {
+  display: block;
+  width: 100%;
   resize: none;
 }
 p,

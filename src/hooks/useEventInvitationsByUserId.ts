@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { EventInvitationPopulated } from "@/types/eventInvitation";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export const useEventInvitationsByUserId = (
   userId?: string,
@@ -13,6 +15,7 @@ export const useEventInvitationsByUserId = (
   >([]);
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
+  const { t } = useTranslation("events");
 
   const fetchEventInvitations = async () => {
     const searchParams = new URLSearchParams();
@@ -20,26 +23,20 @@ export const useEventInvitationsByUserId = (
       searchParams.append(key, value);
     });
     try {
-      const url = `${
-        process.env.NEXT_PUBLIC_API_URL
-      }/api/event-invitations/user/${userId}?${searchParams.toString()}`;
+      const url = `/api/event-invitations/user/${userId}?${searchParams.toString()}`;
 
-      const response = await axios.get(url, {
-        withCredentials: true,
-      });
+      const response = await apiClient.get(url);
       if (response.data && response.data.data) {
         setEventInvitations(response.data.data);
       } else {
         setEventInvitations([]);
-        showError("Invalid response from server");
+        showError(t("eventInvitationsByUserId.invalidResponse"));
       }
     } catch (err) {
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : "Erreur lors du chargement des invitations d'événements";
+      showError(
+        getErrorMessage(err, t, t("eventInvitationsByUserId.loadError"))
+      );
       setEventInvitations([]);
-      showError(errorMessage);
     }
   };
 

@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { ReviewPopulated } from "@/types/review";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 /**
  * Récupère les avis reçus sur le lieu de l'utilisateur connecté.
@@ -12,6 +14,7 @@ export const useReviewsReceived = (userId?: string) => {
   const [reviews, setReviews] = useState<ReviewPopulated[]>([]);
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
+  const { t } = useTranslation("account");
   const showErrorRef = useRef(showError);
   showErrorRef.current = showError;
 
@@ -21,21 +24,16 @@ export const useReviewsReceived = (userId?: string) => {
       return;
     }
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/reviews/received`,
-        { withCredentials: true }
-      );
+      const response = await apiClient.get(`/api/reviews/received`, {});
       const data = response.data?.data?.reviews ?? [];
       setReviews(Array.isArray(data) ? data : []);
     } catch (err) {
-      const message =
-        err instanceof Error
-          ? err.message
-          : "Erreur lors du chargement des avis reçus";
       setReviews([]);
-      showErrorRef.current(message);
+      showErrorRef.current(
+        getErrorMessage(err, t, t("useReviewsReceived.loadError")),
+      );
     }
-  }, [userId]);
+  }, [userId, t]);
 
   useEffect(() => {
     if (userId) {

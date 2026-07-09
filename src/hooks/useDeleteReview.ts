@@ -1,32 +1,30 @@
-import axios from "axios";
 import { useLoading } from "./useLoading";
+import { apiClient } from "@/lib/api/client";
 import { useToast } from "./useToast";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 const useDeleteReview = () => {
   const { isLoading, withLoading } = useLoading();
   const { showError, showSuccess } = useToast();
+  const { t } = useTranslation("reviews");
 
   const deleteReview = async (reviewId: string) => {
     try {
       await withLoading(() =>
-        axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/reviews/${reviewId}`,
+        apiClient.delete(
+          `/api/reviews/${reviewId}`,
           {
             headers: {
               "Content-Type": "application/json",
-            },
-            withCredentials: true,
+            }
           }
         )
       );
-      showSuccess("Avis supprimé avec succès");
+      showSuccess(t("useDeleteReview.success"));
       return true;
     } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response?.data) {
-        showError(err.response.data.message || "Erreur lors de la suppression");
-      } else {
-        showError("Une erreur inattendue s'est produite");
-      }
+      showError(getErrorMessage(err, t, t("useDeleteReview.deleteError")));
       throw err;
     }
   };

@@ -9,6 +9,9 @@ import LoadingBar from "@/components/common/loading/LoadingBar";
 import TextField from "@/components/common/inputs/TextField";
 import { useToast } from "@/hooks/useToast";
 import { validateRequestPasswordResetData } from "@/validations/authValidations";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
+import { validationT } from "@/utils/i18n/validationT";
 
 export default function ResendVerificationForm() {
   const [email, setEmail] = useState("");
@@ -17,12 +20,13 @@ export default function ResendVerificationForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const { showSuccess, showError } = useToast();
+  const { t } = useTranslation("auth");
 
   const validateFormData = useCallback((): boolean => {
-    const validation = validateRequestPasswordResetData({ email });
+    const validation = validateRequestPasswordResetData(validationT(t))({ email });
     setErrors(validation.errors);
     return validation.isValid;
-  }, [email]);
+  }, [email, t]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,16 +41,10 @@ export default function ResendVerificationForm() {
         { email },
         { withCredentials: true },
       );
-      showSuccess(
-        "Si ce compte existe, un nouveau lien de vérification a été envoyé.",
-      );
+      showSuccess(t("resendVerificationForm.toastSuccess"));
       setIsSubmitted(true);
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.data?.message) {
-        showError(String(error.response.data.message));
-      } else {
-        showError("Une erreur s'est produite.");
-      }
+      showError(getErrorMessage(error, t));
     } finally {
       setLoading(false);
     }
@@ -62,15 +60,13 @@ export default function ResendVerificationForm() {
     return (
       <div className={styles.container}>
         <div className={styles.formContainer}>
-          <h1>Email envoyé</h1>
+          <h1>{t("resendVerificationForm.emailSentTitle")}</h1>
           <p className={styles.successMessage}>
-            Si cet email existe dans notre système, un nouveau lien de
-            vérification vous a été envoyé. Vérifiez votre boîte de réception et
-            vos spams.
+            {t("resendVerificationForm.successMessage")}
           </p>
           <Link href="/auth/signin">
             <Button variant="primary" size="medium" fullWidth>
-              Retour à la connexion
+              {t("resendVerificationForm.backToSignin")}
             </Button>
           </Link>
         </div>
@@ -82,20 +78,19 @@ export default function ResendVerificationForm() {
     <div className={styles.container}>
       {loading && <LoadingBar />}
       <div className={styles.formContainer}>
-        <h1>Renvoyer le lien de vérification</h1>
+        <h1>{t("resendVerificationForm.title")}</h1>
         <p className={styles.description}>
-          Entrez votre adresse email pour recevoir un nouveau lien de
-          vérification.
+          {t("resendVerificationForm.description")}
         </p>
         <form onSubmit={handleSubmit} className={styles.form} noValidate>
           <TextField
-            label="Email"
+            label={t("resendVerificationForm.emailLabel")}
             name="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            placeholder="votre@email.com"
+            placeholder={t("resendVerificationForm.emailPlaceholder")}
             disabled={loading}
             error={!!errors.email}
             fullWidth
@@ -108,11 +103,13 @@ export default function ResendVerificationForm() {
             fullWidth
             disabled={loading}
           >
-            Envoyer le lien
+            {t("resendVerificationForm.sendLink")}
           </Button>
         </form>
         <p className={styles.signinLink}>
-          <Link href="/auth/signin">Retour à la connexion</Link>
+          <Link href="/auth/signin">
+            {t("resendVerificationForm.backToSignin")}
+          </Link>
         </p>
       </div>
     </div>

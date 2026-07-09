@@ -64,7 +64,7 @@ export default function AccountActions({
   onToggleSidebar,
 }: AccountActionsProps) {
   const router = useRouter();
-  const { t } = useTranslation("marketing");
+  const { t } = useTranslation("account");
   const { userType } = user || {};
 
   const isCreator = userType === "creator";
@@ -74,8 +74,8 @@ export default function AccountActions({
     ...(isCreator && hasPlaceObject
       ? [
           {
-            label: "Lieu",
-            ariaLabel: "Gérer mon lieu",
+            label: t("accountActions.placeLabel"),
+            ariaLabel: t("accountActions.placeAriaLabel"),
             icon: <MapPin size={16} />,
             onClick: () =>
               hasPlaceObject &&
@@ -86,53 +86,53 @@ export default function AccountActions({
         ]
       : []),
     {
-      label: "Images",
-      ariaLabel: "Gérer mes images",
+      label: t("accountActions.imagesLabel"),
+      ariaLabel: t("accountActions.imagesAriaLabel"),
       icon: <ImageIcon size={16} />,
       onClick: () => onToggleSidebar(SIDEBAR_VALUES.IMAGES),
       disabled: isLoadingUser,
       creatorOnly: true,
     },
     {
-      label: "Collaborations",
-      ariaLabel: "Ouvrir les collaborations",
+      label: t("accountActions.collaborationsLabel"),
+      ariaLabel: t("accountActions.collaborationsAriaLabel"),
       icon: <Users size={16} />,
       onClick: () => onToggleSidebar(SIDEBAR_VALUES.COLLABORATIONS),
       disabled: isLoadingUser,
       creatorOnly: true,
     },
     {
-      label: "Évènements",
-      ariaLabel: "Ouvrir les évènements",
+      label: t("accountActions.eventsLabel"),
+      ariaLabel: t("accountActions.eventsAriaLabel"),
       icon: <CalendarDays size={16} />,
       onClick: () => onToggleSidebar(SIDEBAR_VALUES.EVENTS),
       disabled: isLoadingUser,
       creatorOnly: true,
     },
     {
-      label: "Réservations",
-      ariaLabel: "Ouvrir mes réservations",
+      label: t("accountActions.bookingsLabel"),
+      ariaLabel: t("accountActions.bookingsAriaLabel"),
       icon: <Ticket size={16} />,
       onClick: () => onToggleSidebar(SIDEBAR_VALUES.BOOKINGS),
       disabled: isLoadingUser,
     },
     {
-      label: "Avis",
-      ariaLabel: "Ouvrir les avis",
+      label: t("accountActions.reviewsLabel"),
+      ariaLabel: t("accountActions.reviewsAriaLabel"),
       icon: <Star size={16} />,
       onClick: () => onToggleSidebar(SIDEBAR_VALUES.REVIEWS),
       disabled: isLoadingUser,
     },
     {
-      label: "Abonnements",
-      ariaLabel: "Ouvrir les abonnements",
+      label: t("accountActions.followsLabel"),
+      ariaLabel: t("accountActions.followsAriaLabel"),
       icon: <Leaf size={16} />,
       onClick: () => onToggleSidebar(SIDEBAR_VALUES.FOLLOWS),
       disabled: isLoadingUser,
     },
     {
-      label: "Produits",
-      ariaLabel: "Ouvrir les produits",
+      label: t("accountActions.productsLabel"),
+      ariaLabel: t("accountActions.productsAriaLabel"),
       icon: <Package size={16} />,
       onClick: () => onToggleSidebar(SIDEBAR_VALUES.PRODUCTS),
       disabled: isLoadingUser,
@@ -142,11 +142,14 @@ export default function AccountActions({
 
   const buttonParameters =
     isCreator
-      ? { route: "/account/update-creator", text: t("account.editProfile") }
+      ? {
+          route: "/account/update-creator",
+          text: t("accountActions.editProfile"),
+        }
       : userType === "guest"
       ? {
-          route: "/account/create",
-          text: t("account.addActivity"),
+          route: "/account/create?redirectTo=/account/events/create",
+          text: t("accountActions.addActivity"),
         }
       : null;
 
@@ -160,9 +163,9 @@ export default function AccountActions({
         onClick={() => router.push("/account/settings")}
         fullWidth
         startIcon={<Settings size={16} />}
-        ariaLabel="Accéder aux paramètres du compte"
+        ariaLabel={t("accountActions.settingsAriaLabel")}
       >
-        Paramètres du compte
+        {t("accountActions.settingsButton")}
       </Button>
 
       {buttonParameters && (
@@ -208,17 +211,17 @@ export default function AccountActions({
             router.push("/account/places/create");
           }}
           fullWidth
-          ariaLabel="Ajouter un lieu"
+          ariaLabel={t("accountActions.addPlaceAriaLabel")}
         >
-          Ajouter un lieu
+          {t("accountActions.addPlaceButton")}
         </Button>
       )}
 
       {userType === "guest" && (
         <div className={styles.infoCard}>
-          <p className={styles.infoText}>{t("account.guestInfoLine1")}</p>
-          <p className={styles.infoText}>{t("account.guestInfoLine2")}</p>
-          <p className={styles.infoText}>{t("account.guestInfoLine3")}</p>
+          <p className={styles.infoText}>{t("accountActions.guestInfoLine1")}</p>
+          <p className={styles.infoText}>{t("accountActions.guestInfoLine2")}</p>
+          <p className={styles.infoText}>{t("accountActions.guestInfoLine3")}</p>
         </div>
       )}
     </section>

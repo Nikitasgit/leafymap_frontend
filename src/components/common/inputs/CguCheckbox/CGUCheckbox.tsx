@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import { Trans, useTranslation } from "react-i18next";
 import styles from "./CGUCheckbox.module.scss";
 
 export interface CGUCheckboxProps {
@@ -21,6 +24,8 @@ const CGUCheckbox: React.FC<CGUCheckboxProps> = ({
   cguLink = "/legal/cgu",
   className,
 }) => {
+  const { t } = useTranslation("common");
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.checked);
   };
@@ -39,16 +44,21 @@ const CGUCheckbox: React.FC<CGUCheckboxProps> = ({
           aria-describedby={error ? "cgu-error" : undefined}
         />
         <span className={styles.checkboxText}>
-          J&apos;accepte les{" "}
-          <Link
-            href={cguLink}
-            className={styles.cguLink}
-            aria-label="Lire les Conditions Générales d'Utilisation"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Conditions Générales d&apos;Utilisation
-          </Link>
+          <Trans
+            i18nKey="cguCheckbox.label"
+            ns="common"
+            components={{
+              link: (
+                <Link
+                  href={cguLink}
+                  className={styles.cguLink}
+                  aria-label={t("cguCheckbox.cguLinkAriaLabel")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              ),
+            }}
+          />
         </span>
       </label>
       {error && errorMessage && (

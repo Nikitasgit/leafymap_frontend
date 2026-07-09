@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import TimeSlotInputs from "@/components/common/inputs/TimeSlotInputs";
 import TextField from "@/components/common/inputs/TextField";
 import Button from "@/components/common/buttons/Button";
@@ -22,6 +25,7 @@ const EventEditTimeSlot: React.FC<EventEditTimeSlotProps> = ({
   defaultSlot,
   onCancel,
 }) => {
+  const { t } = useTranslation("events");
   const { showError } = useToast();
   const [timeSlot, setTimeSlot] = useState<EventTimeSlot>(
     defaultSlot || {
@@ -55,9 +59,9 @@ const EventEditTimeSlot: React.FC<EventEditTimeSlotProps> = ({
 
   const handleValidateTimeSlot = () => {
     if (!timeSlot.title || !timeSlot.startTime || !timeSlot.endTime) {
-      showError("Veuillez remplir tous les champs obligatoires du créneau.");
+      showError(t("eventEditTimeSlot.requiredFieldsError"));
       if (timeSlot.title.length < 3) {
-        showError("Le titre du créneau doit contenir au moins 3 caractères.");
+        showError(t("eventEditTimeSlot.titleMinLengthError"));
       }
       return;
     }
@@ -101,7 +105,7 @@ const EventEditTimeSlot: React.FC<EventEditTimeSlotProps> = ({
       updatedSlot.endTime &&
       updatedSlot.endTime < updatedSlot.startTime
     ) {
-      alert("L'heure de fin doit être après l'heure de début.");
+      alert(t("eventEditTimeSlot.endTimeAfterStartError"));
       return;
     }
 
@@ -119,7 +123,7 @@ const EventEditTimeSlot: React.FC<EventEditTimeSlotProps> = ({
       />
       <TextField
         className={styles.titleInput}
-        label="Titre du créneau"
+        label={t("eventEditTimeSlot.titleLabel")}
         required
         fullWidth
         name="title"
@@ -136,16 +140,18 @@ const EventEditTimeSlot: React.FC<EventEditTimeSlotProps> = ({
           variant="secondary"
           onClick={handleCancelTimeSlot}
           fullWidth
-          ariaLabel="Annuler le créneau"
+          ariaLabel={t("eventEditTimeSlot.cancelSlotAriaLabel")}
         >
-          Annuler
+          {t("common:actions.cancel")}
         </Button>
         <Button
           onClick={handleValidateTimeSlot}
           fullWidth
-          ariaLabel="Valider le créneau"
+          ariaLabel={t("eventEditTimeSlot.validateSlotAriaLabel")}
         >
-          {defaultSlot ? "Modifier ce créneau" : "Ajouter ce créneau"}
+          {defaultSlot
+            ? t("eventEditTimeSlot.editSlot")
+            : t("eventEditTimeSlot.addSlot")}
         </Button>
       </div>
     </div>

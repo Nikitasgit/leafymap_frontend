@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Conversation } from "@/hooks/useConversations";
 import ConversationCard from "../ConversationCard";
 import { ConversationCardSkeleton } from "../skeletons";
@@ -17,6 +20,7 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
   conversations,
   isLoading,
 }) => {
+  const { t } = useTranslation("messages");
   if (isLoading) {
     return (
       <div className={styles.conversationsList}>
@@ -31,8 +35,8 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
     return (
       <div className={styles.conversationsList}>
         <EmptyState
-          title="Aucune conversation"
-          description="Vous n'avez pas encore de conversations"
+          title={t("conversationsList.emptyTitle")}
+          description={t("conversationsList.emptyDescription")}
           icon={<MessageSquare className={styles.icon} />}
         />
       </div>

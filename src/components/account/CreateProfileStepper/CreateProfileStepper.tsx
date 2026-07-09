@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import ProfileFormStep from "../CreateProfileSteps/ProfileFormStep";
 import {
   FormDataChangeHandler,
@@ -11,12 +12,13 @@ import styles from "./CreateProfileStepper.module.scss";
 import useSubmitUser from "@/hooks/useSubmitUser";
 import useSubmitPlace from "@/hooks/useSubmitPlace";
 import { User } from "@/types/user";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
 import PageHeader from "@/components/common/PageHeader";
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import ProtectedRoute from "@/components/common/ProtectedRoute";
 import { useAuth } from "@/hooks/useAuth";
+import { useApp } from "@/hooks/useApp";
 
 const initialUserData = (user: Partial<User> | null): InitialCreatorData => ({
   userType: "creator",
@@ -35,7 +37,6 @@ const initialPlaceData = (user: Partial<User> | null): InitialPlaceData => ({
   location: null,
   defaultSchedule: defaultSchedule,
   placeCategory: "",
-  placeType: [],
   active: true,
   phone: user?.phone || "",
   email: user?.email || "",
@@ -44,8 +45,11 @@ const initialPlaceData = (user: Partial<User> | null): InitialPlaceData => ({
 
 const CreateProfileStepper = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { showSuccess, showError } = useToast();
+  const { t } = useTranslation("account");
   const { user } = useAuth();
+  const { userCategories } = useApp();
   const { submitUser } = useSubmitUser();
   const { submitPlace } = useSubmitPlace();
 
@@ -53,13 +57,40 @@ const CreateProfileStepper = () => {
   const [newUser, setNewUser] = useState<InitialCreatorData>(
     initialUserData(null),
   );
+  const initializedGuestUserIdRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (user && user.userType === "guest") {
-      setNewUser(initialUserData(user));
-      setPlace(initialPlaceData(user));
+    if (!user || user.userType !== "guest") {
+      return;
     }
+
+    if (initializedGuestUserIdRef.current === user._id) {
+      return;
+    }
+
+    initializedGuestUserIdRef.current = user._id;
+    setNewUser(initialUserData(user));
+    setPlace(initialPlaceData(user));
   }, [user]);
+
+  useEffect(() => {
+    if (newUser.userCategory || userCategories.length === 0) {
+      return;
+    }
+
+    const organizerCategory = userCategories.find(
+      (category) => category.name === "organizer",
+    );
+
+    if (!organizerCategory) {
+      return;
+    }
+
+    setNewUser((prev) => ({
+      ...prev,
+      userCategory: prev.userCategory || organizerCategory._id,
+    }));
+  }, [newUser.userCategory, userCategories]);
 
   const handleSubmit = async () => {
     try {
@@ -67,10 +98,15 @@ const CreateProfileStepper = () => {
       if (place.active === true && user) {
         await submitPlace(place);
       }
-      showSuccess("Profil créé avec succès");
-      router.push("/account");
+      showSuccess(t("createProfileStepper.createSuccess"));
+      const redirectTo = searchParams.get("redirectTo");
+      router.push(
+        redirectTo === "/account/events/create"
+          ? "/account/events/create"
+          : "/account",
+      );
     } catch {
-      showError("Erreur lors de la création du profil");
+      showError(t("createProfileStepper.createError"));
     }
   };
 
@@ -91,7 +127,7 @@ const CreateProfileStepper = () => {
     >
       <div className={styles.pageContainer}>
         <section className={styles.container}>
-          <PageHeader title="Créer votre profil" showBackButton />
+          <PageHeader title={t("createProfileStepper.title")} showBackButton />
 
           <ProfileFormStep
             place={place}

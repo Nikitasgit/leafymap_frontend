@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import styles from "./EventsTab.module.scss";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import EventCard from "@/components/common/events/EventCard";
@@ -16,6 +17,7 @@ export interface EventsTabProps {
 }
 
 const EventsTab = ({ username, place, user, events }: EventsTabProps) => {
+  const { t } = useTranslation("events");
   const [selectedEvent, setSelectedEvent] = useState<EventPopulated | null>(
     null
   );
@@ -39,8 +41,13 @@ const EventsTab = ({ username, place, user, events }: EventsTabProps) => {
     <>
       <div className={styles.eventsContainer}>
         <h3 className={styles.sectionTitle}>
-          <b>{capitalizeFirstLetter(username)}</b> organise ces événements (
-          {events.length}):
+          <Trans
+            i18nKey="eventsTab.title"
+            ns="events"
+            count={events.length}
+            values={{ username: capitalizeFirstLetter(username) }}
+            components={{ b: <b /> }}
+          />
         </h3>
         <div className={styles.eventsList}>
           {events.map((event) => {

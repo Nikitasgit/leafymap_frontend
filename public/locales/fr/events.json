@@ -1,0 +1,258 @@
+{
+  "eventBookingWidget": {
+    "title": "Réservations",
+    "organizerHelper": "Vous êtes l'organisateur de cet évènement. Retrouvez la liste des réservations dans la page de modification de l'évènement.",
+    "manageBookings": "Gérer les réservations",
+    "loginHelper": "Connectez-vous pour réserver votre place à cet évènement.",
+    "bookedSeats_one": "Vous avez réservé <strong>{{count}} place</strong> pour cet évènement.",
+    "bookedSeats_other": "Vous avez réservé <strong>{{count}} places</strong> pour cet évènement.",
+    "cancelBooking": "Annuler ma réservation",
+    "remainingSeats_one": "{{count}} place restante.",
+    "remainingSeats_other": "{{count}} places restantes.",
+    "unlimitedSeats": "Places illimitées.",
+    "maxSeats_one": "Vous pouvez réserver jusqu'à {{count}} place.",
+    "maxSeats_other": "Vous pouvez réserver jusqu'à {{count}} places.",
+    "book": "Réserver",
+    "cancelModalTitle": "Annuler la réservation ?",
+    "cancelModalBody": "Votre réservation pour cet évènement sera définitivement annulée."
+  },
+  "seatsStepper": {
+    "removeSeat": "Retirer une place",
+    "addSeat": "Ajouter une place"
+  },
+  "eventDetails": {
+    "participants": "Participants",
+    "organizedBy": "Organisé par"
+  },
+  "eventSchedule": {
+    "title": "Programme",
+    "dateFrom": "Du",
+    "dateOn": "Le",
+    "dateTo": "Au",
+    "timeRange": "{{startTime}} à {{endTime}}",
+    "defaultParticipant": "Participant"
+  },
+  "eventsTab": {
+    "title_one": "<b>{{username}}</b> organise cet événement ({{count}}) :",
+    "title_other": "<b>{{username}}</b> organise ces événements ({{count}}) :"
+  },
+  "eventCard": {
+    "online": "En ligne"
+  },
+  "accountEventCard": {
+    "deleteAriaLabel": "Supprimer l'événement",
+    "editAriaLabel": "Modifier l'événement"
+  },
+  "accountEventsList": {
+    "placeEventsTitle": "Les événements de <span>{{placeName}}</span> :",
+    "myEventsTitle": "Mes événements :",
+    "emptyTitle": "Aucun événement",
+    "emptyDescription": "Commencez par créer votre premier événement pour attirer des visiteurs."
+  },
+  "eventForm": {
+    "validationError": "Veuillez corriger les erreurs du formulaire",
+    "updateSuccess": "Évènement modifié avec succès",
+    "createSuccess": "Évènement créé avec succès",
+    "updateError": "Erreur lors de la modification de l'évènement",
+    "createError": "Erreur lors de la création de l'évènement",
+    "nameLabel": "Nom de l'évènement",
+    "namePlaceholder": "Nom de l'évènement",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Description",
+    "locationTitle": "Localisation de l'évènement",
+    "useMyPlace": "Utiliser mon lieu",
+    "setAddress": "Définir l'adresse",
+    "onlineEvent": "Évènement en ligne",
+    "markerName": "Évènement",
+    "bookingTitle": "Réservations",
+    "isBookableLabel": "Les participants peuvent-ils réserver une place pour cet évènement ?",
+    "capacityLabel": "Nombre de places total",
+    "capacityPlaceholder": "Laisser vide pour un nombre illimité",
+    "maxSeatsPerBookingLabel": "Nombre de places réservables par utilisateur"
+  },
+  "eventModifyContainer": {
+    "title": "Modifier un événement",
+    "editTab": "Modifier",
+    "bookingsTab": "Réservations"
+  },
+  "eventCreateContainer": {
+    "title": "Créer un événement"
+  },
+  "eventNewDatesSelector": {
+    "title": "Dates et horaires",
+    "addDatesTitle": "Ajouter des dates",
+    "selectPeriodError": "Veuillez sélectionner une période",
+    "selectDateError": "Veuillez sélectionner une date",
+    "addDatesAriaLabel": "Ajouter les dates",
+    "addPeriod": "Ajouter une période",
+    "addThisPeriod": "Ajouter cette période",
+    "addDate": "Ajouter une date",
+    "addThisDate": "Ajouter cette date"
+  },
+  "eventEditTimeSlot": {
+    "requiredFieldsError": "Veuillez remplir tous les champs obligatoires du créneau.",
+    "titleMinLengthError": "Le titre du créneau doit contenir au moins 3 caractères.",
+    "endTimeAfterStartError": "L'heure de fin doit être après l'heure de début.",
+    "titleLabel": "Titre du créneau",
+    "cancelSlotAriaLabel": "Annuler le créneau",
+    "validateSlotAriaLabel": "Valider le créneau",
+    "editSlot": "Modifier ce créneau",
+    "addSlot": "Ajouter ce créneau"
+  },
+  "eventBookingsManageTab": {
+    "title": "Réservations",
+    "bookedSeatsLimited_one": "{{booked}} / {{capacity}} place réservée.",
+    "bookedSeatsLimited_other": "{{booked}} / {{capacity}} places réservées.",
+    "bookedSeatsUnlimited_one": "{{booked}} place réservée — capacité illimitée.",
+    "bookedSeatsUnlimited_other": "{{booked}} places réservées — capacité illimitée.",
+    "emptyTitle": "Aucune réservation",
+    "emptyDescription": "Personne n'a encore réservé de place pour cet évènement."
+  },
+  "eventBookingsManageList": {
+    "seatsBooked_one": "{{count}} place réservée",
+    "seatsBooked_other": "{{count}} places réservées",
+    "lockedMessage": "Cet évènement a déjà commencé ou est terminé, cette réservation ne peut plus être modifiée ni annulée.",
+    "editSeats": "Modifier les places",
+    "editSeatsAriaLabel": "Modifier les places réservées",
+    "cancelBookingAriaLabel": "Annuler la réservation",
+    "cancelModalTitle": "Annuler cette réservation ?",
+    "cancelModalPrimary": "Annuler la réservation",
+    "cancelModalBody": "{{username}} sera notifié de l'annulation de sa réservation.",
+    "defaultUser": "Cet utilisateur"
+  },
+  "eventPartnershipsSelect": {
+    "title": "Participants sur ce créneau :",
+    "addParticipantAriaLabel": "Ajouter {{username}} à ce créneau",
+    "defaultUser": "Utilisateur",
+    "noParticipantsHint": "Pour ajouter des participants à ce créneau, vous devez d'abord les ajouter à la liste des participants de l'évènement.",
+    "noParticipantsOnSlot": "Aucun participant n'a été ajouté à ce créneau.",
+    "participantsAdded_one": "{{count}} participant ajouté à ce créneau.",
+    "participantsAdded_other": "{{count}} participants ajoutés à ce créneau."
+  },
+  "eventSlotCard": {
+    "participants": "Participants",
+    "noCollaborators": "Aucun collaborateur ajouté",
+    "editSlotTitle": "Modifier le créneau",
+    "deleteSlotTitle": "Supprimer le créneau"
+  },
+  "eventScheduleListCard": {
+    "dateFrom": "Du",
+    "dateOn": "Le",
+    "dateTo": "Au",
+    "addSlot": "Ajouter un créneau",
+    "addSlotAriaLabel": "Ajouter un créneau",
+    "editPeriodAriaLabel": "Modifier la période",
+    "deletePeriodAriaLabel": "Supprimer la période",
+    "saveDatesAriaLabel": "Enregistrer les dates",
+    "emptyTitle": "Aucun créneau"
+  },
+  "eventScheduleList": {
+    "emptyTitle": "Aucune date programmée"
+  },
+  "myEventsTab": {
+    "title": "Mes évènements",
+    "description": "Gérez vos événements. Créez-en de nouveaux, avec un lieu, une adresse dédiée ou en ligne.",
+    "createEvent": "Créer un évènement",
+    "createEventAriaLabel": "Créer un évènement"
+  },
+  "myEventBookingsTab": {
+    "title": "Mes réservations",
+    "description": "Retrouvez vos réservations pour des évènements. Vous pouvez modifier le nombre de places ou annuler une réservation.",
+    "emptyTitle": "Aucune réservation",
+    "emptyMessage": "Vous n'avez réservé aucun évènement pour le moment."
+  },
+  "myEventBookingsList": {
+    "seatsBooked_one": "{{count}} place réservée",
+    "seatsBooked_other": "{{count}} places réservées",
+    "editBookingAriaLabel": "Modifier la réservation",
+    "cancelBookingAriaLabel": "Annuler la réservation",
+    "cancelModalTitle": "Annuler la réservation ?",
+    "cancelModalPrimary": "Annuler ma réservation",
+    "cancelModalBody": "Votre réservation pour « {{eventName}} » sera définitivement annulée."
+  },
+  "eventParticipationsTab": {
+    "title": "Mes participations",
+    "description": "Les évènements auxquels vous participez en tant que collaborateur.",
+    "emptyTitle": "Aucune participation",
+    "emptyDescription": "Vous ne participez à aucun évènement pour le moment.",
+    "cancelModalTitle": "Annuler votre participation ?",
+    "cancelModalPrimary": "Annuler ma participation",
+    "cancelModalBody": "Vous ne participerez plus à cet évènement. L'organisateur en sera informé."
+  },
+  "eventParticipationsList": {
+    "cancelParticipation": "Annuler ma participation",
+    "cancelParticipationAriaLabel": "Annuler ma participation"
+  },
+  "eventInvitationsReceivedTab": {
+    "title": "Invitations reçues",
+    "description": "Acceptez ou refusez les invitations à des évènements qui vous sont envoyées.",
+    "emptyTitle": "Aucune invitation reçue",
+    "emptyMessage": "Les invitations à des évènements en attente apparaîtront ici."
+  },
+  "eventInvitationsReceivedList": {
+    "defaultUser": "Utilisateur",
+    "accept": "Accepter",
+    "acceptAriaLabel": "Accepter l'invitation",
+    "refuse": "Refuser",
+    "refuseAriaLabel": "Refuser l'invitation"
+  },
+  "bookingLimits": {
+    "lockedMessage": "Cet évènement a déjà commencé ou est terminé, votre réservation ne peut plus être modifiée ni annulée.",
+    "lockedParticipationMessage": "Cet évènement a déjà commencé ou est terminé, votre participation ne peut plus être annulée.",
+    "closedMessage": "Cet évènement a déjà commencé ou est terminé, les réservations sont fermées.",
+    "fullMessage": "Cet évènement est complet, il ne reste plus de places disponibles."
+  },
+  "createEventBooking": {
+    "success": "Réservation confirmée avec succès",
+    "error": "Erreur lors de la réservation"
+  },
+  "updateEventBooking": {
+    "success": "Réservation modifiée avec succès",
+    "error": "Erreur lors de la modification"
+  },
+  "cancelEventBooking": {
+    "success": "Réservation annulée avec succès",
+    "error": "Erreur lors de l'annulation"
+  },
+  "deleteEvent": {
+    "success": "Événement supprimé avec succès",
+    "confirmMessage": "Êtes-vous sûr de vouloir supprimer cet événement ? Cette action est définitive.",
+    "doubleConfirmMessage": "Cette action est définitive. Confirmez-vous la suppression de l'événement ?"
+  },
+  "eventInvitations": {
+    "invalidResponse": "Réponse invalide du serveur",
+    "loadError": "Erreur lors du chargement des invitations"
+  },
+  "eventInvitationsByUserId": {
+    "invalidResponse": "Réponse invalide du serveur",
+    "loadError": "Erreur lors du chargement des invitations d'événements"
+  },
+  "eventInvitationActions": {
+    "updated": "Invitation mise à jour",
+    "updateError": "Erreur lors de la mise à jour de l'invitation",
+    "participationCancelled": "Participation annulée"
+  },
+  "submitEventInvitations": {
+    "updateError": "Erreur lors de la mise à jour des invitations d'événement"
+  },
+  "myEventBookings": {
+    "loadError": "Erreur lors du chargement de vos réservations"
+  },
+  "eventBookingsForEvent": {
+    "loadError": "Erreur lors du chargement des réservations"
+  },
+  "userEvents": {
+    "invalidResponse": "Réponse invalide du serveur",
+    "loadError": "Erreur lors du chargement des événements"
+  },
+  "eventsSuggestions": {
+    "loadError": "Erreur lors du chargement des événements"
+  },
+  "useEvent": {
+    "loadError": "Erreur lors du chargement de l'événement"
+  },
+  "useEventSchedule": {
+    "deletePeriodConfirm": "Tous les créneaux de cette période seront également supprimés",
+    "deleteTimeSlotConfirm": "Voulez-vous vraiment supprimer ce créneau ?"
+  }
+}

@@ -5,7 +5,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useState, useRef, useEffect, useCallback } from "react";
 import styles from "./MapPageContainer.module.scss";
 import MapFiltersBar from "@/components/map/MapFiltersBar";
-import { MapFilters, ExtendedMapRef } from "@/types/map";
+import { MapDisplayMode, MapFilters, ExtendedMapRef } from "@/types/map";
 import MapCardContainer from "@/components/map/MapCardContainer";
 import MapFiltersPanel from "@/components/map/MapFiltersPanel";
 import { useAppSelector } from "@/store";
@@ -18,10 +18,12 @@ import type { LngLatBoundsLike } from "mapbox-gl";
 import { SearchResult } from "./MapPageContainer.types";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useMapViewState } from "@/hooks/useMapViewState";
+import { navigateToPlaceOnMap } from "@/utils/mapNavigation";
 
 const defaultFilters: MapFilters = {
   placeTypes: [],
   placeCategories: [],
+  eventCategories: [],
   minRating: null,
   userCategoryIds: [],
   productCategoryIds: [],
@@ -41,16 +43,19 @@ const MapPageContainer = () => {
   } = useMapViewState();
 
   const initialCreatorId = searchParams.get("creator");
+  const initialEventId = searchParams.get("event");
   const [selectedItem, setSelectedItem] = useState<{
     id: string;
     type: "creator" | "filters" | null;
+    eventId?: string | null;
   }>(
     initialCreatorId
-      ? { id: initialCreatorId, type: "creator" }
+      ? { id: initialCreatorId, type: "creator", eventId: initialEventId }
       : { id: "", type: null }
   );
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState<MapFilters>(defaultFilters);
+  const [displayMode, setDisplayMode] = useState<MapDisplayMode>("events");
   const [isFavoritesMode, setIsFavoritesMode] = useState(false);
   const [favoritesPlaces, setFavoritesPlaces] = useState<Place[]>([]);
   const favoritesBounds = useRef<LngLatBoundsLike | null>(null);
@@ -111,7 +116,22 @@ const MapPageContainer = () => {
   }, [isFavoritesMode]);
 
   const handleMarkerClick = (userId: string) => {
-    setSelectedItem({ id: userId, type: "creator" });
+    setSelectedItem({ id: userId, type: "creator", eventId: null });
+  };
+
+  const handleEventMarkerClick = (
+    userId: string,
+    eventId: string,
+    coordinates: number[]
+  ) => {
+    exitFavoritesMode();
+    setDisplayMode("events");
+    setSelectedItem({ id: userId, type: "creator", eventId });
+    navigateToPlaceOnMap({
+      mapRef,
+      placeId: eventId,
+      coordinates,
+    });
   };
 
   const handleCloseFilterPanel = useCallback(() => {
@@ -123,11 +143,19 @@ const MapPageContainer = () => {
     setSelectedItem({ id: "", type: null });
   }, []);
 
+  const handleMapBackgroundInteraction = useCallback(() => {
+    if (selectedItem.type === "creator") {
+      handleCloseCreatorCard();
+    }
+  }, [selectedItem.type, handleCloseCreatorCard]);
+
   const handleSelect = (item: SearchResult) => {
-    setSelectedItem({ id: item.id, type: item.type });
+    setSelectedItem({ id: item.id, type: item.type, eventId: item.eventId });
     if (item.type === "creator") {
       exitFavoritesMode();
-      setFilters({ ...defaultFilters });
+      if (!item.eventId) {
+        setFilters({ ...defaultFilters });
+      }
     } else if (item.type === null) {
       exitFavoritesMode();
     }
@@ -135,12 +163,20 @@ const MapPageContainer = () => {
 
   useEffect(() => {
     const urlCreatorId = searchParams.get("creator");
+    const urlEventId = searchParams.get("event");
     const currentCreatorId =
       selectedItem.type === "creator" ? selectedItem.id : null;
-    if (urlCreatorId !== currentCreatorId) {
+    const currentEventId =
+      selectedItem.type === "creator" ? selectedItem.eventId || null : null;
+    if (urlCreatorId !== currentCreatorId || urlEventId !== currentEventId) {
       isUpdatingFromUrl.current = true;
       if (urlCreatorId) {
-        setSelectedItem({ id: urlCreatorId, type: "creator" });
+        setSelectedItem({
+          id: urlCreatorId,
+          type: "creator",
+          eventId: urlEventId,
+        });
+        if (urlEventId) setDisplayMode("events");
       } else {
         setSelectedItem({ id: "", type: null });
       }
@@ -155,17 +191,28 @@ const MapPageContainer = () => {
       return;
     }
     const currentCreatorId = searchParams.get("creator");
+    const currentEventId = searchParams.get("event");
     const params = new URLSearchParams(searchParams.toString());
 
     if (selectedItem.type === "creator" && selectedItem.id) {
-      if (currentCreatorId !== selectedItem.id) {
+      const nextEventId = selectedItem.eventId || null;
+      if (
+        currentCreatorId !== selectedItem.id ||
+        currentEventId !== nextEventId
+      ) {
         params.set("creator", selectedItem.id);
+        if (nextEventId) {
+          params.set("event", nextEventId);
+        } else {
+          params.delete("event");
+        }
         const newUrl = `${pathname}?${params.toString()}`;
         router.replace(newUrl, { scroll: false });
       }
     } else {
-      if (currentCreatorId) {
+      if (currentCreatorId || currentEventId) {
         params.delete("creator");
+        params.delete("event");
         const newUrl = params.toString()
           ? `${pathname}?${params.toString()}`
           : pathname;
@@ -182,6 +229,8 @@ const MapPageContainer = () => {
         loading={loading}
         selectedItem={selectedItem}
         handleSelect={handleSelect}
+        displayMode={displayMode}
+        onDisplayModeChange={setDisplayMode}
         isFavoritesMode={isFavoritesMode}
         onFavoritesModeToggle={handleFavoritesModeToggle}
         onExitFavoritesMode={exitFavoritesMode}
@@ -191,9 +240,14 @@ const MapPageContainer = () => {
           <MapComponent
             ref={mapRef}
             withPlacesInView
+            displayMode={displayMode}
             filters={filters}
             setLoading={setLoading}
             onMarkerClick={handleMarkerClick}
+            onEventMarkerClick={handleEventMarkerClick}
+            onMapClick={handleMapBackgroundInteraction}
+            onMapDragStart={handleMapBackgroundInteraction}
+            selectedEventId={selectedItem.eventId}
             height="100%"
             width="100%"
             isFavoritesMode={isFavoritesMode}
@@ -207,6 +261,7 @@ const MapPageContainer = () => {
         {selectedItem.type === "filters" && (
           <MapFiltersPanel
             filters={filters}
+            displayMode={displayMode}
             setFilters={setFilters}
             onResetFilters={() => setFilters(defaultFilters)}
             onClose={handleCloseFilterPanel}

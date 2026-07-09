@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { Bell } from "lucide-react";
 import Button from "../../common/buttons/Button";
 import { NotificationsList } from "../../common/notifications";
@@ -18,6 +19,7 @@ interface NavbarNotificationsProps {
 export default function NavbarNotifications({
   onBellClick,
 }: NavbarNotificationsProps) {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +46,7 @@ export default function NavbarNotifications({
         variant="simple"
         startIcon={<Bell className={styles.icon} aria-hidden="true" />}
         badge={unreadCount > 0 ? unreadCount : undefined}
-        ariaLabel="Notifications"
+        ariaLabel={t("navbar.notificationsAriaLabel")}
         onClick={() => {
           onBellClick?.();
           setIsOpen((v) => {

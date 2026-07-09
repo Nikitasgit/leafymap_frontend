@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { MoreVertical } from "lucide-react";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import styles from "./ThreeDotsMenu.module.scss";
@@ -9,10 +10,13 @@ import type { ThreeDotsMenuProps } from "./ThreeDotsMenu.types";
 export default function ThreeDotsMenu({
   actions,
   trigger,
-  ariaLabel = "Ouvrir le menu",
+  ariaLabel,
   align = "right",
   className,
 }: ThreeDotsMenuProps) {
+  const { t } = useTranslation("common");
+  const resolvedAriaLabel =
+    ariaLabel ?? t("threeDotsMenu.openMenuAriaLabel");
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   useOnClickOutside(menuRef, () => setMenuOpen(false));
@@ -35,7 +39,7 @@ export default function ThreeDotsMenu({
         type="button"
         className={styles.trigger}
         onClick={handleToggle}
-        aria-label={ariaLabel}
+        aria-label={resolvedAriaLabel}
         aria-expanded={menuOpen}
         aria-haspopup="true"
       >

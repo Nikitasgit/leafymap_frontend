@@ -2,6 +2,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { CalendarDays, Ticket } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import BaseModal from "@/components/common/modals/BaseModal";
 import Button from "@/components/common/buttons/Button";
 import { EventPopulated } from "@/types/place/event";
@@ -28,6 +29,7 @@ const EventModal: React.FC<EventModalProps> = ({
   user,
   isContentLoading = false,
 }) => {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const eventPlace =
     typeof event.place === "object" && event.place
@@ -56,7 +58,7 @@ const EventModal: React.FC<EventModalProps> = ({
           <CalendarDays size={18} />
         </span>
       }
-      primaryButtonLabel="Fermer"
+      primaryButtonLabel={t("actions.close")}
       onPrimaryAction={handleClose}
       withFooter={false}
       isContentLoading={isContentLoading}
@@ -74,9 +76,9 @@ const EventModal: React.FC<EventModalProps> = ({
             variant="outline"
             fullWidth
             onClick={goToEventPage}
-            ariaLabel="Voir plus de détails sur l'évènement"
+            ariaLabel={t("eventModal.seeMoreAriaLabel")}
           >
-            Voir plus
+            {t("actions.seeMore")}
           </Button>
           {event.isBookable && event.lifecycleStatus === "upcoming" && (
             <Button
@@ -85,9 +87,9 @@ const EventModal: React.FC<EventModalProps> = ({
               fullWidth
               startIcon={<Ticket size={16} />}
               onClick={goToEventPage}
-              ariaLabel="Réserver une place pour cet évènement"
+              ariaLabel={t("eventModal.bookAriaLabel")}
             >
-              Réserver
+              {t("eventModal.book")}
             </Button>
           )}
         </div>

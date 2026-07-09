@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import StarsReview from "@/components/common/stars/StarsReview";
 import BaseModal from "@/components/common/modals/BaseModal";
 import TextField from "@/components/common/inputs/TextField";
@@ -24,6 +25,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   onSuccess,
   review,
 }) => {
+  const { t } = useTranslation("reviews");
   const isEditMode = !!review;
   const [rating, setRating] = useState(review?.rating || 0);
   const [comment, setComment] = useState(review?.comment || "");
@@ -72,25 +74,25 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      title={isEditMode ? "Modifier mon avis" : "Rédiger un avis"}
-      primaryButtonLabel={isEditMode ? "Enregistrer" : "Publier"}
-      secondaryButtonLabel="Annuler"
+      title={isEditMode ? t("reviewModal.editTitle") : t("reviewModal.writeTitle")}
+      primaryButtonLabel={isEditMode ? t("common:actions.save") : t("reviewModal.publish")}
+      secondaryButtonLabel={t("common:actions.cancel")}
       onPrimaryAction={handleSubmit}
       isPrimaryDisabled={rating === 0}
       isSubmitLoading={isLoading}
       primaryButtonType="submit"
     >
       <div className={styles.starsSection}>
-        <label className={styles.label}>Note</label>
+        <label className={styles.label}>{t("reviewModal.ratingLabel")}</label>
         <StarsReview rating={rating} onRatingChange={setRating} size="large" />
       </div>
       <div className={styles.commentSection}>
         <TextField
           name="comment"
-          label="Commentaire"
+          label={t("reviewModal.commentLabel")}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          placeholder="Partagez votre expérience..."
+          placeholder={t("reviewModal.commentPlaceholder")}
           multiline
           fullWidth
           rows={5}

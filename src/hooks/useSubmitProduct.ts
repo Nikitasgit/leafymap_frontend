@@ -1,63 +1,32 @@
-import axios from "axios";
 import { useLoading } from "./useLoading";
-import { useToast } from "./useToast";
+import { apiClient } from "@/lib/api/client";
+import useHandleApiErrors from "./useHandleApiErrors";
 
 const useSubmitProduct = () => {
   const { isLoading, withLoading } = useLoading();
-  const { showError } = useToast();
+  const { handleApiError } = useHandleApiErrors();
 
   const createProduct = async (data: { productCategory: string }) => {
     try {
       const response = await withLoading(() =>
-        axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/products`,
-          data,
-          {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
-          }
-        )
+        apiClient.post("/api/products", data, {
+          headers: { "Content-Type": "application/json" },
+        }),
       );
       return response.data?.data ?? true;
     } catch (err: unknown) {
-      handleApiError(err);
+      handleApiError(err, undefined, true);
     }
   };
 
   const deleteProduct = async (productId: string) => {
     try {
-      await withLoading(() =>
-        axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}`,
-          { withCredentials: true }
-        )
-      );
+      await withLoading(() => apiClient.delete(`/api/products/${productId}`));
       return true;
     } catch (err: unknown) {
-      handleApiError(err);
+      handleApiError(err, undefined, true);
     }
   };
-
-  function handleApiError(err: unknown) {
-    if (axios.isAxiosError(err) && err.response?.data) {
-      if (err.response.data.data) {
-        const responseData = err.response.data.data;
-        if (typeof responseData === "object") {
-          Object.values(responseData).forEach((error: unknown) => {
-            if (Array.isArray(error)) {
-              error.forEach((e: string) => showError(e));
-            } else if (typeof error === "string") {
-              showError(error);
-            }
-          });
-        }
-      } else {
-        showError(err.response.data.message ?? "Erreur");
-      }
-    } else {
-      showError("Une erreur inattendue s'est produite");
-    }
-  }
 
   return { createProduct, deleteProduct, isLoading };
 };

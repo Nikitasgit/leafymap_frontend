@@ -2,6 +2,7 @@ import { ExtendedMapRef } from "@/types/map";
 
 export interface MapCreatorCardProps {
   userId: string;
+  initialEventId?: string | null;
   mapRef: React.RefObject<ExtendedMapRef | null>;
   /** When true, navigateToPlaceOnMap will skip fetchPlacesInView (e.g. in favorites mode). */
   skipFetchPlacesInView?: boolean;

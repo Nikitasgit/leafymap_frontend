@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import styles from "./CreatorHeader.module.scss";
 import { MapPin } from "lucide-react";
@@ -11,6 +13,7 @@ import { Place } from "@/types/place";
 import { UserPopulated } from "@/types/user";
 import { getPlaceCategoryName } from "@/utils/place";
 import { FollowingCount } from "@/components/common/follow/FollowingCount";
+import { useTranslation } from "react-i18next";
 
 export interface CreatorHeaderProps {
   place: Place | null;
@@ -26,6 +29,7 @@ const CreatorHeader = ({
   variant = "compact",
 }: CreatorHeaderProps) => {
   const router = useRouter();
+  const { t } = useTranslation("profile");
 
   return (
     <div
@@ -39,7 +43,9 @@ const CreatorHeader = ({
           router.push(`/users/${user._id}`);
         }}
         type="button"
-        aria-label={`Voir le profil de ${user.username || "l'utilisateur"}`}
+        aria-label={t("creatorHeader.viewProfileAriaLabel", {
+          username: user.username || t("creatorHeader.defaultUsername"),
+        })}
       >
         {!isLoading && (
           <Image

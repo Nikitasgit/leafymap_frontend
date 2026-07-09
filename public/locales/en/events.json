@@ -1,0 +1,258 @@
+{
+  "eventBookingWidget": {
+    "title": "Bookings",
+    "organizerHelper": "You are the organizer of this event. Find the list of bookings on the event edit page.",
+    "manageBookings": "Manage bookings",
+    "loginHelper": "Sign in to book your spot for this event.",
+    "bookedSeats_one": "You have booked <strong>{{count}} seat</strong> for this event.",
+    "bookedSeats_other": "You have booked <strong>{{count}} seats</strong> for this event.",
+    "cancelBooking": "Cancel my booking",
+    "remainingSeats_one": "{{count}} seat remaining.",
+    "remainingSeats_other": "{{count}} seats remaining.",
+    "unlimitedSeats": "Unlimited seats.",
+    "maxSeats_one": "You can book up to {{count}} seat.",
+    "maxSeats_other": "You can book up to {{count}} seats.",
+    "book": "Book",
+    "cancelModalTitle": "Cancel booking?",
+    "cancelModalBody": "Your booking for this event will be permanently cancelled."
+  },
+  "seatsStepper": {
+    "removeSeat": "Remove a seat",
+    "addSeat": "Add a seat"
+  },
+  "eventDetails": {
+    "participants": "Participants",
+    "organizedBy": "Organized by"
+  },
+  "eventSchedule": {
+    "title": "Schedule",
+    "dateFrom": "From",
+    "dateOn": "On",
+    "dateTo": "To",
+    "timeRange": "{{startTime}} to {{endTime}}",
+    "defaultParticipant": "Participant"
+  },
+  "eventsTab": {
+    "title_one": "<b>{{username}}</b> organizes this event ({{count}}):",
+    "title_other": "<b>{{username}}</b> organizes these events ({{count}}):"
+  },
+  "eventCard": {
+    "online": "Online"
+  },
+  "accountEventCard": {
+    "deleteAriaLabel": "Delete event",
+    "editAriaLabel": "Edit event"
+  },
+  "accountEventsList": {
+    "placeEventsTitle": "Events at <span>{{placeName}}</span>:",
+    "myEventsTitle": "My events:",
+    "emptyTitle": "No events",
+    "emptyDescription": "Start by creating your first event to attract visitors."
+  },
+  "eventForm": {
+    "validationError": "Please correct the errors in the form",
+    "updateSuccess": "Event updated successfully",
+    "createSuccess": "Event created successfully",
+    "updateError": "Error updating event",
+    "createError": "Error creating event",
+    "nameLabel": "Event name",
+    "namePlaceholder": "Event name",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Description",
+    "locationTitle": "Event location",
+    "useMyPlace": "Use my place",
+    "setAddress": "Set address",
+    "onlineEvent": "Online event",
+    "markerName": "Event",
+    "bookingTitle": "Bookings",
+    "isBookableLabel": "Can participants book a spot for this event?",
+    "capacityLabel": "Total number of seats",
+    "capacityPlaceholder": "Leave empty for unlimited",
+    "maxSeatsPerBookingLabel": "Number of seats bookable per user"
+  },
+  "eventModifyContainer": {
+    "title": "Edit event",
+    "editTab": "Edit",
+    "bookingsTab": "Bookings"
+  },
+  "eventCreateContainer": {
+    "title": "Create event"
+  },
+  "eventNewDatesSelector": {
+    "title": "Dates and times",
+    "addDatesTitle": "Add dates",
+    "selectPeriodError": "Please select a period",
+    "selectDateError": "Please select a date",
+    "addDatesAriaLabel": "Add dates",
+    "addPeriod": "Add a period",
+    "addThisPeriod": "Add this period",
+    "addDate": "Add a date",
+    "addThisDate": "Add this date"
+  },
+  "eventEditTimeSlot": {
+    "requiredFieldsError": "Please fill in all required fields for the time slot.",
+    "titleMinLengthError": "The time slot title must be at least 3 characters.",
+    "endTimeAfterStartError": "End time must be after start time.",
+    "titleLabel": "Time slot title",
+    "cancelSlotAriaLabel": "Cancel time slot",
+    "validateSlotAriaLabel": "Validate time slot",
+    "editSlot": "Edit this time slot",
+    "addSlot": "Add this time slot"
+  },
+  "eventBookingsManageTab": {
+    "title": "Bookings",
+    "bookedSeatsLimited_one": "{{booked}} / {{capacity}} seat booked.",
+    "bookedSeatsLimited_other": "{{booked}} / {{capacity}} seats booked.",
+    "bookedSeatsUnlimited_one": "{{booked}} seat booked — unlimited capacity.",
+    "bookedSeatsUnlimited_other": "{{booked}} seats booked — unlimited capacity.",
+    "emptyTitle": "No bookings",
+    "emptyDescription": "No one has booked a spot for this event yet."
+  },
+  "eventBookingsManageList": {
+    "seatsBooked_one": "{{count}} seat booked",
+    "seatsBooked_other": "{{count}} seats booked",
+    "lockedMessage": "This event has already started or ended; this booking can no longer be modified or cancelled.",
+    "editSeats": "Edit seats",
+    "editSeatsAriaLabel": "Edit booked seats",
+    "cancelBookingAriaLabel": "Cancel booking",
+    "cancelModalTitle": "Cancel this booking?",
+    "cancelModalPrimary": "Cancel booking",
+    "cancelModalBody": "{{username}} will be notified of the cancellation of their booking.",
+    "defaultUser": "This user"
+  },
+  "eventPartnershipsSelect": {
+    "title": "Participants on this time slot:",
+    "addParticipantAriaLabel": "Add {{username}} to this time slot",
+    "defaultUser": "User",
+    "noParticipantsHint": "To add participants to this time slot, you must first add them to the event participant list.",
+    "noParticipantsOnSlot": "No participant has been added to this time slot.",
+    "participantsAdded_one": "{{count}} participant added to this time slot.",
+    "participantsAdded_other": "{{count}} participants added to this time slot."
+  },
+  "eventSlotCard": {
+    "participants": "Participants",
+    "noCollaborators": "No collaborator added",
+    "editSlotTitle": "Edit time slot",
+    "deleteSlotTitle": "Delete time slot"
+  },
+  "eventScheduleListCard": {
+    "dateFrom": "From",
+    "dateOn": "On",
+    "dateTo": "To",
+    "addSlot": "Add a time slot",
+    "addSlotAriaLabel": "Add a time slot",
+    "editPeriodAriaLabel": "Edit period",
+    "deletePeriodAriaLabel": "Delete period",
+    "saveDatesAriaLabel": "Save dates",
+    "emptyTitle": "No time slots"
+  },
+  "eventScheduleList": {
+    "emptyTitle": "No dates scheduled"
+  },
+  "myEventsTab": {
+    "title": "My events",
+    "description": "Manage your events. Create new ones with a place, a dedicated address, or online.",
+    "createEvent": "Create event",
+    "createEventAriaLabel": "Create event"
+  },
+  "myEventBookingsTab": {
+    "title": "My bookings",
+    "description": "Find your event bookings. You can change the number of seats or cancel a booking.",
+    "emptyTitle": "No bookings",
+    "emptyMessage": "You haven't booked any events yet."
+  },
+  "myEventBookingsList": {
+    "seatsBooked_one": "{{count}} seat booked",
+    "seatsBooked_other": "{{count}} seats booked",
+    "editBookingAriaLabel": "Edit booking",
+    "cancelBookingAriaLabel": "Cancel booking",
+    "cancelModalTitle": "Cancel booking?",
+    "cancelModalPrimary": "Cancel my booking",
+    "cancelModalBody": "Your booking for \"{{eventName}}\" will be permanently cancelled."
+  },
+  "eventParticipationsTab": {
+    "title": "My participations",
+    "description": "Events you participate in as a collaborator.",
+    "emptyTitle": "No participations",
+    "emptyDescription": "You are not participating in any events at the moment.",
+    "cancelModalTitle": "Cancel your participation?",
+    "cancelModalPrimary": "Cancel my participation",
+    "cancelModalBody": "You will no longer participate in this event. The organizer will be notified."
+  },
+  "eventParticipationsList": {
+    "cancelParticipation": "Cancel my participation",
+    "cancelParticipationAriaLabel": "Cancel my participation"
+  },
+  "eventInvitationsReceivedTab": {
+    "title": "Received invitations",
+    "description": "Accept or decline event invitations sent to you.",
+    "emptyTitle": "No invitations received",
+    "emptyMessage": "Pending event invitations will appear here."
+  },
+  "eventInvitationsReceivedList": {
+    "defaultUser": "User",
+    "accept": "Accept",
+    "acceptAriaLabel": "Accept invitation",
+    "refuse": "Decline",
+    "refuseAriaLabel": "Decline invitation"
+  },
+  "bookingLimits": {
+    "lockedMessage": "This event has already started or ended; your booking can no longer be modified or cancelled.",
+    "lockedParticipationMessage": "This event has already started or ended; your participation can no longer be cancelled.",
+    "closedMessage": "This event has already started or ended; bookings are closed.",
+    "fullMessage": "This event is full; there are no seats available."
+  },
+  "createEventBooking": {
+    "success": "Booking confirmed successfully",
+    "error": "Error while booking"
+  },
+  "updateEventBooking": {
+    "success": "Booking updated successfully",
+    "error": "Error while updating booking"
+  },
+  "cancelEventBooking": {
+    "success": "Booking cancelled successfully",
+    "error": "Error while cancelling booking"
+  },
+  "deleteEvent": {
+    "success": "Event deleted successfully",
+    "confirmMessage": "Are you sure you want to delete this event? This action is permanent.",
+    "doubleConfirmMessage": "This action is permanent. Do you confirm deleting the event?"
+  },
+  "eventInvitations": {
+    "invalidResponse": "Invalid response from server",
+    "loadError": "Error loading invitations"
+  },
+  "eventInvitationsByUserId": {
+    "invalidResponse": "Invalid response from server",
+    "loadError": "Error loading event invitations"
+  },
+  "eventInvitationActions": {
+    "updated": "Invitation updated",
+    "updateError": "Error updating invitation",
+    "participationCancelled": "Participation cancelled"
+  },
+  "submitEventInvitations": {
+    "updateError": "Error updating event invitations"
+  },
+  "myEventBookings": {
+    "loadError": "Error loading your bookings"
+  },
+  "eventBookingsForEvent": {
+    "loadError": "Error loading bookings"
+  },
+  "userEvents": {
+    "invalidResponse": "Invalid response from server",
+    "loadError": "Error loading events"
+  },
+  "eventsSuggestions": {
+    "loadError": "Error loading events"
+  },
+  "useEvent": {
+    "loadError": "Error loading event"
+  },
+  "useEventSchedule": {
+    "deletePeriodConfirm": "All time slots in this period will also be deleted",
+    "deleteTimeSlotConfirm": "Are you sure you want to delete this time slot?"
+  }
+}

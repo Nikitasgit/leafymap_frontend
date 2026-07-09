@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { ExternalLink } from "lucide-react";
 import ThreeDotsMenu from "@/components/common/ThreeDotsMenu";
 import styles from "./PartnershipCard.module.scss";
@@ -13,6 +16,7 @@ const PartnershipCard = ({
   className,
   actions = [],
 }: PartnershipCardProps) => {
+  const { t } = useTranslation("common");
   const router = useRouter();
 
   const imageUrl =
@@ -20,7 +24,7 @@ const PartnershipCard = ({
       ? user.image
       : (user.image?.urls?.thumbnail ?? "");
 
-  const displayName = user.username ?? "Utilisateur";
+  const displayName = user.username ?? t("partnershipCard.defaultUser");
   const categoryName = user.userCategory?.name;
   const hasActions = actions.length > 0;
 
@@ -34,13 +38,13 @@ const PartnershipCard = ({
         <ThreeDotsMenu
           className={styles.cardActions}
           actions={actions}
-          ariaLabel="Ouvrir le menu"
+          ariaLabel={t("partnershipCard.openMenuAriaLabel")}
         />
       )}
       <div className={styles.imageContainer}>
         <Image
           src={imageUrl || user.googlePictureUrl || creatorDefaultsSvg}
-          alt={displayName || "Créateur"}
+          alt={displayName || t("partnershipCard.creatorAlt")}
           width={60}
           height={60}
           className={styles.image}
@@ -48,7 +52,9 @@ const PartnershipCard = ({
         <button
           className={styles.iconButton}
           onClick={handleButtonClick}
-          aria-label={`Voir le profil de ${displayName}`}
+          aria-label={t("partnershipCard.viewProfileAriaLabel", {
+            name: displayName,
+          })}
           type="button"
         >
           <ExternalLink size={12} />

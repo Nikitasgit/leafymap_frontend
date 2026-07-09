@@ -1,34 +1,34 @@
-import axios from "axios";
 import { useLoading } from "./useLoading";
+import { apiClient } from "@/lib/api/client";
 import { useToast } from "./useToast";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export const useCreateEventBooking = () => {
   const { isLoading, withLoading } = useLoading();
   const { showError, showSuccess } = useToast();
+  const { t } = useTranslation("events");
 
   const createEventBooking = async (eventId: string, seats: number) => {
     try {
       const response = await withLoading(() =>
-        axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/event-bookings/event/${eventId}`,
+        apiClient.post(
+          `/api/event-bookings/event/${eventId}`,
           { seats },
           {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
+            headers: { "Content-Type": "application/json" }
           }
         )
       );
-      showSuccess("Réservation confirmée avec succès");
+      showSuccess(t("createEventBooking.success"));
       return response.data.data;
     } catch (err) {
-      const errorMessage = axios.isAxiosError(err)
-        ? err.response?.data?.message ?? "Erreur lors de la réservation"
-        : "Erreur lors de la réservation";
-      showError(errorMessage);
+      showError(
+        getErrorMessage(err, t, t("createEventBooking.error"))
+      );
       throw err;
     }
   };
 
   return { createEventBooking, isLoading };
 };
-

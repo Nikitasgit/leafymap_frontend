@@ -1,0 +1,60 @@
+{
+  "reviewsTab": {
+    "title": "Avis ({{count}})",
+    "editReview": "Modifier mon avis",
+    "writeReview": "Rédiger un avis",
+    "emptyTitle": "Aucun avis pour le moment",
+    "emptyDescriptionCanReview": "Soyez le premier à laisser un avis !",
+    "emptyDescriptionNoReview": "Il n'y a pas encore d'avis sur cet élément."
+  },
+  "reviewModal": {
+    "editTitle": "Modifier mon avis",
+    "writeTitle": "Rédiger un avis",
+    "publish": "Publier",
+    "ratingLabel": "Note",
+    "commentLabel": "Commentaire",
+    "commentPlaceholder": "Partagez votre expérience..."
+  },
+  "reviewCard": {
+    "defaultUser": "Utilisateur",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cet avis ? Cette action est irréversible.",
+    "editReviewAria": "Modifier mon avis",
+    "deleteReviewAria": "Supprimer mon avis",
+    "replyAria": "Répondre à cet avis",
+    "reply": "Répondre",
+    "editCommentAria": "Modifier mon commentaire",
+    "deleteCommentAria": "Supprimer mon commentaire",
+    "editCommentPlaceholder": "Modifiez votre commentaire..."
+  },
+  "commentInput": {
+    "defaultPlaceholder": "Écrivez votre réponse...",
+    "publish": "Publier",
+    "updating": "Modification...",
+    "publishing": "Publication..."
+  },
+  "useSubmitReview": {
+    "success": "Avis publié avec succès"
+  },
+  "useUpdateReview": {
+    "success": "Avis modifié avec succès"
+  },
+  "useDeleteReview": {
+    "success": "Avis supprimé avec succès",
+    "deleteError": "Erreur lors de la suppression"
+  },
+  "useReviews": {
+    "loadError": "Erreur lors du chargement des avis"
+  },
+  "useSubmitComment": {
+    "success": "Commentaire publié avec succès"
+  },
+  "useUpdateComment": {
+    "success": "Commentaire modifié avec succès"
+  },
+  "useDeleteComment": {
+    "success": "Commentaire supprimé avec succès"
+  },
+  "useComments": {
+    "loadError": "Erreur lors du chargement des commentaires"
+  }
+}

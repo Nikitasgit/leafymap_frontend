@@ -37,7 +37,7 @@ const CreatorActionButtons = ({
   const router = useRouter();
   const params = useParams();
   const locale = params.locale as string;
-  const { t } = useTranslation("marketing");
+  const { t } = useTranslation("profile");
   const { user: currentUser } = useAuth();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { follow, unfollow, isLoading: isFollowLoading } = useFollow();
@@ -100,7 +100,7 @@ const CreatorActionButtons = ({
   const shareTitle =
     [user.firstname, user.lastname].filter(Boolean).join(" ") ||
     user.username ||
-    t("account.shareHostProfile");
+    t("marketing:account.shareHostProfile");
   const shareText = place?.name ? `${shareTitle} - ${place.name}` : shareTitle;
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
@@ -144,11 +144,11 @@ const CreatorActionButtons = ({
         {showFollowButton ? (
           <RoundButton
             icon={<UserPlus size={18} />}
-            label={isFollowing ? "Abonné" : "S'abonner"}
+            label={isFollowing ? t("creatorActionButtons.subscribed") : t("creatorActionButtons.subscribe")}
             onClick={handleFollowClick}
             disabled={isFollowLoading}
             variant={isFollowing ? "primary" : "secondary"}
-            ariaLabel={isFollowing ? "Ne plus suivre" : "S'abonner"}
+            ariaLabel={isFollowing ? t("creatorActionButtons.unsubscribe") : t("creatorActionButtons.subscribe")}
           />
         ) : (
           <div className={styles.actionPlaceholder} aria-hidden />
@@ -158,10 +158,10 @@ const CreatorActionButtons = ({
         {showMessageButton ? (
           <RoundButton
             icon={<MessageSquare size={18} />}
-            label="Messages"
+            label={t("creatorActionButtons.messages")}
             onClick={handleMessageClick}
             variant="secondary"
-            ariaLabel="Envoyer un message"
+            ariaLabel={t("creatorActionButtons.sendMessage")}
           />
         ) : (
           <div className={styles.actionPlaceholder} aria-hidden />
@@ -171,10 +171,10 @@ const CreatorActionButtons = ({
         {showDirectionsButton ? (
           <RoundButton
             icon={<Route size={18} />}
-            label="Itinéraire"
+            label={t("creatorActionButtons.directions")}
             onClick={handleDirectionsClick}
             variant="primary"
-            ariaLabel="Voir l'itinéraire"
+            ariaLabel={t("creatorActionButtons.viewDirections")}
           />
         ) : (
           <div className={styles.actionPlaceholder} aria-hidden />
@@ -183,20 +183,20 @@ const CreatorActionButtons = ({
       <div className={styles.actionItem}>
         <RoundButton
           icon={<Share2 size={18} />}
-          label="Partager"
+          label={t("creatorActionButtons.share")}
           onClick={() => setIsShareModalOpen(true)}
           variant="secondary"
-          ariaLabel="Partager"
+          ariaLabel={t("creatorActionButtons.share")}
         />
       </div>
       <div className={styles.actionItem}>
         <RoundButton
           icon={<Bookmark size={18} />}
-          label={isPlaceFavorited ? "Enregistré" : "Enregistrer"}
+          label={isPlaceFavorited ? t("creatorActionButtons.saved") : t("creatorActionButtons.save")}
           onClick={handleSaveClick}
           disabled={isFavoritesLoading || !place?._id}
           variant={isPlaceFavorited ? "primary" : "secondary"}
-          ariaLabel={isPlaceFavorited ? "Retirer des favoris" : "Enregistrer"}
+          ariaLabel={isPlaceFavorited ? t("creatorActionButtons.removeFromFavorites") : t("creatorActionButtons.save")}
         />
       </div>
 

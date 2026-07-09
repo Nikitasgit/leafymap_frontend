@@ -1,5 +1,8 @@
+"use client";
+
 import styles from "./UsersListXScroll.module.scss";
 import { useRef, useState, MouseEvent, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import PartnershipCard from "@/components/common/partnerships/PartnershipCard";
 import LoadingSpinner from "../../loading/LoadingSpinner";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -30,6 +33,7 @@ const UsersListXScroll = ({
   showCategory = false,
   showChevrons = false,
 }: UsersListXScrollProps) => {
+  const { t } = useTranslation("common");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -147,7 +151,7 @@ const UsersListXScroll = ({
             type="button"
             className={styles.chevronButton}
             onClick={() => scrollBy("left")}
-            aria-label="Défiler vers la gauche"
+            aria-label={t("usersListXScroll.scrollLeftAriaLabel")}
           >
             <ChevronLeft size={20} />
           </button>
@@ -157,7 +161,7 @@ const UsersListXScroll = ({
             type="button"
             className={`${styles.chevronButton} ${styles.chevronRight}`}
             onClick={() => scrollBy("right")}
-            aria-label="Défiler vers la droite"
+            aria-label={t("usersListXScroll.scrollRightAriaLabel")}
           >
             <ChevronRight size={20} />
           </button>

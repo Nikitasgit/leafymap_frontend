@@ -11,14 +11,15 @@ import { useUserProducts } from "@/hooks/useUserProducts";
 import { useApp } from "@/hooks/useApp";
 import useSubmitProduct from "@/hooks/useSubmitProduct";
 import { useToast } from "@/hooks/useToast";
-import LoadingBar from "@/components/common/loading/LoadingBar";
-import { Product, ProductCategory } from "@/types/product";
+import AccountTabShell from "@/components/account/AccountTabShell";
+import { ProductCategory } from "@/types/product";
+import { resolveRefId } from "@/lib/api/normalizers/resolveRef";
 import styles from "./MyProductsTab.module.scss";
 
 const MAX_PRODUCTS_PER_USER = 10;
 
 export default function MyProductsTab() {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("account");
   const { user, isLoading: isLoadingUser } = useCurrentUser();
   const { productCategories, loading: isLoadingCategories } = useApp();
   const {
@@ -35,7 +36,7 @@ export default function MyProductsTab() {
     const type = option.type;
     if (!type || typeof type !== "object") return "";
     const name = (type as { name?: string }).name ?? "";
-    return name ? t(`categoryTypes.${name}`, t(`placeTypes.${name}`, name)) : "";
+    return name ? t(`common:categoryTypes.${name}`, t(`common:placeTypes.${name}`, name)) : "";
   };
 
   const options = useMemo(
@@ -46,16 +47,13 @@ export default function MyProductsTab() {
         if (ga !== gb) return ga.localeCompare(gb);
         return (a.name ?? "").localeCompare(b.name ?? "");
       }),
-    [productCategories, t]
+    [productCategories],
   );
 
   const value = useMemo(() => {
     return products
       .map((p) => {
-        const id =
-          typeof p.productCategory === "object" && p.productCategory
-            ? (p.productCategory as ProductCategory)._id
-            : (p.productCategory as string);
+        const id = resolveRefId(p.productCategory);
         return productCategories.find((c) => c._id === id);
       })
       .filter((c): c is ProductCategory => c != null);
@@ -63,7 +61,7 @@ export default function MyProductsTab() {
 
   const handleChange = async (
     _: React.SyntheticEvent,
-    newValue: ProductCategory[]
+    newValue: ProductCategory[],
   ) => {
     if (!user) return;
     const prevIds = new Set(value.map((c) => c._id));
@@ -73,7 +71,9 @@ export default function MyProductsTab() {
       if (!prevIds.has(cat._id)) {
         if (atLimit) {
           showError(
-            `Vous ne pouvez pas ajouter plus de ${MAX_PRODUCTS_PER_USER} produits.`
+            t("myProductsTab.maxProductsError", {
+              count: MAX_PRODUCTS_PER_USER,
+            }),
           );
           return;
         }
@@ -84,13 +84,9 @@ export default function MyProductsTab() {
     }
     for (const cat of value) {
       if (!nextIds.has(cat._id)) {
-        const product = products.find((p) => {
-          const id =
-            typeof p.productCategory === "object" && p.productCategory
-              ? (p.productCategory as ProductCategory)._id
-              : (p.productCategory as string);
-          return id === cat._id;
-        });
+        const product = products.find(
+          (p) => resolveRefId(p.productCategory) === cat._id,
+        );
         if (product) {
           const ok = await deleteProduct(product._id);
           if (ok) await refetch();
@@ -100,29 +96,17 @@ export default function MyProductsTab() {
     }
   };
 
-  if (isLoadingUser || isLoadingProducts || isLoadingCategories) {
-    return <LoadingBar />;
-  }
-
-  if (!user) {
+  if (!user && !isLoadingUser) {
     return null;
   }
 
   return (
-    <div className={styles.myProductsTab}>
-      <div className={styles.headerSection}>
-        <div className={styles.header}>
-          <p className={styles.label}>
-            <Package size={20} className={styles.icon} />
-            Mes produits
-          </p>
-          <p className={styles.info}>
-            Les catégories de produits que vous proposez, affichées sur votre
-            profil.
-          </p>
-        </div>
-      </div>
-
+    <AccountTabShell
+      icon={<Package size={20} />}
+      title={t("myProductsTab.title")}
+      description={t("myProductsTab.description")}
+      isLoading={isLoadingUser || isLoadingProducts || isLoadingCategories}
+    >
       <div className={styles.autocompleteWrap}>
         <Autocomplete
           multiple
@@ -131,7 +115,7 @@ export default function MyProductsTab() {
           options={options}
           getOptionLabel={(option) =>
             option.name
-              ? t(`productCategories.${option.name}`, option.name)
+              ? t(`common:productCategories.${option.name}`, option.name)
               : ""
           }
           groupBy={(option) => getCategoryGroupName(option)}
@@ -145,16 +129,18 @@ export default function MyProductsTab() {
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Catégories de produits"
+              label={t("myProductsTab.categoriesLabel")}
               placeholder={
                 atLimit
-                  ? "Limite atteinte (10/10)"
-                  : "Ajouter une catégorie..."
+                  ? t("myProductsTab.limitReachedPlaceholder")
+                  : t("myProductsTab.addCategoryPlaceholder")
               }
               helperText={
                 atLimit
-                  ? "Vous avez atteint la limite de 10 produits. Supprimez-en un pour en ajouter un autre."
-                  : `Maximum ${MAX_PRODUCTS_PER_USER} produits`
+                  ? t("myProductsTab.limitReachedHelper")
+                  : t("myProductsTab.maxProductsHelper", {
+                      count: MAX_PRODUCTS_PER_USER,
+                    })
               }
             />
           )}
@@ -181,6 +167,6 @@ export default function MyProductsTab() {
           }}
         />
       </div>
-    </div>
+    </AccountTabShell>
   );
 }

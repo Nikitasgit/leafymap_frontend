@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import Button from "../Button";
 import { ArrowLeft } from "lucide-react";
 import styles from "./BackButton.module.scss";
 import { useRouter } from "next/navigation";
 
 const BackButton = ( { path}: { path?: string } ) => {
+  const { t } = useTranslation("common");
   const router = useRouter();
 
   const handleBack = () => {
@@ -23,9 +25,9 @@ const BackButton = ( { path}: { path?: string } ) => {
       onClick={handleBack}
       className={styles.backButton}
       startIcon={<ArrowLeft size={16} />}
-      ariaLabel="Retour"
+      ariaLabel={t("actions.back")}
     >
-      Retour
+      {t("actions.back")}
     </Button>
   );
 };

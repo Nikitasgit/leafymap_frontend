@@ -1,13 +1,17 @@
+"use client";
+
 import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
 import { Calendar } from "lucide-react";
 import { registerLocale } from "react-datepicker";
 import { fr } from "date-fns/locale/fr";
+import { enUS } from "date-fns/locale/en-US";
+import { useTranslation } from "react-i18next";
 import styles from "./DatesSelector.module.scss";
 
 registerLocale("fr", fr);
+registerLocale("en", enUS);
 
 interface DatesSelectorProps {
   startDate: Date | null;
@@ -26,6 +30,9 @@ const DatesSelector: React.FC<DatesSelectorProps> = ({
   setIsPeriod,
   title,
 }) => {
+  const { t, i18n } = useTranslation("common");
+  const dateLocale = i18n.language === "fr" ? "fr" : "en";
+
   const handleDateChange = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     onDateChange(start, end);
@@ -56,9 +63,9 @@ const DatesSelector: React.FC<DatesSelectorProps> = ({
               !isPeriod ? styles.active : ""
             }`}
             onClick={() => handleToggleClick(false)}
-            aria-label="Un jour"
+            aria-label={t("datesSelector.singleDayAriaLabel")}
           >
-            Un jour
+            {t("datesSelector.singleDay")}
           </button>
           <button
             type="button"
@@ -66,9 +73,9 @@ const DatesSelector: React.FC<DatesSelectorProps> = ({
               isPeriod ? styles.active : ""
             }`}
             onClick={() => handleToggleClick(true)}
-            aria-label="Période"
+            aria-label={t("datesSelector.periodAriaLabel")}
           >
-            Période
+            {t("datesSelector.period")}
           </button>
         </div>
 
@@ -82,8 +89,8 @@ const DatesSelector: React.FC<DatesSelectorProps> = ({
               selectsRange
               dateFormat="dd/MM/yyyy"
               minDate={new Date()}
-              placeholderText="Sélectionner la période"
-              locale="fr"
+              placeholderText={t("datesSelector.selectPeriodPlaceholder")}
+              locale={dateLocale}
               className={styles.datePicker}
               isClearable
               onClickOutside={(e) => e.stopPropagation()}
@@ -94,8 +101,8 @@ const DatesSelector: React.FC<DatesSelectorProps> = ({
               onChange={handleSingleDateChange}
               dateFormat="dd/MM/yyyy"
               minDate={new Date()}
-              placeholderText="Sélectionner la date"
-              locale="fr"
+              placeholderText={t("datesSelector.selectDatePlaceholder")}
+              locale={dateLocale}
               className={styles.datePicker}
               isClearable
               onClickOutside={(e) => e.stopPropagation()}

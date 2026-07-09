@@ -2,42 +2,26 @@
 
 import React from "react";
 import { Ticket } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useMyEventBookings } from "@/hooks/useMyEventBookings";
 import MyEventBookingsList from "../MyEventBookingsList";
-import EmptyState from "@/components/common/noResults/EmptyState";
-import LoadingBar from "@/components/common/loading/LoadingBar";
-import styles from "./MyEventBookingsTab.module.scss";
+import AccountTabShell from "@/components/account/AccountTabShell";
 
 export default function MyEventBookingsTab() {
+  const { t } = useTranslation("events");
   const { eventBookings, isLoading, refetch } = useMyEventBookings();
 
-  if (isLoading) {
-    return <LoadingBar />;
-  }
-
   return (
-    <div className={styles.content}>
-      <div className={styles.headerSection}>
-        <div className={styles.header}>
-          <p className={styles.label}>
-            <Ticket size={20} className={styles.icon} />
-            Mes réservations
-          </p>
-          <p className={styles.info}>
-            Retrouvez vos réservations pour des évènements. Vous pouvez
-            modifier le nombre de places ou annuler une réservation.
-          </p>
-        </div>
-      </div>
-      {eventBookings.length === 0 ? (
-        <EmptyState
-          title="Aucune réservation"
-          description="Vous n'avez réservé aucun évènement pour le moment."
-          icon={<Ticket className={styles.emptyIcon} />}
-        />
-      ) : (
-        <MyEventBookingsList eventBookings={eventBookings} onChange={refetch} />
-      )}
-    </div>
+    <AccountTabShell
+      icon={<Ticket size={20} />}
+      title={t("myEventBookingsTab.title")}
+      description={t("myEventBookingsTab.description")}
+      isLoading={isLoading}
+      isEmpty={eventBookings.length === 0}
+      emptyTitle={t("myEventBookingsTab.emptyTitle")}
+      emptyMessage={t("myEventBookingsTab.emptyMessage")}
+    >
+      <MyEventBookingsList eventBookings={eventBookings} onChange={refetch} />
+    </AccountTabShell>
   );
 }

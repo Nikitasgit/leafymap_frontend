@@ -16,6 +16,7 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import useUpdateUser from "@/hooks/useSubmitUser";
 import { useToast } from "@/hooks/useToast";
 import { validateLegalNameFields } from "@/validations/userValidations";
+import { useTranslation } from "react-i18next";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import {
   accountSettingsProfileFromUser,
@@ -23,6 +24,7 @@ import {
   type AccountSettingsProfile,
 } from "./accountSettingsProfile";
 import styles from "./AccountSettingsContainer.module.scss";
+import { validationT } from "@/utils/i18n/validationT";
 
 const AccountSettingsContainer = () => {
   const { deleteAccount, isLoading } = useDeleteAccount();
@@ -37,6 +39,7 @@ const AccountSettingsContainer = () => {
   } = useCurrentUser();
   const { submitUser } = useUpdateUser();
   const { showSuccess, showError } = useToast();
+  const { t } = useTranslation("account");
 
   const [user, setUser] = useState<AccountSettingsProfile | null>(null);
   const [userErrors, setUserErrors] = useState<Record<string, string>>({});
@@ -79,7 +82,7 @@ const AccountSettingsContainer = () => {
           preferences: { emailNotifications: checked },
         });
         if (result === true) {
-          showSuccess("Préférence enregistrée");
+          showSuccess(t("accountSettingsContainer.preferenceSaved"));
           await refetch();
         } else {
           throw new Error("Preference update failed");
@@ -96,21 +99,21 @@ const AccountSettingsContainer = () => {
               }
             : prev
         );
-        showError("Impossible d'enregistrer la préférence");
+        showError(t("accountSettingsContainer.preferenceSaveError"));
       } finally {
         setIsSavingEmailNotifications(false);
       }
     },
-    [refetch, showError, showSuccess, submitUser, user]
+    [refetch, showError, showSuccess, submitUser, t, user]
   );
 
   const handleSaveProfile = useCallback(async () => {
     if (!user) return;
 
-    const { errors, isValid } = validateLegalNameFields(user);
+    const { errors, isValid } = validateLegalNameFields(validationT(t))(user);
     setUserErrors(errors);
     if (!isValid) {
-      showError("Veuillez corriger les erreurs du formulaire");
+      showError(t("accountSettingsContainer.formValidationError"));
       return;
     }
 
@@ -133,10 +136,10 @@ const AccountSettingsContainer = () => {
       lastname: user.lastname,
     });
     if (result === true) {
-      showSuccess("Informations enregistrées");
+      showSuccess(t("accountSettingsContainer.profileSaved"));
       await refetch();
     }
-  }, [refetch, sessionUser, showError, showSuccess, submitUser, user]);
+  }, [refetch, sessionUser, showError, showSuccess, submitUser, t, user]);
 
   const isUserFormLoading = userLoading || !sessionUser || !user;
 
@@ -154,8 +157,8 @@ const AccountSettingsContainer = () => {
     <div className={styles.pageContainer}>
       <section className={styles.container} aria-labelledby="settings-title">
         <PageHeader
-          subtitle="Gérez vos paramètres de compte"
-          title="Paramètres du compte"
+          subtitle={t("accountSettingsContainer.subtitle")}
+          title={t("accountSettingsContainer.title")}
           showBackButton
         />
         {isUserFormLoading ? (
@@ -164,11 +167,13 @@ const AccountSettingsContainer = () => {
           <div className={styles.informationsForm}>
             <div className={infoStyles.container}>
               <fieldset className={infoStyles.section}>
-                <legend className={infoStyles.title}>Informations</legend>
+                <legend className={infoStyles.title}>
+                  {t("accountSettingsContainer.informationsSection")}
+                </legend>
                 <div className={infoStyles.infosContainer}>
                   <TextField
                     fullWidth
-                    label="Prénom"
+                    label={t("accountSettingsContainer.firstnameLabel")}
                     name="firstname"
                     value={capitalizeFirstLetter(user.firstname)}
                     onChange={handleUserChange}
@@ -178,7 +183,7 @@ const AccountSettingsContainer = () => {
                   />
                   <TextField
                     fullWidth
-                    label="Nom"
+                    label={t("accountSettingsContainer.lastnameLabel")}
                     name="lastname"
                     value={capitalizeFirstLetter(user.lastname)}
                     onChange={handleUserChange}
@@ -189,7 +194,9 @@ const AccountSettingsContainer = () => {
                 </div>
               </fieldset>
               <fieldset className={infoStyles.section}>
-                <legend className={infoStyles.title}>Notifications</legend>
+                <legend className={infoStyles.title}>
+                  {t("accountSettingsContainer.notificationsSection")}
+                </legend>
                 <label className={styles.notificationPreference}>
                   <input
                     type="checkbox"
@@ -200,12 +207,12 @@ const AccountSettingsContainer = () => {
                   />
                   <span className={styles.notificationText}>
                     <span className={styles.notificationTitle}>
-                      Recevoir les notifications par e-mail
+                      {t("accountSettingsContainer.emailNotificationsTitle")}
                     </span>
                     <span className={styles.notificationDescription}>
-                      Vous recevrez un e-mail lorsqu'une notification importante
-                      est créée pour votre compte.
-                      {isSavingEmailNotifications && " Enregistrement..."}
+                      {t("accountSettingsContainer.emailNotificationsDescription")}
+                      {isSavingEmailNotifications &&
+                        t("accountSettingsContainer.saving")}
                     </span>
                   </span>
                 </label>
@@ -215,7 +222,7 @@ const AccountSettingsContainer = () => {
         )}
         <section
           className={styles.settingsContainer}
-          aria-label="Actions sensibles sur le compte"
+          aria-label={t("accountSettingsContainer.sensitiveActionsAriaLabel")}
         >
           {placeId && (
             <article className={styles.deletePlaceCard}>
@@ -225,17 +232,16 @@ const AccountSettingsContainer = () => {
                     id="place-delete-title"
                     className={styles.deletePlaceTitle}
                   >
-                    Supprimer mon lieu
+                    {t("accountSettingsContainer.deletePlaceTitle")}
                   </h3>
                   <InfoIcon
-                    tooltip="La suppression de votre lieu est définitive : événements, photos du lieu, avis sur le lieu et sur ses événements, ainsi que les commentaires associés à ces avis seront supprimés."
+                    tooltip={t("accountSettingsContainer.deletePlaceTooltip")}
                     place="right"
                     className={styles.infoIcon}
                   />
                 </div>
                 <p className={styles.deletePlaceDescription}>
-                  Retirez votre lieu de la carte et supprimez toutes les données
-                  liées (événements, avis, commentaires).
+                  {t("accountSettingsContainer.deletePlaceDescription")}
                 </p>
                 {placeLabel && (
                   <p className={styles.placeAddress}>
@@ -249,9 +255,9 @@ const AccountSettingsContainer = () => {
                 onClick={() => setIsDeletePlaceModalOpen(true)}
                 disabled={isDeletingPlace}
                 startIcon={<Trash2 size={16} />}
-                ariaLabel="Supprimer mon lieu et toutes les données associées"
+                ariaLabel={t("accountSettingsContainer.deletePlaceAriaLabel")}
               >
-                Supprimer le lieu
+                {t("accountSettingsContainer.deletePlaceButton")}
               </Button>
             </article>
           )}
@@ -259,17 +265,16 @@ const AccountSettingsContainer = () => {
             <div className={styles.deleteAccountInfo}>
               <div className={styles.titleRow}>
                 <h3 id="danger-zone-title" className={styles.deleteTitle}>
-                  Supprimer mon compte
+                  {t("accountSettingsContainer.deleteAccountTitle")}
                 </h3>
                 <InfoIcon
-                  tooltip="La suppression de votre compte entraînera la suppression définitive de : vos lieux, vos événements, vos partenariats, vos avis et commentaires et votre profil utilisateur. Cette action est irréversible et ne peut pas être annulée."
+                  tooltip={t("accountSettingsContainer.deleteAccountTooltip")}
                   place="right"
                   className={styles.infoIcon}
                 />
               </div>
               <p className={styles.deleteDescription}>
-                Suppression définitive de votre compte et de toutes vos données.
-                Cette action est irréversible.
+                {t("accountSettingsContainer.deleteAccountDescription")}
               </p>
             </div>
 
@@ -278,9 +283,11 @@ const AccountSettingsContainer = () => {
               onClick={deleteAccount}
               disabled={isLoading}
               startIcon={<Trash2 size={16} />}
-              ariaLabel="Supprimer définitivement mon compte et toutes mes données"
+              ariaLabel={t("accountSettingsContainer.deleteAccountAriaLabel")}
             >
-              {isLoading ? "Suppression..." : "Supprimer"}
+              {isLoading
+                ? t("accountSettingsContainer.deleting")
+                : t("common:actions.delete")}
             </Button>
           </article>
         </section>
@@ -288,18 +295,18 @@ const AccountSettingsContainer = () => {
           <BaseModal
             isOpen={isDeletePlaceModalOpen}
             onClose={() => setIsDeletePlaceModalOpen(false)}
-            title="Supprimer ce lieu ?"
-            primaryButtonLabel="Supprimer définitivement"
-            secondaryButtonLabel="Annuler"
+            title={t("accountSettingsContainer.deletePlaceModalTitle")}
+            primaryButtonLabel={t(
+              "accountSettingsContainer.deletePlaceModalPrimary",
+            )}
+            secondaryButtonLabel={t("common:actions.cancel")}
             onPrimaryAction={handleConfirmDeletePlace}
             primaryButtonType="button"
             isSubmitLoading={isDeletingPlace}
             withLoadingState={false}
           >
             <p className={styles.modalMessage}>
-              Cette action est irréversible. Votre lieu, ses images, tous ses
-              événements, les avis (lieu et événements) et les commentaires
-              associés seront supprimés.
+              {t("accountSettingsContainer.deletePlaceModalBody")}
             </p>
           </BaseModal>
         )}

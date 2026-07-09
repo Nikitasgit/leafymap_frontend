@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import Button from "@/components/common/buttons/Button";
 import TextField from "@/components/common/inputs/TextField";
 import useSubmitComment from "@/hooks/useSubmitComment";
@@ -20,11 +21,13 @@ const CommentInput: React.FC<CommentInputProps> = ({
   referenceType,
   onSuccess,
   onCancel,
-  placeholder = "Écrivez votre réponse...",
+  placeholder,
   comment,
 }) => {
+  const { t } = useTranslation("reviews");
   const isEditMode = !!comment;
   const [content, setContent] = useState(comment?.content || "");
+  const resolvedPlaceholder = placeholder ?? t("commentInput.defaultPlaceholder");
   const { submitComment, isLoading: isSubmitting } = useSubmitComment();
   const { updateComment, isLoading: isUpdating } = useUpdateComment();
   const isLoading = isSubmitting || isUpdating;
@@ -66,7 +69,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
         name="comment"
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder={placeholder}
+        placeholder={resolvedPlaceholder}
         multiline
         fullWidth
         rows={3}
@@ -83,7 +86,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
             onClick={onCancel}
             disabled={isLoading}
           >
-            Annuler
+            {t("common:actions.cancel")}
           </Button>
         )}
         <Button
@@ -94,11 +97,11 @@ const CommentInput: React.FC<CommentInputProps> = ({
         >
           {isLoading
             ? isEditMode
-              ? "Modification..."
-              : "Publication..."
+              ? t("commentInput.updating")
+              : t("commentInput.publishing")
             : isEditMode
-            ? "Enregistrer"
-            : "Publier"}
+            ? t("common:actions.save")
+            : t("commentInput.publish")}
         </Button>
       </div>
     </form>

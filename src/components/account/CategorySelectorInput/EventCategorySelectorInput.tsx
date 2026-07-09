@@ -24,7 +24,7 @@ const EventCategorySelectorInput = ({
   const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const { showError } = useToast();
-  const { t } = useTranslation(["subscription", "common"]);
+  const { t } = useTranslation("subscription");
   const ref = useRef<HTMLDivElement>(null);
 
   useOnClickOutside(ref, () => setIsOpen(false));
@@ -61,7 +61,7 @@ const EventCategorySelectorInput = ({
       {loading && <LoadingBar />}
       <TextField
         name="eventCategory"
-        label={t("subscription:eventCategorySelector.label")}
+        label={t("eventCategorySelector.label")}
         value={t(`common:eventCategories.${inputValue}`, {
           defaultValue: inputValue,
         })}
@@ -69,7 +69,7 @@ const EventCategorySelectorInput = ({
         readOnly
         required
         fullWidth
-        placeholder={t("subscription:eventCategorySelector.placeholder")}
+        placeholder={t("eventCategorySelector.placeholder")}
         onChange={(e) => setInputValue(e.target.value)}
         error={error}
         errorMessage={errorMessage}

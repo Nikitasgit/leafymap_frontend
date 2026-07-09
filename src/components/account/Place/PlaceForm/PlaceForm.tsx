@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import TimeTableForm from "@/components/account/Place/DefaultScheduleForm";
 import AddressInput from "@/components/common/inputs/AddressInput";
 import PlaceCategorySelectorInput from "@/components/account/CategorySelectorInput/PlaceCategorySelectorInput";
-import PlaceTypeSelectorInput from "@/components/account/Place/PlaceTypeSelectorInput";
 import RadioYesOrNo from "@/components/common/inputs/RadioYesOrNo";
 import MapComponent from "@/components/common/Map/MapComponent";
 import { useGeolocation } from "@/hooks/useGeolocation";
@@ -31,6 +31,7 @@ const PlaceForm = ({
   initialPlaceLocation?: Location | null;
   showRadioYesOrNo?: boolean;
 }) => {
+  const { t } = useTranslation("account");
   const mapRef = useRef<ExtendedMapRef | null>(null);
   const { latitude, longitude } = useGeolocation();
   const [mapReady, setMapReady] = useState(false);
@@ -95,7 +96,7 @@ const PlaceForm = ({
     <fieldset className={styles.placeForm}>
       {showRadioYesOrNo && (
         <RadioYesOrNo
-          label="Souhaitez-vous afficher votre lieu sur la carte pour recevoir des visiteurs?"
+          label={t("placeForm.displayOnMapLabel")}
           name="userWithPlace"
           value={place.active ? "yes" : "no"}
           onChange={handleDisplayPlaceChange}
@@ -103,7 +104,7 @@ const PlaceForm = ({
       )}
       {place.active && (
         <div>
-          <legend className={styles.title}>Lieu</legend>
+          <legend className={styles.title}>{t("placeForm.placeLegend")}</legend>
           <div className={styles.placeFormContainer}>
             <AddressInput
               onLocationSelect={onLocationSelect}
@@ -115,7 +116,7 @@ const PlaceForm = ({
 
             <div className={styles.mapSection}>
               <p className={styles.mapTitle}>
-                Cliquez sur la carte pour positionner votre lieu
+                {t("placeForm.mapInstructions")}
               </p>
               <div className={styles.mapContainer}>
                 <MapComponent
@@ -129,15 +130,9 @@ const PlaceForm = ({
                 />
               </div>
             </div>
-            <PlaceTypeSelectorInput
-              value={place.placeType || []}
-              onChange={onChange}
-              error={!!errors.placeType}
-            />
             <PlaceCategorySelectorInput
               value={(place.placeCategory as string) || ""}
               onChange={onChange}
-              selectedTypes={place.placeType || []}
               error={!!errors.placeCategory}
             />
           </div>

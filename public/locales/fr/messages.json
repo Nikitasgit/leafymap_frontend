@@ -1,0 +1,30 @@
+{
+  "messagesList": {
+    "emptyTitle": "Aucun message",
+    "emptyDescription": "Commencez la conversation en envoyant un message"
+  },
+  "messageInput": {
+    "placeholder": "Écrivez un message..."
+  },
+  "message": {
+    "emptyContent": "Message vide"
+  },
+  "inboxContainer": {
+    "sectionTitle": "Conversations"
+  },
+  "conversationsList": {
+    "emptyTitle": "Aucune conversation",
+    "emptyDescription": "Vous n'avez pas encore de conversations"
+  },
+  "conversationCard": {
+    "noMessage": "Aucun message"
+  },
+  "partnershipMessage": {
+    "defaultUser": "Utilisateur",
+    "invitation": "<strong>{{senderName}}</strong> souhaite vous ajouter comme collaborateur de son lieu"
+  },
+  "useSendMessage": {
+    "success": "Message envoyé",
+    "error": "Erreur lors de l'envoi du message"
+  }
+}

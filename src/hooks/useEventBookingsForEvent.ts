@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { EventBookingWithUser } from "@/types/eventBooking";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export const useEventBookingsForEvent = (eventId?: string) => {
   const [eventBookings, setEventBookings] = useState<EventBookingWithUser[]>(
@@ -10,12 +12,13 @@ export const useEventBookingsForEvent = (eventId?: string) => {
   );
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
+  const { t } = useTranslation("events");
 
   const fetchEventBookings = useCallback(async () => {
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/event-bookings/event/${eventId}`,
-        { withCredentials: true }
+      const response = await apiClient.get(
+        `/api/event-bookings/event/${eventId}`,
+        {}
       );
 
       if (response.data && response.data.data) {
@@ -24,12 +27,10 @@ export const useEventBookingsForEvent = (eventId?: string) => {
         setEventBookings([]);
       }
     } catch (err) {
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : "Erreur lors du chargement des réservations";
+      showError(
+        getErrorMessage(err, t, t("eventBookingsForEvent.loadError"))
+      );
       setEventBookings([]);
-      showError(errorMessage);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventId]);
@@ -51,4 +52,3 @@ export const useEventBookingsForEvent = (eventId?: string) => {
 
   return { eventBookings, isLoading, refetch };
 };
-

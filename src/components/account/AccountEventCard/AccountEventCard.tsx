@@ -1,3 +1,5 @@
+"use client";
+
 import { Event } from "@/types/place/event";
 import ProfilePictureUploader from "@/components/common/inputs/ProfilePictureUploader";
 import EventStatus from "@/components/common/events/EventStatus";
@@ -10,6 +12,7 @@ import useDeleteEvent from "@/hooks/useDeleteEvent";
 import ActionButtons from "@/components/common/actions/ActionButtons";
 import { capitalizeFirstLetter } from "@/utils/functions";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 interface AccountEventCardProps {
   event: Event;
@@ -17,6 +20,7 @@ interface AccountEventCardProps {
 }
 
 const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
+  const { t } = useTranslation("events");
   const { submitEvent } = useSubmitEvent();
   const { deleteEvent, isLoading: isDeletingEvent } = useDeleteEvent();
   const router = useRouter();
@@ -52,7 +56,7 @@ const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
               {
                 type: "delete",
                 onClick: () => deleteEvent(event._id),
-                ariaLabel: "Supprimer l'événement",
+                ariaLabel: t("accountEventCard.deleteAriaLabel"),
                 disabled: isDeletingEvent,
               },
               {
@@ -63,7 +67,7 @@ const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
                       ? `/account/places/${placeId}/events/${event._id}`
                       : `/account/events/${event._id}`,
                   ),
-                ariaLabel: "Modifier l'événement",
+                ariaLabel: t("accountEventCard.editAriaLabel"),
               },
             ]}
             className={styles.actionButtons}

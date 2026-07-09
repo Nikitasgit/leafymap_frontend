@@ -1,0 +1,93 @@
+{
+  "common": {
+    "phone": {
+      "tenDigits": "Le numéro de téléphone doit contenir 10 chiffres"
+    },
+    "email": {
+      "required": "L'email est requis",
+      "invalid": "L'email n'est pas valide"
+    },
+    "website": {
+      "invalidUrl": "L'URL du site web n'est pas valide"
+    },
+    "description": {
+      "minLength": "La description doit contenir au moins 10 caractères",
+      "maxLength": "La description ne peut pas dépasser 300 caractères"
+    },
+    "firstname": {
+      "required": "Le prénom est requis",
+      "maxLength": "Le prénom ne peut pas dépasser 50 caractères",
+      "invalidChars": "Le prénom ne peut contenir que des lettres, espaces, tirets et apostrophes"
+    },
+    "lastname": {
+      "required": "Le nom est requis",
+      "maxLength": "Le nom ne peut pas dépasser 50 caractères",
+      "invalidChars": "Le nom ne peut contenir que des lettres, espaces, tirets et apostrophes"
+    },
+    "name": {
+      "required": "Le nom est requis",
+      "minLength": "Le nom doit contenir au moins 4 caractères",
+      "maxLength": "Le nom ne peut pas dépasser 30 caractères",
+      "invalidChars": "Le nom ne peut contenir que des lettres, chiffres, espaces et le caractère '"
+    }
+  },
+  "auth": {
+    "password": {
+      "required": "Le mot de passe est requis",
+      "minLength": "Le mot de passe doit contenir au moins 10 caractères",
+      "maxLength": "Le mot de passe ne peut pas dépasser 100 caractères",
+      "complexity": "Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre"
+    },
+    "passwordConfirm": {
+      "required": "La confirmation du mot de passe est requise",
+      "mismatch": "Les mots de passe ne correspondent pas"
+    },
+    "cgu": {
+      "required": "Vous devez accepter les Conditions Générales d'Utilisation"
+    },
+    "identifier": {
+      "required": "L'identifiant est requis",
+      "invalid": "L'identifiant doit être un email valide ou un nom d'utilisateur valide (3-30 caractères, lettres, chiffres, tirets et underscores uniquement)"
+    },
+    "token": {
+      "required": "Le token est requis"
+    }
+  },
+  "event": {
+    "name": {
+      "required": "Le nom est requis",
+      "minLength": "Le nom doit contenir au moins 4 caractères",
+      "maxLength": "Le nom ne peut pas dépasser 40 caractères",
+      "invalidChars": "Le nom ne peut contenir que des lettres, chiffres, espaces et le caractère '"
+    },
+    "category": {
+      "required": "La catégorie est requise"
+    },
+    "schedule": {
+      "minDates": "Le programme doit contenir au moins une date"
+    },
+    "location": {
+      "required": "Un lieu ou une adresse est requis pour un évènement présentiel"
+    },
+    "capacity": {
+      "positiveInteger": "La capacité doit être un nombre entier supérieur à 0"
+    },
+    "maxSeatsPerBooking": {
+      "positive": "Le nombre de places par réservation doit être supérieur à 0",
+      "exceedsCapacity": "Le nombre de places par réservation ne peut pas dépasser la capacité totale"
+    }
+  },
+  "place": {
+    "category": {
+      "required": "La catégorie du lieu est requise"
+    },
+    "address": {
+      "required": "L'adresse du lieu est obligatoire"
+    }
+  },
+  "user": {
+    "category": {
+      "required": "Veuillez sélectionner une catégorie"
+    }
+  }
+}

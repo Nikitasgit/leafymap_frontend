@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { Trans, useTranslation } from "react-i18next";
 import AccountEventCard from "@/components/account/AccountEventCard";
 import { Event } from "@/types/place/event";
 import styles from "./AccountEventsList.module.scss";
@@ -15,21 +18,26 @@ const EventsList: React.FC<EventsListProps> = ({
   placeId,
   placeName,
 }) => {
+  const { t } = useTranslation("events");
+
   return (
     <section className={styles.content}>
       <h2 className={styles.placeName}>
         {placeName ? (
-          <>
-            Les événements de <span>{placeName}</span> :
-          </>
+          <Trans
+            i18nKey="accountEventsList.placeEventsTitle"
+            ns="events"
+            values={{ placeName }}
+            components={{ span: <span /> }}
+          />
         ) : (
-          "Mes événements :"
+          t("accountEventsList.myEventsTitle")
         )}
       </h2>
       {events.length === 0 ? (
         <EmptyState
-          title="Aucun événement"
-          description="Commencez par créer votre premier événement pour attirer des visiteurs."
+          title={t("accountEventsList.emptyTitle")}
+          description={t("accountEventsList.emptyDescription")}
         />
       ) : (
         <div className={styles.eventsList}>

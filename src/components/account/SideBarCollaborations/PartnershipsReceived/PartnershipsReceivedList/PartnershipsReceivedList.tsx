@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Partnership } from "@/types/partnerships";
 import PartnershipCard from "@/components/common/partnerships/PartnershipCard";
 import Button from "@/components/common/buttons/Button";
@@ -21,6 +22,8 @@ export default function PartnershipsReceivedList({
   onAccept,
   onRefuse,
 }: PartnershipsReceivedListProps) {
+  const { t } = useTranslation("account");
+
   if (isLoading) {
     return null;
   }
@@ -38,7 +41,7 @@ export default function PartnershipsReceivedList({
               user={
                 partnership.initiator ?? {
                   _id: partnership._id,
-                  username: "Utilisateur",
+                  username: t("partnershipsReceivedList.fallbackUsername"),
                 }
               }
               showCategory
@@ -51,9 +54,9 @@ export default function PartnershipsReceivedList({
                 fullWidth
                 onClick={() => onAccept?.(partnership._id)}
                 disabled={isUpdating}
-                ariaLabel="Accepter l'invitation"
+                ariaLabel={t("partnershipsReceivedList.acceptAriaLabel")}
               >
-                Accepter
+                {t("partnershipsReceivedList.accept")}
               </Button>
               <Button
                 type="button"
@@ -62,9 +65,9 @@ export default function PartnershipsReceivedList({
                 fullWidth
                 onClick={() => onRefuse?.(partnership._id)}
                 disabled={isUpdating}
-                ariaLabel="Refuser l'invitation"
+                ariaLabel={t("partnershipsReceivedList.refuseAriaLabel")}
               >
-                Refuser
+                {t("partnershipsReceivedList.refuse")}
               </Button>
             </div>
           </li>

@@ -1,45 +1,31 @@
-import axios from "axios";
 import { useLoading } from "./useLoading";
+import { apiClient } from "@/lib/api/client";
 import { useToast } from "./useToast";
+import useHandleApiErrors from "./useHandleApiErrors";
+import { useTranslation } from "react-i18next";
 
 const useDeleteComment = () => {
   const { isLoading, withLoading } = useLoading();
-  const { showError, showSuccess } = useToast();
+  const { showSuccess } = useToast();
+  const { handleApiError } = useHandleApiErrors();
+  const { t } = useTranslation("reviews");
 
   const deleteComment = async (commentId: string) => {
     try {
       await withLoading(() =>
-        axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${commentId}`,
+        apiClient.delete(
+          `/api/comments/${commentId}`,
           {
             headers: {
               "Content-Type": "application/json",
-            },
-            withCredentials: true,
+            }
           }
         )
       );
-      showSuccess("Commentaire supprimé avec succès");
+      showSuccess(t("useDeleteComment.success"));
       return true;
     } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response?.data) {
-        if (err.response.data.data) {
-          Object.values(err.response.data.data).forEach((error: unknown) => {
-            if (Array.isArray(error)) {
-              error.forEach((e: string) => {
-                showError(e);
-              });
-            } else if (typeof error === "string") {
-              showError(error);
-            }
-          });
-        } else {
-          showError(err.response.data.message);
-        }
-      } else {
-        showError("Une erreur inattendue s'est produite");
-      }
-      throw err;
+      handleApiError(err, undefined, true);
     }
   };
 

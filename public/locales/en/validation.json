@@ -1,0 +1,93 @@
+{
+  "common": {
+    "phone": {
+      "tenDigits": "Phone number must contain 10 digits"
+    },
+    "email": {
+      "required": "Email is required",
+      "invalid": "Email is not valid"
+    },
+    "website": {
+      "invalidUrl": "Website URL is not valid"
+    },
+    "description": {
+      "minLength": "Description must be at least 10 characters",
+      "maxLength": "Description cannot exceed 300 characters"
+    },
+    "firstname": {
+      "required": "First name is required",
+      "maxLength": "First name cannot exceed 50 characters",
+      "invalidChars": "First name can only contain letters, spaces, hyphens and apostrophes"
+    },
+    "lastname": {
+      "required": "Last name is required",
+      "maxLength": "Last name cannot exceed 50 characters",
+      "invalidChars": "Last name can only contain letters, spaces, hyphens and apostrophes"
+    },
+    "name": {
+      "required": "Name is required",
+      "minLength": "Name must be at least 4 characters",
+      "maxLength": "Name cannot exceed 30 characters",
+      "invalidChars": "Name can only contain letters, numbers, spaces and apostrophes"
+    }
+  },
+  "auth": {
+    "password": {
+      "required": "Password is required",
+      "minLength": "Password must be at least 10 characters",
+      "maxLength": "Password cannot exceed 100 characters",
+      "complexity": "Password must contain at least one lowercase letter, one uppercase letter and one digit"
+    },
+    "passwordConfirm": {
+      "required": "Password confirmation is required",
+      "mismatch": "Passwords do not match"
+    },
+    "cgu": {
+      "required": "You must accept the Terms of Use"
+    },
+    "identifier": {
+      "required": "Username or email is required",
+      "invalid": "Must be a valid email or username (3-30 characters, letters, numbers, hyphens and underscores only)"
+    },
+    "token": {
+      "required": "Token is required"
+    }
+  },
+  "event": {
+    "name": {
+      "required": "Name is required",
+      "minLength": "Name must be at least 4 characters",
+      "maxLength": "Name cannot exceed 40 characters",
+      "invalidChars": "Name can only contain letters, numbers, spaces and apostrophes"
+    },
+    "category": {
+      "required": "Category is required"
+    },
+    "schedule": {
+      "minDates": "Schedule must contain at least one date"
+    },
+    "location": {
+      "required": "A place or address is required for an in-person event"
+    },
+    "capacity": {
+      "positiveInteger": "Capacity must be a whole number greater than 0"
+    },
+    "maxSeatsPerBooking": {
+      "positive": "Seats per booking must be greater than 0",
+      "exceedsCapacity": "Seats per booking cannot exceed total capacity"
+    }
+  },
+  "place": {
+    "category": {
+      "required": "Place category is required"
+    },
+    "address": {
+      "required": "Place address is required"
+    }
+  },
+  "user": {
+    "category": {
+      "required": "Please select a category"
+    }
+  }
+}

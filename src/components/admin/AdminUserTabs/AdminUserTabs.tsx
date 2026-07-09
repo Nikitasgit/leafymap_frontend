@@ -1,20 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Calendar, ImageIcon, MapPin, MessageCircle, Star } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import Tab from "@/components/common/tabs/Tab";
 import TabsContainer from "@/components/common/tabs/TabsContainer";
 import AdminContentTable from "../AdminContentTable/AdminContentTable";
 import { AdminResource, AdminUserContent } from "@/lib/api/admin";
 import styles from "./AdminUserTabs.module.scss";
-
-const tabs = [
-  { id: "events", label: "Événements", icon: Calendar },
-  { id: "places", label: "Lieux", icon: MapPin },
-  { id: "images", label: "Images", icon: ImageIcon },
-  { id: "reviews", label: "Reviews", icon: Star },
-  { id: "comments", label: "Commentaires", icon: MessageCircle },
-] as const;
 
 const AdminUserTabs = ({
   content,
@@ -25,7 +18,20 @@ const AdminUserTabs = ({
   onDelete: (resource: AdminResource, id: string) => Promise<void>;
   onRestore: (resource: AdminResource, id: string) => Promise<void>;
 }) => {
+  const { t } = useTranslation("admin");
   const [activeTab, setActiveTab] = useState<AdminResource>("events");
+
+  const tabs = useMemo(
+    () =>
+      [
+        { id: "events", label: t("adminUserTabs.events"), icon: Calendar },
+        { id: "places", label: t("adminUserTabs.places"), icon: MapPin },
+        { id: "images", label: t("adminUserTabs.images"), icon: ImageIcon },
+        { id: "reviews", label: t("adminUserTabs.reviews"), icon: Star },
+        { id: "comments", label: t("adminUserTabs.comments"), icon: MessageCircle },
+      ] as const,
+    [t],
+  );
 
   return (
     <section className={styles.section}>

@@ -1,12 +1,10 @@
-import axios from "axios";
 import { APP_URL } from "@/utils/constants";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { apiClient } from "@/lib/api/client";
 
 export const getUserById = async (userId: string) => {
   try {
-    const url = `${API_URL}/api/users/${userId}`;
-    const response = await axios.get(url, {
+    const url = `/api/users/${userId}`;
+    const response = await apiClient.get(url, {
       headers: {
         Origin: APP_URL,
         "Content-Type": "application/json",

@@ -15,12 +15,18 @@ import {
   useImperativeHandle,
 } from "react";
 import { usePlacesInView } from "@/hooks/usePlacesInView";
+import { useEventsInView } from "@/hooks/useEventsInView";
 import CategoryMarker from "../CategoryMarker";
 import { ExtendedMapRef } from "@/types/map";
 import { DEFAULT_LOCATION } from "@/utils/constants";
 import { MapComponentProps, MapViewState } from "./Map.types";
 import type { GeolocateControl as GeolocateControlInstance } from "mapbox-gl";
 import { getPlaceCategoryName, getPlaceDisplayName } from "@/utils/place";
+import type { Event } from "@/types/place/event";
+import {
+  getEventCoordinates,
+  getEventCreatorId,
+} from "@/lib/api/normalizers/resolveRef";
 
 /** Delay so GeolocateControl is fully on the map before trigger. */
 const GEOLOCATE_TRIGGER_MS = 500;
@@ -38,11 +44,14 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
       height = "100vh",
       filters,
       onMapClick,
+      onMapDragStart,
       userMarker,
       withPlacesInView = false,
       onMarkerClick,
+      onEventMarkerClick,
       setLoading,
       selectedPlaceId,
+      selectedEventId,
       onMapReady,
       isFavoritesMode = false,
       externalPlaces,
@@ -50,6 +59,7 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
       onViewStateChange,
       activateGeolocationOnMount = false,
       followUserLocationWhenGeolocating = true,
+      displayMode = "places",
     },
     ref
   ) => {
@@ -84,8 +94,17 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
     const {
       places: filteredPlaces,
       fetchPlacesInView,
-      isLoading,
+      isLoading: isLoadingPlaces,
     } = usePlacesInView({ filters });
+    const {
+      events: filteredEvents,
+      fetchEventsInView,
+      isLoading: isLoadingEvents,
+    } = useEventsInView({ filters });
+
+    const shouldFetchInView = withPlacesInView && !isFavoritesMode;
+    const isLoading =
+      displayMode === "events" ? isLoadingEvents : isLoadingPlaces;
 
     const placesToShow =
       isFavoritesMode && Array.isArray(externalPlaces)
@@ -98,10 +117,12 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
         ...(mapRef.current ?? ({} as MapRef)),
         fetchPlacesInView: (bounds: mapboxgl.LngLatBounds | null) =>
           fetchPlacesInView(bounds, mapRef as React.RefObject<MapRef>),
+        fetchEventsInView: (bounds: mapboxgl.LngLatBounds | null) =>
+          fetchEventsInView(bounds, mapRef as React.RefObject<MapRef>),
         setSelectedPlaceId: setInternalSelectedPlaceId,
         isReady: Boolean(mapRef.current && isMapReady),
       }),
-      [isMapReady, fetchPlacesInView]
+      [isMapReady, fetchPlacesInView, fetchEventsInView]
     );
 
     useEffect(() => {
@@ -128,8 +149,12 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
           {...viewState}
           onMove={(e) => setViewState(e.viewState)}
           onMoveEnd={(e) => {
-            if (withPlacesInView && !isFavoritesMode) {
-              fetchPlacesInView(e.target.getBounds());
+            if (shouldFetchInView) {
+              if (displayMode === "events") {
+                fetchEventsInView(e.target.getBounds());
+              } else {
+                fetchPlacesInView(e.target.getBounds());
+              }
             }
           }}
           onClick={(e) => {
@@ -140,10 +165,17 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
               });
             }
           }}
+          onDragStart={() => {
+            onMapDragStart?.();
+          }}
           style={{ width, height }}
           onLoad={(e) => {
-            if (withPlacesInView && !isFavoritesMode) {
-              fetchPlacesInView(e.target.getBounds());
+            if (shouldFetchInView) {
+              if (displayMode === "events") {
+                fetchEventsInView(e.target.getBounds());
+              } else {
+                fetchPlacesInView(e.target.getBounds());
+              }
             }
             setIsMapReady(true);
             if (typeof onMapReady === "function") onMapReady();
@@ -164,29 +196,56 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
             positionOptions={GEO_OPTIONS}
           />
 
-          {placesToShow?.map((place) =>
-            place && place.location ? (
-              <CategoryMarker
-                key={place._id}
-                longitude={place.location.coordinates[0]}
-                latitude={place.location.coordinates[1]}
-                categoryName={getPlaceCategoryName(place.placeCategory)}
-                placeName={getPlaceDisplayName(place)}
-                zoom={viewState.zoom}
-                isSelected={place._id === internalSelectedPlaceId}
-                onClick={() => {
-                  setInternalSelectedPlaceId(place._id);
-                  const userId =
-                    place.user && typeof place.user === "object"
-                      ? (place.user as { _id: string })._id
-                      : undefined;
-                  if (userId && onMarkerClick) {
-                    onMarkerClick(userId);
+          {displayMode === "places" &&
+            placesToShow?.map((place) =>
+              place && place.location ? (
+                <CategoryMarker
+                  key={place._id}
+                  longitude={place.location.coordinates[0]}
+                  latitude={place.location.coordinates[1]}
+                  categoryName={getPlaceCategoryName(place.placeCategory)}
+                  placeName={getPlaceDisplayName(place)}
+                  zoom={viewState.zoom}
+                  isSelected={place._id === internalSelectedPlaceId}
+                  onClick={() => {
+                    setInternalSelectedPlaceId(place._id);
+                    const userId =
+                      place.user && typeof place.user === "object"
+                        ? (place.user as { _id: string })._id
+                        : undefined;
+                    if (userId && onMarkerClick) {
+                      onMarkerClick(userId);
+                    }
+                  }}
+                />
+              ) : null
+            )}
+
+          {displayMode === "events" &&
+            filteredEvents.map((event) => {
+              const coordinates = getEventCoordinates(event);
+              const creatorId = getEventCreatorId(event);
+              const categoryName =
+                typeof event.eventCategory === "object"
+                  ? event.eventCategory.name
+                  : "event";
+              if (!coordinates || !creatorId) return null;
+              const [longitude, latitude] = coordinates;
+              return (
+                <CategoryMarker
+                  key={event._id}
+                  longitude={longitude}
+                  latitude={latitude}
+                  categoryName={categoryName}
+                  placeName={event.name}
+                  zoom={viewState.zoom}
+                  isSelected={event._id === selectedEventId}
+                  onClick={() =>
+                    onEventMarkerClick?.(creatorId, event._id, coordinates)
                   }
-                }}
-              />
-            ) : null
-          )}
+                />
+              );
+            })}
 
           {userMarker && userMarker.location && (
             <CategoryMarker

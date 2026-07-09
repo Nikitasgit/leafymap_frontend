@@ -1,0 +1,20 @@
+{
+  "notificationsList": {
+    "empty": "No notifications"
+  },
+  "notificationCard": {
+    "ariaLabel": "{{displayName}}: {{message}}"
+  },
+  "actions": {
+    "message": "New message",
+    "partnership_invitation": "Collaboration request",
+    "partnership_accepted": "Collaboration accepted",
+    "event_invitation": "Event invitation",
+    "event_accepted": "Event invitation accepted",
+    "event_refused": "Event invitation declined",
+    "event_booking_cancelled": "Booking cancelled or modified",
+    "review": "New review",
+    "new_follower": "New follower",
+    "other": "Notification"
+  }
+}

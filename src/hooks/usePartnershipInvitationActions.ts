@@ -1,12 +1,15 @@
-import axios from "axios";
 import { useLoading } from "./useLoading";
+import { apiClient } from "@/lib/api/client";
 import { useToast } from "./useToast";
 import useDeletePartnership from "./useDeletePartnership";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export const usePartnershipInvitationActions = (onUpdate?: () => void) => {
   const { isLoading, withLoading } = useLoading();
   const { showError, showSuccess } = useToast();
   const { deletePartnership } = useDeletePartnership(onUpdate);
+  const { t } = useTranslation("account");
 
   const updatePartnerships = async (
     partnershipUpdates: Array<{
@@ -17,21 +20,24 @@ export const usePartnershipInvitationActions = (onUpdate?: () => void) => {
   ) => {
     try {
       await withLoading(() =>
-        axios.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/partnerships/update`,
+        apiClient.put(
+          `/api/partnerships/update`,
           { partnerships: partnershipUpdates },
           {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
+            headers: { "Content-Type": "application/json" }
           }
         )
       );
 
-      showSuccess("Invitation mise à jour");
+      showSuccess(t("usePartnershipInvitationActions.updateSuccess"));
       onUpdate?.();
     } catch (error) {
       console.error("Error updating partnership:", error);
-      showError("Erreur lors de la mise à jour de l'invitation");
+      showError(
+        getErrorMessage(
+          error, t, t("usePartnershipInvitationActions.updateError"),
+        ),
+      );
     }
   };
 
@@ -40,11 +46,17 @@ export const usePartnershipInvitationActions = (onUpdate?: () => void) => {
   };
 
   const refusePartnershipInvitation = async (partnershipId: string) => {
-    await deletePartnership(partnershipId, "Invitation refusée");
+    await deletePartnership(
+      partnershipId,
+      t("usePartnershipInvitationActions.refuseSuccess"),
+    );
   };
 
   const cancelPartnershipInvitation = async (partnershipId: string) => {
-    await deletePartnership(partnershipId, "Invitation annulée");
+    await deletePartnership(
+      partnershipId,
+      t("usePartnershipInvitationActions.cancelSuccess"),
+    );
   };
 
   return {

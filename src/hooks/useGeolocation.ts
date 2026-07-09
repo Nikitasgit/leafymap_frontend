@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 interface GeolocationState {
   latitude: number | null;
@@ -8,6 +9,7 @@ interface GeolocationState {
 }
 
 export const useGeolocation = () => {
+  const { t } = useTranslation("map");
   const [geolocation, setGeolocation] = useState<GeolocationState>({
     latitude: null,
     longitude: null,
@@ -20,7 +22,7 @@ export const useGeolocation = () => {
     if (typeof window === "undefined" || !navigator.geolocation) {
       setGeolocation((prev) => ({
         ...prev,
-        error: "La géolocalisation n'est pas supportée par ce navigateur",
+        error: t("useGeolocation.notSupported"),
         isLoading: false,
       }));
       return;
@@ -38,17 +40,17 @@ export const useGeolocation = () => {
 
     // user refused to share their location or the location is not available
     const error = (error: GeolocationPositionError) => {
-      let errorMessage = "Erreur de géolocalisation";
+      let errorMessage = t("useGeolocation.genericError");
 
       switch (error.code) {
         case error.PERMISSION_DENIED:
-          errorMessage = "Permission de géolocalisation refusée";
+          errorMessage = t("useGeolocation.permissionDenied");
           break;
         case error.POSITION_UNAVAILABLE:
-          errorMessage = "Position non disponible";
+          errorMessage = t("useGeolocation.positionUnavailable");
           break;
         case error.TIMEOUT:
-          errorMessage = "Délai d'attente dépassé";
+          errorMessage = t("useGeolocation.timeout");
           break;
       }
 
@@ -69,7 +71,7 @@ export const useGeolocation = () => {
 
     // get user's location
     navigator.geolocation.getCurrentPosition(success, error, options);
-  }, []);
+  }, [t]);
 
   return geolocation;
 };

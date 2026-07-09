@@ -3,23 +3,22 @@
 import Link from "next/link";
 import styles from "./CheckEmailMessage.module.scss";
 import Button from "@/components/common/buttons/Button";
+import { useTranslation } from "react-i18next";
 
 export default function CheckEmailMessage() {
+  const { t } = useTranslation("auth");
+
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>
-        <h1>Consultez votre boîte de réception</h1>
+        <h1>{t("checkEmailMessage.title")}</h1>
         <p className={styles.description}>
-          Nous vous avons envoyé un email avec un lien pour vérifier votre
-          adresse et activer votre compte. Le lien est valide 15 minutes.
+          {t("checkEmailMessage.description")}
         </p>
-        <p className={styles.checkSpam}>
-          Si vous ne voyez pas l&apos;email, vérifiez votre dossier spam ou
-          indésirables.
-        </p>
+        <p className={styles.checkSpam}>{t("checkEmailMessage.checkSpam")}</p>
         <Link href="/auth/signin">
           <Button variant="primary" size="medium" fullWidth>
-            Retour à la connexion
+            {t("checkEmailMessage.backToSignin")}
           </Button>
         </Link>
       </div>

@@ -1,0 +1,40 @@
+{
+  "gallerySection": {
+    "emptyTitle": "Aucune image dans la galerie",
+    "deleteImage": "Supprimer l'image",
+    "imageAlt": "Image {{index}}"
+  },
+  "userCard": {
+    "creatorBadge": "Créateur",
+    "visitProfile": "Visiter le profil"
+  },
+  "creatorTabs": {
+    "presentation": "Présentation",
+    "reviews": "Avis",
+    "events": "Événements",
+    "images": "Images"
+  },
+  "creatorActionButtons": {
+    "subscribed": "Abonné",
+    "subscribe": "S'abonner",
+    "unsubscribe": "Ne plus suivre",
+    "messages": "Messages",
+    "sendMessage": "Envoyer un message",
+    "directions": "Itinéraire",
+    "viewDirections": "Voir l'itinéraire",
+    "share": "Partager",
+    "saved": "Enregistré",
+    "save": "Enregistrer",
+    "removeFromFavorites": "Retirer des favoris"
+  },
+  "userSuggestionCard": {
+    "noDescription": "Aucune description disponible"
+  },
+  "eventSuggestionCard": {
+    "online": "En ligne"
+  },
+  "creatorHeader": {
+    "viewProfileAriaLabel": "Voir le profil de {{username}}",
+    "defaultUsername": "l'utilisateur"
+  }
+}

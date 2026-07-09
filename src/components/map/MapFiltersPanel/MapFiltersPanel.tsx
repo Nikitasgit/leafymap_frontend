@@ -5,6 +5,7 @@ import { MapFiltersPanelProps } from "./MapFiltersPanel.types";
 
 const MapFiltersPanel = ({
   filters,
+  displayMode,
   setFilters,
   onResetFilters,
   onClose,
@@ -35,6 +36,7 @@ const MapFiltersPanel = ({
     >
       <MapFiltersCard
         filters={filters}
+        displayMode={displayMode}
         onFiltersChange={setFilters}
         onResetFilters={onResetFilters}
         onClose={handleClose}

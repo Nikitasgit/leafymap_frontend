@@ -19,6 +19,7 @@ import { Partnership, PartnershipPopulated } from "@/types/partnerships";
 import { useSubmitEventInvitations } from "@/hooks/useSubmitEventInvitations";
 import { separateNewAndUpdatedArrayValues } from "@/utils/tempId";
 import { validateEventData } from "@/validations/eventValidations";
+import { useTranslation } from "react-i18next";
 import { useEventSchedule } from "@/hooks/useEventSchedule";
 import type { initialEventData, EventFormProps } from "./EventForm.types";
 import PartnershipsForm from "../../Partnership/PartnershipsForm";
@@ -27,6 +28,7 @@ import LocationPicker from "@/components/common/inputs/LocationPicker";
 import type { Event } from "@/types/place/event";
 import { EventCategorySelectorInput } from "../../CategorySelectorInput";
 import RadioYesOrNo from "@/components/common/inputs/RadioYesOrNo";
+import { validationT } from "@/utils/i18n/validationT";
 
 type LocationMode = "place" | "address" | "online";
 
@@ -85,6 +87,7 @@ const EventForm = ({
   const { submitEventInvitations, isLoading: submitEventInvitationsLoading } =
     useSubmitEventInvitations();
   const { showError, showSuccess } = useToast();
+  const { t } = useTranslation("events");
 
   const [partnerships, setPartnerships] =
     useState<Partnership[]>(partnershipsData);
@@ -125,13 +128,13 @@ const EventForm = ({
   };
 
   const validateFormData = useCallback((): boolean => {
-    const eventValidation = validateEventData(event);
+    const eventValidation = validateEventData(validationT(t))(event);
     setErrors((prev) => ({
       ...prev,
       event: eventValidation.errors,
     }));
     return eventValidation.isValid;
-  }, [event]);
+  }, [event, t]);
 
   useEffect(() => {
     if (eventData) setEvent(initialEventData(eventData));
@@ -194,7 +197,7 @@ const EventForm = ({
     setHasAttemptedSubmit(true);
     try {
       if (!validateFormData()) {
-        showError("Veuillez corriger les erreurs du formulaire");
+        showError(t("eventForm.validationError"));
         return;
       }
       if (event) {
@@ -227,8 +230,8 @@ const EventForm = ({
       }
       showSuccess(
         isUpdate
-          ? "Évènement modifié avec succès"
-          : "Évènement créé avec succès"
+          ? t("eventForm.updateSuccess")
+          : t("eventForm.createSuccess")
       );
       router.push(
         getAccountSidebarPath(SIDEBAR_VALUES.EVENTS, EVENTS_TAB_IDS.MY_EVENTS)
@@ -236,8 +239,8 @@ const EventForm = ({
     } catch {
       showError(
         isUpdate
-          ? "Erreur lors de la modification de l'évènement"
-          : "Erreur lors de la création de l'évènement"
+          ? t("eventForm.updateError")
+          : t("eventForm.createError")
       );
     }
   };
@@ -245,11 +248,11 @@ const EventForm = ({
   return (
     <form onSubmit={handleSubmit} noValidate>
       <TextField
-        label="Nom de l'évènement"
+        label={t("eventForm.nameLabel")}
         fullWidth
         required
         name="name"
-        placeholder="Nom de l'évènement"
+        placeholder={t("eventForm.namePlaceholder")}
         value={event.name}
         onChange={onEventChange}
         error={!!errors.event.name}
@@ -262,28 +265,30 @@ const EventForm = ({
         required
         maxLength={300}
         rows={2}
-        label="Description"
+        label={t("eventForm.descriptionLabel")}
         className={styles.description}
         name="description"
-        placeholder="Description"
+        placeholder={t("eventForm.descriptionPlaceholder")}
         value={event.description}
         onChange={onEventChange}
         error={!!errors.event.description}
         errorMessage={errors.event.description}
       />
-      <EventCategorySelectorInput
-        value={event.eventCategory}
-        onChange={onEventChange}
-        error={!!errors.event.eventCategory}
-        errorMessage={errors.event.eventCategory}
-      />
+      <div className={styles.eventCategory}>
+        <EventCategorySelectorInput
+          value={event.eventCategory}
+          onChange={onEventChange}
+          error={!!errors.event.eventCategory}
+          errorMessage={errors.event.eventCategory}
+        />
+      </div>
       <PartnershipsForm
         onChange={setPartnerships}
         partnerships={partnerships as PartnershipPopulated[]}
       />
       <fieldset className={styles.locationSection}>
         <legend className={styles.locationTitle}>
-          Localisation de l’évènement
+          {t("eventForm.locationTitle")}
         </legend>
         <div className={styles.locationOptions}>
           {userPlace && (
@@ -296,7 +301,7 @@ const EventForm = ({
                 onChange={() => handleLocationModeChange("place")}
               />
               <span>
-                Utiliser mon lieu
+                {t("eventForm.useMyPlace")}
                 {userPlace.location?.label
                   ? ` (${userPlace.location.label})`
                   : ""}
@@ -311,7 +316,7 @@ const EventForm = ({
               checked={locationMode === "address"}
               onChange={() => handleLocationModeChange("address")}
             />
-            <span>Définir l’adresse</span>
+            <span>{t("eventForm.setAddress")}</span>
           </label>
           <label className={styles.locationOption}>
             <input
@@ -321,7 +326,7 @@ const EventForm = ({
               checked={locationMode === "online"}
               onChange={() => handleLocationModeChange("online")}
             />
-            <span>Évènement en ligne</span>
+            <span>{t("eventForm.onlineEvent")}</span>
           </label>
         </div>
         {locationMode === "address" && (
@@ -331,14 +336,14 @@ const EventForm = ({
               setEvent((prev) => ({ ...prev, location, place: null }))
             }
             error={errors.event.location}
-            markerName={event.name || "Évènement"}
+            markerName={event.name || t("eventForm.markerName")}
           />
         )}
       </fieldset>
       <fieldset className={styles.bookingSection}>
-        <legend className={styles.locationTitle}>Réservations</legend>
+        <legend className={styles.locationTitle}>{t("eventForm.bookingTitle")}</legend>
         <RadioYesOrNo
-          label="Les participants peuvent-ils réserver une place pour cet évènement ?"
+          label={t("eventForm.isBookableLabel")}
           name="isBookable"
           value={event.isBookable ? "yes" : "no"}
           onChange={handleIsBookableChange}
@@ -347,8 +352,8 @@ const EventForm = ({
           <div className={styles.bookingFields}>
             <TextField
               type="number"
-              label="Nombre de places total"
-              placeholder="Laisser vide pour un nombre illimité"
+              label={t("eventForm.capacityLabel")}
+              placeholder={t("eventForm.capacityPlaceholder")}
               name="capacity"
               value={event.capacity}
               onChange={onEventChange}
@@ -357,7 +362,7 @@ const EventForm = ({
             />
             <TextField
               type="number"
-              label="Nombre de places réservables par utilisateur"
+              label={t("eventForm.maxSeatsPerBookingLabel")}
               required
               name="maxSeatsPerBooking"
               value={event.maxSeatsPerBooking}
@@ -385,19 +390,19 @@ const EventForm = ({
           size="large"
           variant="secondary"
           onClick={() => router.back()}
-          ariaLabel="Annuler"
+          ariaLabel={t("common:actions.cancel")}
           disabled={loading}
         >
-          Annuler
+          {t("common:actions.cancel")}
         </Button>
         <Button
           type="submit"
           fullWidth
           size="large"
           disabled={loading}
-          ariaLabel="Enregistrer"
+          ariaLabel={t("common:actions.save")}
         >
-          Enregistrer
+          {t("common:actions.save")}
         </Button>
       </div>
     </form>

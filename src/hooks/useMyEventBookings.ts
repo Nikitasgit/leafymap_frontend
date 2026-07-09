@@ -1,19 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { MyEventBooking } from "@/types/eventBooking";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export const useMyEventBookings = () => {
   const [eventBookings, setEventBookings] = useState<MyEventBooking[]>([]);
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
+  const { t } = useTranslation("events");
 
   const fetchMyEventBookings = useCallback(async () => {
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/event-bookings/me`,
-        { withCredentials: true }
+      const response = await apiClient.get(
+        `/api/event-bookings/me`,
+        {}
       );
 
       if (response.data && response.data.data) {
@@ -22,12 +25,10 @@ export const useMyEventBookings = () => {
         setEventBookings([]);
       }
     } catch (err) {
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : "Erreur lors du chargement de vos réservations";
+      showError(
+        getErrorMessage(err, t, t("myEventBookings.loadError"))
+      );
       setEventBookings([]);
-      showError(errorMessage);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -43,4 +44,3 @@ export const useMyEventBookings = () => {
 
   return { eventBookings, isLoading, refetch };
 };
-

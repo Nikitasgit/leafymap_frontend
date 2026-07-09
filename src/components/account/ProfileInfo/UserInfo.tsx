@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslation } from "react-i18next";
 import TextField from "@/components/common/inputs/TextField";
 import CategorySelectorInput from "@/components/account/CategorySelectorInput/CreatorCategorySelectorInput";
 import { UserInfoProps } from "./info.types";
@@ -6,21 +9,25 @@ import styles from "./Info.module.scss";
 const UserInfo = ({
   user,
   onUserChange,
-  onPlaceChange,
   errors = {},
   showLegalName = true,
 }: UserInfoProps) => {
+  const { t } = useTranslation("account");
+
   return (
     <div className={styles.container}>
       <fieldset className={styles.section}>
-        <legend className={styles.title}>Informations</legend>
+        <legend className={styles.title}>
+          {t("userInfo.informationsSection")}
+        </legend>
         <div className={styles.infosContainer}>
           {showLegalName && (
             <>
               <TextField
                 fullWidth
-                label={"Prénom"}
+                label={t("userInfo.firstnameLabel")}
                 name="firstname"
+                required
                 value={user.firstname || ""}
                 onChange={onUserChange}
                 error={!!errors.firstname}
@@ -28,8 +35,9 @@ const UserInfo = ({
               />
               <TextField
                 fullWidth
-                label={"Nom"}
+                label={t("userInfo.lastnameLabel")}
                 name="lastname"
+                required
                 value={user.lastname || ""}
                 onChange={onUserChange}
                 error={!!errors.lastname}
@@ -39,7 +47,7 @@ const UserInfo = ({
           )}
           <TextField
             fullWidth
-            label={"Nom de votre activité"}
+            label={t("userInfo.activityNameLabel")}
             name="username"
             required
             value={user.username}
@@ -49,7 +57,7 @@ const UserInfo = ({
           />
           <TextField
             fullWidth
-            label="Description"
+            label={t("userInfo.descriptionLabel")}
             name="description"
             required
             value={user.description}
@@ -61,17 +69,18 @@ const UserInfo = ({
             error={!!errors.description}
             errorMessage={errors.description}
           />
-          <CategorySelectorInput
-            onUserChange={onUserChange}
-            onPlaceChange={onPlaceChange}
-            value={
-              typeof user.userCategory === "string"
-                ? user.userCategory
-                : user.userCategory?._id ?? ""
-            }
-            error={!!errors.userCategory}
-            errorMessage={errors.userCategory}
-          />
+          <div className={styles.roleSelector}>
+            <CategorySelectorInput
+              onUserChange={onUserChange}
+              value={
+                typeof user.userCategory === "string"
+                  ? user.userCategory
+                  : user.userCategory?._id ?? ""
+              }
+              error={!!errors.userCategory}
+              errorMessage={errors.userCategory}
+            />
+          </div>
         </div>
       </fieldset>
     </div>

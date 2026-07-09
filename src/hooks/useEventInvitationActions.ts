@@ -1,10 +1,13 @@
-import axios from "axios";
 import { useLoading } from "./useLoading";
+import { apiClient } from "@/lib/api/client";
 import { useToast } from "./useToast";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export const useEventInvitationActions = (onUpdate?: () => void) => {
   const { isLoading, withLoading } = useLoading();
   const { showError, showSuccess } = useToast();
+  const { t } = useTranslation("events");
 
   const updateEventInvitations = async (
     eventInvitationUpdates: Array<{
@@ -12,27 +15,28 @@ export const useEventInvitationActions = (onUpdate?: () => void) => {
       status?: "pending" | "accepted" | "refused" | "cancelled" | "completed";
       deleted?: boolean;
     }>,
-    successMessage = "Invitation mise à jour"
+    successMessage?: string
   ) => {
     try {
       await withLoading(() =>
-        axios.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/event-invitations`,
+        apiClient.put(
+          `/api/event-invitations`,
           { eventInvitations: eventInvitationUpdates },
           {
             headers: {
               "Content-Type": "application/json",
-            },
-            withCredentials: true,
+            }
           }
         )
       );
 
-      showSuccess(successMessage);
+      showSuccess(successMessage ?? t("eventInvitationActions.updated"));
       onUpdate?.();
     } catch (error) {
       console.error("Error updating event invitations:", error);
-      showError("Erreur lors de la mise à jour de l'invitation");
+      showError(
+        getErrorMessage(error, t, t("eventInvitationActions.updateError"))
+      );
     }
   };
 
@@ -51,7 +55,7 @@ export const useEventInvitationActions = (onUpdate?: () => void) => {
   const cancelEventInvitation = async (eventInvitationId: string) => {
     await updateEventInvitations(
       [{ _id: eventInvitationId, status: "cancelled" }],
-      "Participation annulée"
+      t("eventInvitationActions.participationCancelled")
     );
   };
 

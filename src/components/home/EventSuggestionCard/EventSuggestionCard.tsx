@@ -1,5 +1,6 @@
 import { EventPopulated } from "@/types/place/event";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./EventSuggestionCard.module.scss";
 import Image from "next/image";
 import { MapPin } from "lucide-react";
@@ -10,6 +11,7 @@ import { PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
 
 const EventSuggestionCard = ({ event }: { event: EventPopulated }) => {
+  const { t } = useTranslation("profile");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const dateRangeLabel = event.dateRange
@@ -22,7 +24,7 @@ const EventSuggestionCard = ({ event }: { event: EventPopulated }) => {
   const user = (event as unknown as { user?: UserPopulated }).user;
 
   const locationLabel =
-    event.online ? "En ligne" : event.location?.label || place?.location?.label;
+    event.online ? t("eventSuggestionCard.online") : event.location?.label || place?.location?.label;
 
   return (
     <>

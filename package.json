@@ -46,6 +46,7 @@
     "@types/react-dom": "^19",
     "eslint": "^10",
     "eslint-config-next": "16.1.6",
+    "eslint-plugin-i18next": "^6.1.5",
     "knip": "^6.25.0",
     "typescript": "^5"
   },

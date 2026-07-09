@@ -1,0 +1,55 @@
+{
+  "adminUsersSearchContainer": {
+    "title": "Administration utilisateurs",
+    "subtitle": "Rechercher un compte par email et gérer son contenu.",
+    "searchPlaceholder": "Rechercher par email",
+    "emptySearchTitle": "Saisissez un email pour lancer une recherche",
+    "noUsersFoundTitle": "Aucun utilisateur trouvé"
+  },
+  "adminUserTabs": {
+    "events": "Événements",
+    "places": "Lieux",
+    "images": "Images",
+    "reviews": "Reviews",
+    "comments": "Commentaires"
+  },
+  "adminUserSummaryCard": {
+    "noUsername": "Aucun username",
+    "roleType": "Role: {{role}} · Type: {{userType}}",
+    "banReasonPlaceholder": "Raison du ban",
+    "durationDaysPlaceholder": "Durée en jours",
+    "unban": "Débannir",
+    "ban": "Bannir",
+    "restore": "Restaurer",
+    "hide": "Masquer",
+    "defaultBanReason": "Non-respect des règles"
+  },
+  "adminUserDetailContainer": {
+    "subtitle": "Gestion du compte et de son contenu",
+    "actionFailed": "Action impossible",
+    "userNotFound": "Utilisateur introuvable",
+    "userBanned": "Utilisateur banni",
+    "userUnbanned": "Utilisateur débanni",
+    "userHidden": "Utilisateur masqué",
+    "userRestored": "Utilisateur restauré",
+    "contentDeleted": "Contenu supprimé",
+    "contentRestored": "Contenu restauré"
+  },
+  "adminContentTable": {
+    "empty": "Aucun contenu.",
+    "headerContent": "Contenu",
+    "headerDate": "Date",
+    "headerStatus": "Statut",
+    "headerAction": "Action",
+    "statusDeleted": "Supprimé",
+    "statusVisible": "Visible",
+    "restore": "Restaurer"
+  },
+  "adminUserRow": {
+    "noUsername": "Aucun username",
+    "never": "Jamais",
+    "statusBanned": "Banni",
+    "statusHidden": "Masqué",
+    "statusActive": "Actif"
+  }
+}

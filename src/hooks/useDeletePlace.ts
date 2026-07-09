@@ -1,57 +1,40 @@
-import axios from "axios";
 import { useLoading } from "./useLoading";
+import { apiClient } from "@/lib/api/client";
 import { useToast } from "./useToast";
+import useHandleApiErrors from "./useHandleApiErrors";
+import { useTranslation } from "react-i18next";
 
 const useDeletePlace = () => {
   const { isLoading, withLoading } = useLoading();
-  const { showError, showSuccess } = useToast();
+  const { showSuccess } = useToast();
+  const { handleApiError } = useHandleApiErrors();
+  const { t } = useTranslation("account");
 
   const performDeletePlace = async (placeId: string) => {
     try {
       await withLoading(() =>
-        axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/places/${placeId}`,
+        apiClient.delete(
+          `/api/places/${placeId}`,
           {
             headers: {
               "Content-Type": "application/json",
-            },
-            withCredentials: true,
+            }
           }
         )
       );
 
-      showSuccess("Lieu supprimé avec succès");
+      showSuccess(t("useDeletePlace.deleteSuccess"));
       window.location.reload();
     } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response?.data) {
-        if (err.response.data.data) {
-          Object.values(err.response.data.data).forEach((error: unknown) => {
-            if (Array.isArray(error)) {
-              error.forEach((e: string) => {
-                showError(e);
-              });
-            } else if (typeof error === "string") {
-              showError(error);
-            }
-          });
-        } else {
-          showError(err.response.data.message);
-        }
-      } else {
-        showError("Une erreur inattendue s'est produite");
-      }
+      handleApiError(err, undefined, true);
     }
   };
 
   const deletePlaceWithConfirmation = async (placeId: string) => {
-    const confirmed = window.confirm(
-      "Êtes-vous sûr de vouloir supprimer ce lieu ? Cette action supprimera également tous les événements, avis et commentaires associés."
-    );
+    const confirmed = window.confirm(t("useDeletePlace.confirmFirst"));
 
     if (confirmed) {
-      const doubleConfirmed = window.confirm(
-        "Cette action est définitive. Les événements, avis et commentaires liés à ce lieu seront supprimés. Confirmez-vous la suppression ?"
-      );
+      const doubleConfirmed = window.confirm(t("useDeletePlace.confirmSecond"));
 
       if (doubleConfirmed) {
         await performDeletePlace(placeId);

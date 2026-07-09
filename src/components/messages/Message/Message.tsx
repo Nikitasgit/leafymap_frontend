@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useTranslation } from "react-i18next";
 import DisplayPublishingDate from "@/components/common/date/DisplayPublishingDate";
 import PartnershipMessage from "@/components/messages/PartnershipMessage";
 import type { MessagePartnership } from "@/components/messages/PartnershipMessage";
@@ -36,6 +39,7 @@ const MessageComponent: React.FC<MessageProps> = ({
   message,
   currentUserId,
 }) => {
+  const { t } = useTranslation("messages");
   const isOwnMessage = currentUserId === message.sender._id;
   const isPartnershipMessage = !!message.partnership;
 
@@ -74,7 +78,7 @@ const MessageComponent: React.FC<MessageProps> = ({
               <span className={styles.senderName}>{senderName}</span>
             )}
             <p className={styles.messageContent}>
-              {message.content || "Message vide"}
+              {message.content || t("message.emptyContent")}
             </p>
             <div className={styles.messageFooter}>
               <DisplayPublishingDate

@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Eye, Edit3, Trash2, LucideIcon } from "lucide-react";
 import Tooltip from "@/components/common/Tooltip";
 import styles from "./ActionButtons.module.scss";
@@ -10,17 +13,19 @@ const iconMap: Record<ActionType, LucideIcon> = {
   delete: Trash2,
 };
 
-const actionLabels: Record<ActionType, string> = {
-  view: "Voir",
-  edit: "Modifier",
-  delete: "Supprimer",
-};
-
 const ActionButtons: React.FC<ActionButtonsProps> = ({
   actions,
   iconSize = 15,
   className,
 }) => {
+  const { t } = useTranslation("common");
+
+  const actionLabels: Record<ActionType, string> = {
+    view: t("actions.view"),
+    edit: t("actions.edit"),
+    delete: t("actions.delete"),
+  };
+
   if (actions.length === 0) return null;
 
   return (

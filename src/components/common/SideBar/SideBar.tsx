@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { X, LucideIcon } from "lucide-react";
 import Button from "@/components/common/buttons/Button";
 import NotificationBadge from "@/components/common/badges/NotificationBadge";
@@ -38,6 +39,7 @@ const SideBar = ({
   initialTabId,
   className,
 }: SideBarProps) => {
+  const { t } = useTranslation("common");
   const [activeTabId, setActiveTabId] = useState(tabs?.[0]?.id ?? "");
   const [isContentVisible, setIsContentVisible] = useState(false);
 
@@ -81,7 +83,7 @@ const SideBar = ({
           variant="simple"
           size="small"
           onClick={onClose}
-          ariaLabel="Fermer le menu"
+          ariaLabel={t("navbar.closeMenuAriaLabel")}
           startIcon={<X size={20} />}
         />
       </div>

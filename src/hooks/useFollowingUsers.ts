@@ -1,33 +1,33 @@
 import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 import { FollowUser } from "@/types/follow";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 const useFollowingUsers = (userId?: string) => {
   const [following, setFollowing] = useState<FollowUser[]>([]);
   const { isLoading, withLoading } = useLoading(!!userId);
   const { showError } = useToast();
+  const { t } = useTranslation("account");
 
   const fetchFollowing = useCallback(async () => {
     if (!userId) return;
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/follows/following/${userId}`,
+      const response = await apiClient.get(
+        `/api/follows/following/${userId}`,
         {
-          withCredentials: true,
         }
       );
       setFollowing(response.data.data.following || []);
     } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : "Erreur lors du chargement des abonnements";
       setFollowing([]);
-      showError(errorMessage);
+      showError(
+        getErrorMessage(err, t, t("useFollowingUsers.loadErrorFallback")),
+      );
     }
-  }, [userId, showError]);
+  }, [userId, showError, t]);
 
   useEffect(() => {
     if (!userId) {

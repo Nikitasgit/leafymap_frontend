@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Partnership } from "@/types/partnerships";
 import PartnershipCard from "@/components/common/partnerships/PartnershipCard";
 import Button from "@/components/common/buttons/Button";
@@ -19,6 +20,8 @@ export default function PartnershipsSentList({
   isLoading = false,
   onCancel,
 }: PartnershipsSentListProps) {
+  const { t } = useTranslation("account");
+
   if (isLoading) {
     return null;
   }
@@ -26,7 +29,7 @@ export default function PartnershipsSentList({
   if (partnerships.length === 0) {
     return (
       <EmptyState
-        title="Aucune invitation envoyée"
+        title={t("partnershipsSentList.emptyTitle")}
         icon={<Send className={styles.icon} />}
       />
     );
@@ -34,7 +37,7 @@ export default function PartnershipsSentList({
 
   return (
     <div className={styles.list}>
-      <h3 className={styles.title}>Invitations envoyées</h3>
+      <h3 className={styles.title}>{t("partnershipsSentList.title")}</h3>
       <ul className={styles.items}>
         {partnerships.map((partnership) => (
           <li key={partnership._id} className={styles.item}>
@@ -44,9 +47,9 @@ export default function PartnershipsSentList({
               variant="secondary"
               size="small"
               onClick={() => onCancel?.(partnership._id)}
-              ariaLabel="Annuler l'invitation"
+              ariaLabel={t("partnershipsSentList.cancelInvitationAriaLabel")}
             >
-              Annuler l&apos;invitation
+              {t("partnershipsSentList.cancelInvitation")}
             </Button>
           </li>
         ))}

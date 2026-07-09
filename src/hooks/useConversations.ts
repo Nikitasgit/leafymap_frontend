@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { apiClient, isAxiosError } from "@/lib/api/client";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
-import axios from "axios";
 
 export interface Conversation {
   _id: string;
@@ -42,10 +42,9 @@ export const useConversations = (options?: { autoFetch?: boolean }) => {
 
   const fetchConversations = useCallback(async () => {
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/messages/conversations`,
+      const response = await apiClient.get(
+        `/api/messages/conversations`,
         {
-          withCredentials: true,
         }
       );
 
@@ -61,7 +60,7 @@ export const useConversations = (options?: { autoFetch?: boolean }) => {
           ? err.message
           : "Erreur lors du chargement des conversations";
       setConversations([]);
-      if (axios.isAxiosError(err) && err.response?.status !== 401) {
+      if (isAxiosError(err) && err.response?.status !== 401) {
         showErrorRef.current(errorMessage);
       }
     }

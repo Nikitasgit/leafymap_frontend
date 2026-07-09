@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import useOnClickOutside from "../../../../hooks/useOnClickOutside";
 import styles from "./SearchInput.module.scss";
 import TextField from "../TextField";
@@ -14,11 +15,15 @@ const SearchInput = <T extends SearchSuggestion>({
   value = "",
   onSelect,
   fetchSuggestions: fetchSuggestionsProps,
-  placeholder = "Rechercher...",
+  placeholder,
   limit = 5,
   withIcons = false,
   label,
+  size = "medium",
 }: SearchInputProps<T>) => {
+  const { t } = useTranslation("common");
+  const resolvedPlaceholder =
+    placeholder ?? t("searchInput.defaultPlaceholder");
   const [input, setInput] = useState(value);
   const [suggestions, setSuggestions] = useState<T[]>([]);
   const [isFocused, setIsFocused] = useState(false);
@@ -100,8 +105,9 @@ const SearchInput = <T extends SearchSuggestion>({
         onFocus={() => {
           setIsFocused(true);
         }}
-        placeholder={placeholder}
+        placeholder={resolvedPlaceholder}
         fullWidth
+        size={size}
       />
       {isFocused && suggestions.length > 0 && (
         <ul className={styles.suggestions}>
@@ -114,7 +120,7 @@ const SearchInput = <T extends SearchSuggestion>({
               {withIcons && !("coordinates" in sug) && (
                 <Image
                   src={sug.image || (sug as SearchSuggestion).googlePictureUrl || creatorDefaultsSvg}
-                  alt={sug.name || "Créateur"}
+                  alt={sug.name || t("searchInput.creatorAlt")}
                   width={32}
                   height={32}
                   className={styles.suggestionImage}

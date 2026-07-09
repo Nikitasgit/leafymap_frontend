@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Image as ImageIcon, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { GallerySectionProps } from "./GallerySection.types";
@@ -17,6 +18,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
   onFilesSelected,
   canHandleImages = false,
 }) => {
+  const { t } = useTranslation("profile");
   const [modalOpen, setModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { images, isLoading, refetch } = useImages(
@@ -64,7 +66,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
     <section className={styles.gallerySection}>
       {!images || (images.length === 0 && !canHandleImages) ? (
         <EmptyState
-          title="Aucune image dans la galerie"
+          title={t("gallerySection.emptyTitle")}
           icon={<ImageIcon className={styles.icon} />}
         />
       ) : (
@@ -88,7 +90,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
               >
                 <Image
                   src={image.urls?.thumbnail}
-                  alt={`Image ${index + 1}`}
+                  alt={t("gallerySection.imageAlt", { index: index + 1 })}
                   className={styles.galleryImage}
                   width={150}
                   height={150}
@@ -98,9 +100,9 @@ const GallerySection: React.FC<GallerySectionProps> = ({
                     className={styles.deleteButton}
                     onClick={(e) => handleDeleteImage(image._id, e)}
                     disabled={isDeleting}
-                    title="Supprimer l'image"
+                    title={t("gallerySection.deleteImage")}
                     type="button"
-                    aria-label="Supprimer l'image"
+                    aria-label={t("gallerySection.deleteImage")}
                   >
                     <Trash2 size={16} />
                   </button>

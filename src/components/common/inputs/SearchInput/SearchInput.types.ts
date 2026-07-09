@@ -6,6 +6,7 @@ export interface SearchInputProps<T> {
   limit?: number;
   withIcons?: boolean;
   label?: string;
+  size?: "small" | "medium";
 }
 
 export interface SearchSuggestion {

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { MapPin } from "lucide-react";
 import styles from "./PartnershipMessage.module.scss";
 import { PartnershipPopulated } from "@/types/partnerships";
@@ -21,10 +22,11 @@ export default function PartnershipMessage({
   partnership,
   sender,
 }: PartnershipMessageProps) {
+  const { t } = useTranslation("messages");
   const senderName =
     sender?.username ||
     (partnership as PartnershipPopulated).initiator?.username ||
-    "Utilisateur";
+    t("partnershipMessage.defaultUser");
 
   const isPlace =
     ("type" in partnership && partnership.type === "place") ||
@@ -43,8 +45,12 @@ export default function PartnershipMessage({
     return (
       <div className={styles.partnershipCard}>
         <p className={styles.invitationMessage}>
-          <strong>{senderName}</strong> souhaite vous ajouter comme
-          collaborateur de son lieu
+          <Trans
+            i18nKey="partnershipMessage.invitation"
+            ns="messages"
+            values={{ senderName }}
+            components={{ strong: <strong /> }}
+          />
         </p>
         {fullPlace && place && typeof place === "object" ? (
           <div className={styles.placeContainer}>

@@ -2,6 +2,7 @@
 
 import { Clock } from "lucide-react";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 import styles from "./EventSchedule.module.scss";
 import { formatDateShort, sortPeriodsByStartDate } from "@/utils/dates";
 import { EventScheduleProps } from "./EventSchedule.types";
@@ -9,6 +10,7 @@ import { Collaborator } from "@/types/place/collaborators";
 import creatorDefaultsSvg from "@public/images/creator_default.png";
 
 const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
+  const { t } = useTranslation("events");
   const sortedSchedule = sortPeriodsByStartDate(schedule);
 
   const getCollaborator = (
@@ -21,7 +23,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
 
   return (
     <section className={styles.scheduleContainer}>
-      <h3 className={styles.sectionTitle}>Programme</h3>
+      <h3 className={styles.sectionTitle}>{t("eventSchedule.title")}</h3>
       <div className={styles.scheduleList}>
         {sortedSchedule.map((period) => (
           <div key={period._id} className={styles.period}>
@@ -29,8 +31,8 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
               <div className={styles.dateItem}>
                 <p className={styles.dateLabel}>
                   {period.endDate !== period.startDate && period.endDate
-                    ? "Du"
-                    : "Le"}
+                    ? t("eventSchedule.dateFrom")
+                    : t("eventSchedule.dateOn")}
                 </p>
                 <p className={styles.dateValue}>
                   {formatDateShort(period.startDate)}
@@ -38,7 +40,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
               </div>
               {period.endDate !== period.startDate && period.endDate !== "" && (
                 <div className={styles.dateItem}>
-                  <p className={styles.dateLabel}>Au</p>
+                  <p className={styles.dateLabel}>{t("eventSchedule.dateTo")}</p>
                   <p className={styles.dateValue}>
                     {formatDateShort(period.endDate)}
                   </p>
@@ -53,7 +55,10 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
                       <div className={styles.timeSlotTime}>
                         <Clock size={14} />
                         <p className={styles.timeRange}>
-                          {timeSlot.startTime} à {timeSlot.endTime}
+                          {t("eventSchedule.timeRange", {
+                            startTime: timeSlot.startTime,
+                            endTime: timeSlot.endTime,
+                          })}
                         </p>
                       </div>
                       <p className={styles.timeSlotTitle}>- {timeSlot.title}</p>
@@ -67,7 +72,8 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
                         )
                         .map((user) => {
                           const imageUrl = user.image?.urls?.thumbnail ?? "";
-                          const displayName = user.username ?? "Participant";
+                          const displayName =
+                            user.username ?? t("eventSchedule.defaultParticipant");
                           return (
                             <div
                               key={user._id}

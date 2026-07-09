@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useToast } from "@/hooks/useToast";
 import { fetchLocationSuggestions } from "@/utils/map";
@@ -14,6 +17,7 @@ const AddressInput = ({
   error,
   errorMessage,
 }: AddressInputProps) => {
+  const { t } = useTranslation("common");
   const { showError } = useToast();
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState<Location[]>([]);
@@ -36,7 +40,7 @@ const AddressInput = ({
         setSuggestions(results);
       } catch (err) {
         console.error("Error fetching suggestions:", err);
-        showError("Erreur lors de la recherche d'adresse. Veuillez réessayer.");
+        showError(t("addressInput.searchError"));
         setSuggestions([]);
       }
     } else {
@@ -59,24 +63,23 @@ const AddressInput = ({
   useOnClickOutside(wrapperRef, handleClickOutside);
 
   useEffect(() => {
-    if (value) {
-      setInput(value);
-      if (selectedLocation && value === selectedLocation.label) {
-        setLastSelectedLocation(selectedLocation);
-      } else if (lastSelectedLocation && value !== lastSelectedLocation.label) {
-        setLastSelectedLocation(null);
-      }
-    } else {
-      setInput("");
+    setInput(value || "");
+
+    if (selectedLocation && value === selectedLocation.label) {
+      setLastSelectedLocation(selectedLocation);
+      return;
+    }
+
+    if (!selectedLocation) {
       setLastSelectedLocation(null);
     }
-  }, [value, selectedLocation, lastSelectedLocation]);
+  }, [value, selectedLocation]);
 
   return (
     <div ref={wrapperRef} className={styles.addressInputWrapper}>
       <TextField
         name="address"
-        label="Adresse"
+        label={t("addressInput.label")}
         required
         type="text"
         value={input}
@@ -84,7 +87,7 @@ const AddressInput = ({
           handleInputChange(e as React.ChangeEvent<HTMLInputElement>)
         }
         onFocus={() => setIsFocused(true)}
-        placeholder="Rechercher une adresse..."
+        placeholder={t("addressInput.placeholder")}
         fullWidth
         error={error}
         errorMessage={errorMessage}

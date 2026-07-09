@@ -1,0 +1,149 @@
+{
+  "accountSettingsContainer": {
+    "subtitle": "Gérez vos paramètres de compte",
+    "title": "Paramètres du compte",
+    "informationsSection": "Informations",
+    "firstnameLabel": "Prénom",
+    "lastnameLabel": "Nom",
+    "notificationsSection": "Notifications",
+    "emailNotificationsTitle": "Recevoir les notifications par e-mail",
+    "emailNotificationsDescription": "Vous recevrez un e-mail lorsqu'une notification importante est créée pour votre compte.",
+    "saving": " Enregistrement...",
+    "preferenceSaved": "Préférence enregistrée",
+    "preferenceSaveError": "Impossible d'enregistrer la préférence",
+    "formValidationError": "Veuillez corriger les erreurs du formulaire",
+    "profileSaved": "Informations enregistrées",
+    "sensitiveActionsAriaLabel": "Actions sensibles sur le compte",
+    "deletePlaceTitle": "Supprimer mon lieu",
+    "deletePlaceTooltip": "La suppression de votre lieu est définitive : événements, photos du lieu, avis sur le lieu et sur ses événements, ainsi que les commentaires associés à ces avis seront supprimés.",
+    "deletePlaceDescription": "Retirez votre lieu de la carte et supprimez toutes les données liées (événements, avis, commentaires).",
+    "deletePlaceButton": "Supprimer le lieu",
+    "deletePlaceAriaLabel": "Supprimer mon lieu et toutes les données associées",
+    "deleteAccountTitle": "Supprimer mon compte",
+    "deleteAccountTooltip": "La suppression de votre compte entraînera la suppression définitive de : vos lieux, vos événements, vos partenariats, vos avis et commentaires et votre profil utilisateur. Cette action est irréversible et ne peut pas être annulée.",
+    "deleteAccountDescription": "Suppression définitive de votre compte et de toutes vos données. Cette action est irréversible.",
+    "deleteAccountAriaLabel": "Supprimer définitivement mon compte et toutes mes données",
+    "deleting": "Suppression...",
+    "deletePlaceModalTitle": "Supprimer ce lieu ?",
+    "deletePlaceModalPrimary": "Supprimer définitivement",
+    "deletePlaceModalBody": "Cette action est irréversible. Votre lieu, ses images, tous ses événements, les avis (lieu et événements) et les commentaires associés seront supprimés."
+  },
+  "accountSidebarConfig": {
+    "tabs": {
+      "collaborators": "Mes collaborateurs",
+      "receivedInvitations": "Invitations reçues",
+      "invite": "Inviter",
+      "myEvents": "Mes évènements",
+      "myParticipations": "Mes participations",
+      "myBookings": "Mes réservations",
+      "reviewsWritten": "Avis rédigés",
+      "reviewsReceived": "Avis reçus",
+      "followers": "Abonnés",
+      "following": "Abonnements",
+      "myProducts": "Mes produits",
+      "gallery": "Images"
+    },
+    "titles": {
+      "collaborations": "Collaborations",
+      "events": "Mes évènements",
+      "bookings": "Réservations",
+      "reviews": "Avis",
+      "follows": "Abonnements",
+      "products": "Produits",
+      "images": "Images"
+    }
+  },
+  "partnershipsSentTab": {
+    "label": "Inviter un collaborateur",
+    "info": "Recherchez un utilisateur pour lui envoyer une invitation de collaboration.",
+    "searchPlaceholder": "Rechercher un utilisateur..."
+  },
+  "partnershipsReceivedTab": {
+    "label": "Invitations reçues",
+    "info": "Acceptez ou refusez les demandes de collaboration qui vous sont envoyées.",
+    "emptyTitle": "Aucune invitation reçue",
+    "emptyDescription": "Les invitations en attente apparaîtront ici."
+  },
+  "partnershipsAcceptedTab": {
+    "label": "Mes collaborateurs",
+    "info": "Liste des personnes avec qui vous collaborez.",
+    "emptyTitle": "Aucune collaboration",
+    "emptyDescription": "Vous n'avez pas de collaborateurs pour le moment."
+  },
+  "partnershipsSentList": {
+    "emptyTitle": "Aucune invitation envoyée",
+    "title": "Invitations envoyées",
+    "cancelInvitation": "Annuler l'invitation",
+    "cancelInvitationAriaLabel": "Annuler l'invitation"
+  },
+  "partnershipsReceivedList": {
+    "accept": "Accepter",
+    "refuse": "Refuser",
+    "acceptAriaLabel": "Accepter l'invitation",
+    "refuseAriaLabel": "Refuser l'invitation",
+    "fallbackUsername": "Utilisateur"
+  },
+  "followingTab": {
+    "unfollow": "Ne plus suivre",
+    "emptyTitle": "Aucun abonnement pour le moment"
+  },
+  "followersTab": {
+    "emptyTitle": "Aucun abonné pour le moment"
+  },
+  "reviewsReceivedTab": {
+    "title": "Avis reçus",
+    "description": "Les avis laissés par les utilisateurs sur votre lieu.",
+    "emptyTitle": "Aucun avis reçu",
+    "emptyMessage": "Votre lieu n'a pas encore reçu d'avis, ou vous n'avez pas de lieu associé à votre compte."
+  },
+  "reviewsWrittenTab": {
+    "title": "Avis rédigés",
+    "description": "Les avis que vous avez rédigés sur des lieux ou des évènements.",
+    "emptyTitle": "Aucun avis rédigé",
+    "emptyMessage": "Vous n'avez pas encore rédigé d'avis.",
+    "placeFallback": "Lieu"
+  },
+  "accountGalleryTab": {
+    "label": "Galerie",
+    "info": "Gérez les images de votre profil créateur."
+  },
+  "userInfo": {
+    "informationsSection": "Informations",
+    "firstnameLabel": "Prénom",
+    "lastnameLabel": "Nom",
+    "activityNameLabel": "Nom de votre activité",
+    "descriptionLabel": "Description"
+  },
+  "userContactForm": {
+    "contactSection": "Contact",
+    "phoneLabel": "Téléphone",
+    "phonePlaceholder": "Entrez votre numéro de téléphone",
+    "websiteLabel": "Site web",
+    "websitePlaceholder": "Entrez l'URL de votre site web"
+  },
+  "useDeleteAccount": {
+    "success": "Compte supprimé avec succès",
+    "confirmFirst": "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et supprimera toutes vos données.",
+    "confirmSecond": "Cette action est définitive. Toutes vos données (lieux, événements, partenariats) seront supprimées. Confirmez-vous la suppression ?",
+    "errorFallback": "Erreur lors de la suppression du compte"
+  },
+  "useFindUsers": {
+    "searchErrorFallback": "Erreur lors de la recherche d'utilisateurs"
+  },
+  "useFollowingUsers": {
+    "loadErrorFallback": "Erreur lors du chargement des abonnements"
+  },
+  "useFollowers": {
+    "loadErrorFallback": "Erreur lors du chargement des abonnés"
+  },
+  "useFollow": {
+    "followSuccess": "Abonnement réussi",
+    "unfollowSuccess": "Désabonnement réussi"
+  },
+  "useReviewsWritten": {
+    "loadError": "Erreur lors du chargement des avis rédigés"
+  },
+  "useReviewsReceived": {
+    "loadError": "Erreur lors du chargement des avis reçus"
+  }
+}

@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from "react";
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 import { useAppDispatch, useAppSelector } from "@/store";
 import {
   fetchUserNotifications,
@@ -41,10 +41,10 @@ export const useUserNotifications = (options?: {
   const markConversationAsRead = useCallback(
     async (conversationId: string) => {
       try {
-        await axios.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/messages/conversation/${conversationId}/read`,
+        await apiClient.put(
+          `/api/messages/conversation/${conversationId}/read`,
           {},
-          { withCredentials: true }
+          {}
         );
         fetchNotifications();
       } catch {}
@@ -55,10 +55,10 @@ export const useUserNotifications = (options?: {
   const markNotificationsAsReadByAction = useCallback(
     async (action: NotificationActionType) => {
       try {
-        await axios.patch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/read`,
+        await apiClient.patch(
+          `/api/notifications/read`,
           { action },
-          { withCredentials: true }
+          {}
         );
         fetchNotifications();
       } catch {}
@@ -77,10 +77,10 @@ export const useUserNotifications = (options?: {
   );
   const markAllNotificationsAsRead = useCallback(async () => {
     try {
-      await axios.patch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/read-all`,
+      await apiClient.patch(
+        `/api/notifications/read-all`,
         {},
-        { withCredentials: true }
+        {}
       );
       fetchNotifications();
     } catch {}

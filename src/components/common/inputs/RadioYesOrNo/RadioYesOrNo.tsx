@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./RadioYesOrNo.module.scss";
 
 type RadioYesOrNoProps = {
@@ -18,10 +21,14 @@ const RadioYesOrNo: React.FC<RadioYesOrNoProps> = ({
   title,
   value,
   onChange,
-  yesLabel = "Oui",
-  noLabel = "Non",
+  yesLabel,
+  noLabel,
   disabled = false,
 }) => {
+  const { t } = useTranslation("common");
+  const resolvedYesLabel = yesLabel ?? t("radioYesOrNo.yes");
+  const resolvedNoLabel = noLabel ?? t("radioYesOrNo.no");
+
   return (
     <div className={styles.container}>
       {title && <p className={styles.title}>{title}</p>}
@@ -40,7 +47,7 @@ const RadioYesOrNo: React.FC<RadioYesOrNoProps> = ({
               className={styles.radioInput}
             />
             <label htmlFor={`${name}-yes`} className={styles.radioLabel}>
-              <span className={styles.optionText}>{yesLabel}</span>
+              <span className={styles.optionText}>{resolvedYesLabel}</span>
             </label>
           </div>
 
@@ -56,7 +63,7 @@ const RadioYesOrNo: React.FC<RadioYesOrNoProps> = ({
               className={styles.radioInput}
             />
             <label htmlFor={`${name}-no`} className={styles.radioLabel}>
-              <span className={styles.optionText}>{noLabel}</span>
+              <span className={styles.optionText}>{resolvedNoLabel}</span>
             </label>
           </div>
         </div>

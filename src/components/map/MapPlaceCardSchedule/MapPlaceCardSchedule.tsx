@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ChevronRight } from "lucide-react";
+import type { TFunction } from "i18next";
 import { DefaultSchedule, WeekDay } from "@/types/place/schedule";
 import { useTranslation } from "react-i18next";
 import styles from "./MapPlaceCardSchedule.module.scss";
@@ -18,6 +19,7 @@ interface ScheduleDayProps {
   onToggleTimeSlots: () => void;
   onToggleEvents: () => void;
   onEventClick: (eventId: string) => void;
+  t: TFunction;
 }
 
 const ScheduleDay: React.FC<ScheduleDayProps> = ({
@@ -28,8 +30,8 @@ const ScheduleDay: React.FC<ScheduleDayProps> = ({
   onToggleTimeSlots,
   onToggleEvents,
   onEventClick,
+  t,
 }) => {
-  const { t } = useTranslation("common");
   const isOpen = daySchedule.open;
   const hasTimeSlots = daySchedule.timeSlots?.length > 0;
   const hasEvents = daySchedule.events && daySchedule.events.length > 0;
@@ -47,7 +49,7 @@ const ScheduleDay: React.FC<ScheduleDayProps> = ({
       <div className={styles.dayHeader}>
         <div className={styles.dayHeaderContent}>
           <span className={styles.dayName}>
-            {t(`defaultSchedule.day.${dayKey}`)}
+            {t(`common:defaultSchedule.day.${dayKey}`)}
           </span>
           <div className={styles.statusContainer}>
             {hasEvents && (
@@ -56,7 +58,7 @@ const ScheduleDay: React.FC<ScheduleDayProps> = ({
                 variant="outline"
                 size="xSmall"
                 onClick={handleEventsClick}
-                ariaLabel="Afficher les événements"
+                ariaLabel={t("mapPlaceCardSchedule.showEventsAriaLabel")}
                 endIcon={
                   <ChevronRight
                     size={12}
@@ -66,7 +68,7 @@ const ScheduleDay: React.FC<ScheduleDayProps> = ({
                   />
                 }
               >
-                Événements
+                {t("mapPlaceCardSchedule.events")}
               </Button>
             )}
             <div
@@ -75,7 +77,7 @@ const ScheduleDay: React.FC<ScheduleDayProps> = ({
               }`}
             >
               <span className={styles.statusText}>
-                {t(`defaultSchedule.${isOpen ? "open" : "closed"}`)}
+                {t(`common:defaultSchedule.${isOpen ? "open" : "closed"}`)}
               </span>
             </div>
           </div>
@@ -87,7 +89,7 @@ const ScheduleDay: React.FC<ScheduleDayProps> = ({
               className={styles.chevronButton}
               onClick={onToggleTimeSlots}
               aria-expanded={isTimeSlotsExpanded}
-              aria-label="Afficher les horaires"
+              aria-label={t("mapPlaceCardSchedule.showScheduleAriaLabel")}
             >
               <ChevronRight
                 size={16}
@@ -137,7 +139,7 @@ const MapPlaceCardSchedule: React.FC<MapPlaceCardScheduleProps> = ({
   user,
   isPlaceLoading = false,
 }) => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("map");
   const [expandedTimeSlots, setExpandedTimeSlots] = useState<Set<WeekDay>>(
     new Set()
   );
@@ -194,7 +196,7 @@ const MapPlaceCardSchedule: React.FC<MapPlaceCardScheduleProps> = ({
   return (
     <>
       <div className={`${styles.schedule} ${className || ""}`}>
-        <h4 className={styles.scheduleTitle}>{t("defaultSchedule.title")}</h4>
+        <h4 className={styles.scheduleTitle}>{t("common:defaultSchedule.title")}</h4>
         <div className={styles.scheduleList}>
           {Object.keys(schedule).map((dayKey) => (
             <ScheduleDay
@@ -206,6 +208,7 @@ const MapPlaceCardSchedule: React.FC<MapPlaceCardScheduleProps> = ({
               onToggleTimeSlots={() => toggleTimeSlots(dayKey as WeekDay)}
               onToggleEvents={() => toggleEvents(dayKey as WeekDay)}
               onEventClick={handleEventClick}
+              t={t}
             />
           ))}
         </div>

@@ -1,13 +1,12 @@
-import axios from "axios";
+import { apiClient } from "@/lib/api/client";
 
-const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/favorites`;
+const baseUrl = `/api/favorites`;
 
 export const getFavoritesByType = async (
   referenceType: string
 ): Promise<{ ids: string[] }> => {
-  const response = await axios.get(baseUrl, {
-    params: { referenceType },
-    withCredentials: true,
+  const response = await apiClient.get(baseUrl, {
+    params: { referenceType }
   });
   return response.data.data;
 };
@@ -16,12 +15,11 @@ export const addFavorite = async (
   referenceId: string,
   referenceType: string
 ): Promise<void> => {
-  await axios.post(
+  await apiClient.post(
     baseUrl,
     { referenceId, referenceType },
     {
-      headers: { "Content-Type": "application/json" },
-      withCredentials: true,
+      headers: { "Content-Type": "application/json" }
     }
   );
 };
@@ -30,8 +28,7 @@ export const removeFavorite = async (
   referenceId: string,
   referenceType: string
 ): Promise<void> => {
-  await axios.delete(baseUrl, {
-    data: { referenceId, referenceType },
-    withCredentials: true,
+  await apiClient.delete(baseUrl, {
+    data: { referenceId, referenceType }
   });
 };

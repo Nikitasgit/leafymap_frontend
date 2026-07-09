@@ -1,37 +1,20 @@
-import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCurrentUser, selectAuth } from "@/store/authSlice";
+import { AppDispatch } from "@/store";
 import { UserPopulated } from "@/types/user";
-import { useLoading } from "./useLoading";
-import { useToast } from "./useToast";
 
 export const useCurrentUser = () => {
-  const [user, setUser] = useState<UserPopulated | null>(null);
-  const { isLoading, withLoading } = useLoading(true);
-  const { showError } = useToast();
+  const dispatch = useDispatch<AppDispatch>();
+  const { user, loading } = useSelector(selectAuth);
 
   const refetch = useCallback(async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`,
-        {
-          withCredentials: true,
-        },
-      );
-      setUser(response.data.data.user);
-    } catch (err) {
-      if (axios.isAxiosError(err) && err.response?.status === 401) {
-        setUser(null);
-        return;
-      }
-      const errorMessage = "Erreur lors du chargement de l'utilisateur";
-      setUser(null);
-      showError(errorMessage);
-    }
-  }, []);
+    await dispatch(fetchCurrentUser()).unwrap();
+  }, [dispatch]);
 
-  useEffect(() => {
-    withLoading(refetch);
-  }, [refetch]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  return { user, isLoading, refetch };
+  return {
+    user: user as UserPopulated | null,
+    isLoading: loading,
+    refetch,
+  };
 };

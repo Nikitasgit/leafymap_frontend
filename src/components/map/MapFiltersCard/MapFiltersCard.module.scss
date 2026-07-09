@@ -73,6 +73,26 @@
     }
   }
 
+  .dateInputs {
+    @include flex(row, flex-start, center, spacing(0.75));
+
+    label {
+      @include flex(column, flex-start, stretch, spacing(0.25));
+      flex: 1;
+      color: $grey-500;
+      font-size: rem(12);
+      font-weight: 500;
+    }
+
+    input {
+      border: 1px solid $grey-200;
+      border-radius: rem(6);
+      color: $grey-700;
+      font: inherit;
+      padding: spacing(0.5) spacing(0.75);
+    }
+  }
+
   @include respond-to(sm) {
     .header {
       padding: spacing(1.5) spacing(2);

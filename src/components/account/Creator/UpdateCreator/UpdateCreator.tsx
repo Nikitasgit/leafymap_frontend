@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import {
   FormDataChangeHandler,
   InitialCreatorData,
@@ -31,6 +32,7 @@ const initialUserData = (user: InitialCreatorData): InitialCreatorData => ({
 const UpdateCreator = () => {
   const { user, isLoading: userLoading } = useCurrentUser();
   const { submitUser, isLoading: submitUserLoading } = useUpdateUser();
+  const { t } = useTranslation("account");
 
   const { showSuccess, showError } = useToast();
   const router = useRouter();
@@ -47,11 +49,11 @@ const UpdateCreator = () => {
     try {
       if (updatedUser) {
         await submitUser(updatedUser);
-        showSuccess("Profil mis à jour avec succès");
+        showSuccess(t("updateCreator.updateSuccess"));
         router.push("/account");
       }
     } catch {
-      showError("Erreur lors de la mise à jour");
+      showError(t("updateCreator.updateError"));
     }
   };
 
@@ -74,7 +76,7 @@ const UpdateCreator = () => {
   return (
     <div className={styles.pageContainer}>
       <section className={styles.container}>
-        <PageHeader title="Modifier votre profil" showBackButton={true} />
+        <PageHeader title={t("updateCreator.title")} showBackButton={true} />
         {loading ? (
           <LoadingBar />
         ) : (
@@ -84,7 +86,7 @@ const UpdateCreator = () => {
             onUserChange={onUserChange}
             onPlaceChange={() => {}}
             onSubmit={handleSubmit}
-            submitButtonText="Enregistrer"
+            submitButtonText={t("common:actions.save")}
             showPlaceForm={false}
             hideUserLegalName
           />

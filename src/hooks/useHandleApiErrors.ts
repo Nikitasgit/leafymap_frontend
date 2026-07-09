@@ -1,39 +1,37 @@
-import axios from "axios";
+import {
+  getApiValidationErrorMessages,
+  parseApiValidationErrors,
+} from "@/lib/api/client";
 import { useToast } from "./useToast";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 const useHandleApiErrors = () => {
   const { showError } = useToast();
+  const { t } = useTranslation();
 
   const handleApiError = (
     err: unknown,
     setErrors?: (errors: Record<string, string>) => void,
-    showValidationErrorsInToast: boolean = false
+    showValidationErrorsInToast: boolean = false,
   ) => {
-    if (axios.isAxiosError(err) && err.response?.data) {
-      if (err.response.data.data) {
-        const validationErrors = err.response.data.data;
+    const validationErrors = parseApiValidationErrors(err);
 
-        if (setErrors) {
-          setErrors(validationErrors);
-        }
-
-        if (showValidationErrorsInToast) {
-          Object.values(validationErrors).forEach((error: unknown) => {
-            if (Array.isArray(error)) {
-              error.forEach((e: string) => {
-                showError(e);
-              });
-            } else if (typeof error === "string") {
-              showError(error);
-            }
-          });
-        }
-      } else {
-        showError(err.response.data.message);
+    if (validationErrors) {
+      if (setErrors) {
+        setErrors(validationErrors as Record<string, string>);
       }
-    } else {
-      showError("Une erreur inattendue s'est produite");
+
+      if (showValidationErrorsInToast) {
+        getApiValidationErrorMessages(err).forEach((message) => {
+          showError(message);
+        });
+      }
+
+      return;
     }
+
+    showError(getErrorMessage(err, t));
   };
 
   return { handleApiError };

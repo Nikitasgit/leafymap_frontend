@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { apiClient } from "@/lib/api/client";
 import { ReviewPopulated } from "@/types/review";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
-import axios from "axios";
+import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 interface UseReviewsParams {
   reference?: string;
@@ -14,6 +16,7 @@ export const useReviews = (params?: UseReviewsParams) => {
   const [reviews, setReviews] = useState<ReviewPopulated[]>([]);
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
+  const { t } = useTranslation("reviews");
 
   const fetchReviews = async () => {
     try {
@@ -23,17 +26,13 @@ export const useReviews = (params?: UseReviewsParams) => {
         queryParams.append("referenceType", params.referenceType);
       if (params?.author) queryParams.append("author", params.author);
 
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/reviews${
+      const url = `/api/reviews${
         queryParams.toString() ? `?${queryParams.toString()}` : ""
       }`;
-      const response = await axios.get(url);
+      const response = await apiClient.get(url);
       setReviews(response.data.data.reviews || []);
     } catch (err) {
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : "Erreur lors du chargement des avis";
-      showError(errorMessage);
+      showError(getErrorMessage(err, t, t("useReviews.loadError")));
       setReviews([]);
     }
   };

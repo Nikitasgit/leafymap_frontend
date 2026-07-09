@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import EventCard from "@/components/common/events/EventCard";
 import PartnershipCard from "@/components/common/partnerships/PartnershipCard";
 import Button from "@/components/common/buttons/Button";
@@ -24,6 +25,8 @@ export default function EventInvitationsReceivedList({
   onAccept,
   onRefuse,
 }: EventInvitationsReceivedListProps) {
+  const { t } = useTranslation("events");
+
   if (isLoading) {
     return null;
   }
@@ -54,7 +57,7 @@ export default function EventInvitationsReceivedList({
                   user={
                     initiator ?? {
                       _id: invitation._id,
-                      username: "Utilisateur",
+                      username: t("eventInvitationsReceivedList.defaultUser"),
                     }
                   }
                   showCategory
@@ -67,9 +70,9 @@ export default function EventInvitationsReceivedList({
                     fullWidth
                     onClick={() => onAccept?.(invitation._id)}
                     disabled={isUpdating}
-                    ariaLabel="Accepter l'invitation"
+                    ariaLabel={t("eventInvitationsReceivedList.acceptAriaLabel")}
                   >
-                    Accepter
+                    {t("eventInvitationsReceivedList.accept")}
                   </Button>
                   <Button
                     type="button"
@@ -78,9 +81,9 @@ export default function EventInvitationsReceivedList({
                     fullWidth
                     onClick={() => onRefuse?.(invitation._id)}
                     disabled={isUpdating}
-                    ariaLabel="Refuser l'invitation"
+                    ariaLabel={t("eventInvitationsReceivedList.refuseAriaLabel")}
                   >
-                    Refuser
+                    {t("eventInvitationsReceivedList.refuse")}
                   </Button>
                 </div>
               </div>

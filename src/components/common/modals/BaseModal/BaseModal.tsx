@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 import Skeleton from "@mui/material/Skeleton";
 import Button from "@/components/common/buttons/Button";
@@ -29,7 +32,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
   titleIcon,
   children,
   primaryButtonLabel,
-  secondaryButtonLabel = "Annuler",
+  secondaryButtonLabel,
   onPrimaryAction,
   onSecondaryAction,
   isPrimaryDisabled = false,
@@ -39,6 +42,9 @@ const BaseModal: React.FC<BaseModalProps> = ({
   withFooter = true,
   withLoadingState = true,
 }) => {
+  const { t } = useTranslation("common");
+  const resolvedSecondaryButtonLabel =
+    secondaryButtonLabel ?? t("actions.cancel");
   const [showContent, setShowContent] = React.useState(false);
   const scrollYRef = React.useRef(0);
   const CONTENT_DELAY_MS = 100;
@@ -152,7 +158,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
               onClick={handleSecondaryClick}
               disabled={isSubmitLoading}
             >
-              {secondaryButtonLabel}
+              {resolvedSecondaryButtonLabel}
             </Button>
             <Button
               type={primaryButtonType}
@@ -162,7 +168,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
                 primaryButtonType === "button" ? handlePrimaryClick : undefined
               }
             >
-              {isSubmitLoading ? "Chargement..." : primaryButtonLabel}
+              {isSubmitLoading ? t("baseModal.loading") : primaryButtonLabel}
             </Button>
           </div>
         </div>
@@ -191,7 +197,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
           <button
             className={styles.closeButton}
             onClick={onClose}
-            aria-label="Fermer la modale"
+            aria-label={t("baseModal.closeAriaLabel")}
           >
             <X size={24} />
           </button>
