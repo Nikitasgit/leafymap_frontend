@@ -1,6 +1,6 @@
 # Documentation Frontend - Leafy Map
 
-ttest
+ttes
 Application web de **découverte d'événements locaux** : carte interactive, agenda, profils d'organisateurs et gestion d'événements.
 
 ## 📑 Table des matières
