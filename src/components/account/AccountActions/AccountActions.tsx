@@ -18,7 +18,7 @@ import {
 import styles from "./AccountActions.module.scss";
 import { User } from "@/types/user";
 import { SIDEBAR_VALUES, type SidebarValue } from "@/utils/accountTabs";
-
+//test
 interface AccountActionButtonProps {
   label: string;
   ariaLabel: string;
@@ -140,18 +140,17 @@ export default function AccountActions({
     },
   ];
 
-  const buttonParameters =
-    isCreator
-      ? {
-          route: "/account/update-creator",
-          text: t("accountActions.editProfile"),
-        }
-      : userType === "guest"
-      ? {
-          route: "/account/create?redirectTo=/account/events/create",
-          text: t("accountActions.addActivity"),
-        }
-      : null;
+  const buttonParameters = isCreator
+    ? {
+        route: "/account/update-creator",
+        text: t("accountActions.editProfile"),
+      }
+    : userType === "guest"
+    ? {
+        route: "/account/create?redirectTo=/account/events/create",
+        text: t("accountActions.addActivity"),
+      }
+    : null;
 
   const shouldShowAddPlace = isCreator && !user?.place;
 
@@ -219,9 +218,15 @@ export default function AccountActions({
 
       {userType === "guest" && (
         <div className={styles.infoCard}>
-          <p className={styles.infoText}>{t("accountActions.guestInfoLine1")}</p>
-          <p className={styles.infoText}>{t("accountActions.guestInfoLine2")}</p>
-          <p className={styles.infoText}>{t("accountActions.guestInfoLine3")}</p>
+          <p className={styles.infoText}>
+            {t("accountActions.guestInfoLine1")}
+          </p>
+          <p className={styles.infoText}>
+            {t("accountActions.guestInfoLine2")}
+          </p>
+          <p className={styles.infoText}>
+            {t("accountActions.guestInfoLine3")}
+          </p>
         </div>
       )}
     </section>
