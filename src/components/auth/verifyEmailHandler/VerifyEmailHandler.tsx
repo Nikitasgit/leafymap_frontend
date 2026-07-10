@@ -20,15 +20,12 @@ interface VerifyEmailHandlerProps {
 export default function VerifyEmailHandler({ token }: VerifyEmailHandlerProps) {
   const { showError } = useToast();
   const { t } = useTranslation("auth");
-  const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading",
+  const [status, setStatus] = useState<"loading" | "success" | "error">(() =>
+    token ? "loading" : "error",
   );
 
   useEffect(() => {
-    if (!token) {
-      setStatus("error");
-      return;
-    }
+    if (!token) return;
     if (verificationStarted.has(token)) return;
     verificationStarted.add(token);
 
@@ -47,7 +44,7 @@ export default function VerifyEmailHandler({ token }: VerifyEmailHandlerProps) {
         );
       }
     };
-    verify();
+    void verify();
   }, [token, showError, t]);
 
   if (status === "loading") {

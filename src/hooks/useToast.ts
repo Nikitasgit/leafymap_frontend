@@ -6,22 +6,20 @@ interface ToastFunctions {
   showInfo: (message: string) => void;
 }
 
-export const useToast = (): ToastFunctions => {
-  const showSuccess = (message: string) => {
-    toast.success(message);
-  };
-
-  const showError = (message: string) => {
-    toast.error(message);
-  };
-
-  const showInfo = (message: string) => {
-    toast.info(message);
-  };
-
-  return {
-    showSuccess,
-    showError,
-    showInfo,
-  };
+const showSuccess = (message: string) => {
+  toast.success(message);
 };
+
+const showError = (message: string) => {
+  toast.error(message);
+};
+
+const showInfo = (message: string) => {
+  toast.info(message);
+};
+
+export const useToast = (): ToastFunctions => ({
+  showSuccess,
+  showError,
+  showInfo,
+});

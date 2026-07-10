@@ -77,9 +77,11 @@ export default function AccountActions({
             label: t("accountActions.placeLabel"),
             ariaLabel: t("accountActions.placeAriaLabel"),
             icon: <MapPin size={16} />,
-            onClick: () =>
-              hasPlaceObject &&
-              router.push(`/account/places/${(user.place as any)._id}`),
+            onClick: () => {
+              if (hasPlaceObject && typeof user.place === "object") {
+                router.push(`/account/places/${user.place._id}`);
+              }
+            },
             disabled: isLoadingUser,
             creatorOnly: true,
           } as AccountActionButtonProps,

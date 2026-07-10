@@ -10,7 +10,10 @@ interface FollowData {
   _id: string;
 }
 
-const useFollowStatus = ({ currentUserId, targetUserId }: UseFollowStatusParams) => {
+const useFollowStatus = ({
+  currentUserId,
+  targetUserId,
+}: UseFollowStatusParams) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followId, setFollowId] = useState<string | null>(null);
 
@@ -21,15 +24,12 @@ const useFollowStatus = ({ currentUserId, targetUserId }: UseFollowStatusParams)
       return;
     }
     try {
-      const response = await apiClient.get(
-        `/api/follows/check`,
-        {
-          params: {
-            follower: currentUserId,
-            following: targetUserId,
-          }
-        }
-      );
+      const response = await apiClient.get(`/api/follows/check`, {
+        params: {
+          follower: currentUserId,
+          following: targetUserId,
+        },
+      });
       const followData = response.data.data?.follow as FollowData | undefined;
       setIsFollowing(!!followData);
       setFollowId(followData?._id ?? null);
@@ -40,10 +40,48 @@ const useFollowStatus = ({ currentUserId, targetUserId }: UseFollowStatusParams)
   }, [currentUserId, targetUserId]);
 
   useEffect(() => {
-    checkFollowStatus();
-  }, [checkFollowStatus]);
+    let cancelled = false;
 
-  return { isFollowing, followId, setIsFollowing, setFollowId, refetch: checkFollowStatus };
+    const load = async () => {
+      if (!currentUserId || !targetUserId || currentUserId === targetUserId) {
+        if (!cancelled) {
+          setIsFollowing(false);
+          setFollowId(null);
+        }
+        return;
+      }
+      try {
+        const response = await apiClient.get(`/api/follows/check`, {
+          params: {
+            follower: currentUserId,
+            following: targetUserId,
+          },
+        });
+        if (cancelled) return;
+        const followData = response.data.data?.follow as FollowData | undefined;
+        setIsFollowing(!!followData);
+        setFollowId(followData?._id ?? null);
+      } catch {
+        if (!cancelled) {
+          setIsFollowing(false);
+          setFollowId(null);
+        }
+      }
+    };
+
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, [currentUserId, targetUserId]);
+
+  return {
+    isFollowing,
+    followId,
+    setIsFollowing,
+    setFollowId,
+    refetch: checkFollowStatus,
+  };
 };
 
 export default useFollowStatus;

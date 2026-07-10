@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useToast } from "@/hooks/useToast";
@@ -19,13 +19,30 @@ const AddressInput = ({
 }: AddressInputProps) => {
   const { t } = useTranslation("common");
   const { showError } = useToast();
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(value || "");
   const [suggestions, setSuggestions] = useState<Location[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const [lastSelectedLocation, setLastSelectedLocation] =
     useState<Location | null>(null);
+  const [prevValue, setPrevValue] = useState(value);
+  const [prevSelectedLocation, setPrevSelectedLocation] =
+    useState(selectedLocation);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  if (value !== prevValue) {
+    setPrevValue(value);
+    setInput(value || "");
+  }
+
+  if (selectedLocation !== prevSelectedLocation) {
+    setPrevSelectedLocation(selectedLocation);
+    if (selectedLocation && value === selectedLocation.label) {
+      setLastSelectedLocation(selectedLocation);
+    } else if (!selectedLocation) {
+      setLastSelectedLocation(null);
+    }
+  }
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -61,19 +78,6 @@ const AddressInput = ({
   };
 
   useOnClickOutside(wrapperRef, handleClickOutside);
-
-  useEffect(() => {
-    setInput(value || "");
-
-    if (selectedLocation && value === selectedLocation.label) {
-      setLastSelectedLocation(selectedLocation);
-      return;
-    }
-
-    if (!selectedLocation) {
-      setLastSelectedLocation(null);
-    }
-  }, [value, selectedLocation]);
 
   return (
     <div ref={wrapperRef} className={styles.addressInputWrapper}>

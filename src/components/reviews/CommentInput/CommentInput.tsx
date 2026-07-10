@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "@/components/common/buttons/Button";
 import TextField from "@/components/common/inputs/TextField";
@@ -13,7 +13,7 @@ interface CommentInputProps {
   onSuccess?: () => void;
   onCancel?: () => void;
   placeholder?: string;
-  comment?: CommentPopulated; // If provided, we're in edit mode
+  comment?: CommentPopulated;
 }
 
 const CommentInput: React.FC<CommentInputProps> = ({
@@ -27,18 +27,17 @@ const CommentInput: React.FC<CommentInputProps> = ({
   const { t } = useTranslation("reviews");
   const isEditMode = !!comment;
   const [content, setContent] = useState(comment?.content || "");
-  const resolvedPlaceholder = placeholder ?? t("commentInput.defaultPlaceholder");
+  const [prevCommentId, setPrevCommentId] = useState(comment?._id);
+  const resolvedPlaceholder =
+    placeholder ?? t("commentInput.defaultPlaceholder");
   const { submitComment, isLoading: isSubmitting } = useSubmitComment();
   const { updateComment, isLoading: isUpdating } = useUpdateComment();
   const isLoading = isSubmitting || isUpdating;
 
-  useEffect(() => {
-    if (comment) {
-      setContent(comment.content);
-    } else {
-      setContent("");
-    }
-  }, [comment]);
+  if (comment?._id !== prevCommentId) {
+    setPrevCommentId(comment?._id);
+    setContent(comment?.content || "");
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,8 +99,8 @@ const CommentInput: React.FC<CommentInputProps> = ({
               ? t("commentInput.updating")
               : t("commentInput.publishing")
             : isEditMode
-            ? t("common:actions.save")
-            : t("commentInput.publish")}
+              ? t("common:actions.save")
+              : t("commentInput.publish")}
         </Button>
       </div>
     </form>

@@ -8,14 +8,16 @@ import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export const useUserEvents = (
   userId: string | null,
-  lifecycleStatus?: ("upcoming" | "ongoing" | "completed" | "unvalid")[]
+  lifecycleStatus?: ("upcoming" | "ongoing" | "completed" | "unvalid")[],
 ) => {
   const [events, setEvents] = useState<EventPopulated[]>([]);
-  const { isLoading, withLoading, stopLoading } = useLoading(true);
+  const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
   const { t } = useTranslation("events");
 
   useEffect(() => {
+    if (!userId) return;
+
     const fetchEvents = async () => {
       try {
         let url = `/api/events?userId=${userId}`;
@@ -38,13 +40,8 @@ export const useUserEvents = (
       }
     };
 
-    if (userId) {
-      withLoading(fetchEvents);
-    } else {
-      setEvents([]);
-      stopLoading();
-    }
-  }, [userId, lifecycleStatus]); // eslint-disable-line react-hooks/exhaustive-deps
+    void withLoading(fetchEvents);
+  }, [userId, lifecycleStatus, withLoading, showError, t]);
 
-  return { events, isLoading };
+  return { events: userId ? events : [], isLoading: userId ? isLoading : false };
 };

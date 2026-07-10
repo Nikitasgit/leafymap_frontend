@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { apiClient } from "@/lib/api/client";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
@@ -8,19 +8,16 @@ export const useUserProducts = (userId?: string) => {
   const [products, setProducts] = useState<Product[]>([]);
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
-  const showErrorRef = useRef(showError);
-  showErrorRef.current = showError;
 
   const fetchProducts = useCallback(async () => {
     if (!userId) {
-      setProducts([]);
       return;
     }
     try {
       const params = new URLSearchParams({ userId });
       const response = await apiClient.get(
         `/api/products?${params.toString()}`,
-        {}
+        {},
       );
       const data = response.data?.data ?? [];
       setProducts(Array.isArray(data) ? data : []);
@@ -30,20 +27,17 @@ export const useUserProducts = (userId?: string) => {
           ? err.message
           : "Erreur lors du chargement des produits";
       setProducts([]);
-      showErrorRef.current(message);
+      showError(message);
     }
-  }, [userId]);
+  }, [userId, showError]);
 
   useEffect(() => {
-    if (userId) {
-      withLoading(fetchProducts);
-    } else {
-      setProducts([]);
-    }
-  }, [userId, fetchProducts]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (!userId) return;
+    void withLoading(fetchProducts);
+  }, [userId, fetchProducts, withLoading]);
 
   return {
-    products,
+    products: userId ? products : [],
     isLoading,
     refetch: fetchProducts,
   };

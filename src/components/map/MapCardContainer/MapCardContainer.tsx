@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import MapCreatorCard from "../MapCreatorCard";
 import styles from "./MapCardContainer.module.scss";
 import { MapCardContainerProps } from "./MapCardContainer.types";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 type DrawerState = "collapsed" | "default" | "expanded";
 
@@ -21,54 +22,54 @@ const MapCardContainer = ({
   const { t } = useTranslation("map");
   const [drawerState, setDrawerState] = useState<DrawerState>("default");
   const [dragHeight, setDragHeight] = useState<number | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 767px)");
   const [isCreatorLoading, setIsCreatorLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartY = useRef(0);
   const touchStartHeight = useRef(0);
   const touchDraggedRef = useRef(false);
-  const isAnimatingCloseRef = useRef(false);
-  const closeFallbackTimerRef = useRef<number | null>(null);
+  const [isAnimatingClose, setIsAnimatingClose] = useState(false);
+  const [closeFallbackTimerId, setCloseFallbackTimerId] = useState<number | null>(
+    null,
+  );
+  const [prevSelectedItem, setPrevSelectedItem] = useState(selectedItem);
 
   const clearCloseFallback = useCallback(() => {
-    const id = closeFallbackTimerRef.current;
-    if (id !== null) {
-      window.clearTimeout(id);
-      closeFallbackTimerRef.current = null;
-    }
+    setCloseFallbackTimerId((currentId) => {
+      if (currentId !== null) {
+        window.clearTimeout(currentId);
+      }
+      return null;
+    });
   }, []);
 
   const finishCloseAfterAnimation = useCallback(() => {
-    if (!isAnimatingCloseRef.current) {
+    if (!isAnimatingClose) {
       return;
     }
-    isAnimatingCloseRef.current = false;
+    setIsAnimatingClose(false);
     clearCloseFallback();
     onClose();
-  }, [clearCloseFallback, onClose]);
+  }, [clearCloseFallback, isAnimatingClose, onClose]);
 
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
-    setIsMobile(mq.matches);
-    const fn = () => setIsMobile(mq.matches);
-    mq.addEventListener("change", fn);
-    return () => mq.removeEventListener("change", fn);
-  }, []);
-
-  const isCollapsed = drawerState === "collapsed";
-
-  useEffect(() => {
-    isAnimatingCloseRef.current = false;
-    clearCloseFallback();
+  if (selectedItem !== prevSelectedItem) {
+    setPrevSelectedItem(selectedItem);
+    setIsAnimatingClose(false);
+    if (closeFallbackTimerId !== null) {
+      window.clearTimeout(closeFallbackTimerId);
+      setCloseFallbackTimerId(null);
+    }
     setDrawerState("default");
-  }, [selectedItem, clearCloseFallback]);
+  }
 
   useEffect(
     () => () => {
       clearCloseFallback();
     },
-    [clearCloseFallback]
+    [clearCloseFallback],
   );
+
+  const isCollapsed = drawerState === "collapsed";
 
   const getContainerHeight = useCallback(() => {
     return containerRef.current?.parentElement?.getBoundingClientRect().height ?? window.innerHeight;
@@ -137,7 +138,7 @@ const MapCardContainer = ({
 
   const handleTransitionEnd = useCallback(
     (e: React.TransitionEvent<HTMLDivElement>) => {
-      if (!isAnimatingCloseRef.current) {
+      if (!isAnimatingClose) {
         return;
       }
       if (e.target !== e.currentTarget) {
@@ -148,7 +149,7 @@ const MapCardContainer = ({
       }
       finishCloseAfterAnimation();
     },
-    [finishCloseAfterAnimation]
+    [finishCloseAfterAnimation, isAnimatingClose],
   );
 
   const handleHandleClick = useCallback(() => {
@@ -156,24 +157,26 @@ const MapCardContainer = ({
       touchDraggedRef.current = false;
       return;
     }
-    if (isAnimatingCloseRef.current) {
+    if (isAnimatingClose) {
       return;
     }
     if (drawerState === "collapsed") {
       onClose();
       return;
     }
-    isAnimatingCloseRef.current = true;
+    setIsAnimatingClose(true);
     setDrawerState("collapsed");
     clearCloseFallback();
-    closeFallbackTimerRef.current = window.setTimeout(() => {
-      closeFallbackTimerRef.current = null;
+    const timerId = window.setTimeout(() => {
+      setCloseFallbackTimerId(null);
       finishCloseAfterAnimation();
     }, CLOSE_TRANSITION_FALLBACK_MS);
+    setCloseFallbackTimerId(timerId);
   }, [
     clearCloseFallback,
     drawerState,
     finishCloseAfterAnimation,
+    isAnimatingClose,
     onClose,
   ]);
 

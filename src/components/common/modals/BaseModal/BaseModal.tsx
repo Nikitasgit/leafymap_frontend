@@ -52,41 +52,39 @@ const BaseModal: React.FC<BaseModalProps> = ({
   const showSkeleton = withLoadingState && !showContent;
 
   useEffect(() => {
+    if (!isOpen) return;
+
+    scrollYRef.current = window.scrollY;
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollYRef.current}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+
     let timer: ReturnType<typeof setTimeout> | undefined;
+    if (withLoadingState && !isContentLoading) {
+      timer = setTimeout(() => setShowContent(true), CONTENT_DELAY_MS);
+    }
 
-    if (isOpen) {
-      scrollYRef.current = window.scrollY;
-      document.body.style.overflow = "hidden";
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollYRef.current}px`;
-      document.body.style.left = "0";
-      document.body.style.right = "0";
-      setShowContent(!withLoadingState);
-
-      if (withLoadingState && !isContentLoading) {
-        timer = setTimeout(() => setShowContent(true), CONTENT_DELAY_MS);
-      }
-    } else {
+    return () => {
       const savedScrollY = scrollYRef.current;
       document.body.style.overflow = "";
       document.body.style.position = "";
       document.body.style.top = "";
       document.body.style.left = "";
       document.body.style.right = "";
-      setShowContent(false);
       window.scrollTo(0, savedScrollY);
-    }
-
-    return () => {
-      document.body.style.overflow = "";
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
-      window.scrollTo(0, scrollYRef.current);
       if (timer) clearTimeout(timer);
     };
   }, [isOpen, isContentLoading, withLoadingState]);
+
+  if (!isOpen && showContent) {
+    setShowContent(false);
+  }
+
+  if (isOpen && !withLoadingState && !showContent) {
+    setShowContent(true);
+  }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

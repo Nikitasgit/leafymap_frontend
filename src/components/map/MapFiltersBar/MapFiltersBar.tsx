@@ -52,24 +52,19 @@ const MapFiltersBar = ({
     [t]
   );
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [searchType, setSearchType] = useState<SearchType>(searchTypes[0]);
+  const [searchTypeKey, setSearchTypeKey] = useState(searchTypes[0].key);
+  const searchType =
+    searchTypes.find((type) => type.key === searchTypeKey) ?? searchTypes[0];
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { searchUsers, isLoading: isLoadingUsers } = useFindUsers();
   useOnClickOutside(dropdownRef, () => setIsDropdownOpen(false));
-
-  useEffect(() => {
-    setSearchType((prev) => {
-      const match = searchTypes.find((type) => type.key === prev.key);
-      return match ?? searchTypes[0];
-    });
-  }, [searchTypes]);
 
   const handleDropdownToggle = useCallback(() => {
     setIsDropdownOpen((prev) => !prev);
   }, []);
 
   const handleSearchTypeSelect = useCallback((type: SearchType) => {
-    setSearchType(type);
+    setSearchTypeKey(type.key);
     setIsDropdownOpen(false);
   }, []);
 
@@ -243,11 +238,11 @@ const MapFiltersBar = ({
   const handleDisplayModeChange = useCallback(
     (mode: typeof displayMode) => {
       onDisplayModeChange(mode);
-      setSearchType(
+      const nextType =
         searchTypes.find((type) =>
-          mode === "events" ? type.key === "evenements" : type.key === "lieux"
-        ) ?? searchTypes[0]
-      );
+          mode === "events" ? type.key === "evenements" : type.key === "lieux",
+        ) ?? searchTypes[0];
+      setSearchTypeKey(nextType.key);
       handleSelect({ id: "", type: null });
       onExitFavoritesMode();
     },

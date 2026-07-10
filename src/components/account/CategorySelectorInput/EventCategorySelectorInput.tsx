@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EventCategory } from "@/types/categories";
 import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper";
@@ -21,7 +21,6 @@ const EventCategorySelectorInput = ({
   errorMessage?: string;
 }) => {
   const { eventCategories, loading, error: appError } = useApp();
-  const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const { showError } = useToast();
   const { t } = useTranslation("subscription");
@@ -29,8 +28,12 @@ const EventCategorySelectorInput = ({
 
   useOnClickOutside(ref, () => setIsOpen(false));
 
+  const inputValue = useMemo(() => {
+    if (!value) return "";
+    return eventCategories.find((cat) => cat._id === value)?.name ?? "";
+  }, [eventCategories, value]);
+
   const handleSelect = (eventCategory: EventCategory) => {
-    setInputValue(eventCategory.name);
     setIsOpen(false);
     onChange({
       target: {
@@ -39,18 +42,6 @@ const EventCategorySelectorInput = ({
       },
     });
   };
-
-  useEffect(() => {
-    if (!value) {
-      setInputValue("");
-      return;
-    }
-
-    const category = eventCategories.find((cat) => cat._id === value);
-    if (category) {
-      setInputValue(category.name);
-    }
-  }, [eventCategories, value]);
 
   if (appError) {
     showError(appError);
@@ -70,7 +61,7 @@ const EventCategorySelectorInput = ({
         required
         fullWidth
         placeholder={t("eventCategorySelector.placeholder")}
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={() => {}}
         error={error}
         errorMessage={errorMessage}
       />

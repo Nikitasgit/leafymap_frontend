@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import StarsReview from "@/components/common/stars/StarsReview";
 import BaseModal from "@/components/common/modals/BaseModal";
@@ -14,7 +14,7 @@ interface ReviewModalProps {
   reference: string;
   referenceType: ReviewReferenceType;
   onSuccess?: () => void;
-  review?: ReviewPopulated; // If provided, we're in edit mode
+  review?: ReviewPopulated;
 }
 
 const ReviewModal: React.FC<ReviewModalProps> = ({
@@ -29,11 +29,15 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   const isEditMode = !!review;
   const [rating, setRating] = useState(review?.rating || 0);
   const [comment, setComment] = useState(review?.comment || "");
+  const [prevOpenState, setPrevOpenState] = useState(isOpen);
+  const [prevReviewId, setPrevReviewId] = useState(review?._id);
   const { submitReview, isLoading: isSubmitting } = useSubmitReview();
   const { updateReview, isLoading: isUpdating } = useUpdateReview();
   const isLoading = isSubmitting || isUpdating;
 
-  useEffect(() => {
+  if (isOpen !== prevOpenState || review?._id !== prevReviewId) {
+    setPrevOpenState(isOpen);
+    setPrevReviewId(review?._id);
     if (isOpen && review) {
       setRating(review.rating);
       setComment(review.comment || "");
@@ -41,7 +45,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       setRating(0);
       setComment("");
     }
-  }, [isOpen, review]);
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,8 +78,12 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      title={isEditMode ? t("reviewModal.editTitle") : t("reviewModal.writeTitle")}
-      primaryButtonLabel={isEditMode ? t("common:actions.save") : t("reviewModal.publish")}
+      title={
+        isEditMode ? t("reviewModal.editTitle") : t("reviewModal.writeTitle")
+      }
+      primaryButtonLabel={
+        isEditMode ? t("common:actions.save") : t("reviewModal.publish")
+      }
       secondaryButtonLabel={t("common:actions.cancel")}
       onPrimaryAction={handleSubmit}
       isPrimaryDisabled={rating === 0}

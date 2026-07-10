@@ -21,7 +21,7 @@ const PlaceCategoryFilter: React.FC<PlaceCategoryFilterProps> = ({
         _id: cat._id,
         label: t(`common:placeCategories.${cat.name.toLowerCase()}`, cat.name),
       })),
-    [placeCategories]
+    [placeCategories, t]
   );
 
   const value = useMemo(

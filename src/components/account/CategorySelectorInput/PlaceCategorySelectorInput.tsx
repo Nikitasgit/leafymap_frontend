@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useMemo, useRef, useState } from "react";
 import styles from "./CategorySelectorInput.module.scss";
 import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper";
 import { PlaceCategory } from "@/types/categories";
@@ -21,7 +21,6 @@ const PlaceCategorySelectorInput = ({
   errorMessage?: string;
 }) => {
   const { placeCategories, loading, error: appError } = useApp();
-  const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const { showError } = useToast();
   const { t } = useTranslation("subscription");
@@ -33,8 +32,12 @@ const PlaceCategorySelectorInput = ({
 
   useOnClickOutside(ref, handleClickOutside);
 
+  const inputValue = useMemo(() => {
+    if (!value) return "";
+    return placeCategories.find((category) => category._id === value)?.name ?? "";
+  }, [placeCategories, value]);
+
   const handleSelect = (category: PlaceCategory) => {
-    setInputValue(category.name);
     setIsOpen(false);
     onChange({
       target: {
@@ -43,15 +46,6 @@ const PlaceCategorySelectorInput = ({
       },
     });
   };
-
-  useEffect(() => {
-    if (value) {
-      const category = placeCategories.find((s) => s._id === value);
-      if (category) {
-        setInputValue(category.name);
-      }
-    }
-  }, [value, placeCategories]);
 
   if (appError) {
     showError(appError);
@@ -71,7 +65,7 @@ const PlaceCategorySelectorInput = ({
         required
         fullWidth
         placeholder={t("placeCategorySelector.placeholder")}
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={() => {}}
         error={error}
         errorMessage={errorMessage}
       />

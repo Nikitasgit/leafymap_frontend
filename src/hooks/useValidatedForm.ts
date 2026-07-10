@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ZodError, ZodSchema } from "zod";
 
 function zodErrorsToRecord(error: ZodError): Record<string, string> {
@@ -10,26 +10,31 @@ function zodErrorsToRecord(error: ZodError): Record<string, string> {
   return errors;
 }
 
+function computeErrors<T>(
+  schema: ZodSchema<T>,
+  values: T,
+): Record<string, string> {
+  const result = schema.safeParse(values);
+  if (result.success) {
+    return {};
+  }
+  return zodErrorsToRecord(result.error);
+}
+
 export function useValidatedForm<T>(schema: ZodSchema<T>, initialValues: T) {
   const [values, setValuesState] = useState<T>(initialValues);
-  const [errors, setErrors] = useState<Record<string, string>>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+
+  const errors = useMemo(
+    () =>
+      hasAttemptedSubmit ? computeErrors(schema, values) : {},
+    [hasAttemptedSubmit, schema, values],
+  );
 
   const validate = useCallback((): boolean => {
     const result = schema.safeParse(values);
-    if (result.success) {
-      setErrors({});
-      return true;
-    }
-    setErrors(zodErrorsToRecord(result.error));
-    return false;
+    return result.success;
   }, [schema, values]);
-
-  useEffect(() => {
-    if (hasAttemptedSubmit) {
-      validate();
-    }
-  }, [hasAttemptedSubmit, validate]);
 
   const setField = useCallback(
     <K extends keyof T>(field: K, value: T[K]) => {
@@ -52,11 +57,9 @@ export function useValidatedForm<T>(schema: ZodSchema<T>, initialValues: T) {
         setHasAttemptedSubmit(true);
         const result = schema.safeParse(values);
         if (!result.success) {
-          setErrors(zodErrorsToRecord(result.error));
           onInvalid?.();
           return false;
         }
-        setErrors({});
         await onValid(result.data);
         return true;
       },

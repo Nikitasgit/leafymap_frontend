@@ -1,7 +1,7 @@
 "use client";
 import { FormDataChangeHandler } from "@/components/account/CreateProfileStepper";
 import TextField from "@/components/common/inputs/TextField";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useMemo } from "react";
 import NewDatesEventForm from "../EventNewDatesSelector";
 import Button from "@/components/common/buttons/Button";
 import useSubmitEvent from "@/hooks/useSubmitEvent";
@@ -31,6 +31,15 @@ import RadioYesOrNo from "@/components/common/inputs/RadioYesOrNo";
 import { validationT } from "@/utils/i18n/validationT";
 
 type LocationMode = "place" | "address" | "online";
+
+const getLocationMode = (
+  event: Event | initialEventData | null,
+): LocationMode => {
+  if (event?.online) return "online";
+  if (event?.location) return "address";
+  if (event?.place) return "place";
+  return "address";
+};
 
 const getEventPlaceId = (
   event: Event | initialEventData | null
@@ -91,23 +100,58 @@ const EventForm = ({
 
   const [partnerships, setPartnerships] =
     useState<Partnership[]>(partnershipsData);
-  const [event, setEvent] = useState<initialEventData>(
-    initialEventData(eventData)
+  const [event, setEvent] = useState<initialEventData>(() =>
+    initialEventData(eventData),
   );
-  const [locationMode, setLocationMode] = useState<LocationMode>(
-    eventData?.online
-      ? "online"
-      : eventData?.location
-      ? "address"
-      : eventData?.place
-      ? "place"
-      : "address"
+  const [locationMode, setLocationMode] = useState<LocationMode>(() =>
+    getLocationMode(eventData),
   );
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
-  const hasInitializedLocationMode = useRef(!!eventData);
-  const [errors, setErrors] = useState<{
-    event: Record<string, string>;
-  }>({ event: {} });
+  const [prevEventData, setPrevEventData] = useState(eventData);
+  const [prevPartnershipsData, setPrevPartnershipsData] =
+    useState(partnershipsData);
+  const [hasAppliedDefaultPlace, setHasAppliedDefaultPlace] = useState(false);
+
+  if (eventData !== prevEventData) {
+    setPrevEventData(eventData);
+    if (eventData) {
+      setEvent(initialEventData(eventData));
+      setLocationMode(getLocationMode(eventData));
+    }
+  }
+
+  if (partnershipsData !== prevPartnershipsData) {
+    setPrevPartnershipsData(partnershipsData);
+    if (partnershipsData.length > 0) {
+      setPartnerships(partnershipsData);
+    }
+  }
+
+  if (
+    !isUpdate &&
+    userPlace &&
+    !hasAppliedDefaultPlace &&
+    !event.place &&
+    !event.location &&
+    !event.online
+  ) {
+    setHasAppliedDefaultPlace(true);
+    setLocationMode("place");
+    setEvent((prev) => ({ ...prev, place: userPlace._id }));
+  }
+
+  if (!isUpdate && userPlace && locationMode === "place" && !event.place) {
+    setEvent((prev) => ({ ...prev, place: userPlace._id }));
+  }
+
+  const errors = useMemo(
+    () => ({
+      event: hasAttemptedSubmit
+        ? validateEventData(validationT(t))(event).errors
+        : {},
+    }),
+    [hasAttemptedSubmit, event, t],
+  );
 
   const { onUpdatePeriod, onDeletePeriod, onUpdateTimeSlot, onDeleteTimeSlot } =
     useEventSchedule({ setEvent });
@@ -127,48 +171,10 @@ const EventForm = ({
     }));
   };
 
-  const validateFormData = useCallback((): boolean => {
-    const eventValidation = validateEventData(validationT(t))(event);
-    setErrors((prev) => ({
-      ...prev,
-      event: eventValidation.errors,
-    }));
-    return eventValidation.isValid;
-  }, [event, t]);
-
-  useEffect(() => {
-    if (eventData) setEvent(initialEventData(eventData));
-    if (eventData?.online) setLocationMode("online");
-    else if (eventData?.location) setLocationMode("address");
-    else if (eventData?.place) setLocationMode("place");
-    if (partnershipsData && partnershipsData.length > 0)
-      setPartnerships(partnershipsData);
-  }, [eventData, partnershipsData]);
-
-  useEffect(() => {
-    if (!isUpdate && userPlace && locationMode === "place" && !event.place) {
-      setEvent((prev) => ({ ...prev, place: userPlace._id }));
-    }
-  }, [event.place, isUpdate, locationMode, userPlace]);
-
-  useEffect(() => {
-    if (
-      !isUpdate &&
-      userPlace &&
-      !event.place &&
-      !event.location &&
-      !event.online
-    ) {
-      setLocationMode("place");
-      setEvent((prev) => ({ ...prev, place: userPlace._id }));
-    }
-  }, [event.location, event.online, event.place, isUpdate, userPlace]);
-
-  useEffect(() => {
-    if (hasAttemptedSubmit) {
-      validateFormData();
-    }
-  }, [hasAttemptedSubmit, validateFormData]);
+  const isFormValid = useMemo(
+    () => validateEventData(validationT(t))(event).isValid,
+    [event, t],
+  );
 
   const loading = submitEventInvitationsLoading || submitFormLoading;
 
@@ -196,7 +202,7 @@ const EventForm = ({
     e.preventDefault();
     setHasAttemptedSubmit(true);
     try {
-      if (!validateFormData()) {
+      if (!isFormValid) {
         showError(t("eventForm.validationError"));
         return;
       }

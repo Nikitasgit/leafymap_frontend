@@ -60,7 +60,7 @@ const MapPageContainer = () => {
   const [favoritesPlaces, setFavoritesPlaces] = useState<Place[]>([]);
   const favoritesBounds = useRef<LngLatBoundsLike | null>(null);
   const mapRef = useRef<ExtendedMapRef | null>(null);
-  const isUpdatingFromUrl = useRef(false);
+  const [prevSearchParams, setPrevSearchParams] = useState(searchParams);
   const placeFavoriteIds = useAppSelector(selectPlaceFavorites);
 
   const exitFavoritesMode = useCallback(() => {
@@ -161,15 +161,18 @@ const MapPageContainer = () => {
     }
   };
 
-  useEffect(() => {
+  // Adopte l'URL dans le state uniquement quand searchParams change
+  // (navigation, bouton retour), pas à chaque render.
+  if (searchParams !== prevSearchParams) {
+    setPrevSearchParams(searchParams);
     const urlCreatorId = searchParams.get("creator");
     const urlEventId = searchParams.get("event");
     const currentCreatorId =
       selectedItem.type === "creator" ? selectedItem.id : null;
     const currentEventId =
       selectedItem.type === "creator" ? selectedItem.eventId || null : null;
+
     if (urlCreatorId !== currentCreatorId || urlEventId !== currentEventId) {
-      isUpdatingFromUrl.current = true;
       if (urlCreatorId) {
         setSelectedItem({
           id: urlCreatorId,
@@ -180,16 +183,10 @@ const MapPageContainer = () => {
       } else {
         setSelectedItem({ id: "", type: null });
       }
-      setTimeout(() => {
-        isUpdatingFromUrl.current = false;
-      }, 0);
     }
-  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
+  }
 
   useEffect(() => {
-    if (isUpdatingFromUrl.current) {
-      return;
-    }
     const currentCreatorId = searchParams.get("creator");
     const currentEventId = searchParams.get("event");
     const params = new URLSearchParams(searchParams.toString());
