@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { UserPopulated } from "@/types/user";
 import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import useFollowers from "@/hooks/useFollowers";
@@ -38,7 +38,12 @@ const FollowersTab: React.FC = () => {
               createdAt: new Date(),
               updatedAt: new Date(),
             };
-            return <UserCard key={follower._id} user={userPopulated as any} />;
+            return (
+              <UserCard
+                key={follower._id}
+                user={userPopulated as UserPopulated}
+              />
+            );
           })}
         </div>
       ) : (

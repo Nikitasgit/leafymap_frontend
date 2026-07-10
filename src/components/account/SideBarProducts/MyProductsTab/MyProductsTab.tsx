@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Package } from "lucide-react";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -32,12 +32,17 @@ export default function MyProductsTab() {
   const { showError } = useToast();
   const atLimit = products.length >= MAX_PRODUCTS_PER_USER;
 
-  const getCategoryGroupName = (option: ProductCategory): string => {
-    const type = option.type;
-    if (!type || typeof type !== "object") return "";
-    const name = (type as { name?: string }).name ?? "";
-    return name ? t(`common:categoryTypes.${name}`, t(`common:placeTypes.${name}`, name)) : "";
-  };
+  const getCategoryGroupName = useCallback(
+    (option: ProductCategory): string => {
+      const type = option.type;
+      if (!type || typeof type !== "object") return "";
+      const name = (type as { name?: string }).name ?? "";
+      return name
+        ? t(`common:categoryTypes.${name}`, t(`common:placeTypes.${name}`, name))
+        : "";
+    },
+    [t],
+  );
 
   const options = useMemo(
     () =>
@@ -47,7 +52,7 @@ export default function MyProductsTab() {
         if (ga !== gb) return ga.localeCompare(gb);
         return (a.name ?? "").localeCompare(b.name ?? "");
       }),
-    [productCategories],
+    [productCategories, getCategoryGroupName],
   );
 
   const value = useMemo(() => {

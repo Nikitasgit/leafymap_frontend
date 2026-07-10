@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { X, LucideIcon } from "lucide-react";
 import Button from "@/components/common/buttons/Button";
@@ -42,21 +42,43 @@ const SideBar = ({
   const { t } = useTranslation("common");
   const [activeTabId, setActiveTabId] = useState(tabs?.[0]?.id ?? "");
   const [isContentVisible, setIsContentVisible] = useState(false);
+  const [appliedInitialTabId, setAppliedInitialTabId] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
-    if (isOpen) {
-      const timer = setTimeout(() => {
-        setIsContentVisible(true);
-      }, SIDEBAR_ANIMATION_DURATION_MS);
-      return () => clearTimeout(timer);
-    } else {
-      setIsContentVisible(false);
-    }
+    if (!isOpen) return;
+
+    const timer = setTimeout(() => {
+      setIsContentVisible(true);
+    }, SIDEBAR_ANIMATION_DURATION_MS);
+    return () => clearTimeout(timer);
   }, [isOpen]);
 
+  if (!isOpen && isContentVisible) {
+    setIsContentVisible(false);
+  }
+
+  // Réinitialise à la fermeture pour que l'onglet initial soit réappliqué
+  // à la prochaine ouverture.
+  if (!isOpen && appliedInitialTabId !== null) {
+    setAppliedInitialTabId(null);
+  }
+
+  if (
+    isOpen &&
+    initialTabId &&
+    tabs?.some((tab) => tab.id === initialTabId) &&
+    appliedInitialTabId !== initialTabId
+  ) {
+    setAppliedInitialTabId(initialTabId);
+    setActiveTabId(initialTabId);
+  }
+
+  // La notification du parent est un side effect : elle reste dans un effet
+  // (elle peut déclencher navigation et appels API côté parent).
   useEffect(() => {
-    if (isOpen && initialTabId && tabs?.some((t) => t.id === initialTabId)) {
-      setActiveTabId(initialTabId);
+    if (isOpen && initialTabId && tabs?.some((tab) => tab.id === initialTabId)) {
       onTabChange?.(initialTabId);
     }
   }, [isOpen, initialTabId]); // eslint-disable-line react-hooks/exhaustive-deps

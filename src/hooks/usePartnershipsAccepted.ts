@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { apiClient } from "@/lib/api/client";
 import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
@@ -11,14 +11,9 @@ export const usePartnershipsAccepted = (userId?: string) => {
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
   const { t } = useTranslation("account");
-  const showErrorRef = useRef(showError);
-  showErrorRef.current = showError;
-  const tRef = useRef(t);
-  tRef.current = t;
 
   const fetchPartnerships = useCallback(async () => {
     if (!userId) {
-      setPartnerships([]);
       return;
     }
     try {
@@ -29,26 +24,20 @@ export const usePartnershipsAccepted = (userId?: string) => {
       const data = response.data?.data ?? [];
       setPartnerships(Array.isArray(data) ? data : []);
     } catch (err) {
-      const message = getErrorMessage(
-        err,
-        tRef.current,
-        tRef.current("usePartnershipsAccepted.loadError"),
-      );
       setPartnerships([]);
-      showErrorRef.current(message);
+      showError(
+        getErrorMessage(err, t, t("usePartnershipsAccepted.loadError")),
+      );
     }
-  }, [userId]);
+  }, [userId, t, showError]);
 
   useEffect(() => {
-    if (userId) {
-      withLoading(fetchPartnerships);
-    } else {
-      setPartnerships([]);
-    }
-  }, [userId, fetchPartnerships]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (!userId) return;
+    void withLoading(fetchPartnerships);
+  }, [userId, fetchPartnerships, withLoading]);
 
   return {
-    partnerships,
+    partnerships: userId ? partnerships : [],
     isLoading,
     refetch: fetchPartnerships,
   };

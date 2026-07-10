@@ -1,9 +1,8 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useMemo, useState } from "react";
 import Button from "@/components/common/buttons/Button";
 import PlaceForm from "@/components/account/Place/PlaceForm";
 import { useToast } from "@/hooks/useToast";
-import { ValidationResult } from "@/validations/commonValidations";
 import { validateNewPlaceData } from "@/validations/placeValidations";
 import { validateNewUserData } from "@/validations/userValidations";
 import { useTranslation } from "react-i18next";
@@ -34,24 +33,30 @@ const ProfileFormStep = ({
   const { t } = useTranslation("account");
 
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
-  const [errors, setErrors] = useState<ProfileFormStepErrors>({
-    place: {},
-    user: {},
-  });
-  const validateFormData = useCallback((): boolean => {
-    const userValidation = validateNewUserData(validationT(t))(user);
-    let placeValidation: ValidationResult = {
-      errors: {},
-      isValid: true,
-    };
-    if (place && place.active) {
-      placeValidation = validateNewPlaceData(validationT(t))(place);
+
+  const errors = useMemo<ProfileFormStepErrors>(() => {
+    if (!hasAttemptedSubmit) {
+      return { place: {}, user: {} };
     }
-    setErrors((prev) => ({
-      ...prev,
+
+    const userValidation = validateNewUserData(validationT(t))(user);
+    const placeValidation =
+      place && place.active
+        ? validateNewPlaceData(validationT(t))(place)
+        : { errors: {}, isValid: true };
+
+    return {
       user: userValidation.errors,
       place: placeValidation.errors,
-    }));
+    };
+  }, [hasAttemptedSubmit, place, user, t]);
+
+  const isFormValid = useMemo(() => {
+    const userValidation = validateNewUserData(validationT(t))(user);
+    const placeValidation =
+      place && place.active
+        ? validateNewPlaceData(validationT(t))(place)
+        : { errors: {}, isValid: true };
     return userValidation.isValid && placeValidation.isValid;
   }, [place, user, t]);
 
@@ -59,18 +64,12 @@ const ProfileFormStep = ({
     e.preventDefault();
     setHasAttemptedSubmit(true);
 
-    if (validateFormData()) {
+    if (isFormValid) {
       await onSubmit();
     } else {
       showError(t("profileFormStep.validationError"));
     }
   };
-
-  useEffect(() => {
-    if (hasAttemptedSubmit) {
-      validateFormData();
-    }
-  }, [hasAttemptedSubmit, validateFormData]);
 
   return (
     <form onSubmit={handleSubmit} noValidate>

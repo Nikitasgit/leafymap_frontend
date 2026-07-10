@@ -2,7 +2,7 @@
 import LoadingBar from "@/components/common/loading/LoadingBar";
 import { useUser } from "@/hooks/useUser";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import styles from "./UserProfileContainer.module.scss";
 import { useAuth } from "@/hooks/useAuth";
 import useSubmitImages from "@/hooks/useSubmitImages";
@@ -14,9 +14,10 @@ const UserProfileContainer = () => {
   const { userId } = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState("presentation");
   const { user: currentUser } = useAuth();
-  const { user, isLoading: isLoadingUser, refetch: refetchUser } = useUser(userId as string);
+  const { user, isLoading: isLoadingUser, refetch: refetchUser } = useUser(
+    userId as string,
+  );
   const { submitImages, isLoading: isUploadingImages } = useSubmitImages();
   const placeId = useMemo(() => {
     if (!user?.place) return null;
@@ -51,26 +52,30 @@ const UserProfileContainer = () => {
     }
   };
 
-  // Initialize tab from URL on mount
+  const tabFromUrl = searchParams.get("tab");
+  const availableTabs = ["presentation", "images"];
+  if (place) {
+    availableTabs.push("reviews", "events");
+  }
+
+  // L'URL est la source de vérité : l'onglet actif en est dérivé.
+  const activeTab =
+    tabFromUrl && availableTabs.includes(tabFromUrl)
+      ? tabFromUrl
+      : "presentation";
+
+  const hasInvalidTabInUrl = Boolean(
+    tabFromUrl && !availableTabs.includes(tabFromUrl) && !isLoadingPlace,
+  );
+
   useEffect(() => {
-    const tabFromUrl = searchParams.get("tab");
-    const availableTabs = ["presentation", "images"];
-    if (place) {
-      availableTabs.push("reviews", "events");
-    }
-    if (tabFromUrl && availableTabs.includes(tabFromUrl)) {
-      setActiveTab(tabFromUrl);
-    } else if (tabFromUrl && !availableTabs.includes(tabFromUrl)) {
-      // If user tries to access a tab that's not available, redirect to presentation
-      setActiveTab("presentation");
-      const newSearchParams = new URLSearchParams(searchParams.toString());
-      newSearchParams.set("tab", "presentation");
-      router.replace(`?${newSearchParams.toString()}`, { scroll: false });
-    }
-  }, [searchParams, place, router]);
+    if (!hasInvalidTabInUrl) return;
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("tab", "presentation");
+    router.replace(`?${newSearchParams.toString()}`, { scroll: false });
+  }, [hasInvalidTabInUrl, searchParams, router]);
 
   const handleTabClick = (tabId: string) => {
-    setActiveTab(tabId);
     const newSearchParams = new URLSearchParams(searchParams.toString());
     newSearchParams.set("tab", tabId);
     router.replace(`?${newSearchParams.toString()}`, { scroll: false });

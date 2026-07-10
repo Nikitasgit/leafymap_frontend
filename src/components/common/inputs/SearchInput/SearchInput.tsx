@@ -27,10 +27,15 @@ const SearchInput = <T extends SearchSuggestion>({
   const [input, setInput] = useState(value);
   const [suggestions, setSuggestions] = useState<T[]>([]);
   const [isFocused, setIsFocused] = useState(false);
+  const [prevValue, setPrevValue] = useState(value);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const prevValueRef = useRef<string>(value);
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  if (value !== undefined && value !== prevValue) {
+    setPrevValue(value);
+    setInput(value);
+  }
 
   const fetchSuggestions = useCallback(
     async (searchTerm: string) => {
@@ -75,13 +80,6 @@ const SearchInput = <T extends SearchSuggestion>({
   };
 
   useOnClickOutside(wrapperRef, handleClickOutside);
-
-  useEffect(() => {
-    if (value !== undefined && value !== prevValueRef.current) {
-      setInput(value);
-      prevValueRef.current = value;
-    }
-  }, [value]);
 
   // Cleanup: clear debounce timer when component unmounts
   useEffect(() => {

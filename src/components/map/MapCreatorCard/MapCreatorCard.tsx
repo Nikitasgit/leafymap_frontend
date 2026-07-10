@@ -32,9 +32,12 @@ const MapCreatorCard = ({
   const { user: currentUser } = useAuth();
   const isOwner = isSameId(currentUser?._id, user?._id);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(
-    initialEventId || null
+    initialEventId || null,
   );
-  const [isEventModalOpen, setIsEventModalOpen] = useState(Boolean(initialEventId));
+  const [isEventModalOpen, setIsEventModalOpen] = useState(
+    Boolean(initialEventId),
+  );
+  const [prevInitialEventId, setPrevInitialEventId] = useState(initialEventId);
   const { event: selectedEvent, isLoading: isLoadingEvent } = useEvent(
     selectedEventId || ""
   );
@@ -48,10 +51,11 @@ const MapCreatorCard = ({
     navigatedPlaceIdRef.current = null;
   }, [userId]);
 
-  useEffect(() => {
+  if (initialEventId !== prevInitialEventId) {
+    setPrevInitialEventId(initialEventId);
     setSelectedEventId(initialEventId || null);
     setIsEventModalOpen(Boolean(initialEventId));
-  }, [initialEventId]);
+  }
 
   // Fly to the place once when the data first loads or when userId changes.
   useEffect(() => {

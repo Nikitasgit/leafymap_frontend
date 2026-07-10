@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import {
@@ -37,8 +37,22 @@ const UpdateCreator = () => {
   const { showSuccess, showError } = useToast();
   const router = useRouter();
   const [updatedUser, setUpdatedUser] = useState<InitialCreatorData | null>(
-    null
+    null,
   );
+  const [syncedUserId, setSyncedUserId] = useState<string | null>(null);
+
+  if (user && user._id !== syncedUserId) {
+    setSyncedUserId(user._id);
+    setUpdatedUser(
+      initialUserData({
+        ...user,
+        userCategory:
+          typeof user.userCategory === "string"
+            ? user.userCategory
+            : user.userCategory?._id ?? "",
+      }),
+    );
+  }
 
   const onUserChange: FormDataChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -58,20 +72,6 @@ const UpdateCreator = () => {
   };
 
   const loading = userLoading || !updatedUser || submitUserLoading;
-
-  useEffect(() => {
-    if (user) {
-      setUpdatedUser(
-        initialUserData({
-          ...user,
-          userCategory:
-            typeof user.userCategory === "string"
-              ? user.userCategory
-              : user.userCategory?._id ?? "",
-        })
-      );
-    }
-  }, [user]);
 
   return (
     <div className={styles.pageContainer}>

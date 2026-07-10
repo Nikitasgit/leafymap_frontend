@@ -8,7 +8,7 @@ import { getErrorMessage } from "@/utils/i18n/getErrorMessage";
 
 export const useEventInvitations = (
   eventId?: string,
-  queryParams: Record<string, string> = {}
+  queryParams: Record<string, string> = {},
 ) => {
   const [eventInvitations, setEventInvitations] = useState<
     EventInvitationPopulated[]
@@ -16,11 +16,17 @@ export const useEventInvitations = (
   const { isLoading, withLoading } = useLoading(true);
   const { showError } = useToast();
   const { t } = useTranslation("events");
+  const queryKey = JSON.stringify(queryParams);
 
   useEffect(() => {
+    if (!eventId) return;
+
     const fetchEventInvitations = async () => {
+      // Reconstruit les params depuis queryKey (string stable) pour ne pas
+      // dépendre de la référence de l'objet queryParams dans l'effet.
+      const parsedParams: Record<string, string> = JSON.parse(queryKey);
       const searchParams = new URLSearchParams();
-      Object.entries(queryParams).forEach(([key, value]) => {
+      Object.entries(parsedParams).forEach(([key, value]) => {
         searchParams.append(key, value);
       });
       try {
@@ -35,19 +41,16 @@ export const useEventInvitations = (
           showError(t("eventInvitations.invalidResponse"));
         }
       } catch (err) {
-        showError(
-          getErrorMessage(err, t, t("eventInvitations.loadError"))
-        );
+        showError(getErrorMessage(err, t, t("eventInvitations.loadError")));
         setEventInvitations([]);
       }
     };
 
-    if (eventId) {
-      withLoading(fetchEventInvitations);
-    } else {
-      setEventInvitations([]);
-    }
-  }, [eventId, JSON.stringify(queryParams)]); // eslint-disable-line react-hooks/exhaustive-deps
+    void withLoading(fetchEventInvitations);
+  }, [eventId, queryKey, withLoading, showError, t]);
 
-  return { eventInvitations, isLoading };
+  return {
+    eventInvitations: eventId ? eventInvitations : [],
+    isLoading: eventId ? isLoading : false,
+  };
 };
