@@ -1,5 +1,5 @@
 /**
- * Fichier temporaire pour tester push direct sur main + CI + Vercel.
+ * Test temporaire : push direct sur main avec ruleset active.
  * À supprimer après validation.
  */
 export const ciFailureCheck = (): number => {
