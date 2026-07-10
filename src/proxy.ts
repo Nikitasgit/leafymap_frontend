@@ -3,10 +3,10 @@ import { i18nRouter } from "next-i18n-router";
 import { i18nConfig } from "./i18nConfig";
 
 /**
- * Next.js middleware that handles internationalization routing.
+ * Next.js proxy that handles internationalization routing.
  * Redirects requests to the appropriate locale path (e.g., /en or /fr).
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const i18nResponse = i18nRouter(request, i18nConfig);
   return i18nResponse;
 }
