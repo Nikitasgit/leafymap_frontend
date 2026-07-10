@@ -34,7 +34,7 @@ export function getLocalizedPath(
   return `/${locale}${pathWithoutLocale}`;
 }
 
-/** Always prefixes the locale so middleware can update the locale cookie. */
+/** Always prefixes the locale so the proxy can update the locale cookie. */
 export function getLocaleSwitchPath(
   pathname: string,
   locale: string,
