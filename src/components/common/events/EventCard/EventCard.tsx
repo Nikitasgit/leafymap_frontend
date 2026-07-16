@@ -13,12 +13,7 @@ import { PlacePopulated } from "@/types/place";
 import { UserPopulated } from "@/types/user";
 import { getEventLocationLabel } from "@/lib/api/normalizers/resolveRef";
 
-const EventCard: React.FC<EventCardProps> = ({
-  event,
-  place,
-  user,
-  clickable = true,
-}) => {
+const EventCard: React.FC<EventCardProps> = ({ event, place, user }) => {
   const { t } = useTranslation("events");
   const eventPlace =
     typeof event.place === "object" && event.place

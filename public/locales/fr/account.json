@@ -1,4 +1,51 @@
 {
+  "accountActions": {
+    "settingsButton": "Paramètres",
+    "settingsAriaLabel": "Accéder aux paramètres du compte",
+    "editProfile": "Modifier mon profil",
+    "addActivity": "Publier un événement",
+    "placeLabel": "Mon lieu",
+    "placeAriaLabel": "Modifier mon lieu",
+    "imagesLabel": "Images",
+    "imagesAriaLabel": "Gérer mes images",
+    "collaborationsLabel": "Collaborations",
+    "collaborationsAriaLabel": "Gérer mes collaborations",
+    "eventsLabel": "Mes évènements",
+    "eventsAriaLabel": "Gérer mes évènements",
+    "bookingsLabel": "Réservations",
+    "bookingsAriaLabel": "Gérer mes réservations",
+    "reviewsLabel": "Avis",
+    "reviewsAriaLabel": "Gérer mes avis",
+    "followsLabel": "Abonnements",
+    "followsAriaLabel": "Gérer mes abonnements",
+    "productsLabel": "Produits",
+    "productsAriaLabel": "Gérer mes produits",
+    "addPlaceButton": "Ajouter un lieu",
+    "addPlaceAriaLabel": "Ajouter un lieu sur la carte",
+    "guestInfoLine1": "Organisateur, responsable de lieu ou hôte d'événements ?",
+    "guestInfoLine2": "Publiez vos événements locaux et rejoignez {{appName}} dès aujourd'hui.",
+    "guestInfoLine3": "Cliquez sur « Publier un événement » pour créer votre profil."
+  },
+  "placeFormContainer": {
+    "createTitle": "Créer un lieu",
+    "updateTitle": "Modifier mon lieu",
+    "createSuccess": "Lieu créé avec succès",
+    "updateSuccess": "Lieu modifié avec succès",
+    "createError": "Erreur lors de la création du lieu",
+    "updateError": "Erreur lors de la modification du lieu",
+    "validationError": "Veuillez corriger les erreurs du formulaire"
+  },
+  "placeForm": {
+    "displayOnMapLabel": "Souhaitez-vous afficher votre lieu sur la carte ?",
+    "placeLegend": "Informations du lieu",
+    "mapInstructions": "Cliquez sur la carte pour positionner votre lieu"
+  },
+  "defaultScheduleDay": {
+    "incompleteSlotsError": "Veuillez compléter les créneaux horaires existants avant d'en ajouter un nouveau",
+    "editStatusAriaLabel": "Modifier le statut d'ouverture",
+    "addSlotAriaLabel": "Ajouter un créneau horaire",
+    "addSlot": "Ajouter un créneau"
+  },
   "accountSettingsContainer": {
     "subtitle": "Gérez vos paramètres de compte",
     "title": "Paramètres du compte",
