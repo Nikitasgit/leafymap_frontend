@@ -1,4 +1,51 @@
 {
+  "accountActions": {
+    "settingsButton": "Settings",
+    "settingsAriaLabel": "Go to account settings",
+    "editProfile": "Edit my profile",
+    "addActivity": "Publish an event",
+    "placeLabel": "My place",
+    "placeAriaLabel": "Edit my place",
+    "imagesLabel": "Images",
+    "imagesAriaLabel": "Manage my images",
+    "collaborationsLabel": "Collaborations",
+    "collaborationsAriaLabel": "Manage my collaborations",
+    "eventsLabel": "My events",
+    "eventsAriaLabel": "Manage my events",
+    "bookingsLabel": "Bookings",
+    "bookingsAriaLabel": "Manage my bookings",
+    "reviewsLabel": "Reviews",
+    "reviewsAriaLabel": "Manage my reviews",
+    "followsLabel": "Following",
+    "followsAriaLabel": "Manage my following",
+    "productsLabel": "Products",
+    "productsAriaLabel": "Manage my products",
+    "addPlaceButton": "Add a place",
+    "addPlaceAriaLabel": "Add a place to the map",
+    "guestInfoLine1": "Event organizer, venue manager, or event host?",
+    "guestInfoLine2": "Publish your local events and join {{appName}} today.",
+    "guestInfoLine3": "Click « Publish an event » to create your profile."
+  },
+  "placeFormContainer": {
+    "createTitle": "Create a place",
+    "updateTitle": "Edit my place",
+    "createSuccess": "Place created successfully",
+    "updateSuccess": "Place updated successfully",
+    "createError": "Error creating place",
+    "updateError": "Error updating place",
+    "validationError": "Please fix the form errors"
+  },
+  "placeForm": {
+    "displayOnMapLabel": "Would you like to display your place on the map?",
+    "placeLegend": "Place information",
+    "mapInstructions": "Click on the map to position your place"
+  },
+  "defaultScheduleDay": {
+    "incompleteSlotsError": "Please complete existing time slots before adding a new one",
+    "editStatusAriaLabel": "Edit opening status",
+    "addSlotAriaLabel": "Add a time slot",
+    "addSlot": "Add a time slot"
+  },
   "accountSettingsContainer": {
     "subtitle": "Manage your account settings",
     "title": "Account settings",
