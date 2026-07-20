@@ -40,13 +40,13 @@ export default function PartnershipsSentList({
       <h3 className={styles.title}>{t("partnershipsSentList.title")}</h3>
       <ul className={styles.items}>
         {partnerships.map((partnership) => (
-          <li key={partnership._id} className={styles.item}>
+          <li key={partnership.id} className={styles.item}>
             <PartnershipCard user={partnership.collaborator} showCategory />
             <Button
               type="button"
               variant="secondary"
               size="small"
-              onClick={() => onCancel?.(partnership._id)}
+              onClick={() => onCancel?.(partnership.id)}
               ariaLabel={t("partnershipsSentList.cancelInvitationAriaLabel")}
             >
               {t("partnershipsSentList.cancelInvitation")}

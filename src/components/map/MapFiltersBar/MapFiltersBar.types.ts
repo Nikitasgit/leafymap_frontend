@@ -1,7 +1,7 @@
 import { MapDisplayMode, MapFilters, ExtendedMapRef } from "@/types/map";
 
 export type CreatorSearchResult = {
-  _id: string;
+  id: string;
   name: string;
   image: string;
   categories?: {
@@ -13,13 +13,13 @@ export type CreatorSearchResult = {
 };
 
 export type LocationSearchResult = {
-  _id: string;
+  id: string;
   name: string;
   coordinates?: number[];
 };
 
 export type EventSearchResult = {
-  _id: string;
+  id: string;
   name: string;
   image?: string;
   creatorId: string;

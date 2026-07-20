@@ -13,7 +13,7 @@ export const usePartnershipInvitationActions = (onUpdate?: () => void) => {
 
   const updatePartnerships = async (
     partnershipUpdates: Array<{
-      _id: string;
+      id: string;
       status?: "pending" | "accepted";
       deleted?: boolean;
     }>
@@ -42,7 +42,7 @@ export const usePartnershipInvitationActions = (onUpdate?: () => void) => {
   };
 
   const acceptPartnershipInvitation = async (partnershipId: string) => {
-    await updatePartnerships([{ _id: partnershipId, status: "accepted" }]);
+    await updatePartnerships([{ id: partnershipId, status: "accepted" }]);
   };
 
   const refusePartnershipInvitation = async (partnershipId: string) => {

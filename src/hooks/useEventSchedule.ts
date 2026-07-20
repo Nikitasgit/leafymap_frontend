@@ -29,7 +29,7 @@ export const useEventSchedule = ({
       setEvent((prev: initialEventData) => ({
         ...prev,
         schedule: prev.schedule.map((period: Period) =>
-          period._id === periodId
+          period.id === periodId
             ? {
                 ...period,
                 startDate: format(startDate, "dd-MM-yyyy"),
@@ -48,7 +48,7 @@ export const useEventSchedule = ({
         setEvent((prev: initialEventData) => ({
           ...prev,
           schedule: prev.schedule.filter(
-            (period: Period) => period._id !== periodId,
+            (period: Period) => period.id !== periodId,
           ),
         }));
       }
@@ -61,14 +61,14 @@ export const useEventSchedule = ({
       setEvent((prev: initialEventData) => ({
         ...prev,
         schedule: prev.schedule.map((period: Period) =>
-          period._id === periodId
+          period.id === periodId
             ? {
                 ...period,
                 timeSlots: period.timeSlots.some(
-                  (slot: EventTimeSlot) => slot._id === timeSlot._id,
+                  (slot: EventTimeSlot) => slot.id === timeSlot.id,
                 )
                   ? period.timeSlots.map((slot: EventTimeSlot) =>
-                      slot._id === timeSlot._id ? timeSlot : slot,
+                      slot.id === timeSlot.id ? timeSlot : slot,
                     )
                   : [...period.timeSlots, timeSlot],
               }
@@ -85,11 +85,11 @@ export const useEventSchedule = ({
         setEvent((prev: initialEventData) => ({
           ...prev,
           schedule: prev.schedule.map((period: Period) =>
-            period._id === periodId
+            period.id === periodId
               ? {
                   ...period,
                   timeSlots: period.timeSlots.filter(
-                    (slot: EventTimeSlot) => slot._id !== timeSlotId,
+                    (slot: EventTimeSlot) => slot.id !== timeSlotId,
                   ),
                 }
               : period,

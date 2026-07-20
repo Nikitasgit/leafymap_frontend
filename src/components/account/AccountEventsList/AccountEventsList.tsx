@@ -42,7 +42,7 @@ const EventsList: React.FC<EventsListProps> = ({
       ) : (
         <div className={styles.eventsList}>
           {events.map((event) => (
-            <AccountEventCard key={event._id} event={event} placeId={placeId} />
+            <AccountEventCard key={event.id} event={event} placeId={placeId} />
           ))}
         </div>
       )}

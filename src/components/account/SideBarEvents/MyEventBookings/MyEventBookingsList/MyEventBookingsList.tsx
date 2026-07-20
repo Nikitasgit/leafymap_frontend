@@ -35,7 +35,7 @@ export default function MyEventBookingsList({
   }
 
   const startEditing = (booking: MyEventBooking) => {
-    setEditingId(booking._id);
+    setEditingId(booking.id);
     setEditSeats(booking.seats);
   };
 
@@ -44,7 +44,7 @@ export default function MyEventBookingsList({
       setEditingId(null);
       return;
     }
-    await updateEventBooking(booking._id, editSeats);
+    await updateEventBooking(booking.id, editSeats);
     setEditingId(null);
     onChange?.();
   };
@@ -59,15 +59,15 @@ export default function MyEventBookingsList({
     <div className={styles.list}>
       <ul className={styles.items}>
         {eventBookings.map((booking) => {
-          if (!booking.event || !booking.event._id) return null;
+          if (!booking.event || !booking.event.id) return null;
           const event = booking.event as unknown as EventPopulated;
           const maxSeats = event.maxSeatsPerBooking || 1;
           const remainingSeats = event.remainingSeats ?? null;
-          const isEditing = editingId === booking._id;
+          const isEditing = editingId === booking.id;
 
           return (
             <BookingListItem
-              key={booking._id}
+              key={booking.id}
               booking={booking}
               event={event}
               maxSeats={maxSeats}
@@ -81,9 +81,9 @@ export default function MyEventBookingsList({
               onEditSeatsChange={setEditSeats}
               onCancelEditing={() => setEditingId(null)}
               onSave={() => handleSave(booking)}
-              onOpenCancelModal={() => setCancellingId(booking._id)}
+              onOpenCancelModal={() => setCancellingId(booking.id)}
               onCloseCancelModal={() => setCancellingId(null)}
-              onConfirmCancel={() => handleCancel(booking._id)}
+              onConfirmCancel={() => handleCancel(booking.id)}
             />
           );
         })}
@@ -139,7 +139,7 @@ function BookingListItem({
 
   return (
     <li className={styles.item}>
-      <EventCard event={event} clickable={!!event._id} />
+      <EventCard event={event} clickable={!!event.id} />
       <div className={styles.bottomRow}>
         <p className={styles.seatsInfo}>
           {t("myEventBookingsList.seatsBooked", { count: booking.seats })}
@@ -199,7 +199,7 @@ function BookingListItem({
       </div>
 
       <BaseModal
-        isOpen={cancellingId === booking._id}
+        isOpen={cancellingId === booking.id}
         onClose={onCloseCancelModal}
         title={t("myEventBookingsList.cancelModalTitle")}
         primaryButtonLabel={t("myEventBookingsList.cancelModalPrimary")}

@@ -125,7 +125,7 @@ const PlaceFormContainer = ({ mode }: PlaceFormContainerProps) => {
           await submitPlace(
             validPlace as InitialPlaceData,
             true,
-            placeData._id,
+            placeData.id,
           );
           showSuccess(t("placeFormContainer.updateSuccess"));
         }

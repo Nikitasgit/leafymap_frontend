@@ -19,7 +19,7 @@ const CreatorCard: React.FC<CreatorCardProps> = ({ user, place, actions }) => {
       className={styles.creatorCard}
       onClick={() => {
         if (user) {
-          router.push(`/users/${user._id}`);
+          router.push(`/users/${user.id}`);
         }
       }}
       role="link"

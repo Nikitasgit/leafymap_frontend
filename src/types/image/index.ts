@@ -5,7 +5,7 @@ export interface ImageUrls {
 }
 
 export interface Image {
-  _id: string;
+  id: string;
   urls: ImageUrls;
   user?: string;
   reference: string;

@@ -1,5 +1,5 @@
 export interface SelectOption {
-  _id: string;
+  id: string;
   label: string;
   group?: string;
 }

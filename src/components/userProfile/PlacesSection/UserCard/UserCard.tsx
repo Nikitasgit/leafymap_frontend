@@ -18,7 +18,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
       className={styles.userCard}
       onClick={() => {
         if (user) {
-          router.push(`/users/${user._id}`);
+          router.push(`/users/${user.id}`);
         }
       }}
       role="link"

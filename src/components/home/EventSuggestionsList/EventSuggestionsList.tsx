@@ -96,7 +96,7 @@ const EventSuggestionsList = () => {
                   <EventSuggestionCardSkeleton key={`skeleton-${i}`} />
                 ))
               : events.map((event) => (
-                  <EventSuggestionCard key={event._id} event={event} />
+                  <EventSuggestionCard key={event.id} event={event} />
                 ))}
           </div>
         </div>

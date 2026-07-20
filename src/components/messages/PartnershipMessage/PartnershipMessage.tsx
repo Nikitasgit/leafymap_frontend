@@ -35,7 +35,7 @@ export default function PartnershipMessage({
   const fullPlace =
     (partnership as PartnershipPopulated).place &&
     typeof (partnership as PartnershipPopulated).place === "object" &&
-    "_id" in (partnership as PartnershipPopulated).place;
+    "id" in (partnership as PartnershipPopulated).place;
 
   if (isPlace) {
     const place = (partnership as PartnershipPopulated).place;

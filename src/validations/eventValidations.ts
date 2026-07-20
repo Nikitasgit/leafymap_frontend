@@ -49,7 +49,7 @@ export const createEventSchema = (t: TFunction<"validation">) =>
                   collaborators: z
                     .array(
                       z.object({
-                        _id: z.string(),
+                        id: z.string(),
                       }),
                     )
                     .optional(),

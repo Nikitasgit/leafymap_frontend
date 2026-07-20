@@ -22,7 +22,7 @@ const initialUserData = (user: InitialCreatorData): InitialCreatorData => ({
   userCategory:
     typeof user.userCategory === "string"
       ? user.userCategory
-      : user.userCategory?._id ?? "",
+      : user.userCategory?.id ?? "",
   website: user.website || "",
   phone: user.phone || "",
   firstname: user.firstname || "",
@@ -41,15 +41,15 @@ const UpdateCreator = () => {
   );
   const [syncedUserId, setSyncedUserId] = useState<string | null>(null);
 
-  if (user && user._id !== syncedUserId) {
-    setSyncedUserId(user._id);
+  if (user && user.id !== syncedUserId) {
+    setSyncedUserId(user.id);
     setUpdatedUser(
       initialUserData({
         ...user,
         userCategory:
           typeof user.userCategory === "string"
             ? user.userCategory
-            : user.userCategory?._id ?? "",
+            : user.userCategory?.id ?? "",
       }),
     );
   }

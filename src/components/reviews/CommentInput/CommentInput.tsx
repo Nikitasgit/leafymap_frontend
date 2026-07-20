@@ -27,15 +27,15 @@ const CommentInput: React.FC<CommentInputProps> = ({
   const { t } = useTranslation("reviews");
   const isEditMode = !!comment;
   const [content, setContent] = useState(comment?.content || "");
-  const [prevCommentId, setPrevCommentId] = useState(comment?._id);
+  const [prevCommentId, setPrevCommentId] = useState(comment?.id);
   const resolvedPlaceholder =
     placeholder ?? t("commentInput.defaultPlaceholder");
   const { submitComment, isLoading: isSubmitting } = useSubmitComment();
   const { updateComment, isLoading: isUpdating } = useUpdateComment();
   const isLoading = isSubmitting || isUpdating;
 
-  if (comment?._id !== prevCommentId) {
-    setPrevCommentId(comment?._id);
+  if (comment?.id !== prevCommentId) {
+    setPrevCommentId(comment?.id);
     setContent(comment?.content || "");
   }
 
@@ -45,7 +45,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
 
     try {
       if (isEditMode && comment) {
-        await updateComment(comment._id, {
+        await updateComment(comment.id, {
           content: content.trim(),
         });
       } else {

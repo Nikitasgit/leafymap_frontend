@@ -28,7 +28,7 @@ export default function ReviewsWrittenTab() {
   const { t } = useTranslation("account");
   const { user, isLoading: isLoadingUser } = useCurrentUser();
   const { reviews, isLoading: isLoadingReviews, refetch } = useReviewsWritten(
-    user?._id,
+    user?.id,
   );
 
   return (
@@ -50,7 +50,7 @@ export default function ReviewsWrittenTab() {
               ? typedReview.reference
               : null;
           return (
-            <li key={review._id} className={styles.reviewItem}>
+            <li key={review.id} className={styles.reviewItem}>
               {ref && (
                 <CreatorCardWithAddress
                   imageUrl={ref.user?.image?.urls?.thumbnail}

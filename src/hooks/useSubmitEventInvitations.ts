@@ -19,7 +19,7 @@ export const useSubmitEventInvitations = (onUpdate?: () => void) => {
       const filteredEventInvitations = eventInvitations.map((invitation) => {
         if (isUpdate) {
           return {
-            _id: invitation._id,
+            id: invitation.id,
             deleted: invitation.deleted,
             status: invitation.status,
           };

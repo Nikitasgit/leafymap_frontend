@@ -15,7 +15,7 @@ interface MessagesListProps {
 const MessagesList: React.FC<MessagesListProps> = ({ messages }) => {
   const { t } = useTranslation("messages");
   const { user } = useAuth();
-  const currentUserId = user?._id;
+  const currentUserId = user?.id;
   const messagesListRef = useRef<HTMLDivElement>(null);
   const previousMessagesLengthRef = useRef<number>(0);
   const hasScrolledToBottomRef = useRef<boolean>(false);
@@ -51,7 +51,7 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages }) => {
           200;
 
       const lastMessage = messages[messages.length - 1];
-      const isOwnMessage = lastMessage?.sender?._id === currentUserId;
+      const isOwnMessage = lastMessage?.sender?.id === currentUserId;
 
       if (isNearBottom || isOwnMessage) {
         scrollToBottom(true);
@@ -84,7 +84,7 @@ const MessagesList: React.FC<MessagesListProps> = ({ messages }) => {
     <div className={styles.messagesList} ref={messagesListRef}>
       {messages.map((message) => (
         <Message
-          key={message._id}
+          key={message.id}
           message={message}
           currentUserId={currentUserId}
         />

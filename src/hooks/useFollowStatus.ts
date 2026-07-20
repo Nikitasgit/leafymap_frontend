@@ -7,7 +7,7 @@ interface UseFollowStatusParams {
 }
 
 interface FollowData {
-  _id: string;
+  id: string;
 }
 
 const useFollowStatus = ({
@@ -32,7 +32,7 @@ const useFollowStatus = ({
       });
       const followData = response.data.data?.follow as FollowData | undefined;
       setIsFollowing(!!followData);
-      setFollowId(followData?._id ?? null);
+      setFollowId(followData?.id ?? null);
     } catch {
       setIsFollowing(false);
       setFollowId(null);
@@ -60,7 +60,7 @@ const useFollowStatus = ({
         if (cancelled) return;
         const followData = response.data.data?.follow as FollowData | undefined;
         setIsFollowing(!!followData);
-        setFollowId(followData?._id ?? null);
+        setFollowId(followData?.id ?? null);
       } catch {
         if (!cancelled) {
           setIsFollowing(false);

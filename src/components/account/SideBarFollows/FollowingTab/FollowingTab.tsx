@@ -15,7 +15,7 @@ import { FollowUser } from "@/types/follow";
 const FollowingTab: React.FC = () => {
   const { t } = useTranslation("account");
   const { user } = useCurrentUser();
-  const { following, isLoading, refetch } = useFollowingUsers(user?._id);
+  const { following, isLoading, refetch } = useFollowingUsers(user?.id);
   const { unfollow } = useFollow();
 
   const handleUnfollow = async (followId: string) => {
@@ -36,10 +36,10 @@ const FollowingTab: React.FC = () => {
       {following.length > 0 ? (
         <ul className={styles.items}>
           {following.map((user: FollowUser) => (
-            <li key={user._id} className={styles.item}>
+            <li key={user.id} className={styles.item}>
               <PartnershipCard
                 user={{
-                  _id: user._id,
+                  id: user.id,
                   username: user.username,
                   image: user.image,
                   userCategory: undefined,

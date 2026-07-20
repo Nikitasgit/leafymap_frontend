@@ -15,7 +15,7 @@ export interface MapCreatorCardPartnershipsProps {
   username: string;
   onMapButtonClick: (placeItem: {
     location: { coordinates: number[] } | null;
-    _id: string;
+    id: string;
   }) => Promise<void>;
 }
 
@@ -69,14 +69,14 @@ const MapCreatorCardPartnerships = ({
           {eventInvitations.map((invitation) => {
             const event = invitation.event;
             const initiator = invitation.initiator;
-            if (!event || !event._id) return null;
+            if (!event || !event.id) return null;
 
             return (
               <div
-                key={invitation._id}
+                key={invitation.id}
                 onClick={() =>
                   handleEventClick(
-                    event._id,
+                    event.id,
                     initiator as UserPopulated | undefined
                   )
                 }

@@ -15,7 +15,7 @@ const useSubmitImages = () => {
 
   interface UploadImagesResponse {
     images: Array<{
-      _id: string;
+      id: string;
       urls: {
         original: string;
         thumbnail: string;

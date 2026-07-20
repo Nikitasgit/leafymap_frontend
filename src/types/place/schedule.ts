@@ -24,14 +24,14 @@ export interface TimeSlot {
 export interface EventTimeSlot extends TimeSlot {
   title: string;
   collaborators: Collaborator[];
-  _id: string;
+  id: string;
 }
 
 export interface Period {
   startDate: string;
   endDate: string;
   timeSlots: EventTimeSlot[];
-  _id: string;
+  id: string;
 }
 
 export type WeekDay =

@@ -4,7 +4,7 @@ import { EventDateRange } from "../place/event";
 import { Period } from "../place/schedule";
 
 export interface EventInvitationEvent {
-  _id: string;
+  id: string;
   name: string;
   description?: string;
   image?: Image;
@@ -15,16 +15,16 @@ export interface EventInvitationEvent {
 }
 
 export interface EventInvitationPopulated {
-  _id: string;
+  id: string;
   event: EventInvitationEvent;
   initiator?: {
-    _id: string;
+    id: string;
     username?: string;
     image?: Image;
     userCategory?: UserCategory;
   };
   collaborator?: {
-    _id: string;
+    id: string;
     username?: string;
     image?: Image;
     userCategory?: UserCategory;

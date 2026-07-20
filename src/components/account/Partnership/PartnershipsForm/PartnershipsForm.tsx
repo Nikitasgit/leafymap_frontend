@@ -28,13 +28,13 @@ const PartnershipsForm = ({
     const searchParams: Record<string, string | string[]> = {
       username: query,
     };
-    if (user?._id) {
-      searchParams.excludeIds = [user._id];
+    if (user?.id) {
+      searchParams.excludeIds = [user.id];
     }
 
     const users = await searchUsers(searchParams);
     const suggestions = users.map((user) => ({
-      _id: user._id,
+      id: user.id,
       image:
         (typeof user.image === "object"
           ? user.image?.urls?.thumbnail
@@ -47,7 +47,7 @@ const PartnershipsForm = ({
 
   const handleSelect = (suggestion: Collaborator) => {
     const existingPartnership = partnerships.find(
-      (partnership) => partnership.collaborator._id === suggestion._id
+      (partnership) => partnership.collaborator.id === suggestion.id
     );
     if (existingPartnership) {
       if (existingPartnership.deleted) {
@@ -57,7 +57,7 @@ const PartnershipsForm = ({
         };
         onChange(
           partnerships.map((p) =>
-            p._id === existingPartnership._id ? updatedPartnership : p
+            p.id === existingPartnership.id ? updatedPartnership : p
           )
         );
       } else {
@@ -66,9 +66,9 @@ const PartnershipsForm = ({
       }
     } else {
       const newPartnership: Partnership = {
-        _id: generateTempId(),
+        id: generateTempId(),
         collaborator: {
-          _id: suggestion._id,
+          id: suggestion.id,
           username: suggestion.name || "",
           image: suggestion.image,
         },
@@ -80,9 +80,9 @@ const PartnershipsForm = ({
   };
 
   const handleDelete = (partnership: Partnership) => {
-    if (isTempId(partnership._id)) {
+    if (isTempId(partnership.id)) {
       const newPartnerships = partnerships.filter(
-        (p) => p._id !== partnership._id
+        (p) => p.id !== partnership.id
       );
       onChange(newPartnerships);
       return;
@@ -93,7 +93,7 @@ const PartnershipsForm = ({
     };
     onChange(
       partnerships.map((p) =>
-        p._id === partnership._id ? updatedPartnership : p
+        p.id === partnership.id ? updatedPartnership : p
       )
     );
   };

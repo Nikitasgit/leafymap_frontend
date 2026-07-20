@@ -4,18 +4,18 @@ import { Place, PlacePopulated } from "../place";
 import { Event, EventPopulated } from "../place/event";
 
 export interface Partnership {
-  _id: string;
+  id: string;
   place?: string | Place;
   event?: string | Event;
   initiator?: {
-    _id: string;
+    id: string;
     username?: string;
     name?: string;
     image?: Image;
     userCategory?: UserCategory;
   };
   collaborator: {
-    _id: string;
+    id: string;
     username?: string;
     image?: Image | string;
     googlePictureUrl?: string;
@@ -29,7 +29,7 @@ export interface PartnershipPopulated extends Partnership {
   place: PlacePopulated;
   event: EventPopulated;
   collaborator: {
-    _id: string;
+    id: string;
     username?: string;
     image?: Image | string;
     googlePictureUrl?: string;

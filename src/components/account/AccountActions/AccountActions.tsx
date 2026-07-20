@@ -79,7 +79,7 @@ export default function AccountActions({
             icon: <MapPin size={16} />,
             onClick: () => {
               if (hasPlaceObject && typeof user.place === "object") {
-                router.push(`/account/places/${user.place._id}`);
+                router.push(`/account/places/${user.place.id}`);
               }
             },
             disabled: isLoadingUser,

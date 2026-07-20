@@ -12,7 +12,7 @@ const getLabel = (item: AdminContentItem) =>
   item.content ||
   item.type ||
   item.referenceType ||
-  item._id;
+  item.id;
 
 const AdminContentTable = ({
   resource,
@@ -41,7 +41,7 @@ const AdminContentTable = ({
         <span>{t("adminContentTable.headerAction")}</span>
       </div>
       {items.map((item) => (
-        <div className={styles.row} key={item._id}>
+        <div className={styles.row} key={item.id}>
           <span>{getLabel(item)}</span>
           <span>
             {item.createdAt
@@ -58,7 +58,7 @@ const AdminContentTable = ({
               <Button
                 size="small"
                 variant="secondary"
-                onClick={() => onRestore(resource, item._id)}
+                onClick={() => onRestore(resource, item.id)}
               >
                 {t("adminContentTable.restore")}
               </Button>
@@ -66,7 +66,7 @@ const AdminContentTable = ({
               <Button
                 size="small"
                 variant="danger"
-                onClick={() => onDelete(resource, item._id)}
+                onClick={() => onDelete(resource, item.id)}
               >
                 {t("common:actions.delete")}
               </Button>

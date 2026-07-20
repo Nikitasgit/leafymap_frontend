@@ -15,7 +15,7 @@ import styles from "./PartnershipsAcceptedTab.module.scss";
 function getOtherUser(partnership: Partnership, currentUserId: string) {
   const initiatorId =
     typeof partnership.initiator === "object" && partnership.initiator
-      ? partnership.initiator._id
+      ? partnership.initiator.id
       : partnership.initiator;
   const isCurrentUserInitiator = initiatorId === currentUserId;
   return isCurrentUserInitiator
@@ -30,7 +30,7 @@ export default function PartnershipsAcceptedTab() {
     partnerships,
     isLoading: isLoadingPartnerships,
     refetch,
-  } = usePartnershipsAccepted(user?._id);
+  } = usePartnershipsAccepted(user?.id);
   const { deletePartnership } = useDeletePartnership(refetch);
 
   if (isLoadingUser || isLoadingPartnerships) {
@@ -65,17 +65,17 @@ export default function PartnershipsAcceptedTab() {
       ) : (
         <ul className={styles.items}>
           {acceptedPartnerships.map((partnership) => {
-            const otherUser = getOtherUser(partnership, user._id);
+            const otherUser = getOtherUser(partnership, user.id);
             if (!otherUser || typeof otherUser !== "object") return null;
             return (
-              <li key={partnership._id} className={styles.item}>
+              <li key={partnership.id} className={styles.item}>
                 <PartnershipCard
                   user={otherUser}
                   showCategory
                   actions={[
                     {
                       label: t("common:actions.delete"),
-                      onClick: () => deletePartnership(partnership._id),
+                      onClick: () => deletePartnership(partnership.id),
                     },
                   ]}
                 />

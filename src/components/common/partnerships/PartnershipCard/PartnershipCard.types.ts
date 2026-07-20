@@ -1,5 +1,5 @@
 export interface PartnershipCardUser {
-  _id: string;
+  id: string;
   username?: string;
   image?: string | { urls?: { thumbnail?: string } };
   googlePictureUrl?: string;

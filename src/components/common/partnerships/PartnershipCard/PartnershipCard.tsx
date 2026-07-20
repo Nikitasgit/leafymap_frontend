@@ -29,7 +29,7 @@ const PartnershipCard = ({
   const hasActions = actions.length > 0;
 
   const handleButtonClick = () => {
-    router.push(`/users/${user._id}`);
+    router.push(`/users/${user.id}`);
   };
 
   return (

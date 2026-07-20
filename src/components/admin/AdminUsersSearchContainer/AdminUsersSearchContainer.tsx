@@ -43,7 +43,7 @@ const AdminUsersSearchContainer = () => {
           <EmptyState title={t("adminUsersSearchContainer.noUsersFoundTitle")} />
         )}
         {users.map((user) => (
-          <AdminUserRow key={user._id} user={user} />
+          <AdminUserRow key={user.id} user={user} />
         ))}
       </section>
     </main>

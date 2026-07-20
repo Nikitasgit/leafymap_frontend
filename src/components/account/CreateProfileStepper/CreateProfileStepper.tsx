@@ -64,9 +64,9 @@ const CreateProfileStepper = () => {
   if (
     user &&
     user.userType === "guest" &&
-    initializedGuestUserId !== user._id
+    initializedGuestUserId !== user.id
   ) {
-    setInitializedGuestUserId(user._id);
+    setInitializedGuestUserId(user.id);
     setNewUser(initialUserData(user));
     setPlace(initialPlaceData(user));
   }
@@ -79,7 +79,7 @@ const CreateProfileStepper = () => {
     setNewUser((prev) =>
       prev.userCategory
         ? prev
-        : { ...prev, userCategory: organizerCategory._id },
+        : { ...prev, userCategory: organizerCategory.id },
     );
   }
 

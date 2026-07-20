@@ -30,7 +30,7 @@ const EventCategorySelectorInput = ({
 
   const inputValue = useMemo(() => {
     if (!value) return "";
-    return eventCategories.find((cat) => cat._id === value)?.name ?? "";
+    return eventCategories.find((cat) => cat.id === value)?.name ?? "";
   }, [eventCategories, value]);
 
   const handleSelect = (eventCategory: EventCategory) => {
@@ -38,7 +38,7 @@ const EventCategorySelectorInput = ({
     onChange({
       target: {
         name: "eventCategory",
-        value: eventCategory._id,
+        value: eventCategory.id,
       },
     });
   };
@@ -70,13 +70,13 @@ const EventCategorySelectorInput = ({
         <div className={styles.dropdown} role="listbox">
           <ul className={styles.list}>
             {eventCategories.map((cat) => (
-              <li key={cat._id}>
+              <li key={cat.id}>
                 <button
                   type="button"
                   className={styles.item}
                   onClick={() => handleSelect(cat)}
                   role="option"
-                  aria-selected={value === cat._id}
+                  aria-selected={value === cat.id}
                 >
                   {t(`common:eventCategories.${cat.name}`, {
                     defaultValue: cat.name,

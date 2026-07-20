@@ -9,7 +9,7 @@ import styles from "./MessageInput.module.scss";
 
 interface MessageInputProps {
   recipientId: string;
-  onMessageSent?: (result?: { _id: string; conversationId: string }) => void;
+  onMessageSent?: (result?: { id: string; conversationId: string }) => void;
 }
 
 const MessageInput: React.FC<MessageInputProps> = ({

@@ -111,7 +111,7 @@ const ConversationContainer: React.FC<ConversationContainerProps> = ({
         <MessagesList messages={messages} />
         {otherParticipant && (
           <MessageInput
-            recipientId={otherParticipant._id.toString()}
+            recipientId={otherParticipant.id.toString()}
             onMessageSent={isNewConversation ? handleMessageSent : undefined}
           />
         )}

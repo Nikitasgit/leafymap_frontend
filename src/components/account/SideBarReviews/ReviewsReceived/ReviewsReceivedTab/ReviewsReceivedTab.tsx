@@ -12,7 +12,7 @@ import { UserPopulated } from "@/types/user";
 export default function ReviewsReceivedTab() {
   const { t } = useTranslation("account");
   const { user, loading: isLoadingUser } = useAuth();
-  const { reviews, isLoading, refetch } = useReviewsReceived(user?._id);
+  const { reviews, isLoading, refetch } = useReviewsReceived(user?.id);
 
   return (
     <AccountTabShell
@@ -26,7 +26,7 @@ export default function ReviewsReceivedTab() {
     >
       <ul className={styles.reviewsList}>
         {reviews.map((review) => (
-          <li key={review._id}>
+          <li key={review.id}>
             <ReviewCard
               review={review}
               user={user as UserPopulated}

@@ -31,7 +31,7 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
     booking,
     isLoading: isBookingLoading,
     refetch: refetchBooking,
-  } = useMyBookingForEvent(event._id, isAuthenticated);
+  } = useMyBookingForEvent(event.id, isAuthenticated);
   const { createEventBooking, isLoading: isCreating } =
     useCreateEventBooking();
   const { updateEventBooking, isLoading: isUpdating } =
@@ -47,7 +47,7 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   const eventOwnerId = getEventCreatorId(event);
-  const isOrganizer = !!user && eventOwnerId === user._id;
+  const isOrganizer = !!user && eventOwnerId === user.id;
   const maxSeatsPerBooking = event.maxSeatsPerBooking || 1;
 
   const {
@@ -68,7 +68,7 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
   const refreshRemainingSeats = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/events/${event._id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/events/${event.id}`,
       );
       const updatedEvent = response.data?.data;
       if (updatedEvent && typeof updatedEvent.remainingSeats !== "undefined") {
@@ -80,21 +80,21 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
   };
 
   const handleCreateBooking = async () => {
-    await createEventBooking(event._id, seats);
+    await createEventBooking(event.id, seats);
     await Promise.all([refetchBooking(), refreshRemainingSeats()]);
     setSeats(1);
   };
 
   const handleUpdateBooking = async () => {
     if (!booking || editSeats === null) return;
-    await updateEventBooking(booking._id, editSeats);
+    await updateEventBooking(booking.id, editSeats);
     await Promise.all([refetchBooking(), refreshRemainingSeats()]);
     setEditSeats(null);
   };
 
   const handleCancelBooking = async () => {
     if (!booking) return;
-    await cancelEventBooking(booking._id);
+    await cancelEventBooking(booking.id);
     setIsCancelModalOpen(false);
     await Promise.all([refetchBooking(), refreshRemainingSeats()]);
   };
@@ -107,7 +107,7 @@ const EventBookingWidget: React.FC<EventBookingWidgetProps> = ({ event }) => {
           {t("eventBookingWidget.organizerHelper")}
         </p>
         <Link
-          href={`/account/events/${event._id}`}
+          href={`/account/events/${event.id}`}
           className={styles.manageLink}
         >
           {t("eventBookingWidget.manageBookings")}

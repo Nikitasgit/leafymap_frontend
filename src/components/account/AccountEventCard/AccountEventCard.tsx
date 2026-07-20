@@ -32,7 +32,7 @@ const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
           image: imageId,
         },
         true,
-        event._id,
+        event.id,
       );
     }
   };
@@ -40,7 +40,7 @@ const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
     <div className={styles.card}>
       <ProfilePictureUploader
         type="Event"
-        reference={event._id}
+        reference={event.id}
         onImageUploaded={handleImageUploaded}
         initialImage={event.image as Image}
         isOwner
@@ -55,7 +55,7 @@ const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
             actions={[
               {
                 type: "delete",
-                onClick: () => deleteEvent(event._id),
+                onClick: () => deleteEvent(event.id),
                 ariaLabel: t("accountEventCard.deleteAriaLabel"),
                 disabled: isDeletingEvent,
               },
@@ -64,8 +64,8 @@ const AccountEventCard = ({ event, placeId }: AccountEventCardProps) => {
                 onClick: () =>
                   router.push(
                     placeId
-                      ? `/account/places/${placeId}/events/${event._id}`
-                      : `/account/events/${event._id}`,
+                      ? `/account/places/${placeId}/events/${event.id}`
+                      : `/account/events/${event.id}`,
                   ),
                 ariaLabel: t("accountEventCard.editAriaLabel"),
               },

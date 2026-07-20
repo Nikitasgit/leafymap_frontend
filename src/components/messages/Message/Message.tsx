@@ -10,9 +10,9 @@ import { getDisplayName } from "@/utils/userDisplay";
 import styles from "./Message.module.scss";
 
 export interface Message {
-  _id: string;
+  id: string;
   sender: {
-    _id: string;
+    id: string;
     username?: string;
     firstname?: string;
     lastname?: string;
@@ -40,7 +40,7 @@ const MessageComponent: React.FC<MessageProps> = ({
   currentUserId,
 }) => {
   const { t } = useTranslation("messages");
-  const isOwnMessage = currentUserId === message.sender._id;
+  const isOwnMessage = currentUserId === message.sender.id;
   const isPartnershipMessage = !!message.partnership;
 
   const senderName = getDisplayName(message.sender);

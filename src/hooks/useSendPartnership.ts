@@ -15,7 +15,7 @@ export const useSendPartnership = (onSuccess?: () => void) => {
           `/api/partnerships`,
           {
             partnership: {
-              collaborator: { _id: collaboratorId },
+              collaborator: { id: collaboratorId },
             },
           },
           {

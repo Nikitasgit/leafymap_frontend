@@ -21,7 +21,7 @@ export interface PresentationTabProps {
   isOwner?: boolean;
   onMapButtonClick: (placeItem: {
     location: { coordinates: number[] } | null;
-    _id: string;
+    id: string;
   }) => Promise<void>;
   refetchUser: () => void;
 }
@@ -34,21 +34,21 @@ const PresentationTab = ({
   onMapButtonClick,
   refetchUser,
 }: PresentationTabProps) => {
-  const { eventInvitations } = useEventInvitationsByUserId(user._id, {
+  const { eventInvitations } = useEventInvitationsByUserId(user.id, {
     asCollaborator: "true",
     includeCancelledEvents: "false",
     includePastEvents: "false",
     onlyAccepted: "true",
   });
   const { partnerships, isLoading: isPartnershipsLoading } =
-    usePartnershipsAccepted(user._id);
+    usePartnershipsAccepted(user.id);
 
   const partnershipUsers = useMemo((): UsersListXScrollUser[] => {
-    const currentUserId = user._id;
+    const currentUserId = user.id;
     return partnerships
       .map((p: Partnership) => {
         const isInitiatorCurrent =
-          p.initiator && p.initiator._id === currentUserId;
+          p.initiator && p.initiator.id === currentUserId;
         const other = isInitiatorCurrent
           ? p.collaborator
           : (p.initiator ?? p.collaborator);
@@ -58,14 +58,14 @@ const PresentationTab = ({
             ? { urls: other.image.urls }
             : undefined;
         return {
-          _id: other._id,
+          id: other.id,
           username: other.username,
           image,
           userCategory: other.userCategory,
         };
       })
-      .filter((u) => u._id !== currentUserId);
-  }, [partnerships, user._id]);
+      .filter((u) => u.id !== currentUserId);
+  }, [partnerships, user.id]);
 
   const websiteDisplayUrl = useMemo(() => {
     const url = user.website?.trim();
@@ -89,7 +89,7 @@ const PresentationTab = ({
         isOwner={isOwner}
         refetchUser={refetchUser}
       />
-      <ProductCategoriesBadges userId={user._id} />
+      <ProductCategoriesBadges userId={user.id} />
       <span className={styles.descriptionLabel}>Description&nbsp;:</span>
       <div className={styles.descriptionRow}>
         <p>{capitalizeFirstLetter(user.description || "")}</p>

@@ -5,7 +5,7 @@ export type ReviewReferenceType = "Place" | "Event";
 
 /** Référence Place peuplée (pour affichage dans "Avis rédigés") */
 export interface ReviewReferencePlacePopulated {
-  _id: string;
+  id: string;
   location?: { label?: string };
   user?: {
     username?: string;
@@ -14,7 +14,7 @@ export interface ReviewReferencePlacePopulated {
 }
 
 export interface Review extends BaseEntity {
-  _id: string;
+  id: string;
   author: string | User;
   rating: number;
   comment?: string;
