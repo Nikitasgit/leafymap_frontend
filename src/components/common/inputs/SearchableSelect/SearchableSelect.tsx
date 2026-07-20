@@ -16,7 +16,7 @@ const SearchableSelect = (props: SearchableSelectProps) => {
     const { key: _key, ...rest } = optionProps;
 
     return (
-      <li key={option._id} {...rest}>
+      <li key={option.id} {...rest}>
         {option.label}
       </li>
     );
@@ -52,7 +52,7 @@ const SearchableSelect = (props: SearchableSelectProps) => {
     getOptionLabel: (option: SelectOption) => option.label,
     groupBy: props.groupBy,
     isOptionEqualToValue: (option: SelectOption, value: SelectOption) =>
-      option._id === value._id,
+      option.id === value.id,
     disabled: props.disabled,
     loading: props.loading,
     renderOption,

@@ -24,13 +24,13 @@ const MultiSelectFilter = ({
         getOptionLabel={(opt) => opt.label}
         groupBy={groupBy}
         filterSelectedOptions
-        isOptionEqualToValue={(opt, val) => opt._id === val._id}
+        isOptionEqualToValue={(opt, val) => opt.id === val.id}
         disabled={disabled}
         loading={loading}
         renderOption={(props, option) => {
           const { key: _key, ...rest } = props as React.HTMLAttributes<HTMLLIElement> & { key?: React.Key };
           return (
-            <li key={option._id} {...rest}>
+            <li key={option.id} {...rest}>
               {option.label}
             </li>
           );

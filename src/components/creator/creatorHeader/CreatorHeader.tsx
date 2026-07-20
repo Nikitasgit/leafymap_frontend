@@ -40,7 +40,7 @@ const CreatorHeader = ({
       <button
         className={`${styles.imageContainer} ${isLoading ? "skeleton" : ""}`}
         onClick={() => {
-          router.push(`/users/${user._id}`);
+          router.push(`/users/${user.id}`);
         }}
         type="button"
         aria-label={t("creatorHeader.viewProfileAriaLabel", {
@@ -67,7 +67,7 @@ const CreatorHeader = ({
             <h2 className={styles.title}>
               {capitalizeFirstLetter(user.username || "")}
             </h2>
-            <FollowingCount count={user.followers ?? 0} userId={user._id} />
+            <FollowingCount count={user.followers ?? 0} userId={user.id} />
           </div>
           {place && (
             <div className={styles.categoryRow}>

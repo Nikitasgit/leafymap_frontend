@@ -45,7 +45,7 @@ const EventModal: React.FC<EventModalProps> = ({
   };
 
   const goToEventPage = () => {
-    router.push(`/events/${event._id}`);
+    router.push(`/events/${event.id}`);
   };
 
   return (

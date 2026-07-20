@@ -36,12 +36,12 @@ const EventPartnershipsSelect = ({
             partnership.collaborator.username ??
             t("eventPartnershipsSelect.defaultUser");
           return (
-            <li key={partnership._id}>
+            <li key={partnership.id}>
               <Button
                 className={styles.partnershipButton}
                 variant={
                   selectedPartnerships.some(
-                    (p) => p._id === partnership.collaborator._id
+                    (p) => p.id === partnership.collaborator.id
                   )
                     ? "outline"
                     : "secondary"

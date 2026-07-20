@@ -39,18 +39,18 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const { comments, refetch: refetchComments } = useComments({
-    reference: review._id,
+    reference: review.id,
     referenceType: "Review",
   });
 
   const author = typeof review.author === "object" ? review.author : null;
-  const isAuthor = user && author && user._id === author._id;
+  const isAuthor = user && author && user.id === author.id;
 
   // Check if the current user has already replied to this review
   const userComment = comments.find((comment) => {
     const commentAuthor =
       typeof comment.author === "object" ? comment.author : null;
-    return user && commentAuthor && user._id === commentAuthor._id;
+    return user && commentAuthor && user.id === commentAuthor.id;
   });
   const hasUserReplied = !!userComment;
 
@@ -99,7 +99,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     }
 
     try {
-      await deleteReview(review._id);
+      await deleteReview(review.id);
       onReviewDeleted?.();
     } catch {
       // Error is handled in the hook
@@ -185,7 +185,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
 
           {showReplyInput && (
             <CommentInput
-              reference={review._id}
+              reference={review.id}
               referenceType="Review"
               onSuccess={handleReplySuccess}
               onCancel={() => setShowReplyInput(false)}
@@ -205,11 +205,11 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                   commentAuthor.image.urls?.original
                 : null;
             const isCommentAuthor =
-              user && commentAuthor && user._id === commentAuthor._id;
-            const isEditing = editingCommentId === comment._id;
+              user && commentAuthor && user.id === commentAuthor.id;
+            const isEditing = editingCommentId === comment.id;
 
             return (
-              <div key={comment._id} className={styles.commentItem}>
+              <div key={comment.id} className={styles.commentItem}>
                 {!isEditing ? (
                   <>
                     {commentAuthorImage ? (
@@ -245,12 +245,12 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                             actions={[
                               {
                                 type: "edit",
-                                onClick: () => handleEditComment(comment._id),
+                                onClick: () => handleEditComment(comment.id),
                                 ariaLabel: t("reviewCard.editCommentAria"),
                               },
                               {
                                 type: "delete",
-                                onClick: () => handleDeleteComment(comment._id),
+                                onClick: () => handleDeleteComment(comment.id),
                                 disabled: isDeletingComment,
                                 ariaLabel: t("reviewCard.deleteCommentAria"),
                               },
@@ -265,7 +265,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                   </>
                 ) : (
                   <CommentInput
-                    reference={review._id}
+                    reference={review.id}
                     referenceType="Review"
                     comment={comment}
                     onSuccess={handleReplySuccess}
@@ -284,8 +284,8 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
           reference={
-            typeof review.reference === "object" && review.reference && "_id" in review.reference
-              ? review.reference._id
+            typeof review.reference === "object" && review.reference && "id" in review.reference
+              ? review.reference.id
               : (review.reference as string)
           }
           referenceType={review.referenceType}

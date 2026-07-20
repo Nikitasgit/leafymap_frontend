@@ -200,18 +200,18 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
             placesToShow?.map((place) =>
               place && place.location ? (
                 <CategoryMarker
-                  key={place._id}
+                  key={place.id}
                   longitude={place.location.coordinates[0]}
                   latitude={place.location.coordinates[1]}
                   categoryName={getPlaceCategoryName(place.placeCategory)}
                   placeName={getPlaceDisplayName(place)}
                   zoom={viewState.zoom}
-                  isSelected={place._id === internalSelectedPlaceId}
+                  isSelected={place.id === internalSelectedPlaceId}
                   onClick={() => {
-                    setInternalSelectedPlaceId(place._id);
+                    setInternalSelectedPlaceId(place.id);
                     const userId =
                       place.user && typeof place.user === "object"
-                        ? (place.user as { _id: string })._id
+                        ? (place.user as { id: string }).id
                         : undefined;
                     if (userId && onMarkerClick) {
                       onMarkerClick(userId);
@@ -233,15 +233,15 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
               const [longitude, latitude] = coordinates;
               return (
                 <CategoryMarker
-                  key={event._id}
+                  key={event.id}
                   longitude={longitude}
                   latitude={latitude}
                   categoryName={categoryName}
                   placeName={event.name}
                   zoom={viewState.zoom}
-                  isSelected={event._id === selectedEventId}
+                  isSelected={event.id === selectedEventId}
                   onClick={() =>
-                    onEventMarkerClick?.(creatorId, event._id, coordinates)
+                    onEventMarkerClick?.(creatorId, event.id, coordinates)
                   }
                 />
               );
@@ -249,13 +249,13 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
 
           {userMarker && userMarker.location && (
             <CategoryMarker
-              key={userMarker._id}
+              key={userMarker.id}
               longitude={userMarker.location.coordinates[0]}
               latitude={userMarker.location.coordinates[1]}
               categoryName={userMarker.placeCategory.name}
               placeName={userMarker.name}
               zoom={viewState.zoom}
-              isSelected={userMarker._id === internalSelectedPlaceId}
+              isSelected={userMarker.id === internalSelectedPlaceId}
             />
           )}
         </Map>

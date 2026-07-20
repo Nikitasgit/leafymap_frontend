@@ -2,11 +2,11 @@ import type { Event } from "@/types/place/event";
 import type { Location } from "@/types/common";
 
 export function resolveRefId(
-  ref: string | { _id: string } | null | undefined,
+  ref: string | { id: string } | null | undefined,
 ): string | null {
   if (ref == null) return null;
   if (typeof ref === "string") return ref;
-  return ref._id ?? null;
+  return ref.id ?? null;
 }
 
 export function getEventCreatorId(event: Event): string | null {

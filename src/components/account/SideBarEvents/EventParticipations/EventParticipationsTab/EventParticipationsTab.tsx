@@ -16,7 +16,7 @@ export default function EventParticipationsTab() {
   const { t } = useTranslation("events");
   const { user } = useAuth();
   const { eventInvitations, isLoading, refetch } = useEventInvitationsByUserId(
-    user?._id,
+    user?.id,
     {
       asCollaborator: "true",
       includeCancelledEvents: "false",

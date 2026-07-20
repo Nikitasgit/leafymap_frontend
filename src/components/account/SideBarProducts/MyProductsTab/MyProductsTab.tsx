@@ -26,7 +26,7 @@ export default function MyProductsTab() {
     products,
     isLoading: isLoadingProducts,
     refetch,
-  } = useUserProducts(user?._id);
+  } = useUserProducts(user?.id);
   const { createProduct, deleteProduct, isLoading: isSubmitting } =
     useSubmitProduct();
   const { showError } = useToast();
@@ -59,7 +59,7 @@ export default function MyProductsTab() {
     return products
       .map((p) => {
         const id = resolveRefId(p.productCategory);
-        return productCategories.find((c) => c._id === id);
+        return productCategories.find((c) => c.id === id);
       })
       .filter((c): c is ProductCategory => c != null);
   }, [products, productCategories]);
@@ -69,11 +69,11 @@ export default function MyProductsTab() {
     newValue: ProductCategory[],
   ) => {
     if (!user) return;
-    const prevIds = new Set(value.map((c) => c._id));
-    const nextIds = new Set(newValue.map((c) => c._id));
+    const prevIds = new Set(value.map((c) => c.id));
+    const nextIds = new Set(newValue.map((c) => c.id));
 
     for (const cat of newValue) {
-      if (!prevIds.has(cat._id)) {
+      if (!prevIds.has(cat.id)) {
         if (atLimit) {
           showError(
             t("myProductsTab.maxProductsError", {
@@ -82,18 +82,18 @@ export default function MyProductsTab() {
           );
           return;
         }
-        const ok = await createProduct({ productCategory: cat._id });
+        const ok = await createProduct({ productCategory: cat.id });
         if (ok) await refetch();
         return;
       }
     }
     for (const cat of value) {
-      if (!nextIds.has(cat._id)) {
+      if (!nextIds.has(cat.id)) {
         const product = products.find(
-          (p) => resolveRefId(p.productCategory) === cat._id,
+          (p) => resolveRefId(p.productCategory) === cat.id,
         );
         if (product) {
-          const ok = await deleteProduct(product._id);
+          const ok = await deleteProduct(product.id);
           if (ok) await refetch();
         }
         return;
@@ -149,7 +149,7 @@ export default function MyProductsTab() {
               }
             />
           )}
-          isOptionEqualToValue={(option, val) => option._id === val._id}
+          isOptionEqualToValue={(option, val) => option.id === val.id}
           loading={isSubmitting}
           disabled={isSubmitting}
           slotProps={{

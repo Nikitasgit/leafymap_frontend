@@ -27,7 +27,7 @@ const CategorySelectorInput = ({
   const options = useMemo<SelectOption[]>(
     () =>
       userCategories.map((userCategory) => ({
-        _id: userCategory._id,
+        id: userCategory.id,
         label: t(`common:creatorCategories.${userCategory.name}`, {
           defaultValue: userCategory.name,
         }),
@@ -36,17 +36,17 @@ const CategorySelectorInput = ({
   );
 
   const selectedOption =
-    options.find((option) => option._id === value) ?? null;
+    options.find((option) => option.id === value) ?? null;
 
   const handleSelect = (selected: SelectOption | null) => {
     const userCategory = selected
-      ? userCategories.find((category) => category._id === selected._id)
+      ? userCategories.find((category) => category.id === selected.id)
       : null;
 
     onUserChange({
       target: {
         name: "userCategory",
-        value: userCategory?._id ?? "",
+        value: userCategory?.id ?? "",
       },
     });
   };

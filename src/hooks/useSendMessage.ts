@@ -9,7 +9,7 @@ interface SendMessageParams {
 }
 
 interface SendMessageResult {
-  _id: string;
+  id: string;
   conversationId: string;
 }
 

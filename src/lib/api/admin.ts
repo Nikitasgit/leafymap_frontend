@@ -9,7 +9,7 @@ export type AdminResource =
   | "comments";
 
 export interface AdminContentItem {
-  _id: string;
+  id: string;
   name?: string;
   location?: { label?: string };
   type?: string;

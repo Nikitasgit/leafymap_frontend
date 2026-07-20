@@ -18,19 +18,19 @@ const PlaceCategoryFilter: React.FC<PlaceCategoryFilterProps> = ({
   const options: MultiSelectOption[] = useMemo(
     () =>
       placeCategories.map((cat) => ({
-        _id: cat._id,
+        id: cat.id,
         label: t(`common:placeCategories.${cat.name.toLowerCase()}`, cat.name),
       })),
     [placeCategories, t]
   );
 
   const value = useMemo(
-    () => options.filter((opt) => selectedCategories.includes(opt._id)),
+    () => options.filter((opt) => selectedCategories.includes(opt.id)),
     [options, selectedCategories]
   );
 
   const handleChange = (selected: MultiSelectOption[]) => {
-    onCategoryChange(selected.map((s) => s._id));
+    onCategoryChange(selected.map((s) => s.id));
   };
 
   return (

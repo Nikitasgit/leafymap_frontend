@@ -14,7 +14,7 @@ export default function MyEventsTab() {
   const { t } = useTranslation("events");
   const router = useRouter();
   const { user, isLoading: isLoadingUser } = useCurrentUser();
-  const { events, isLoading: eventsLoading } = useUserEvents(user?._id ?? null);
+  const { events, isLoading: eventsLoading } = useUserEvents(user?.id ?? null);
 
   return (
     <AccountTabShell

@@ -57,7 +57,7 @@ export const buildUserMarker = (
           : place.placeCategory?.name ?? USER_MARKER.placeCategory.name,
     },
     name: username || USER_MARKER.name,
-    _id: "user-marker",
+    id: "user-marker",
   };
 };
 

@@ -38,7 +38,7 @@ const MapFiltersCard = ({
       categoryTypes
         .filter((type) => type.name !== "organization")
         .map((type) => ({
-          value: type._id,
+          value: type.id,
           labelKey: `placeTypes.${type.name}`,
           fallback: type.name,
         })),
@@ -60,7 +60,7 @@ const MapFiltersCard = ({
           return a.name.localeCompare(b.name);
         })
         .map((cat) => ({
-          _id: cat._id,
+          id: cat.id,
           label: t(`common:creatorCategories.${cat.name}`, cat.name),
           group: cat.type?.name
             ? t(
@@ -92,7 +92,7 @@ const MapFiltersCard = ({
               ? ((cat.type as { name?: string }).name ?? "")
               : "";
           return {
-            _id: cat._id,
+            id: cat.id,
             label: t(`common:productCategories.${cat.name}`, cat.name),
             group: rawGroup
               ? t(`common:categoryTypes.${rawGroup}`, t(`common:placeTypes.${rawGroup}`, rawGroup))
@@ -105,7 +105,7 @@ const MapFiltersCard = ({
   const selectedUserCategories = useMemo(
     () =>
       userCategoryOptions.filter((opt) =>
-        (localFilters.userCategoryIds ?? []).includes(opt._id)
+        (localFilters.userCategoryIds ?? []).includes(opt.id)
       ),
     [userCategoryOptions, localFilters.userCategoryIds]
   );
@@ -113,7 +113,7 @@ const MapFiltersCard = ({
   const selectedProductCategories = useMemo(
     () =>
       productCategoryOptions.filter((opt) =>
-        (localFilters.productCategoryIds ?? []).includes(opt._id)
+        (localFilters.productCategoryIds ?? []).includes(opt.id)
       ),
     [productCategoryOptions, localFilters.productCategoryIds]
   );
@@ -121,7 +121,7 @@ const MapFiltersCard = ({
   const eventCategoryOptions: MultiSelectOption[] = useMemo(
     () =>
       eventCategories.map((cat) => ({
-        _id: cat._id,
+        id: cat.id,
         label: t(`common:eventCategories.${cat.name}`, cat.name),
       })),
     [eventCategories]
@@ -130,7 +130,7 @@ const MapFiltersCard = ({
   const selectedEventCategories = useMemo(
     () =>
       eventCategoryOptions.filter((opt) =>
-        (localFilters.eventCategories ?? []).includes(opt._id)
+        (localFilters.eventCategories ?? []).includes(opt.id)
       ),
     [eventCategoryOptions, localFilters.eventCategories]
   );
@@ -204,7 +204,7 @@ const MapFiltersCard = ({
                 onChange={(selected) =>
                   setLocalFilters((prev) => ({
                     ...prev,
-                    eventCategories: selected.map((s) => s._id),
+                    eventCategories: selected.map((s) => s.id),
                   }))
                 }
                 label={t("mapFiltersCard.eventCategories")}
@@ -319,7 +319,7 @@ const MapFiltersCard = ({
                 onChange={(selected) =>
                   setLocalFilters((prev) => ({
                     ...prev,
-                    userCategoryIds: selected.map((s) => s._id),
+                    userCategoryIds: selected.map((s) => s.id),
                   }))
                 }
                 label={t("mapFiltersCard.creatorType")}
@@ -340,7 +340,7 @@ const MapFiltersCard = ({
                 onChange={(selected) =>
                   setLocalFilters((prev) => ({
                     ...prev,
-                    productCategoryIds: selected.map((s) => s._id),
+                    productCategoryIds: selected.map((s) => s.id),
                   }))
                 }
                 label={t("mapFiltersCard.productsOffered")}

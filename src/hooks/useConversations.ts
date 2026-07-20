@@ -4,9 +4,9 @@ import { useLoading } from "./useLoading";
 import { useToast } from "./useToast";
 
 export interface Conversation {
-  _id: string;
+  id: string;
   participants: {
-    _id: string;
+    id: string;
     username?: string;
     firstname?: string;
     lastname?: string;

@@ -46,7 +46,7 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
   return (
     <div className={styles.conversationsList}>
       {conversations.map((conversation) => (
-        <ConversationCard key={conversation._id} conversation={conversation} />
+        <ConversationCard key={conversation.id} conversation={conversation} />
       ))}
     </div>
   );

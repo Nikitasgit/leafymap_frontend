@@ -4,7 +4,7 @@ import { User, UserPopulated } from "../user";
 export type CommentReferenceType = "Review" | "Image" | "Comment";
 
 export interface Comment extends BaseEntity {
-  _id: string;
+  id: string;
   author: string | User;
   content: string;
   reference: string;

@@ -43,12 +43,12 @@ const CreatorActionButtons = ({
   const { follow, unfollow, isLoading: isFollowLoading } = useFollow();
   const { isFollowing, followId, setIsFollowing, setFollowId } =
     useFollowStatus({
-      currentUserId: currentUser?._id,
-      targetUserId: user._id,
+      currentUserId: currentUser?.id,
+      targetUserId: user.id,
     });
   const dispatch = useAppDispatch();
   const isPlaceFavorited = useAppSelector(
-    selectIsPlaceFavorited(place?._id)
+    selectIsPlaceFavorited(place?.id)
   );
   const isFavoritesLoading = useAppSelector(
     (state) => state.favorites.loading
@@ -56,9 +56,9 @@ const CreatorActionButtons = ({
 
   const handleFollow = async () => {
     try {
-      const result = await follow(user._id);
+      const result = await follow(user.id);
       setIsFollowing(true);
-      setFollowId(result?._id || null);
+      setFollowId(result?.id || null);
       refetchUser();
     } catch {
       // Error handled in hook
@@ -80,14 +80,14 @@ const CreatorActionButtons = ({
   const handleMessageClick = async () => {
     if (isOwner) return;
 
-    if (!currentUser?._id) {
+    if (!currentUser?.id) {
       router.push(`/${locale}/auth/register`);
       return;
     }
 
-    const conversationId = await findConversationWithUser(user._id);
+    const conversationId = await findConversationWithUser(user.id);
     router.push(
-      `/${locale}/inbox?conversationId=${conversationId || "new"}&recipientId=${user._id}`,
+      `/${locale}/inbox?conversationId=${conversationId || "new"}&recipientId=${user.id}`,
     );
   };
 
@@ -104,12 +104,12 @@ const CreatorActionButtons = ({
   const shareText = place?.name ? `${shareTitle} - ${place.name}` : shareTitle;
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
-  const showFollowButton = currentUser?._id !== user._id;
+  const showFollowButton = currentUser?.id !== user.id;
   const showMessageButton = !isOwner;
   const showDirectionsButton = !!place?.location?.coordinates;
 
   const handleFollowClick = () => {
-    if (!currentUser?._id) {
+    if (!currentUser?.id) {
       router.push(`/${locale}/auth/register`);
       return;
     }
@@ -122,18 +122,18 @@ const CreatorActionButtons = ({
   };
 
   const handleSaveClick = () => {
-    if (!currentUser?._id) {
+    if (!currentUser?.id) {
       router.push(`/${locale}/auth/register`);
       return;
     }
-    if (!place?._id) return;
+    if (!place?.id) return;
     if (isPlaceFavorited) {
       void dispatch(
-        removeFavorite({ referenceId: place._id, referenceType: "Place" })
+        removeFavorite({ referenceId: place.id, referenceType: "Place" })
       );
     } else {
       void dispatch(
-        addFavorite({ referenceId: place._id, referenceType: "Place" })
+        addFavorite({ referenceId: place.id, referenceType: "Place" })
       );
     }
   };
@@ -194,7 +194,7 @@ const CreatorActionButtons = ({
           icon={<Bookmark size={18} />}
           label={isPlaceFavorited ? t("creatorActionButtons.saved") : t("creatorActionButtons.save")}
           onClick={handleSaveClick}
-          disabled={isFavoritesLoading || !place?._id}
+          disabled={isFavoritesLoading || !place?.id}
           variant={isPlaceFavorited ? "primary" : "secondary"}
           ariaLabel={isPlaceFavorited ? t("creatorActionButtons.removeFromFavorites") : t("creatorActionButtons.save")}
         />

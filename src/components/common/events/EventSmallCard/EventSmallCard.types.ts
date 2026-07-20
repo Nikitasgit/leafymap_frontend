@@ -2,7 +2,6 @@ import { Image } from "@/types/image";
 
 export interface EventSmallCardEvent {
   id?: string;
-  _id?: string;
   name: string;
   image?: Image | null;
 }

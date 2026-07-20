@@ -20,7 +20,7 @@ export interface CreatorTabsProps {
   onTabChange?: (tabId: string) => void;
   onMapButtonClick?: (placeItem: {
     location: { coordinates: number[] } | null;
-    _id: string;
+    id: string;
   }) => Promise<void>;
   onPlaceRefetch?: () => void;
   isOwner?: boolean;
@@ -48,7 +48,7 @@ const CreatorTabs = ({
   const { t } = useTranslation("profile");
   const [internalActiveTab, setInternalActiveTab] = useState("presentation");
   const { events, isLoading: isLoadingEvents } = useUserEvents(
-    user._id || null,
+    user.id || null,
     ACTIVE_LIFECYCLE_STATUSES,
   );
 
@@ -93,9 +93,9 @@ const CreatorTabs = ({
           />
         ) : null;
       case "reviews":
-        return place?._id ? (
+        return place?.id ? (
           <ReviewsTab
-            reference={place._id}
+            reference={place.id}
             referenceType="Place"
             isOwner={isOwner}
             canReview={!isOwner}
@@ -106,7 +106,7 @@ const CreatorTabs = ({
       case "images":
         return (
           <GallerySection
-            reference={user._id || null}
+            reference={user.id || null}
             referenceType="User"
             canHandleImages={canHandleImages}
             isUploading={isUploadingImages}

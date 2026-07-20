@@ -19,7 +19,7 @@ export default function NotificationsList({
   return (
     <div className={styles.list} role="list">
       {notifications.map((notification) => (
-        <div key={notification._id} role="listitem">
+        <div key={notification.id} role="listitem">
           <NotificationCard
             notification={notification}
             onClick={

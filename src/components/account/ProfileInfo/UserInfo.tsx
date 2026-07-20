@@ -75,7 +75,7 @@ const UserInfo = ({
               value={
                 typeof user.userCategory === "string"
                   ? user.userCategory
-                  : user.userCategory?._id ?? ""
+                  : user.userCategory?.id ?? ""
               }
               error={!!errors.userCategory}
               errorMessage={errors.userCategory}

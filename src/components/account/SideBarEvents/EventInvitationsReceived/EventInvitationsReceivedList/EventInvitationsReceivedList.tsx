@@ -39,24 +39,24 @@ export default function EventInvitationsReceivedList({
     <div className={styles.list}>
       <ul className={styles.items}>
         {eventInvitations.map((invitation) => {
-          if (!invitation.event || !invitation.event._id) return null;
+          if (!invitation.event || !invitation.event.id) return null;
           const event = invitation.event as unknown as EventPopulated;
           const initiator = invitation.initiator as UserPopulated | undefined;
           return (
-            <li key={invitation._id} className={styles.item}>
+            <li key={invitation.id} className={styles.item}>
               <div className={styles.eventCardWrapper}>
                 <EventCard
                   event={event}
                   place={undefined}
                   user={initiator}
-                  clickable={!!event._id}
+                  clickable={!!event.id}
                 />
               </div>
               <div className={styles.bottomRow}>
                 <PartnershipCard
                   user={
                     initiator ?? {
-                      _id: invitation._id,
+                      id: invitation.id,
                       username: t("eventInvitationsReceivedList.defaultUser"),
                     }
                   }
@@ -68,7 +68,7 @@ export default function EventInvitationsReceivedList({
                     variant="primary"
                     size="small"
                     fullWidth
-                    onClick={() => onAccept?.(invitation._id)}
+                    onClick={() => onAccept?.(invitation.id)}
                     disabled={isUpdating}
                     ariaLabel={t("eventInvitationsReceivedList.acceptAriaLabel")}
                   >
@@ -79,7 +79,7 @@ export default function EventInvitationsReceivedList({
                     variant="outline"
                     size="small"
                     fullWidth
-                    onClick={() => onRefuse?.(invitation._id)}
+                    onClick={() => onRefuse?.(invitation.id)}
                     disabled={isUpdating}
                     ariaLabel={t("eventInvitationsReceivedList.refuseAriaLabel")}
                   >

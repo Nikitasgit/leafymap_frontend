@@ -1,12 +1,12 @@
 import { BaseEntity } from "../common";
 
 export interface CategoryTypeRef {
-  _id: string;
+  id: string;
   name: string;
 }
 
 export interface ProductCategory {
-  _id: string;
+  id: string;
   name: string;
   type: string | CategoryTypeRef;
 }

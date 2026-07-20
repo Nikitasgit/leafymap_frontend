@@ -105,7 +105,7 @@ const SuggestionsList = () => {
                   <UserSuggestionCardSkeleton key={`skeleton-${i}`} />
                 ))
               : users.map((user) => (
-                  <UserSuggestionCard key={user._id} user={user} />
+                  <UserSuggestionCard key={user.id} user={user} />
                 ))}
           </div>
         </div>

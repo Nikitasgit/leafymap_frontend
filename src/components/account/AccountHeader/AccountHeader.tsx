@@ -9,7 +9,7 @@ import CreatorCategoryBadge from "@/components/common/users/CreatorCategoryBadge
 
 interface AccountHeaderProps {
   user: {
-    _id: string;
+    id: string;
     username?: string;
     email: string;
     image?: string | Image;
@@ -66,7 +66,7 @@ export default function AccountHeader({
         googlePictureUrl={user.googlePictureUrl}
         onImageUploaded={handleImageUploaded}
         type="User"
-        reference={user._id}
+        reference={user.id}
         initialImage={user.image as Image}
         isOwner={true}
         rounded

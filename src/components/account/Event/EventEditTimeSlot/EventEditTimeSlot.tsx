@@ -33,14 +33,14 @@ const EventEditTimeSlot: React.FC<EventEditTimeSlotProps> = ({
       startTime: "",
       endTime: "",
       collaborators: [],
-      _id: generateTempId(),
+      id: generateTempId(),
     }
   );
 
   const handleParticipantSelect = (partnership: Partnership) => {
     if (
       !timeSlot.collaborators?.some(
-        (p) => p._id === partnership.collaborator._id
+        (p) => p.id === partnership.collaborator.id
       )
     ) {
       setTimeSlot({
@@ -51,7 +51,7 @@ const EventEditTimeSlot: React.FC<EventEditTimeSlotProps> = ({
       setTimeSlot({
         ...timeSlot,
         collaborators: timeSlot.collaborators.filter(
-          (p) => p._id !== partnership.collaborator._id
+          (p) => p.id !== partnership.collaborator.id
         ),
       });
     }
@@ -76,7 +76,7 @@ const EventEditTimeSlot: React.FC<EventEditTimeSlotProps> = ({
       startTime: "",
       endTime: "",
       collaborators: [],
-      _id: generateTempId(),
+      id: generateTempId(),
     });
   };
   const handleSlotChange = (

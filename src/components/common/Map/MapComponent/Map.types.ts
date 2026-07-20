@@ -30,7 +30,7 @@ export interface MapComponentProps {
     location: { coordinates: number[] };
     placeCategory: { name: string };
     name: string;
-    _id: string;
+    id: string;
   };
   isFavoritesMode?: boolean;
   externalPlaces?: Place[];

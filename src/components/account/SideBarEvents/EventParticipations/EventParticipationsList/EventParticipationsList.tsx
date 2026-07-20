@@ -35,14 +35,14 @@ export default function EventParticipationsList({
     <div className={styles.list}>
       <ul className={styles.items}>
         {eventInvitations.map((invitation) => {
-          if (!invitation.event || !invitation.event._id) return null;
+          if (!invitation.event || !invitation.event.id) return null;
           const event = invitation.event as unknown as EventPopulated;
           const initiator = invitation.initiator as UserPopulated | undefined;
 
           return (
             <ParticipationListItem
-              key={invitation._id}
-              invitationId={invitation._id}
+              key={invitation.id}
+              invitationId={invitation.id}
               event={event}
               initiator={initiator}
               isUpdating={isUpdating}
@@ -83,7 +83,7 @@ function ParticipationListItem({
         event={event}
         place={undefined}
         user={initiator}
-        clickable={!!event._id}
+        clickable={!!event.id}
       />
       {!canEdit ? (
         <p className={styles.helperText}>{lockedParticipationMessage}</p>

@@ -144,7 +144,7 @@ const AccountSettingsContainer = () => {
   const isUserFormLoading = userLoading || !sessionUser || !user;
 
   const userPlace = sessionUser?.place;
-  const placeId = userPlace?._id;
+  const placeId = userPlace?.id;
   const placeLabel = userPlace?.location?.label;
 
   const handleConfirmDeletePlace = async () => {

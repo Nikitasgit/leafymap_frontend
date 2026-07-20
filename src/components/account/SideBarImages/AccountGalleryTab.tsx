@@ -14,11 +14,11 @@ export default function AccountGalleryTab() {
   const { submitImages, isLoading: isUploading } = useSubmitImages();
 
   const handleFilesSelected = async (files: File[]) => {
-    if (files.length === 0 || !user?._id) return;
+    if (files.length === 0 || !user?.id) return;
     try {
       await submitImages({
         files,
-        reference: user._id,
+        reference: user.id,
         referenceType: "User",
         type: "gallery",
       });
@@ -40,7 +40,7 @@ export default function AccountGalleryTab() {
       </div>
 
       <GallerySection
-        reference={user?._id ?? null}
+        reference={user?.id ?? null}
         referenceType="User"
         canHandleImages
         isUploading={isUploading}

@@ -21,7 +21,7 @@ const UserProfileContainer = () => {
   const { submitImages, isLoading: isUploadingImages } = useSubmitImages();
   const placeId = useMemo(() => {
     if (!user?.place) return null;
-    return typeof user.place === "string" ? user.place : user.place._id;
+    return typeof user.place === "string" ? user.place : user.place.id;
   }, [user?.place]);
 
   const {
@@ -43,7 +43,7 @@ const UserProfileContainer = () => {
     try {
       await submitImages({
         files,
-        reference: user._id,
+        reference: user.id,
         referenceType: "User",
         type: "gallery",
       });
@@ -82,7 +82,7 @@ const UserProfileContainer = () => {
   };
 
   const isOwner = Boolean(
-    currentUser?._id && user?._id && currentUser._id === user._id,
+    currentUser?.id && user?.id && currentUser.id === user.id,
   );
 
   if (isLoading) return <LoadingBar />;

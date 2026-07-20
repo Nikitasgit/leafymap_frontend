@@ -13,7 +13,7 @@ const UserSuggestionCard = ({ user }: { user: UserPopulated }) => {
   const { t } = useTranslation("profile");
   const router = useRouter();
   const handleRedirect = () => {
-    router.push(`/users/${user._id}`);
+    router.push(`/users/${user.id}`);
   };
 
   const locationLabel =

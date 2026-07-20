@@ -34,7 +34,7 @@ const PlaceCategorySelectorInput = ({
 
   const inputValue = useMemo(() => {
     if (!value) return "";
-    return placeCategories.find((category) => category._id === value)?.name ?? "";
+    return placeCategories.find((category) => category.id === value)?.name ?? "";
   }, [placeCategories, value]);
 
   const handleSelect = (category: PlaceCategory) => {
@@ -42,7 +42,7 @@ const PlaceCategorySelectorInput = ({
     onChange({
       target: {
         name: "placeCategory",
-        value: category._id,
+        value: category.id,
       },
     });
   };
@@ -74,13 +74,13 @@ const PlaceCategorySelectorInput = ({
         <div className={styles.dropdown} role="listbox">
           <ul className={styles.list}>
             {placeCategories.map((cat) => (
-              <li key={cat._id}>
+              <li key={cat.id}>
                 <button
                   type="button"
                   className={styles.item}
                   onClick={() => handleSelect(cat)}
                   role="option"
-                  aria-selected={value === cat._id}
+                  aria-selected={value === cat.id}
                 >
                   {t(`placeCategories.${cat.name}`)}
                 </button>
