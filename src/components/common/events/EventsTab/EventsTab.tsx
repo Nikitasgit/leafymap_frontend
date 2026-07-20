@@ -62,7 +62,7 @@ const EventsTab = ({ username, place, user, events }: EventsTabProps) => {
 
             return (
               <div
-                key={event._id}
+                key={event.id}
                 onClick={() => handleEventClick(event)}
                 className={styles.eventCardWrapper}
               >

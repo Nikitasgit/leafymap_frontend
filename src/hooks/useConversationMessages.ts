@@ -61,7 +61,7 @@ export const useConversationMessages = (
 
     const handleNewMessage = (newMessage: Message) => {
       setMessages((prev) => {
-        const messageExists = prev.some((msg) => msg._id === newMessage._id);
+        const messageExists = prev.some((msg) => msg.id === newMessage.id);
         if (messageExists) {
           return prev;
         }

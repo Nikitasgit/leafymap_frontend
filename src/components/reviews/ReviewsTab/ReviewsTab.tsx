@@ -45,14 +45,14 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
     if (!user) return undefined;
     return reviews.find((review) => {
       const author = typeof review.author === "object" ? review.author : null;
-      return author && author._id === user._id;
+      return author && author.id === user.id;
     });
   }, [reviews, user]);
 
   const sortedReviews = useMemo(() => {
     if (!userReview) return reviews;
     const otherReviews = reviews.filter(
-      (review) => review._id !== userReview._id
+      (review) => review.id !== userReview.id
     );
     return [userReview, ...otherReviews];
   }, [reviews, userReview]);
@@ -98,12 +98,12 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
       ) : (
         <div className={styles.reviewsList}>
           {sortedReviews.map((review, index) => {
-            const isUserReview = userReview && review._id === userReview._id;
+            const isUserReview = userReview && review.id === userReview.id;
             const showSeparator =
               isUserReview && index === 0 && sortedReviews.length > 1;
 
             return (
-              <React.Fragment key={review._id}>
+              <React.Fragment key={review.id}>
                 <ReviewCard
                   review={review}
                   user={user as UserPopulated}

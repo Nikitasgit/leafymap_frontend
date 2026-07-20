@@ -30,7 +30,7 @@ const MapCreatorCard = ({
 }: MapCreatorCardProps) => {
   const { user, place, isLoading, refetch } = useCreatorData(userId);
   const { user: currentUser } = useAuth();
-  const isOwner = isSameId(currentUser?._id, user?._id);
+  const isOwner = isSameId(currentUser?.id, user?.id);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(
     initialEventId || null,
   );
@@ -61,11 +61,11 @@ const MapCreatorCard = ({
   useEffect(() => {
     if (initialEventId) return;
     if (!place || !mapRef.current) return;
-    if (navigatedPlaceIdRef.current === place._id) return;
-    navigatedPlaceIdRef.current = place._id;
+    if (navigatedPlaceIdRef.current === place.id) return;
+    navigatedPlaceIdRef.current = place.id;
     navigateToPlaceOnMap({
       mapRef,
-      placeId: place._id,
+      placeId: place.id,
       coordinates: place.location?.coordinates || [],
       skipFetchPlacesInView,
     });
@@ -73,13 +73,13 @@ const MapCreatorCard = ({
 
   useEffect(() => {
     if (!selectedEvent || !initialEventId || !mapRef.current) return;
-    if (navigatedPlaceIdRef.current === selectedEvent._id) return;
+    if (navigatedPlaceIdRef.current === selectedEvent.id) return;
     const coordinates = getEventCoordinates(selectedEvent);
     if (coordinates.length < 2) return;
-    navigatedPlaceIdRef.current = selectedEvent._id;
+    navigatedPlaceIdRef.current = selectedEvent.id;
     navigateToPlaceOnMap({
       mapRef,
-      placeId: selectedEvent._id,
+      placeId: selectedEvent.id,
       coordinates,
       skipFetchPlacesInView,
     });
@@ -92,14 +92,14 @@ const MapCreatorCard = ({
 
   const handleMapButtonClick = async (placeItem: {
     location: { coordinates: number[] } | null;
-    _id: string;
+    id: string;
   }): Promise<void> => {
     if (!placeItem.location) return;
     // Reset ref so the next navigateToPlaceOnMap call goes through.
     navigatedPlaceIdRef.current = null;
     await navigateToPlaceOnMap({
       mapRef,
-      placeId: placeItem._id,
+      placeId: placeItem.id,
       coordinates: placeItem.location.coordinates,
       skipFetchPlacesInView,
     });

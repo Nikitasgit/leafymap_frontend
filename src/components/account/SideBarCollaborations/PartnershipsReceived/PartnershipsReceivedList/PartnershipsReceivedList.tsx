@@ -36,11 +36,11 @@ export default function PartnershipsReceivedList({
     <div className={styles.list}>
       <ul className={styles.items}>
         {partnerships.map((partnership) => (
-          <li key={partnership._id} className={styles.item}>
+          <li key={partnership.id} className={styles.item}>
             <PartnershipCard
               user={
                 partnership.initiator ?? {
-                  _id: partnership._id,
+                  id: partnership.id,
                   username: t("partnershipsReceivedList.fallbackUsername"),
                 }
               }
@@ -52,7 +52,7 @@ export default function PartnershipsReceivedList({
                 variant="primary"
                 size="small"
                 fullWidth
-                onClick={() => onAccept?.(partnership._id)}
+                onClick={() => onAccept?.(partnership.id)}
                 disabled={isUpdating}
                 ariaLabel={t("partnershipsReceivedList.acceptAriaLabel")}
               >
@@ -63,7 +63,7 @@ export default function PartnershipsReceivedList({
                 variant="outline"
                 size="small"
                 fullWidth
-                onClick={() => onRefuse?.(partnership._id)}
+                onClick={() => onRefuse?.(partnership.id)}
                 disabled={isUpdating}
                 ariaLabel={t("partnershipsReceivedList.refuseAriaLabel")}
               >

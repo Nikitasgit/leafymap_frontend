@@ -8,15 +8,13 @@ import { capitalizeFirstLetter } from "@/utils/functions";
 
 const EventSmallCard: React.FC<EventSmallCardProps> = ({
   event,
-  enableNavigation = true,
+  enableNavigation: _enableNavigation = true,
   className,
 }) => {
-  const eventId = event._id || event.id;
-
   const cardClassName = `${styles.eventCard} ${className || ""}`;
 
   return (
-    <div className={cardClassName}>
+    <div className={cardClassName} data-event-id={event.id}>
       <div className={styles.eventImageContainer}>
         <Image
           src={event.image?.urls?.thumbnail || eventDefaultsSvg}

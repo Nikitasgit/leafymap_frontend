@@ -30,14 +30,14 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   const [rating, setRating] = useState(review?.rating || 0);
   const [comment, setComment] = useState(review?.comment || "");
   const [prevOpenState, setPrevOpenState] = useState(isOpen);
-  const [prevReviewId, setPrevReviewId] = useState(review?._id);
+  const [prevReviewId, setPrevReviewId] = useState(review?.id);
   const { submitReview, isLoading: isSubmitting } = useSubmitReview();
   const { updateReview, isLoading: isUpdating } = useUpdateReview();
   const isLoading = isSubmitting || isUpdating;
 
-  if (isOpen !== prevOpenState || review?._id !== prevReviewId) {
+  if (isOpen !== prevOpenState || review?.id !== prevReviewId) {
     setPrevOpenState(isOpen);
-    setPrevReviewId(review?._id);
+    setPrevReviewId(review?.id);
     if (isOpen && review) {
       setRating(review.rating);
       setComment(review.comment || "");
@@ -55,7 +55,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
     try {
       if (isEditMode && review) {
-        await updateReview(review._id, {
+        await updateReview(review.id, {
           rating,
           comment: comment.trim() || undefined,
         });

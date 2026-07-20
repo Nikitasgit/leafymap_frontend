@@ -24,7 +24,7 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
   const params = useParams();
   const locale = params.locale as string;
   const otherParticipant = conversation.participants.find(
-    (participant) => participant._id !== user?._id
+    (participant) => participant.id !== user?.id
   );
 
   if (!otherParticipant) {
@@ -43,7 +43,7 @@ const ConversationCard: React.FC<ConversationCardProps> = ({
       }`}
       onClick={() => {
         router.push(
-          `/${locale}/inbox?conversationId=${conversation._id}&recipientId=${otherParticipant._id}`
+          `/${locale}/inbox?conversationId=${conversation.id}&recipientId=${otherParticipant.id}`
         );
       }}
     >

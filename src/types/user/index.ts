@@ -27,7 +27,7 @@ export interface User extends BaseEntity {
   followers?: number;
   interests?: string[];
   place?: Place;
-  _id: string;
+  id: string;
   userCategory?: string | UserCategory;
   acceptedCGU?: boolean;
   bannedAt?: string;

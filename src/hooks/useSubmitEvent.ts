@@ -26,12 +26,12 @@ const useSubmitEvent = () => {
           endDate: period.endDate
             ? parseDateToUTC(period.endDate)
             : parseDateToUTC(period.startDate),
-          _id: isTempId(period._id) ? undefined : period._id,
+          id: isTempId(period.id) ? undefined : period.id,
           timeSlots: period.timeSlots?.map((slot) => ({
             ...slot,
-            _id: isTempId(slot._id) ? undefined : slot._id,
+            id: isTempId(slot.id) ? undefined : slot.id,
             collaborators: slot.collaborators?.map((collaborator) => ({
-              _id: collaborator._id,
+              id: collaborator.id,
             })),
           })),
         })),

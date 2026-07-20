@@ -38,7 +38,7 @@ const ProfilePictureUploader = ({
   reference,
   rounded = false,
 }: ProfilePictureUploaderProps): React.JSX.Element => {
-  const [preview, setPreview] = useState<Pick<IImage, "_id" | "urls"> | null>(
+  const [preview, setPreview] = useState<Pick<IImage, "id" | "urls"> | null>(
     initialImage || null,
   );
 
@@ -58,11 +58,11 @@ const ProfilePictureUploader = ({
       });
       if (response && response.images.length > 0) {
         if (preview) {
-          await deleteImages([preview._id]);
+          await deleteImages([preview.id]);
         }
-        onImageUploaded(response.images[0]._id);
+        onImageUploaded(response.images[0].id);
         setPreview({
-          _id: response.images[0]._id,
+          id: response.images[0].id,
           urls: response.images[0].signedUrls,
         });
       }
@@ -77,7 +77,7 @@ const ProfilePictureUploader = ({
     if (disabled || !isOwner || (!preview && !googlePictureUrl)) return;
     try {
       if (preview) {
-        await deleteImages([preview._id]);
+        await deleteImages([preview.id]);
         setPreview(null);
         return;
       }

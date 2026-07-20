@@ -17,8 +17,8 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
     collaborator: Collaborator | string,
   ): EventScheduleProps["users"][0] | undefined => {
     const collaboratorId =
-      typeof collaborator === "string" ? collaborator : collaborator._id;
-    return users.find((user) => user._id === collaboratorId);
+      typeof collaborator === "string" ? collaborator : collaborator.id;
+    return users.find((user) => user.id === collaboratorId);
   };
 
   return (
@@ -26,7 +26,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
       <h3 className={styles.sectionTitle}>{t("eventSchedule.title")}</h3>
       <div className={styles.scheduleList}>
         {sortedSchedule.map((period) => (
-          <div key={period._id} className={styles.period}>
+          <div key={period.id} className={styles.period}>
             <div className={styles.periodDates}>
               <div className={styles.dateItem}>
                 <p className={styles.dateLabel}>
@@ -50,7 +50,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
             {period.timeSlots && period.timeSlots.length > 0 && (
               <div className={styles.timeSlotsList}>
                 {period.timeSlots.map((timeSlot) => (
-                  <div key={timeSlot._id} className={styles.timeSlot}>
+                  <div key={timeSlot.id} className={styles.timeSlot}>
                     <div className={styles.timeSlotHeader}>
                       <div className={styles.timeSlotTime}>
                         <Clock size={14} />
@@ -76,7 +76,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {
                             user.username ?? t("eventSchedule.defaultParticipant");
                           return (
                             <div
-                              key={user._id}
+                              key={user.id}
                               className={styles.participantCard}
                               title={displayName}
                             >

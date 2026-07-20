@@ -2,7 +2,7 @@ import { Image } from "../image";
 import { EventDateRange } from "../place/event";
 
 export interface EventBookingEvent {
-  _id: string;
+  id: string;
   name: string;
   description?: string;
   image?: Image;
@@ -16,19 +16,19 @@ export interface EventBookingEvent {
   maxSeatsPerBooking?: number;
   deleted?: boolean;
   user?: {
-    _id: string;
+    id: string;
     username?: string;
     image?: Image;
   };
   place?: {
-    _id: string;
+    id: string;
     location?: { label?: string };
-    user?: { _id: string; username?: string };
+    user?: { id: string; username?: string };
   } | null;
 }
 
 export interface EventBookingUser {
-  _id: string;
+  id: string;
   username?: string;
   email?: string;
   image?: Image;
@@ -37,7 +37,7 @@ export interface EventBookingUser {
 export type EventBookingStatus = "confirmed" | "cancelled";
 
 export interface EventBooking {
-  _id: string;
+  id: string;
   seats: number;
   status: EventBookingStatus;
   cancelledAt?: string | null;

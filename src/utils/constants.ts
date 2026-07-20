@@ -27,7 +27,7 @@ export const USER_MARKER = {
   placeCategory: { name: "workshop" },
   name: "Déplacez votre lieu",
   isSelected: true,
-  _id: "user-marker",
+  id: "user-marker",
 };
 
 // Event constants

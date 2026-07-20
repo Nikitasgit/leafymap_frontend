@@ -111,7 +111,7 @@ const SearchInput = <T extends SearchSuggestion>({
         <ul className={styles.suggestions}>
           {suggestions.map((sug) => (
             <li
-              key={sug._id}
+              key={sug.id}
               onClick={() => handleSuggestionClick(sug)}
               className={styles.suggestionItem}
             >

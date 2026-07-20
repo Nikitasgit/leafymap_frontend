@@ -12,7 +12,7 @@ export interface MapCreatorCardContentProps {
   refetchUser: () => void;
   onMapButtonClick: (placeItem: {
     location: { coordinates: number[] } | null;
-    _id: string;
+    id: string;
   }) => Promise<void>;
 }
 

@@ -8,7 +8,7 @@ import LoadingSpinner from "../../loading/LoadingSpinner";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface UsersListXScrollUser {
-  _id: string;
+  id: string;
   username?: string;
   image?: { urls?: { thumbnail?: string } };
   userCategory?: { name: string };
@@ -190,7 +190,7 @@ const UsersListXScroll = ({
             <LoadingSpinner />
           ) : (
             users.map((user) => (
-              <div key={user._id} className={styles.cardWrapper}>
+              <div key={user.id} className={styles.cardWrapper}>
                 <PartnershipCard user={user} showCategory={showCategory} />
               </div>
             ))

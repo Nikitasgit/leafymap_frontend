@@ -27,7 +27,7 @@ const PartnershipsFormList = ({
       {filteredPartnerships.length > 0 ? (
         <div className={styles.list}>
           {filteredPartnerships.map((partnership) => {
-            const id = partnership._id;
+            const id = partnership.id;
             const collaborator = partnership.collaborator as Partnership["collaborator"] & {
               googlePictureUrl?: string;
             };

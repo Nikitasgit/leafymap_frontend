@@ -34,7 +34,7 @@ export default function EventBookingsManageList({
   const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   const startEditing = (booking: EventBookingWithUser) => {
-    setEditingId(booking._id);
+    setEditingId(booking.id);
     setEditSeats(booking.seats);
   };
 
@@ -43,7 +43,7 @@ export default function EventBookingsManageList({
       setEditingId(null);
       return;
     }
-    await updateEventBooking(booking._id, editSeats);
+    await updateEventBooking(booking.id, editSeats);
     setEditingId(null);
     onChange?.();
   };
@@ -57,9 +57,9 @@ export default function EventBookingsManageList({
   return (
     <ul className={styles.items}>
       {eventBookings.map((booking) => {
-        const isEditing = editingId === booking._id;
+        const isEditing = editingId === booking.id;
         return (
-          <li key={booking._id} className={styles.item}>
+          <li key={booking.id} className={styles.item}>
             <PartnershipCard user={booking.user} />
             <div className={styles.bottomRow}>
               <p className={styles.seatsInfo}>
@@ -134,7 +134,7 @@ export default function EventBookingsManageList({
                     type="button"
                     variant="danger"
                     size="small"
-                    onClick={() => setCancellingId(booking._id)}
+                    onClick={() => setCancellingId(booking.id)}
                     ariaLabel={t(
                       "eventBookingsManageList.cancelBookingAriaLabel"
                     )}
@@ -146,12 +146,12 @@ export default function EventBookingsManageList({
             </div>
 
             <BaseModal
-              isOpen={cancellingId === booking._id}
+              isOpen={cancellingId === booking.id}
               onClose={() => setCancellingId(null)}
               title={t("eventBookingsManageList.cancelModalTitle")}
               primaryButtonLabel={t("eventBookingsManageList.cancelModalPrimary")}
               secondaryButtonLabel={t("common:actions.back")}
-              onPrimaryAction={() => handleCancel(booking._id)}
+              onPrimaryAction={() => handleCancel(booking.id)}
               primaryButtonType="button"
               isSubmitLoading={isCancelling}
               withLoadingState={false}

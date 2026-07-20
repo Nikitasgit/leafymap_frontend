@@ -15,7 +15,7 @@ export default function PartnershipsReceivedTab() {
   const { t } = useTranslation("account");
   const { user } = useAuth();
   const { partnerships, isLoading, refetch } = usePartnershipsReceived(
-    user?._id,
+    user?.id,
     { status: "pending" }
   );
   const {

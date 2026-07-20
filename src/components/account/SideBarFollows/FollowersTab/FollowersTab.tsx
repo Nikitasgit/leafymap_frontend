@@ -13,7 +13,7 @@ import LoadingBar from "@/components/common/loading/LoadingBar";
 const FollowersTab: React.FC = () => {
   const { t } = useTranslation("account");
   const { user } = useCurrentUser();
-  const { followers, isLoading } = useFollowers(user?._id);
+  const { followers, isLoading } = useFollowers(user?.id);
 
   if (isLoading) {
     return <LoadingBar />;
@@ -25,7 +25,7 @@ const FollowersTab: React.FC = () => {
         <div className={styles.followersList}>
           {followers.map((follower) => {
             const userPopulated = {
-              _id: follower._id,
+              id: follower.id,
               username: follower.username || "",
               firstname: follower.firstname,
               lastname: follower.lastname,
@@ -40,7 +40,7 @@ const FollowersTab: React.FC = () => {
             };
             return (
               <UserCard
-                key={follower._id}
+                key={follower.id}
                 user={userPopulated as UserPopulated}
               />
             );

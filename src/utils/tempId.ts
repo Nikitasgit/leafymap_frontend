@@ -6,10 +6,10 @@ export const isTempId = (id: string): boolean => {
   return id.startsWith("temp_");
 };
 
-export const separateNewAndUpdatedArrayValues = <T extends { _id: string }>(
+export const separateNewAndUpdatedArrayValues = <T extends { id: string }>(
   array: T[]
 ): { newValues: T[]; updatedValues: T[] } => {
-  const newValues = array.filter((value) => isTempId(value._id));
-  const updatedValues = array.filter((value) => !isTempId(value._id));
+  const newValues = array.filter((value) => isTempId(value.id));
+  const updatedValues = array.filter((value) => !isTempId(value.id));
   return { newValues, updatedValues };
 };

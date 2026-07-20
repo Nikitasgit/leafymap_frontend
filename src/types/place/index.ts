@@ -9,7 +9,7 @@ export interface Place extends BaseEntity, ContactInfo {
   description: string;
   user: string | User;
   location: Location | null;
-  placeCategory: string | (PlaceCategory & { _id: string });
+  placeCategory: string | (PlaceCategory & { id: string });
   categories: string[];
   defaultSchedule: DefaultSchedule;
   isCreatorPlace?: boolean;

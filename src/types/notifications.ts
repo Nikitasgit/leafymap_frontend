@@ -21,7 +21,7 @@ export type NotificationActionType =
   | "other";
 
 export interface NotificationSender {
-  _id: string;
+  id: string;
   username?: string;
   firstname?: string;
   lastname?: string;
@@ -32,7 +32,7 @@ export interface NotificationSender {
 }
 
 export interface Notification {
-  _id: string;
+  id: string;
   action: NotificationActionType;
   reference: string;
   referenceType: NotificationReferenceType;

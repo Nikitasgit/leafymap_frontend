@@ -98,8 +98,8 @@ const MapFiltersBar = ({
                 ? event.eventCategory.name
                 : undefined;
             results.push({
-              _id: event._id,
-              eventId: event._id,
+              id: event.id,
+              eventId: event.id,
               creatorId,
               image,
               name: event.name,
@@ -116,7 +116,7 @@ const MapFiltersBar = ({
       if (searchType.key === "membres") {
         const creators = await searchUsers({ username: query }, 10);
         return creators.map((user) => ({
-          _id: user._id,
+          id: user.id,
           image: user.image?.urls?.thumbnail || user.googlePictureUrl || "",
           name: user.username || "",
           place: user.place?.location
@@ -147,7 +147,7 @@ const MapFiltersBar = ({
       try {
         const locations = await fetchLocationSuggestions(query);
         return locations.map((location) => ({
-          _id:
+          id:
             location.id ||
             `location-${location.coordinates[0]}-${location.coordinates[1]}`,
           name: location.label,
@@ -183,7 +183,7 @@ const MapFiltersBar = ({
       }
 
       if (searchType.key === "membres") {
-        handleSelect({ id: item._id, type: "creator" });
+        handleSelect({ id: item.id, type: "creator" });
         return;
       }
 

@@ -98,7 +98,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
                 {canHandleImages && (
                   <button
                     className={styles.deleteButton}
-                    onClick={(e) => handleDeleteImage(image._id, e)}
+                    onClick={(e) => handleDeleteImage(image.id, e)}
                     disabled={isDeleting}
                     title={t("gallerySection.deleteImage")}
                     type="button"

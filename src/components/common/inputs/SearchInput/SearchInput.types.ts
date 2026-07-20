@@ -10,7 +10,7 @@ export interface SearchInputProps<T> {
 }
 
 export interface SearchSuggestion {
-  _id: string;
+  id: string;
   name: string;
   image?: string;
   googlePictureUrl?: string;

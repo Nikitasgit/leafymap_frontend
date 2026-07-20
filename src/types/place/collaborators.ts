@@ -1,7 +1,7 @@
 import { Image } from "../image";
 
 export type Collaborator = {
-  _id: string;
+  id: string;
   name?: string;
   image?: string | Image;
 };

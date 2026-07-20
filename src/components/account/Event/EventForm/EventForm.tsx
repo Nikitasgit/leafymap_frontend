@@ -45,14 +45,14 @@ const getEventPlaceId = (
   event: Event | initialEventData | null
 ): string | null => {
   if (!event?.place) return null;
-  return typeof event.place === "string" ? event.place : event.place._id;
+  return typeof event.place === "string" ? event.place : event.place.id;
 };
 
 const getEventCategoryId = (event: Event | initialEventData | null): string => {
   if (!event?.eventCategory) return "";
   return typeof event.eventCategory === "string"
     ? event.eventCategory
-    : event.eventCategory._id;
+    : event.eventCategory.id;
 };
 
 const initialEventData = (
@@ -137,11 +137,11 @@ const EventForm = ({
   ) {
     setHasAppliedDefaultPlace(true);
     setLocationMode("place");
-    setEvent((prev) => ({ ...prev, place: userPlace._id }));
+    setEvent((prev) => ({ ...prev, place: userPlace.id }));
   }
 
   if (!isUpdate && userPlace && locationMode === "place" && !event.place) {
-    setEvent((prev) => ({ ...prev, place: userPlace._id }));
+    setEvent((prev) => ({ ...prev, place: userPlace.id }));
   }
 
   const errors = useMemo(
@@ -192,7 +192,7 @@ const EventForm = ({
       return {
         ...prev,
         online: false,
-        place: userPlace?._id || null,
+        place: userPlace?.id || null,
         location: null,
       };
     });
@@ -217,10 +217,10 @@ const EventForm = ({
             ? Number(maxSeatsPerBooking) || 1
             : 1,
         };
-        const { _id: eventId } = await submitEvent(
+        const { id: eventId } = await submitEvent(
           eventPayload,
           isUpdate,
-          eventData?._id
+          eventData?.id
         );
         // send partnerships data to server if event is created
         if (eventId && partnerships.length > 0) {

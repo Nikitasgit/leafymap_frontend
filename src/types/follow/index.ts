@@ -1,5 +1,5 @@
 export interface FollowUser {
-  _id: string;
+  id: string;
   followId?: string;
   username?: string;
   firstname?: string;

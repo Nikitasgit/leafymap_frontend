@@ -44,7 +44,7 @@ const EventNewDatesSelector = ({
       startDate: format(startDate, "dd-MM-yyyy"),
       endDate: isPeriod && endDate ? format(endDate, "dd-MM-yyyy") : "",
       timeSlots: [],
-      _id: generateTempId(),
+      id: generateTempId(),
     };
     const updatedSchedule = [...data.schedule, updatedPeriod];
     onChange({

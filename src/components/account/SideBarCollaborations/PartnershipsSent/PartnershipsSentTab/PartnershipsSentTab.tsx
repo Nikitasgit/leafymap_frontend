@@ -16,7 +16,7 @@ export default function PartnershipsSentTab() {
   const { t } = useTranslation("account");
   const { searchUsers } = useFindUsers();
   const { user } = useAuth();
-  const { partnerships, isLoading, refetch } = usePartnershipsSent(user?._id, {
+  const { partnerships, isLoading, refetch } = usePartnershipsSent(user?.id, {
     status: "pending",
   });
   const { sendPartnership } = useSendPartnership(refetch);
@@ -26,12 +26,12 @@ export default function PartnershipsSentTab() {
     const searchParams: Record<string, string | string[]> = {
       username: query,
     };
-    if (user?._id) {
-      searchParams.excludeIds = [user._id];
+    if (user?.id) {
+      searchParams.excludeIds = [user.id];
     }
     const users = await searchUsers(searchParams);
     return users.map((u) => ({
-      _id: u._id,
+      id: u.id,
       image: u.image?.urls?.thumbnail,
       name: u.username,
       categories: u.userCategory
@@ -45,8 +45,8 @@ export default function PartnershipsSentTab() {
     }));
   };
 
-  const handleSelect = (suggestion: { _id: string }) => {
-    sendPartnership(suggestion._id);
+  const handleSelect = (suggestion: { id: string }) => {
+    sendPartnership(suggestion.id);
   };
 
   const handleCancel = (partnershipId: string) => {

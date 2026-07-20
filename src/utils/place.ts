@@ -8,7 +8,7 @@ import { resolveRefId } from "@/lib/api/normalizers/resolveRef";
  * it is already populated (object) or just a string id.
  */
 export const getPlaceCategoryName = (
-  cat: string | (PlaceCategory & { _id: string }) | null | undefined,
+  cat: string | (PlaceCategory & { id: string }) | null | undefined,
 ): string => {
   if (resolveRefId(cat) && typeof cat === "object" && cat) {
     return cat.name ?? "";

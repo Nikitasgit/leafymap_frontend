@@ -52,22 +52,22 @@ const EventScheduleListCard = ({
   const handleSaveDates = () => {
     setIsEditMode(false);
     if (startDate) {
-      onUpdatePeriod(period._id, startDate, endDate);
+      onUpdatePeriod(period.id, startDate, endDate);
     }
   };
   const handleAddTimeSlot = (timeSlot: EventTimeSlot) => {
     setIsAddTimeSlot(false);
-    onUpdateTimeSlot(period._id, timeSlot);
+    onUpdateTimeSlot(period.id, timeSlot);
   };
   const handleUpdateTimeSlot = (timeSlot: EventTimeSlot) => {
     setTimeSlotToEdit(null);
-    onUpdateTimeSlot(period._id, timeSlot);
+    onUpdateTimeSlot(period.id, timeSlot);
   };
   const handleDeleteTimeSlot = (timeSlotId: string) => {
-    onDeleteTimeSlot(period._id, timeSlotId);
+    onDeleteTimeSlot(period.id, timeSlotId);
   };
   return (
-    <div key={period._id} className={styles.periodContainer}>
+    <div key={period.id} className={styles.periodContainer}>
       <div className={styles.periodHeader}>
         <div className={styles.periodDates}>
           <div className={styles.dateItem}>
@@ -110,7 +110,7 @@ const EventScheduleListCard = ({
           <Button
             type="button"
             className={styles.deleteButton}
-            onClick={() => onDeletePeriod(period._id)}
+            onClick={() => onDeletePeriod(period.id)}
             variant="simple"
             size="small"
             ariaLabel={t("eventScheduleListCard.deletePeriodAriaLabel")}
@@ -149,9 +149,9 @@ const EventScheduleListCard = ({
       {period.timeSlots.length > 0 ? (
         <div className={styles.timeSlotsContainer}>
           {period.timeSlots.map((slot) =>
-            timeSlotToEdit && timeSlotToEdit._id === slot._id ? (
+            timeSlotToEdit && timeSlotToEdit.id === slot.id ? (
               <NewEventSlot
-                key={slot._id}
+                key={slot.id}
                 partnerships={partnerships}
                 onSubmit={handleUpdateTimeSlot}
                 defaultSlot={slot}
@@ -159,7 +159,7 @@ const EventScheduleListCard = ({
               />
             ) : (
               <EventSlotCard
-                key={slot._id}
+                key={slot.id}
                 slot={slot}
                 setTimeSlotToEdit={setTimeSlotToEdit}
                 onDeleteTimeSlot={handleDeleteTimeSlot}

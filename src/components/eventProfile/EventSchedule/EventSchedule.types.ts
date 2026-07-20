@@ -1,7 +1,7 @@
 import { Period } from "@/types/place/schedule";
 
 export interface EventScheduleUser {
-  _id: string;
+  id: string;
   username?: string;
   image?: { urls?: { thumbnail?: string } };
   userCategory?: { name: string };

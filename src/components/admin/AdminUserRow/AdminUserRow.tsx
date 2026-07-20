@@ -22,7 +22,7 @@ const AdminUserRow = ({ user }: { user: User }) => {
   return (
     <button
       className={styles.row}
-      onClick={() => router.push(`/admin/users/${user._id}`)}
+      onClick={() => router.push(`/admin/users/${user.id}`)}
     >
       <span>
         <strong>{user.email}</strong>

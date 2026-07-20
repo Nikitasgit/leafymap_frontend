@@ -45,7 +45,7 @@ const EventScheduleList: React.FC<EventScheduleListProps> = ({
         <section className={styles.eventScheduleList}>
           {schedule.map((period) => (
             <EventScheduleListCard
-              key={period._id}
+              key={period.id}
               period={period}
               onUpdatePeriod={onUpdatePeriod}
               onDeletePeriod={onDeletePeriod}

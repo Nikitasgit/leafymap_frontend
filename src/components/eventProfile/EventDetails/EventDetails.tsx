@@ -29,7 +29,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
 }) => {
   const { t } = useTranslation("events");
   const { eventInvitations, isLoading: eventInvitationsLoading } =
-    useEventInvitations(event._id, { onlyAccepted: "true" });
+    useEventInvitations(event.id, { onlyAccepted: "true" });
 
   const participants = eventInvitations
     .map((invitation) => invitation.collaborator)

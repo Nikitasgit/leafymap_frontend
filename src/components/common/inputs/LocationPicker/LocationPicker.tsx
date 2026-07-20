@@ -40,7 +40,7 @@ const LocationPicker = ({
       location: { coordinates },
       placeCategory: { name: "event" },
       name: resolvedMarkerName,
-      _id: "event-location-marker",
+      id: "event-location-marker",
     };
   }, [latitude, location?.coordinates, longitude, resolvedMarkerName]);
 

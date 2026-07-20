@@ -11,7 +11,7 @@ export const useEventInvitationActions = (onUpdate?: () => void) => {
 
   const updateEventInvitations = async (
     eventInvitationUpdates: Array<{
-      _id: string;
+      id: string;
       status?: "pending" | "accepted" | "refused" | "cancelled" | "completed";
       deleted?: boolean;
     }>,
@@ -42,19 +42,19 @@ export const useEventInvitationActions = (onUpdate?: () => void) => {
 
   const acceptEventInvitation = async (eventInvitationId: string) => {
     await updateEventInvitations([
-      { _id: eventInvitationId, status: "accepted" },
+      { id: eventInvitationId, status: "accepted" },
     ]);
   };
 
   const refuseEventInvitation = async (eventInvitationId: string) => {
     await updateEventInvitations([
-      { _id: eventInvitationId, status: "refused" },
+      { id: eventInvitationId, status: "refused" },
     ]);
   };
 
   const cancelEventInvitation = async (eventInvitationId: string) => {
     await updateEventInvitations(
-      [{ _id: eventInvitationId, status: "cancelled" }],
+      [{ id: eventInvitationId, status: "cancelled" }],
       t("eventInvitationActions.participationCancelled")
     );
   };

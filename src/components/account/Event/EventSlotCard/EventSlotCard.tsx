@@ -55,7 +55,7 @@ const EventSlotCard = ({
           type="button"
           className={`${styles.actionButton} ${styles.deleteButton}`}
           title={t("eventSlotCard.deleteSlotTitle")}
-          onClick={() => onDeleteTimeSlot(slot._id)}
+          onClick={() => onDeleteTimeSlot(slot.id)}
         >
           <Trash2 size={14} />
         </button>
