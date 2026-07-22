@@ -4,13 +4,16 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
-import { X } from "lucide-react";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
 import { getActiveAnnouncements } from "@/features/announcements/api/announcementsApi";
 import type {
   ActiveAnnouncement,
   AnnouncementLocale,
 } from "@/features/announcements/types";
-import styles from "./AnnouncementBanner.module.scss";
+import { capitalizeFirstLetter } from "@/shared/utils/functions";
 
 const STORAGE_PREFIX = "leafymap:dismissed-announcement:";
 
@@ -67,30 +70,53 @@ const AnnouncementBanner = () => {
     setDismissed(true);
   }, [announcement]);
 
-  if (!announcement || dismissed) {
+  if (!announcement) {
     return null;
   }
 
   return (
-    <aside className={styles.banner} role="status" aria-live="polite">
-      <div className={styles.content}>
-        <strong className={styles.title}>{announcement.title}</strong>
-        <p className={styles.body}>{announcement.body}</p>
-        {announcement.ctaHref && announcement.ctaLabel ? (
-          <Link className={styles.cta} href={announcement.ctaHref}>
-            {announcement.ctaLabel}
-          </Link>
-        ) : null}
-      </div>
-      <button
-        type="button"
-        className={styles.dismiss}
-        onClick={handleDismiss}
-        aria-label={t("actions.close")}
+    <Snackbar
+      open={!dismissed}
+      anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      sx={{ maxWidth: 400, width: { xs: "calc(100% - 32px)", sm: 400 } }}
+    >
+      <Alert
+        severity="success"
+        variant="filled"
+        onClose={handleDismiss}
+        closeText={t("actions.close")}
+        sx={{
+          width: "100%",
+          bgcolor: "primary.main",
+          alignItems: "flex-start",
+          "& .MuiAlert-message": { width: "100%", py: 0.25 },
+        }}
       >
-        <X size={16} />
-      </button>
-    </aside>
+        <AlertTitle sx={{ mb: 0.25, fontSize: "0.9rem", fontWeight: 700 }}>
+          {capitalizeFirstLetter(announcement.title)}
+        </AlertTitle>
+        {capitalizeFirstLetter(announcement.body)}
+        {announcement.ctaHref && announcement.ctaLabel ? (
+          <Button
+            component={Link}
+            href={announcement.ctaHref}
+            color="inherit"
+            size="small"
+            sx={{
+              display: "block",
+              mt: 0.5,
+              px: 0,
+              minWidth: 0,
+              fontWeight: 600,
+              textDecoration: "underline",
+              textTransform: "none",
+            }}
+          >
+            {capitalizeFirstLetter(announcement.ctaLabel)}
+          </Button>
+        ) : null}
+      </Alert>
+    </Snackbar>
   );
 };
 
