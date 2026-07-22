@@ -15,6 +15,7 @@ import {
   publishAdminAnnouncement,
 } from "@/features/announcements";
 import type { Announcement } from "@/features/announcements";
+import useHandleApiErrors from "@/shared/hooks/useHandleApiErrors";
 import styles from "./AdminAnnouncementsContainer.module.scss";
 
 const titleFor = (announcement: Announcement) =>
@@ -25,6 +26,7 @@ const titleFor = (announcement: Announcement) =>
 const AdminAnnouncementsContainer = () => {
   const { t } = useTranslation("admin");
   const router = useRouter();
+  const { handleApiError } = useHandleApiErrors();
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -32,11 +34,14 @@ const AdminAnnouncementsContainer = () => {
     setIsLoading(true);
     try {
       setAnnouncements(await listAdminAnnouncements());
-    } catch {
+    } catch (err: unknown) {
       setAnnouncements([]);
+      handleApiError(err, undefined, true);
     } finally {
       setIsLoading(false);
     }
+    // handleApiError is recreated each render; omit it to avoid reload loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -44,18 +49,30 @@ const AdminAnnouncementsContainer = () => {
   }, [load]);
 
   const onPublish = async (id: string) => {
-    await publishAdminAnnouncement(id);
-    await load();
+    try {
+      await publishAdminAnnouncement(id);
+      await load();
+    } catch (err: unknown) {
+      handleApiError(err, undefined, true);
+    }
   };
 
   const onArchive = async (id: string) => {
-    await archiveAdminAnnouncement(id);
-    await load();
+    try {
+      await archiveAdminAnnouncement(id);
+      await load();
+    } catch (err: unknown) {
+      handleApiError(err, undefined, true);
+    }
   };
 
   const onDelete = async (id: string) => {
-    await deleteAdminAnnouncement(id);
-    await load();
+    try {
+      await deleteAdminAnnouncement(id);
+      await load();
+    } catch (err: unknown) {
+      handleApiError(err, undefined, true);
+    }
   };
 
   return (

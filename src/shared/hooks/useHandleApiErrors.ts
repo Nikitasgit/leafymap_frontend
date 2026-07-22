@@ -1,5 +1,4 @@
 import {
-  getApiValidationErrorMessages,
   parseApiValidationErrors,
 } from "@/shared/api/client";
 import { useToast } from "./useToast";
@@ -23,8 +22,9 @@ const useHandleApiErrors = () => {
       }
 
       if (showValidationErrorsInToast) {
-        getApiValidationErrorMessages(err).forEach((message) => {
-          showError(message);
+        Object.entries(validationErrors).forEach(([field, message]) => {
+          const text = Array.isArray(message) ? message.join(", ") : message;
+          showError(field === "_root" ? text : `${field}: ${text}`);
         });
       }
 
