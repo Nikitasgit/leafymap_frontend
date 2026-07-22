@@ -1,5 +1,5 @@
-import { UserProfileContainer } from "@/components/userProfile/UserProfileContainer";
-import { generateUserMetadata } from "@/lib/metadata";
+import UserProfileContainer from "@/features/users/components/userProfileContainer";
+import { generateUserMetadata } from "@/app/lib/entityMetadata";
 
 export async function generateMetadata({
   params,

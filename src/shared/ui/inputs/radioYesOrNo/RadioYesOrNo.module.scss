@@ -1,0 +1,80 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.container {
+  margin-top: spacing(2);
+  .title {
+    color: $grey-50 0;
+    font-size: rem(14);
+    margin-bottom: spacing(1);
+  }
+  .innerContainer {
+    width: 100%;
+    border: 1px solid $grey-200;
+    border-radius: rem(6);
+    padding: spacing(1);
+    .label {
+      color: $grey-500;
+      font-size: rem(14);
+      margin-bottom: spacing(1);
+    }
+    .optionsContainer {
+      @include flex(row, flex-start, center, spacing(2));
+      flex-wrap: wrap;
+    }
+    .optionWrapper {
+      @include flex(row, center, center, spacing(0.75));
+      position: relative;
+    }
+    .radioLabel {
+      cursor: pointer;
+      font-size: rem(14);
+      color: $grey-500;
+      transition: $transition-default;
+    }
+    .optionText {
+      color: $grey-500;
+    }
+    .disabled {
+      .radioLabel {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+  @include respond-to(sm) {
+    .title {
+      font-size: rem(15);
+    }
+    .innerContainer {
+      border-radius: rem(8);
+      padding: spacing(1.5);
+      .label {
+        font-size: rem(15);
+      }
+      .optionsContainer {
+        gap: spacing(3);
+      }
+      .optionWrapper {
+        gap: spacing(1);
+      }
+      .radioLabel {
+        font-size: rem(15);
+      }
+    }
+  }
+  @include respond-to(md) {
+    .title {
+      font-size: rem(16);
+    }
+    .innerContainer {
+      .label {
+        font-size: rem(16);
+      }
+      .radioLabel {
+        font-size: rem(16);
+      }
+    }
+  }
+}

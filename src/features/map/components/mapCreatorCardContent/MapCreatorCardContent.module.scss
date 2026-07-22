@@ -1,0 +1,11 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.content {
+  width: 100%;
+  border-top: 1px solid $grey-200;
+  margin-top: spacing(1);
+}
+
+

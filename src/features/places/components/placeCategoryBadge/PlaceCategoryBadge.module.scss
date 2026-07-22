@@ -1,0 +1,15 @@
+@use "@/shared/styles/abstracts/functions" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/variables" as *;
+
+.category {
+  font-size: rem(12);
+  background: $grey-50;
+  border: 1px solid $grey-200;
+  border-radius: 6px;
+  padding: spacing(0.25) spacing(0.75);
+  font-weight: 500;
+  color: $grey-500;
+  line-height: 1.2;
+  text-transform: capitalize;
+}

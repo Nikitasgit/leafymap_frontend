@@ -11,7 +11,6 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "linkal.s3.eu-west-3.amazonaws.com",
         pathname: "/**",
-        search: "**",
       },
       {
         protocol: "https",

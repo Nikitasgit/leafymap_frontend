@@ -1,12 +1,12 @@
-import "@/styles/main.scss";
+import "@/shared/styles/main.scss";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import ConditionalFooter from "@/components/common/Footer";
+import ConditionalFooter from "@/shared/ui/footer";
 import Providers from "@/components/Providers";
 import { roboto } from "@/fonts/font";
-import Navbar from "@/components/navbar/Navbar";
+import Navbar from "@/components/layout/navbar/navbar";
 import type { Metadata } from "next";
-import { getDefaultMetadata } from "@/lib/pageMetadata";
+import { getDefaultMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,

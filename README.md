@@ -1,50 +1,32 @@
 # Documentation Frontend - Leafy Map
 
-ttes
 Application web de **découverte d'événements locaux** : carte interactive, agenda, profils d'organisateurs et gestion d'événements.
 
-## 📑 Table des matières
+> **Refonte architecture en cours** — suivi détaillé dans [REFACTORING.md](./REFACTORING.md).
 
-1. [🚀 Commandes de base](#-commandes-de-base)
-2. [📁 Architecture du projet](#-architecture-du-projet)
-3. [🌍 Internationalisation (i18n)](#-internationalisation-i18n)
-   - [Configuration](#configuration)
-   - [Structure des routes](#structure-des-routes)
-   - [Fonctionnement](#fonctionnement)
-   - [Fichiers de traduction](#fichiers-de-traduction)
-   - [Changement de langue](#changement-de-langue)
-4. [🔑 Fonctionnalités principales](#-fonctionnalités-principales)
-   - [Authentification](#1-authentification)
-   - [Gestion d'état global (Redux)](#2-gestion-détat-global-redux)
-   - [Hooks personnalisés](#3-hooks-personnalisés-30-hooks)
-   - [Composants principaux](#4-composants-principaux)
-   - [Pages et routes](#5-pages-et-routes)
-   - [Intégrations](#6-intégrations)
-5. [🎨 Styling](#-styling)
-6. [🛠️ Conventions de code](#️-conventions-de-code)
-   - [TypeScript](#typescript)
-   - [Composants React](#composants-react)
-   - [Hooks personnalisés](#hooks-personnalisés)
-   - [Fichiers et dossiers](#fichiers-et-dossiers)
-7. [🔧 Configuration](#-configuration)
-8. [📦 Dépendances principales](#-dépendances-principales)
-9. [🔄 Workflow de développement](#-workflow-de-développement)
-10. [📝 Notes importantes](#-notes-importantes)
-    - [SEO](#seo)
-    - [Performance](#performance)
-    - [Accessibilité](#accessibilité)
-    - [Mobile](#mobile)
-11. [🚢 Déploiement](#-déploiement)
+## Table des matières
+
+1. [Commandes de base](#commandes-de-base)
+2. [Architecture du projet](#architecture-du-projet)
+3. [Internationalisation (i18n)](#internationalisation-i18n)
+4. [Fonctionnalités principales](#fonctionnalités-principales)
+5. [Styling](#styling)
+6. [Conventions de code](#conventions-de-code)
+7. [Configuration](#configuration)
+8. [Dépendances principales](#dépendances-principales)
+9. [Workflow de développement](#workflow-de-développement)
+10. [Notes importantes](#notes-importantes)
+11. [Déploiement](#déploiement)
 
 ---
 
-## 🚀 Commandes de base
+## Commandes de base
 
 ```bash
 # Installation des dépendances
 npm install
 
-# Développement (port 3000 par défaut)
+# Développement (port 3001)
 npm run dev
 
 # Build de production
@@ -53,39 +35,64 @@ npm run build
 # Démarrage en production
 npm start
 
-# Linting
+# Linting / dead code
 npm run lint
+npm run knip
 ```
 
-## 📁 Architecture du projet
+## Architecture du projet
+
+Le frontend suit une **architecture modulaire par feature** (style [Bulletproof React](https://github.com/alan2207/bulletproof-react) / *vertical slice*). C'est le pendant frontend de la **Clean Architecture** du backend : co-localisation par domaine métier et **règle de dépendance unidirectionnelle**.
+
+### Règle de dépendance
 
 ```
-innovastay-frontend/
+shared ← features ← app
+         ↑
+       store   (configureStore + hooks typés ; les slices vivent dans features/*/model)
+```
+
+- `shared/` ne dépend jamais de `features/` ni de `app/`
+- Une feature importe `shared/` librement
+- Entre features : uniquement via le barrel public `@/features/<name>` (pas d'import profond)
+- `app/` reste fin : routing App Router → containers de features
+
+Les frontières sont enforceées (en `warn` pendant la migration) via `eslint-plugin-boundaries` dans `eslint.config.mjs`.
+
+### Arborescence cible
+
+```
+leafymap-frontend/
 ├── src/
-│   ├── app/                    # App Router Next.js 15
-│   │   ├── [locale]/          # Routes internationalisées
-│   │   ├── i18n.ts            # Configuration i18n
-│   │   └── sitemap.ts         # Génération sitemap
-│   ├── components/            # Composants React réutilisables
-│   ├── hooks/                 # Custom hooks
-│   ├── store/                 # Redux Toolkit (state global)
-│   ├── types/                 # Types TypeScript
-│   ├── utils/                 # Fonctions utilitaires
-│   ├── validations/           # Schémas de validation
-│   ├── styles/                # Styles SCSS globaux
-│   ├── middleware.ts          # Middleware Next.js
-│   └── i18nConfig.ts          # Config des locales
-├── public/
-│   ├── locales/               # Fichiers de traduction
-│   │   ├── fr/
-│   │   │   ├── common.json
-│   │   │   ├── marketing.json
-│   │   │   └── subscription.json
-│   │   └── en/
-│   └── images/                # Images statiques
-└── next.config.ts             # Configuration Next.js
+│   ├── app/                      # Next.js App Router (routing, layouts, pages)
+│   │   └── [locale]/            # Routes internationalisées
+│   ├── features/                 # Modules métier verticaux
+│   │   └── <feature>/
+│   │       ├── api/              # Appels HTTP du domaine
+│   │       ├── components/       # UI (dossiers camelCase, fichiers PascalCase)
+│   │       ├── hooks/
+│   │       ├── model/            # Redux slice + selectors
+│   │       ├── types/
+│   │       ├── validations/
+│   │       └── index.ts          # API publique de la feature
+│   ├── shared/                   # Noyau transverse
+│   │   ├── api/                  # apiClient, erreurs, normalizers
+│   │   ├── ui/                   # Design system (ex-components/common)
+│   │   ├── hooks/                # Hooks génériques
+│   │   ├── lib/ / utils/ / config/ / types/ / styles/
+│   ├── store/                    # configureStore uniquement
+│   └── proxy.ts                  # Routing i18n (Next.js proxy)
+├── public/                       # Assets statiques + locales i18n
+└── next.config.ts
 ```
 
+### Alias TypeScript
+
+- `@/*` → `src/*` (ex. `@/features/auth`, `@/shared/api/client`)
+
+### État de la migration
+
+Voir [REFACTORING.md](./REFACTORING.md). Passes 1–4 : squelette `shared/`, `auth`, shell `account`, puis `events` scindé en `events` / `eventBookings` / `eventInvitations`. Les dossiers legacy coexistent temporairement avec des **shims** de ré-export.
 ## 🌍 Internationalisation (i18n)
 
 ### Configuration
@@ -440,49 +447,49 @@ console.log(userWithDetails.places[0].name); // Accès direct au nom du lieu
 
 - **Composants** : `ComponentName.tsx` (PascalCase)
 - **Hooks** : `useHookName.ts` (camelCase)
-- **Types** : `typeName.ts` (camelCase)
+- **API** : `featureApi.ts` (camelCase)
 - **Utils** : `utilName.ts` (camelCase)
 
 #### Dossiers
 
-##### Dossiers de composants (PascalCase)
+##### Features (`src/features/<feature>/`)
+
+Segments en minuscules : `api/`, `components/`, `hooks/`, `model/`, `types/`, `validations/`, plus `index.ts` (API publique).
+
+##### Dossiers de composants (camelCase)
 
 Quand un dossier regroupe un composant avec ses fichiers associés :
 
 ```
-Button/
-  ├── Button.tsx          # Composant principal
-  ├── index.ts            # Export du composant
-  ├── Button.module.scss  # Styles
-  └── Button.types.ts     # Types (optionnel)
+signinForm/
+  ├── SigninForm.tsx
+  ├── index.ts
+  ├── SigninForm.module.scss
+  └── SigninForm.types.ts   # optionnel
 ```
 
-**Convention** : Nom en **PascalCase** (`Button`, `UserProfile`, `EventCard`)
+**Convention** : dossier en **camelCase** (`button`, `signinForm`, `eventCard`) ; fichiers du composant en **PascalCase**. Sur macOS (FS case-insensitive), renommer en deux temps : `git mv Old tmp && git mv tmp new`.
 
-##### Autres dossiers (camelCase)
-
-Pour les dossiers utilitaires, hooks, types, etc. :
+##### Shared et segments techniques (camelCase / lowercase)
 
 ```
-hooks/
+shared/
+  ├── api/
+  ├── ui/
+  ├── hooks/
+  └── utils/
+
+features/auth/hooks/
   ├── useAuth.ts
-  └── useToast.ts
-
-utils/
-  ├── formatDate.ts
-  └── apiClient.ts
-
-validations/
-  ├── userSchema.ts
-  └── placeSchema.ts
+  └── useCurrentUser.ts
 ```
 
-**Convention** : Nom en **camelCase** (`hooks`, `utils`, `validations`, `constants`)
+**Convention** : features, segments, shared et dossiers de composants en **camelCase** / minuscules ; fichiers de composants en **PascalCase**.
 
 ##### Résumé
 
-- **PascalCase** : Dossiers de composants (contenant composant + index + styles + types)
-- **camelCase** : Tous les autres dossiers (hooks, utils, types, validations, etc.)
+- **PascalCase** : fichiers de composants (`SigninForm.tsx`)
+- **camelCase / lowercase** : features, segments (`api`, `hooks`, `model`), dossiers de composants, `shared/`
 
 ## 🔧 Configuration
 

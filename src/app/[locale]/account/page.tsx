@@ -1,6 +1,6 @@
-import AccountContainer from "@/components/account/AccountContainer";
-import ProtectedRoute from "@/components/common/ProtectedRoute";
-import { getPageMetadata } from "@/lib/pageMetadata";
+import { AccountContainer } from "@/features/account";
+import { ProtectedRoute } from "@/features/auth";
+import { getPageMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,

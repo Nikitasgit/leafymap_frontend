@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -7,16 +9,16 @@ import {
   selectPlaceCategories,
   selectProductCategories,
   selectEventCategories,
-} from "@/store/appSlice";
-import { fetchCurrentUser, selectAuth } from "@/store/authSlice";
+} from "@/features/categories";
+import { fetchCurrentUser, selectAuth } from "@/features/auth";
 import {
   fetchUserNotifications,
   selectNotifications,
-} from "@/store/notificationSlice";
+} from "@/features/notifications/model/notificationSlice";
 import {
   fetchFavoritesByType,
   selectFavorites,
-} from "@/store/favoritesSlice";
+} from "@/features/favorites/model/favoritesSlice";
 import type { AppDispatch } from "@/store";
 
 export default function AppInitializer() {

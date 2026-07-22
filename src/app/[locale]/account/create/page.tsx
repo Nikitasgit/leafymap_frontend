@@ -1,7 +1,7 @@
 import { Suspense } from "react";
-import CreateProfileStepper from "@/components/account/CreateProfileStepper";
-import LoadingBar from "@/components/common/loading/LoadingBar";
-import { getPageMetadata } from "@/lib/pageMetadata";
+import { CreateProfileStepper } from "@/features/account";
+import LoadingBar from "@/shared/ui/loading/loadingBar";
+import { getPageMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,

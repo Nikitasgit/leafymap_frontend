@@ -1,5 +1,5 @@
-import MapPageContainer from "@/components/map/MapPageContainer";
-import { getMapMetadata } from "@/lib/pageMetadata";
+import MapPageContainer from "@/features/map/components/mapPageContainer";
+import { getMapMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,

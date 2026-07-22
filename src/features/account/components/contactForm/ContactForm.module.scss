@@ -1,0 +1,20 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.contactForm {
+  margin-top: spacing(1);
+  .title {
+    color: $grey-500;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: spacing(0.5);
+    @include respond-to(md) {
+      font-size: 22px;
+    }
+  }
+
+  .formFields {
+    @include flex(column, flex-start, stretch, spacing(1));
+  }
+}

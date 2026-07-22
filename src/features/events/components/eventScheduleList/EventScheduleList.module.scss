@@ -1,0 +1,12 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.eventScheduleList {
+  background: $white;
+  overflow: visible;
+  @include respond-to(sm) {
+    border-radius: 8px;
+    border: 1px solid $grey-200;
+  }
+}

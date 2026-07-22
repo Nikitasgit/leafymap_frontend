@@ -1,0 +1,13 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.tabContent {
+  width: 100%;
+  padding: spacing(1);
+  
+  @include respond-to(sm) {
+    padding: spacing(1.5);
+  }
+}
+

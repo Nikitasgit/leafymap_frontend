@@ -130,6 +130,18 @@
     "refuseAriaLabel": "Refuser l'invitation",
     "fallbackUsername": "Utilisateur"
   },
+  "partnershipsForm": {
+    "title": "Participants",
+    "tooltip": "Invitez des collaborateurs à participer à votre évènement. Ils pourront ensuite être assignés à des créneaux horaires.",
+    "addPartnerLabel": "Ajouter un participant",
+    "addPartnerInfo": "Recherchez un utilisateur pour l'inviter à collaborer sur cet évènement.",
+    "searchLabel": "Rechercher un utilisateur",
+    "searchPlaceholder": "Rechercher un utilisateur...",
+    "alreadyAddedError": "Cet utilisateur est déjà ajouté"
+  },
+  "partnershipsFormList": {
+    "emptyTitle": "Aucun participant ajouté"
+  },
   "followingTab": {
     "unfollow": "Ne plus suivre",
     "emptyTitle": "Aucun abonnement pour le moment"

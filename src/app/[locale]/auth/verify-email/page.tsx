@@ -1,5 +1,5 @@
-import VerifyEmailHandler from "@/components/auth/verifyEmailHandler";
-import { getPageMetadata } from "@/lib/pageMetadata";
+import { VerifyEmailHandler } from "@/features/auth";
+import { getPageMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,

@@ -1,0 +1,33 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.list {
+  margin-top: 0;
+}
+
+.items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: spacing(1);
+}
+
+.item {
+  @include flex(row, flex-start, center, spacing(1));
+  padding: spacing(0.75);
+  background: $grey-50;
+  border-radius: rem(6);
+
+  > *:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.actions {
+  @include flex(column, flex-start, stretch, spacing(0.5));
+  flex-shrink: 0;
+}

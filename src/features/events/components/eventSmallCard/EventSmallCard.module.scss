@@ -1,0 +1,81 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.eventCard {
+  @include flex(row, flex-start, center, spacing(0.5));
+  width: 100%;
+  padding: spacing(0.5);
+  background-color: $grey-50;
+  border-radius: 6px;
+  border: 1px solid $grey-200;
+  transition: all 0.2s ease;
+  text-align: left;
+
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      background-color: $grey-100;
+      border-color: $grey-300;
+    }
+  }
+}
+
+.eventImageContainer {
+  position: relative;
+  width: 28px;
+  align-self: stretch;
+  flex-shrink: 0;
+  border-radius: rem(6) 0 0 rem(6);
+  overflow: hidden;
+  background-color: $grey-200;
+
+  .placeImage {
+    object-fit: cover;
+    height: 100%;
+  }
+}
+
+.eventInfo {
+  @include flex(column, flex-start, flex-start, spacing(0.25));
+  flex: 1;
+  min-width: 0;
+}
+
+.eventName {
+  font-size: rem(12);
+  color: $grey-800;
+  font-weight: 500;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.eventIcon {
+  color: $grey-400;
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+
+.eventCard:hover .eventIcon {
+  color: $grey-600;
+}
+
+// Responsive design
+@include respond-to(sm) {
+  .eventCard {
+    padding: spacing(0.625);
+    gap: spacing(0.75);
+    border-radius: rem(8);
+  }
+
+  .eventImageContainer {
+    width: 32px;
+    border-radius: rem(8) 0 0 rem(8);
+  }
+
+  .eventName {
+    font-size: rem(13);
+  }
+}
+

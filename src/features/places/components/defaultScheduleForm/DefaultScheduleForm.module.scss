@@ -1,0 +1,28 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.defaultScheduleForm {
+  @include flex(column, flex-start, stretch, spacing(1.5));
+  border-bottom: 1px solid $grey-200;
+  padding-bottom: spacing(2);
+  margin-top: spacing(1);
+  .title {
+    color: $grey-500;
+    font-size: rem(18);
+    font-weight: 600;
+    margin-bottom: spacing(0.5);
+  }
+  @include respond-to(sm) {
+    padding-bottom: spacing(2.5);
+    .title {
+      font-size: rem(20);
+    }
+  }
+  @include respond-to(md) {
+    padding-bottom: spacing(3);
+    .title {
+      font-size: rem(22);
+    }
+  }
+}

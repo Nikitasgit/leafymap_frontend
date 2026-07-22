@@ -1,5 +1,5 @@
-import AccountSettingsContainer from "@/components/account/AccountSettings/AccountSettingsContainer";
-import { getPageMetadata } from "@/lib/pageMetadata";
+import { AccountSettingsContainer } from "@/features/account";
+import { getPageMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,

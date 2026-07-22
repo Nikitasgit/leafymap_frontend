@@ -1,0 +1,18 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.subscribersCounter {
+  @include flex(row, flex-start, center, spacing(0.5));
+  color: $grey-600;
+  font-size: rem(14);
+  font-weight: 500;
+  .counter {
+    font-weight: 600;
+    color: $grey-800;
+  }
+  .title {
+    font-weight: 400;
+    color: $grey-600;
+  }
+}

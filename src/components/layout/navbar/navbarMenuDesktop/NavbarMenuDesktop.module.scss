@@ -1,0 +1,132 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.container {
+  @include flex(row, flex-end, center, spacing(1));
+  flex-shrink: 0;
+  display: none;
+
+  .navLinks {
+    @include flex(row, center, center, spacing(0.5));
+    flex-shrink: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navLink {
+    color: $grey-500;
+    text-decoration: none;
+    transition: $transition-default;
+    font-weight: 500;
+    @include flex(row, center, center, spacing(0.25));
+    padding: spacing(0.5);
+    border-radius: 4px;
+    position: relative;
+
+    &:hover,
+    &:focus {
+      color: $grey-600;
+    }
+
+    &.active {
+      color: $primary-color;
+      background-color: rgba($primary-color, 0.1);
+    }
+
+    span {
+      display: none;
+      font-size: rem(14);
+      white-space: nowrap;
+    }
+  }
+
+  .iconContainer {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    height: fit-content;
+  }
+
+  .navIcon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .navBadge {
+    position: absolute;
+    top: rem(-3);
+    right: rem(-3);
+  }
+
+  .authLinks {
+    @include flex(row, center, center, spacing(0.5));
+    color: $grey-500;
+    padding: spacing(0.5) spacing(0.75);
+    border-radius: 4px;
+    transition: $transition-default;
+    font-size: rem(13);
+    border: 1px solid $grey-200;
+    background-color: $white;
+
+    &:hover {
+      color: $grey-600;
+    }
+
+    span {
+      color: $grey-300;
+      font-weight: 300;
+    }
+
+    .separator {
+      color: $grey-300;
+      font-weight: 300;
+    }
+  }
+}
+
+@include respond-to(md) {
+  .container {
+    display: flex;
+    gap: spacing(2);
+
+    .navLink {
+      padding: spacing(0.75) spacing(1);
+      gap: spacing(0.75);
+    }
+
+    .authLinks {
+      font-size: rem(14);
+      gap: spacing(1);
+    }
+  }
+}
+
+@include respond-to(lg) {
+  .container {
+    .navLinks {
+      gap: spacing(2);
+    }
+
+    .navLink {
+      display: block;
+
+      span {
+        display: inline;
+      }
+    }
+
+    .navIcon {
+      display: none;
+    }
+
+    .authLinks {
+      font-size: rem(15);
+      gap: spacing(1.5);
+    }
+  }
+}
