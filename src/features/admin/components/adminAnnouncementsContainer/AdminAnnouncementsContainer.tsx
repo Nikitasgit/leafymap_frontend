@@ -42,6 +42,11 @@ const AdminAnnouncementsContainer = () => {
     }
     // handleApiError is recreated each render; omit it to avoid reload loops
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    } catch {
+      setAnnouncements([]);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -73,6 +78,18 @@ const AdminAnnouncementsContainer = () => {
     } catch (err: unknown) {
       handleApiError(err, undefined, true);
     }
+    await publishAdminAnnouncement(id);
+    await load();
+  };
+
+  const onArchive = async (id: string) => {
+    await archiveAdminAnnouncement(id);
+    await load();
+  };
+
+  const onDelete = async (id: string) => {
+    await deleteAdminAnnouncement(id);
+    await load();
   };
 
   return (
