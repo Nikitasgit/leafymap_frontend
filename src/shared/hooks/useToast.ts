@@ -18,8 +18,10 @@ const showInfo = (message: string) => {
   toast.info(message);
 };
 
-export const useToast = (): ToastFunctions => ({
+const toastFunctions: ToastFunctions = {
   showSuccess,
   showError,
   showInfo,
-});
+};
+
+export const useToast = (): ToastFunctions => toastFunctions;

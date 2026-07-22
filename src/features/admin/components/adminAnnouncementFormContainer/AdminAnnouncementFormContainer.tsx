@@ -13,6 +13,7 @@ import {
   updateAdminAnnouncement,
 } from "@/features/announcements";
 import type { AnnouncementInput } from "@/features/announcements";
+import useHandleApiErrors from "@/shared/hooks/useHandleApiErrors";
 import styles from "./AdminAnnouncementFormContainer.module.scss";
 
 type Props = {
@@ -48,6 +49,7 @@ const fromDatetimeLocal = (value: string): string | null => {
 const AdminAnnouncementFormContainer = ({ announcementId }: Props) => {
   const { t } = useTranslation("admin");
   const router = useRouter();
+  const { handleApiError } = useHandleApiErrors();
   const isEdit = Boolean(announcementId);
   const [form, setForm] = useState<AnnouncementInput>(emptyForm);
   const [isLoading, setIsLoading] = useState(isEdit);
@@ -140,6 +142,8 @@ const AdminAnnouncementFormContainer = ({ announcementId }: Props) => {
         await createAdminAnnouncement(payload);
       }
       router.push("/admin/announcements");
+    } catch (err: unknown) {
+      handleApiError(err, undefined, true);
     } finally {
       setIsSaving(false);
     }
