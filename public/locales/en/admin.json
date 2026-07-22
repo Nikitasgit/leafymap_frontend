@@ -4,7 +4,35 @@
     "subtitle": "Search for an account by email and manage its content.",
     "searchPlaceholder": "Search by email",
     "emptySearchTitle": "Enter an email to start a search",
-    "noUsersFoundTitle": "No users found"
+    "noUsersFoundTitle": "No users found",
+    "toAnnouncements": "Manage platform announcements"
+  },
+  "adminAnnouncements": {
+    "title": "Platform announcements",
+    "subtitle": "Create and publish messages visible on Leafymap.",
+    "toUsers": "Back to users",
+    "create": "New announcement",
+    "empty": "No announcements",
+    "priority": "Priority",
+    "edit": "Edit",
+    "publish": "Publish",
+    "archive": "Archive",
+    "delete": "Delete"
+  },
+  "adminAnnouncementForm": {
+    "createTitle": "New announcement",
+    "editTitle": "Edit announcement",
+    "slug": "Slug",
+    "priority": "Priority",
+    "startsAt": "Publish from",
+    "endsAt": "Publish until",
+    "frSection": "French",
+    "enSection": "English",
+    "title": "Title",
+    "body": "Message",
+    "ctaLabel": "Button label (optional)",
+    "ctaHref": "Button link (optional)",
+    "save": "Save"
   },
   "adminUserTabs": {
     "events": "Events",

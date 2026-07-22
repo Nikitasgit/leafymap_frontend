@@ -4,7 +4,35 @@
     "subtitle": "Rechercher un compte par email et gérer son contenu.",
     "searchPlaceholder": "Rechercher par email",
     "emptySearchTitle": "Saisissez un email pour lancer une recherche",
-    "noUsersFoundTitle": "Aucun utilisateur trouvé"
+    "noUsersFoundTitle": "Aucun utilisateur trouvé",
+    "toAnnouncements": "Gérer les annonces plateforme"
+  },
+  "adminAnnouncements": {
+    "title": "Annonces plateforme",
+    "subtitle": "Créer et publier des messages visibles sur Leafymap.",
+    "toUsers": "Retour aux utilisateurs",
+    "create": "Nouvelle annonce",
+    "empty": "Aucune annonce",
+    "priority": "Priorité",
+    "edit": "Modifier",
+    "publish": "Publier",
+    "archive": "Archiver",
+    "delete": "Supprimer"
+  },
+  "adminAnnouncementForm": {
+    "createTitle": "Nouvelle annonce",
+    "editTitle": "Modifier l'annonce",
+    "slug": "Slug",
+    "priority": "Priorité",
+    "startsAt": "Début de publication",
+    "endsAt": "Fin de publication",
+    "frSection": "Français",
+    "enSection": "English",
+    "title": "Titre",
+    "body": "Message",
+    "ctaLabel": "Libellé du bouton (optionnel)",
+    "ctaHref": "Lien du bouton (optionnel)",
+    "save": "Enregistrer"
   },
   "adminUserTabs": {
     "events": "Événements",
