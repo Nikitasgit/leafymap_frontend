@@ -1,10 +1,12 @@
 import { APP_URL } from "@/shared/config/app";
 import { request } from "@/shared/api/client";
-import type { Event } from "../types/event";
+import type { Event, EventPopulated } from "../types/event";
 
-export const getEventById = async (eventId: string) => {
+export const getEventById = async (
+  eventId: string,
+): Promise<EventPopulated | string> => {
   try {
-    return await request<Event>({
+    return await request<EventPopulated>({
       method: "GET",
       url: `/api/events/${eventId}`,
       headers: {
@@ -20,8 +22,10 @@ export const getEventById = async (eventId: string) => {
   }
 };
 
-export const fetchEventById = async (eventId: string): Promise<Event> => {
-  return request<Event>({
+export const fetchEventById = async (
+  eventId: string,
+): Promise<EventPopulated> => {
+  return request<EventPopulated>({
     method: "GET",
     url: `/api/events/${eventId}`,
   });

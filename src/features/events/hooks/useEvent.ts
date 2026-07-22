@@ -11,7 +11,7 @@ export const useEvent = (eventId: string) => {
     isLoading,
     refetch,
   } = useApiQuery<EventPopulated | null>(
-    async () => (await fetchEventById(eventId)) as EventPopulated,
+    async () => await fetchEventById(eventId),
     {
       initialData: null,
       enabled: !!eventId,

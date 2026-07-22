@@ -1,6 +1,7 @@
 @use "@/shared/styles/abstracts/variables" as *;
 @use "@/shared/styles/abstracts/mixins" as *;
 @use "@/shared/styles/abstracts/functions" as *;
+@use "sass:color";
 
 .wrapper {
   width: 100%;
@@ -41,7 +42,7 @@
         font-size: rem(14);
 
         &:hover {
-          color: darken($primary-color, 10%);
+          color: color.adjust($primary-color, $lightness: -10%);
         }
       }
     }

@@ -3,6 +3,8 @@ import { generateEventMetadata } from "@/app/lib/entityMetadata";
 import { getEventById } from "@/features/events/api/eventsApi";
 import EventDetailsWithParticipants from "@/features/eventInvitations/components/eventDetailsWithParticipants";
 import EventBookingWidget from "@/features/eventBookings/components/eventBookingWidget";
+import type { PlacePopulated } from "@/features/places/types/place";
+import type { UserPopulated } from "@/features/users/types";
 import { capitalizeFirstLetter } from "@/shared/utils/functions";
 import { resolveRefObject } from "@/shared/api/normalizers/resolveRef";
 import styles from "./EventPage.module.scss";
@@ -36,8 +38,10 @@ const EventPage = async ({ params }: EventPageProps) => {
   }
 
   const title = capitalizeFirstLetter(eventData.name);
-  const place = resolveRefObject(eventData.place) ?? undefined;
-  const user = resolveRefObject(eventData.user) ?? undefined;
+  const place =
+    (resolveRefObject(eventData.place) as PlacePopulated | null) ?? undefined;
+  const user =
+    (resolveRefObject(eventData.user) as UserPopulated | null) ?? undefined;
 
   return (
     <main className={styles.container}>
