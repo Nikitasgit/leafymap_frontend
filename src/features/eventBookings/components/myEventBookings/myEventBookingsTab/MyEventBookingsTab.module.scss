@@ -1,0 +1,47 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.content {
+  width: 100%;
+  min-width: 0;
+  padding: 0 spacing(1);
+  @include flex(column, flex-start, stretch, spacing(0.75));
+}
+
+.headerSection {
+  padding: spacing(1) spacing(1.25) 0;
+
+  .header {
+    margin-bottom: spacing(0.5);
+    padding-bottom: spacing(0.5);
+    border-bottom: 1px solid $grey-100;
+
+    .label {
+      @include flex(row, flex-start, center, spacing(0.5));
+      color: $grey-800;
+      font-size: rem(15);
+      font-weight: 600;
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+
+      .icon {
+        flex-shrink: 0;
+        color: $primary-color;
+      }
+    }
+
+    .info {
+      color: $grey-500;
+      font-size: rem(13);
+      line-height: 1.5;
+      margin: spacing(0.5) 0 0;
+      max-width: 100%;
+    }
+  }
+}
+
+.emptyIcon {
+  font-size: rem(24);
+  opacity: 0.5;
+}

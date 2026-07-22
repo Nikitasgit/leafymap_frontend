@@ -1,7 +1,7 @@
-import HomeHeader from "@/components/home/HomeHeader";
-import SuggestionsList from "@/components/home/SuggestionsList";
-import EventSuggestionsList from "@/components/home/EventSuggestionsList";
-import { getHomeMetadata } from "@/lib/pageMetadata";
+import HomeHeader from "@/features/home/components/homeHeader";
+import SuggestionsList from "@/features/home/components/suggestionsList";
+import EventSuggestionsList from "@/features/events/components/eventSuggestionsList";
+import { getHomeMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,

@@ -1,0 +1,42 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.actionButtons {
+  @include flex(row, flex-end, center, spacing(0.75));
+  align-self: center;
+}
+
+.actionButton {
+  @include flex(row, center, center, 0);
+  background: none;
+  border: none;
+  color: $grey-500;
+  cursor: pointer;
+  padding: spacing(0.25);
+  border-radius: rem(4);
+  transition: $transition-default;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+
+  &.view,
+  &.edit {
+    &:hover:not(:disabled) {
+      color: $primary-color;
+    }
+  }
+
+  &.delete {
+    &:hover:not(:disabled) {
+      color: $error-color;
+    }
+  }
+}

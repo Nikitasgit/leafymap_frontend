@@ -1,0 +1,55 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.descriptionLabel {
+  display: block;
+  font-size: rem(13);
+  font-weight: 500;
+  color: $grey-700;
+  margin-bottom: spacing(0.25);
+}
+
+.descriptionRow {
+  padding: spacing(0.5) spacing(1.5);
+  background-color: $grey-50;
+  border-radius: rem(8);
+  margin-bottom: spacing(1);
+
+  p {
+    font-size: rem(13);
+    color: $grey-600;
+    line-height: 1.5;
+    margin: 0;
+    font-weight: 400;
+  }
+}
+
+.websiteRow {
+  padding: spacing(0.5) 0 spacing(0.75);
+  font-size: rem(13);
+  color: $grey-600;
+
+  .websiteLabel {
+    font-weight: 500;
+    color: $grey-700;
+  }
+
+  .websiteLink {
+    color: $primary-color;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@include respond-to(sm) {
+  .descriptionRow {
+    padding: spacing(1);
+
+    p {
+      font-size: rem(14);
+    }
+  }
+}

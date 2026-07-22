@@ -1,5 +1,5 @@
-import EventModifyContainer from "@/components/account/Event/EventModifyContainer";
-import { getPageMetadata } from "@/lib/pageMetadata";
+import EventModifyContainer from "@/features/account/components/eventModifyContainer";
+import { getPageMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,

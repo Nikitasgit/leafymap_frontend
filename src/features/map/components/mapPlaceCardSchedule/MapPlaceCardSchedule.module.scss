@@ -1,0 +1,187 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.schedule {
+  @include flex(column, flex-start, flex-start, spacing(0.5));
+  width: 100%;
+  background-color: $white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba-color($grey-600, 0.1);
+}
+
+.scheduleTitle {
+  font-size: rem(15);
+  font-weight: 600;
+  color: $grey-600;
+
+}
+
+.scheduleList {
+  @include flex(column, flex-start, flex-start, 0);
+  width: 100%;
+}
+
+.scheduleDayContainer {
+  width: 100%;
+  border-bottom: 1px solid $grey-200;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.dayHeader {
+  @include flex(row, space-between, center, spacing(1));
+  width: 100%;
+  padding: spacing(0.75) 0;
+  background: none;
+  border: none;
+  text-align: left;
+}
+
+.dayHeaderContent {
+  @include flex(row, space-between, center, spacing(1));
+  flex: 1;
+  min-width: 0;
+}
+
+.dayName {
+  font-weight: 500;
+  color: $grey-600;
+  font-size: rem(12);
+  flex-shrink: 0;
+}
+
+.statusContainer {
+  @include flex(row, flex-end, center, spacing(0.75));
+  flex-shrink: 0;
+}
+
+
+.chevronContainer {
+  width: 16px;
+  height: 16px;
+  @include flex(row, center, center, 0);
+  flex-shrink: 0;
+}
+
+.chevronButton {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  @include flex(row, center, center, 0);
+  color: $grey-400;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $grey-600;
+  }
+}
+
+.dayContent {
+  @include flex(column, flex-start, flex-start, spacing(0.75));
+  padding: spacing(0.5) 0 spacing(0.75) 0;
+  padding-left: spacing(1);
+}
+
+.chevron {
+  color: $grey-400;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.chevronExpanded {
+  transform: rotate(90deg);
+}
+
+.eventsChevron {
+  color: currentColor;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.eventsChevronExpanded {
+  transform: rotate(90deg);
+}
+
+.timeSlots {
+  @include flex(column, flex-start, flex-start, spacing(0.15));
+  width: 100%;
+}
+
+.timeSlot {
+  font-size: rem(12);
+  color: $grey-500;
+  font-weight: 400;
+}
+
+.eventsContainer {
+  width: 100%;
+  padding: spacing(0.75) 0;
+
+  border-top: 1px solid $grey-100;
+  margin-top: spacing(0.5);
+}
+
+.events {
+  @include flex(column, flex-start, flex-start, spacing(0.75));
+  width: 100%;
+}
+
+.scheduleStatus {
+  @include flex(column, flex-start, flex-end, 0);
+  flex: 1;
+  text-align: right;
+}
+
+.statusDisplay {
+  @include flex(row, flex-end, center, spacing(0.25));
+  padding: spacing(0.25) spacing(0.5);
+  border-radius: 4px;
+  font-size: rem(12);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.openStatus .statusText {
+  color: $success-color;
+  font-weight: 500;
+  font-size: rem(12);
+}
+
+.closedStatus .statusText {
+  color: $error-color;
+  font-weight: 500;
+  font-size: rem(12);
+}
+
+// Responsive design
+@include respond-to(sm) {
+  .dayHeader {
+    padding: spacing(1) 0;
+  }
+
+  .dayName {
+    font-size: rem(13);
+  }
+
+  .statusText {
+    font-size: rem(13);
+  }
+
+  .dayContent {
+    padding-left: spacing(1.5);
+  }
+}
+
+@include respond-to(md) {
+  .scheduleTitle {
+    font-size: rem(16);
+  }
+
+  .dayHeaderContent {
+    min-width: 110px;
+  }
+}

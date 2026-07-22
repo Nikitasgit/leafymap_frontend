@@ -1,0 +1,15 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.starsSection {
+  @include flex(column, flex-start, flex-start, spacing(0.75));
+}
+
+.commentSection {
+  @include flex(column, flex-start, stretch, spacing(0.5));
+}
+
+.commentField {
+  width: 100%;
+}

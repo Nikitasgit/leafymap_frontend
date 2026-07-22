@@ -1,0 +1,41 @@
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.skeletonCard {
+  @include flex(column, flex-start, stretch, spacing(0));
+  width: 240px;
+  flex-shrink: 0;
+  border: 1px solid $grey-200;
+  overflow: hidden;
+  background: $white;
+}
+
+.skeletonDateBanner {
+  width: 100% !important;
+  height: 32px !important;
+  flex-shrink: 0;
+}
+
+.skeletonImageWrap {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.skeletonImage {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@include respond-to(sm) {
+  .skeletonCard {
+    width: 280px;
+  }
+}
+
+@include respond-to(md) {
+  .skeletonCard {
+    width: 300px;
+  }
+}

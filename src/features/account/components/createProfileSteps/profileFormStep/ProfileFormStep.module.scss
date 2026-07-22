@@ -1,0 +1,13 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.buttonContainer {
+  @include flex(column, flex-start, stretch, spacing(1.5));
+  width: 100%;
+  margin-top: spacing(1.5);
+  @include respond-to(sm) {
+    @include flex(row, space-between, center, spacing(2));
+    margin-top: spacing(2);
+  }
+}

@@ -1,5 +1,5 @@
-import { UpdateCreator } from "@/components/account/Creator/UpdateCreator";
-import { getPageMetadata } from "@/lib/pageMetadata";
+import { UpdateCreator } from "@/features/account";
+import { getPageMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,

@@ -1,0 +1,94 @@
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+@use "@/shared/styles/abstracts/variables" as *;
+
+.actions {
+  @include flex(column, flex-start, stretch, spacing(0.75));
+}
+
+.actionsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: spacing(0.75);
+  margin-top: spacing(0.75);
+}
+
+.actionItem {
+  flex: 0 0 calc(50% - spacing(0.5));
+
+  :global(button) {
+    width: 100%;
+    min-height: 3.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.15s ease;
+  }
+
+  :global(button:hover),
+  :global(button:focus-visible) {
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+  }
+}
+
+.actionButton {
+  font-size: 0.8rem; // ~12.8px on base 16px
+  font-weight: 500;
+
+  :global(svg) {
+    color: #0f172a;
+  }
+}
+
+@include respond-to(sm) {
+  .actions {
+    @include flex(column, flex-start, stretch, spacing(1));
+  }
+
+  .actionsGrid {
+    gap: spacing(1);
+    margin-top: spacing(1);
+  }
+
+  .actionItem {
+    :global(button) {
+      min-height: 3.5rem;
+    }
+  }
+
+  .actionButton {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 340px) {
+  .actionItem {
+    flex: 0 0 100%;
+  }
+}
+
+.infoCard {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid $input-border-color;
+  border-radius: spacing(1);
+  padding: spacing(2);
+  @include flex(column, flex-start, stretch, spacing(1.5));
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.1);
+}
+
+.infoText {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #0c4a6e;
+  margin: 0;
+
+  &:first-child {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  &:last-child {
+    font-weight: 500;
+    color: #075985;
+  }
+}

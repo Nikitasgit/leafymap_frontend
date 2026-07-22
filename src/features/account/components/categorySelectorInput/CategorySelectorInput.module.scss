@@ -1,0 +1,64 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.categoryInputWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: $white;
+  padding-top: spacing(0.5);
+  border: 1px solid $grey-300;
+  border-top: none;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  border-radius: 0 0 4px 4px;
+  transition: $transition-default;
+}
+
+.list {
+  @include flex(column, flex-start, stretch, 0);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  width: 100%;
+  padding: spacing(1.25);
+  @include flex(row, space-between, center, 0);
+  cursor: pointer;
+  transition: $transition-default;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  background: none;
+  border: none;
+  text-align: left;
+  color: inherit;
+
+  &:hover {
+    background-color: $grey-100;
+  }
+
+  &:active {
+    background-color: $grey-200;
+  }
+
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: -2px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary-color;
+    outline-offset: -2px;
+  }
+}

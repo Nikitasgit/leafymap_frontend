@@ -1,0 +1,43 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.containerWrapper {
+  position: relative;
+  width: 100%;
+  border-bottom: 1px solid $grey-200;
+  background: $grey-50;
+}
+
+.tabs {
+  @include flex(row, flex-start, center, 0);
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  // Hide scrollbar
+  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none; // IE and Edge
+
+  &::-webkit-scrollbar {
+    display: none; // Chrome, Safari, Opera
+  }
+}
+
+// Gradient overlay on the right when scrollable
+.containerWrapper.hasScrollableContent::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 50px;
+  background: linear-gradient(
+    to right,
+    rgba(249, 250, 251, 0) 0%,
+    rgba(249, 250, 251, 0.8) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}

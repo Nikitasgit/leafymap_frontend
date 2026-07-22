@@ -1,9 +1,12 @@
 import { notFound } from "next/navigation";
-import { generateEventMetadata } from "@/lib/metadata";
-import { getEventById } from "@/lib/api/events";
-import EventDetails from "@/components/eventProfile/EventDetails";
-import EventBookingWidget from "@/components/eventProfile/EventBookingWidget";
-import { capitalizeFirstLetter } from "@/utils/functions";
+import { generateEventMetadata } from "@/app/lib/entityMetadata";
+import { getEventById } from "@/features/events/api/eventsApi";
+import EventDetailsWithParticipants from "@/features/eventInvitations/components/eventDetailsWithParticipants";
+import EventBookingWidget from "@/features/eventBookings/components/eventBookingWidget";
+import type { PlacePopulated } from "@/features/places/types/place";
+import type { UserPopulated } from "@/features/users/types";
+import { capitalizeFirstLetter } from "@/shared/utils/functions";
+import { resolveRefObject } from "@/shared/api/normalizers/resolveRef";
 import styles from "./EventPage.module.scss";
 
 export async function generateMetadata({
@@ -36,18 +39,14 @@ const EventPage = async ({ params }: EventPageProps) => {
 
   const title = capitalizeFirstLetter(eventData.name);
   const place =
-    typeof eventData.place === "object" && eventData.place
-      ? eventData.place
-      : undefined;
+    (resolveRefObject(eventData.place) as PlacePopulated | null) ?? undefined;
   const user =
-    typeof eventData.user === "object" && eventData.user
-      ? eventData.user
-      : undefined;
+    (resolveRefObject(eventData.user) as UserPopulated | null) ?? undefined;
 
   return (
     <main className={styles.container}>
       <h1>{title}</h1>
-      <EventDetails event={eventData} place={place} user={user} />
+      <EventDetailsWithParticipants event={eventData} place={place} user={user} />
       {eventData.isBookable && <EventBookingWidget event={eventData} />}
     </main>
   );

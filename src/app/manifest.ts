@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getManifestStrings } from "@/lib/pageMetadata";
+import { getManifestStrings } from "@/app/lib/pageMetadata";
 import { i18nConfig } from "@/i18nConfig";
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {

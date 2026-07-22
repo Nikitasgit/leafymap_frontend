@@ -1,5 +1,5 @@
-import AccountConsentForm from "@/components/auth/accountConsentForm/AccountConsentForm";
-import { getPageMetadata } from "@/lib/pageMetadata";
+import { AccountConsentForm } from "@/features/auth";
+import { getPageMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,

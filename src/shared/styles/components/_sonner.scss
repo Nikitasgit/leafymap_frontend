@@ -1,0 +1,51 @@
+@use "@/shared/styles/abstracts/variables" as *;
+
+[data-sonner-toaster] {
+  --normal-bg: #{$white};
+  --normal-border: #{$grey-200};
+  --normal-text: #{$grey-500};
+
+  --success-bg: #{$white};
+  --success-border: #{$success-color};
+  --success-text: #{$grey-500};
+
+  --error-bg: #{$white};
+  --error-border: #{$error-color};
+  --error-text: #{$grey-500};
+
+  --info-bg: #{$white};
+  --info-border: #{$input-border-color};
+  --info-text: #{$grey-500};
+}
+
+[data-sonner-toast] {
+  font-family: $font-family-base !important;
+  border: 1px solid #{$grey-300} !important;
+  padding: 12px 16px !important;
+  max-width: 320px !important;
+}
+
+[data-sonner-toast][data-type="success"] {
+  border-right: 4px solid #{$success-color} !important;
+}
+
+[data-sonner-toast][data-type="error"] {
+  border-right: 4px solid #{$error-color} !important;
+}
+
+[data-sonner-toast][data-type="info"] {
+  border-right: 4px solid #{$input-border-color} !important;
+}
+
+[data-sonner-toast][data-type="loading"] {
+  border-right: 4px solid #{$primary-color} !important;
+}
+
+[data-sonner-toast] [data-close-button] {
+  color: #{$grey-500} !important;
+  background-color: #{$white} !important;
+}
+
+[data-sonner-toast] [data-icon] {
+  color: $grey-500 !important;
+}

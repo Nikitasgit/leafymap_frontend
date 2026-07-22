@@ -1,0 +1,39 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.pageContainer {
+  background: linear-gradient(135deg, $grey-50 0%, $white 100%);
+  min-height: calc(100vh - $footer-height - $navbar-height);
+  @include respond-to(sm) {
+    .container {
+      border-radius: 8px;
+    }
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: $white;
+  }
+  @include respond-to(md) {
+    padding: spacing(4);
+  }
+  @include respond-to(lg) {
+    padding: spacing(6);
+  }
+}
+
+.tabContent {
+  width: 100%;
+  padding: spacing(1);
+  
+  @include respond-to(sm) {
+    padding: spacing(1.5);
+  }
+}
+
+.headerSpacing {
+  margin-bottom: spacing(1);
+  
+
+}

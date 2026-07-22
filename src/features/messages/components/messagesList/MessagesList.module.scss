@@ -1,0 +1,18 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.messagesList {
+  @include flex(column, flex-start, stretch, 0);
+  width: 100%;
+  padding: spacing(1.5) 0;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0; 
+
+  .icon {
+    width: rem(48);
+    height: rem(48);
+    color: $grey-400;
+  }
+}

@@ -1,0 +1,22 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.followingTab {
+  padding: spacing(1);
+}
+
+.items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  @include flex(column, flex-start, stretch, spacing(1));
+}
+
+.item {
+  width: 100%;
+}
+
+.icon {
+  color: $grey-400;
+}

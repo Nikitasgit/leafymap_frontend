@@ -130,6 +130,18 @@
     "refuseAriaLabel": "Decline invitation",
     "fallbackUsername": "User"
   },
+  "partnershipsForm": {
+    "title": "Participants",
+    "tooltip": "Invite collaborators to take part in your event. They can then be assigned to time slots.",
+    "addPartnerLabel": "Add a participant",
+    "addPartnerInfo": "Search for a user to invite them to collaborate on this event.",
+    "searchLabel": "Search for a user",
+    "searchPlaceholder": "Search for a user...",
+    "alreadyAddedError": "This user has already been added"
+  },
+  "partnershipsFormList": {
+    "emptyTitle": "No participants added"
+  },
   "followingTab": {
     "unfollow": "Unfollow",
     "emptyTitle": "No following yet"

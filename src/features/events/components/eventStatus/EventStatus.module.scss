@@ -1,0 +1,63 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+
+.eventStatus {
+  @include flex(inline-flex, center, center, 0);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-size: rem(12);
+  padding: spacing(0.15) spacing(0.3);
+  border-radius: rem(2);
+  margin-left: spacing(0.25);
+  .statusText {
+    margin: 0;
+    font-size: inherit;
+    white-space: nowrap;
+    font-weight: inherit;
+  }
+  &.upcoming {
+    background-color: rgba($primary-color, 0.1);
+    color: $primary-color;
+    border: 1px solid rgba($primary-color, 0.2);
+  }
+  &.ongoing {
+    background-color: rgba($success-color, 0.1);
+    color: $success-color;
+    border: 1px solid rgba($success-color, 0.2);
+  }
+  &.completed {
+    background-color: rgba($grey-500, 0.1);
+    color: $grey-600;
+    border: 1px solid rgba($grey-500, 0.2);
+  }
+  &.unvalid {
+    background-color: rgba($error-color, 0.1);
+    color: $error-color;
+    border: 1px solid rgba($error-color, 0.2);
+  }
+  &.pending {
+    background-color: rgba($warning-color, 0.1);
+    color: $warning-color;
+    border: 1px solid rgba($warning-color, 0.2);
+  }
+  &.accepted {
+    background-color: rgba($success-color, 0.1);
+    color: $success-color;
+    border: 1px solid rgba($success-color, 0.2);
+  }
+  &.refused {
+    background-color: rgba($error-color, 0.1);
+    color: $error-color;
+    border: 1px solid rgba($error-color, 0.2);
+  }
+  @include respond-to(sm) {
+    font-size: rem(12);
+    padding: spacing(0.2) spacing(0.4);
+    border-radius: rem(3);
+    margin-left: spacing(0.5);
+    letter-spacing: 0.5px;
+  }
+}
+

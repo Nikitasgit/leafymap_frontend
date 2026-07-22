@@ -1,5 +1,5 @@
-import ResendVerificationForm from "@/components/auth/resendVerificationForm";
-import { getPageMetadata } from "@/lib/pageMetadata";
+import { ResendVerificationForm } from "@/features/auth";
+import { getPageMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,
