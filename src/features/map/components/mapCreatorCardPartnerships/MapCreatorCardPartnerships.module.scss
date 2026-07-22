@@ -1,0 +1,38 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.placesAndEventsSection {
+  padding: spacing(0.5) 0;
+  border-top: 1px solid $grey-200;
+
+
+  .section {
+
+    margin-bottom: spacing(1.5);
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    .sectionTitle {
+      font-size: rem(12);
+      font-weight: 400;
+      color: $grey-600;
+      margin: 0 0 spacing(1) 0;
+    }
+  }
+}
+
+@include respond-to(sm) {
+  .placesAndEventsSection {
+  padding: spacing(1) 0;
+    .section {
+      margin-bottom: spacing(2);
+      .sectionTitle {
+        font-size: rem(13);
+        margin-bottom: spacing(1.5);
+      }
+    }
+  }
+}
+

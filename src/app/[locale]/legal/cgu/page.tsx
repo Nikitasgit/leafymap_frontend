@@ -1,8 +1,8 @@
-import BackButton from "@/components/common/buttons/BackButton";
-import { APP_NAME } from "@/utils/constants";
+import BackButton from "@/shared/ui/buttons/backButton";
+import { APP_NAME } from "@/shared/config/app";
 import initTranslations from "../../../i18n";
 import styles from "./cgu.module.scss";
-import { getPageMetadata } from "@/lib/pageMetadata";
+import { getPageMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,

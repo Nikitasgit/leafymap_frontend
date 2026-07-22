@@ -1,0 +1,123 @@
+"use client";
+
+import Image from "next/image";
+import styles from "./CreatorHeader.module.scss";
+import { MapPin } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { PlaceCategoryBadge, getPlaceCategoryName } from "@/features/places";
+import CreatorCategoryBadge from "@/features/users/components/creatorCategoryBadge";
+import { capitalizeFirstLetter } from "@/shared/utils/functions";
+import placeDefaultSvg from "@public/images/place_default.svg";
+import StarsDisplay from "@/features/reviews/components/starsDisplay";
+import { Place } from "@/features/places/types/place";
+import { UserPopulated } from "@/features/users/types";
+import FollowingCount from "@/features/follows/components/followingCount";
+import { useTranslation } from "react-i18next";
+
+export interface CreatorHeaderProps {
+  place: Place | null;
+  user: UserPopulated;
+  isLoading: boolean;
+  variant?: "compact" | "full";
+}
+
+const CreatorHeader = ({
+  place,
+  user,
+  isLoading,
+  variant = "compact",
+}: CreatorHeaderProps) => {
+  const router = useRouter();
+  const { t } = useTranslation("profile");
+
+  return (
+    <div
+      className={`${styles.headerWrapper} ${
+        variant === "full" ? styles.fullWidth : ""
+      }`}
+    >
+      <button
+        className={`${styles.imageContainer} ${isLoading ? "skeleton" : ""}`}
+        onClick={() => {
+          router.push(`/users/${user.id}`);
+        }}
+        type="button"
+        aria-label={t("creatorHeader.viewProfileAriaLabel", {
+          username: user.username || t("creatorHeader.defaultUsername"),
+        })}
+      >
+        {!isLoading && (
+          <Image
+            src={
+              user.image?.urls.medium ||
+              user.googlePictureUrl ||
+              placeDefaultSvg
+            }
+            alt={user.username || "Lieu"}
+            fill
+            sizes="(max-width: 768px) 100vw, 400px"
+            style={{ objectFit: "cover", objectPosition: "center" }}
+          />
+        )}
+      </button>
+      <header className={styles.header}>
+        <div className={styles.headerMain}>
+          <div className={styles.titleRow}>
+            <h2 className={styles.title}>
+              {capitalizeFirstLetter(user.username || "")}
+            </h2>
+            <FollowingCount count={user.followers ?? 0} userId={user.id} />
+          </div>
+          {place && (
+            <div className={styles.categoryRow}>
+              <div className={styles.categoryRowLeft}>
+                <PlaceCategoryBadge
+                  categoryName={getPlaceCategoryName(place.placeCategory)}
+                />
+              </div>
+              <div className={styles.ratingFollowersRow}>
+                {place?.rating != null &&
+                  typeof place.rating === "number" &&
+                  place.rating > 0 && (
+                    <div className={styles.ratingContainer}>
+                      <StarsDisplay rating={place.rating} size="small" />
+                      <span className={styles.ratingValue}>
+                        ({place.rating.toFixed(1)})
+                      </span>
+                    </div>
+                  )}
+              </div>
+            </div>
+          )}
+        </div>
+        {place?.location?.label && (
+          <div className={styles.addressRow}>
+            <MapPin
+              size={14}
+              className={styles.addressIcon}
+              aria-hidden="true"
+            />
+            <p className={styles.address}>{place.location.label}</p>
+          </div>
+        )}
+        <div className={styles.ownerRow}>
+          <span className={styles.ownerName}>
+            Par:{" "}
+            <b>
+              {capitalizeFirstLetter(user.firstname || "")}{" "}
+              {capitalizeFirstLetter(user.lastname || "")}
+            </b>{" "}
+            {user.userCategory &&
+              user.userCategory.type?.name !== "organization" && (
+                <CreatorCategoryBadge
+                  categoryName={user.userCategory?.name || ""}
+                />
+              )}
+          </span>
+        </div>
+      </header>
+    </div>
+  );
+};
+
+export default CreatorHeader;

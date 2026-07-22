@@ -1,0 +1,7 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.date {
+  font-size: rem(12);
+  color: $grey-500;
+}

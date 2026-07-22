@@ -1,0 +1,102 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.scheduleContainer {
+  margin-top: spacing(2);
+}
+
+.sectionTitle {
+  font-size: rem(16);
+  font-weight: 600;
+  color: $grey-800;
+  margin-bottom: spacing(1.5);
+}
+
+.scheduleList {
+  @include flex(column, flex-start, stretch, spacing(1.5));
+}
+
+.period {
+  padding-bottom: spacing(1.5);
+  border-bottom: 1px solid $grey-100;
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.periodDates {
+  @include flex(row, flex-start, center, spacing(1));
+  flex-wrap: wrap;
+  margin-bottom: spacing(0.75);
+}
+
+.dateItem {
+  @include flex(row, flex-start, center, spacing(0.5));
+  .dateLabel {
+    color: $grey-600;
+    font-size: rem(12);
+    font-weight: 500;
+  }
+  .dateValue {
+    color: $grey-800;
+    font-size: rem(12);
+    font-weight: 600;
+  }
+}
+
+.timeSlotsList {
+  @include flex(column, flex-start, stretch, spacing(1));
+  margin-top: spacing(0.75);
+}
+
+.timeSlot {
+  padding-left: spacing(1);
+  border-left: 2px solid $grey-200;
+}
+
+.timeSlotHeader {
+  @include flex(column, flex-start, stretch, spacing(0.25));
+  margin-bottom: spacing(0.5);
+}
+
+.timeSlotTime {
+  @include flex(row, flex-start, center, spacing(0.5));
+  color: $grey-700;
+  font-size: rem(13);
+}
+
+.timeRange {
+  font-weight: 500;
+}
+
+.timeSlotTitle {
+  font-size: rem(13);
+  color: $grey-800;
+}
+
+.participantsList {
+  @include flex(row, flex-start, center, spacing(0.75));
+  flex-wrap: wrap;
+  margin-top: spacing(0.5);
+}
+
+.participantCard {
+  @include flex(row, flex-start, center, spacing(0.5));
+  padding: spacing(0.25) spacing(0.5);
+  background: $grey-50;
+  border-radius: 4px;
+  font-size: rem(12);
+  color: $grey-800;
+}
+
+.participantImage {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.participantName {
+  font-weight: 500;
+}

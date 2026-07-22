@@ -1,0 +1,41 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.container {
+  width: 100%;
+
+  :global(.MuiTextField-root) {
+    width: 100%;
+  }
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.textareaWrapper {
+  position: relative;
+  width: 100%;
+
+  .withCharCount :global(.MuiInputBase-input) {
+    padding-bottom: spacing(3.5);
+  }
+}
+
+.charCount {
+  position: absolute;
+  bottom: spacing(2.5);
+  right: spacing(1);
+  font-size: rem(12);
+  color: $grey-500;
+  background-color: $white;
+  padding: spacing(0.25) spacing(0.5);
+  border-radius: rem(4);
+  font-weight: 500;
+  pointer-events: none;
+
+  &.overLimit {
+    color: $error-color;
+    font-weight: 600;
+  }
+}

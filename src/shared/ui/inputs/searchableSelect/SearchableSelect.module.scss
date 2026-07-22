@@ -1,0 +1,14 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.wrapper {
+  width: 100%;
+
+  :global(.MuiListSubheader-root) {
+    background-color: $white;
+  }
+
+  :global(.MuiAutocomplete-option) {
+    padding: spacing(0.5) spacing(1.5) !important;
+  }
+}

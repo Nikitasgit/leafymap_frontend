@@ -1,4 +1,4 @@
-import ProtectedRoute from "@/components/common/ProtectedRoute";
+import { ProtectedRoute } from "@/features/auth";
 
 type AccountLayoutProps = {
   children: React.ReactNode;

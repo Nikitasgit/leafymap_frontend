@@ -1,6 +1,5 @@
-import RegisterForm from "@/components/auth/registerForm";
-import GuestOnlyRoute from "@/components/common/GuestOnlyRoute";
-import { getPageMetadata } from "@/lib/pageMetadata";
+import { RegisterForm, GuestOnlyRoute } from "@/features/auth";
+import { getPageMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,

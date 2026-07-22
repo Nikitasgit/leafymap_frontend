@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { APP_URL } from "@/utils/constants";
+import { APP_URL } from "@/shared/config/app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = APP_URL;

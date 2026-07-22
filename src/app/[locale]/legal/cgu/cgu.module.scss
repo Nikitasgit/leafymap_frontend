@@ -1,6 +1,6 @@
-@use "../../../../styles/abstracts/variables" as *;
-@use "../../../../styles/abstracts/mixins" as *;
-@use "../../../../styles/abstracts/functions" as *;
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
 
 .cguPage {
   min-height: 100vh;

@@ -1,0 +1,30 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+
+.badge {
+  position: relative;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background: $primary-color;
+  color: $white;
+  border-radius: rem(10);
+  min-width: rem(20);
+  padding: rem(1.5) rem(3);
+
+  font-size: rem(11) !important;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  border: 2px solid $white;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+
+.absolutePosition {
+  position: absolute;
+  top: rem(-6);
+  right: rem(-6);
+}

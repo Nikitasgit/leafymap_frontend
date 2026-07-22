@@ -1,0 +1,36 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+@use "sass:color";
+
+.footer {
+  background-color: $grey-50;
+  border-top: 1px solid $grey-200;
+  padding: spacing(1.5) 0;
+  margin-top: auto;
+  min-height: $footer-height;
+  .container {
+    max-width: rem(1200);
+    margin: 0 auto;
+    padding: 0 spacing(1);
+    .content {
+      @include flex(column, center, center, spacing(0.75));
+      text-align: center;
+      .text {
+        color: $grey-600;
+        font-size: rem(14);
+        margin: 0;
+      }
+      .link {
+        color: $primary-color;
+        font-size: rem(14);
+        text-decoration: none;
+        transition: $transition-default;
+        &:hover {
+          text-decoration: underline;
+          color: color.adjust($primary-color, $lightness: 10%);
+        }
+      }
+    }
+  }
+}

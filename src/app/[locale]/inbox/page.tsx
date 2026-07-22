@@ -1,6 +1,6 @@
-import ProtectedRoute from "@/components/common/ProtectedRoute";
-import InboxContainer from "@/components/messages/InboxContainer";
-import { getPageMetadata } from "@/lib/pageMetadata";
+import { ProtectedRoute } from "@/features/auth";
+import InboxContainer from "@/features/messages/components/inboxContainer";
+import { getPageMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,

@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import appReducer from "./appSlice";
-import authReducer from "./authSlice";
-import notificationReducer from "./notificationSlice";
-import favoritesReducer from "./favoritesSlice";
+import categoriesReducer from "@/features/categories/model/categoriesSlice";
+import authReducer from "@/features/auth/model/authSlice";
+import notificationReducer from "@/features/notifications/model/notificationSlice";
+import favoritesReducer from "@/features/favorites/model/favoritesSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const store = configureStore({
   reducer: {
-    app: appReducer,
+    categories: categoriesReducer,
     auth: authReducer,
     notifications: notificationReducer,
     favorites: favoritesReducer,

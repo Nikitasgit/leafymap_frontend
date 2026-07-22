@@ -1,5 +1,5 @@
-import CheckEmailMessage from "@/components/auth/checkEmailMessage";
-import { getPageMetadata } from "@/lib/pageMetadata";
+import { CheckEmailMessage } from "@/features/auth";
+import { getPageMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,

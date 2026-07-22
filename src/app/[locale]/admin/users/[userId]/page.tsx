@@ -1,5 +1,5 @@
-import AdminUserDetailContainer from "@/components/admin/AdminUserDetailContainer/AdminUserDetailContainer";
-import ProtectedRoute from "@/components/common/ProtectedRoute";
+import AdminUserDetailContainer from "@/features/admin/components/adminUserDetailContainer";
+import { ProtectedRoute } from "@/features/auth";
 
 export default async function AdminUserDetailPage({
   params,

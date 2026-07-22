@@ -1,0 +1,115 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+
+.container {
+  @include flex(column, flex-start, stretch, 0);
+  height: calc(100vh - $footer-height - $navbar-height);
+  margin: 0 auto;
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, $grey-50 0%, $white 100%);
+}
+
+.container > * {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.inbox {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: spacing(1);
+  gap: spacing(1);
+  @include respond-to(lg) {
+    flex-direction: row;
+    padding: spacing(3);
+  }
+}
+
+.conversationsColumn {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  &.hasConversation {
+    @include respond-to(xl) {
+      flex-direction: row;
+      gap: spacing(1);
+    }
+  }
+}
+
+.conversationsListColumn {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .sectionTitle {
+    flex-shrink: 0;
+  }
+
+  .conversationsColumn.hasConversation & {
+    @media (max-width: 1199px) {
+      display: none;
+    }
+    @include respond-to(xl) {
+      display: flex;
+      width: 280px;
+      max-width: 280px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+.conversationsListWrapper {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.conversationViewColumn {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  @include respond-to(xl) {
+    border-left: 1px solid $grey-200;
+  }
+}
+
+.sectionTitle {
+  font-size: rem(16);
+  font-weight: 600;
+  color: $grey-700;
+  margin-bottom: spacing(1.5);
+  padding-bottom: spacing(0.75);
+  border-bottom: 1px solid $grey-200;
+  @include respond-to(sm) {
+    font-size: rem(18);
+    margin-bottom: spacing(2);
+    padding-bottom: spacing(1);
+  }
+  @include respond-to(md) {
+    font-size: rem(20);
+  }
+}

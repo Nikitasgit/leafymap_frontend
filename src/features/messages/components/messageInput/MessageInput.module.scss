@@ -1,0 +1,50 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.messageInputContainer {
+  border-top: 1px solid $grey-200;
+  padding: spacing(2);
+  background-color: $white;
+  flex-shrink: 0;
+
+  .inputWrapper {
+    @include flex(row, flex-start, flex-end, spacing(2));
+    position: relative;
+  }
+
+  .textField {
+    flex: 1;
+  }
+
+  .sendButton {
+    @include flex(row, center, center);
+    background: $primary-color;
+    color: $white;
+    border: none;
+    border-radius: 50%;
+    width: rem(40);
+    height: rem(40);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+
+    &:hover:not(:disabled) {
+      background: darken($primary-color, 10%);
+      transform: scale(1.05);
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.95);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  @include respond-to(md) {
+    padding: spacing(3);
+  }
+}

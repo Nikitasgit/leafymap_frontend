@@ -1,0 +1,158 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.cardMapContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+  background-color: $white;
+  border-radius: rem(16) rem(16) 0 0;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  transition: height 0.3s ease-in-out;
+
+  &[data-dragging="true"] {
+    transition: none;
+  }
+
+  &.state_collapsed {
+    height: 40px;
+  }
+  &.state_default {
+    height: 65%;
+  }
+  &.state_expanded {
+    height: 100%;
+    border-radius: 0;
+  }
+
+  &[data-creator-loading="true"] .collapseButton {
+    display: none;
+  }
+
+  .collapseButton {
+    touch-action: none;
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 28px;
+    background-color: $grey-100;
+    border-radius: rem(16) rem(16) 0 0;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    border: none;
+    @include flex(row, center, center, 0);
+
+    .desktopText {
+      display: none;
+    }
+
+    &::after {
+      content: "";
+      width: 40px;
+      height: 4px;
+      background-color: $grey-400;
+      border-radius: rem(2);
+    }
+
+    &:hover {
+      background-color: $grey-200;
+      &::after {
+        background-color: $grey-500;
+      }
+    }
+  }
+
+  .cardContent {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+    background-color: $white;
+    border-radius: rem(16) rem(16) 0 0;
+    padding-top: 28px;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba($grey-200, 0.5);
+      border-radius: rem(2);
+      &:hover {
+        background: rgba($grey-500, 0.7);
+      }
+    }
+    scrollbar-width: thin;
+    scrollbar-color: rgba($grey-300, 0.5) transparent;
+  }
+
+  @include respond-to(md) {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: auto;
+    width: 400px;
+    height: 100% !important;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+    transition: transform 0.3s ease-in-out;
+
+    &.state_collapsed {
+      height: 100% !important;
+      transform: translateX(-100%);
+    }
+    &.state_default,
+    &.state_expanded {
+      height: 100% !important;
+      transform: translateX(0);
+    }
+
+    .collapseButton {
+      position: absolute;
+      right: -22px;
+      top: 50%;
+      left: auto;
+      transform: translateY(-50%);
+      width: 22px;
+      height: 70px;
+      background-color: $white;
+      border: 1px solid rgba($grey-300, 0.5);
+      border-left: none;
+      border-radius: 0 rem(12) rem(12) 0;
+      z-index: 100000;
+      @include flex(row, center, center, 0);
+      font-size: rem(20);
+      font-weight: bold;
+      color: $grey-600;
+
+      &::after {
+        display: none;
+      }
+      .desktopText {
+        display: block;
+      }
+      &:hover {
+        background-color: $grey-50;
+      }
+    }
+
+    .cardContent {
+      border-radius: 0;
+      padding-top: 0;
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+    }
+  }
+}

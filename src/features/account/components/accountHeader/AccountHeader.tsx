@@ -1,0 +1,77 @@
+"use client";
+import React from "react";
+import { Image } from "@/shared/types/image";
+import ProfilePictureUploader from "@/shared/ui/inputs/profilePictureUploader";
+import { capitalizeFirstLetter } from "@/shared/utils/functions";
+import styles from "./AccountHeader.module.scss";
+import useSubmitUser from "@/features/users/hooks/useSubmitUser";
+import CreatorCategoryBadge from "@/features/users/components/creatorCategoryBadge";
+
+interface AccountHeaderProps {
+  user: {
+    id: string;
+    username?: string;
+    email: string;
+    image?: string | Image;
+    userCategory?: { name: string };
+    googlePictureUrl?: string;
+  };
+  isLoadingUser: boolean;
+  onUserUpdated?: () => void | Promise<void>;
+}
+
+export default function AccountHeader({
+  user,
+  isLoadingUser,
+  onUserUpdated,
+}: AccountHeaderProps) {
+  const { submitUser } = useSubmitUser();
+  const displayName =
+    user.username?.trim() ||
+    user.email.split("@")[0] ||
+    "Mon compte";
+  const handleImageUploaded = async (
+    imageId: string | null,
+    googlePictureUrl?: string | null,
+  ) => {
+    if (imageId) {
+      await submitUser({
+        image: imageId,
+      });
+    }
+    if (googlePictureUrl) {
+      await submitUser({
+        googlePictureUrl: "",
+      });
+    }
+    await onUserUpdated?.();
+  };
+
+  return (
+    <header className={styles.header}>
+      <div className={styles.userInfo}>
+        <div className={styles.usernameRow}>
+          <h1 className={styles.username}>
+            {capitalizeFirstLetter(displayName)}
+          </h1>
+        </div>
+        {user.userCategory && (
+          <div className={styles.creatorInfoContainer}>
+            <CreatorCategoryBadge categoryName={user.userCategory.name} />
+          </div>
+        )}
+        <p className={styles.email}>{user.email}</p>
+      </div>
+      <ProfilePictureUploader
+        googlePictureUrl={user.googlePictureUrl}
+        onImageUploaded={handleImageUploaded}
+        type="User"
+        reference={user.id}
+        initialImage={user.image as Image}
+        isOwner={true}
+        rounded
+        disabled={isLoadingUser}
+      />
+    </header>
+  );
+}

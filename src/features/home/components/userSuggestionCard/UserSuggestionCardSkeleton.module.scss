@@ -1,0 +1,43 @@
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.skeletonCard {
+  @include flex(column, flex-start, stretch, spacing(0));
+  width: 160px;
+  flex-shrink: 0;
+  border: 1px solid $grey-200;
+  border-radius: 8px;
+  overflow: hidden;
+  background: $white;
+}
+
+.skeletonImageWrap {
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 8px 8px 0 0;
+}
+
+.skeletonImage {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 8px 8px 0 0;
+}
+
+.skeletonContent {
+  padding: spacing(0.5);
+  @include flex(column, flex-start, flex-start, spacing(0.25));
+}
+
+@include respond-to(sm) {
+  .skeletonCard {
+    width: 200px;
+  }
+}
+
+@include respond-to(md) {
+  .skeletonCard {
+    width: 220px;
+  }
+}

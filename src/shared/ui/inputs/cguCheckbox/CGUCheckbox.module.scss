@@ -1,0 +1,41 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+
+.checkboxGroup {
+  @include flex(column, flex-start, flex-start, spacing(0.5));
+  margin: spacing(1) 0;
+}
+
+.checkboxLabel {
+  @include flex(row, flex-start, flex-start, spacing(1));
+  cursor: pointer;
+  font-size: rem(14);
+  color: $grey-500;
+  line-height: 1.4;
+}
+
+.checkbox {
+  margin-top: rem(2);
+  accent-color: $primary-color;
+  cursor: pointer;
+}
+
+.checkboxText {
+  flex: 1;
+}
+
+.cguLink {
+  color: $primary-color;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.errorMessage {
+  color: $error-color;
+  font-size: rem(12);
+  margin-top: spacing(0.5);
+}

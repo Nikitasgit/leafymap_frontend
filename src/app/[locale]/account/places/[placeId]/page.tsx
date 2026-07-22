@@ -1,5 +1,5 @@
-import UpdatePlaceContainer from "@/components/account/Place/UpdatePlaceContainer";
-import { getPageMetadata } from "@/lib/pageMetadata";
+import UpdatePlaceContainer from "@/features/places/components/updatePlaceContainer";
+import { getPageMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
   params,
