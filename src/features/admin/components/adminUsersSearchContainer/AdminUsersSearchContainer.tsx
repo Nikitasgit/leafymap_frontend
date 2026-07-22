@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import PageHeader from "@/shared/ui/pageHeader";
 import EmptyState from "@/shared/ui/noResults/emptyState";
@@ -22,6 +23,10 @@ const AdminUsersSearchContainer = () => {
         title={t("adminUsersSearchContainer.title")}
         subtitle={t("adminUsersSearchContainer.subtitle")}
       />
+
+      <Link href="/admin/announcements" className={styles.navLink}>
+        {t("adminUsersSearchContainer.toAnnouncements")}
+      </Link>
 
       <TextField
         name="adminUserSearch"

@@ -1,4 +1,5 @@
 import MapPageContainer from "@/features/map/components/mapPageContainer";
+import { AnnouncementBanner } from "@/features/announcements";
 import { getMapMetadata } from "@/app/lib/pageMetadata";
 
 export async function generateMetadata({
@@ -11,7 +12,12 @@ export async function generateMetadata({
 }
 
 const MapPage = () => {
-  return <MapPageContainer />;
+  return (
+    <>
+      <AnnouncementBanner />
+      <MapPageContainer />
+    </>
+  );
 };
 
 export default MapPage;

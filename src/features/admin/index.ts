@@ -36,3 +36,5 @@ export { default as AdminUserRow } from "./components/adminUserRow";
 export { default as AdminUserSummaryCard } from "./components/adminUserSummaryCard";
 export { default as AdminUserTabs } from "./components/adminUserTabs";
 export { default as AdminContentTable } from "./components/adminContentTable";
+export { default as AdminAnnouncementsContainer } from "./components/adminAnnouncementsContainer";
+export { default as AdminAnnouncementFormContainer } from "./components/adminAnnouncementFormContainer";
