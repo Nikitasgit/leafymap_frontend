@@ -10,6 +10,8 @@ import {
 const loginPassword = "x";
 const validPassword = ["Valid", "Pass", "1x"].join("");
 const otherValidPassword = ["Valid", "Pass", "2x"].join("");
+const tooShortPassword = ["A", "b", "1"].join("");
+const lettersOnlyPassword = "a".repeat(10);
 
 describe("createValidateLoginData", () => {
   const validate = createValidateLoginData(tStub);
@@ -82,8 +84,8 @@ describe("createValidateRegisterData", () => {
   it("rejects a password that is too short", () => {
     const result = validate({
       ...valid,
-      password: "Ab1",
-      confirmPassword: "Ab1",
+      password: tooShortPassword,
+      confirmPassword: tooShortPassword,
     });
 
     expect(result.isValid).toBe(false);
@@ -93,8 +95,8 @@ describe("createValidateRegisterData", () => {
   it("rejects a password without complexity", () => {
     const result = validate({
       ...valid,
-      password: "abcdefghij",
-      confirmPassword: "abcdefghij",
+      password: lettersOnlyPassword,
+      confirmPassword: lettersOnlyPassword,
     });
 
     expect(result.isValid).toBe(false);
