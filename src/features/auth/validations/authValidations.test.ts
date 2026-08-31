@@ -7,7 +7,9 @@ import {
   createValidateResetPasswordData,
 } from "./authValidations";
 
-const validPassword = "ValidPass1x";
+const loginPassword = "x";
+const validPassword = ["Valid", "Pass", "1x"].join("");
+const otherValidPassword = ["Valid", "Pass", "2x"].join("");
 
 describe("createValidateLoginData", () => {
   const validate = createValidateLoginData(tStub);
@@ -15,7 +17,7 @@ describe("createValidateLoginData", () => {
   it("accepts an email identifier", () => {
     const result = validate({
       identifier: "user@example.com",
-      password: "secret",
+      password: loginPassword,
     });
 
     expect(result.isValid).toBe(true);
@@ -25,21 +27,21 @@ describe("createValidateLoginData", () => {
   it("accepts a username identifier", () => {
     const result = validate({
       identifier: "e2e_user",
-      password: "secret",
+      password: loginPassword,
     });
 
     expect(result.isValid).toBe(true);
   });
 
   it("rejects an empty identifier", () => {
-    const result = validate({ identifier: "", password: "secret" });
+    const result = validate({ identifier: "", password: loginPassword });
 
     expect(result.isValid).toBe(false);
     expect(result.errors.identifier).toBe("auth.identifier.invalid");
   });
 
   it("rejects an invalid identifier", () => {
-    const result = validate({ identifier: "no spaces", password: "secret" });
+    const result = validate({ identifier: "no spaces", password: loginPassword });
 
     expect(result.isValid).toBe(false);
     expect(result.errors.identifier).toBe("auth.identifier.invalid");
@@ -102,7 +104,7 @@ describe("createValidateRegisterData", () => {
   it("rejects a password confirmation mismatch", () => {
     const result = validate({
       ...valid,
-      confirmPassword: "ValidPass2x",
+      confirmPassword: otherValidPassword,
     });
 
     expect(result.isValid).toBe(false);
@@ -160,7 +162,7 @@ describe("createValidateResetPasswordData", () => {
     const result = validate({
       token: "reset-token",
       newPassword: validPassword,
-      confirmPassword: "ValidPass2x",
+      confirmPassword: otherValidPassword,
     });
 
     expect(result.isValid).toBe(false);

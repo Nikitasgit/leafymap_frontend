@@ -24,7 +24,7 @@ test.describe("Email auth", () => {
     await page.goto("/auth/signin");
 
     await page.getByLabel("Nom d'utilisateur ou Email").fill(e2eUser.email);
-    await page.getByLabel("Mot de passe").fill("WrongPassw0rd!");
+    await page.getByLabel("Mot de passe").fill("wrong");
     await page.getByRole("button", { name: "Se connecter", exact: true }).click();
 
     await expect(
