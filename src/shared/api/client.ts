@@ -10,8 +10,13 @@ export type ApiErrorResponse = {
   data?: Record<string, string | string[]>;
 };
 
+const apiBaseURL =
+  typeof window === "undefined"
+    ? process.env.API_URL || process.env.NEXT_PUBLIC_API_URL
+    : process.env.NEXT_PUBLIC_API_URL;
+
 export const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: apiBaseURL,
   withCredentials: true,
 });
 

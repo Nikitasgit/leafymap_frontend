@@ -17,7 +17,9 @@
     "src/shared/styles/index.ts",
     "src/shared/api/index.ts",
     "src/features/*/index.ts",
-    "src/features/*/types/index.ts"
+    "src/features/*/types/index.ts",
+    "src/**/*.test.ts",
+    "src/test/**"
   ],
   "ignoreDependencies": [
     "eslint",
