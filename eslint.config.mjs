@@ -44,6 +44,7 @@ const eslintConfig = defineConfig([
   },
   {
     files: ["src/**/*.{ts,tsx}"],
+    ignores: ["src/**/*.test.ts", "src/test/**"],
     plugins: {
       boundaries,
     },
@@ -136,6 +137,7 @@ const eslintConfig = defineConfig([
   },
   {
     files: ["src/shared/**/*.{ts,tsx}"],
+    ignores: ["src/shared/**/*.test.ts"],
     rules: {
       "no-restricted-imports": [
         "error",

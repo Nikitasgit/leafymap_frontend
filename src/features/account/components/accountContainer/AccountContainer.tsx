@@ -18,7 +18,7 @@ export default function AccountContainer() {
   }
 
   return (
-    <div className={styles.accountLayout}>
+    <div className={styles.accountLayout} data-testid="account-layout">
       <SideBar
         title={sidebar.title}
         isOpen={sidebar.isSideBarOpen}
