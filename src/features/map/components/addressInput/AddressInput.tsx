@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import useOnClickOutside from "@/shared/hooks/useOnClickOutside";
 import { useToast } from "@/shared/hooks/useToast";
@@ -9,6 +9,8 @@ import styles from "./AddressInput.module.scss";
 import TextField from "@/shared/ui/inputs/textField";
 import { AddressInputProps } from "./AddressInput.types";
 import { Location } from "@/shared/types/common";
+
+const SUGGESTION_DEBOUNCE_MS = 300;
 
 const AddressInput = ({
   onLocationSelect,
@@ -29,6 +31,7 @@ const AddressInput = ({
     useState(selectedLocation);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   if (value !== prevValue) {
     setPrevValue(value);
@@ -44,14 +47,24 @@ const AddressInput = ({
     }
   }
 
-  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInput(newValue);
     if (lastSelectedLocation && newValue !== lastSelectedLocation.label) {
       setLastSelectedLocation(null);
       onLocationSelect(null);
     }
-    if (newValue.length > 2) {
+
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    if (newValue.length <= 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    debounceTimerRef.current = setTimeout(async () => {
       try {
         const results = await fetchLocationSuggestions(newValue);
         setSuggestions(results);
@@ -60,9 +73,7 @@ const AddressInput = ({
         showError(t("addressInput.searchError"));
         setSuggestions([]);
       }
-    } else {
-      setSuggestions([]);
-    }
+    }, SUGGESTION_DEBOUNCE_MS);
   };
 
   const handleSuggestionClick = (suggestion: Location) => {
@@ -78,6 +89,14 @@ const AddressInput = ({
   };
 
   useOnClickOutside(wrapperRef, handleClickOutside);
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div ref={wrapperRef} className={styles.addressInputWrapper}>

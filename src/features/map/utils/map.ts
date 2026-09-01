@@ -1,8 +1,8 @@
 import type { InitialPlaceData } from "@/features/account";
-import { MapCoordinates, Location, MapboxFeature } from "@/shared/types/common";
+import { MapCoordinates, Location } from "@/shared/types/common";
 import { USER_MARKER } from "./constants";
 import { resolveRefObject } from "@/shared/api/normalizers/resolveRef";
-import axios from "axios";
+import { request } from "@/shared/api/client";
 
 /**
  * Converts pixel offset to geographic coordinates offset.
@@ -66,32 +66,20 @@ export const buildUserMarker = (
 
 /**
  * Reverse geocoding: converts coordinates to a human-readable address.
- * Uses Mapbox Geocoding API.
  */
 export const getLocationFromCoordinates = async (coordinates: {
   latitude: number;
   longitude: number;
 }): Promise<Location | null> => {
   const { latitude, longitude } = coordinates;
-  const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
   try {
-    const res = await fetch(
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${token}`
-    );
-    const data = await res.json();
-
-    if (data?.features?.length) {
-      const place = data.features[0];
-      const newLocation: Location = {
-        type: "Point",
-        label: place.place_name,
-        coordinates: [longitude, latitude],
-        id: place.id,
-      };
-      return newLocation;
-    }
-    return null;
+    const location = await request<Location | null>({
+      method: "GET",
+      url: "/api/geocode/reverse",
+      params: { lng: longitude, lat: latitude },
+    });
+    return location;
   } catch (error) {
     console.error("Error fetching location data:", error);
     return null;
@@ -100,32 +88,15 @@ export const getLocationFromCoordinates = async (coordinates: {
 
 /**
  * Forward geocoding: searches for places matching a text query.
- * Restricted to France (country: "fr") and returns French localized names.
- * Used for the address autocomplete input.
+ * Restricted to France and returns French localized names.
  */
 export const fetchLocationSuggestions = async (
   input: string
 ): Promise<Location[]> => {
-  const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
-
-  const response = await axios.get(
-    `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
-      input
-    )}.json`,
-    {
-      params: {
-        access_token: mapboxAccessToken,
-        country: "fr",
-        language: "fr",
-        limit: 5,
-      },
-    }
-  );
-
-  return response.data.features.map((feature: MapboxFeature) => ({
-    type: "Point",
-    id: feature.id,
-    label: feature.place_name_fr || feature.place_name,
-    coordinates: [feature.center[0], feature.center[1]],
-  }));
+  const data = await request<Location[]>({
+    method: "GET",
+    url: "/api/geocode/suggest",
+    params: { q: input },
+  });
+  return Array.isArray(data) ? data : [];
 };
