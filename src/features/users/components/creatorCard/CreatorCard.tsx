@@ -7,7 +7,7 @@ import Image from "next/image";
 import SubscribersCounter from "@/shared/ui/counters/subscribersCounter";
 import ActionButtons from "@/shared/ui/actions/actionButtons";
 import { PlaceCategoryBadge } from "@/features/places";
-import creatorDefaultsSvg from "@public/images/creator_default.png";
+import creatorDefaultsSvg from "@public/images/creator_default.svg";
 import { getDisplayName } from "@/shared/utils/userDisplay";
 import { resolveRefObject } from "@/shared/api/normalizers/resolveRef";
 
@@ -35,6 +35,7 @@ const CreatorCard: React.FC<CreatorCardProps> = ({ user, place, actions }) => {
           }
           alt={displayName}
           fill
+          sizes="60px"
           className={styles.cardImage}
         />
       </div>

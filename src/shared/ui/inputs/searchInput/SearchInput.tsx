@@ -6,7 +6,7 @@ import useOnClickOutside from "@/shared/hooks/useOnClickOutside";
 import styles from "./SearchInput.module.scss";
 import TextField from "@/shared/ui/inputs/textField";
 import { SearchInputProps, SearchSuggestion } from "./SearchInput.types";
-import creatorDefaultsSvg from "@public/images/creator_default.png";
+import creatorDefaultsSvg from "@public/images/creator_default.svg";
 import { MapPin } from "lucide-react";
 
 const SearchInput = <T extends SearchSuggestion>({

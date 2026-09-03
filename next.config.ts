@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     includePaths: [path.resolve(process.cwd(), "src")],
   },
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",

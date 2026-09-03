@@ -25,12 +25,12 @@ export type GoogleSignInResult = {
 };
 
 export const authApi = {
-  getMe: async (): Promise<User> => {
-    const data = await request<{ user: User }>({
+  getMe: async (): Promise<User | null> => {
+    const data = await request<{ user: User | null }>({
       method: "GET",
       url: "/api/auth/me",
     });
-    return data.user;
+    return data.user ?? null;
   },
 
   signIn: async ({

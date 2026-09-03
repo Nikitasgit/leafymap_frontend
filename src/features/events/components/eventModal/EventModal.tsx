@@ -12,6 +12,7 @@ import styles from "./EventModal.module.scss";
 import { capitalizeFirstLetter } from "@/shared/utils/functions";
 import EventDetails from "../eventDetails";
 import { resolveRefObject } from "@/shared/api/normalizers/resolveRef";
+import { areEventBookingsOpen } from "../../utils/constants";
 
 export interface EventModalProps {
   isOpen: boolean;
@@ -77,7 +78,7 @@ const EventModal: React.FC<EventModalProps> = ({
           >
             {t("actions.seeMore")}
           </Button>
-          {event.isBookable && event.lifecycleStatus === "upcoming" && (
+          {event.isBookable && areEventBookingsOpen(event.lifecycleStatus) && (
             <Button
               type="button"
               variant="primary"

@@ -14,14 +14,14 @@ import styles from "./EventBookingsManageTab.module.scss";
 interface EventBookingsManageListProps {
   eventBookings: EventBookingWithUser[];
   maxSeatsPerBooking: number;
-  hasEventStarted?: boolean;
+  areBookingsClosed?: boolean;
   onChange?: () => void;
 }
 
 export default function EventBookingsManageList({
   eventBookings,
   maxSeatsPerBooking,
-  hasEventStarted = false,
+  areBookingsClosed = false,
   onChange,
 }: EventBookingsManageListProps) {
   const { t } = useTranslation("events");
@@ -67,7 +67,7 @@ export default function EventBookingsManageList({
                   count: booking.seats,
                 })}
               </p>
-              {hasEventStarted ? (
+              {areBookingsClosed ? (
                 <p className={styles.lockedInfo}>
                   {t("eventBookingsManageList.lockedMessage")}
                 </p>

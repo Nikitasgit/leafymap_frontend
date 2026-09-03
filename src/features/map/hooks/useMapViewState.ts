@@ -46,7 +46,8 @@ function readViewFromParams(params: URLSearchParams): MapViewState | null {
  * Initialization priority (evaluated once at mount):
  *  1. `lat`/`lng`/`z` present in URL  → restore that view
  *  2. nothing in URL, permission already granted → resolve position, then render
- *  3. nothing in URL, permission prompt/denied → render at Paris, let GeolocateControl handle it
+ *  3. nothing in URL, permission prompt/denied → render at default view;
+ *     the user can click the locate control (no prompt on load)
  *
  * The `creator` param is handled separately by MapPageContainer; this hook
  * never reads or writes it.
@@ -74,7 +75,7 @@ export function useMapViewState() {
   // When geolocation permission is already granted, resolve user position
   // *before* the map renders to avoid the "Paris flash then fly" effect.
   // When permission is still "prompt" or "denied", give up immediately so the
-  // map renders at Paris and lets GeolocateControl handle the prompt.
+  // map renders at the default view. The user can click the locate control.
   useEffect(() => {
     if (!needsGeolocation) return;
     if (typeof navigator === "undefined" || !navigator.geolocation) {

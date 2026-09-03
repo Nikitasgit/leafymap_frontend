@@ -1,0 +1,66 @@
+@use "@/shared/styles/abstracts/variables" as *;
+@use "@/shared/styles/abstracts/functions" as *;
+@use "@/shared/styles/abstracts/mixins" as *;
+
+.banner {
+  position: fixed;
+  bottom: spacing(2);
+  left: spacing(2);
+  z-index: 1200;
+  display: flex;
+  align-items: flex-start;
+  gap: spacing(1);
+  width: calc(100% - #{spacing(4)});
+  max-width: 400px;
+  padding: spacing(1.5);
+  background-color: $primary-color;
+  color: $white;
+  border-radius: rem(8);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  margin: 0 0 spacing(0.25);
+  font-size: rem(14);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.body {
+  margin: 0;
+  font-size: rem(13);
+  line-height: 1.4;
+}
+
+.cta {
+  display: inline-block;
+  margin-top: spacing(0.5);
+  color: $white;
+  font-size: rem(13);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.close {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: rem(4);
+  background: transparent;
+  color: $white;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}

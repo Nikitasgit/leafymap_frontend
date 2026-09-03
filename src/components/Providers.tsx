@@ -52,7 +52,7 @@ export default function Providers({ children, locale = "fr" }: ProvidersProps) {
         "reviews",
         "admin",
       ],
-      preload: i18nConfig.locales,
+      preload: [locale],
       interpolation: {
         escapeValue: false,
         defaultVariables: { appName: APP_NAME },

@@ -1,4 +1,5 @@
 import { i18nConfig } from "@/i18nConfig";
+import { APP_URL } from "@/shared/config/app";
 
 export function stripLocaleFromPath(
   pathname: string,
@@ -47,4 +48,16 @@ export function getLocaleSwitchPath(
   }
 
   return `/${locale}${pathWithoutLocale}`;
+}
+
+export function localizedUrl(
+  locale: string,
+  path = "/",
+  config = i18nConfig
+): string {
+  const pathname = getLocalizedPath(path, locale, config);
+  if (pathname === "/") {
+    return APP_URL;
+  }
+  return `${APP_URL}${pathname}`;
 }

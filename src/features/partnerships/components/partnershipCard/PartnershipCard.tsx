@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { ExternalLink } from "lucide-react";
 import ThreeDotsMenu from "@/shared/ui/threeDotsMenu";
 import styles from "./PartnershipCard.module.scss";
-import creatorDefaultsSvg from "@public/images/creator_default.png";
+import creatorDefaultsSvg from "@public/images/creator_default.svg";
 import CreatorCategoryBadge from "@/features/users/components/creatorCategoryBadge";
 import type { PartnershipCardProps } from "./PartnershipCard.types";
 

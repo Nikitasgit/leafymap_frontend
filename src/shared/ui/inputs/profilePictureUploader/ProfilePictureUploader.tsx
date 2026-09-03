@@ -6,7 +6,7 @@ import useSubmitImages from "@/shared/hooks/useSubmitImages";
 import useDeleteImages from "@/shared/hooks/useDeleteImages";
 import { Image as IImage } from "@/shared/types/image";
 import placeDefaultsSvg from "@public/images/place_default.svg";
-import creatorDefaultsSvg from "@public/images/creator_default.png";
+import creatorDefaultsSvg from "@public/images/creator_default.svg";
 import eventDefaultsSvg from "@public/images/event_default.svg";
 import LoadingSpinner from "@/shared/ui/loading/loadingSpinner";
 

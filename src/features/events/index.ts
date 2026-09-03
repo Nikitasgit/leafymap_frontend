@@ -13,7 +13,7 @@ export type {
 } from "./types";
 
 // Utils
-export { ACTIVE_LIFECYCLE_STATUSES } from "./utils/constants";
+export { ACTIVE_LIFECYCLE_STATUSES, areEventBookingsOpen } from "./utils/constants";
 export {
   getEventCreatorId,
   getEventLocation,

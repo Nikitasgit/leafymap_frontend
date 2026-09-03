@@ -10,6 +10,7 @@ import TabsContainer from "@/shared/ui/tabs/tabsContainer";
 import Tab from "@/shared/ui/tabs/tab";
 import EventForm from "@/features/events/components/eventForm";
 import { useEvent } from "@/features/events/hooks/useEvent";
+import { areEventBookingsOpen } from "@/features/events/utils/constants";
 import EventBookingsManageTab from "@/features/eventBookings/components/eventBookingsManageTab";
 import { useEventInvitations } from "@/features/eventInvitations/hooks/useEventInvitations";
 import type { Partnership } from "@/features/partnerships/types";
@@ -60,7 +61,7 @@ const EventModifyContainer = () => {
                   maxSeatsPerBooking={event?.maxSeatsPerBooking || 1}
                   capacity={event?.capacity}
                   bookedSeats={event?.bookedSeats}
-                  hasEventStarted={event?.lifecycleStatus !== "upcoming"}
+                  areBookingsClosed={!areEventBookingsOpen(event?.lifecycleStatus)}
                 />
               ) : (
                 <EventForm

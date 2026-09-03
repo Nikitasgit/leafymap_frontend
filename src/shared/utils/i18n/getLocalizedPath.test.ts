@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 import {
   getLocaleSwitchPath,
   getLocalizedPath,
+  localizedUrl,
   stripLocaleFromPath,
 } from "./getLocalizedPath";
+import { APP_URL } from "@/shared/config/app";
 
 describe("stripLocaleFromPath", () => {
   it("strips a locale prefix", () => {
@@ -38,5 +40,17 @@ describe("getLocaleSwitchPath", () => {
     expect(getLocaleSwitchPath("/account", "fr")).toBe("/fr/account");
     expect(getLocaleSwitchPath("/account", "en")).toBe("/en/account");
     expect(getLocaleSwitchPath("/", "fr")).toBe("/fr");
+  });
+});
+
+describe("localizedUrl", () => {
+  it("omits the locale prefix for the default locale", () => {
+    expect(localizedUrl("fr", "/")).toBe(APP_URL);
+    expect(localizedUrl("fr", "/map")).toBe(`${APP_URL}/map`);
+  });
+
+  it("prefixes a non-default locale", () => {
+    expect(localizedUrl("en", "/")).toBe(`${APP_URL}/en`);
+    expect(localizedUrl("en", "/map")).toBe(`${APP_URL}/en/map`);
   });
 });

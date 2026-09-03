@@ -111,7 +111,7 @@
   "eventBookingsManageList": {
     "seatsBooked_one": "{{count}} place réservée",
     "seatsBooked_other": "{{count}} places réservées",
-    "lockedMessage": "Cet évènement a déjà commencé ou est terminé, cette réservation ne peut plus être modifiée ni annulée.",
+    "lockedMessage": "Cet évènement est terminé, cette réservation ne peut plus être modifiée ni annulée.",
     "editSeats": "Modifier les places",
     "editSeatsAriaLabel": "Modifier les places réservées",
     "cancelBookingAriaLabel": "Annuler la réservation",
@@ -197,9 +197,9 @@
     "refuseAriaLabel": "Refuser l'invitation"
   },
   "bookingLimits": {
-    "lockedMessage": "Cet évènement a déjà commencé ou est terminé, votre réservation ne peut plus être modifiée ni annulée.",
-    "lockedParticipationMessage": "Cet évènement a déjà commencé ou est terminé, votre participation ne peut plus être annulée.",
-    "closedMessage": "Cet évènement a déjà commencé ou est terminé, les réservations sont fermées.",
+    "lockedMessage": "Cet évènement est terminé, votre réservation ne peut plus être modifiée ni annulée.",
+    "lockedParticipationMessage": "Cet évènement est terminé, votre participation ne peut plus être annulée.",
+    "closedMessage": "Cet évènement est terminé, les réservations sont fermées.",
     "fullMessage": "Cet évènement est complet, il ne reste plus de places disponibles."
   },
   "createEventBooking": {

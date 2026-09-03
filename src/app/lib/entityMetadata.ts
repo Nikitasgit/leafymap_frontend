@@ -1,5 +1,5 @@
 import { capitalizeFirstLetter } from "@/shared/utils/functions";
-import { APP_NAME } from "@/shared/config/app";
+import { APP_NAME, APP_URL } from "@/shared/config/app";
 import { Metadata } from "next";
 import { getUserById } from "@/features/users/api/usersApi";
 import { getEventById } from "@/features/events/api/eventsApi";
@@ -31,8 +31,12 @@ function buildShareMetadata(
   type: "profile" | "website" = "website"
 ): Metadata {
   return {
+    metadataBase: new URL(APP_URL),
     title,
     description,
+    alternates: {
+      canonical: "./",
+    },
     openGraph: {
       title,
       description,

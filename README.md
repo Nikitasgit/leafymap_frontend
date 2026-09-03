@@ -598,7 +598,6 @@ L'application respecte les standards d'accessibilité suivants :
 
 ## 🚢 Déploiement
 
-- **Platform** : Vercel (ou autre plateforme)
-- **URL** : yourdomain.com
-- **Auto-deploy** : Sur push `main`
-- **Preview** : Une URL par PR
+- **Frontend** : Vercel — `https://leafymap.com`, auto-deploy sur push `main`, preview par PR
+- **API** : Render (web service Node) — voir le README backend
+- **Images** : AWS S3 (stockage, pas l’hébergement de l’API)

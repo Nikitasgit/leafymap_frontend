@@ -7,7 +7,7 @@ import styles from "./EventSchedule.module.scss";
 import { formatDateShort, sortPeriodsByStartDate } from "@/shared/utils/dates";
 import { EventScheduleProps } from "./EventSchedule.types";
 import { Collaborator } from "@/features/places/types/collaborators";
-import creatorDefaultsSvg from "@public/images/creator_default.png";
+import creatorDefaultsSvg from "@public/images/creator_default.svg";
 import { resolveRefId } from "@/shared/api/normalizers/resolveRef";
 
 const EventSchedule: React.FC<EventScheduleProps> = ({ schedule, users }) => {

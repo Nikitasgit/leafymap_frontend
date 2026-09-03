@@ -14,7 +14,7 @@ interface EventBookingsManageTabProps {
   maxSeatsPerBooking: number;
   capacity?: number | null;
   bookedSeats?: number;
-  hasEventStarted?: boolean;
+  areBookingsClosed?: boolean;
 }
 
 export default function EventBookingsManageTab({
@@ -22,7 +22,7 @@ export default function EventBookingsManageTab({
   maxSeatsPerBooking,
   capacity,
   bookedSeats,
-  hasEventStarted = false,
+  areBookingsClosed = false,
 }: EventBookingsManageTabProps) {
   const { t } = useTranslation("events");
   const { eventBookings, isLoading, refetch } =
@@ -64,7 +64,7 @@ export default function EventBookingsManageTab({
         <EventBookingsManageList
           eventBookings={eventBookings}
           maxSeatsPerBooking={maxSeatsPerBooking}
-          hasEventStarted={hasEventStarted}
+          areBookingsClosed={areBookingsClosed}
           onChange={refetch}
         />
       )}

@@ -5,7 +5,7 @@ import Image from "next/image";
 import Button from "@/shared/ui/buttons/button";
 import EventStatus from "@/features/events/components/eventStatus";
 import EmptyState from "@/shared/ui/noResults/emptyState";
-import creatorDefaultsSvg from "@public/images/creator_default.png";
+import creatorDefaultsSvg from "@public/images/creator_default.svg";
 import { useTranslation } from "react-i18next";
 import { resolveRefObject } from "@/shared/api/normalizers/resolveRef";
 

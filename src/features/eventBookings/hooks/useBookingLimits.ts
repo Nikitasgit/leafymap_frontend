@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { areEventBookingsOpen } from "@/features/events/utils/constants";
 
 interface UseBookingLimitsParams {
   maxSeatsPerBooking: number;
@@ -16,9 +17,9 @@ export function useBookingLimits({
 }: UseBookingLimitsParams) {
   const { t } = useTranslation("events");
 
-  const hasEventStarted = lifecycleStatus !== "upcoming";
+  const areBookingsOpen = areEventBookingsOpen(lifecycleStatus);
   const isFull = remainingSeats !== null && remainingSeats <= 0;
-  const canEdit = !hasEventStarted;
+  const canEdit = areBookingsOpen;
 
   const maxSelectable = useMemo(() => {
     if (remainingSeats === null) return maxSeatsPerBooking;
@@ -44,7 +45,6 @@ export function useBookingLimits({
     maxSelectable,
     maxEditable,
     canEdit,
-    hasEventStarted,
     isFull,
     lockedMessage,
     lockedParticipationMessage,

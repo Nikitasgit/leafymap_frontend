@@ -132,16 +132,45 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
       if (setLoading) setLoading(isLoading);
     }, [isLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // Start GeolocateControl once: with trackUserLocation + followUserLocation false,
-    // Mapbox only draws the dot without moving the camera (see mapbox-gl _onSuccess).
+    // Only auto-trigger GeolocateControl when permission is already granted.
+    // Prompting on load fails Lighthouse Best Practices and is unnecessary:
+    // first-time visitors keep the France view and use the locate button.
     useEffect(() => {
       if (!isMapReady || !activateGeolocationOnMount || geolocateTriggeredRef.current)
         return;
-      geolocateTriggeredRef.current = true;
-      const timeoutId = window.setTimeout(() => {
-        geolocateRef.current?.trigger();
-      }, GEOLOCATE_TRIGGER_MS);
-      return () => window.clearTimeout(timeoutId);
+
+      let cancelled = false;
+      let timeoutId: number | undefined;
+
+      const triggerGeolocate = () => {
+        if (cancelled || geolocateTriggeredRef.current) return;
+        geolocateTriggeredRef.current = true;
+        timeoutId = window.setTimeout(() => {
+          geolocateRef.current?.trigger();
+        }, GEOLOCATE_TRIGGER_MS);
+      };
+
+      if (!navigator.permissions?.query) {
+        return () => {
+          cancelled = true;
+        };
+      }
+
+      navigator.permissions
+        .query({ name: "geolocation" as PermissionName })
+        .then((result) => {
+          if (result.state === "granted") {
+            triggerGeolocate();
+          }
+        })
+        .catch(() => {
+          // Permission API unavailable or denied — do not prompt on load.
+        });
+
+      return () => {
+        cancelled = true;
+        if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+      };
     }, [isMapReady, activateGeolocationOnMount]);
 
     return (
