@@ -42,8 +42,8 @@ export interface MapComponentProps {
   /** Called on every map movement when the parent owns the view state. */
   onViewStateChange?: (vs: MapViewState) => void;
   /**
-   * If true, starts the GeolocateControl once after load (`trigger()`): shows the
-   * blue dot when permission allows. Pair with `followUserLocationWhenGeolocating`.
+   * If true, starts the GeolocateControl after load when geolocation permission
+   * is already granted (`trigger()`). Does not prompt on first visit.
    */
   activateGeolocationOnMount?: boolean;
   /**

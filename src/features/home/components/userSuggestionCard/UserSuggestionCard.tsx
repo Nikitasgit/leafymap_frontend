@@ -6,7 +6,7 @@ import Image from "next/image";
 import CreatorCategoryBadge from "@/features/users/components/creatorCategoryBadge";
 import { MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
-import creatorDefaultSvg from "@public/images/creator_default.png";
+import creatorDefaultSvg from "@public/images/creator_default.svg";
 import { getDisplayName } from "@/shared/utils/userDisplay";
 
 const UserSuggestionCard = ({ user }: { user: UserPopulated }) => {

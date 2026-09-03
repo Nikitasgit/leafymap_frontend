@@ -1,39 +1,26 @@
 import { MetadataRoute } from "next";
-import { APP_URL } from "@/shared/config/app";
+import { i18nConfig } from "@/i18nConfig";
+import { localizedUrl } from "@/shared/utils/i18n/getLocalizedPath";
+
+const PUBLIC_PAGES: {
+  path: string;
+  changeFrequency: NonNullable<MetadataRoute.Sitemap[number]["changeFrequency"]>;
+  priority: number;
+}[] = [
+  { path: "/", changeFrequency: "daily", priority: 1 },
+  { path: "/map", changeFrequency: "daily", priority: 0.9 },
+  { path: "/legal/cgu", changeFrequency: "monthly", priority: 0.3 },
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = APP_URL;
+  const lastModified = new Date();
 
-  return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/map`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/auth/signin`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/auth/register`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/legal/cgu`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.3,
-    },
-  ];
+  return i18nConfig.locales.flatMap((locale) =>
+    PUBLIC_PAGES.map((page) => ({
+      url: localizedUrl(locale, page.path),
+      lastModified,
+      changeFrequency: page.changeFrequency,
+      priority: page.priority,
+    }))
+  );
 }

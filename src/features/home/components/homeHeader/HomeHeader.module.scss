@@ -176,9 +176,7 @@
   overflow: hidden;
   text-decoration: none;
   color: $white;
-  background-image: url("/images/map-illustration.jpg");
-  background-size: cover;
-  background-position: center;
+  background-color: $grey-700;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   transition: box-shadow 0.2s ease;
 
@@ -191,6 +189,12 @@
   }
 }
 
+.cardRightImg {
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
 .cardRightGradient {
   position: absolute;
   inset: 0;
@@ -200,13 +204,13 @@
     rgba(0, 0, 0, 0.4) 22%,
     transparent 50%
   );
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
 }
 
 .cardRightContent {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   height: 100%;
   padding: spacing(1.5);
   @include flex(column, flex-end, flex-start, spacing(0.25));

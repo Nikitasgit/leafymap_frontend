@@ -111,7 +111,7 @@
   "eventBookingsManageList": {
     "seatsBooked_one": "{{count}} seat booked",
     "seatsBooked_other": "{{count}} seats booked",
-    "lockedMessage": "This event has already started or ended; this booking can no longer be modified or cancelled.",
+    "lockedMessage": "This event has ended; this booking can no longer be modified or cancelled.",
     "editSeats": "Edit seats",
     "editSeatsAriaLabel": "Edit booked seats",
     "cancelBookingAriaLabel": "Cancel booking",
@@ -197,9 +197,9 @@
     "refuseAriaLabel": "Decline invitation"
   },
   "bookingLimits": {
-    "lockedMessage": "This event has already started or ended; your booking can no longer be modified or cancelled.",
-    "lockedParticipationMessage": "This event has already started or ended; your participation can no longer be cancelled.",
-    "closedMessage": "This event has already started or ended; bookings are closed.",
+    "lockedMessage": "This event has ended; your booking can no longer be modified or cancelled.",
+    "lockedParticipationMessage": "This event has ended; your participation can no longer be cancelled.",
+    "closedMessage": "This event has ended; bookings are closed.",
     "fullMessage": "This event is full; there are no seats available."
   },
   "createEventBooking": {

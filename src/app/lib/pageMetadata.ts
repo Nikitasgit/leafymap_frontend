@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import initTranslations from "@/app/i18n";
-import { APP_NAME } from "@/shared/config/app";
+import { APP_NAME, APP_URL } from "@/shared/config/app";
 import { i18nConfig } from "@/i18nConfig";
+import { localizedUrl } from "@/shared/utils/i18n/getLocalizedPath";
 
 const MARKETING_NS = "marketing";
 
@@ -45,20 +46,37 @@ function withAppName(value: string): string {
   return value.replace(/\{\{appName\}\}/g, APP_NAME);
 }
 
+function localeAlternates(locale: string, path = "/"): Metadata["alternates"] {
+  return {
+    canonical: localizedUrl(locale, path),
+    languages: {
+      fr: localizedUrl("fr", path),
+      en: localizedUrl("en", path),
+      "x-default": localizedUrl(i18nConfig.defaultLocale, path),
+    },
+  };
+}
+
 function buildMetadata(
   title: string,
   description: string,
-  locale: string
+  locale: string,
+  path?: string
 ): Metadata {
   return {
+    metadataBase: new URL(APP_URL),
     title,
     description,
+    alternates: path
+      ? localeAlternates(locale, path)
+      : { canonical: "./" },
     openGraph: {
       title,
       description,
       siteName: APP_NAME,
       locale,
       type: "website",
+      ...(path ? { url: localizedUrl(locale, path) } : {}),
     },
     twitter: {
       card: "summary_large_image",
@@ -73,8 +91,12 @@ export async function getDefaultMetadata(locale?: string): Promise<Metadata> {
   const description = withAppName(t("meta.defaultDescription"));
 
   return {
+    metadataBase: new URL(APP_URL),
     title: APP_NAME,
     description,
+    alternates: {
+      canonical: "./",
+    },
     openGraph: {
       title: APP_NAME,
       description,
@@ -116,14 +138,14 @@ export async function getHomeMetadata(locale?: string): Promise<Metadata> {
   const { t, locale: resolvedLocale } = await getMarketingT(locale);
   const title = withAppName(t("meta.homeTitle"));
   const description = withAppName(t("meta.homeDescription"));
-  return buildMetadata(title, description, resolvedLocale);
+  return buildMetadata(title, description, resolvedLocale, "/");
 }
 
 export async function getMapMetadata(locale?: string): Promise<Metadata> {
   const { t, locale: resolvedLocale } = await getMarketingT(locale);
   const title = withAppName(t("meta.mapTitle"));
   const description = withAppName(t("meta.mapDescription"));
-  return buildMetadata(title, description, resolvedLocale);
+  return buildMetadata(title, description, resolvedLocale, "/map");
 }
 
 export async function getPageMetadata(

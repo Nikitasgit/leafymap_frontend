@@ -1,7 +1,6 @@
 "use client";
 
 import MapComponent from "../mapComponent";
-import "mapbox-gl/dist/mapbox-gl.css";
 import { useState, useRef, useEffect, useCallback } from "react";
 import styles from "./MapPageContainer.module.scss";
 import MapFiltersBar from "../mapFiltersBar";
@@ -30,7 +29,6 @@ const defaultFilters: MapFilters = {
   startDate: null,
   endDate: null,
 };
-//ttest
 const MapPageContainer = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
