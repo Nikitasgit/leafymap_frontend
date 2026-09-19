@@ -2,6 +2,7 @@ import { createInstance, Resource } from "i18next";
 import { initReactI18next } from "react-i18next/initReactI18next";
 import resourcesToBackend from "i18next-resources-to-backend";
 import { i18nConfig } from "../i18nConfig";
+import { APP_NAME } from "@/shared/config/app";
 import { I18n } from "next-i18next";
 
 export default async function initTranslations(
@@ -32,6 +33,11 @@ export default async function initTranslations(
     fallbackNS: namespaces[0],
     ns: namespaces,
     preload: resources ? [] : [locale],
+    react: { useSuspense: false },
+    interpolation: {
+      escapeValue: false,
+      defaultVariables: { appName: APP_NAME },
+    },
   });
 
   return {

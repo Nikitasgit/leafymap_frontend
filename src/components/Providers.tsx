@@ -6,10 +6,10 @@ import { store } from "@/store";
 import AppInitializer from "./initializers/AppInitializer";
 import { Toaster } from "sonner";
 import { I18nextProvider } from "react-i18next";
-import { createInstance } from "i18next";
+import { createInstance, type Resource } from "i18next";
 import { initReactI18next } from "react-i18next/initReactI18next";
 import resourcesToBackend from "i18next-resources-to-backend";
-import { i18nConfig } from "@/i18nConfig";
+import { i18nConfig, i18nNamespaces } from "@/i18nConfig";
 import { APP_NAME } from "@/shared/config/app";
 import { ThemeProvider } from "@mui/material/styles";
 import { muiTheme } from "@/shared/styles/muiTheme";
@@ -17,42 +17,36 @@ import { muiTheme } from "@/shared/styles/muiTheme";
 interface ProvidersProps {
   children: React.ReactNode;
   locale?: string;
+  resources?: Resource;
 }
 
-export default function Providers({ children, locale = "fr" }: ProvidersProps) {
+export default function Providers({
+  children,
+  locale = "fr",
+  resources,
+}: ProvidersProps) {
   const [i18nInstance] = React.useState(() => {
     const instance = createInstance();
     instance.use(initReactI18next);
-    instance.use(
-      resourcesToBackend(
-        (language: string, namespace: string) =>
-          import(`../../public/locales/${language}/${namespace}.json`)
-      )
-    );
+    if (!resources) {
+      instance.use(
+        resourcesToBackend(
+          (language: string, namespace: string) =>
+            import(`../../public/locales/${language}/${namespace}.json`)
+        )
+      );
+    }
 
     instance.init({
       lng: locale,
+      resources,
       fallbackLng: i18nConfig.defaultLocale,
       supportedLngs: i18nConfig.locales,
       defaultNS: "common",
       fallbackNS: "common",
-      ns: [
-        "common",
-        "subscription",
-        "marketing",
-        "errors",
-        "validation",
-        "events",
-        "auth",
-        "messages",
-        "notifications",
-        "map",
-        "account",
-        "profile",
-        "reviews",
-        "admin",
-      ],
-      preload: [locale],
+      ns: [...i18nNamespaces],
+      preload: resources ? [] : [locale],
+      react: { useSuspense: false },
       interpolation: {
         escapeValue: false,
         defaultVariables: { appName: APP_NAME },
