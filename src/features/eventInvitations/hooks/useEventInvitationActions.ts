@@ -12,7 +12,7 @@ export const useEventInvitationActions = (onUpdate?: () => void) => {
     async (
       eventInvitationUpdates: Array<{
         id: string;
-        status?: "pending" | "accepted" | "refused" | "cancelled" | "completed";
+        status?: "pending" | "accepted" | "refused" | "cancelled";
         deleted?: boolean;
       }>,
       successMessage?: string,

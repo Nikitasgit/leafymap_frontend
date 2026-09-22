@@ -76,7 +76,7 @@ export const selectNotificationsList = (state: RootState): Notification[] =>
   state.notifications.notifications;
 
 export const selectUnreadCount = (state: RootState): number =>
-  state.notifications.notifications.filter((n) => n.read !== true).length;
+  state.notifications.notifications.filter((n) => !n.readAt).length;
 
 export const selectUnreadConversations = (state: RootState): number =>
   state.notifications.unreadConversations;

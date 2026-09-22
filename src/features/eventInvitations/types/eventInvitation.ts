@@ -29,6 +29,6 @@ export interface EventInvitationPopulated {
     image?: Image;
     userCategory?: UserCategory;
   };
-  status: "pending" | "accepted" | "refused" | "cancelled" | "completed";
+  status: "pending" | "accepted" | "refused" | "cancelled";
   deleted?: boolean;
 }

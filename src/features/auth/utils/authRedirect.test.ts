@@ -4,19 +4,25 @@ import { getAuthenticatedRedirectPath } from "./authRedirect";
 describe("getAuthenticatedRedirectPath", () => {
   it("sends users who have not accepted CGU to accept-cgu", () => {
     expect(
-      getAuthenticatedRedirectPath({ acceptedCGU: false, role: "user" }),
+      getAuthenticatedRedirectPath({ role: "user" }),
     ).toBe("/auth/accept-cgu");
   });
 
   it("sends admins to the admin users page", () => {
     expect(
-      getAuthenticatedRedirectPath({ acceptedCGU: true, role: "admin" }),
+      getAuthenticatedRedirectPath({
+        acceptedAt: "2026-01-01T00:00:00.000Z",
+        role: "admin",
+      }),
     ).toBe("/admin/users");
   });
 
   it("sends regular users to account", () => {
     expect(
-      getAuthenticatedRedirectPath({ acceptedCGU: true, role: "user" }),
+      getAuthenticatedRedirectPath({
+        acceptedAt: "2026-01-01T00:00:00.000Z",
+        role: "user",
+      }),
     ).toBe("/account");
   });
 

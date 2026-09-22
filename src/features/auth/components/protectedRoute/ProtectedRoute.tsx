@@ -32,7 +32,7 @@ const ProtectedRoute = ({
         router.push(redirectTo);
         return;
       }
-      if (user.acceptedCGU === false) {
+      if (!user.acceptedAt) {
         router.push(ACCEPT_CGU_PATH);
         return;
       }
@@ -53,7 +53,7 @@ const ProtectedRoute = ({
 
   if (
     !user ||
-    user.acceptedCGU === false ||
+    !user.acceptedAt ||
     (allowedUserTypes && !allowedUserTypes.includes(user.userType)) ||
     (allowedRoles && !allowedRoles.includes(user.role || "user"))
   ) {
