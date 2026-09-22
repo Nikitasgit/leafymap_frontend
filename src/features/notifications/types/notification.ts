@@ -36,7 +36,6 @@ export interface Notification {
   action: NotificationActionType;
   reference: string;
   referenceType: NotificationReferenceType;
-  read?: boolean;
   readAt?: string;
   createdAt: string;
   updatedAt: string;

@@ -29,7 +29,7 @@ export interface User extends BaseEntity {
   place?: Place;
   id: string;
   userCategory?: string | UserCategory;
-  acceptedCGU?: boolean;
+  acceptedAt?: string;
   bannedAt?: string;
   banReason?: string;
   banDuration?: number;

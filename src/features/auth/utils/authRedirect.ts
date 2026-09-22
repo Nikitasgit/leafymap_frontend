@@ -1,9 +1,9 @@
 import type { User } from "@/features/users/types";
 
 export const getAuthenticatedRedirectPath = (
-  user: Pick<User, "acceptedCGU" | "role"> | null | undefined,
+  user: Pick<User, "acceptedAt" | "role"> | null | undefined,
 ) => {
-  if (user?.acceptedCGU === false) {
+  if (user && !user.acceptedAt) {
     return "/auth/accept-cgu";
   }
 
