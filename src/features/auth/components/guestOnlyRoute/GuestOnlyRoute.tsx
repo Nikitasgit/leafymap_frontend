@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import LoadingBar from "@/shared/ui/loading/loadingBar";
 import { useAuth } from "../../hooks/useAuth";
@@ -17,14 +17,21 @@ const GuestOnlyRoute = ({
 }: GuestOnlyRouteProps) => {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const [sessionChecked, setSessionChecked] = useState(false);
 
   useEffect(() => {
-    if (!loading && user) {
+    if (!loading) {
+      setSessionChecked(true);
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (sessionChecked && user) {
       router.replace(getAuthenticatedRedirectPath(user));
     }
-  }, [loading, router, user]);
+  }, [sessionChecked, user, router]);
 
-  if (loading) {
+  if (!sessionChecked) {
     return <>{fallback}</>;
   }
 

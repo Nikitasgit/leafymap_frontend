@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, type FormEvent } from "react";
 import Link from "next/link";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import styles from "./SigninForm.module.scss";
@@ -20,9 +20,18 @@ const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 export default function SigninForm() {
   const { t } = useTranslation("subscription");
   const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
-  const { login, loginWithGoogle, loading } = useAuth();
+  const [otpCode, setOtpCode] = useState("");
+  const {
+    login,
+    loginWithGoogle,
+    completeTwoFactorLogin,
+    cancelTwoFactorLogin,
+    twoFactorChallengeToken,
+    loading,
+  } = useAuth();
   const { showError } = useToast();
   const isSubmitting = loading || isGoogleSubmitting;
+  const showTwoFactorStep = Boolean(twoFactorChallengeToken);
 
   const schema = useMemo(() => loginSchema(validationT(t)), [t]);
   const { values, errors, setField, handleSubmit } = useValidatedForm(
@@ -42,86 +51,137 @@ export default function SigninForm() {
     setIsGoogleSubmitting(false);
   };
 
+  const handleOtpSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!showTwoFactorStep || isSubmitting || !otpCode.trim()) return;
+    await completeTwoFactorLogin(otpCode.trim());
+  };
+
   return (
     <div className={styles.container}>
       {isSubmitting && <LoadingBar />}
 
       <div className={styles.formContainer}>
-        <h1>{t("signin.title")}</h1>
+        <h1>
+          {showTwoFactorStep ? t("signin.twoFactor.title") : t("signin.title")}
+        </h1>
 
-        <form onSubmit={onSubmit} className={styles.form} noValidate>
-          <TextField
-            label={t("signin.form.identifier.label")}
-            name="identifier"
-            type="text"
-            value={values.identifier}
-            onChange={(e) => setField("identifier", e.target.value)}
-            required
-            placeholder={t("signin.form.identifier.placeholder")}
-            disabled={isSubmitting}
-            error={!!errors.identifier}
-            fullWidth
-            errorMessage={errors.identifier}
-          />
-
-          <TextField
-            label={t("signin.form.password.label")}
-            name="password"
-            type="password"
-            value={values.password}
-            onChange={(e) => setField("password", e.target.value)}
-            required
-            placeholder={t("signin.form.password.placeholder")}
-            disabled={isSubmitting}
-            error={!!errors.password}
-            fullWidth
-            errorMessage={errors.password}
-          />
-
-          <div className={styles.forgotPasswordLink}>
-            <Link href="/auth/forgot-password">
-              {t("auth:signinForm.forgotPasswordLink")}
-            </Link>
-          </div>
-
-          <Button
-            type="submit"
-            variant="primary"
-            size="medium"
-            ariaLabel={t("signin.form.submit")}
-            disabled={isSubmitting}
-          >
-            {isSubmitting
-              ? t("signin.form.submitLoading")
-              : t("signin.form.submit")}
-          </Button>
-        </form>
-
-        {GOOGLE_CLIENT_ID && (
+        {showTwoFactorStep ? (
+          <form onSubmit={handleOtpSubmit} className={styles.form} noValidate>
+            <p className={styles.twoFactorHint}>
+              {t("signin.twoFactor.description")}
+            </p>
+            <TextField
+              label={t("signin.twoFactor.codeLabel")}
+              name="otpCode"
+              type="text"
+              value={otpCode}
+              onChange={(e) => setOtpCode(e.target.value)}
+              required
+              placeholder={t("signin.twoFactor.codePlaceholder")}
+              disabled={isSubmitting}
+              fullWidth
+            />
+            <Button
+              type="submit"
+              variant="primary"
+              size="medium"
+              ariaLabel={t("signin.twoFactor.submit")}
+              disabled={isSubmitting || !otpCode.trim()}
+            >
+              {isSubmitting
+                ? t("signin.form.submitLoading")
+                : t("signin.twoFactor.submit")}
+            </Button>
+            <button
+              type="button"
+              className={styles.backToCredentials}
+              onClick={() => {
+                cancelTwoFactorLogin();
+                setOtpCode("");
+              }}
+              disabled={isSubmitting}
+            >
+              {t("signin.twoFactor.back")}
+            </button>
+          </form>
+        ) : (
           <>
-            <div className={styles.divider}>
-              <span>{t("signin.divider")}</span>
-            </div>
-            <div className={styles.googleButton}>
-              <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-                <RegisterFormGoogleLogin
-                  loginWithGoogle={handleGoogleLogin}
-                  onGoogleFlowError={() => {
-                    showError(t("auth:signinForm.googleError"));
-                  }}
-                  loadingAriaLabel={t("googleButtonLoading")}
-                  disabled={isSubmitting}
-                  disabledLabel={t("signin.form.submitLoading")}
-                />
-              </GoogleOAuthProvider>
-            </div>
+            <form onSubmit={onSubmit} className={styles.form} noValidate>
+              <TextField
+                label={t("signin.form.identifier.label")}
+                name="identifier"
+                type="text"
+                value={values.identifier}
+                onChange={(e) => setField("identifier", e.target.value)}
+                required
+                placeholder={t("signin.form.identifier.placeholder")}
+                disabled={isSubmitting}
+                error={!!errors.identifier}
+                fullWidth
+                errorMessage={errors.identifier}
+              />
+
+              <TextField
+                label={t("signin.form.password.label")}
+                name="password"
+                type="password"
+                value={values.password}
+                onChange={(e) => setField("password", e.target.value)}
+                required
+                placeholder={t("signin.form.password.placeholder")}
+                disabled={isSubmitting}
+                error={!!errors.password}
+                fullWidth
+                errorMessage={errors.password}
+              />
+
+              <div className={styles.forgotPasswordLink}>
+                <Link href="/auth/forgot-password">
+                  {t("auth:signinForm.forgotPasswordLink")}
+                </Link>
+              </div>
+
+              <Button
+                type="submit"
+                variant="primary"
+                size="medium"
+                ariaLabel={t("signin.form.submit")}
+                disabled={isSubmitting}
+              >
+                {isSubmitting
+                  ? t("signin.form.submitLoading")
+                  : t("signin.form.submit")}
+              </Button>
+            </form>
+
+            {GOOGLE_CLIENT_ID && (
+              <>
+                <div className={styles.divider}>
+                  <span>{t("signin.divider")}</span>
+                </div>
+                <div className={styles.googleButton}>
+                  <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+                    <RegisterFormGoogleLogin
+                      loginWithGoogle={handleGoogleLogin}
+                      onGoogleFlowError={() => {
+                        showError(t("auth:signinForm.googleError"));
+                      }}
+                      loadingAriaLabel={t("googleButtonLoading")}
+                      disabled={isSubmitting}
+                      disabledLabel={t("signin.form.submitLoading")}
+                    />
+                  </GoogleOAuthProvider>
+                </div>
+              </>
+            )}
+
+            <p className={styles.signupLink}>
+              {t("signin.signupLink.text")}
+              <Link href="/auth/register">{t("signin.signupLink.link")}</Link>
+            </p>
           </>
         )}
-
-        <p className={styles.signupLink}>
-          {t("signin.signupLink.text")}
-          <Link href="/auth/register">{t("signin.signupLink.link")}</Link>
-        </p>
       </div>
     </div>
   );

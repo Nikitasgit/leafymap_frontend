@@ -26,6 +26,14 @@
     "messages": {
       "success": "Sign in successful!",
       "error": "Sign in failed"
+    },
+    "twoFactor": {
+      "title": "Two-factor authentication",
+      "description": "Enter the 6-digit code from your authenticator app, or a recovery code.",
+      "codeLabel": "Code",
+      "codePlaceholder": "123456",
+      "submit": "Verify",
+      "back": "Back to sign in"
     }
   },
   "form": {

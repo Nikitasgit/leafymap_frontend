@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { isAxiosError } from "@/shared/api/client";
 import { authApi } from "../api/authApi";
 import type { RootState } from "@/store";
@@ -8,7 +8,7 @@ export const fetchCurrentUser = createAsyncThunk(
   "auth/fetchCurrentUser",
   async () => {
     return authApi.getMe();
-  },
+  }
 );
 
 export const signIn = createAsyncThunk(
@@ -21,7 +21,7 @@ export const signIn = createAsyncThunk(
       identifier: string;
       password: string;
     },
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
       return await authApi.signIn({ identifier, password });
@@ -31,7 +31,7 @@ export const signIn = createAsyncThunk(
       }
       throw error;
     }
-  },
+  }
 );
 
 export const signInWithGoogle = createAsyncThunk(
@@ -45,7 +45,30 @@ export const signInWithGoogle = createAsyncThunk(
       }
       throw error;
     }
-  },
+  }
+);
+
+export const verifyTwoFactor = createAsyncThunk(
+  "auth/verifyTwoFactor",
+  async (
+    {
+      challengeToken,
+      code,
+    }: {
+      challengeToken: string;
+      code: string;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      return await authApi.verifyTwoFactor(challengeToken, code);
+    } catch (error) {
+      if (isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data);
+      }
+      throw error;
+    }
+  }
 );
 
 export const signOut = createAsyncThunk("auth/signOut", async () => {
@@ -56,12 +79,13 @@ type AuthState = {
   user: User | null;
   loading: boolean;
   error: string | null;
+  twoFactorChallengeToken: string | null;
 };
 
 const getRejectionMessage = (
   payload: unknown,
   errorMessage: string | undefined,
-  fallback: string,
+  fallback: string
 ): string => {
   if (
     payload &&
@@ -78,15 +102,49 @@ const initialState: AuthState = {
   user: null,
   loading: true,
   error: null,
+  twoFactorChallengeToken: null,
+};
+
+const applySignInResult = (
+  state: AuthState,
+  payload: {
+    user?: User;
+    twoFactorRequired?: boolean;
+    challengeToken?: string;
+  }
+) => {
+  state.loading = false;
+  if (payload.user) {
+    state.user = payload.user;
+    state.twoFactorChallengeToken = null;
+    return;
+  }
+  if (payload.twoFactorRequired && payload.challengeToken) {
+    state.twoFactorChallengeToken = payload.challengeToken;
+  }
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    cguAccepted(state, action: PayloadAction<{ emailNotifications: boolean }>) {
+      if (!state.user) return;
+      state.user.acceptedAt = new Date().toISOString();
+      state.user.preferences = {
+        ...state.user.preferences,
+        emailNotifications: action.payload.emailNotifications,
+      };
+    },
+    clearTwoFactorChallenge(state) {
+      state.twoFactorChallengeToken = null;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCurrentUser.pending, (state) => {
-      state.loading = true;
+      if (!state.user) {
+        state.loading = true;
+      }
       state.error = null;
     });
     builder.addCase(fetchCurrentUser.fulfilled, (state, action) => {
@@ -103,15 +161,14 @@ const authSlice = createSlice({
       state.error = null;
     });
     builder.addCase(signIn.fulfilled, (state, action) => {
-      state.loading = false;
-      state.user = action.payload;
+      applySignInResult(state, action.payload);
     });
     builder.addCase(signIn.rejected, (state, action) => {
       state.loading = false;
       state.error = getRejectionMessage(
         action.payload,
         action.error.message,
-        "Failed to sign in",
+        "Failed to sign in"
       );
     });
 
@@ -120,15 +177,31 @@ const authSlice = createSlice({
       state.error = null;
     });
     builder.addCase(signInWithGoogle.fulfilled, (state, action) => {
+      applySignInResult(state, action.payload);
+    });
+    builder.addCase(verifyTwoFactor.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(verifyTwoFactor.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = action.payload.user;
+      state.user = action.payload;
+      state.twoFactorChallengeToken = null;
+    });
+    builder.addCase(verifyTwoFactor.rejected, (state, action) => {
+      state.loading = false;
+      state.error = getRejectionMessage(
+        action.payload,
+        action.error.message,
+        "Failed to verify two-factor code"
+      );
     });
     builder.addCase(signInWithGoogle.rejected, (state, action) => {
       state.loading = false;
       state.error = getRejectionMessage(
         action.payload,
         action.error.message,
-        "Failed to sign in with Google",
+        "Failed to sign in with Google"
       );
     });
 
@@ -139,9 +212,12 @@ const authSlice = createSlice({
     builder.addCase(signOut.fulfilled, (state) => {
       state.loading = false;
       state.user = null;
+      state.twoFactorChallengeToken = null;
     });
   },
 });
+
+export const { cguAccepted, clearTwoFactorChallenge } = authSlice.actions;
 
 export default authSlice.reducer;
 

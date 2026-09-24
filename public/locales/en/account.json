@@ -73,7 +73,33 @@
     "deleting": "Deleting...",
     "deletePlaceModalTitle": "Delete this place?",
     "deletePlaceModalPrimary": "Delete permanently",
-    "deletePlaceModalBody": "This action is irreversible. Your place, its images, all its events, reviews (place and events), and associated comments will be deleted."
+    "deletePlaceModalBody": "This action is irreversible. Your place, its images, all its events, reviews (place and events), and associated comments will be deleted.",
+    "twoFactorTitle": "Two-factor authentication",
+    "twoFactorTooltip": "A 6-digit code from an authenticator app will be required at each sign-in.",
+    "twoFactorDescription": "Add a verification step to protect your account.",
+    "twoFactorEnabledDescription": "Two-factor authentication is on. A code will be required at each sign-in.",
+    "twoFactorEnableButton": "Enable two-factor authentication",
+    "twoFactorDisableButton": "Disable",
+    "twoFactorEnableAriaLabel": "Enable two-factor authentication",
+    "twoFactorDisableAriaLabel": "Disable two-factor authentication",
+    "twoFactorSetupTitle": "Enable two-factor authentication",
+    "twoFactorSetupBody": "Scan this QR code with an authenticator app, or enter the secret manually, then type the 6-digit code.",
+    "twoFactorSetupPrimary": "Enable",
+    "twoFactorQrAlt": "Two-factor authentication QR code",
+    "twoFactorSecretLabel": "Secret:",
+    "twoFactorCodeLabel": "Code",
+    "twoFactorCodePlaceholder": "123456",
+    "twoFactorRecoveryTitle": "Recovery codes",
+    "twoFactorRecoveryBody": "Save these codes now. Each can be used only once. They will not be shown again.",
+    "twoFactorRecoveryPrimary": "I have saved my codes",
+    "twoFactorRecoveryCopy": "Copy codes",
+    "twoFactorRecoveryCopyAriaLabel": "Copy recovery codes",
+    "twoFactorRecoveryCopied": "Codes copied",
+    "twoFactorRecoveryCopyFailed": "Unable to copy the codes",
+    "twoFactorDisableTitle": "Disable two-factor authentication",
+    "twoFactorDisableBody": "Enter a code from your authenticator app or a recovery code.",
+    "twoFactorDisablePrimary": "Disable",
+    "twoFactorDisabled": "Two-factor authentication disabled"
   },
   "accountSidebarConfig": {
     "tabs": {
@@ -204,5 +230,20 @@
   },
   "useReviewsReceived": {
     "loadError": "Error loading received reviews"
+  },
+  "createProfileStepper": {
+    "title": "Create your profile",
+    "createSuccess": "Profile created successfully",
+    "createError": "Error creating profile"
+  },
+  "profileFormStep": {
+    "submitButton": "Create my profile",
+    "validationError": "Please fix the form errors",
+    "previousAriaLabel": "Go back to the previous step"
+  },
+  "updateCreator": {
+    "title": "Edit your profile",
+    "updateSuccess": "Profile updated successfully",
+    "updateError": "Error updating profile"
   }
 }

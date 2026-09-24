@@ -26,6 +26,14 @@
     "messages": {
       "success": "Connexion réussie !",
       "error": "Échec de la connexion"
+    },
+    "twoFactor": {
+      "title": "Double authentification",
+      "description": "Saisissez le code à 6 chiffres de votre application d'authentification, ou un code de récupération.",
+      "codeLabel": "Code",
+      "codePlaceholder": "123456",
+      "submit": "Valider",
+      "back": "Retour à la connexion"
     }
   },
   "form": {
