@@ -86,6 +86,7 @@ const EventForm = ({
   const router = useRouter();
   const { user } = useCurrentUser();
   const userPlace = resolveRefObject(user?.place);
+  const userPlaceAddress = userPlace?.location?.label;
   const { submitEvent, isLoading: submitFormLoading } = useSubmitEvent();
   const { submitEventInvitations, isLoading: submitEventInvitationsLoading } =
     useSubmitEventInvitations();
@@ -124,6 +125,7 @@ const EventForm = ({
   if (
     !isUpdate &&
     userPlace &&
+    userPlaceAddress &&
     !hasAppliedDefaultPlace &&
     !event.place &&
     !event.location &&
@@ -134,7 +136,13 @@ const EventForm = ({
     setEvent((prev) => ({ ...prev, place: userPlace.id }));
   }
 
-  if (!isUpdate && userPlace && locationMode === "place" && !event.place) {
+  if (
+    !isUpdate &&
+    userPlace &&
+    userPlaceAddress &&
+    locationMode === "place" &&
+    !event.place
+  ) {
     setEvent((prev) => ({ ...prev, place: userPlace.id }));
   }
 
@@ -292,7 +300,7 @@ const EventForm = ({
           {t("eventForm.locationTitle")}
         </legend>
         <div className={styles.locationOptions}>
-          {userPlace && (
+          {userPlace && userPlaceAddress && (
             <label className={styles.locationOption}>
               <input
                 type="radio"
@@ -302,10 +310,7 @@ const EventForm = ({
                 onChange={() => handleLocationModeChange("place")}
               />
               <span>
-                {t("eventForm.useMyPlace")}
-                {userPlace.location?.label
-                  ? ` (${userPlace.location.label})`
-                  : ""}
+                {t("eventForm.useMyPlace", { address: userPlaceAddress })}
               </span>
             </label>
           )}

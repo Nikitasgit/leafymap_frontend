@@ -10,6 +10,13 @@ export async function generateMetadata({
   return getPageMetadata("verifyEmail", locale);
 }
 
-export default function VerifyEmail() {
-  return <VerifyEmailHandler />;
+export default async function VerifyEmail({
+  searchParams,
+}: {
+  searchParams: Promise<{ token?: string | string[] }>;
+}) {
+  const { token } = await searchParams;
+  const value = Array.isArray(token) ? token[0] : token;
+
+  return <VerifyEmailHandler token={value} />;
 }

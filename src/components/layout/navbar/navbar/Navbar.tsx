@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Home, Map, MessageSquare, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useRef, useState } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 import { useAppSelector } from "@/store";
 import {
   NavbarNotifications,
@@ -21,10 +21,25 @@ import { APP_NAME } from "@/shared/config/app";
 import styles from "./Navbar.module.scss";
 import logo from "../../../../../public/logo/logo-leafy-map.svg";
 
+const subscribeHydration = () => () => {};
+const getHydratedSnapshot = () => true;
+const getServerHydratedSnapshot = () => false;
+
+function useIsHydrated() {
+  return useSyncExternalStore(
+    subscribeHydration,
+    getHydratedSnapshot,
+    getServerHydratedSnapshot
+  );
+}
+
 export default function Navbar() {
   const pathname = usePathname();
   const { t } = useTranslation("common");
   const { loading, user, logout } = useAuth();
+  const isHydrated = useIsHydrated();
+  const sessionUser = isHydrated ? user : null;
+  const authPending = !isHydrated || loading;
   const unreadConversations = useAppSelector(selectUnreadConversations);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navbarRef = useRef<HTMLDivElement>(null);
@@ -36,10 +51,15 @@ export default function Navbar() {
       href: "/inbox",
       label: t("nav.messages"),
       icon: MessageSquare,
-      display: !!user,
+      display: !!sessionUser,
       badge: unreadConversations > 0 ? unreadConversations : undefined,
     },
-    { href: "/account", label: t("nav.account"), icon: User, display: !!user },
+    {
+      href: "/account",
+      label: t("nav.account"),
+      icon: User,
+      display: !!sessionUser,
+    },
   ];
 
   const toggleMobileMenu = () => {
@@ -72,12 +92,12 @@ export default function Navbar() {
       </div>
       <div className={styles.navSection}>
         <NavbarLanguageSwitcher />
-        {user && <NavbarNotifications onBellClick={closeMobileMenu} />}
+        {sessionUser && <NavbarNotifications onBellClick={closeMobileMenu} />}
         <NavbarMenuDesktop
           navItems={navItems}
           pathname={pathname}
-          loading={loading}
-          user={user}
+          loading={authPending}
+          user={sessionUser}
           logout={logout}
           t={t}
         />
@@ -90,8 +110,8 @@ export default function Navbar() {
         isOpen={isMobileMenuOpen}
         navItems={navItems}
         pathname={pathname}
-        loading={loading}
-        user={user}
+        loading={authPending}
+        user={sessionUser}
         logout={logout}
         onClose={closeMobileMenu}
         t={t}

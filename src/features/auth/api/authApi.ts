@@ -18,10 +18,28 @@ export type AcceptCguPayload = {
 };
 
 export type GoogleSignInResult = {
-  user: User;
+  user?: User;
   isNewUser?: boolean;
   mergedAccount?: boolean;
   mergedUnverifiedAccount?: boolean;
+  twoFactorRequired?: boolean;
+  challengeToken?: string;
+};
+
+export type SignInResult = {
+  user?: User;
+  twoFactorRequired?: boolean;
+  challengeToken?: string;
+};
+
+export type TwoFactorSetupResult = {
+  secret: string;
+  otpauthUri: string;
+  qrDataUrl: string;
+};
+
+export type TwoFactorConfirmResult = {
+  recoveryCodes: string[];
 };
 
 export const authApi = {
@@ -36,13 +54,12 @@ export const authApi = {
   signIn: async ({
     identifier,
     password,
-  }: SignInCredentials): Promise<User> => {
-    const data = await request<{ user: User }>({
+  }: SignInCredentials): Promise<SignInResult> => {
+    return request<SignInResult>({
       method: "POST",
       url: "/api/auth/signin",
       data: { identifier, password },
     });
-    return data.user;
   },
 
   signInWithGoogle: async (idToken: string): Promise<GoogleSignInResult> => {
@@ -101,5 +118,40 @@ export const authApi = {
       url: "/api/auth/accept-cgu",
       data: payload,
     });
+  },
+
+  setupTwoFactor: async (): Promise<TwoFactorSetupResult> => {
+    return request<TwoFactorSetupResult>({
+      method: "POST",
+      url: "/api/auth/two-factor/setup",
+    });
+  },
+
+  confirmTwoFactor: async (code: string): Promise<TwoFactorConfirmResult> => {
+    return request<TwoFactorConfirmResult>({
+      method: "POST",
+      url: "/api/auth/two-factor/confirm",
+      data: { code },
+    });
+  },
+
+  disableTwoFactor: async (code: string): Promise<void> => {
+    await request<void>({
+      method: "POST",
+      url: "/api/auth/two-factor/disable",
+      data: { code },
+    });
+  },
+
+  verifyTwoFactor: async (
+    challengeToken: string,
+    code: string,
+  ): Promise<User> => {
+    const data = await request<{ user: User }>({
+      method: "POST",
+      url: "/api/auth/two-factor/verify",
+      data: { challengeToken, code },
+    });
+    return data.user;
   },
 };

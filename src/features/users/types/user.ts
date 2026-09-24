@@ -36,6 +36,7 @@ export interface User extends BaseEntity {
   banExpiresAt?: string;
   lastLogin?: string;
   preferences?: UserPreferences;
+  twoFactorEnabled?: boolean;
 }
 
 export interface UserPopulated extends User {

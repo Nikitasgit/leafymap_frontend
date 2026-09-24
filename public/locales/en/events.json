@@ -60,7 +60,7 @@
     "descriptionLabel": "Description",
     "descriptionPlaceholder": "Description",
     "locationTitle": "Event location",
-    "useMyPlace": "Use my place",
+    "useMyPlace": "Your address: {{address}}",
     "setAddress": "Set address",
     "onlineEvent": "Online event",
     "markerName": "Event",

@@ -68,6 +68,32 @@
       margin: spacing(1.5) 0;
     }
 
+    .twoFactorHint {
+      color: $grey-600;
+      font-size: rem(14);
+      line-height: 1.4;
+      margin: 0 0 spacing(0.5);
+    }
+
+    .backToCredentials {
+      background: none;
+      border: none;
+      color: $primary-color;
+      cursor: pointer;
+      font-size: rem(14);
+      padding: 0;
+      text-align: center;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+    }
+
     .signupLink {
       text-align: center;
       margin-top: spacing(1.5);

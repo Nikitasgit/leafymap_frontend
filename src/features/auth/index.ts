@@ -26,9 +26,12 @@ export {
   fetchCurrentUser,
   signIn,
   signInWithGoogle,
+  verifyTwoFactor,
   signOut,
   selectAuth,
 } from "./model/authSlice";
+
+export { authApi } from "./api/authApi";
 
 // Types
 export type { RegisterFormData, LoginFormData } from "./types";
