@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import SubscribersCounter from "@/shared/ui/counters/subscribersCounter";
 import ActionButtons from "@/shared/ui/actions/actionButtons";
-import { PlaceCategoryBadge } from "@/features/places";
+import PlaceCategoryBadge from "@/features/places/components/placeCategoryBadge";
 import creatorDefaultsSvg from "@public/images/creator_default.svg";
 import { getDisplayName } from "@/shared/utils/userDisplay";
 import { resolveRefObject } from "@/shared/api/normalizers/resolveRef";

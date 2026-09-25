@@ -37,6 +37,8 @@ export type { DateRangeProps } from "./dateRange";
 
 export { default as PlaceCategoryIcon } from "./icons/placeCategoryIcon";
 export { getPlaceCategoryConfig } from "./icons/placeCategoryIcon";
+export { default as EventCategoryIcon } from "./icons/eventCategoryIcon";
+export { getEventCategoryConfig } from "./icons/eventCategoryIcon";
 
 export { default as TextField } from "./inputs/textField";
 export { default as CguCheckbox } from "./inputs/cguCheckbox";

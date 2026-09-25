@@ -3,6 +3,9 @@ import { Marker } from "react-map-gl/mapbox";
 import PlaceCategoryIcon, {
   getPlaceCategoryConfig,
 } from "@/shared/ui/icons/placeCategoryIcon";
+import EventCategoryIcon, {
+  getEventCategoryConfig,
+} from "@/shared/ui/icons/eventCategoryIcon";
 import styles from "./CategoryMarker.module.scss";
 import { CategoryMarkerProps } from "./CategoryMarker.types";
 import { capitalizeFirstLetter } from "@/shared/utils/functions";
@@ -11,6 +14,7 @@ const CategoryMarker: React.FC<CategoryMarkerProps> = ({
   longitude,
   latitude,
   categoryName,
+  categoryKind = "place",
   placeName,
   onClick,
   zoom = 0,
@@ -21,13 +25,24 @@ const CategoryMarker: React.FC<CategoryMarkerProps> = ({
   const isZoomHighEnough = zoom >= 10;
   const shouldShowLabel =
     isZoomHighEnough && (isZoomedIn || isHovered || isSelected);
-  const categoryConfig = getPlaceCategoryConfig(categoryName);
+  const isEvent = categoryKind === "event";
+  const categoryConfig = isEvent
+    ? getEventCategoryConfig(categoryName)
+    : getPlaceCategoryConfig(categoryName);
+  const CategoryIcon = isEvent ? EventCategoryIcon : PlaceCategoryIcon;
+  const labelFallback = isEvent ? "Événement" : "Lieu";
 
   return (
     <Marker
       longitude={longitude}
       latitude={latitude}
-      onClick={onClick}
+      onClick={(event) => {
+        // The marker sits in the map canvas container, so this click also
+        // bubbles to the map. Stop it here so selecting a pin is not treated
+        // as a background click that closes the card.
+        event.originalEvent.stopPropagation();
+        onClick?.();
+      }}
       className={`${styles.markerContainer} ${
         isSelected ? styles.selected : ""
       }`}
@@ -44,12 +59,12 @@ const CategoryMarker: React.FC<CategoryMarkerProps> = ({
         onMouseLeave={() => !isZoomedIn && setIsHovered(false)}
         type="button"
         aria-label={`${
-          capitalizeFirstLetter(placeName) || "Lieu"
+          capitalizeFirstLetter(placeName) || labelFallback
         } - ${categoryName}`}
         aria-pressed={isSelected}
       >
         <div className={styles.markerIconContainer} aria-hidden="true">
-          <PlaceCategoryIcon
+          <CategoryIcon
             categoryName={categoryName}
             size="small"
             iconColor="#ffffff"

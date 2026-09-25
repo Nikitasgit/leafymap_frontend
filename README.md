@@ -2,7 +2,7 @@
 
 Application web de **découverte d'événements locaux** : carte interactive, agenda, profils d'organisateurs et gestion d'événements.
 
-> **Refonte architecture en cours** — suivi détaillé dans [REFACTORING.md](./REFACTORING.md).
+Architecture modulaire par feature en place. Historique de la migration : [REFACTORING.md](./REFACTORING.md).
 
 ## Table des matières
 
@@ -38,6 +38,13 @@ npm start
 # Linting / dead code
 npm run lint
 npm run knip
+
+# Tests unitaires (Vitest)
+npm test
+
+# E2E Playwright (Chromium)
+npm run playwright:install
+npm run test:e2e
 ```
 
 ## Architecture du projet
@@ -57,7 +64,7 @@ shared ← features ← app
 - Entre features : uniquement via le barrel public `@/features/<name>` (pas d'import profond)
 - `app/` reste fin : routing App Router → containers de features
 
-Les frontières sont enforceées (en `warn` pendant la migration) via `eslint-plugin-boundaries` dans `eslint.config.mjs`.
+Les frontières sont en `error` via `eslint-plugin-boundaries` dans `eslint.config.mjs`. Les imports profonds d’une feature (`api/`, `model/`, `hooks/`, `components/`, …) restent autorisés ; le barrel `@/features/<name>` est le point d’entrée public.
 
 ### Arborescence cible
 
@@ -92,7 +99,8 @@ leafymap-frontend/
 
 ### État de la migration
 
-Voir [REFACTORING.md](./REFACTORING.md). Passes 1–4 : squelette `shared/`, `auth`, shell `account`, puis `events` scindé en `events` / `eventBookings` / `eventInvitations`. Les dossiers legacy coexistent temporairement avec des **shims** de ré-export.
+Les passes décrites dans [REFACTORING.md](./REFACTORING.md) sont faites (`shared/`, features métier, design system sous `shared/ui`). Features : `account`, `admin`, `announcements`, `auth`, `categories`, `comments`, `creator`, `eventBookings`, `eventInvitations`, `events`, `favorites`, `follows`, `home`, `map`, `messages`, `notifications`, `partnerships`, `places`, `products`, `reviews`, `users`.
+
 ## 🌍 Internationalisation (i18n)
 
 ### Configuration
@@ -107,17 +115,18 @@ Voir [REFACTORING.md](./REFACTORING.md). Passes 1–4 : squelette `shared/`, `au
 ```
 /fr/...          # Routes en français
 /en/...          # Routes en anglais
-/fr/places       # Exemple : page des lieux en français
-/en/places       # Exemple : page des lieux en anglais
+/fr/map          # Exemple : carte en français
+/en/map          # Exemple : carte en anglais
 ```
 
 ### Fonctionnement
 
-#### 1. Middleware (`middleware.ts`)
+#### 1. Proxy (`src/proxy.ts`)
+
+Next.js 16 n’utilise plus `middleware.ts` pour ce routage. `src/proxy.ts` intercepte les requêtes et préfixe l’URL avec la locale :
 
 ```typescript
-// Intercepte toutes les requêtes et ajoute la locale à l'URL
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const i18nResponse = i18nRouter(request, i18nConfig);
   return i18nResponse;
 }
@@ -140,7 +149,7 @@ export const i18nConfig = {
 #### 3. Initialisation (`app/i18n.ts`)
 
 - **Chargement dynamique** : Traductions importées à la demande
-- **Namespaces** : `common`, `subscription`, `marketing`
+- **Namespaces** (`src/i18nConfig.ts`) : `common`, `subscription`, `marketing`, `errors`, `validation`, `events`, `auth`, `messages`, `notifications`, `map`, `account`, `profile`, `reviews`, `admin`
 - **Fallback** : Français si traduction manquante
 
 #### 4. Provider (`components/Providers.tsx`)
@@ -216,27 +225,20 @@ function MyComponent() {
 
 #### Types d'utilisateurs et permissions
 
-##### Guest (Invité)
+Le `userType` courant est `guest` ou `creator`. `organizer` n’est plus une valeur de `userType` (ça reste un libellé de catégorie / de copie). Le rôle admin (`user` / `admin`) est distinct.
 
-- ✅ Consulter les lieux et événements
-- ✅ Créer un profil **Creator** ou **Organizer**
-- ❌ Créer des lieux
-- ❌ Créer des événements
+##### Guest
 
-##### Creator (Créateur/Artisan)
+- Consulter la carte, les événements et les profils publics
+- Passer en profil **creator**
 
-- ✅ Créer **1 seul lieu** maximum (limite globale : 1 lieu par utilisateur)
-- ✅ Créer des événements sur son lieu
-- ✅ **Accepter/refuser** les demandes de partnership
-- ❌ Créer des partnerships
-- ✅ Profil avec nom d'artiste et catégories
+##### Creator
 
-##### Organizer (Organisateur)
+- Un seul lieu par utilisateur
+- Créer et gérer des événements
+- Profil créateur (catégorie, description, image)
 
-- ✅ Créer **1 seul lieu** maximum (limite globale : 1 lieu par utilisateur)
-- ✅ Créer des événements
-- ✅ **Envoyer** des demandes de partnership
-- ❌ Modifier le statut des partnerships
+Les partenariats sont des invitations entre utilisateurs (`pending` → `accepted`), pas un droit réservé à un type `organizer`.
 
 ### 2. Gestion d'état global (Redux)
 
@@ -296,23 +298,28 @@ function MyComponent() {
 
 #### Routes publiques
 
-- `/[locale]` : Page d'accueil
-- `/[locale]/places/[placeId]` : Détail d'un lieu
-- `/[locale]/events/[eventId]` : Détail d'un événement
-- `/[locale]/map` : Carte interactive
+- `/[locale]` : Accueil
+- `/[locale]/map` : Carte
+- `/[locale]/events/[eventId]` : Détail d’un événement
 - `/[locale]/users/[userId]` : Profil public
+- `/[locale]/legal/cgu`
+- `/[locale]/auth/signin`, `register`, `forgot-password`, `reset-password`, `verify-email`, `resend-verification`, `check-email`, `accept-cgu`
 
 #### Routes authentifiées
 
-- `/[locale]/account` : Compte utilisateur
-- `/[locale]/account/create` : Créer un profil Creator/Organizer (Guest uniquement)
-- `/[locale]/account/update-creator` : Modifier profil Creator
-- `/[locale]/account/settings` : Paramètres du compte
-- `/[locale]/account/places/create` : Créer un lieu (1 max par utilisateur)
-- `/[locale]/account/places/[placeId]` : Gérer un lieu (propriétaire uniquement)
-- `/[locale]/account/places/[placeId]/events/create` : Créer un événement
-- `/[locale]/account/places/[placeId]/events/[eventId]` : Modifier un événement
-- `/[locale]/messages` : Messagerie
+- `/[locale]/account` : Compte
+- `/[locale]/account/create` : Passer en profil creator
+- `/[locale]/account/update-creator`
+- `/[locale]/account/settings`
+- `/[locale]/account/places/create` et `/[locale]/account/places/[placeId]`
+- `/[locale]/account/places/[placeId]/events/create` et `.../events/[eventId]`
+- `/[locale]/account/events/create` et `/[locale]/account/events/[eventId]`
+- `/[locale]/inbox` : Messagerie
+
+#### Admin
+
+- `/[locale]/admin/users` et `/[locale]/admin/users/[userId]`
+- `/[locale]/admin/announcements`, `.../new`, `.../[announcementId]`
 
 ### 6. Intégrations
 
@@ -495,18 +502,27 @@ features/auth/hooks/
 
 ### Variables d'environnement
 
+Voir `env.example`.
+
 ```env
-NEXT_PUBLIC_API_URL=https://...
+# npm run dev sur l’hôte : même port que PORT du backend (env.example backend = 5001)
+NEXT_PUBLIC_API_URL=http://localhost:5001
+# Docker Compose force http://localhost:5002 (le compose écrase cette variable)
+# API_URL=http://api:5002   # SSR uniquement quand le front tourne dans Compose. Ne pas définir sur Vercel.
+
 NEXT_PUBLIC_MAPBOX_TOKEN=pk.xxx...
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=xxx.apps.googleusercontent.com
 ```
+
+`API_URL` n’est lue que pour les fetch **serveur** (`src/shared/api/client.ts`). Le navigateur utilise toujours `NEXT_PUBLIC_API_URL`.
 
 ### Next.js
 
-- **Version** : 15.3.2 (App Router)
-- **React** : 19.0.0
-- **Node** : 20.x (engine requis)
+- **Version** : 16.3.5 (App Router)
+- **React** : 19.2
+- **Node** : `>=22` (`engines` dans `package.json`)
 - **SSR** : Par défaut pour les pages
-- **Image optimization** : Composant `<Image>`
+- **Image optimization** : Composant `<Image>` (hôtes distants dans `next.config.ts` : bucket S3, avatars Google)
 
 ## 📦 Dépendances principales
 
@@ -516,19 +532,23 @@ NEXT_PUBLIC_MAPBOX_TOKEN=pk.xxx...
 - **i18next** : Internationalisation
 - **Axios** : Requêtes HTTP
 - **Zod** : Validation côté client
-- **Mapbox GL** : Cartographie
+- **Mapbox GL** : Tuiles de la carte (le géocodage passe par l’API)
+- **MUI** : Composants Material
 - **SCSS** : Préprocesseur CSS
+- **Socket.IO client** : Messagerie temps réel
+- **Google OAuth** : `@react-oauth/google`
 - **Lucide React** : Icônes
 - **Sonner** : Toast notifications
+- **Vitest** / **Playwright** : Tests unitaires et e2e
 
 ## 🔄 Workflow de développement
 
-1. **Créer une feature branch** depuis `main`
-2. **Développer** avec hot-reload (`npm run dev`)
+1. **Créer une feature branch** depuis la branche de travail (`develop` aujourd’hui ; la production Vercel suit `main`)
+2. **Développer** avec hot-reload (`npm run dev`, port 3001)
 3. **Tester** dans les deux locales (fr/en)
-4. **Build local** pour vérifier (`npm run build`)
-5. **Commit** et push
-6. **Deploy preview** automatique sur Vercel
+4. **Vérifier** `npm run lint`, `npm test`, `npm run build`
+5. **Pull request vers `main`** : la CI GitHub Actions (lint, Vitest, build) tourne sur les PR et les push vers `main`
+6. **Merge sur `main`** : Vercel publie la production. Les autres branches peuvent avoir une preview, selon le projet Vercel
 
 ## 📝 Notes importantes
 
@@ -598,6 +618,51 @@ L'application respecte les standards d'accessibilité suivants :
 
 ## 🚢 Déploiement
 
-- **Frontend** : Vercel — `https://leafymap.com`, auto-deploy sur push `main`, preview par PR
-- **API** : Render (web service Node) — voir le README backend
-- **Images** : AWS S3 (stockage, pas l’hébergement de l’API)
+Le frontend et l’API sont **deux dépôts Git**, déployés séparément. Un correctif d’écran ne redéploie pas l’API.
+
+| | Frontend | API |
+| --- | --- | --- |
+| Dépôt | `leafymap_frontend` | `leafymap_backend` |
+| Hôte | **Vercel** | **Render**, web service **Node** (pas l’image Docker) |
+| Branche de production | `main` | `main` |
+| CI | push + PR vers `main` | PR vers `main` seulement |
+
+Domaines du site : `https://leafymap.com` et `https://www.leafymap.com`. L’URL canonique de l’app (`APP_PRODUCTION_URL` dans `src/shared/config/app.ts`) est **`https://www.leafymap.com`**. Les liens e-mail de l’API pointent vers l’apex `https://leafymap.com` (voir le README backend).
+
+Les images ne sont pas hébergées par Vercel : l’API les stocke sur **AWS S3** et renvoie des URLs signées.
+
+### Vercel
+
+1. Projet connecté au dépôt `leafymap_frontend`, framework **Next.js**, **Node 22** (le `engines` du `package.json` est `>=22`).
+2. Commandes par défaut : installation des dépendances, build `npm run build` (`next build`). Vercel **n’exécute pas** `npm start` et ignore le port `3001` de ce script : c’est le runtime Vercel qui sert le build.
+3. Branche de production : `main`. Un push sur `main` publie le site. Un push sur `develop` ne met pas à jour la production.
+4. Variables d’environnement, pour **Production** et pour **Preview** si les previews doivent appeler l’API. Les `NEXT_PUBLIC_*` sont figées **au build** : les changer impose un nouveau déploiement.
+
+```env
+NEXT_PUBLIC_API_URL=https://<origine-publique-du-service-render>
+NEXT_PUBLIC_MAPBOX_TOKEN=pk....
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=<le même Client ID que GOOGLE_CLIENT_ID côté API>
+```
+
+Ne pas définir `API_URL` sur Vercel. Elle ne sert que lorsque le serveur Next tourne **dans Docker Compose** et doit joindre le service `api` (`http://api:5002`). Sans elle, les fetch serveur utilisent `NEXT_PUBLIC_API_URL`, ce qui est le bon comportement sur Vercel.
+
+`NEXT_PUBLIC_API_URL` est l’origine seule (`https://…`), sans chemin `/api` et sans slash final.
+
+### Session cross-origine
+
+Le navigateur est sur Vercel, l’API sur Render. Axios envoie les cookies (`withCredentials: true`). En production le JWT est un cookie `httpOnly`, `Secure`, `SameSite=None`. Ça ne marche que si :
+
+- les deux hôtes sont en **HTTPS** (Vercel et Render terminent TLS) ;
+- l’API tourne avec `NODE_ENV=production` (Render le définit). Sinon le cookie reste `SameSite=Lax` / non `Secure`, et le login depuis `leafymap.com` ne pose pas la session.
+
+Le CORS n’est pas configuré dans Vercel : la liste d’origines est dans le backend (`https://leafymap.com` et `https://www.leafymap.com`).
+
+### Checklist
+
+- [ ] Node 22 sélectionné dans le projet Vercel
+- [ ] `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_MAPBOX_TOKEN`, `NEXT_PUBLIC_GOOGLE_CLIENT_ID` renseignées sur l’environnement déployé
+- [ ] `NEXT_PUBLIC_GOOGLE_CLIENT_ID` identique à `GOOGLE_CLIENT_ID` Render
+- [ ] `API_URL` absente sur Vercel
+- [ ] CI verte sur la PR vers `main` (lint, Vitest, `next build`)
+- [ ] Après merge : déploiement Vercel réussi
+- [ ] Login depuis `https://www.leafymap.com` (cookie cross-site) et affichage de la carte (token Mapbox)

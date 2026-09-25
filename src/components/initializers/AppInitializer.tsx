@@ -9,8 +9,8 @@ import {
   selectPlaceCategories,
   selectProductCategories,
   selectEventCategories,
-} from "@/features/categories";
-import { fetchCurrentUser, selectAuth } from "@/features/auth";
+} from "@/features/categories/model/categoriesSlice";
+import { fetchCurrentUser, selectAuth } from "@/features/auth/model/authSlice";
 import {
   fetchUserNotifications,
   selectNotifications,

@@ -2,7 +2,7 @@ import { useState, useCallback, useRef } from "react";
 import { fetchEventsInView as fetchEventsInViewRequest } from "../api/eventsApi";
 import { Event } from "../types/event";
 import type { MapFilters } from "@/features/map/types";
-import { MapRef } from "react-map-gl/mapbox";
+import type { MapRef } from "react-map-gl/mapbox";
 
 interface UseEventsInViewProps {
   filters?: MapFilters;
