@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { useCurrentUser } from "@/features/auth";
+import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser";
 import { getHeaderCtaKey, getHeaderRoute } from "../../utils/home";
 import styles from "./HomeHeader.module.scss";
 
@@ -47,9 +47,9 @@ const HomeHeader = () => {
               src="/images/atelier.jpg"
               alt=""
               fill
-              sizes="(max-width: 768px) 100vw, 40vw"
+              sizes="(max-width: 575px) 1px, 40vw"
               className={styles.cardLeftImg}
-              priority
+              loading="lazy"
             />
           </div>
         </Link>
@@ -65,7 +65,9 @@ const HomeHeader = () => {
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
             className={styles.cardRightImg}
-            priority
+            preload
+            fetchPriority="high"
+            loading="eager"
           />
           <div className={styles.cardRightGradient} />
           <div className={styles.cardRightContent}>

@@ -190,6 +190,13 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
             }
           }}
           onClick={(e) => {
+            const target = e.originalEvent.target;
+            if (
+              target instanceof Element &&
+              target.closest(".mapboxgl-marker")
+            ) {
+              return;
+            }
             if (onMapClick) {
               onMapClick({
                 latitude: e.lngLat.lat,
@@ -263,6 +270,7 @@ const MapComponent = forwardRef<ExtendedMapRef, MapComponentProps>(
                   key={event.id}
                   longitude={longitude}
                   latitude={latitude}
+                  categoryKind="event"
                   categoryName={categoryName}
                   placeName={event.name}
                   zoom={viewState.zoom}

@@ -23,14 +23,7 @@
   width: 100%;
   height: 100%;
   border-radius: 8px 8px 0 0;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.06) 25%,
-    rgba(0, 0, 0, 0.02) 50%,
-    rgba(0, 0, 0, 0.06) 75%
-  );
-  background-size: 200% 100%;
-  animation: skeleton 1.2s ease-in-out infinite;
+  @include skeleton-surface;
 }
 
 .skeletonContent {
@@ -41,14 +34,7 @@
 .bone {
   height: 14px;
   border-radius: 4px;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.06) 25%,
-    rgba(0, 0, 0, 0.02) 50%,
-    rgba(0, 0, 0, 0.06) 75%
-  );
-  background-size: 200% 100%;
-  animation: skeleton 1.2s ease-in-out infinite;
+  @include skeleton-surface;
 }
 
 .lineTitle {
@@ -62,15 +48,6 @@
 
 .lineWide {
   width: 90%;
-}
-
-@keyframes skeleton {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
 }
 
 @include respond-to(sm) {

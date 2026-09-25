@@ -7,11 +7,9 @@ import { Home, Map, MessageSquare, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useRef, useState, useSyncExternalStore } from "react";
 import { useAppSelector } from "@/store";
-import {
-  NavbarNotifications,
-  selectUnreadConversations,
-} from "@/features/notifications";
-import { useAuth } from "@/features/auth";
+import NavbarNotifications from "@/features/notifications/components/navbarNotifications";
+import { selectUnreadConversations } from "@/features/notifications/model/notificationSlice";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import useOnClickOutside from "@/shared/hooks/useOnClickOutside";
 import NavbarLanguageSwitcher from "../navbarLanguageSwitcher";
 import NavbarMenuDesktop from "../navbarMenuDesktop";

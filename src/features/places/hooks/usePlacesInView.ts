@@ -2,7 +2,7 @@ import { useState, useCallback, useRef } from "react";
 import { fetchPlacesInView as fetchPlacesInViewRequest } from "../api/placesApi";
 import { Place } from "../types/place";
 import type { MapFilters } from "@/features/map/types";
-import { MapRef } from "react-map-gl/mapbox";
+import type { MapRef } from "react-map-gl/mapbox";
 
 interface UsePlacesInViewProps {
   filters?: MapFilters;

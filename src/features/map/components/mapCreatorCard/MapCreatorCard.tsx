@@ -57,9 +57,13 @@ const MapCreatorCard = ({
   }
 
   // Fly to the place once when the data first loads or when userId changes.
+  // Ignore data still belonging to the previously opened creator: userId
+  // changes before the fetch resolves, and flying that stale place snaps the
+  // camera back to the previous pin.
   useEffect(() => {
     if (initialEventId) return;
-    if (!place || !mapRef.current) return;
+    if (!place || !user || !mapRef.current) return;
+    if (!isSameId(user.id, userId)) return;
     if (navigatedPlaceIdRef.current === place.id) return;
     navigatedPlaceIdRef.current = place.id;
     navigateToPlaceOnMap({
@@ -68,10 +72,11 @@ const MapCreatorCard = ({
       coordinates: place.location?.coordinates || [],
       skipFetchPlacesInView,
     });
-  }, [initialEventId, mapRef, place, skipFetchPlacesInView]);
+  }, [initialEventId, mapRef, place, skipFetchPlacesInView, user, userId]);
 
   useEffect(() => {
     if (!selectedEvent || !initialEventId || !mapRef.current) return;
+    if (selectedEvent.id !== initialEventId) return;
     if (navigatedPlaceIdRef.current === selectedEvent.id) return;
     const coordinates = getEventCoordinates(selectedEvent);
     if (coordinates.length < 2) return;
@@ -104,7 +109,9 @@ const MapCreatorCard = ({
     });
   };
 
-  if (!user) return null;
+  if (!user || !isSameId(user.id, userId)) return null;
+
+  const isCurrentEvent = selectedEvent?.id === selectedEventId;
 
   const selectedEventPlace =
     (resolveRefObject(selectedEvent?.place) as PlacePopulated | null) ??
@@ -124,7 +131,7 @@ const MapCreatorCard = ({
           refetchUser={refetch}
         />
       </article>
-      {isEventModalOpen && selectedEvent && !isLoadingEvent && (
+      {isEventModalOpen && isCurrentEvent && selectedEvent && !isLoadingEvent && (
         <EventModal
           key={selectedEventId}
           isOpen={isEventModalOpen}

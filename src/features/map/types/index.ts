@@ -1,4 +1,4 @@
-import { MapRef } from "react-map-gl/mapbox";
+import type { MapRef } from "react-map-gl/mapbox";
 
 export interface ExtendedMapRef extends MapRef {
   fetchPlacesInView: (bounds: mapboxgl.LngLatBounds | null) => void;

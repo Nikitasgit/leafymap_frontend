@@ -1,12 +1,16 @@
+"use client";
+
 import { EventPopulated } from "../../types/event";
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
 import styles from "./EventSuggestionCard.module.scss";
 import Image from "next/image";
 import { MapPin } from "lucide-react";
 import eventDefaultSvg from "@public/images/event_default.svg";
 import { formatEventDateRangeCard } from "@/shared/utils/dates";
-import EventModal from "../eventModal";
+
+const EventModal = dynamic(() => import("../eventModal"), { ssr: false });
 import { resolveRefObject } from "@/shared/api/normalizers/resolveRef";
 import type { PlacePopulated } from "@/features/places/types/place";
 import type { UserPopulated } from "@/features/users/types";
