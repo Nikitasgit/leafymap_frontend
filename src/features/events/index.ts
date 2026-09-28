@@ -47,6 +47,7 @@ export { default as EventModal } from "./components/eventModal";
 
 // Components — shared cards
 export { default as EventCard } from "./components/eventCard";
+export { default as EventCategoryBadge } from "./components/eventCategoryBadge";
 export { default as EventSmallCard } from "./components/eventSmallCard";
 export { default as EventStatus } from "./components/eventStatus";
 export { default as EventsTab } from "./components/eventsTab";

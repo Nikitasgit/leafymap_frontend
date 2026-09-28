@@ -12,6 +12,7 @@ import Button from "@/shared/ui/buttons/button";
 import { fetchLocationSuggestions } from "@/features/map/utils/map";
 import { PlaceCategoryBadge } from "@/features/places";
 import { searchEvents } from "@/features/events/api/eventsApi";
+import EventCategoryBadge from "@/features/events/components/eventCategoryBadge";
 import {
   getEventCoordinates,
   getEventCreatorId,
@@ -338,9 +339,13 @@ const MapFiltersBar = ({
             onSelect={handleSelectSuggestion}
             fetchSuggestions={handleSearch}
             placeholder={searchType.placeholder}
-            renderCategoryBadge={(name) => (
-              <CreatorCategoryBadge categoryName={name} />
-            )}
+            renderCategoryBadge={(name) =>
+              searchType.key === "evenements" ? (
+                <EventCategoryBadge categoryName={name} />
+              ) : (
+                <CreatorCategoryBadge categoryName={name} />
+              )
+            }
             renderPlaceCategoryBadge={(name) => (
               <PlaceCategoryBadge categoryName={name} />
             )}
