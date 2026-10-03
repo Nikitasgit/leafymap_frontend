@@ -29,7 +29,7 @@ const PlaceCategorySelectorInput = ({
     () =>
       placeCategories.map((category) => ({
         id: category.id,
-        label: t(`common:placeCategories.${category.name}`, {
+        label: t(`placeCategories.${category.name}`, {
           defaultValue: category.name,
         }),
       })),
