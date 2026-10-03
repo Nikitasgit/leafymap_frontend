@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ProfileFormStep from "../createProfileSteps/profileFormStep";
 import {
@@ -50,7 +50,7 @@ const CreateProfileStepper = () => {
   const { user } = useAuth();
   const { refetch: refetchCurrentUser } = useCurrentUser();
   const { userCategories } = useApp();
-  const skipGuestGuardRef = useRef(false);
+  const [skipGuestGuard, setSkipGuestGuard] = useState(false);
   const { submitUser } = useSubmitUser();
   const { submitPlace } = useSubmitPlace();
 
@@ -105,7 +105,7 @@ const CreateProfileStepper = () => {
       // so the event form can offer the new place. Skip the guest-only guard
       // first: once the user becomes a creator, that guard would send them
       // to /account instead of the event form.
-      skipGuestGuardRef.current = true;
+      setSkipGuestGuard(true);
       try {
         await refetchCurrentUser();
       } catch {
@@ -114,7 +114,7 @@ const CreateProfileStepper = () => {
       showSuccess(t("createProfileStepper.createSuccess"));
       router.push(nextPath);
     } catch {
-      skipGuestGuardRef.current = false;
+      setSkipGuestGuard(false);
       showError(t("createProfileStepper.createError"));
     }
   };
@@ -130,7 +130,7 @@ const CreateProfileStepper = () => {
   };
   return (
     <ProtectedRoute
-      allowedUserTypes={skipGuestGuardRef.current ? undefined : ["guest"]}
+      allowedUserTypes={skipGuestGuard ? undefined : ["guest"]}
       redirectTo="/account"
       fallback={<LoadingBar />}
     >
