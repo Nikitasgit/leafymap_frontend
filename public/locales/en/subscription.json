@@ -75,7 +75,8 @@
   },
   "eventCategorySelector": {
     "label": "Event type",
-    "placeholder": "Select an event type"
+    "placeholder": "Select an event type",
+    "searchPlaceholder": "Search for an event type..."
   },
   "divider": "OR",
   "signinLink": {
