@@ -1,12 +1,35 @@
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, {
+  createFilterOptions,
+} from "@mui/material/Autocomplete";
 import type {
   AutocompleteRenderGroupParams,
   AutocompleteRenderInputParams,
 } from "@mui/material/Autocomplete";
+import type { FilterOptionsState } from "@mui/material/useAutocomplete";
 import MuiTextField from "@mui/material/TextField";
 import ListSubheader from "@mui/material/ListSubheader";
 import styles from "./SearchableSelect.module.scss";
 import { SearchableSelectProps, SelectOption } from "./SearchableSelect.types";
+
+const defaultFilter = createFilterOptions<SelectOption>();
+
+const filterOptions = (
+  options: SelectOption[],
+  state: FilterOptionsState<SelectOption>,
+  selected: SelectOption | SelectOption[] | null,
+) => {
+  const selectedLabels = Array.isArray(selected)
+    ? selected.map((option) => option.label)
+    : selected
+      ? [selected.label]
+      : [];
+
+  if (selectedLabels.includes(state.inputValue)) {
+    return options;
+  }
+
+  return defaultFilter(options, state);
+};
 
 const SearchableSelect = (props: SearchableSelectProps) => {
   const renderOption = (
@@ -85,13 +108,23 @@ const SearchableSelect = (props: SearchableSelectProps) => {
           {...commonProps}
           multiple
           filterSelectedOptions
+          openOnFocus
+          selectOnFocus
           value={props.value}
+          filterOptions={(options, state) =>
+            filterOptions(options, state, props.value)
+          }
           onChange={(_event, selected) => props.onChange(selected)}
         />
       ) : (
         <Autocomplete
           {...commonProps}
+          openOnFocus
+          selectOnFocus
           value={props.value}
+          filterOptions={(options, state) =>
+            filterOptions(options, state, props.value)
+          }
           onChange={(_event, selected) => props.onChange(selected)}
         />
       )}

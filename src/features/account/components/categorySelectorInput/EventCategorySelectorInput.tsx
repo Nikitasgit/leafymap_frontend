@@ -1,15 +1,14 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { EventCategory } from "@/shared/types/categories";
 import { FormDataChangeHandler } from "../createProfileStepper";
 import { useApp } from "@/features/categories";
 import { useToast } from "@/shared/hooks/useToast";
-import useOnClickOutside from "@/shared/hooks/useOnClickOutside";
 import LoadingBar from "@/shared/ui/loading/loadingBar";
-import TextField from "@/shared/ui/inputs/textField";
-import styles from "./CategorySelectorInput.module.scss";
+import SearchableSelect, {
+  SelectOption,
+} from "@/shared/ui/inputs/searchableSelect";
 
 const EventCategorySelectorInput = ({
   value,
@@ -23,73 +22,53 @@ const EventCategorySelectorInput = ({
   errorMessage?: string;
 }) => {
   const { eventCategories, loading, error: appError } = useApp();
-  const [isOpen, setIsOpen] = useState(false);
   const { showError } = useToast();
   const { t } = useTranslation("subscription");
-  const ref = useRef<HTMLDivElement>(null);
 
-  useOnClickOutside(ref, () => setIsOpen(false));
+  const options = useMemo<SelectOption[]>(
+    () =>
+      eventCategories.map((category) => ({
+        id: category.id,
+        label: t(`common:eventCategories.${category.name}`, {
+          defaultValue: category.name,
+        }),
+      })),
+    [eventCategories, t],
+  );
 
-  const inputValue = useMemo(() => {
-    if (!value) return "";
-    return eventCategories.find((cat) => cat.id === value)?.name ?? "";
-  }, [eventCategories, value]);
+  const selectedOption = options.find((option) => option.id === value) ?? null;
 
-  const handleSelect = (eventCategory: EventCategory) => {
-    setIsOpen(false);
+  const handleSelect = (selected: SelectOption | null) => {
     onChange({
       target: {
         name: "eventCategory",
-        value: eventCategory.id,
+        value: selected?.id ?? "",
       },
     });
   };
 
-  if (appError) {
-    showError(appError);
-  }
+  useEffect(() => {
+    if (appError) {
+      showError(appError);
+    }
+  }, [appError, showError]);
 
   return (
-    <div className={styles.categoryInputWrapper} ref={ref}>
+    <>
       {loading && <LoadingBar />}
-      <TextField
+      <SearchableSelect
         name="eventCategory"
         label={t("eventCategorySelector.label")}
-        value={t(`common:eventCategories.${inputValue}`, {
-          defaultValue: inputValue,
-        })}
-        onClick={() => setIsOpen(true)}
-        readOnly
         required
-        fullWidth
-        placeholder={t("eventCategorySelector.placeholder")}
-        onChange={() => {}}
+        options={options}
+        value={selectedOption}
+        onChange={handleSelect}
+        loading={loading}
+        placeholder={t("eventCategorySelector.searchPlaceholder")}
         error={error}
         errorMessage={errorMessage}
       />
-
-      {isOpen && (
-        <div className={styles.dropdown} role="listbox">
-          <ul className={styles.list}>
-            {eventCategories.map((cat) => (
-              <li key={cat.id}>
-                <button
-                  type="button"
-                  className={styles.item}
-                  onClick={() => handleSelect(cat)}
-                  role="option"
-                  aria-selected={value === cat.id}
-                >
-                  {t(`common:eventCategories.${cat.name}`, {
-                    defaultValue: cat.name,
-                  })}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 

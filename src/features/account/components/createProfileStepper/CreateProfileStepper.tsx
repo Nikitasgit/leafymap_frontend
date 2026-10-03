@@ -16,7 +16,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/shared/hooks/useToast";
 import PageHeader from "@/shared/ui/pageHeader";
 import LoadingBar from "@/shared/ui/loading/loadingBar";
-import { ProtectedRoute, useAuth } from "@/features/auth";
+import { ProtectedRoute, useAuth, useCurrentUser } from "@/features/auth";
 import { useApp } from "@/features/categories";
 
 const initialUserData = (user: Partial<User> | null): InitialCreatorData => ({
@@ -48,7 +48,9 @@ const CreateProfileStepper = () => {
   const { showSuccess, showError } = useToast();
   const { t } = useTranslation("account");
   const { user } = useAuth();
+  const { refetch: refetchCurrentUser } = useCurrentUser();
   const { userCategories } = useApp();
+  const [skipGuestGuard, setSkipGuestGuard] = useState(false);
   const { submitUser } = useSubmitUser();
   const { submitPlace } = useSubmitPlace();
 
@@ -82,20 +84,37 @@ const CreateProfileStepper = () => {
     );
   }
 
+  const nextPath =
+    searchParams.get("redirectTo") === "/account/events/create"
+      ? "/account/events/create"
+      : "/account";
+
   const handleSubmit = async () => {
     try {
-      const user = await submitUser(newUser);
-      if (place.active === true && user) {
-        await submitPlace(place);
+      const updatedUser = await submitUser(newUser);
+      if (!updatedUser) {
+        return;
+      }
+      if (place.active === true) {
+        const createdPlace = await submitPlace(place);
+        if (!createdPlace) {
+          return;
+        }
+      }
+      // The session still holds the guest profile. Refresh it before leaving
+      // so the event form can offer the new place. Skip the guest-only guard
+      // first: once the user becomes a creator, that guard would send them
+      // to /account instead of the event form.
+      setSkipGuestGuard(true);
+      try {
+        await refetchCurrentUser();
+      } catch {
+        // The profile is already saved. A later load picks up the place.
       }
       showSuccess(t("createProfileStepper.createSuccess"));
-      const redirectTo = searchParams.get("redirectTo");
-      router.push(
-        redirectTo === "/account/events/create"
-          ? "/account/events/create"
-          : "/account",
-      );
+      router.push(nextPath);
     } catch {
+      setSkipGuestGuard(false);
       showError(t("createProfileStepper.createError"));
     }
   };
@@ -111,7 +130,7 @@ const CreateProfileStepper = () => {
   };
   return (
     <ProtectedRoute
-      allowedUserTypes={["guest"]}
+      allowedUserTypes={skipGuestGuard ? undefined : ["guest"]}
       redirectTo="/account"
       fallback={<LoadingBar />}
     >

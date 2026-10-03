@@ -75,7 +75,8 @@
   },
   "eventCategorySelector": {
     "label": "Type d'évènement",
-    "placeholder": "Sélectionne un type d'évènement"
+    "placeholder": "Sélectionne un type d'évènement",
+    "searchPlaceholder": "Rechercher un type d'évènement..."
   },
   "divider": "OU",
   "signinLink": {
