@@ -128,8 +128,8 @@
   },
   "partnershipsSentTab": {
     "label": "Inviter un collaborateur",
-    "info": "Recherchez un utilisateur pour lui envoyer une invitation de collaboration.",
-    "searchPlaceholder": "Rechercher un utilisateur..."
+    "info": "Recherchez un créateur pour lui envoyer une invitation de collaboration.",
+    "searchPlaceholder": "Rechercher un créateur..."
   },
   "partnershipsReceivedTab": {
     "label": "Invitations reçues",
@@ -160,9 +160,9 @@
     "title": "Participants",
     "tooltip": "Invitez des collaborateurs à participer à votre évènement. Ils pourront ensuite être assignés à des créneaux horaires.",
     "addPartnerLabel": "Ajouter un participant",
-    "addPartnerInfo": "Recherchez un utilisateur pour l'inviter à collaborer sur cet évènement.",
-    "searchLabel": "Rechercher un utilisateur",
-    "searchPlaceholder": "Rechercher un utilisateur...",
+    "addPartnerInfo": "Recherchez un créateur pour l'inviter à participer à cet évènement.",
+    "searchLabel": "Rechercher un créateur",
+    "searchPlaceholder": "Rechercher un créateur...",
     "alreadyAddedError": "Cet utilisateur est déjà ajouté"
   },
   "partnershipsFormList": {
@@ -187,6 +187,16 @@
     "emptyTitle": "Aucun avis rédigé",
     "emptyMessage": "Vous n'avez pas encore rédigé d'avis.",
     "placeFallback": "Lieu"
+  },
+  "myProductsTab": {
+    "title": "Mes produits",
+    "description": "Sélectionnez les catégories de produits que vous proposez.",
+    "categoriesLabel": "Catégories de produits",
+    "addCategoryPlaceholder": "Ajouter une catégorie",
+    "limitReachedPlaceholder": "Limite atteinte",
+    "limitReachedHelper": "Vous avez atteint le nombre maximum de produits.",
+    "maxProductsHelper": "Vous pouvez ajouter jusqu'à {{count}} produits.",
+    "maxProductsError": "Vous ne pouvez pas ajouter plus de {{count}} produits."
   },
   "accountGalleryTab": {
     "label": "Galerie",
@@ -245,5 +255,37 @@
     "title": "Modifier votre profil",
     "updateSuccess": "Profil modifié avec succès",
     "updateError": "Erreur lors de la modification du profil"
+  },
+  "useSendPartnership": {
+    "sendSuccess": "Invitation de collaboration envoyée",
+    "sendError": "Impossible d'envoyer l'invitation"
+  },
+  "usePartnershipInvitationActions": {
+    "updateSuccess": "Invitation acceptée",
+    "refuseSuccess": "Invitation refusée",
+    "cancelSuccess": "Invitation annulée"
+  },
+  "useDeletePartnership": {
+    "deleteSuccess": "Collaboration supprimée"
+  },
+  "usePartnershipsSent": {
+    "loadError": "Erreur lors du chargement des invitations envoyées"
+  },
+  "usePartnershipsReceived": {
+    "loadError": "Erreur lors du chargement des invitations reçues"
+  },
+  "usePartnershipsAccepted": {
+    "loadError": "Erreur lors du chargement des collaborations"
+  },
+  "useDeletePlace": {
+    "deleteSuccess": "Lieu supprimé avec succès",
+    "confirmFirst": "Êtes-vous sûr de vouloir supprimer ce lieu ? Cette action est définitive.",
+    "confirmSecond": "Cette action est définitive. Confirmez-vous la suppression du lieu ?"
+  },
+  "useCreatorData": {
+    "loadError": "Erreur lors du chargement du profil"
+  },
+  "useImages": {
+    "loadError": "Erreur lors du chargement des images"
   }
 }

@@ -26,6 +26,7 @@ export default function PartnershipsSentTab() {
   const fetchSuggestions = async (query: string) => {
     const searchParams: Record<string, string | string[]> = {
       username: query,
+      userType: "creator",
     };
     if (user?.id) {
       searchParams.excludeIds = [user.id];
