@@ -4,8 +4,8 @@ import Autocomplete, {
 import type {
   AutocompleteRenderGroupParams,
   AutocompleteRenderInputParams,
-  FilterOptionsState,
 } from "@mui/material/Autocomplete";
+import type { FilterOptionsState } from "@mui/material/useAutocomplete";
 import MuiTextField from "@mui/material/TextField";
 import ListSubheader from "@mui/material/ListSubheader";
 import styles from "./SearchableSelect.module.scss";
